@@ -308,7 +308,7 @@
         align-items: start;
 
         .separateur {
-          border: 1px solid #dddddd;
+          border-right: 1px solid #dddddd;
           align-self: stretch;
           margin-block: 4px;
         }
@@ -341,7 +341,7 @@
       }
 
       .disque-indice-cyber {
-        width: 200px;
+        width: 180px;
         justify-self: center;
       }
 
@@ -391,26 +391,25 @@
         }
       }
     }
+  }
+  .label-onglet {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 
-    .label-onglet {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .pastille {
+      background-color: white;
+      color: #161616;
+      padding: 2px 4px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1rem;
+      height: fit-content;
 
-      .pastille {
-        background-color: white;
-        color: #161616;
-        padding: 2px 4px;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 400;
-        line-height: 1rem;
-        height: fit-content;
-
-        &.active {
-          background-color: var(--bleu-mise-en-avant);
-          color: white;
-        }
+      &.active {
+        background-color: var(--bleu-mise-en-avant);
+        color: white;
       }
     }
   }
@@ -448,7 +447,7 @@
       }
 
       .separateur {
-        border: 1px solid #dddddd;
+        border-right: 1px solid #dddddd;
         align-self: stretch;
       }
 

@@ -41,9 +41,15 @@
   viewBox="0 0 {taille} {taille}"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
-  filter="drop-shadow(0px 4.6857147216796875px 23.428573608398438px rgba(26, 68, 139, 0.2))"
 >
-  <circle cx={taille / 2} cy={taille / 2} r={taille / 2 - 1} fill="white" />
+  <circle
+    cx={taille / 2}
+    cy={taille / 2}
+    r={taille / 2 - 1}
+    fill="white"
+    stroke="#CECECE"
+    stroke-width="2"
+  />
   <text
     x="35"
     y="90"
