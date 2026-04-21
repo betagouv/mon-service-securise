@@ -249,18 +249,11 @@ const routesConnectePageService = ({
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,
     (requete, reponse) => {
-      const { service, autorisationService } = requete;
+      const { service } = requete;
 
-      const peutVoirTamponHomologation =
-        autorisationService.aLesPermissions(
-          Autorisation.DROIT_TAMPON_HOMOLOGATION_ZIP
-        ) && service.dossiers.aUnDossierEnCoursDeValidite();
-
-      reponse.render('service/dossiers', {
+      reponse.render('service/pagesService', {
         service,
         etapeActive: 'dossiers',
-        premiereEtapeParcours: referentiel.premiereEtapeParcours(),
-        peutVoirTamponHomologation,
         referentiel,
       });
     }
