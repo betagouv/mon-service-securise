@@ -232,6 +232,40 @@ describe("Sur demande de la représentation API complète d'un service", () => {
         dossiersRefuses: expect.any(Array),
         aucunDossier: false,
       });
+      const dossierActif = donnees.dossiers!.dossierActif as {
+        statut: string;
+        descriptionProchaineDateHomologation: string;
+        dateProchaineHomologation: string;
+      };
+      expect(dossierActif.statut).toBe('activee');
+      expect(dossierActif.descriptionProchaineDateHomologation).toBeDefined();
+    });
+
+    it("retourne l'étape courante pour un dossier non finalisé", () => {
+      const donneesDossier = unDossier(creeReferentielV2())
+        .avecAutorite('Nom Prenom', 'Fonction')
+        .quiEstNonFinalise().donnees;
+      const serviceV2 = unServiceV2()
+        .avecDossiers([donneesDossier])
+        .construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisationProprietaire,
+        referentiel
+      ).donnees();
+
+      expect(donnees.dossiers!.dossierCourant).toBeDefined();
+      const dossierCourant = donnees.dossiers!.dossierCourant as {
+        etapeCourante: {
+          nomEtape: string;
+          numeroEtape: number;
+          numeroDerniereEtape: number;
+        };
+      };
+      expect(dossierCourant.etapeCourante.nomEtape).toBe('avis');
+      expect(dossierCourant.etapeCourante.numeroEtape).toBe(2);
+      expect(dossierCourant.etapeCourante.numeroDerniereEtape).toBe(6);
     });
 
     it('ne retourne pas la représentation des dossiers si les droits sont insuffisants', () => {

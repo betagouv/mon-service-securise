@@ -14,6 +14,7 @@
   import Toaster from '../ui/Toaster.svelte';
   import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
   import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
+  import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
 
   let {
     idService,
@@ -38,6 +39,7 @@
   let risques: ReturnType<typeof tousRisques> | undefined = $state();
   let contactsUtiles: ContactsUtiles | undefined = $state();
   let indicesCyber: IndicesCyber | undefined = $state();
+  let dossiers: DossiersHomologation | undefined = $state();
   let serviceCompletCharge = $state(false);
 
   const interecepteNavigation = (e: MouseEvent) => {
@@ -75,6 +77,7 @@
         risques: Risques;
         contactsUtiles: ContactsUtiles;
         indicesCyber: IndicesCyber;
+        dossiers: DossiersHomologation;
       }>(`/api/service/${idService}?complet=true`)
     ).data;
 
@@ -84,6 +87,7 @@
       : undefined;
     contactsUtiles = serviceComplet.contactsUtiles;
     indicesCyber = serviceComplet.indicesCyber;
+    dossiers = serviceComplet.dossiers;
     serviceCompletCharge = true;
   };
 
@@ -144,6 +148,14 @@
           tranches: indicesCyber?.tranches.indiceCyber,
           tranchesPersonnalisees:
             indicesCyber?.tranches.indiceCyberPersonnalise,
+        };
+      case 'dossiers':
+        return {
+          dossiers,
+          estLectureSeule: estLectureSeule.dossiers,
+          statutsHomologation: referentiel.dossiers.statutsHomologation,
+          indiceCyber: indicesCyber?.indiceCyberAnssi.total,
+          indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
         };
       default:
         return {};

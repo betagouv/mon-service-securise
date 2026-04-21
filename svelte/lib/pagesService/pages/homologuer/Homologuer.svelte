@@ -1,8 +1,44 @@
 <script lang="ts">
-  let dossiers = [];
+  import type { DossiersHomologation } from './homologuer.types';
+  import CarteDossier from './kit/CarteDossier.svelte';
+
+  interface Props {
+    dossiers: DossiersHomologation;
+    statutsHomologation: Record<string, { libelle: string }>;
+    indiceCyber: number;
+    indiceCyberPersonnalise: number;
+    idService: string;
+  }
+
+  let {
+    idService,
+    dossiers,
+    statutsHomologation,
+    indiceCyber,
+    indiceCyberPersonnalise,
+  }: Props = $props();
+
+  const configurationsTabs = [
+    {
+      id: 'courant',
+      label: 'Projet d’homologation en cours',
+    },
+    {
+      id: 'actif',
+      label: 'Dernière homologation',
+    },
+    {
+      id: 'passees',
+      label: 'Homologations passées',
+    },
+    {
+      id: 'refusees',
+      label: 'Homologations refusées',
+    },
+  ];
 </script>
 
-{#if dossiers.length === 0}
+{#if dossiers.aucunDossier}
   <div class="conteneur-projets-vide">
     <img
       src="/statique/assets/images/illustration_dossiers.svg"
@@ -23,7 +59,49 @@
       onclick={() => {}}
     ></dsfr-button>
   </div>
-{:else}{/if}
+{:else}
+  <dsfr-tabs tabs={configurationsTabs}>
+    <div slot="panel-1" class="conteneur-onglet">
+      {#if dossiers.dossierCourant}
+        <CarteDossier
+          dossier={{
+            ...dossiers.dossierCourant,
+            indiceCyber,
+            indiceCyberPersonnalise,
+          }}
+          {statutsHomologation}
+          {idService}
+        />
+      {/if}
+    </div>
+    <div slot="panel-2" class="conteneur-onglet">
+      {#if dossiers.dossierActif}
+        <CarteDossier
+          dossier={dossiers.dossierActif}
+          {statutsHomologation}
+          avecDocumentsAccessible
+          avecStatutHomologation
+          {idService}
+        />
+      {/if}
+    </div>
+    <div slot="panel-3" class="conteneur-onglet">
+      {#each dossiers.dossiersPasses as dossier (dossier.id)}
+        <CarteDossier {dossier} {statutsHomologation} {idService} />
+      {/each}
+    </div>
+    <div slot="panel-4" class="conteneur-onglet">
+      {#each dossiers.dossiersRefuses as dossier (dossier.id)}
+        <CarteDossier
+          {dossier}
+          {statutsHomologation}
+          avecStatutHomologation
+          {idService}
+        />
+      {/each}
+    </div>
+  </dsfr-tabs>
+{/if}
 
 <style lang="scss">
   .conteneur-projets-vide {
@@ -59,5 +137,11 @@
       font-size: 1.125rem;
       line-height: 1.75rem;
     }
+  }
+
+  .conteneur-onglet {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 </style>

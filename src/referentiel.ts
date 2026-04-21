@@ -72,6 +72,7 @@ const creeReferentiel = (
     donnees.statutsAvisDossierHomologation || {};
   const statutHomologation = (idStatut: IdStatutHomologation) =>
     donnees.statutsHomologation[idStatut];
+  const statutsHomologation = () => donnees.statutsHomologation;
   const categoriesMesures = () => donnees.categoriesMesures;
   const descriptionCategorie = (idCategorie: IdCategorieMesure) =>
     categoriesMesures()[idCategorie];
@@ -658,6 +659,7 @@ const creeReferentiel = (
     statutDeploiementParDescription,
     statutDeploiementValide,
     statutHomologation,
+    statutsHomologation,
     statutsMesures,
     tacheCompletudeProfil,
     trancheIndiceCyber,

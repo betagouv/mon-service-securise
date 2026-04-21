@@ -33,6 +33,9 @@ block append scripts
       descriptions: referentiel.risques(),
       matrice: referentiel.matriceNiveauxRisques(),
       niveaux: referentiel.niveauxRisque()
+    },
+    dossiers: {
+      statutsHomologation: referentiel.statutsHomologation()
     }
   })
   +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })
