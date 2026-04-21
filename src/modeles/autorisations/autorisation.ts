@@ -141,6 +141,10 @@ export class Autorisation extends Base {
     [CONTACTS]: LECTURE,
   };
 
+  static DROITS_VOIR_HOMOLOGUER: Partial<Droits> = {
+    [HOMOLOGUER]: LECTURE,
+  };
+
   static DROITS_EDITER_MESURES: Partial<Droits> = {
     [SECURISER]: ECRITURE,
   };

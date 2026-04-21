@@ -6,18 +6,18 @@ import {
 import { UUID } from '../../src/typesBasiques.ts';
 import { unUUID } from './UUID.ts';
 import { creeReferentielVide } from '../../src/referentiel.js';
-import { Referentiel } from '../../src/referentiel.interface.ts';
+import { TousReferentiels } from '../../src/referentiel.interface.ts';
 import { DonneesAvis } from '../../src/modeles/avis.ts';
 import { DureeValidite } from '../../src/modeles/etapes/decision.ts';
 
 class ConstructeurDossierFantaisie {
   readonly donnees: Partial<DonneesDossier>;
-  private readonly referentiel: Referentiel;
+  private readonly referentiel: TousReferentiels;
   private readonly adaptateurHorloge: AdaptateurHorloge;
 
   constructor(
     id: UUID = unUUID('1'),
-    referentiel: Referentiel = creeReferentielVide(),
+    referentiel: TousReferentiels = creeReferentielVide(),
     adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     this.donnees = { id };
@@ -166,7 +166,7 @@ class ConstructeurDossierFantaisie {
 }
 
 const unDossier = (
-  referentiel: Referentiel,
+  referentiel: TousReferentiels,
   adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
 ) =>
   new ConstructeurDossierFantaisie(unUUID('1'), referentiel, adaptateurHorloge);
