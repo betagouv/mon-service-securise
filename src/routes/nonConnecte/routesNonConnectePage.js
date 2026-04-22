@@ -48,6 +48,10 @@ const routesNonConnectePage = ({
     reponse.render('mentionsLegales');
   });
 
+  routes.get('/industrialisez-vos-homologations', (_requete, reponse) => {
+    reponse.render('industrialisezHomologations');
+  });
+
   routes.get('/statistiques', async (_requete, reponse) => {
     const { utilisateurs, services, vulnerabilites, indiceCyber } =
       await adaptateurStatistiques.recupereStatistiques();

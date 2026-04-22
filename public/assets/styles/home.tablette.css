@@ -104,8 +104,4 @@
     flex-shrink: 0;
     scroll-snap-align: center;
   }
-
-  #home #illustration-laptop {
-    max-width: 700px;
-  }
 }
