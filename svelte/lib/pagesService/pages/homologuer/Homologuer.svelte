@@ -56,7 +56,8 @@
       label="Créer un nouveau projet d'homologation"
       kind="primary"
       size="md"
-      onclick={() => {}}
+      onclick={() =>
+        (window.location.href = `/service/${idService}/homologation/edition/etape/autorite`)}
     ></dsfr-button>
   </div>
 {:else}
