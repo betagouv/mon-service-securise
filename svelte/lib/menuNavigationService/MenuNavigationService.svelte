@@ -75,20 +75,22 @@
           </a>
         </li>
       {/if}
-      <li>
-        <button
-          id="voir-telechargement"
-          class="lien-navigation"
-          onclick={() =>
-            tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-              service,
-            })}
-        >
-          <lab-anssi-icone nom="file-download-line" taille="sm"
-          ></lab-anssi-icone>
-          Documents
-        </button>
-      </li>
+      {#if service?.documentsPdfDisponibles.length > 0}
+        <li>
+          <button
+            id="voir-telechargement"
+            class="lien-navigation"
+            onclick={() =>
+              tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+                service,
+              })}
+          >
+            <lab-anssi-icone nom="file-download-line" taille="sm"
+            ></lab-anssi-icone>
+            Documents
+          </button>
+        </li>
+      {/if}
       {#if visible.descriptionService}
         <li>
           <a
