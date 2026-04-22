@@ -51,6 +51,27 @@
   });
 </script>
 
+{#if !dossiers.aucunDossier}
+  {@const dossierEnCours = !!dossiers.dossierCourant}
+  <div class="bouton-creation">
+    <dsfr-button
+      label={dossierEnCours
+        ? "Reprendre l'homologation"
+        : "Créer un nouveau projet d'homologation"}
+      kind="primary"
+      size="sm"
+      icon={dossierEnCours ? 'edit-box-line' : 'edit-line'}
+      icon-place="left"
+      markup="a"
+      href={dossierEnCours
+        ? `/service/${idService}/homologation/edition/etape/${dossiers.dossierCourant?.etapeCourante.nomEtape}`
+        : `/service/${idService}/homologation/edition/etape/autorite`}
+      type="button"
+      has-icon
+    ></dsfr-button>
+  </div>
+{/if}
+
 {#if dossiers.aucunDossier}
   <OngletVide
     titre="Aucun projet d’homologation en cours"
@@ -153,5 +174,11 @@
 
   .onglet-vide {
     padding: 48px 0;
+  }
+
+  .bouton-creation {
+    position: absolute;
+    top: 32px;
+    right: 24px;
   }
 </style>
