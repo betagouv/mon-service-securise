@@ -2,6 +2,8 @@
   import type { Dossier } from '../homologuer.types';
   import BadgeStatutHomologation from './BadgeStatutHomologation.svelte';
   import Infobulle from '../../../../ui/Infobulle.svelte';
+  import { tiroirStore } from '../../../../ui/stores/tiroir.store';
+  import TiroirTelechargementDocumentsService from '../../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
 
   interface Props {
     idService: string;
@@ -9,6 +11,7 @@
     statutsHomologation: Record<string, { libelle: string }>;
     avecDocumentsAccessible?: boolean;
     avecStatutHomologation?: boolean;
+    documentsPdfDisponibles?: string[];
   }
 
   let {
@@ -17,6 +20,7 @@
     statutsHomologation,
     avecDocumentsAccessible = false,
     avecStatutHomologation = false,
+    documentsPdfDisponibles = [],
   }: Props = $props();
 
   const noteIndiceCyber = (indiceCyber: number) => {
@@ -123,6 +127,7 @@
       ></dsfr-button>
     {/if}
     {#if avecDocumentsAccessible && !dossier.importe}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
         label="Accéder aux documents"
         kind="tertiary"
@@ -132,6 +137,10 @@
         markup="button"
         type="button"
         has-icon
+        onclick={() =>
+          tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+            service: { id: idService, documentsPdfDisponibles },
+          })}
       ></dsfr-button>
     {/if}
     {#if dossier.statut === 'nonRealisee'}
@@ -190,6 +199,10 @@
       display: flex;
       gap: 16px;
       margin-top: 8px;
+
+      dsfr-button {
+        white-space: nowrap;
+      }
     }
 
     .indices-cyber {
