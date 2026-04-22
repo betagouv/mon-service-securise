@@ -109,6 +109,19 @@
     </div>
   {/if}
   <div class="actions">
+    {#if dossier.statut === 'nonRealisee'}
+      <dsfr-button
+        label="Reprendre l'homologation"
+        kind="secondary"
+        size="md"
+        icon="edit-box-line"
+        icon-place="left"
+        markup="a"
+        href={`/service/${idService}/homologation/edition/etape/${dossier.etapeCourante.nomEtape}`}
+        type="button"
+        has-icon
+      ></dsfr-button>
+    {/if}
     {#if avecDocumentsAccessible && !dossier.importe}
       <dsfr-button
         label="Accéder aux documents"
@@ -122,16 +135,20 @@
       ></dsfr-button>
     {/if}
     {#if dossier.statut === 'nonRealisee'}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
-        label="Reprendre l'homologation"
+        label="Supprimer le projet d'homologation"
         kind="tertiary"
         size="md"
-        icon="edit-box-line"
+        icon="delete-line"
         icon-place="left"
-        markup="a"
-        href={`/service/${idService}/homologation/edition/etape/${dossier.etapeCourante.nomEtape}`}
+        markup="button"
         type="button"
         has-icon
+        onclick={() =>
+          document.body.dispatchEvent(
+            new CustomEvent('affiche-tiroir-suppression-dossier-courant')
+          )}
       ></dsfr-button>
     {/if}
   </div>
