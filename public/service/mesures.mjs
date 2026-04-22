@@ -22,6 +22,8 @@ $(() => {
   const enVisiteGuidee = () =>
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
 
+  const autorisationsService = lisDonneesPartagees('autorisations-service');
+
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-mesures', {
       detail: {
@@ -34,6 +36,14 @@ $(() => {
         estLectureSeule,
         modeVisiteGuidee: enVisiteGuidee(),
         versionService,
+        visible: {
+          rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
+          risques: !autorisationsService.RISQUES.estMasque,
+          descriptionService: !autorisationsService.DECRIRE.estMasque,
+          mesures: !autorisationsService.SECURISER.estMasque,
+          dossiers: !autorisationsService.HOMOLOGUER.estMasque,
+          indiceCyber: !autorisationsService.SECURISER.estMasque,
+        },
       },
     })
   );

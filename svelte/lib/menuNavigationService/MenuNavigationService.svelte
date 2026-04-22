@@ -22,6 +22,7 @@
   let service: ServicePourMenuNavigation | undefined = $state();
   onMount(async () => {
     if (modeVisiteGuidee) {
+      service = donneesServiceVisiteGuidee;
       return;
     }
     const reponse = await axios.get<ServicePourMenuNavigation>(
