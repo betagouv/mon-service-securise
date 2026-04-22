@@ -78,7 +78,9 @@
     ).data;
 
     descriptionService = serviceComplet.descriptionService;
-    risques = tousRisques(serviceComplet.risques);
+    risques = serviceComplet.risques
+      ? tousRisques(serviceComplet.risques)
+      : undefined;
     contactsUtiles = serviceComplet.contactsUtiles;
     indicesCyber = serviceComplet.indicesCyber;
   };
