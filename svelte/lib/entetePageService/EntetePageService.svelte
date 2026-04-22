@@ -10,6 +10,7 @@
     indiceCyber,
     indiceCyberPersonnalise,
     noteMax,
+    avecIndiceCyber,
   }: EntetePageServiceProps = $props();
 </script>
 
@@ -18,48 +19,50 @@
     <h1>{nomService}</h1>
     <h2>{organisationResponsable}</h2>
   </div>
-  <div class="indices-cyber">
-    <a
-      class="conteneur-indice-cyber"
-      href="/service/{idService}/indiceCyber?onglet=indice-cyber-anssi"
-    >
-      <div class="indice-cyber">
-        <IndiceCyber {idService} {indiceCyber} {noteMax} />
-      </div>
-      <div class="intitule-indice-cyber">
-        <span>Indice cyber ANSSI</span>
-        <span class="detail">
-          Voir le détail
-          <span class="fleche">
-            <lab-anssi-icone nom="arrow-right-line" taille="sm"
-            ></lab-anssi-icone>
+  {#if avecIndiceCyber}
+    <div class="indices-cyber">
+      <a
+        class="conteneur-indice-cyber"
+        href="/service/{idService}/indiceCyber?onglet=indice-cyber-anssi"
+      >
+        <div class="indice-cyber">
+          <IndiceCyber {idService} {indiceCyber} {noteMax} />
+        </div>
+        <div class="intitule-indice-cyber">
+          <span>Indice cyber ANSSI</span>
+          <span class="detail">
+            Voir le détail
+            <span class="fleche">
+              <lab-anssi-icone nom="arrow-right-line" taille="sm"
+              ></lab-anssi-icone>
+            </span>
           </span>
-        </span>
-      </div>
-    </a>
-    <a
-      class="conteneur-indice-cyber"
-      href="/service/{idService}/indiceCyber?onglet=indice-cyber-personnalise"
-    >
-      <div class="indice-cyber">
-        <IndiceCyberPersonnalise
-          {idService}
-          {indiceCyberPersonnalise}
-          {noteMax}
-        />
-      </div>
-      <div class="intitule-indice-cyber">
-        <span>Indice cyber personnalisé</span>
-        <span class="detail">
-          Voir le détail
-          <span class="fleche">
-            <lab-anssi-icone nom="arrow-right-line" taille="sm"
-            ></lab-anssi-icone>
+        </div>
+      </a>
+      <a
+        class="conteneur-indice-cyber"
+        href="/service/{idService}/indiceCyber?onglet=indice-cyber-personnalise"
+      >
+        <div class="indice-cyber">
+          <IndiceCyberPersonnalise
+            {idService}
+            {indiceCyberPersonnalise}
+            {noteMax}
+          />
+        </div>
+        <div class="intitule-indice-cyber">
+          <span>Indice cyber personnalisé</span>
+          <span class="detail">
+            Voir le détail
+            <span class="fleche">
+              <lab-anssi-icone nom="arrow-right-line" taille="sm"
+              ></lab-anssi-icone>
+            </span>
           </span>
-        </span>
-      </div>
-    </a>
-  </div>
+        </div>
+      </a>
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
