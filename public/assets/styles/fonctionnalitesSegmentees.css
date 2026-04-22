@@ -13,3 +13,37 @@
 .fonctionnalite {
   scroll-margin-top: 16px;
 }
+
+.fonctionnalite img {
+  max-width: 100%;
+}
+
+.conteneur-fonctionnalites {
+  flex: 1;
+}
+
+.illustration-fonctionnalites-segmentees-desktop {
+  display: none;
+  max-width: 588px;
+  height: fit-content;
+}
+
+@media screen and (min-width: 1200px) {
+  .fonctionnalite {
+    cursor: pointer;
+  }
+
+  .illustration-fonctionnalites-segmentees-desktop {
+    display: flex;
+    flex: 1;
+  }
+
+  .fonctionnalite img {
+    display: none;
+  }
+
+  .fonctionnalite.active,
+  .fonctionnalite.active span {
+    color: var(--bleu-mise-en-avant);
+  }
+}

@@ -15,14 +15,16 @@ mixin fonctionnalitesSegmentees(labels, contenu)
       value="1"
       no-legend
     )
-    each groupeFonctionnalites, idxGroupe in contenu
-      .flex-column.gap-16.conteneur-fonctionnalites(class=`${idxGroupe === 0 ? "" : "invisible"}`, data-index=idxGroupe + 1)
-        each fonctionnalite, idx in groupeFonctionnalites
-          .flex-column.gap-16.fonctionnalite
-            .flex-column.gap-8
-              span
-                b= fonctionnalite.titre
-              p.mb-8= fonctionnalite.description
-            img(src=fonctionnalite.img, alt=`Illustration pour ${fonctionnalite.titre}`, class=`${idx === 0 ? "" : "invisible"}`)
-          if idx < groupeFonctionnalites.length - 1
-            hr
+    .flex-row.gap-24.center
+      each groupeFonctionnalites, idxGroupe in contenu
+        .flex-column.gap-16.conteneur-fonctionnalites(class=`${idxGroupe === 0 ? "" : "invisible"}`, data-index=idxGroupe + 1)
+          each fonctionnalite, idx in groupeFonctionnalites
+            .flex-column.gap-16.fonctionnalite(class=`${idx === 0 ? "active": ""}`)
+              .flex-column.gap-8
+                span
+                  b= fonctionnalite.titre
+                p.mb-8= fonctionnalite.description
+              img(src=fonctionnalite.img, alt=`Illustration pour ${fonctionnalite.titre}`, class=`${idx === 0 ? "" : "invisible"}`)
+            if idx < groupeFonctionnalites.length - 1
+              hr
+      img(class="illustration-fonctionnalites-segmentees-desktop" src=contenu[0][0].img)

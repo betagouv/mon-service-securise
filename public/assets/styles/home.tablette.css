@@ -12,14 +12,6 @@
     padding: 56px;
   }
 
-  #home h1 {
-    font-size: 3.9em;
-  }
-
-  #home h3 {
-    font-size: 2.8em;
-  }
-
   #home a {
     width: fit-content;
     height: fit-content;
@@ -104,10 +96,6 @@
 
   #home .centre-tablette {
     text-align: center;
-  }
-
-  #home .chiffre-cle h4 {
-    font-size: 5.6em;
   }
 
   #home .conteneur-entites {
