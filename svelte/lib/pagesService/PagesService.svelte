@@ -32,6 +32,7 @@
     nomService: string;
     organisationResponsable: string;
     version: VersionService;
+    documentsPdfDisponibles: string[];
   };
 
   let service: ServicePourPagesService | undefined = $state();
@@ -156,6 +157,7 @@
           statutsHomologation: referentiel.dossiers.statutsHomologation,
           indiceCyber: indicesCyber?.indiceCyberAnssi.total,
           indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
+          documentsPdfDisponibles: service?.documentsPdfDisponibles,
         };
       default:
         return {};

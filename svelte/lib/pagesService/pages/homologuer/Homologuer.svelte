@@ -8,6 +8,7 @@
     indiceCyber: number;
     indiceCyberPersonnalise: number;
     idService: string;
+    documentsPdfDisponibles: string[];
   }
 
   let {
@@ -16,6 +17,7 @@
     statutsHomologation,
     indiceCyber,
     indiceCyberPersonnalise,
+    documentsPdfDisponibles,
   }: Props = $props();
 
   const configurationsTabs = [
@@ -72,6 +74,8 @@
           }}
           {statutsHomologation}
           {idService}
+          avecDocumentsAccessible
+          {documentsPdfDisponibles}
         />
       {/if}
     </div>
@@ -80,7 +84,6 @@
         <CarteDossier
           dossier={dossiers.dossierActif}
           {statutsHomologation}
-          avecDocumentsAccessible
           avecStatutHomologation
           {idService}
         />
