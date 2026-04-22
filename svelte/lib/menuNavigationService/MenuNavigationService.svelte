@@ -33,13 +33,18 @@
   <div class="conteneur-menu-navigation-service">
     <ul>
       {#if visible.mesures || visible.indiceCyber || visible.risques}
+        {@const destination = visible.mesures
+          ? 'mesures'
+          : visible.risques
+            ? 'risques'
+            : 'indiceCyber'}
         <li>
           <a
             class:actif={etapeActive === 'mesures' ||
               etapeActive === 'indiceCyber' ||
               etapeActive === 'risques'}
             class="lien-navigation"
-            href="/service/{idService}/mesures"
+            href="/service/{idService}/{destination}"
           >
             <lab-anssi-icone nom="list-unordered" taille="sm"></lab-anssi-icone>
             Sécuriser
