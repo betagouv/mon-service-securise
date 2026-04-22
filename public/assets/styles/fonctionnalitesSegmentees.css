@@ -1,0 +1,15 @@
+.fonctionnalites span {
+  color: #161616;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+}
+
+.fonctionnalites hr {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #dddddd;
+}
+
+.fonctionnalite {
+  scroll-margin-top: 16px;
+}

@@ -3,10 +3,6 @@
     width: 100%;
   }
 
-  #home .tag-impact-national {
-    margin-top: 76px;
-  }
-
   #home .bloc-contenu {
     padding: 56px 112px;
     overflow-x: hidden;
@@ -95,16 +91,6 @@
 
   #home .moyenne-marge-haute-tablette {
     margin-top: 48px;
-  }
-
-  #home .etape img {
-    max-width: 486px;
-  }
-
-  #home .numero-etape {
-    width: 84px;
-    height: 84px;
-    font-size: 3.3em;
   }
 
   #home .conteneur-etroit {

@@ -1,4 +1,6 @@
 extends mssDeconnecte
+include ./fragments/fonctionnalitesSegmentees
+
 block variables
   - const meta_description = 'Pilotez la sécurité de vos services numériques en équipe et homologuez les rapidement avec MonServiceSécurisé. Découvrez maintenant !'
   - const ongletActif = 'accueil'
@@ -21,28 +23,21 @@ mixin etape(numero, titre, description, afficheChemin = true)
 
 mixin chiffreCle(chiffre, description)
   .chiffre-cle
-    h4.alignement-gauche.centre-tablette.couleur-principale-foncee= chiffre
-    p.alignement-gauche.centre-tablette= description
+    h4.centre-tablette= chiffre
+    p.centre-tablette= description
 
-mixin carteCarrousel(numero, description)
-  .carte-carrousel(id=`slide-${numero}`)
-    img.petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
-    h3= description
+mixin carteCarrousel(numero, titre, sousTitre)
+  dsfr-tile(title=titre has-description description=sousTitre action-markup="false" no-link size='sm')
 
-mixin carrousel(id, texteBoutonSuivant)
+mixin carrousel(id)
   div(id=id)
     .conteneur-carrousel
       block
     .conteneur-liens-carrousel
-      button.precedent(title="Précédent")
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
-      button.suivant(title="Suivant")
-        span= texteBoutonSuivant
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
+      dsfr-button(label='Précédent' has-icon icon='arrow-left-s-line' kind='tertiary-no-outline').precedent
+      dsfr-button(label='Suivant' has-icon icon='arrow-right-s-line' icon-place='right' kind='tertiary-no-outline').suivant
 
 block append styles
-  link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
-  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.tablette.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.desktop.css', rel='stylesheet')
@@ -52,90 +47,81 @@ block append scripts
 
 block main
   #home
-    .bloc-contenu.fond-couleur-principale
+    .bloc-contenu.fond-couleur-principale.hero
       .conteneur-titre
         .conteneur-centre
-          img.taille-maximale.taille-borne(src='/statique/assets/images/home/illustration_1.svg' alt='')
+          img(src='/statique/assets/images/home/tableau-de-bord.png' alt='')
         .contenu-titre
-          .tag-impact-national
-            span Service à impact national
-          h1.alignement-gauche-desktop MonServiceSécurisé
+          lab-anssi-tag(label='Service à impact national' size='sm' couleur-texte='#297254' couleur-fond='#9ef9be')
+          h1.alignement-gauche-desktop MonService&#8203;Sécurisé
           h2.alignement-gauche L'outil pour piloter en équipe la sécurité de tous vos services numériques et les homologuer rapidement
           .conteneur-liens
-            a#commencer-a-securiser(href='/inscription') Commencer à sécuriser
-            a.secondaire.grande-marge-basse#etre-accompagne(href='https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1' target='_blank' rel='noopener') Être accompagné
-          p.alignement-gauche.moyenne-marge-basse Une innovation ANSSI conçue pour durer en collaboration avec :
-          .conteneur-logo-partenaire.petite-marge-basse
-            img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
-    +carrousel('carrousel-presentation', 'Suivant')
-      +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
-      +carteCarrousel(2, "Accessible à toutes les entités publiques")
-      +carteCarrousel(3, "Conçu par les spécialistes de l'ANSSI")
+            dsfr-button(label='Commencer à sécuriser' kind="inverted-primary" has-icon icon='arrow-right-line' icon-place="right" centered markup="a" type="button" href="/inscription")
+            dsfr-button(label='Demander une demonstration' kind="inverted-secondary"  centered markup="a" type="button" href='https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1')
+
+    +carrousel('carrousel-presentation')
+      +carteCarrousel(1, "Gratuit, 100% en ligne", "et collaboratif")
+      +carteCarrousel(2, "Pour les agents public", "et leurs prestataires")
+      +carteCarrousel(3, "Un outil conçu par l'ANSSI", "en collaboration avec la CNIL")
+
+    .bloc-contenu.fond-couleur-principale-attenuee#trois-etapes
+      h3.alignement-gauche.moyenne-marge-basse Sécurisez vos systèmes d'information en 3 étapes
+      p Du premier ajout d'un système d’information à la signature de la décision d'homologation, MonServiceSécurisé vous guide à chaque étape.
+      #cartes
+        dsfr-card(
+          title="Évaluez les besoins de sécurité de votre service numérique"
+          src='/statique/assets/images/home/carte-1.png'
+          alt=""
+          has-tag
+          no-link
+          no-icon)
+          dsfr-tag(slot="tagsgroup" label="01")
+        dsfr-card(
+          title="Sécurisez, grâce à des mesures adaptées"
+          src='/statique/assets/images/home/carte-2.png'
+          alt=""
+          has-tag
+          no-link
+          no-icon)
+          dsfr-tag(slot="tagsgroup" label="02")
+        dsfr-card(
+          title="Homologuez en toute simplicité"
+          src='/statique/assets/images/home/carte-3.png'
+          alt=""
+          has-tag
+          no-link
+          no-icon)
+          dsfr-tag(slot="tagsgroup" label="03")
+
+      dsfr-button(label='Commencer à sécuriser'  has-icon icon='arrow-right-line' icon-place="right" markup="a" type="button" href="/inscription" centered)
+
+    .bloc-contenu.alignement-gauche
+      h3.alignement-gauche.tres-grande-marge-basse Les fonctionnalités clés
+      +fonctionnalitesSegmentees(
+        ['Pour toutes le équipes', 'Pour les FSSI & les RSSI'],
+        [
+          [
+            { titre: 'Plan d’action cyber collaboratif', description: 'Collaborez avec vos équipes, assignez les mesures de sécurité et suivez leur avancement.', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Indice cyber', description: 'Obtenez une évaluation indicative du niveau de sécurisation du service et sa  durée d’homologation recommandée', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Tableau de bord', description: 'Visualisez vos services, priorités et échéances en un coup d’œil.', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Matrice de risques', description: 'Identifiez et suivez vos risques en temps réel, au fil de la complétion de votre plan d’action cyber.', img: '/statique/assets/images/home/carte-3.png' },
+          ],
+          [
+            { titre: 'Supervision', description: 'Vision globale de vos systèmes d’information avec des indicateurs clés pour piloter la sécurisation de votre entité.', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Téléversement des systèmes d’information', description: 'Importez tous vos systèmes d’information en une seule fois pour les centraliser.', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Import des mesures', description: 'Intégrez des mesures de sécurité spécifiques et réutilisez-les sur vos système d’information.', img: '/statique/assets/images/home/carte-3.png' },
+            { titre: 'Gestion des droits', description: 'Gestion des droits', img: '/statique/assets/images/home/carte-3.png' },
+          ],
+        ]
+      )
+
     .bloc-contenu.fond-couleur-principale-attenuee
-      h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
-      .conteneur-avantage
-        img.grande-marge-basse.taille-maximale.plus-grand#illustration-laptop(src='/statique/assets/images/home/illustration_portable_tdb.png' alt='')
-        .conteneur-avantages.grande-marge-basse
-          +contenuAvantage('Laissez-vous guider !', "Utilisez MonServiceSécurisé, même si la cybersécurité n'a QUE des secrets pour vous.")
-          +contenuAvantage('Renforcez la sécurité de tous vos services', 'Placez votre effort au bon niveau et obtenez des résultats concrets.')
-          +contenuAvantage('Mettez-vous en conformité', "L'homologation de sécurité devient un jeu d'enfant avec MonServiceSécurisé.")
-      .conteneur-centre
-        a.principal.petite-marge-basse#commencer-a-securiser-avantages(href='/inscription') Commencer à sécuriser
+      h3.alignement-gauche.moyenne-marge-basse Ce que disent nos utilisateurs
+      +carrousel('carrousel-temoignages', 'Témoignages suivants')
+        include home/temoignages
+
     .bloc-contenu
-      h3.alignement-gauche.moyenne-marge-basse.couleur-principale-foncee Découvrez MonServiceSécurisé en vidéo
-      .conteneur-video
-        video#video-presentation(src="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Video_MonServiceSecurise_Thumbnail.mp4" controls)
-    .bloc-contenu.bloc-etroit.fond-couleur-principale.bloc-impact-national
-      .conteneur-droite-gauche
-        .conteneur-gauche
-          .tag-impact-national
-            span Service à impact national
-          h3.alignement-gauche.petite-marge-basse MonServiceSécurisé, service à impact national
-          .conteneur-impact-national
-            p.moyenne-police.alignement-gauche La direction interministérielle du numérique a attribué le statut de service à impact national à MonServiceSécurisé.
-            p.moyenne-police.alignement-gauche Cela atteste que le service est de grande qualité, résout réellement un problème d’interêt général et a un fort impact sur ses utilisateurs.
-        .conteneur-droite
-          .conteneur-image
-            img.grande-marge-basse.taille-maximale(src='/statique/assets/images/home/illustration_service_impact_national.svg' alt='Illustration de MonServiceSécurisé, service à impact national')
-      .conteneur-centre.conteneur-gauche-desktop
-        a.petite-marge-basse.moyenne-marge-haute-tablette#en-savoir-plus-impact-national(href='https://aide.monservicesecurise.cyber.gouv.fr/fr/article/service-a-impact-national-quest-ce-que-ca-signifie-67i3tq/' target='_blank' rel='noopener') En savoir plus
-    .bloc-contenu.bloc-etroit.fond-couleur-principale-attenuee
-      .conteneur-flex-photos-equipe
-        .conteneur-photos-equipe.petite-marge-basse
-          img(src='/statique/assets/images/home/antoine.webp' alt="Photo d'Antoine Dupuy" width=160)
-          img(src='/statique/assets/images/home/fabien.webp' alt="Photo de Fabien Giraud" width=160)
-        .contenu-texte-photos-equipe
-          h3.alignement-gauche.petite-marge-basse.moyenne-police-tablette.police-noire Notre équipe est à votre écoute
-          p.moyenne-police.alignement-gauche
-            span Antoine et Fabien vous guideront dans la découverte et la prise en main de MonServiceSécurisé au sein de votre organisation.&nbsp;
-            span
-              b Notre priorité : vous accompagner.
-          .conteneur-centre.conteneur-gauche-desktop
-            a.principal.petite-marge-basse.moyenne-marge-haute-tablette#beneficier-accompagnement(href='https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1' target='_blank' rel='noopener') Assister à une présentation 
-    .bloc-contenu
-      h3.alignement-gauche.moyenne-marge-basse.couleur-principale-foncee Comment fonctionne MonServiceSécurisé ?
-      .etapes.grande-marge-basse
-        +etape(1, 'Évaluez les besoins de sécurité de votre service', "Présentez en 3 min les caractéristiques de votre service afin de permettre à l'ANSSI de créer votre liste personnalisée de mesures de sécurité et de mesures proposées par la CNIL.")
-        +etape(2, 'Sécurisez, grâce à des mesures adaptées', "Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation du service : l'indice cyber.")
-        +etape(3, 'Homologuez en toute simplicité', "Téléchargez en 1 clic, le dossier et le projet de décision d’homologation pour le faire signer.", false)
-      .conteneur-centre
-        a.principal.gra#commencer-a-securiser-etapes(href='/inscription') Commencer à sécuriser
-    .bloc-contenu.bloc-etroit.fond-couleur-principale.sans-padding-bas#conteneur-sport-collectif
-      .conteneur-collaboration
-        .contenu-texte-collaboration
-          .contenu-centre-vertical
-            h3.alignement-gauche.moyenne-marge-basse La cybersécurité est un sport collectif !
-            p.alignement-gauche.moyenne-police.grande-marge-basse Sécurisez à 2, à 10 ou à 100. Pensé par et pour les DSI, RSSI, DPD, et chef/fes de projets. Invitez les personnes de votre choix y compris vos prestataires. Et gérez en finesse leurs droits d’accès.
-        .conteneur-etroit
-          img.taille-maximale.decalage-bas#illustration-collaboratif(loading="lazy" src='/statique/assets/images/home/illustration_3.webp' alt="Menu de gestion des contributeurs" width=384)
-    .bloc-contenu
-      h3.alignement-gauche.centre-tablette.alignement-gauche-desktop.couleur-principale-foncee.moyenne-marge-basse Ça fonctionne !
-      .chiffres-cle.petite-marge-basse
-        +chiffreCle('+55%', "L'augmentation moyenne de l'indice cyber d'un service en seulement 1 mois.")
-        +chiffreCle('5 min', "Le temps nécessaire pour démarrer un projet d'homologation et obtenir une 1ère version de son dossier.")
-        +chiffreCle('+8 000', "Plus de 8 000 personnes utilisent déjà MonServiceSécurisé.")
-    .bloc-contenu.fond-couleur-principale-attenuee
-      h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse Ces entités qui nous font confiance
+      h3.alignement-gauche.moyenne-marge-basse Ces entités qui nous font confiance
       .conteneur-entites.grande-marge-basse
         img(loading="lazy" src='/statique/assets/images/home/logos/ADICO.webp' alt="ADICO - ASSOCIATION POUR LE DEVELOPPEMENT ET L'INNOVATION NUMERIQUE DES COLLECTIVITES")
         img(loading="lazy" src='/statique/assets/images/home/logos/ANCT.webp' alt="ANCT - AGENCE NATIONALE DE LA COHESION DES TERRITOIRES")
@@ -157,33 +143,37 @@ block main
         img(loading="lazy" src='/statique/assets/images/home/logos/PLATEFORME DE L INCLUSION.webp' alt="PLATEFORME DE L'INCLUSION")
         img(loading="lazy" src='/statique/assets/images/home/logos/SM D ENERGIES EQUIPEMENTS ET COMMUNICATION DU JURA (SIDEC).webp' alt="SM D'ENERGIES EQUIPEMENTS ET COMMUNICATION DU JURA (SIDEC)")
         img(loading="lazy" src='/statique/assets/images/home/logos/SYNDICAT MIXTE LA FIBRE64.webp' alt="SYNDICAT MIXTE LA FIBRE64")
-    .bloc-contenu
-      h3.alignement-gauche.titre-etroit.couleur-principale-foncee.moyenne-marge-basse Les avis de nos utilisateurs
-      +carrousel('carrousel-temoignages', 'Témoignages suivants')
-        include home/temoignages
-    .bloc-contenu.bloc-etroit.fond-couleur-principale.alignement-gauche#rejoignez-communaute
-      .conteneur-communaute
-        div
-          h3.moyenne-marge-basse Rejoignez la communauté MonServiceSécurisé et Innovation ANSSI !
-          p.moyenne-police En tant que&nbsp;
-            b membre de la communauté&nbsp;
-            | vous pourrez :
-          br
-          ul.moyenne-police
-            li
-              b Echanger&nbsp;
-              | directement avec vos pairs pour une collaboration facilitée.
-            li
-              b Découvrir&nbsp;
-              | en avant-première les nouvelles fonctionnalités à venir.
-            li
-              b Participer&nbsp;
-              | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
-        div
-          .conteneur-centre
-            img(loading="lazy" src='/statique/assets/images/home/illustration_communaute.svg' alt='')
-      .conteneur-centre
-        a#lien-rejoindre-communaute(href="https://tally.so/r/wa6o22") Rejoindre la communauté
+
+    .bloc-contenu.bloc-etroit.fond-couleur-principale.bloc-impact-national
+      .conteneur-droite-gauche
+        .conteneur-gauche.alignement-gauche
+          h3 MonServiceSécurisé,<br> service à impact national
+          .conteneur-impact-national
+            p.alignement-gauche La direction interministérielle du numérique a attribué le statut de service à impact national à MonServiceSécurisé. Cela atteste que le service est de grande qualité, résout réellement un problème d’interêt général et a un fort impact sur ses utilisateurs.
+            dsfr-button(label="En savoir plus" kind="inverted-primary" markup="a" href='https://aide.monservicesecurise.cyber.gouv.fr/fr/article/service-a-impact-national-quest-ce-que-ca-signifie-67i3tq/' target="blank")
+        .conteneur-droite
+          .conteneur-image
+            img.grande-marge-basse.taille-maximale(src='/statique/assets/images/home/illustration_service_impact_national.svg' alt='Illustration de MonServiceSécurisé, service à impact national')
+
+    .bloc-contenu.bloc-etroit
+      .conteneur-flex-photos-equipe
+        .conteneur-photos-equipe
+          img(src='/statique/assets/images/home/illustration_equipe_antoine_fabien.png' alt="Photo d'Antoine Dupuy et Fabien Giraud")
+        .contenu-texte-photos-equipe.alignement-gauche
+          h3 Notre équipe est à votre écoute
+          p
+            span Antoine et Fabien vous guideront dans la découverte et la prise en main de MonServiceSécurisé au sein de votre organisation.&nbsp;
+            span
+              b Notre priorité : vous accompagner.
+          dsfr-button(label='Assister à une démonstration' size="md" has-icon icon='arrow-right-line' icon-place="right" markup="a" href="https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-")
+
+    .bloc-contenu.fond-couleur-principale-attenuee.resultats#resultats
+      h3.alignement-gauche.centre-tablette Des résultats concrets, rapidement
+      .chiffres-cle
+        +chiffreCle('+55%', "d'augmentation moyenne de l'indice cyber en seulement 1 mois")
+        +chiffreCle('5 min', "pour démarrer une homologation et générer un premier dossier")
+        +chiffreCle('+8 000', "utilisateurs font déjà confiance à MonServiceSécurisé")
+      dsfr-button(label='Commencer à sécuriser' size="md" has-icon icon='arrow-right-line' icon-place="right" markup="a" href="/inscription" centered)
 
     .bloc-contenu
       lab-anssi-presentation-anssi
