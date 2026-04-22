@@ -31,6 +31,7 @@
 
   const formatteDateFrancaise = (dateStr: string) =>
     Intl.DateTimeFormat('fr-FR').format(new Date(dateStr));
+
   const texteTronque = (texte: string, tailleLimite: number) =>
     texte.length > tailleLimite
       ? texte.substring(0, tailleLimite) + '…'
@@ -81,7 +82,7 @@
       <div class="indices-cyber">
         {#if dossier.indiceCyber !== undefined}
           <dsfr-badge
-            label={`Indice cyber ANSSI ${noteIndiceCyber(dossier.indiceCyber)}`}
+            label="Indice cyber ANSSI {noteIndiceCyber(dossier.indiceCyber)}"
             type="accent"
             accent="blue-cumulus"
             size="md"
@@ -90,7 +91,9 @@
 
         {#if dossier.indiceCyberPersonnalise !== undefined}
           <dsfr-badge
-            label={`Indice cyber personnalisé ${noteIndiceCyber(dossier.indiceCyberPersonnalise)}`}
+            label="Indice cyber personnalisé {noteIndiceCyber(
+              dossier.indiceCyberPersonnalise
+            )}"
             type="accent"
             accent="green-archipel"
             size="md"
@@ -114,72 +117,75 @@
       ></dsfr-badge>
     </div>
   {/if}
-  <div class="actions">
-    {#if dossier.statut === 'nonRealisee'}
-      <dsfr-button
-        label="Reprendre l'homologation"
-        kind="secondary"
-        size="md"
-        icon="edit-box-line"
-        icon-place="left"
-        markup="a"
-        href={`/service/${idService}/homologation/edition/etape/${dossier.etapeCourante.nomEtape}`}
-        type="button"
-        has-icon
-      ></dsfr-button>
-    {/if}
-    {#if avecDocumentsAccessible && !dossier.importe}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Accéder aux documents"
-        kind="tertiary"
-        size="md"
-        icon="file-line"
-        icon-place="left"
-        markup="button"
-        type="button"
-        has-icon
-        onclick={() =>
-          tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-            service: { id: idService, documentsPdfDisponibles },
-          })}
-      ></dsfr-button>
-    {/if}
-    {#if dossier.statut === 'nonRealisee'}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Supprimer le projet d'homologation"
-        kind="tertiary"
-        size="md"
-        icon="delete-line"
-        icon-place="left"
-        markup="button"
-        type="button"
-        has-icon
-        onclick={() =>
-          document.body.dispatchEvent(
-            new CustomEvent('affiche-tiroir-suppression-dossier-courant')
-          )}
-      ></dsfr-button>
-    {/if}
-    {#if avecTamponAccessible}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Télécharger l'encart d'homologation"
-        kind="tertiary"
-        size="md"
-        icon="download-line"
-        icon-place="left"
-        markup="button"
-        type="button"
-        has-icon
-        onclick={() =>
-          document.body.dispatchEvent(
-            new CustomEvent('svelte-affiche-tiroir-telechargement-tampon')
-          )}
-      ></dsfr-button>
-    {/if}
-  </div>
+  {#if dossier.statut === 'nonRealisee' || (avecDocumentsAccessible && !dossier.importe) || avecTamponAccessible}
+    <div class="actions">
+      {#if dossier.statut === 'nonRealisee'}
+        <dsfr-button
+          label="Reprendre l'homologation"
+          kind="secondary"
+          size="md"
+          icon="edit-box-line"
+          icon-place="left"
+          markup="a"
+          href="/service/{idService}/homologation/edition/etape/{dossier
+            .etapeCourante.nomEtape}"
+          type="button"
+          has-icon
+        ></dsfr-button>
+      {/if}
+      {#if avecDocumentsAccessible && !dossier.importe}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Accéder aux documents"
+          kind="tertiary"
+          size="md"
+          icon="file-line"
+          icon-place="left"
+          markup="button"
+          type="button"
+          has-icon
+          onclick={() =>
+            tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+              service: { id: idService, documentsPdfDisponibles },
+            })}
+        ></dsfr-button>
+      {/if}
+      {#if dossier.statut === 'nonRealisee'}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Supprimer le projet d'homologation"
+          kind="tertiary"
+          size="md"
+          icon="delete-line"
+          icon-place="left"
+          markup="button"
+          type="button"
+          has-icon
+          onclick={() =>
+            document.body.dispatchEvent(
+              new CustomEvent('affiche-tiroir-suppression-dossier-courant')
+            )}
+        ></dsfr-button>
+      {/if}
+      {#if avecTamponAccessible}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Télécharger l'encart d'homologation"
+          kind="tertiary"
+          size="md"
+          icon="download-line"
+          icon-place="left"
+          markup="button"
+          type="button"
+          has-icon
+          onclick={() =>
+            document.body.dispatchEvent(
+              new CustomEvent('svelte-affiche-tiroir-telechargement-tampon')
+            )}
+        ></dsfr-button>
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
