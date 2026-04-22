@@ -7,6 +7,9 @@
   let { elements, doitEtreOuvert = $bindable() }: Props = $props();
 
   const gereClic = (e: MouseEvent) => {
+    if (!elements) {
+      return;
+    }
     const clicInterieur =
       elements.includes(e.target as HTMLElement) ||
       elements.some((el) => el.contains(e.target as Node));
