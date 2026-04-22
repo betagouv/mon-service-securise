@@ -1,0 +1,28 @@
+mixin fonctionnalitesSegmentees(labels, contenu)
+  -
+    const elements = labels.map(((l, idx) => ({"label": l, "value": (idx + 1).toString(), "id":`segmente-${(idx + 1)}`})))
+
+  block append scripts
+    script(type = 'module', src = '/statique/fonctionnalitesSegmentees.js')
+
+    block append styles
+      link(href='/statique/assets/styles/fonctionnalitesSegmentees.css', rel='stylesheet')
+
+  .flex-column.fonctionnalites
+    dsfr-segmented.tres-grande-marge-basse.controle-segmente-fonctionnalites(
+      size="md"
+      elements=JSON.stringify(elements)
+      value="1"
+      no-legend
+    )
+    each groupeFonctionnalites, idxGroupe in contenu
+      .flex-column.gap-16.conteneur-fonctionnalites(class=`${idxGroupe === 0 ? "" : "invisible"}`, data-index=idxGroupe + 1)
+        each fonctionnalite, idx in groupeFonctionnalites
+          .flex-column.gap-16.fonctionnalite
+            .flex-column.gap-8
+              span
+                b= fonctionnalite.titre
+              p.mb-8= fonctionnalite.description
+            img(src=fonctionnalite.img, alt=`Illustration pour ${fonctionnalite.titre}`, class=`${idx === 0 ? "" : "invisible"}`)
+          if idx < groupeFonctionnalites.length - 1
+            hr

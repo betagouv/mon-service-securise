@@ -1,8 +1,4 @@
 @media screen and (min-width: 1440px) {
-  #home .tag-impact-national {
-    margin-top: 0;
-  }
-
   #home .alignement-gauche-desktop {
     text-align: left;
   }
@@ -79,48 +75,6 @@
     justify-content: left;
   }
 
-  #home .etape {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 54px;
-    position: relative;
-  }
-
-  #home .etape:nth-child(even) {
-    flex-direction: row-reverse;
-  }
-
-  #home .numero-etape {
-    min-width: 120px;
-    min-height: 120px;
-    z-index: 1;
-  }
-
-  #home .contenu-texte-etape {
-    padding-right: 122px;
-  }
-
-  #home .etape:nth-child(even) .contenu-texte-etape {
-    padding-right: 0;
-    padding-left: 122px;
-  }
-
-  #home .etape .chemin {
-    position: absolute;
-    left: 41%;
-    top: 190px;
-    transform: rotate(-22deg);
-  }
-
-  #home .etape:nth-child(even) .chemin {
-    position: absolute;
-    left: 56%;
-    top: 243px;
-    transform: rotate(180deg);
-  }
-
   #home .bloc-contenu.bloc-etroit {
     padding: 80px 0;
   }
@@ -169,17 +123,6 @@
     min-width: calc(1200px / 2 - 12px);
     width: calc(1200px / 2 - 12px);
     scroll-snap-align: start;
-  }
-
-  #home #rejoignez-communaute .conteneur-communaute {
-    display: flex;
-    flex-direction: row-reverse;
-    margin-bottom: 36px;
-    align-items: center;
-  }
-
-  #home #rejoignez-communaute .conteneur-communaute > div {
-    flex: 1;
   }
 
   #home .bloc-impact-national .conteneur-droite-gauche {

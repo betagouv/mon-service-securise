@@ -51,7 +51,7 @@ section:last-of-type {
 }
 
 .invisible {
-  display: none;
+  display: none !important;
 }
 
 .disparu {
