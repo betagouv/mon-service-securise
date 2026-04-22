@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { DossiersHomologation } from './homologuer.types';
   import CarteDossier from './kit/CarteDossier.svelte';
+  import OngletVide from './kit/OngletVide.svelte';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -41,18 +42,10 @@
 </script>
 
 {#if dossiers.aucunDossier}
-  <div class="conteneur-projets-vide">
-    <img
-      src="/statique/assets/images/illustration_dossiers.svg"
-      alt="Illustration du dossier d'homologation vide"
-    />
-    <div>
-      <h4>Aucun projet d’homologation en cours</h4>
-      <span>
-        Aucun projet d’homologation n’est en cours, ni aucune homologation n’a
-        été validée.
-      </span>
-    </div>
+  <OngletVide
+    titre="Aucun projet d’homologation en cours"
+    sousTitre="Aucun projet d’homologation n’est en cours, ni aucune homologation n’a été validée"
+  >
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Créer un nouveau projet d'homologation"
@@ -61,7 +54,7 @@
       onclick={() =>
         (window.location.href = `/service/${idService}/homologation/edition/etape/autorite`)}
     ></dsfr-button>
-  </div>
+  </OngletVide>
 {:else}
   <dsfr-tabs tabs={configurationsTabs}>
     <div slot="panel-1" class="conteneur-onglet">
@@ -77,6 +70,13 @@
           avecDocumentsAccessible
           {documentsPdfDisponibles}
         />
+      {:else}
+        <div class="onglet-vide">
+          <OngletVide
+            titre="Aucun projet d’homologation en cours"
+            sousTitre="Aucun projet d’homologation n’est en cours pour ce service"
+          />
+        </div>
       {/if}
     </div>
     <div slot="panel-2" class="conteneur-onglet">
@@ -88,65 +88,59 @@
           avecTamponAccessible
           {idService}
         />
+      {:else}
+        <div class="onglet-vide">
+          <OngletVide
+            titre="Aucune homologation active"
+            sousTitre="Aucun projet d’homologation n’est actif pour ce service"
+          />
+        </div>
       {/if}
     </div>
     <div slot="panel-3" class="conteneur-onglet">
-      {#each dossiers.dossiersPasses as dossier (dossier.id)}
-        <CarteDossier {dossier} {statutsHomologation} {idService} />
-      {/each}
+      {#if dossiers.dossiersPasses.length === 0}
+        <div class="onglet-vide">
+          <OngletVide
+            titre="Aucune homologation passée"
+            sousTitre="Aucun projet d’homologation n’est archivé pour ce service"
+          />
+        </div>
+      {:else}
+        {#each dossiers.dossiersPasses as dossier (dossier.id)}
+          <CarteDossier {dossier} {statutsHomologation} {idService} />
+        {/each}
+      {/if}
     </div>
     <div slot="panel-4" class="conteneur-onglet">
-      {#each dossiers.dossiersRefuses as dossier (dossier.id)}
-        <CarteDossier
-          {dossier}
-          {statutsHomologation}
-          avecStatutHomologation
-          {idService}
-        />
-      {/each}
+      {#if dossiers.dossiersRefuses.length === 0}
+        <div class="onglet-vide">
+          <OngletVide
+            titre="Aucune homologation refusée"
+            sousTitre="Aucun projet d’homologation n’a été refusé pour ce service"
+          />
+        </div>
+      {:else}
+        {#each dossiers.dossiersRefuses as dossier (dossier.id)}
+          <CarteDossier
+            {dossier}
+            {statutsHomologation}
+            avecStatutHomologation
+            {idService}
+          />
+        {/each}
+      {/if}
     </div>
   </dsfr-tabs>
 {/if}
 
 <style lang="scss">
-  .conteneur-projets-vide {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    max-width: 588px;
-    color: #161616;
-    margin: 0 auto;
-    text-align: center;
-
-    & > div {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    img {
-      max-width: 200px;
-    }
-
-    h4 {
-      font-weight: bold;
-      font-size: 1.5rem;
-      line-height: 2rem;
-      margin: 0;
-    }
-
-    span {
-      font-size: 1.125rem;
-      line-height: 1.75rem;
-    }
-  }
-
   .conteneur-onglet {
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .onglet-vide {
+    padding: 48px 0;
   }
 </style>
