@@ -38,6 +38,7 @@
   let risques: ReturnType<typeof tousRisques> | undefined = $state();
   let contactsUtiles: ContactsUtiles | undefined = $state();
   let indicesCyber: IndicesCyber | undefined = $state();
+  let serviceCompletCharge = $state(false);
 
   const interecepteNavigation = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a');
@@ -83,6 +84,7 @@
       : undefined;
     contactsUtiles = serviceComplet.contactsUtiles;
     indicesCyber = serviceComplet.indicesCyber;
+    serviceCompletCharge = true;
   };
 
   onMount(async () => {
@@ -157,7 +159,7 @@
 />
 
 <Toaster />
-{#if service && descriptionService && indicesCyber && contactsUtiles}
+{#if service && serviceCompletCharge}
   <div class="conteneur-pages-service">
     {#if service.version === 'v1'}
       <BandeauReferentielV2 {idService} />
@@ -165,10 +167,12 @@
     <EntetePageService
       {idService}
       nomService={service.nomService}
-      indiceCyber={indicesCyber.indiceCyberAnssi?.total ?? 0}
-      indiceCyberPersonnalise={indicesCyber.indiceCyberPersonnalise?.total ?? 0}
+      indiceCyber={indicesCyber?.indiceCyberAnssi?.total ?? 0}
+      indiceCyberPersonnalise={indicesCyber?.indiceCyberPersonnalise?.total ??
+        0}
       noteMax={referentiel.indiceCyber.noteMax}
       organisationResponsable={service.organisationResponsable}
+      avecIndiceCyber={visible.indiceCyber}
     />
     <div class="contenu-page">
       <MenuNavigationService
