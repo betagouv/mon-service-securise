@@ -7,6 +7,7 @@
   import { onMount } from 'svelte';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
+  import { donneesServiceVisiteGuidee } from '../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
 
   let {
     visible,
@@ -17,7 +18,8 @@
 
   type ServicePourMenuNavigation = DonneesServicePourTelechargementDocuments &
     DonneesServicePourTiroirContributeurs;
-  let service: ServicePourMenuNavigation;
+
+  let service: ServicePourMenuNavigation | undefined = $state();
   onMount(async () => {
     if (modeVisiteGuidee) {
       return;
@@ -29,100 +31,110 @@
   });
 </script>
 
-<div class="menu-navigation-service">
-  <div class="conteneur-menu-navigation-service">
-    <ul>
-      {#if visible.mesures || visible.indiceCyber || visible.risques}
-        {@const destination = visible.mesures
-          ? 'mesures'
-          : visible.risques
-            ? 'risques'
-            : 'indiceCyber'}
-        <li>
-          <a
-            class:actif={etapeActive === 'mesures' ||
-              etapeActive === 'indiceCyber' ||
-              etapeActive === 'risques'}
-            class="lien-navigation"
-            href="/service/{idService}/{destination}"
-          >
-            <lab-anssi-icone nom="list-unordered" taille="sm"></lab-anssi-icone>
-            Sécuriser
-          </a>
-        </li>
-      {/if}
-      {#if visible.dossiers}
-        <li>
-          <a
-            class:actif={etapeActive === 'dossiers'}
-            class="lien-navigation"
-            href="/service/{idService}/dossiers"
-          >
-            <lab-anssi-icone nom="award-line" taille="sm"></lab-anssi-icone>
-            Homologuer
-          </a>
-        </li>
-      {/if}
-      {#if visible.rolesResponsabilites}
-        <li>
-          <a
-            class:actif={etapeActive === 'rolesResponsabilites'}
-            class="lien-navigation"
-            href="/service/{idService}/rolesResponsabilites"
-          >
-            <lab-anssi-icone nom="mail-line" taille="sm"></lab-anssi-icone>
-            Contacts utiles
-          </a>
-        </li>
-      {/if}
-      {#if service?.documentsPdfDisponibles.length > 0}
-        <li>
-          <button
-            id="voir-telechargement"
-            class="lien-navigation"
-            onclick={() =>
-              tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-                service,
-              })}
-          >
-            <lab-anssi-icone nom="file-download-line" taille="sm"
-            ></lab-anssi-icone>
-            Documents
-          </button>
-        </li>
-      {/if}
-      {#if visible.descriptionService}
-        <li>
-          <a
-            class:actif={etapeActive === 'descriptionService'}
-            class="lien-navigation"
-            href="/service/{idService}/descriptionService"
-          >
-            <lab-anssi-icone nom="survey-line" taille="sm"></lab-anssi-icone>
-            Récapitulatif</a
-          >
-        </li>
-      {/if}
-    </ul>
-    <div id="gerer-contributeurs">
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Gérer les contributeurs"
-        kind="tertiary"
-        size="sm"
-        icon="group-line"
-        icon-place="left"
-        markup="button"
-        type="button"
-        has-icon
-        onclick={() =>
-          tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-            services: [service],
-          })}
-      ></dsfr-button>
+{#if service}
+  <div class="menu-navigation-service">
+    <div class="conteneur-menu-navigation-service">
+      <ul>
+        {#if visible.mesures || visible.indiceCyber || visible.risques}
+          {@const destination = visible.mesures
+            ? 'mesures'
+            : visible.risques
+              ? 'risques'
+              : 'indiceCyber'}
+          <li>
+            <a
+              class:actif={etapeActive === 'mesures' ||
+                etapeActive === 'indiceCyber' ||
+                etapeActive === 'risques'}
+              class="lien-navigation"
+              href="/service/{idService}/{destination}"
+            >
+              <lab-anssi-icone nom="list-unordered" taille="sm"
+              ></lab-anssi-icone>
+              Sécuriser
+            </a>
+          </li>
+        {/if}
+        {#if visible.dossiers}
+          <li>
+            <a
+              class:actif={etapeActive === 'dossiers'}
+              class="lien-navigation"
+              href="/service/{idService}/dossiers"
+            >
+              <lab-anssi-icone nom="award-line" taille="sm"></lab-anssi-icone>
+              Homologuer
+            </a>
+          </li>
+        {/if}
+        {#if visible.rolesResponsabilites}
+          <li>
+            <a
+              class:actif={etapeActive === 'rolesResponsabilites'}
+              class="lien-navigation"
+              href="/service/{idService}/rolesResponsabilites"
+            >
+              <lab-anssi-icone nom="mail-line" taille="sm"></lab-anssi-icone>
+              Contacts utiles
+            </a>
+          </li>
+        {/if}
+        {#if service.documentsPdfDisponibles?.length > 0}
+          <li>
+            <button
+              id="voir-telechargement"
+              class="lien-navigation"
+              onclick={() => {
+                if (service)
+                  tiroirStore.afficheContenu(
+                    TiroirTelechargementDocumentsService,
+                    {
+                      service,
+                    }
+                  );
+              }}
+            >
+              <lab-anssi-icone nom="file-download-line" taille="sm"
+              ></lab-anssi-icone>
+              Documents
+            </button>
+          </li>
+        {/if}
+        {#if visible.descriptionService}
+          <li>
+            <a
+              class:actif={etapeActive === 'descriptionService'}
+              class="lien-navigation"
+              href="/service/{idService}/descriptionService"
+            >
+              <lab-anssi-icone nom="survey-line" taille="sm"></lab-anssi-icone>
+              Récapitulatif</a
+            >
+          </li>
+        {/if}
+      </ul>
+      <div id="gerer-contributeurs">
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Gérer les contributeurs"
+          kind="tertiary"
+          size="sm"
+          icon="group-line"
+          icon-place="left"
+          markup="button"
+          type="button"
+          has-icon
+          onclick={() => {
+            if (service)
+              tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+                services: [service],
+              });
+          }}
+        ></dsfr-button>
+      </div>
     </div>
   </div>
-</div>
+{/if}
 
 <style lang="scss">
   .menu-navigation-service {

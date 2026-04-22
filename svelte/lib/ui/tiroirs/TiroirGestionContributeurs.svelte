@@ -1,13 +1,13 @@
 <script lang="ts">
   import ContenuTiroir from './ContenuTiroir.svelte';
   import GestionContributeurs from '../../gestionContributeurs/GestionContributeurs.svelte';
-  import type { Service } from '../../gestionContributeurs/gestionContributeurs.d';
   import { store } from '../../gestionContributeurs/gestionContributeurs.store';
   import { untrack } from 'svelte';
   import { donneesServiceVisiteGuidee } from '../../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
+  import type { DonneesServicePourTiroirContributeurs } from '../../gestionContributeurs/gestionContributeurs.d';
 
   interface Props {
-    services: Service[];
+    services: DonneesServicePourTiroirContributeurs[];
     modeVisiteGuidee?: boolean;
   }
 
