@@ -2,6 +2,8 @@
   import type { DossiersHomologation } from './homologuer.types';
   import CarteDossier from './kit/CarteDossier.svelte';
   import OngletVide from './kit/OngletVide.svelte';
+  import ModaleEncartHomologation from './kit/ModaleEncartHomologation.svelte';
+  import { onMount } from 'svelte';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -39,6 +41,14 @@
       label: 'Homologations refusées',
     },
   ];
+
+  let modaleEncarteHomologation: ModaleEncartHomologation;
+
+  onMount(() => {
+    const requete = new URLSearchParams(window.location.search);
+    const avecSucces = requete.get('succesHomologation');
+    if (avecSucces) modaleEncarteHomologation?.affiche();
+  });
 </script>
 
 {#if dossiers.aucunDossier}
@@ -132,6 +142,7 @@
     </div>
   </dsfr-tabs>
 {/if}
+<ModaleEncartHomologation {idService} bind:this={modaleEncarteHomologation} />
 
 <style lang="scss">
   .conteneur-onglet {
