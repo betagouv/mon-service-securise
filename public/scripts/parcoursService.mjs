@@ -73,6 +73,7 @@ $(async () => {
         indiceCyber,
         indiceCyberPersonnalise,
         noteMax,
+        avecIndiceCyber: !autorisationsService.SECURISER.estMasque,
       },
     })
   );
