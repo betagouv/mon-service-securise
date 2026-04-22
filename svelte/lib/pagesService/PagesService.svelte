@@ -227,6 +227,7 @@
         color: #161616;
         margin-bottom: 24px;
         width: 100%;
+        position: relative;
 
         h1 {
           font-size: 1.75rem;
