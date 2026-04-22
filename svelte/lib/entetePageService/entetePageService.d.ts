@@ -11,4 +11,5 @@ export type EntetePageServiceProps = {
   indiceCyber: number;
   indiceCyberPersonnalise: number;
   noteMax: number;
+  avecIndiceCyber: boolean;
 };
