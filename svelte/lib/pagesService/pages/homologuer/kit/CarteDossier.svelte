@@ -10,6 +10,7 @@
     dossier: Dossier;
     statutsHomologation: Record<string, { libelle: string }>;
     avecDocumentsAccessible?: boolean;
+    avecTamponAccessible?: boolean;
     avecStatutHomologation?: boolean;
     documentsPdfDisponibles?: string[];
   }
@@ -19,6 +20,7 @@
     dossier,
     statutsHomologation,
     avecDocumentsAccessible = false,
+    avecTamponAccessible = false,
     avecStatutHomologation = false,
     documentsPdfDisponibles = [],
   }: Props = $props();
@@ -157,6 +159,23 @@
         onclick={() =>
           document.body.dispatchEvent(
             new CustomEvent('affiche-tiroir-suppression-dossier-courant')
+          )}
+      ></dsfr-button>
+    {/if}
+    {#if avecTamponAccessible}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Télécharger l'encart d'homologation"
+        kind="tertiary"
+        size="md"
+        icon="download-line"
+        icon-place="left"
+        markup="button"
+        type="button"
+        has-icon
+        onclick={() =>
+          document.body.dispatchEvent(
+            new CustomEvent('svelte-affiche-tiroir-telechargement-tampon')
           )}
       ></dsfr-button>
     {/if}
