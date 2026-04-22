@@ -3,6 +3,7 @@ import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionExportMesures from '../modules/tableauDeBord/actions/ActionExportMesures.mjs';
 import ActionSuppressionDossierCourant from '../modules/tableauDeBord/actions/ActionSuppressionDossierCourant.mjs';
+import ActionTelechargementTamponHomologation from '../modules/tableauDeBord/actions/ActionTelechargementTamponHomologation.js';
 
 $(() => {
   const idService = $('#pages-service').data('id-service');
@@ -98,5 +99,14 @@ $(() => {
 
   $(document.body).on('ferme-tiroir', () => {
     gestionnaireTiroir.basculeOuvert(false);
+  });
+
+  const telechargementTamponHomologation =
+    new ActionTelechargementTamponHomologation();
+  $(document.body).on('svelte-affiche-tiroir-telechargement-tampon', () => {
+    gestionnaireTiroir.afficheContenuAction(
+      { action: telechargementTamponHomologation },
+      { idService }
+    );
   });
 });

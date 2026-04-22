@@ -85,6 +85,7 @@
           dossier={dossiers.dossierActif}
           {statutsHomologation}
           avecStatutHomologation
+          avecTamponAccessible
           {idService}
         />
       {/if}
