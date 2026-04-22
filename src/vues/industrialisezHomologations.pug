@@ -1,0 +1,294 @@
+extends mssDeconnecte
+include ./fragments/entites
+include ./fragments/fonctionnalitesSegmentees
+
+block title
+  title Industrialisez vos homologations | MonServiceSécurisé
+
+block variables
+  - const meta_description = "Industrialisez vos homologations de sécurité avec MonServiceSécurisé, l’outil conçu par les spécialistes de l’ANSSI."
+
+block append styles
+  link(href="/statique/assets/styles/landing.css", rel="stylesheet")
+
+block main
+  .landing(data-themeable="true")
+    .bloc-contenu.bloc-hero
+      dsfr-container
+        .conteneur-colonnes
+          .principale
+            h1.titre Industrialisez vos homologations de sécurité
+            p.description L’outil conçu par les spécialistes de l’ANSSI pour les ministères, les collectivités, opérateurs de l’Etat et entités sous tutelles souhaitant structurer et accélérer leurs démarches d’homologations.
+            .actions
+              dsfr-button(
+                label="Commencer à sécuriser"
+                markup="a"
+                href="/inscription"
+                has-icon
+                icon="arrow-right-line"
+                icon-place="right"
+                centered
+              )
+              dsfr-button(
+                label="Demander une démonstration"
+                kind="secondary"
+                markup="a"
+                href="https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1"
+                centered
+              )
+          figure.secondaire
+            img.illustration(
+              src="/statique/assets/images/landing/illustration_hero-expert_cyber.svg"
+              alt="Illustration expert cyber"
+            )
+
+    .bloc-contenu.bloc-enjeux
+      dsfr-container
+        .conteneur
+          h2.titre Vous vous reconnaissez dans ces enjeux ?
+          .enjeux
+            .enjeu
+              h3.sous-titre Homologuez
+              p.description L’ensemble de vos systèmes d’information, simplement et efficacement
+            .enjeu
+              h3.sous-titre Déléguez
+              p.description Les équipes métiers dans la sécurité de leurs projets
+            .enjeu
+              h3.sous-titre Uniformisez
+              p.description Vos démarches et les documents associés
+            .enjeu
+              h3.sous-titre Supervisez
+              p.description Grâce à une vision globale appuyée par des données fiables
+          dsfr-button(
+            label="Commencer à sécuriser"
+            kind="inverted-primary"
+            markup="a"
+            href="/inscription"
+            has-icon
+            icon="arrow-right-line"
+            icon-place="right"
+            centered
+          )
+
+    .bloc-contenu.bloc-outil
+      dsfr-container
+        h2.titre L’outil pour centraliser et piloter en équipe la sécurité de tous vos systèmes et les homologuer rapidement
+        .conteneur-colonnes
+          .principale
+            .avantage
+              h3.avantage-titre Industrialisez vos homologations en :
+              .avantage-description
+                ul.avantage-liste
+                  li Adaptant les efforts aux besoins de sécurité de chaque système.
+                  li Délégant aux équipes métiers
+                  li Concentrant votre attention sur les homologations qui le nécessitent
+            .avantage
+              h3.avantage-titre Nos engagements
+              .avantage-description
+                ul.avantage-liste
+                  li 100% conforme au guide d'homologation de l'ANSSI
+                  li Un outil puissant et qui s’adapte aux spécificités de votre organisation
+                  li Adapté à tous les agents publics que soit leurs compétences cyber
+            .avantage
+              h3.avantage-titre À la clé
+              .avantage-description
+                ul.avantage-liste
+                  li Déléguez aux équipes métiers et contrôlez le travail réalisé
+                  li Proportionnez et accélérez toutes vos démarches d'homologation
+                  li Centrez vos efforts sur les projets nécessitant votre attention
+                  li Mettez tous vos systèmes en conformité
+          figure.secondaire
+            img.illustration.centered(
+              src="/statique/assets/images/home/tableau-de-bord.png"
+              alt=""
+            )
+        dsfr-button(
+          label="Commencer à sécuriser"
+          markup="a"
+          href="/inscription"
+          has-icon
+          icon="arrow-right-line"
+          icon-place="right"
+          centered
+        )
+
+    .bloc-contenu.bloc-comment
+      dsfr-container
+        h2.titre Comment fonctionne MonServiceSécurisé ?
+        .cartes
+          dsfr-card(
+            title="Évaluez en 3mn les besoins de sécurité de chaque système d’information et découvrez la démarche adaptée"
+            has-description
+            description="Présentez les caractéristiques de votre système d’information afin d’obtenir une évaluation des besoins de sécurité et découvrez la démarche d’homologation adaptée."
+            src="/statique/assets/images/landing/illustration_decrire.png"
+            alt=""
+            has-tag
+            no-link
+            no-icon)
+            dsfr-tag(slot="tagsgroup" label="01")
+          dsfr-card(
+            title="Standardisez la forme de vos projets et décisions d’homologation."
+            has-description
+            description="Téléchargez en 1 clic le dossier complet ainsi que le projet de décision d’homologation afin de pouvoir les transmettre, les faire valider et signer par l’autorité d’homologation."
+            src="/statique/assets/images/landing/illustration_securisez.png"
+            alt=""
+            has-tag
+            no-link
+            no-icon)
+            dsfr-tag(slot="tagsgroup" label="02")
+          dsfr-card(
+            title="Gérez et supervisez la sécurité et l’homologation de tous vos systèmes"
+            has-description
+            description="Supervisez l’ensemble de vos systèmes d’information et leur statut d’homologation grâce à un tableau de bord dédié, et recevez des rappels réguliers pour en assurer le suivi dans la durée."
+            src="/statique/assets/images/landing/illustration_homologuer.png"
+            alt=""
+            has-tag
+            no-link
+            no-icon)
+            dsfr-tag(slot="tagsgroup" label="03")
+        dsfr-button(
+          label="Commencer à sécuriser"
+          markup="a"
+          href="/inscription"
+          has-icon
+          icon="arrow-right-line"
+          icon-place="right"
+          centered
+        )
+
+    .bloc-contenu.bloc-avantages
+      dsfr-container
+        .conteneur
+          h2.titre Les avantages MonServiceSécurisé
+          p.description Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
+          +fonctionnalitesSegmentees(
+            ["Pilotage des homologations et conformité", "Proportionner mes démarches de sécurisation", "Collaborer avec son équipe", "Faire approuver une homologation"],
+            [
+              [
+                { titre: "Le tableau de bord", description: "Pilotez en équipe vos systèmes d'information et obtenez des actions recommandées à chaque étape.", img: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_bord.png" },
+                { titre: "Les mesures spécifiques applicables à plusieurs services à la fois.", description: "Accédez au socle de mesures ANSSI, importez vos mesures spécifiques et modifiez les mesures sur plusieurs SI simultanément", img: "/statique/assets/images/landing/fonctionnalites/illustration_mesures_specifiques.png" },
+                { titre: "Le tableau de supervision", description: "Supervisez l'ensemble de votre périmètre grâce aux SIRETs. Présentez les chiffres en comité de direction (nombre de SIs sécurisés, statut des homologations, évolution de l'indice cyber, ...).", img: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_supervision.png" },
+              ],
+              [
+                { titre: "Évaluation des besoins de sécurité", description: "Décrivez les caractéristiques de chaque SI, puis évaluez l’exposition et la criticité pour que l’outil vous indique quel besoin de sécurité est associé (basique, modéré, avancé)", img: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_besoins.png" },
+                { titre: "Évaluation de la démarche d’homologation adaptée", description: "À chaque besoin de sécurité, sa démarche d’homologation. Proportionnez vos efforts et mettez-vous en conformité avec “l’homologation simplifiée”", img: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_demarche_homologation.png" },
+                { titre: "Une liste de mesures de sécurité personnalisée", description: "Notre outil sélectionne la liste de mesure de sécurité adaptées aux enjeux de sécurité de votre SI. Le socle de mesures proposée vous assure un niveau de sécurité optimal.", img: "/statique/assets/images/landing/fonctionnalites/illustration_liste_de_mesures.png" },
+              ],
+              [
+                { titre: "Le collaboratif", description: "Sur chaque service, ajoutez des contributeurs et attribuez leurs des droits en fonction de leurs rôles.", img: "/statique/assets/images/landing/fonctionnalites/illustration_collaboratif.png" },
+                { titre: "Le plan d’action et l’historique d’activité", description: "Définissez un plan d’action, attribuez des responsables sur chaque mesure et contrôler l’activité des mesures !", img: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
+              ],
+              [
+                { titre: "Un dossier d’homologation clé-en main", description: "Standardisez vos démarches d’homologation grâce à la création d’un dossier d’homologation clé en main.", img: "/statique/assets/images/landing/fonctionnalites/illustration_dossier_homologation.png" },
+                { titre: "L’encart d’homologation", description: "Valorisez vos efforts d’homologation et soyez transparents avec les usagers de vos SIs en partageant l’encart d’homologation.", img: "/statique/assets/images/landing/fonctionnalites/illustration_encart_homologation.png" },
+              ],
+            ],
+            'h3'
+          )
+
+    .bloc-contenu.bloc-equipe
+      dsfr-container
+        .conteneur-colonnes.inverse
+          .principale
+            h2.titre Montez en compétences,<br/> construisez l'outil avec nous
+            p.description
+              span Antoine et Fabien vous guideront dans la découverte et la prise en main de MonServiceSécurisé au sein de votre organisation.&nbsp;
+                strong Notre priorité : vous accompagner.
+            dsfr-button(
+              label="S'inscrire à la formation"
+              markup="a"
+              href="https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1"
+              centered
+            )
+          figure.secondaire
+            img.illustration(
+              src="/statique/assets/images/home/illustration_equipe_antoine_fabien.png"
+              alt="Photo d'Antoine Dupuy et Fabien Giraud"
+            )
+
+    .bloc-contenu.bloc-mss-impact
+      dsfr-container
+        .conteneur-colonnes
+          .principale
+            h2.titre MonServiceSécurisé,<br> service à impact national
+            p.description La direction interministérielle du numérique a attribué le statut de service à impact national à MonServiceSécurisé. Cela atteste que le service est de grande qualité, résout réellement un problème d’interêt général et a un fort impact sur ses utilisateurs.
+            dsfr-button(
+              label="En savoir plus"
+              kind="inverted-primary"
+              markup="a"
+              href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/service-a-impact-national-quest-ce-que-ca-signifie-67i3tq/"
+              target="blank"
+              centered
+            )
+          figure.secondaire
+            img.illustration(
+              src="/statique/assets/images/home/illustration_service_impact_national.svg"
+              alt="Illustration de MonServiceSécurisé, service à impact national"
+            )
+
+    .bloc-contenu.bloc-entites
+      dsfr-container
+        h2.titre Ces entités qui nous font confiance
+        +entites('conteneur')
+
+    .bloc-contenu.bloc-avis
+      dsfr-container
+        h2.titre Les avis de nos utilisateurs
+        lab-anssi-temoignages(
+          titre=""
+          temoignages='[{"citation":"Nous avons commencé à utiliser MSS qui correspond bien à nos objectifs en termes de sécurité et de protection des données personnelles : la complémentarité entre DSI, RSSI et DPO. L\'utilisation du service est simple. Nous y intégrons désormais les nouveaux projets au fur et à mesure que nous en sommes informés. Cela contribue au respect des principes de privacy et security by design.","auteur":"Robert Malek","source":"IMT"},{"citation":"L\'idée d\'une gestion pilotée par la direction générale s\'est révélée être un point de départ essentiel, permettant de dépasser l\'image de \'gadget technique\' souvent associée à une direction opérationnelle. Bien au contraire, chez nous, cet outil est devenu un moyen commun au service de tous. Merci donc pour cette initiative ! ","auteur":"Lionel Pérès","source":"Ville de Vaison-la-Romaine · Directeur général des services"},{"citation":"Après avoir expérimenté l\'outil sur quelques projets en 2023, l\'établissement a décidé de systématiser la démarche d\'homologation de sécurité à tous les nouveaux projets numériques. Il va ainsi accélérer sa mise en conformité avec la nouvelle réglementation et au-delà, se donner les moyens d\'opérer un Numérique plus sûr, garant d\'un service public de confiance.","auteur":"Jacques Hertzberg","source":"Université de Pau · RMSI"},{"citation":"Nous étions à la recherche d\'un outil d’analyse de risques afin de dresser une cartographie des risques de nos SI. Les critères de choix étaient : efficacité et exhaustivité dans les analyses réalisées, facilité d\'emploi pour tous, avec un gestion granulaire des droits d\'accès, aspect collaboratif sur les projets transverses, (etc…). Après une étude de l\'état de l\'art, la solution MonServiceSécurisé a répondu à tous ces critères.","auteur":"Brice Dal Pra","source":"IMT · Responsable de la Sécurité des Systèmes d\'Information IMT"},{"citation":"MonServiceSécurisé est un outil très utile qui m\'a permis de définir plus clairement le niveau de maturité du service que nous mettons à disposition de nos administrés (site Web), et il nous aide dans la construction d\'un plan d\'action SSI, basé sur une analyse du besoin en sécurité et de l\'évaluation du risque sécurité.","auteur":"David Henocq","source":"Boivre-la-Vallée · Conseiller Mairie"},{"citation":"MonServiceSécurisé nous permet d’homologuer l’ensemble de nos sites internet et de rassurer nos collectivités sur notre démarche de sécurisation de nos sites internet, mais aussi de rassurer les habitants des collectivités qui nous font confiance sur la sécurité du site internet de leurs communes.","auteur":"Maxime Virot","source":"OPSN Adico · Responsable du pôle infrastructures"},{"citation":"J\'ai utilisé MonServiceSécurisé comme support dans le cadre de l\'homologation RGS de notre produit. Dans les premières phases, cela a été très utile pour faire un panorama de notre situation d\'un point de vue sécurité. Et par la suite d\'avoir l\'outil comme boussole pour évaluer l\'évolution de notre score en fonction des différentes actions menées.","auteur":"Sonia Perelroizen","source":"Inclusion Connect | La Plateforme de l\'inclusion · Gestionnaire produit"},{"citation":"Un grand vide de comblé. Un bel outil simple à utiliser. Une équipe réactive pour la prise en compte de nouveaux besoins ou des évolutions. Un grand merci à tous.","auteur":"Jean-Paul Baudic","source":"SGDSN · FSSI"},{"citation":"L’outil s’avère efficace, et permet d’harmoniser l’approche d’homologation, quel que soit l’agent qui rédige le dossier. Au final, nous gagnons du temps et de la rigueur dans la création de nos dossiers d’homologation. À ajouter dans sa boîte à outils « cyber ».","auteur":"Sylvain Bart","source":"Pas de Calais · RSSI"},{"citation":"L\'outil MonServiceSécurisé permet une prise de conscience pour les entités proposants des services à travers Internet et donne de sérieuses pistes d\'amélioration et de sécurisation. Il nous reste du pain sur la planche !","auteur":"Baptiste Fostein","source":"La Fibre64 · DSSI"}]'
+
+        )
+
+    .bloc-contenu.bloc-communaute
+      dsfr-container
+        .conteneur-colonnes.inverse
+          .principale
+            h2.titre Rejoignez la communauté MonServiceSécurisé et Innovation ANSSI !
+            p.description En tant que&nbsp;
+              strong membre de la communauté&nbsp;
+              | vous pourrez :
+            ul.list
+              li
+                strong Echanger&nbsp;
+                | directement avec vos pairs pour une collaboration facilitée.
+              li
+                strong Découvrir&nbsp;
+                | en avant-première les nouvelles fonctionnalités à venir.
+              li
+                strong Participer&nbsp;
+                | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
+            dsfr-button(
+              label="Rejoindre la communauté"
+              kind="inverted-primary"
+              markup="a"
+              href="https://tally.so/r/wa6o22"
+              centered
+            )
+          figure.secondaire
+            img.illustration(
+              loading="lazy"
+              src="/statique/assets/images/home/illustration_communaute.svg"
+              alt=""
+            )
+
+    .bloc-contenu.bloc-securite
+      dsfr-container
+        .conteneur-colonnes
+          .principale
+            h2.titre Une sécurité renforcée en continu
+            p.description MonServiceSécurisé est hébergé chez Clever Cloud, via Cloud Temple (SecNumCloud), et homologué avec le soutien de l’ANSSI dans une démarche de sécurisation en continu, pilotée par les risques.
+            dsfr-button(
+              label="En savoir plus"
+              markup="a"
+              href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/heberger-le-service-et-les-donnees-aupres-dun-prestataire-secnumcloud-myk3ux/"
+              centered
+            )
+          figure.secondaire
+            img.illustration(
+              src="/statique/assets/images/landing/illustration_securite_renforce.png"
+              alt=""
+            )
+
+    .bloc-contenu.bloc-presentation-anssi
+      lab-anssi-presentation-anssi

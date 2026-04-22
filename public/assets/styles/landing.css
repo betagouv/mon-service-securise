@@ -1,0 +1,468 @@
+body {
+  min-width: unset;
+}
+
+main {
+  display: block;
+  border-top-width: 0;
+}
+
+.landing {
+  --titre-font-size: 1.75rem;
+  --titre-line-height: 2.25rem;
+  --titre-margin-block: 0 0.75rem;
+
+  color: var(--text-default-grey);
+
+  @media (min-width: 992px) {
+    --titre-font-size: 2rem;
+    --titre-line-height: 2.5rem;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.bloc-contenu {
+  --padding-block: 3.5rem;
+
+  text-align: left;
+  padding-block: var(--padding-block);
+}
+
+.conteneur-colonnes {
+  --colonnes-gap: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--colonnes-gap);
+
+  @media (min-width: 992px) {
+    --colonnes-gap: 0;
+
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .principale {
+    --colonne-taille: calc(800% / 12);
+
+    @media (min-width: 992px) {
+      flex: 0 0 var(--colonne-taille);
+      max-width: var(--colonne-taille);
+      width: var(--colonne-taille);
+    }
+  }
+
+  .secondaire {
+    --colonne-taille: calc(400% / 12);
+
+    @media (min-width: 992px) {
+      flex: 0 0 var(--colonne-taille);
+      max-width: var(--colonne-taille);
+      width: var(--colonne-taille);
+    }
+  }
+}
+
+.conteneur-colonnes.inverse {
+  .principale {
+    @media (min-width: 992px) {
+      order: 1;
+    }
+  }
+}
+
+.titre {
+  color: var(--text-title-grey);
+  font-size: var(--titre-font-size);
+  line-height: var(--titre-line-height);
+  margin-block: var(--titre-margin-block);
+}
+
+ul {
+  list-style-position: inside;
+  padding-inline-start: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+.illustration {
+  display: block;
+  margin: auto;
+}
+
+dsfr-button[centered] {
+  display: block;
+
+  @media (min-width: 992px) {
+    width: fit-content;
+  }
+}
+
+.bloc-hero {
+  --padding-block: 3rem;
+  --titre-font-size: 2.5rem;
+  --titre-line-height: 3rem;
+
+  background-color: var(--background-alt-blue-france);
+
+  @media (min-width: 992px) {
+    --titre-font-size: 3rem;
+    --titre-line-height: 3.5rem;
+  }
+
+  .conteneur-colonnes {
+    --colonnes-gap: 1.5rem;
+  }
+
+  .principale,
+  .secondaire {
+    --colonne-taille: calc(600% / 12);
+  }
+
+  .description {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin-block: 0 1.5rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    padding-block-end: 1rem;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      padding-block-end: 1rem;
+    }
+  }
+
+  .illustration {
+    max-width: 81%;
+  }
+}
+
+.bloc-enjeux {
+  --titre-margin-block: 0;
+
+  background-color: var(--background-action-high-blue-france);
+
+  .conteneur {
+    color: var(--text-inverted-grey);
+    padding-block-end: 1rem;
+  }
+
+  .titre {
+    color: currentColor;
+  }
+
+  .enjeux {
+    padding-block: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+    }
+  }
+
+  .enjeu {
+    @media (min-width: 992px) {
+      flex: 1;
+      padding-inline: 2rem;
+    }
+  }
+
+  .sous-titre {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin-block: 0 1rem;
+
+    @media (min-width: 992px) {
+      font-size: 2.5rem;
+      line-height: 3rem;
+    }
+  }
+
+  .description {
+    margin-block: 0;
+  }
+
+  dsfr-button {
+    margin: 0 auto;
+  }
+}
+
+.bloc-outil {
+  --titre-margin-block: 0 2rem;
+
+  dsfr-container {
+    padding-block-end: 0.5rem;
+  }
+
+  .conteneur-colonnes {
+    @media (min-width: 992px) {
+      padding-block: 3rem;
+    }
+  }
+
+  .principale,
+  .secondaire {
+    --colonne-taille: calc(600% / 12);
+  }
+
+  .principale {
+    order: 1;
+    padding-block: 2rem;
+
+    @media (min-width: 992px) {
+      padding-block: 0;
+      order: 0;
+    }
+  }
+
+  .titre {
+    @media (min-width: 992px) {
+      margin-block-end: 0;
+      max-width: calc(800% / 12);
+    }
+  }
+
+  .avantage {
+    padding-inline-start: 1.25rem;
+    position: relative;
+
+    @media (min-width: 992px) {
+      padding-inline-start: 2.25rem;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--border-default-blue-france);
+    }
+
+    &:not(:last-child) {
+      margin-block-end: 1.5rem;
+    }
+  }
+
+  .avantage-titre {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-block: 0 0.5rem;
+
+    @media (min-width: 992px) {
+      font-size: 1.375rem;
+    }
+  }
+
+  .avantage-description {
+    margin-block: 0;
+  }
+
+  .avantage-liste {
+    margin-block: 0;
+  }
+
+  .illustration.centered {
+    @media (min-width: 992px) {
+      max-width: 84%;
+    }
+  }
+
+  dsfr-button {
+    margin: 0 auto;
+  }
+}
+
+.bloc-comment {
+  --titre-margin-block: 0;
+
+  background-color: var(--background-alt-blue-france);
+
+  @media (min-width: 992px) {
+    --padding-block: 3rem;
+  }
+
+  .titre,
+  .description {
+    @media (min-width: 992px) {
+      text-align: center;
+    }
+  }
+
+  .description {
+    margin: 1rem auto 0;
+
+    @media (min-width: 992px) {
+      margin-block-end: 1rem;
+    }
+  }
+
+  .cartes {
+    display: flex;
+    flex-direction: column;
+    padding-block: 2rem;
+    gap: 1rem;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      padding-block: 3rem;
+      gap: 1.5rem;
+    }
+  }
+
+  dsfr-card {
+    @media (min-width: 992px) {
+      flex: 1 1 calc(100% / 3);
+    }
+  }
+
+  dsfr-tag {
+    margin-block-end: 1rem;
+  }
+
+  dsfr-button {
+    margin-block-end: 1rem;
+
+    @media (min-width: 992px) {
+      margin-block-end: 1.5rem;
+      margin: 0 auto 1.5rem;
+    }
+  }
+}
+
+.bloc-avantages {
+  --padding-block: 72px;
+
+  .description {
+    margin-block: 0;
+  }
+}
+
+.bloc-equipe {
+  background-color: var(--background-alt-blue-france);
+
+  .principale {
+    padding-block-end: 0.5rem;
+
+    @media (min-width: 992px) {
+      padding-inline-start: 0.75rem;
+    }
+  }
+
+  .description {
+    margin-block: 0 1.5rem;
+  }
+}
+
+.bloc-mss-impact {
+  background-color: var(--background-flat-blue-france-lab);
+
+  @media (min-width: 992px) {
+    --titre-font-size: 2.5rem;
+    --titre-line-height: 3rem;
+  }
+
+  .conteneur-colonnes {
+    color: var(--text-inverted-grey);
+    justify-content: space-around;
+  }
+
+  .principale {
+    --colonne-taille: calc(600% / 12);
+
+    padding-block-end: 0.5rem;
+  }
+
+  .titre {
+    color: currentColor;
+  }
+
+  .description {
+    margin-block: 0 1.5rem;
+  }
+
+  .illustration {
+    display: block;
+    margin: auto;
+  }
+}
+
+.bloc-entites {
+  --titre-margin-block: 0 3rem;
+
+  .conteneur {
+    padding-block: 1.5rem;
+  }
+}
+
+.bloc-avis {
+  --titre-margin-block: 0 2rem;
+
+  background-color: var(--background-alt-blue-france);
+
+  lab-anssi-temoignages {
+    --padding-section: 0;
+  }
+}
+
+.bloc-communaute {
+  background-color: var(--background-flat-blue-france-lab);
+
+  .conteneur-colonnes {
+    --colonnes-gap: 1.5rem;
+
+    color: var(--text-inverted-grey);
+  }
+
+  .titre {
+    color: currentColor;
+  }
+
+  .description {
+    margin-block: 0 1.5rem;
+  }
+
+  ul {
+    margin-block: 1.5rem;
+  }
+}
+
+.bloc-securite {
+  .principale {
+    padding-block-end: 0.5rem;
+  }
+
+  .description {
+    margin-block: 0 1.5rem;
+  }
+}
+
+.bloc-presentation-anssi {
+  --brique-presentation-anssi-titre-couleur: var(--text-title-grey);
+  --padding-block: 0;
+
+  background-color: var(--background-alt-grey);
+}
