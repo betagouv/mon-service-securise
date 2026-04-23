@@ -7,7 +7,7 @@
   let { elements, doitEtreOuvert = $bindable() }: Props = $props();
 
   const gereClic = (e: MouseEvent) => {
-    if (!elements) {
+    if (!elements || !Array.isArray(elements)) {
       return;
     }
     const clicInterieur =
