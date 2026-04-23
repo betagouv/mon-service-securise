@@ -4,6 +4,7 @@
   import Infobulle from '../../../../ui/Infobulle.svelte';
   import { tiroirStore } from '../../../../ui/stores/tiroir.store';
   import TiroirTelechargementDocumentsService from '../../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
+  import TiroirTelechargementTamponHomologation from './TiroirTelechargementTamponHomologation.svelte';
 
   interface Props {
     idService: string;
@@ -181,9 +182,9 @@
           type="button"
           has-icon
           onclick={() =>
-            document.body.dispatchEvent(
-              new CustomEvent('svelte-affiche-tiroir-telechargement-tampon')
-            )}
+            tiroirStore.afficheContenu(TiroirTelechargementTamponHomologation, {
+              idService,
+            })}
         ></dsfr-button>
       {/if}
     </div>
