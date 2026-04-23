@@ -1,6 +1,17 @@
 import { z } from 'zod';
 import { schemaDate } from '../../http/schemas/date.schema.js';
-import { ReferentielV2 } from '../../referentiel.interface.js';
+import {
+  ReferentielV2,
+  TousReferentiels,
+} from '../../referentiel.interface.js';
+
+export const schemaPostRepriseHomologation = (
+  referentiel: TousReferentiels
+) => ({
+  etapeDemandee: z.enum(
+    referentiel.etapesParcoursHomologation().map((e) => e.id)
+  ),
+});
 
 export const schemaPutAutoriteHomologation = () => ({
   nom: z.string().trim().min(1).max(200),
