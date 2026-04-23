@@ -1,3 +1,5 @@
+export type AutoriteHomologation = { nom: string; fonction: string };
+
 export type Dossier = {
   id: string;
   finalise: boolean;
@@ -7,17 +9,9 @@ export type Dossier = {
   descriptionProchaineDateHomologation: string;
   indiceCyber?: number;
   indiceCyberPersonnalise?: number;
-  decision: {
-    dateHomologation: string;
-    dureeValidite: string;
-  };
-  autorite: {
-    nom: string;
-    fonction: string;
-  };
-  dateTelechargement: {
-    date: string;
-  };
+  decision: { dateHomologation: string; dureeValidite: string };
+  autorite: AutoriteHomologation;
+  dateTelechargement: { date: string };
   avecAvis: boolean;
   avis: Array<{
     statut: string;

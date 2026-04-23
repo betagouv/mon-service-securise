@@ -4,7 +4,7 @@
     PartiesPrenantes,
     TypePartiePrenante,
   } from './contactsUtiles.types';
-  import InputDSFR from './InputDSFR.svelte';
+  import InputDSFR from '../../../ui/InputDSFR.svelte';
   import { metsAJourContactsUtiles } from './contactsUtiles.api';
   import { untrack } from 'svelte';
   import { toasterStore } from '../../../ui/stores/toaster.store';
