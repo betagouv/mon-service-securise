@@ -1,17 +1,11 @@
 <script lang="ts">
+  import { couleursStatutHomologation } from '../../../../ui/couleursStatutHomologation';
+
   interface Props {
     statutsHomologation: Record<string, { libelle: string }>;
     statutHomologation: string;
     dateExpiration: string;
   }
-
-  const couleurStatut: Record<string, string> = {
-    expiree: 'orange-terre-battue',
-    bientotExpiree: 'yellow-tournesol',
-    nonRealisee: 'beige-gris-galet',
-    activee: 'green-emeraude',
-    refusee: 'pink-tuile',
-  };
 
   let { statutsHomologation, statutHomologation, dateExpiration }: Props =
     $props();
@@ -27,6 +21,6 @@
 <dsfr-badge
   label={libelle(statutHomologation)}
   type="accent"
-  accent={couleurStatut[statutHomologation]}
+  accent={couleursStatutHomologation[statutHomologation]}
   size="md"
 ></dsfr-badge>
