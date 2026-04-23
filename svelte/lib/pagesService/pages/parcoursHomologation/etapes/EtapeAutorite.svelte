@@ -1,7 +1,8 @@
 <script lang="ts">
-  import InputDSFR from '../../contactsUtiles/InputDSFR.svelte';
-  import type { Dossier } from '../../homologuer/homologuer.types';
   import { untrack } from 'svelte';
+  import InputDSFR from '../../../../ui/InputDSFR.svelte';
+  import type { Dossier } from '../../homologuer/homologuer.types';
+  import * as api from '../parcoursHomologation.api';
 
   interface Props {
     idService: string;
@@ -12,7 +13,9 @@
 
   let autorite = $state(untrack(() => dossier.autorite));
 
-  export const enregistre = async () => {};
+  export const enregistre = async () => {
+    await api.enregistreAutorite(idService, autorite);
+  };
 </script>
 
 <p>
@@ -20,8 +23,22 @@
   qui sera chargée de prendre la décision d'homologation de sécurité (ex: maire,
   directeur général, etc).
 </p>
-<InputDSFR label="Prénom Nom" bind:value={autorite.nom} />
-<InputDSFR label="Fonction" bind:value={autorite.fonction} />
+
+<div class="champs">
+  <InputDSFR label="Prénom Nom" bind:value={autorite.nom} />
+  <InputDSFR label="Fonction" bind:value={autorite.fonction} />
+</div>
 
 <style lang="scss">
+  p {
+    color: #3a3a3a;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .champs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 </style>
