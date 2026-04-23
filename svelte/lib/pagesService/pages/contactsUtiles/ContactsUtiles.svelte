@@ -8,6 +8,7 @@
   import { metsAJourContactsUtiles } from './contactsUtiles.api';
   import { untrack } from 'svelte';
   import { toasterStore } from '../../../ui/stores/toaster.store';
+  import CarteFormulaire from '../../../ui/CarteFormulaire.svelte';
 
   interface Props {
     idService: string;
@@ -21,26 +22,14 @@
       return {
         ...snapshot,
         partiesPrenantes: {
-          Hebergement: {
-            nom: '',
-            pointContact: '',
-            natureAcces: '',
-          },
-          SecuriteService: {
-            nom: '',
-            pointContact: '',
-            natureAcces: '',
-          },
+          Hebergement: { nom: '', pointContact: '', natureAcces: '' },
+          SecuriteService: { nom: '', pointContact: '', natureAcces: '' },
           DeveloppementFourniture: {
             nom: '',
             pointContact: '',
             natureAcces: '',
           },
-          MaintenanceService: {
-            nom: '',
-            pointContact: '',
-            natureAcces: '',
-          },
+          MaintenanceService: { nom: '', pointContact: '', natureAcces: '' },
           ...(snapshot.partiesPrenantes as Partial<PartiesPrenantes>),
         },
       };
@@ -48,14 +37,8 @@
   );
 
   const configurationsTabs = [
-    {
-      id: 'gouvernance',
-      label: 'Gouvernance',
-    },
-    {
-      id: 'parties-prenantes',
-      label: 'Parties prenantes',
-    },
+    { id: 'gouvernance', label: 'Gouvernance' },
+    { id: 'parties-prenantes', label: 'Parties prenantes' },
   ];
 
   const toutesPartiesPrenantes = [
@@ -107,8 +90,7 @@
 
 <dsfr-tabs tabs={configurationsTabs}>
   <div slot="panel-1" class="conteneur-onglet">
-    <div class="conteneur-avec-cadre">
-      <h5>Autorité d'homologation</h5>
+    <CarteFormulaire titre="Autorité d'homologation">
       <InputDSFR
         label="Prénom / Nom"
         bind:value={contactsUtiles.autoriteHomologation.nom}
@@ -117,10 +99,9 @@
         label="Fonction"
         bind:value={contactsUtiles.autoriteHomologation.fonction}
       ></InputDSFR>
-    </div>
+    </CarteFormulaire>
 
-    <div class="conteneur-avec-cadre">
-      <h5>Spécialiste cybersécurité</h5>
+    <CarteFormulaire titre="Spécialiste cybersécurité">
       <InputDSFR
         label="Prénom / Nom"
         bind:value={contactsUtiles.expertCybersecurite.nom}
@@ -129,10 +110,11 @@
         label="Fonction"
         bind:value={contactsUtiles.expertCybersecurite.fonction}
       ></InputDSFR>
-    </div>
+    </CarteFormulaire>
 
-    <div class="conteneur-avec-cadre">
-      <h5>Délégué·e à la protection des données à caractère personnel</h5>
+    <CarteFormulaire
+      titre="Délégué·e à la protection des données à caractère personnel"
+    >
       <InputDSFR
         label="Prénom / Nom"
         bind:value={contactsUtiles.delegueProtectionDonnees.nom}
@@ -141,10 +123,9 @@
         label="Fonction"
         bind:value={contactsUtiles.delegueProtectionDonnees.fonction}
       ></InputDSFR>
-    </div>
+    </CarteFormulaire>
 
-    <div class="conteneur-avec-cadre">
-      <h5>Responsables métier du projet</h5>
+    <CarteFormulaire titre="Responsables métier du projet">
       <InputDSFR
         label="Prénom / Nom"
         bind:value={contactsUtiles.piloteProjet.nom}
@@ -153,17 +134,10 @@
         label="Fonction"
         bind:value={contactsUtiles.piloteProjet.fonction}
       ></InputDSFR>
-    </div>
+    </CarteFormulaire>
 
     {#each contactsUtiles.acteursHomologation as _, index (index)}
-      <div class="conteneur-avec-cadre">
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          preset="close"
-          label="Supprimer"
-          class="bouton-suppression-contact"
-          onclick={() => supprimeActeur(index)}
-        ></dsfr-button>
+      <CarteFormulaire onsupprimer={() => supprimeActeur(index)}>
         <InputDSFR
           label="Rôle au regard du projet"
           bind:value={contactsUtiles.acteursHomologation[index].role}
@@ -176,8 +150,9 @@
           label="Fonction"
           bind:value={contactsUtiles.acteursHomologation[index].fonction}
         ></InputDSFR>
-      </div>
+      </CarteFormulaire>
     {/each}
+
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Ajouter un acteur"
@@ -192,8 +167,7 @@
 
   <div slot="panel-2" class="conteneur-onglet">
     {#each toutesPartiesPrenantes as typePartiePrenante (typePartiePrenante)}
-      <div class="conteneur-avec-cadre">
-        <h5>{labelsPartiesPrenantes[typePartiePrenante]}</h5>
+      <CarteFormulaire titre={labelsPartiesPrenantes[typePartiePrenante]}>
         <InputDSFR
           label="Nom de l'entité externe ou interne"
           bind:value={contactsUtiles.partiesPrenantes[typePartiePrenante].nom}
@@ -210,19 +184,11 @@
             contactsUtiles.partiesPrenantes[typePartiePrenante].pointContact
           }
         ></InputDSFR>
-      </div>
+      </CarteFormulaire>
     {/each}
 
     {#each contactsUtiles.partiesPrenantesSpecifiques as _, index (index)}
-      <div class="conteneur-avec-cadre">
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          preset="close"
-          label="Supprimer"
-          class="bouton-suppression-contact"
-          onclick={() => supprimePartiePrenante(index)}
-        ></dsfr-button>
-
+      <CarteFormulaire onsupprimer={() => supprimePartiePrenante(index)}>
         <InputDSFR
           label="Nom de l'entité"
           bind:value={contactsUtiles.partiesPrenantesSpecifiques[index].nom}
@@ -239,8 +205,9 @@
             contactsUtiles.partiesPrenantesSpecifiques[index].pointContact
           }
         ></InputDSFR>
-      </div>
+      </CarteFormulaire>
     {/each}
+
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Ajouter une partie prenante"
@@ -253,6 +220,7 @@
     ></dsfr-button>
   </div>
 </dsfr-tabs>
+
 <div class="barre-actions">
   <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <dsfr-button
@@ -274,32 +242,6 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
-
-      .conteneur-avec-cadre {
-        position: relative;
-        max-width: 924px;
-        border: 1px solid #ddd;
-        padding: 24px;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      .bouton-suppression-contact {
-        position: absolute;
-        top: 12px;
-        right: 24px;
-        z-index: 1;
-      }
-
-      h5 {
-        margin: 0;
-        padding: 0;
-        font-weight: 700;
-        font-size: 1.375rem;
-        line-height: 1.75;
-      }
     }
   }
 
