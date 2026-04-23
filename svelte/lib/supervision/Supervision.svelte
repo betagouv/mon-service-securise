@@ -14,9 +14,9 @@
   let urlSupervision: string | undefined = $state();
   let enCoursChargement: boolean = $state(false);
 
-  let filtreDate: string | undefined = $state();
-  let filtreBesoinsSecurite: string | undefined = $state();
-  let filtreEntite: string | undefined = $state();
+  let filtreDate: string = $state('');
+  let filtreBesoinsSecurite: string = $state('');
+  let filtreEntite: string = $state('');
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -117,6 +117,10 @@
     margin: 0 auto;
   }
 
+  :global(main) {
+    background: white;
+  }
+
   iframe {
     width: 100%;
     border: none;
@@ -138,10 +142,12 @@
 
   h1 {
     margin: 0 0 24px;
+    text-align: left;
   }
 
   .conteneur-filtres {
     display: flex;
     gap: 16px;
+    margin-bottom: 24px;
   }
 </style>
