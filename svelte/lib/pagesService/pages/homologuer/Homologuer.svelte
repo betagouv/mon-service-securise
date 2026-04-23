@@ -42,12 +42,12 @@
     },
   ];
 
-  let modaleEncarteHomologation: ModaleEncartHomologation;
+  let modaleEncartHomologation: ModaleEncartHomologation;
 
   onMount(() => {
     const requete = new URLSearchParams(window.location.search);
     const avecSucces = requete.get('succesHomologation');
-    if (avecSucces) modaleEncarteHomologation?.affiche();
+    if (avecSucces) modaleEncartHomologation?.affiche();
   });
 </script>
 
@@ -163,7 +163,7 @@
     </div>
   </dsfr-tabs>
 {/if}
-<ModaleEncartHomologation {idService} bind:this={modaleEncarteHomologation} />
+<ModaleEncartHomologation {idService} bind:this={modaleEncartHomologation} />
 
 <style lang="scss">
   .conteneur-onglet {

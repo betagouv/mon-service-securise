@@ -21,7 +21,7 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
   const versEtapeSuivante = () =>
     (window.location = idEtapeSuivante
       ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
-      : `/service/${idService}/dossiers${estRefusee ? '' : '?succesHomologation'}`);
+      : `/service/${idService}/dossiers${estRefusee ? '' : '?succesHomologation=true'}`);
 
   $(selecteurFormulaire).on('submit', async (e) => {
     e.preventDefault();
