@@ -96,14 +96,16 @@ describe('Le routeur des pages service', () => {
       expect(navigueHorsSPA).toHaveBeenCalledWith('/service/1234/mesures');
     });
 
-    it("navigue en dehors de la SPA si la rubrique n'est pas encore gérée par la SPA", async () => {
+    it("navigue en dehors de la SPA si la rubrique n'est pas gérée par la SPA", async () => {
       const routeurStore = await leRouteur();
       chargeInformationsService(routeurStore);
       const navigueHorsSPA = vi.fn();
 
-      routeurStore.navigue('/service/1234/dossiers', navigueHorsSPA);
+      routeurStore.navigue('/service/1234/uneAutreRubrique', navigueHorsSPA);
 
-      expect(navigueHorsSPA).toHaveBeenCalledWith('/service/1234/dossiers');
+      expect(navigueHorsSPA).toHaveBeenCalledWith(
+        '/service/1234/uneAutreRubrique'
+      );
     });
 
     it('navigue en dehors de la SPA si la rubrique `descriptionService` est demandée pour un service V1', async () => {
