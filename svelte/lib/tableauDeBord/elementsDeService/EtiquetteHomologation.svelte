@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { couleursStatutHomologation } from '../../ui/couleursStatutHomologation';
+
   interface Props {
     statutHomologation: string;
     label: string;
@@ -14,65 +16,20 @@
   }: Props = $props();
 </script>
 
-<a
-  class={statutHomologation + ' statut-homologation-service'}
+<dsfr-tag
+  label="{label} {statutHomologation === 'bientotExpiree'
+    ? dateExpiration
+    : statutHomologation === 'refusee'
+      ? `le ${dateExpiration}`
+      : ''}"
+  type="clickable"
+  accent={couleursStatutHomologation[statutHomologation]}
+  size="sm"
   href="/service/{idService}/dossiers"
->
-  {label}
-  {#if statutHomologation === 'bientotExpiree'}
-    {dateExpiration}
-  {:else if statutHomologation === 'refusee'}
-    le {dateExpiration}
-  {/if}
-</a>
+></dsfr-tag>
 
 <style>
-  a {
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 20px;
-    background: var(--fond);
-    color: var(--texte-fonce);
+  dsfr-tag {
     white-space: nowrap;
-  }
-
-  a:hover {
-    background: var(--fond-hover);
-  }
-
-  a:active {
-    background: var(--fond-actif);
-  }
-
-  .expiree {
-    --fond: #fef4f2;
-    --fond-hover: #fde7e3;
-    --fond-actif: #fbd0c8;
-  }
-
-  .refusee {
-    --fond: #ffe9e9;
-    --fond-hover: #ffdbdb;
-    --fond-actif: #ffbdbd;
-  }
-
-  .bientotExpiree {
-    --fond: #fff2de;
-    --fond-hover: #ffe3ba;
-    --fond-actif: #f9ce8e;
-  }
-
-  .nonRealisee {
-    --fond: #e6ebf1;
-    --fond-hover: #e6ebf1;
-    --fond-actif: #dadfe6;
-  }
-
-  .activee {
-    --fond: #defbe5;
-    --fond-hover: #c0edcb;
-    --fond-actif: #a2ddb1;
   }
 </style>
