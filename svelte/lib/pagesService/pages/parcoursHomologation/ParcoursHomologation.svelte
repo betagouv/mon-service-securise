@@ -4,6 +4,7 @@
   import type {
     ComposantEtape,
     EtapeParcoursHomologation,
+    IdEtapeParcoursHomologation,
     InstanceEtapeParcoursHomologation,
   } from './parcoursHomologation.types';
   import { etapeDeURL } from './routeurParcours';
@@ -15,11 +16,20 @@
   interface Props {
     idService: string;
     dossier: Dossier;
+    etapesParcours: Array<EtapeParcoursHomologation>;
   }
 
-  let { idService, dossier }: Props = $props();
+  let { idService, dossier, etapesParcours }: Props = $props();
 
-  let etapeCourante: EtapeParcoursHomologation | undefined = $state();
+  let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
+  let detailsEtapeCourante = $derived(
+    etapesParcours.find((e) => e.id === etapeCourante)
+  );
+  let detailsEtapeSuivante = $derived(
+    detailsEtapeCourante
+      ? etapesParcours.find((e) => e.numero === detailsEtapeCourante.numero + 1)
+      : undefined
+  );
   onMount(async () => {
     etapeCourante = await api.reprendsParcours(idService, etapeDeURL());
   });
@@ -36,19 +46,20 @@
   let composantEtapeCourante: InstanceEtapeParcoursHomologation | undefined =
     $state();
 
-  const composants: Record<EtapeParcoursHomologation, ComposantEtape> = {
+  const composants: Record<IdEtapeParcoursHomologation, ComposantEtape> = {
     autorite: EtapeAutorite,
     avis: EtapeAvis,
   };
 </script>
 
-{#if etapeCourante && dossier}
+{#if etapeCourante && dossier && detailsEtapeCourante}
   {@const Composant = composants[etapeCourante]}
   <dsfr-stepper
-    title="Autorité"
-    next-step="Avis sur la sécurité du service"
-    step-count="6"
-    current-step="1"
+    title={detailsEtapeCourante.libelle}
+    next-step={detailsEtapeSuivante?.libelle}
+    step-count={etapesParcours.length}
+    current-step={detailsEtapeCourante.numero}
+    {...detailsEtapeSuivante === undefined ? { 'hide-details': true } : {}}
   >
   </dsfr-stepper>
   <hr />

@@ -1,6 +1,12 @@
 import type { Component } from 'svelte';
 
-export type EtapeParcoursHomologation = 'autorite' | 'avis';
+export type IdEtapeParcoursHomologation = 'autorite' | 'avis';
+
+export type EtapeParcoursHomologation = {
+  numero: number;
+  libelle: string;
+  id: IdEtapeParcoursHomologation;
+};
 
 export interface InstanceEtapeParcoursHomologation {
   enregistre: () => Promise<void>;
