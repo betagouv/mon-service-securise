@@ -163,6 +163,7 @@
       case 'homologation':
         return {
           dossier: dossiers?.dossierCourant,
+          etapesParcours: referentiel.dossiers.etapesParcoursHomologation,
         };
       default:
         return {};

@@ -35,7 +35,8 @@ block append scripts
       niveaux: referentiel.niveauxRisque()
     },
     dossiers: {
-      statutsHomologation: referentiel.statutsHomologation()
+      statutsHomologation: referentiel.statutsHomologation(),
+      etapesParcoursHomologation: referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer)
     }
   })
   +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })

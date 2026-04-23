@@ -10,6 +10,7 @@ import type {
   ReferentielRisques,
   ReferentielVraisemblances,
 } from '../risques/risques.d';
+import type { EtapeParcoursHomologation } from './pages/parcoursHomologation/parcoursHomologation.types';
 
 declare global {
   interface HTMLElementEventMap {
@@ -36,6 +37,7 @@ export type ReferentielPagesService = {
   };
   dossiers: {
     statutsHomologation: Record<string, { libelle: string }>;
+    etapesParcoursHomologation: Array<EtapeParcoursHomologation>;
   };
 };
 export type PagesServiceProps = {
