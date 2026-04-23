@@ -171,6 +171,10 @@
     #cartes {
       flex-direction: row;
       gap: 24px;
+
+      dsfr-card {
+        max-width: 384px;
+      }
     }
   }
 
@@ -200,6 +204,14 @@
     flex-direction: row;
     gap: 24px;
     margin-bottom: 48px;
+  }
+
+  #home #resultats .conteneur-liens {
+    justify-content: center;
+  }
+
+  #home #resultats dsfr-button {
+    width: fit-content;
   }
 }
 

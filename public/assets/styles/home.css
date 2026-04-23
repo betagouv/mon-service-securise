@@ -98,11 +98,7 @@ main {
       gap: 1rem;
       margin-block: 2rem;
       text-align: left;
-      align-items: center;
-
-      dsfr-card {
-        max-width: 384px;
-      }
+      align-items: stretch;
     }
 
     dsfr-tag {
@@ -465,4 +461,8 @@ main {
 
 #home .center {
   align-items: center;
+}
+
+#home #resultats dsfr-button {
+  width: 100%;
 }

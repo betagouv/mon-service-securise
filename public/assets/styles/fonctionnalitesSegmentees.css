@@ -33,6 +33,11 @@
     cursor: pointer;
   }
 
+  .fonctionnalite:hover,
+  .fonctionnalite:hover span {
+    color: #666;
+  }
+
   .illustration-fonctionnalites-segmentees-desktop {
     display: flex;
     flex: 1;
