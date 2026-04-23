@@ -43,6 +43,10 @@ export const routesConnecteApiServiceHomologation = ({
 }) => {
   const routes = express.Router();
 
+  routes.post('/:id/homologation/reprends', (requete, reponse) => {
+    reponse.json({ etapeAAfficher: 'autorite' });
+  });
+
   routes.put(
     '/:id/homologation/autorite',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),

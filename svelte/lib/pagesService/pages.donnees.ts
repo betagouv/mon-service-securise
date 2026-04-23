@@ -6,6 +6,7 @@ import { type PageServiceGeree } from './pagesServiceGerees';
 import ContactsUtiles from './pages/contactsUtiles/ContactsUtiles.svelte';
 import IndiceCyber from './pages/indiceCyber/IndiceCyber.svelte';
 import Homologuer from './pages/homologuer/Homologuer.svelte';
+import ParcoursHomologation from './pages/parcoursHomologation/ParcoursHomologation.svelte';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DonneesPage = {
@@ -50,5 +51,11 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
     sousTitre:
       "Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation",
     composant: Homologuer,
+  },
+  homologation: {
+    titre: 'Créer un nouveau projet d’homologation',
+    sousTitre:
+      "Générer un dossier et un projet de décision d'homologation pour se mettre en conformité avec la réglementation",
+    composant: ParcoursHomologation,
   },
 };
