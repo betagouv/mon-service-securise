@@ -105,14 +105,14 @@
     <div class="indices-cyber">
       <dsfr-badge
         label="Homologation importée"
-        type="accent"
-        accent="blue-cumulus"
+        type="status"
+        status="info"
         size="md"
       ></dsfr-badge>
       <dsfr-badge
         label="Aucun Indice cyber"
-        type="accent"
-        accent="beige-gris-galet"
+        type="status"
+        status="warning"
         size="md"
       ></dsfr-badge>
     </div>
