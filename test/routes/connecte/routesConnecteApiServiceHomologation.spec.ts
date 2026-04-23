@@ -14,14 +14,128 @@ import * as Referentiel from '../../../src/referentiel.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import Dossier from '../../../src/modeles/dossier.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { creeReferentiel } from '../../../src/referentiel.js';
 
-const { ECRITURE } = Permissions;
+const { ECRITURE, LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(() => testeur.initialise());
+
+  describe('quand requête POST sur /api/service/:id/homologation/reprends', () => {
+    let serviceARenvoyer: Service;
+
+    beforeEach(() => {
+      serviceARenvoyer = new Service(
+        {
+          id: '456',
+          descriptionService: { nomService: 'un service' },
+          dossiers: [{ id: '999' }],
+        },
+        creeReferentiel()
+      );
+      testeur
+        .middleware()
+        // @ts-expect-error La méthode `reinitialise` devrait prendre des paramètres optionnels
+        .reinitialise({ serviceARenvoyer });
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async () => {};
+      testeur.depotDonnees().service = async () => serviceARenvoyer;
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/reprends',
+            method: 'post',
+          }
+        );
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          url: '/api/service/456/homologation/reprends',
+          method: 'post',
+        });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const { status } = await testeur.post(
+        '/api/service/456/homologation/reprends',
+        {
+          etapeDemandee: 'pasUneEtape',
+        }
+      );
+
+      expect(status).toBe(400);
+    });
+
+    it('ajoute un dossier courant au service si nécessaire', async () => {
+      let idRecu;
+      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async (
+        idService: string
+      ) => {
+        idRecu = idService;
+      };
+
+      await testeur.post('/api/service/456/homologation/reprends', {
+        etapeDemandee: 'autorite',
+      });
+
+      expect(idRecu).toBe('456');
+    });
+
+    it("retourne l'étape en cours si l'étape demandée est postérieure", async () => {
+      const { body, status } = await testeur.post(
+        '/api/service/456/homologation/reprends',
+        { etapeDemandee: 'avis' }
+      );
+
+      expect(status).toBe(200);
+      expect(body.etapeAAfficher).toBe('autorite');
+    });
+
+    it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
+      serviceARenvoyer.dossierCourant = () => ({
+        etapeCourante: () => 'recapitulatif',
+        // @ts-expect-error on mock l'étape de téléchargement
+        dateTelechargement: { date: new Date() },
+      });
+      testeur.depotDonnees().service = async () => serviceARenvoyer;
+      testeur.depotDonnees().autorisationACharger = uneAutorisation()
+        .deContributeur()
+        .construis();
+
+      const { body } = await testeur.post(
+        '/api/service/456/homologation/reprends',
+        { etapeDemandee: 'recapitulatif' }
+      );
+
+      expect(body.etapeAAfficher).toBe('dateTelechargement');
+    });
+
+    it("retourne une 403 si aucun dossier courant, et que l'utilisateur n'a pas les droits pour en créer un", async () => {
+      // @ts-expect-error On force un dossier courant vide
+      serviceARenvoyer.dossierCourant = () => undefined;
+      testeur.depotDonnees().autorisationACharger = uneAutorisation()
+        .avecDroits({ [HOMOLOGUER]: LECTURE })
+        .construis();
+
+      const { status } = await testeur.post(
+        '/api/service/456/homologation/reprends',
+        { etapeDemandee: 'recapitulatif' }
+      );
+      expect(status).toBe(403);
+    });
+  });
 
   describe('quand requête PUT sur /api/service/:id/homologation/autorite', () => {
     beforeEach(() => {

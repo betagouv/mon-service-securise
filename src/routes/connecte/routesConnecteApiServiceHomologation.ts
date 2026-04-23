@@ -13,13 +13,15 @@ import Service from '../../modeles/service.js';
 import Dossier from '../../modeles/dossier.js';
 import { ErreurDossierCourantInexistant } from '../../erreurs.js';
 import {
+  schemaPostRepriseHomologation,
   schemaPutAutoriteHomologation,
   schemaPutAvisHomologation,
   schemaPutDecisionHomologation,
   schemaPutDocumentsHomologation,
 } from './routesConnecteApiServiceHomologation.schema.js';
+import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 
-const { ECRITURE } = Permissions;
+const { ECRITURE, LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
 
 type RequeteAvecService = Request & {
@@ -28,6 +30,10 @@ type RequeteAvecService = Request & {
 
 type RequeteAvecServiceEtDossierCourant = RequeteAvecService & {
   dossierCourant: Dossier;
+};
+
+type RequeteAvecServiceEtAutorisation = RequeteAvecService & {
+  autorisationService: Autorisation;
 };
 
 export const routesConnecteApiServiceHomologation = ({
@@ -43,9 +49,42 @@ export const routesConnecteApiServiceHomologation = ({
 }) => {
   const routes = express.Router();
 
-  routes.post('/:id/homologation/reprends', (requete, reponse) => {
-    reponse.json({ etapeAAfficher: 'autorite' });
-  });
+  routes.post(
+    '/:id/homologation/reprends',
+    middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
+    middleware.chargeAutorisationsService,
+    valideBody(z.strictObject(schemaPostRepriseHomologation(referentielV2))),
+    async (requete, reponse) => {
+      const { service, autorisationService } =
+        requete as unknown as RequeteAvecServiceEtAutorisation;
+      const { etapeDemandee } = requete.body;
+
+      if (
+        !service.dossierCourant() &&
+        !autorisationService.aLesPermissions(
+          Autorisation.DROITS_EDITER_HOMOLOGATION
+        )
+      ) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      await depotDonnees.ajouteDossierCourantSiNecessaire(service.id);
+      const s = await depotDonnees.service(service.id);
+      const etapeCourante = referentielV2.etapeDossierAutorisee(
+        s!.dossierCourant().etapeCourante(),
+        autorisationService.peutHomologuer()
+      );
+      const numeroEtapeCourante = referentielV2.numeroEtape(etapeCourante!);
+      const numeroEtapeDemandee = referentielV2.numeroEtape(etapeDemandee);
+      if (numeroEtapeDemandee! > numeroEtapeCourante!) {
+        reponse.json({ etapeAAfficher: etapeCourante });
+        return;
+      }
+
+      reponse.json({ etapeAAfficher: etapeDemandee });
+    }
+  );
 
   routes.put(
     '/:id/homologation/autorite',
