@@ -34,6 +34,7 @@ $(() => {
           mesures: !autorisationsService.SECURISER.estMasque,
           indiceCyber: !autorisationsService.SECURISER.estMasque,
           dossiers: !autorisationsService.HOMOLOGUER.estMasque,
+          homologation: !autorisationsService.HOMOLOGUER.estMasque,
         },
         estLectureSeule: {
           rolesResponsabilites: autorisationsService.CONTACTS.estLectureSeule,
@@ -42,6 +43,7 @@ $(() => {
           mesures: autorisationsService.SECURISER.estLectureSeule,
           indiceCyber: autorisationsService.SECURISER.estLectureSeule,
           dossiers: autorisationsService.HOMOLOGUER.estLectureSeule,
+          homologation: autorisationsService.HOMOLOGUER.estLectureSeule,
         },
       },
     })

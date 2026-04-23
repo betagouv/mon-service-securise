@@ -5,6 +5,7 @@
   import { tiroirStore } from '../../../../ui/stores/tiroir.store';
   import TiroirTelechargementDocumentsService from '../../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirTelechargementTamponHomologation from './TiroirTelechargementTamponHomologation.svelte';
+  import { routeurStore } from '../../../store/routeur.store';
 
   interface Props {
     idService: string;
@@ -123,15 +124,17 @@
   {#if dossier.statut === 'nonRealisee' || (avecDocumentsAccessible && !dossier.importe) || avecTamponAccessible}
     <div class="actions">
       {#if dossier.statut === 'nonRealisee'}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-button
           label="Reprendre l'homologation"
           kind="secondary"
           size="md"
           icon="edit-box-line"
           icon-place="left"
-          markup="a"
-          href="/service/{idService}/homologation/edition/etape/{dossier
-            .etapeCourante.nomEtape}"
+          onclick={() =>
+            routeurStore.navigue(
+              `/service/${idService}/homologation/edition/etape/${dossier.etapeCourante.nomEtape}`
+            )}
           type="button"
           has-icon
         ></dsfr-button>

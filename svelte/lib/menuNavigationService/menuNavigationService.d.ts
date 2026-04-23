@@ -10,7 +10,8 @@ export type EtapeService =
   | 'descriptionService'
   | 'mesures'
   | 'dossiers'
-  | 'indiceCyber';
+  | 'indiceCyber'
+  | 'homologation';
 
 export type MenuNavigationServiceProps = {
   idService: string;

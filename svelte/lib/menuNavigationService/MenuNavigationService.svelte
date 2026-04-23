@@ -56,10 +56,11 @@
             </a>
           </li>
         {/if}
-        {#if visible.dossiers}
+        {#if visible.dossiers || visible.homologation}
           <li>
             <a
-              class:actif={etapeActive === 'dossiers'}
+              class:actif={etapeActive === 'dossiers' ||
+                etapeActive === 'homologation'}
               class="lien-navigation"
               href="/service/{idService}/dossiers"
             >
