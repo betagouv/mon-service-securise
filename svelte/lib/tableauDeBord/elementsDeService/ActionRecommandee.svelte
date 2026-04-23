@@ -51,7 +51,7 @@
     inactif={!action.autorisee}
     titre="Télécharger l'encart"
     type="bouton-secondaire"
-    href="/service/{idService}/dossiers?succesHomologation"
+    href="/service/{idService}/dossiers?succesHomologation=true"
     taille="petit"
     icone="telecharger"
     classe="telechargerEncartHomologation"
