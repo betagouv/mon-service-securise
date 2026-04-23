@@ -9,6 +9,7 @@ export const pagesServiceGerees = enEtape([
   'rolesResponsabilites',
   'indiceCyber',
   'dossiers',
+  'homologation',
 ] as const);
 
 export type PageServiceGeree = (typeof pagesServiceGerees)[number];

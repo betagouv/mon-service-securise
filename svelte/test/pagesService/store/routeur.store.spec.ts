@@ -32,6 +32,7 @@ describe('Le routeur des pages service', () => {
         mesures: true,
         dossiers: true,
         indiceCyber: true,
+        homologation: true,
       },
       version: 'v1' as VersionService,
     }
@@ -50,6 +51,7 @@ describe('Le routeur des pages service', () => {
         descriptionService: true,
         mesures: true,
         dossiers: true,
+        homologation: true,
         indiceCyber: true,
       },
       version: 'v1',
@@ -86,6 +88,7 @@ describe('Le routeur des pages service', () => {
           mesures: false,
           dossiers: true,
           indiceCyber: true,
+          homologation: true,
         },
         version: 'v1' as VersionService,
       });
@@ -118,6 +121,7 @@ describe('Le routeur des pages service', () => {
           mesures: true,
           dossiers: true,
           indiceCyber: true,
+          homologation: true,
         },
         version: 'v1' as VersionService,
       });
@@ -158,6 +162,17 @@ describe('Le routeur des pages service', () => {
       const page = get(pageCourante);
 
       expect(page).toBe('indiceCyber');
+    });
+
+    it('sait gérer une route avec des sous-routes', async () => {
+      const routeurStore = await leRouteur();
+      const pageCourante = await laPageCourante();
+      chargeInformationsService(routeurStore);
+      routeurStore.navigue('/service/1234/homologation/edition/etape/avis');
+
+      const page = get(pageCourante);
+
+      expect(page).toBe('homologation');
     });
   });
 });

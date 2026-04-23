@@ -43,6 +43,7 @@ $(() => {
           mesures: !autorisationsService.SECURISER.estMasque,
           dossiers: !autorisationsService.HOMOLOGUER.estMasque,
           indiceCyber: !autorisationsService.SECURISER.estMasque,
+          homologation: !autorisationsService.HOMOLOGUER.estMasque,
         },
       },
     })

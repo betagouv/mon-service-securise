@@ -76,8 +76,8 @@ export const routeurStore = {
 
 const pageDepuisURL = (url: string) => {
   const { pathname } = new URL(url, window.location.origin);
-  const morceaux = pathname.split('/').filter(Boolean);
-  return morceaux.at(-1) as PageServiceGeree;
+  const match = /\/service\/[0-9a-zA-Z-]*\/([a-zA-Z]*)/.exec(pathname);
+  return match?.[1] as PageServiceGeree;
 };
 
 export const pageCourante = derived(routeurStore, ($r) => {

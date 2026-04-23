@@ -263,8 +263,8 @@ const routesConnectePageService = ({
     '/:id/homologation/edition/etape/:idEtape',
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,
-    async (requete, reponse, suite) => {
-      const { service, autorisationService } = requete;
+    (requete, reponse) => {
+      const { service } = requete;
       const { idEtape } = requete.params;
 
       if (!referentiel.etapeExiste(idEtape)) {
@@ -272,30 +272,11 @@ const routesConnectePageService = ({
         return;
       }
 
-      try {
-        await depotDonnees.ajouteDossierCourantSiNecessaire(service.id);
-
-        const s = await depotDonnees.service(service.id);
-        const etapeCourante = referentiel.etapeDossierAutorisee(
-          s.dossierCourant().etapeCourante(),
-          autorisationService.peutHomologuer()
-        );
-        const numeroEtapeCourante = referentiel.numeroEtape(etapeCourante);
-        const numeroEtapeDemandee = referentiel.numeroEtape(idEtape);
-        if (numeroEtapeDemandee > numeroEtapeCourante) {
-          reponse.redirect(etapeCourante);
-          return;
-        }
-
-        reponse.render(`service/etapeDossier/${idEtape}`, {
-          referentiel,
-          service: s,
-          etapeActive: 'dossiers',
-          idEtape,
-        });
-      } catch {
-        suite();
-      }
+      reponse.render('service/pagesService', {
+        service,
+        etapeActive: 'dossiers',
+        referentiel,
+      });
     }
   );
 

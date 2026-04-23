@@ -627,61 +627,6 @@ describe('Le serveur MSS des routes /service/*', () => {
         url: '/service/456/homologation/edition/etape/inconnue',
       });
     });
-
-    it('ajoute un dossier courant au service si nécessaire', async () => {
-      let idRecu;
-      testeur.depotDonnees().ajouteDossierCourantSiNecessaire = async (
-        idService
-      ) => {
-        idRecu = idService;
-      };
-
-      await testeur.get(
-        '/service/456/homologation/edition/etape/dateTelechargement'
-      );
-
-      expect(idRecu).to.be('456');
-    });
-
-    it('recharge le service avant de servir la vue', async () => {
-      let chargementsService = 0;
-      testeur.depotDonnees().service = async () => {
-        chargementsService += 1;
-        return serviceARenvoyer;
-      };
-
-      await testeur.get(
-        '/service/456/homologation/edition/etape/dateTelechargement'
-      );
-
-      expect(chargementsService).to.equal(1);
-    });
-
-    it("redirige vers l'étape en cours si l'étape demandée est postérieure", async () => {
-      const reponse = await testeur.get(
-        '/service/456/homologation/edition/etape/deuxieme'
-      );
-
-      expect(reponse.headers.location).to.contain('dateTelechargement');
-    });
-
-    it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
-      serviceARenvoyer = unService().construis();
-      serviceARenvoyer.dossierCourant = () => ({
-        etapeCourante: () => 'deuxieme',
-        dateTelechargement: { date: new Date() },
-      });
-      testeur.depotDonnees().service = async () => serviceARenvoyer;
-      testeur.depotDonnees().autorisationACharger = uneAutorisation()
-        .deContributeur()
-        .construis();
-
-      const reponse = await testeur.get(
-        '/service/456/homologation/edition/etape/deuxieme'
-      );
-
-      expect(reponse.headers.location).to.contain('dateTelechargement');
-    });
   });
 
   describe('sur demande de la page de création v2', () => {
