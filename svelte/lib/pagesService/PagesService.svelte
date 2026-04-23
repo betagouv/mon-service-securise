@@ -160,6 +160,10 @@
           documentsPdfDisponibles: service?.documentsPdfDisponibles,
           niveauSecurite: descriptionService?.niveauSecurite,
         };
+      case 'homologation':
+        return {
+          dossier: dossiers?.dossierCourant,
+        };
       default:
         return {};
     }
