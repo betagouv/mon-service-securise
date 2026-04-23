@@ -52,7 +52,12 @@ block main
         .conteneur-centre
           img(src='/statique/assets/images/home/tableau-de-bord.png' alt='')
         .contenu-titre
-          lab-anssi-tag(label='Service à impact national' size='sm' couleur-texte='#297254' couleur-fond='#9ef9be')
+          dsfr-badge(
+            label="Service à impact national"
+            type="status"
+            status="success"
+            size="md"
+          )
           h1.alignement-gauche-desktop MonService&#8203;Sécurisé
           h2.alignement-gauche L'outil pour piloter en équipe la sécurité de tous vos services numériques et les homologuer rapidement
           .conteneur-liens
@@ -96,7 +101,8 @@ block main
       dsfr-button(label='Commencer à sécuriser'  has-icon icon='arrow-right-line' icon-place="right" markup="a" type="button" href="/inscription" centered)
 
     .bloc-contenu.alignement-gauche
-      h3.alignement-gauche.tres-grande-marge-basse Les fonctionnalités clés
+      h3.alignement-gauche.moyenne-marge-basse Les fonctionnalités clés
+      p.grande-marge-basse Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
       +fonctionnalitesSegmentees(
         ['Pour toutes le équipes', 'Pour les FSSI & les RSSI'],
         [
@@ -173,7 +179,8 @@ block main
         +chiffreCle('+55%', "d'augmentation moyenne de l'indice cyber en seulement 1 mois")
         +chiffreCle('5 min', "pour démarrer une homologation et générer un premier dossier")
         +chiffreCle('+8 000', "utilisateurs font déjà confiance à MonServiceSécurisé")
-      dsfr-button(label='Commencer à sécuriser' size="md" has-icon icon='arrow-right-line' icon-place="right" markup="a" href="/inscription" centered)
+      .conteneur-liens
+        dsfr-button(label='Commencer à sécuriser' size="md" has-icon icon='arrow-right-line' icon-place="right" markup="a" href="/inscription" centered)
 
     .bloc-contenu
       lab-anssi-presentation-anssi
