@@ -39,56 +39,48 @@
   };
 </script>
 
-<div class="etape">
-  <Explication>
-    Saisissez les informations remplies par l'autorité d'homologation sur le
-    document <strong>Décision de l'homologation de sécurité</strong>.
-  </Explication>
+<Explication>
+  Saisissez les informations remplies par l'autorité d'homologation sur le
+  document <strong>Décision de l'homologation de sécurité</strong>.
+</Explication>
 
-  <div class="champs">
-    <InputDSFR
-      label="Date de la commission d'homologation"
-      type="date"
-      id="date-homologation"
-      bind:value={dateHomologation}
-    />
+<div class="champs">
+  <InputDSFR
+    label="Date de la commission d'homologation"
+    type="date"
+    id="date-homologation"
+    bind:value={dateHomologation}
+  />
 
+  <dsfr-radios-group
+    legend="Validation de l'homologation"
+    onvaluechanged={commandesDecision.updateValidee}
+    radios={[
+      { label: 'Oui', id: 'validee-oui', value: true },
+      { label: 'Non', id: 'validee-non', value: false },
+    ]}
+    value={validee}
+  ></dsfr-radios-group>
+
+  {#if validee}
     <dsfr-radios-group
-      legend="Validation de l'homologation"
-      onvaluechanged={commandesDecision.updateValidee}
-      radios={[
-        { label: 'Oui', id: 'validee-oui', value: true },
-        { label: 'Non', id: 'validee-non', value: false },
-      ]}
-      value={validee}
+      legend="Durée de validité de l'homologation"
+      onvaluechanged={commandesDecision.updateDureeValidite}
+      radios={Object.entries(echeancesRenouvellement).map(([cle, valeur]) => ({
+        id: `duree-${cle}`,
+        label: valeur.description,
+        value: cle,
+      }))}
+      value={dureeValidite}
     ></dsfr-radios-group>
-
-    {#if validee}
-      <dsfr-radios-group
-        legend="Durée de validité de l'homologation"
-        onvaluechanged={commandesDecision.updateDureeValidite}
-        radios={Object.entries(echeancesRenouvellement).map(
-          ([cle, valeur]) => ({
-            id: `duree-${cle}`,
-            label: valeur.description,
-            value: cle,
-          })
-        )}
-        value={dureeValidite}
-      ></dsfr-radios-group>
-    {/if}
-  </div>
+  {/if}
 </div>
 
 <style lang="scss">
-  .etape {
-    width: var(--parcours-homologation-largeur-formulaire);
-
-    .champs {
-      display: flex;
-      flex-direction: column;
-      margin-top: 1.5rem;
-      gap: 1.5rem;
-    }
+  .champs {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    gap: 1.5rem;
   }
 </style>

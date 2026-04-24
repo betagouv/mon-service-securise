@@ -87,8 +87,8 @@
     {...detailsEtapeSuivante === undefined ? { 'hide-details': true } : {}}
   >
   </dsfr-stepper>
-  <hr />
-  <div>
+  <div class="etape-parcours">
+    <hr />
     <Composant
       {idService}
       {dossier}
@@ -117,6 +117,14 @@
 <style lang="scss">
   :root {
     --parcours-homologation-largeur-formulaire: 894px;
+  }
+
+  dsfr-stepper {
+    width: calc(var(--parcours-homologation-largeur-formulaire) * 2 / 3);
+  }
+
+  .etape-parcours {
+    width: var(--parcours-homologation-largeur-formulaire);
   }
 
   hr {
