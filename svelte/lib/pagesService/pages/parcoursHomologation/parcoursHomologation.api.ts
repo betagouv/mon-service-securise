@@ -33,6 +33,8 @@ export const enregistrement = (idService: string) => ({
       avecDocuments,
       documents,
     }),
+  finalise: async () =>
+    await axios.post(`/api/service/${idService}/homologation/finalise`),
   telechargement: async () =>
     await axios.put(`/api/service/${idService}/homologation/telechargement`),
 });

@@ -15,6 +15,7 @@
   import EtapeDocuments from './etapes/EtapeDocuments.svelte';
   import EtapeDateTelechargement from './etapes/EtapeDateTelechargement.svelte';
   import EtapeDecision from './etapes/EtapeDecision.svelte';
+  import EtapeRecapitulatif from './etapes/EtapeRecapitulatif.svelte';
   import type {
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
@@ -74,6 +75,7 @@
     documents: EtapeDocuments,
     dateTelechargement: EtapeDateTelechargement,
     decision: EtapeDecision,
+    recapitulatif: EtapeRecapitulatif,
   };
 </script>
 
