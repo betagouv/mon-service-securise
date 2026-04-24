@@ -13,6 +13,7 @@
   import type { Dossier } from '../homologuer/homologuer.types';
   import EtapeAvis from './etapes/EtapeAvis.svelte';
   import EtapeDocuments from './etapes/EtapeDocuments.svelte';
+  import EtapeDateTelechargement from './etapes/EtapeDateTelechargement.svelte';
   import type {
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
@@ -45,7 +46,10 @@
   );
 
   onMount(async () => {
-    etapeCourante = await api.reprendsParcours(idService, etapeDeURL());
+    etapeCourante = await api.reprendsParcours(
+      idService,
+      etapeDeURL(window.location.pathname)
+    );
   });
 
   const suivant = async () => {
@@ -65,6 +69,7 @@
     autorite: EtapeAutorite,
     avis: EtapeAvis,
     documents: EtapeDocuments,
+    dateTelechargement: EtapeDateTelechargement,
   };
 </script>
 

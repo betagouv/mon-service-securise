@@ -1,4 +1,4 @@
-import type { EtapeParcoursHomologation } from './parcoursHomologation.types';
+import type { IdEtapeParcoursHomologation } from './parcoursHomologation.types';
 import type {
   AutoriteHomologation,
   AvisHomologation,
@@ -24,7 +24,7 @@ export const enregistrement = (idService: string) => ({
 
 export const reprendsParcours = async (
   idService: string,
-  etapeDemandee: EtapeParcoursHomologation
+  etapeDemandee: IdEtapeParcoursHomologation
 ) => {
   const reponse = await axios.post(
     `/api/service/${idService}/homologation/reprends`,
