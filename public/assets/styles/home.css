@@ -334,21 +334,6 @@ main {
   }
 }
 
-#home .conteneur-entites {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: left;
-  gap: 32px;
-}
-
-#home .conteneur-entites img {
-  max-width: 150px;
-  max-height: 63px;
-  margin-bottom: 24px;
-  align-self: center;
-}
-
 #home .conteneur-temoignages {
   display: flex;
   flex-direction: column;

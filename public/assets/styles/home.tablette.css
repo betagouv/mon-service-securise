@@ -98,10 +98,6 @@
     text-align: center;
   }
 
-  #home .conteneur-entites {
-    justify-content: space-around;
-  }
-
   #home .temoignage {
     min-width: calc(100vw - 112px * 2);
     width: calc(100vw - 112px * 2);
