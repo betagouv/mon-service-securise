@@ -40,7 +40,7 @@
 
 <style lang="scss">
   dsfr-link {
-    display: block;
+    display: inline-block;
     margin-top: 2rem;
   }
 </style>
