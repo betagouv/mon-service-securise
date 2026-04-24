@@ -42,12 +42,14 @@
       ? etapesParcours.find((e) => e.numero === detailsEtapeCourante.numero + 1)
       : undefined
   );
+
   onMount(async () => {
     etapeCourante = await api.reprendsParcours(idService, etapeDeURL());
   });
 
   const suivant = async () => {
     await composantEtapeCourante?.enregistre();
+    document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     etapeCourante = 'avis';
   };
 
