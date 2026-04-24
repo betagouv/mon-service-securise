@@ -48,6 +48,7 @@ export type ReferentielPagesService = {
     etapesParcoursHomologation: Array<EtapeParcoursHomologation>;
     statutsAvisDossierHomologation: StatutsAvisDossierHomologation;
     echeancesRenouvellement: EcheancesRenouvellementHomologation;
+    peutHomologuer: boolean;
   };
 };
 

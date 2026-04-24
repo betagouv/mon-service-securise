@@ -167,6 +167,7 @@
           statutsAvisDossierHomologation:
             referentiel.dossiers.statutsAvisDossierHomologation,
           echeancesRenouvellement: referentiel.dossiers.echeancesRenouvellement,
+          peutHomologuer: referentiel.dossiers.peutHomologuer,
         };
       default:
         return {};
