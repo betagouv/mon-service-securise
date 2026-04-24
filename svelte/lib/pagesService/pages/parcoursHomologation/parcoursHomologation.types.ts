@@ -1,11 +1,19 @@
 import type { Component } from 'svelte';
 
-export type IdEtapeParcoursHomologation = 'autorite' | 'avis' | 'documents';
+export const idEtapeParcoursHomologation = {
+  autorite: 'autorite',
+  avis: 'avis',
+  documents: 'documents',
+  dateTelechargement: 'dateTelechargement',
+} as const;
+
+export type IdEtapeParcoursHomologation =
+  (typeof idEtapeParcoursHomologation)[keyof typeof idEtapeParcoursHomologation];
 
 export type EtapeParcoursHomologation = {
+  id: IdEtapeParcoursHomologation;
   numero: number;
   libelle: string;
-  id: IdEtapeParcoursHomologation;
 };
 
 export interface InstanceEtapeParcoursHomologation {

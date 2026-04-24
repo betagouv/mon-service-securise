@@ -68,11 +68,7 @@ const chargeInformationsService = (
   });
 };
 
-export const routeurStore = {
-  chargeInformationsService,
-  subscribe,
-  navigue,
-};
+export const routeurStore = { chargeInformationsService, subscribe, navigue };
 
 const pageDepuisURL = (url: string) => {
   const { pathname } = new URL(url, window.location.origin);
