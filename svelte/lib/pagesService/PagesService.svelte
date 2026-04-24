@@ -164,6 +164,9 @@
         return {
           dossier: dossiers?.dossierCourant,
           etapesParcours: referentiel.dossiers.etapesParcoursHomologation,
+          statutsAvisDossierHomologation:
+            referentiel.dossiers.statutsAvisDossierHomologation,
+          echeancesRenouvellement: referentiel.dossiers.echeancesRenouvellement,
         };
       default:
         return {};

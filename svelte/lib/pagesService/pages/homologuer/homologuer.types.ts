@@ -1,5 +1,12 @@
 export type AutoriteHomologation = { nom: string; fonction: string };
 
+export type AvisHomologation = {
+  statut: string;
+  dureeValidite: string;
+  commentaires: string;
+  collaborateurs: Array<string>;
+};
+
 export type Dossier = {
   id: string;
   finalise: boolean;
@@ -13,12 +20,7 @@ export type Dossier = {
   autorite: AutoriteHomologation;
   dateTelechargement: { date: string };
   avecAvis: boolean;
-  avis: Array<{
-    statut: string;
-    dureeValidite: string;
-    commentaires: string;
-    collaborateurs: Array<string>;
-  }>;
+  avis: Array<AvisHomologation>;
   avecDocuments: boolean;
   documents: string[];
   etapeCourante: {

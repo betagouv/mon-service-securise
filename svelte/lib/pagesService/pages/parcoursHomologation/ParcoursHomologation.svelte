@@ -12,14 +12,26 @@
   import EtapeAutorite from './etapes/EtapeAutorite.svelte';
   import type { Dossier } from '../homologuer/homologuer.types';
   import EtapeAvis from './etapes/EtapeAvis.svelte';
+  import type {
+    EcheancesRenouvellementHomologation,
+    StatutsAvisDossierHomologation,
+  } from '../../pagesService.d';
 
   interface Props {
     idService: string;
     dossier: Dossier;
+    statutsAvisDossierHomologation: StatutsAvisDossierHomologation;
     etapesParcours: Array<EtapeParcoursHomologation>;
+    echeancesRenouvellement: EcheancesRenouvellementHomologation;
   }
 
-  let { idService, dossier, etapesParcours }: Props = $props();
+  let {
+    idService,
+    dossier,
+    etapesParcours,
+    statutsAvisDossierHomologation,
+    echeancesRenouvellement,
+  }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
   let detailsEtapeCourante = $derived(
@@ -64,7 +76,13 @@
   </dsfr-stepper>
   <hr />
   <div>
-    <Composant {idService} {dossier} bind:this={composantEtapeCourante} />
+    <Composant
+      {idService}
+      {dossier}
+      {statutsAvisDossierHomologation}
+      {echeancesRenouvellement}
+      bind:this={composantEtapeCourante}
+    />
   </div>
   <div class="bandeau-actions">
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->

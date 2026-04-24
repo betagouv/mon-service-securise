@@ -18,10 +18,18 @@ declare global {
   }
 }
 
+export type StatutsAvisDossierHomologation = Record<
+  string,
+  { description: string }
+>;
+
+type EcheancesRenouvellementHomologation = Record<
+  string,
+  { description: string }
+>;
+
 export type ReferentielPagesService = {
-  indiceCyber: {
-    noteMax: number;
-  };
+  indiceCyber: { noteMax: number };
   mesures: {
     categories: Record<IdCategorie, string>;
     statuts: Record<StatutMesure, string>;
@@ -38,8 +46,11 @@ export type ReferentielPagesService = {
   dossiers: {
     statutsHomologation: Record<string, { libelle: string }>;
     etapesParcoursHomologation: Array<EtapeParcoursHomologation>;
+    statutsAvisDossierHomologation: StatutsAvisDossierHomologation;
+    echeancesRenouvellement: EcheancesRenouvellementHomologation;
   };
 };
+
 export type PagesServiceProps = {
   idService: string;
   referentiel: ReferentielPagesService;
