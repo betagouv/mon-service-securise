@@ -418,36 +418,6 @@ main {
   color: black;
 }
 
-#home .flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-#home .flex-row {
-  display: flex;
-  flex-direction: row;
-}
-
-#home .gap-8 {
-  gap: 8px;
-}
-
-#home .gap-16 {
-  gap: 16px;
-}
-
-#home .gap-24 {
-  gap: 24px;
-}
-
-#home .mb-8 {
-  margin-bottom: 8px;
-}
-
-#home .center {
-  align-items: center;
-}
-
 #home #resultats dsfr-button {
   width: 100%;
 }

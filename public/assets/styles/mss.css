@@ -339,3 +339,33 @@ section:last-of-type {
   gap: 8px;
   align-items: center;
 }
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.gap-16 {
+  gap: 16px;
+}
+
+.gap-24 {
+  gap: 24px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.center {
+  align-items: center;
+}
