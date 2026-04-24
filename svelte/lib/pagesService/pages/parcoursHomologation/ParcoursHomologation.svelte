@@ -20,6 +20,8 @@
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
   } from '../../pagesService.d';
+  import VoirDemarcheIndicative from './kit/VoirDemarcheIndicative.svelte';
+  import type { IdNiveauDeSecurite } from '../../../ui/types';
 
   interface Props {
     idService: string;
@@ -28,6 +30,7 @@
     etapesParcours: Array<EtapeParcoursHomologation>;
     echeancesRenouvellement: EcheancesRenouvellementHomologation;
     peutHomologuer: boolean;
+    niveauSecurite: IdNiveauDeSecurite;
   }
 
   let {
@@ -37,6 +40,7 @@
     statutsAvisDossierHomologation,
     echeancesRenouvellement,
     peutHomologuer,
+    niveauSecurite,
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
@@ -100,6 +104,7 @@
       bind:this={composantEtapeCourante}
     />
   </div>
+  <VoirDemarcheIndicative {etapeCourante} {niveauSecurite} />
   <div class="bandeau-actions">
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button label="Annuler" kind="tertiary" onclick={annuler}
