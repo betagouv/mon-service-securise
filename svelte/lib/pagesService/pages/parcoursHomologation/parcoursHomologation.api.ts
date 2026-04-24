@@ -20,6 +20,8 @@ export const enregistrement = (idService: string) => ({
       avecDocuments,
       documents,
     }),
+  telechargement: async () =>
+    await axios.put(`/api/service/${idService}/homologation/telechargement`),
 });
 
 export const reprendsParcours = async (
