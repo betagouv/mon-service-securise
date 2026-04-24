@@ -25,6 +25,7 @@
     statutsAvisDossierHomologation: StatutsAvisDossierHomologation;
     etapesParcours: Array<EtapeParcoursHomologation>;
     echeancesRenouvellement: EcheancesRenouvellementHomologation;
+    peutHomologuer: boolean;
   }
 
   let {
@@ -33,6 +34,7 @@
     etapesParcours,
     statutsAvisDossierHomologation,
     echeancesRenouvellement,
+    peutHomologuer,
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
@@ -90,6 +92,7 @@
       {dossier}
       {statutsAvisDossierHomologation}
       {echeancesRenouvellement}
+      {peutHomologuer}
       bind:this={composantEtapeCourante}
     />
   </div>
