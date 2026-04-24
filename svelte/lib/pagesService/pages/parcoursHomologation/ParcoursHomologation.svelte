@@ -14,6 +14,7 @@
   import EtapeAvis from './etapes/EtapeAvis.svelte';
   import EtapeDocuments from './etapes/EtapeDocuments.svelte';
   import EtapeDateTelechargement from './etapes/EtapeDateTelechargement.svelte';
+  import EtapeDecision from './etapes/EtapeDecision.svelte';
   import type {
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
@@ -72,6 +73,7 @@
     avis: EtapeAvis,
     documents: EtapeDocuments,
     dateTelechargement: EtapeDateTelechargement,
+    decision: EtapeDecision,
   };
 </script>
 
@@ -113,6 +115,10 @@
 {/if}
 
 <style lang="scss">
+  :root {
+    --parcours-homologation-largeur-formulaire: 894px;
+  }
+
   hr {
     border: none;
     border-top: 1px solid #dddddd;

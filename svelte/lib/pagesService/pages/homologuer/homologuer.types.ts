@@ -7,6 +7,12 @@ export type AvisHomologation = {
   collaborateurs: Array<string>;
 };
 
+export type DecisionHomologation = {
+  dateHomologation: string;
+  dureeValidite?: string;
+  refusee?: boolean;
+};
+
 export type Dossier = {
   id: string;
   finalise: boolean;
@@ -16,7 +22,7 @@ export type Dossier = {
   descriptionProchaineDateHomologation: string;
   indiceCyber?: number;
   indiceCyberPersonnalise?: number;
-  decision: { dateHomologation: string; dureeValidite: string };
+  decision: DecisionHomologation;
   autorite: AutoriteHomologation;
   dateTelechargement: { date: string };
   avecAvis: boolean;
