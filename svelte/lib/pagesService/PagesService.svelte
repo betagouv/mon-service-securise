@@ -179,6 +179,7 @@
   on:description-service-modifiee={rafraichisResumeService}
   on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
   on:homologation-supprimee={rafraichisServiceComplet}
+  on:homologation-modifiee={rafraichisServiceComplet}
   on:mesure-modifiee={rafraichisServiceComplet}
 />
 
