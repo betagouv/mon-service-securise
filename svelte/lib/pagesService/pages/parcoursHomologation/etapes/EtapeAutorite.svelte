@@ -23,7 +23,14 @@
   Complétez les informations sur la personne physique au sein de votre entité
   qui sera chargée de prendre la décision d'homologation de sécurité (ex: maire,
   directeur général, etc).
-</Explication>
+  <dsfr-link
+    label="En savoir plus"
+    icon-place="left"
+    href="/articles/tout-savoir-sur-lhomologation-de-securite"
+    blank
+  >
+  </dsfr-link></Explication
+>
 
 <div class="champs">
   <InputDSFR label="Prénom Nom" bind:value={autorite.nom} />
