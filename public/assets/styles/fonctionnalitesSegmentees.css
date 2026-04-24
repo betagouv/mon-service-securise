@@ -1,13 +1,8 @@
-.fonctionnalites span {
-  color: #161616;
-  font-size: 1.125rem;
-  line-height: 1.5rem;
-}
-
 .fonctionnalites hr {
   width: 100%;
   border: none;
   border-bottom: 1px solid #dddddd;
+  margin: 0;
 }
 
 .fonctionnalite {
@@ -19,6 +14,7 @@
 }
 
 .conteneur-fonctionnalites {
+  gap: 16px;
   flex: 1;
 }
 
@@ -28,14 +24,41 @@
   height: fit-content;
 }
 
+#fonctionnalites {
+  padding-block-start: 56px;
+
+  .fonctionnalite-titre {
+    color: currentColor;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.controle-segmente-fonctionnalites {
+  margin-block-end: 56px;
+}
+
+.fonctionnalite-description {
+  margin: 0;
+  padding-block-end: 8px;
+}
+
 @media screen and (min-width: 1200px) {
+  #fonctionnalites {
+    .fonctionnalite-titre {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
   .fonctionnalite {
     cursor: pointer;
   }
 
-  .fonctionnalite:hover,
-  .fonctionnalite:hover span {
-    color: #666;
+  .fonctionnalite:hover {
+    color: var(--text-mention-grey);
   }
 
   .illustration-fonctionnalites-segmentees-desktop {
@@ -47,8 +70,11 @@
     display: none;
   }
 
-  .fonctionnalite.active,
-  .fonctionnalite.active span {
-    color: var(--bleu-mise-en-avant);
+  .fonctionnalite.active {
+    color: var(--text-action-high-blue-france);
+  }
+
+  .conteneur-fonctionnalites {
+    gap: 24px;
   }
 }
