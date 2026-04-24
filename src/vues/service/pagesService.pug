@@ -36,7 +36,9 @@ block append scripts
     },
     dossiers: {
       statutsHomologation: referentiel.statutsHomologation(),
-      etapesParcoursHomologation: referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer)
+      etapesParcoursHomologation: referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer),
+      statutsAvisDossierHomologation: referentiel.statutsAvisDossierHomologation(),
+      echeancesRenouvellement:  referentiel.echeancesRenouvellement()
     }
   })
   +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })
