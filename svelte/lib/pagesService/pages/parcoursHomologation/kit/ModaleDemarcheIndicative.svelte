@@ -63,13 +63,13 @@
           </tbody>
         </table>
       </div>
-      <a
+      <dsfr-link
+        label="Télécharger le document « l'homologation simplifiée »"
         href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
+        blank
+        size="sm"
       >
-        Télécharger le document "l'homologation simplifiée"
-      </a>
+      </dsfr-link>
     </div>
   {/snippet}
   {#snippet actions()}
@@ -105,26 +105,8 @@
     display: flex;
     flex-direction: column;
 
-    a {
-      color: #042794;
-      align-self: end;
-      display: flex;
-      flex-direction: row;
-      gap: 8px;
-      align-items: end;
-      border-bottom: 1px solid #042794;
-      padding-bottom: 1px;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
-
-      &:after {
-        content: url('/statique/assets/images/icone_telecharger_dsfr.svg');
-        width: 16px;
-        height: 16px;
-        display: flex;
-      }
+    dsfr-link {
+      margin-left: auto;
     }
   }
 
