@@ -12,6 +12,7 @@
   import EtapeAutorite from './etapes/EtapeAutorite.svelte';
   import type { Dossier } from '../homologuer/homologuer.types';
   import EtapeAvis from './etapes/EtapeAvis.svelte';
+  import EtapeDocuments from './etapes/EtapeDocuments.svelte';
   import type {
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
@@ -34,7 +35,7 @@
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
-  let detailsEtapeCourante = $derived(
+  let detailsEtapeCourante: EtapeParcoursHomologation | undefined = $derived(
     etapesParcours.find((e) => e.id === etapeCourante)
   );
   let detailsEtapeSuivante = $derived(
@@ -50,7 +51,7 @@
   const suivant = async () => {
     await composantEtapeCourante?.enregistre();
     document.dispatchEvent(new CustomEvent('homologation-modifiee'));
-    etapeCourante = 'avis';
+    if (detailsEtapeSuivante) etapeCourante = detailsEtapeSuivante.id;
   };
 
   const annuler = () => {
@@ -63,6 +64,7 @@
   const composants: Record<IdEtapeParcoursHomologation, ComposantEtape> = {
     autorite: EtapeAutorite,
     avis: EtapeAvis,
+    documents: EtapeDocuments,
   };
 </script>
 

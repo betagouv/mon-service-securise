@@ -37,7 +37,7 @@
     }),
     supprime: (index: number) => {
       avis.splice(index, 1);
-      if (avis.length === 0) avecAvis = false;
+      avecAvis = avis.length > 0;
     },
     ajouteUnVide: () => {
       avis.push(commandeAvis.avisVide());
