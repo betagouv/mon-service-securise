@@ -92,10 +92,10 @@
   }
 
   h4 {
-    margin: 0 0 32px;
-    font-size: 28px;
+    margin: 0 0 0.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    line-height: 36px;
+    line-height: 2.25rem;
   }
 
   .contenu-parcours-homologation {
@@ -120,14 +120,14 @@
 
     h5 {
       margin: 0 0 16px;
-      font-size: 24px;
+      font-size: 1.5rem;
       font-weight: 700;
-      line-height: 32px;
+      line-height: 2rem;
       white-space: nowrap;
     }
 
     p {
-      font-size: 18px;
+      font-size: 1rem;
       font-weight: 400;
       line-height: 28px;
     }
