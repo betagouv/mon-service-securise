@@ -75,7 +75,7 @@
 
 <style lang="scss">
   .etape {
-    max-width: 894px;
+    width: var(--parcours-homologation-largeur-formulaire);
 
     .consignes {
       font-size: 1rem;

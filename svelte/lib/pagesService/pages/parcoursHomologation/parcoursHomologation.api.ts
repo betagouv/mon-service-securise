@@ -2,6 +2,7 @@ import type { IdEtapeParcoursHomologation } from './parcoursHomologation.types';
 import type {
   AutoriteHomologation,
   AvisHomologation,
+  DecisionHomologation,
 } from '../homologuer/homologuer.types';
 
 export const enregistrement = (idService: string) => ({
@@ -15,6 +16,18 @@ export const enregistrement = (idService: string) => ({
       avecAvis,
       avis,
     }),
+  decision: async (donnees: DecisionHomologation) => {
+    const { dateHomologation, dureeValidite, refusee } = donnees;
+
+    const payload = refusee
+      ? { refusee, dateHomologation }
+      : { dureeValidite, dateHomologation };
+
+    return await axios.put(
+      `/api/service/${idService}/homologation/decision`,
+      payload
+    );
+  },
   documents: async (avecDocuments: boolean, documents: string[]) =>
     await axios.put(`/api/service/${idService}/homologation/documents`, {
       avecDocuments,

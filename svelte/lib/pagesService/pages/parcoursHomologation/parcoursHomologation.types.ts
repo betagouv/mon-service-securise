@@ -5,6 +5,7 @@ export const idEtapeParcoursHomologation = {
   avis: 'avis',
   documents: 'documents',
   dateTelechargement: 'dateTelechargement',
+  decision: 'decision',
 } as const;
 
 export type IdEtapeParcoursHomologation =
