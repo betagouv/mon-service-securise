@@ -168,6 +168,7 @@
             referentiel.dossiers.statutsAvisDossierHomologation,
           echeancesRenouvellement: referentiel.dossiers.echeancesRenouvellement,
           peutHomologuer: referentiel.dossiers.peutHomologuer,
+          niveauSecurite: descriptionService?.niveauSecurite,
         };
       default:
         return {};
