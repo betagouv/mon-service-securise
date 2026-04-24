@@ -15,6 +15,11 @@ export const enregistrement = (idService: string) => ({
       avecAvis,
       avis,
     }),
+  documents: async (avecDocuments: boolean, documents: string[]) =>
+    await axios.put(`/api/service/${idService}/homologation/documents`, {
+      avecDocuments,
+      documents,
+    }),
 });
 
 export const reprendsParcours = async (

@@ -1,6 +1,6 @@
 import type { Component } from 'svelte';
 
-export type IdEtapeParcoursHomologation = 'autorite' | 'avis';
+export type IdEtapeParcoursHomologation = 'autorite' | 'avis' | 'documents';
 
 export type EtapeParcoursHomologation = {
   numero: number;
