@@ -10,8 +10,11 @@ let app: CentreNotifications;
 const rechargeApp = async () => {
   if (app) await unmount(app);
 
+  const target = document.getElementById('centre-notifications');
+  if (!target) return;
+
   app = mount(CentreNotifications, {
-    target: document.getElementById('centre-notifications')!,
+    target: target!,
   });
 };
 
