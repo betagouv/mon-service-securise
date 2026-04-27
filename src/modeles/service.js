@@ -400,7 +400,10 @@ class Service {
   }
 
   actionRecommandee() {
-    if (this.aUneSimulationMigrationReferentiel)
+    if (
+      this.aUneSimulationMigrationReferentiel &&
+      this.version() === VersionService.v1
+    )
       return Service.ACTIONS_RECOMMANDEES.CONTINUER_SIMULATION_REFERENTIEL_V2;
 
     if (this.version() === VersionService.v1)
