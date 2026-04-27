@@ -13,6 +13,7 @@
     avecTamponAccessible?: boolean;
     avecStatutHomologation?: boolean;
     documentsPdfDisponibles?: string[];
+    peutSupprimer?: boolean;
   }
 
   let {
@@ -23,6 +24,7 @@
     avecTamponAccessible = false,
     avecStatutHomologation = false,
     documentsPdfDisponibles = [],
+    peutSupprimer = false,
   }: Props = $props();
 
   const noteIndiceCyber = (indiceCyber: number) => {
@@ -150,7 +152,7 @@
             })}
         ></dsfr-button>
       {/if}
-      {#if dossier.statut === 'nonRealisee'}
+      {#if dossier.statut === 'nonRealisee' && peutSupprimer}
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-button
           label="Supprimer le projet d'homologation"
