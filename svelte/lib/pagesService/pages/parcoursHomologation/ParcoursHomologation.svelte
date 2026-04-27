@@ -44,6 +44,7 @@
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
+  let estDerniereEtape = $derived(etapeCourante === etapesParcours.at(-1)?.id);
   let detailsEtapeCourante: EtapeParcoursHomologation | undefined = $derived(
     etapesParcours.find((e) => e.id === etapeCourante)
   );
@@ -88,6 +89,15 @@
 
   const annuler = () => {
     routeurStore.navigue(`/service/${idService}/dossiers`);
+  };
+
+  const enregistrerDecision = async () => {
+    const estRefusee = dossier.decision.refusee;
+    await api.enregistrement(idService).finalise();
+    document.dispatchEvent(new CustomEvent('homologation-finalisee'));
+    routeurStore.navigue(
+      `/service/${idService}/dossiers${estRefusee ? '' : '?succesHomologation=true'}`
+    );
   };
 
   let composantEtapeCourante: InstanceEtapeParcoursHomologation | undefined =
@@ -135,15 +145,26 @@
       <dsfr-button label="Précédent" kind="tertiary" onclick={precedent}
       ></dsfr-button>
     {/if}
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Suivant"
-      kind="primary"
-      has-icon
-      icon="arrow-right-line"
-      icon-place="right"
-      onclick={suivant}
-    ></dsfr-button>
+    {#if estDerniereEtape}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Enregistrer la décision"
+        kind="primary"
+        icon="save-line"
+        icon-place="right"
+        onclick={enregistrerDecision}
+      ></dsfr-button>
+    {:else}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Suivant"
+        kind="primary"
+        has-icon
+        icon="arrow-right-line"
+        icon-place="right"
+        onclick={suivant}
+      ></dsfr-button>
+    {/if}
   </div>
 {/if}
 

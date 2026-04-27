@@ -13,6 +13,7 @@ declare module 'svelte/elements' {
     'on:description-service-modifiee'?: (event: CustomEvent<never>) => void;
     'on:homologation-supprimee'?: (event: CustomEvent<never>) => void;
     'on:homologation-modifiee'?: (event: CustomEvent<never>) => void;
+    'on:homologation-finalisee'?: (event: CustomEvent<never>) => void;
     'on:parcours-homologation-initie'?: (event: CustomEvent<never>) => void;
     'on:contacts-utiles-service-modifiee'?: (event: CustomEvent<never>) => void;
   }
