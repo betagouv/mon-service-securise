@@ -68,25 +68,6 @@
     )}
 />
 
-{#if !dossiers.aucunDossier}
-  {@const dossierEnCours = !!dossiers.dossierCourant}
-  {#if !dossierEnCours && !estLectureSeule}
-    <div class="bouton-creation">
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        onclick={() => modaleDemarcheIndicative.affiche()}
-        label="Créer un nouveau projet d'homologation"
-        kind="primary"
-        size="sm"
-        icon="edit-line"
-        icon-place="left"
-        type="button"
-        has-icon
-      ></dsfr-button>
-    </div>
-  {/if}
-{/if}
-
 {#if dossiers.aucunDossier}
   <OngletVide
     titre="Aucun projet d’homologation en cours"
@@ -123,7 +104,17 @@
           <OngletVide
             titre="Aucun projet d’homologation en cours"
             sousTitre="Aucun projet d’homologation n’est en cours pour ce service"
-          />
+          >
+            {#if !estLectureSeule}
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+              <dsfr-button
+                onclick={() => modaleDemarcheIndicative.affiche()}
+                label="Créer un nouveau projet d'homologation"
+                kind="primary"
+                size="md"
+              ></dsfr-button>
+            {/if}
+          </OngletVide>
         </div>
       {/if}
     </div>
