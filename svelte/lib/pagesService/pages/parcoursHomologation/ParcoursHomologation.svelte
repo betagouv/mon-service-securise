@@ -58,6 +58,7 @@
       idService,
       etapeDeURL(window.location.pathname)
     );
+    document.dispatchEvent(new CustomEvent('parcours-homologation-initie'));
   });
 
   const suivant = async () => {

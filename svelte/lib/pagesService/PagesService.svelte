@@ -184,6 +184,7 @@
   on:homologation-supprimee={rafraichisServiceComplet}
   on:homologation-modifiee={rafraichisServiceComplet}
   on:mesure-modifiee={rafraichisServiceComplet}
+  on:parcours-homologation-initie={rafraichisServiceComplet}
 />
 
 <Toaster />
