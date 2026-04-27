@@ -64,7 +64,11 @@
   const suivant = async () => {
     await composantEtapeCourante?.enregistre();
     document.dispatchEvent(new CustomEvent('homologation-modifiee'));
-    if (detailsEtapeSuivante) etapeCourante = detailsEtapeSuivante.id;
+    if (detailsEtapeSuivante) {
+      routeurStore.navigue(
+        `/service/${idService}/homologation/edition/etape/${detailsEtapeSuivante.id}`
+      );
+    }
   };
 
   const annuler = () => {
