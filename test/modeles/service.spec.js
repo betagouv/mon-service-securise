@@ -1180,6 +1180,20 @@ describe('Un service', () => {
       );
     });
 
+    it("ne propose pas 'continuerSimulationReferentielV2', si le service est déjà en V2", () => {
+      // En théorie, si le service est en V2 alors la BDD n'a plus de ligne "simulation_migration_referentiel"
+      // pour le service.
+      // En pratique, on a constaté, parfois, en DÉMO, une désynchro entre l'état du service et l'état de la BDD.
+      // On rajoute donc ce test.
+      const v2AvecSimulation = unServiceV2()
+        .avecUneSimulationExistante()
+        .construis();
+
+      expect(v2AvecSimulation.actionRecommandee()?.id).not.toBe(
+        'continuerSimulationReferentielV2'
+      );
+    });
+
     it("retourne 'simulerReferentielV2' si le service est en v1 et que le feature flag est activé", () => {
       const v1SansSimulation = unService()
         .avecVersion(VersionService.v1)
