@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { IdEtapeParcoursHomologation } from '../parcoursHomologation.types';
-  import ModaleDemarcheIndicative from './ModaleDemarcheIndicative.svelte';
+  import ModaleDemarcheIndicative from '../../../kit/ModaleDemarcheIndicative.svelte';
 
   interface Props {
     etapeCourante: IdEtapeParcoursHomologation;
