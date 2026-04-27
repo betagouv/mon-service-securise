@@ -68,7 +68,7 @@
 
 {#if !dossiers.aucunDossier}
   {@const dossierEnCours = !!dossiers.dossierCourant}
-  {#if !dossierEnCours}
+  {#if !dossierEnCours && !estLectureSeule}
     <div class="bouton-creation">
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
@@ -90,13 +90,15 @@
     titre="Aucun projet d’homologation en cours"
     sousTitre="Aucun projet d’homologation n’est en cours, ni aucune homologation n’a été validée"
   >
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      onclick={() => modaleDemarcheIndicative.affiche()}
-      label="Créer un nouveau projet d'homologation"
-      kind="primary"
-      size="md"
-    ></dsfr-button>
+    {#if !estLectureSeule}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        onclick={() => modaleDemarcheIndicative.affiche()}
+        label="Créer un nouveau projet d'homologation"
+        kind="primary"
+        size="md"
+      ></dsfr-button>
+    {/if}
   </OngletVide>
 {:else}
   <dsfr-tabs tabs={configurationsTabs}>
