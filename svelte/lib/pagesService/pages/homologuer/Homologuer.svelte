@@ -9,6 +9,7 @@
 
   interface Props {
     dossiers: DossiersHomologation;
+    estLectureSeule: boolean;
     statutsHomologation: Record<string, { libelle: string }>;
     indiceCyber: number;
     indiceCyberPersonnalise: number;
@@ -20,6 +21,7 @@
   let {
     idService,
     dossiers,
+    estLectureSeule,
     statutsHomologation,
     indiceCyber,
     indiceCyberPersonnalise,
@@ -110,6 +112,7 @@
           {idService}
           avecDocumentsAccessible
           {documentsPdfDisponibles}
+          peutSupprimer={!estLectureSeule}
         />
       {:else}
         <div class="onglet-vide">
