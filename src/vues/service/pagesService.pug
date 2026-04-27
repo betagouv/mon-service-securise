@@ -39,7 +39,6 @@ block append scripts
       etapesParcoursHomologation: referentiel.etapesParcoursHomologation(autorisationsService.peutHomologuer),
       statutsAvisDossierHomologation: referentiel.statutsAvisDossierHomologation(),
       echeancesRenouvellement:  referentiel.echeancesRenouvellement(),
-      peutHomologuer: autorisationsService.peutHomologuer
     }
   })
   +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })

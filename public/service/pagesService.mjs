@@ -27,6 +27,7 @@ $(() => {
         featureFlags,
         preferencesUtilisateur,
         suggestionsService,
+        peutHomologuer: autorisationsService.peutHomologuer,
         visible: {
           rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
