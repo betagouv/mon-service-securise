@@ -158,6 +158,7 @@
           indiceCyber: indicesCyber?.indiceCyberAnssi.total,
           indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
           documentsPdfDisponibles: service?.documentsPdfDisponibles,
+          niveauSecurite: descriptionService?.niveauSecurite,
         };
       default:
         return {};
