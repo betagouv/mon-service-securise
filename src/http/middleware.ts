@@ -29,6 +29,7 @@ import Service from '../modeles/service.js';
 import Dossier from '../modeles/dossier.js';
 import Utilisateur from '../modeles/utilisateur.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
+import { lisUtilisateurCourant } from '../utilisateur/lectureUtilisateurCourant.js';
 
 const { LECTURE, INVISIBLE } = Permissions;
 
@@ -124,36 +125,26 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       return reponse.redirect(urlAvecRedirection);
     };
 
-    try {
-      const token = adaptateurJWT.decode(requete.session?.token) as {
-        idUtilisateur: UUID;
-        iat: number;
-        source: SourceAuthentification;
-      };
-      const estRevoque = await depotDonnees.estJwtRevoque(
-        requete.session?.token
-      );
-      if (estRevoque) return renvoieUtilisateurSansJWTValide();
+    const utilisateurCourant = await lisUtilisateurCourant(
+      requete.session?.token,
+      adaptateurJWT,
+      depotDonnees
+    );
+    if (!utilisateurCourant) return renvoieUtilisateurSansJWTValide();
 
-      const utilisateur = await depotDonnees.utilisateur(token.idUtilisateur);
-      if (!utilisateur) return renvoieUtilisateurSansJWTValide();
+    adaptateurGestionErreur.identifieUtilisateur(
+      utilisateurCourant.id,
+      utilisateurCourant.timestampConnexion
+    );
 
-      adaptateurGestionErreur.identifieUtilisateur(
-        token.idUtilisateur,
-        token.iat
-      );
-
-      requete.idUtilisateurCourant = token.idUtilisateur;
-      requete.cguAcceptees = requete.session?.cguAcceptees;
-      requete.estInvite = requete.session?.estInvite;
-      requete.sourceAuthentification = token.source;
-      reponse.locals.utilisateurConnecte = {
-        prenomNom: utilisateur.prenomNom(),
-        email: utilisateur.email,
-      };
-    } catch {
-      return renvoieUtilisateurSansJWTValide();
-    }
+    requete.idUtilisateurCourant = utilisateurCourant.id;
+    requete.sourceAuthentification = utilisateurCourant.source;
+    reponse.locals.utilisateurConnecte = {
+      prenomNom: utilisateurCourant.prenomNom,
+      email: utilisateurCourant.email,
+    };
+    requete.cguAcceptees = requete.session?.cguAcceptees;
+    requete.estInvite = requete.session?.estInvite;
 
     return suite();
   };
