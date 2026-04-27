@@ -25,6 +25,7 @@
     featureFlags,
     preferencesUtilisateur,
     suggestionsService,
+    peutHomologuer,
   }: PagesServiceProps = $props();
 
   type ServicePourPagesService = {
@@ -167,7 +168,7 @@
           statutsAvisDossierHomologation:
             referentiel.dossiers.statutsAvisDossierHomologation,
           echeancesRenouvellement: referentiel.dossiers.echeancesRenouvellement,
-          peutHomologuer: referentiel.dossiers.peutHomologuer,
+          peutHomologuer,
           niveauSecurite: descriptionService?.niveauSecurite,
         };
       default:
