@@ -31,11 +31,7 @@
   >
   </dsfr-link>
 
-  <ModaleDemarcheIndicative
-    bind:this={modale}
-    {niveauSecurite}
-    onHomologuer={() => {}}
-  />
+  <ModaleDemarcheIndicative bind:this={modale} {niveauSecurite} />
 {/if}
 
 <style lang="scss">

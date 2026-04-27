@@ -4,7 +4,7 @@
 
   interface Props {
     niveauSecurite: 'niveau1' | 'niveau2' | 'niveau3';
-    onHomologuer: () => void;
+    onHomologuer?: () => void;
   }
 
   let { niveauSecurite, onHomologuer }: Props = $props();
@@ -18,7 +18,7 @@
 
   const valideEtFerme = () => {
     ferme();
-    onHomologuer();
+    if (onHomologuer) onHomologuer();
   };
 </script>
 
@@ -76,13 +76,16 @@
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button label="Fermer" kind="secondary" type="button" onclick={ferme}
     ></dsfr-button>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Ok, j’homologue le service !"
-      kind="primary"
-      type="button"
-      onclick={valideEtFerme}
-    ></dsfr-button>
+
+    {#if onHomologuer}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Ok, j’homologue le service !"
+        kind="primary"
+        type="button"
+        onclick={valideEtFerme}
+      ></dsfr-button>
+    {/if}
   {/snippet}
 </Modale>
 
