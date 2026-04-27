@@ -52,6 +52,11 @@
       ? etapesParcours.find((e) => e.numero === detailsEtapeCourante.numero + 1)
       : undefined
   );
+  let detailsEtapePrecedente = $derived(
+    detailsEtapeCourante
+      ? etapesParcours.find((e) => e.numero === detailsEtapeCourante.numero - 1)
+      : undefined
+  );
 
   onMount(async () => {
     etapeCourante = await api.reprendsParcours(
@@ -67,6 +72,16 @@
     if (detailsEtapeSuivante) {
       routeurStore.navigue(
         `/service/${idService}/homologation/edition/etape/${detailsEtapeSuivante.id}`
+      );
+    }
+  };
+
+  const precedent = async () => {
+    await composantEtapeCourante?.enregistre();
+    document.dispatchEvent(new CustomEvent('homologation-modifiee'));
+    if (detailsEtapePrecedente) {
+      routeurStore.navigue(
+        `/service/${idService}/homologation/edition/etape/${detailsEtapePrecedente.id}`
       );
     }
   };
@@ -111,9 +126,15 @@
   </div>
   <VoirDemarcheIndicative {etapeCourante} {niveauSecurite} />
   <div class="bandeau-actions">
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button label="Annuler" kind="tertiary" onclick={annuler}
-    ></dsfr-button>
+    {#if detailsEtapeCourante.numero === 1}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button label="Annuler" kind="tertiary" onclick={annuler}
+      ></dsfr-button>
+    {:else}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button label="Précédent" kind="tertiary" onclick={precedent}
+      ></dsfr-button>
+    {/if}
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Suivant"
