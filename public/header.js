@@ -13,4 +13,12 @@ $(() => {
 
   updateLogo();
   window.addEventListener('resize', updateLogo);
+
+  $('dsfr-header').on('logout', () => {
+    window.location.href = '/deconnexion';
+  });
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-centre-notifications')
+  );
 });

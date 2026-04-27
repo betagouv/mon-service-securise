@@ -95,6 +95,7 @@ const creeServeur = ({
   app.use(
     '',
     middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
+    middleware.chargeUtilisateurConnecte,
     routesNonConnectePage({
       adaptateurEnvironnement,
       adaptateurStatistiques,

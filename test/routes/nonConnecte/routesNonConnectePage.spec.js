@@ -37,6 +37,12 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('text/html');
     });
+
+    it(`charge l'utilisateur connecte (pour afficher le header en mode connecté) sur la page ${route}`, async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeUtilisateurConnecte(testeur.app(), route);
+    });
   });
 
   describe('quand requête GET sur `/articles/:slug`', () => {

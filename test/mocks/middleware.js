@@ -72,6 +72,7 @@ let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let traficProtege = false;
 let verificationJWTMenee = false;
+let utilisateurConnecteCharge = false;
 let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
 let typeRequeteCharge = null;
@@ -107,6 +108,7 @@ const middlewareFantaisie = {
     suppressionCookieEffectuee = false;
     traficProtege = false;
     verificationJWTMenee = false;
+    utilisateurConnecteCharge = false;
     verificationCGUMenee = false;
     versionBuildeeChargee = false;
     sourceAuthentification = authentificationAUtiliser;
@@ -210,6 +212,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  chargeUtilisateurConnecte: (_requete, _reponse, suite) => {
+    utilisateurConnecteCharge = true;
+    suite();
+  },
+
   redirigeVersUrlBase: (_requete, _reponse, suite) => {
     suite();
   },
@@ -305,6 +312,13 @@ const middlewareFantaisie = {
   verifieRequeteExigeJWT: async (app, requete) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationJWTMenee },
+      app,
+      requete
+    ),
+
+  verifieRequeteChargeUtilisateurConnecte: async (app, requete) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => utilisateurConnecteCharge },
       app,
       requete
     ),
