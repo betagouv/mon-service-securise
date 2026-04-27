@@ -111,6 +111,25 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
+  const chargeUtilisateurConnecte = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    const utilisateurCourant = await lisUtilisateurCourant(
+      requete.session?.token,
+      adaptateurJWT,
+      depotDonnees
+    );
+    if (utilisateurCourant) {
+      reponse.locals.utilisateurConnecte = {
+        prenomNom: utilisateurCourant.prenomNom,
+        email: utilisateurCourant.email,
+      };
+    }
+    suite();
+  };
+
   const verificationJWT = async (
     requete: RequeteMSS,
     reponse: Response,
@@ -473,6 +492,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeExplicationUtilisationMFA,
     chargeFeatureFlags,
     chargeTypeRequete,
+    chargeUtilisateurConnecte,
     filtreIpAutorisees,
     interdisLaMiseEnCache,
     positionneHeaders,
