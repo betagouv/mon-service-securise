@@ -4,6 +4,8 @@
   import OngletVide from './kit/OngletVide.svelte';
   import ModaleEncartHomologation from './kit/ModaleEncartHomologation.svelte';
   import { onMount } from 'svelte';
+  import ModaleDemarcheIndicative from '../../kit/ModaleDemarcheIndicative.svelte';
+  import type { IdNiveauDeSecurite } from '../../../ui/types';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -12,6 +14,7 @@
     indiceCyberPersonnalise: number;
     idService: string;
     documentsPdfDisponibles: string[];
+    niveauSecurite: IdNiveauDeSecurite;
   }
 
   let {
@@ -21,6 +24,7 @@
     indiceCyber,
     indiceCyberPersonnalise,
     documentsPdfDisponibles,
+    niveauSecurite,
   }: Props = $props();
 
   const configurationsTabs = [
@@ -43,6 +47,7 @@
   ];
 
   let modaleEncartHomologation: ModaleEncartHomologation;
+  let modaleDemarcheIndicative: ModaleDemarcheIndicative;
 
   onMount(() => {
     const requete = new URLSearchParams(window.location.search);
@@ -51,25 +56,31 @@
   });
 </script>
 
+<ModaleDemarcheIndicative
+  bind:this={modaleDemarcheIndicative}
+  {niveauSecurite}
+  onHomologuer={() => {
+    window.location.href = `/service/${idService}/homologation/edition/etape/autorite`;
+  }}
+/>
+
 {#if !dossiers.aucunDossier}
   {@const dossierEnCours = !!dossiers.dossierCourant}
-  <div class="bouton-creation">
-    <dsfr-button
-      label={dossierEnCours
-        ? "Reprendre l'homologation"
-        : "Créer un nouveau projet d'homologation"}
-      kind="primary"
-      size="sm"
-      icon={dossierEnCours ? 'edit-box-line' : 'edit-line'}
-      icon-place="left"
-      markup="a"
-      href={dossierEnCours
-        ? `/service/${idService}/homologation/edition/etape/${dossiers.dossierCourant?.etapeCourante.nomEtape}`
-        : `/service/${idService}/homologation/edition/etape/autorite`}
-      type="button"
-      has-icon
-    ></dsfr-button>
-  </div>
+  {#if !dossierEnCours}
+    <div class="bouton-creation">
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        onclick={() => modaleDemarcheIndicative.affiche()}
+        label="Créer un nouveau projet d'homologation"
+        kind="primary"
+        size="sm"
+        icon="edit-line"
+        icon-place="left"
+        type="button"
+        has-icon
+      ></dsfr-button>
+    </div>
+  {/if}
 {/if}
 
 {#if dossiers.aucunDossier}
@@ -79,11 +90,10 @@
   >
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
+      onclick={() => modaleDemarcheIndicative.affiche()}
       label="Créer un nouveau projet d'homologation"
       kind="primary"
       size="md"
-      onclick={() =>
-        (window.location.href = `/service/${idService}/homologation/edition/etape/autorite`)}
     ></dsfr-button>
   </OngletVide>
 {:else}
