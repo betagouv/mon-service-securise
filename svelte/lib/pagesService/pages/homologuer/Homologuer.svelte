@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import ModaleDemarcheIndicative from '../../kit/ModaleDemarcheIndicative.svelte';
   import type { IdNiveauDeSecurite } from '../../../ui/types';
+  import { routeurStore } from '../../store/routeur.store';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -61,9 +62,10 @@
 <ModaleDemarcheIndicative
   bind:this={modaleDemarcheIndicative}
   {niveauSecurite}
-  onHomologuer={() => {
-    window.location.href = `/service/${idService}/homologation/edition/etape/autorite`;
-  }}
+  onHomologuer={() =>
+    routeurStore.navigue(
+      `/service/${idService}/homologation/edition/etape/autorite`
+    )}
 />
 
 {#if !dossiers.aucunDossier}
