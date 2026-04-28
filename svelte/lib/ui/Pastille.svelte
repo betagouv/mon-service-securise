@@ -20,18 +20,17 @@
     padding: 2px 4px;
     justify-content: center;
     align-items: center;
+
     border-radius: 12px;
-    border: 1px solid white;
-    color: var(--texte-clair);
-    background: var(--fond-gris-pale);
+    color: #161616;
+    background: white;
     font-size: 0.75rem;
-    line-height: 1.25rem;
+    line-height: 1rem;
     font-weight: 400;
 
     &.active {
       background: var(--bleu-mise-en-avant);
       color: white;
-      border-color: transparent;
     }
   }
 </style>
