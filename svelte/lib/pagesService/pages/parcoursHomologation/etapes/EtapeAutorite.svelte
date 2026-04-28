@@ -8,9 +8,10 @@
   interface Props {
     idService: string;
     dossier: Dossier;
+    estLectureSeule: boolean;
   }
 
-  let { idService, dossier }: Props = $props();
+  let { idService, dossier, estLectureSeule }: Props = $props();
 
   let autorite = $state(untrack(() => dossier.autorite));
 
@@ -33,8 +34,16 @@
 >
 
 <div class="champs">
-  <InputDSFR label="Prénom Nom" bind:value={autorite.nom} />
-  <InputDSFR label="Fonction" bind:value={autorite.fonction} />
+  <InputDSFR
+    label="Prénom Nom"
+    bind:value={autorite.nom}
+    disabled={estLectureSeule}
+  />
+  <InputDSFR
+    label="Fonction"
+    bind:value={autorite.fonction}
+    disabled={estLectureSeule}
+  />
 </div>
 
 <style lang="scss">

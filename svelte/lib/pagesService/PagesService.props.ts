@@ -85,6 +85,7 @@ export const propsPourPage = (
           props.referentiel.dossiers.echeancesRenouvellement,
         peutHomologuer: props.peutHomologuer,
         niveauSecurite: descriptionService?.niveauSecurite,
+        estLectureSeule: props.estLectureSeule.homologation,
       };
     default:
       return {};

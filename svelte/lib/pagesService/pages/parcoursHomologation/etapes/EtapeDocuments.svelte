@@ -9,9 +9,10 @@
   interface Props {
     idService: string;
     dossier: Dossier;
+    estLectureSeule: boolean;
   }
 
-  let { idService, dossier }: Props = $props();
+  let { idService, dossier, estLectureSeule }: Props = $props();
 
   let avecDocuments = $state(untrack(() => dossier.avecDocuments ?? false));
   let documents: string[] = $state(untrack(() => dossier.documents ?? []));
@@ -57,6 +58,7 @@
   ]}
   status="default"
   value={avecDocuments}
+  disabled={estLectureSeule}
 ></dsfr-radios-group>
 
 {#if avecDocuments}
@@ -65,17 +67,20 @@
       <InputDSFR
         label="Nom du document et informations utiles"
         bind:value={nouveauDocument}
+        disabled={estLectureSeule}
       />
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Ajouter ce document"
-        kind="secondary"
-        type="button"
-        has-icon
-        icon="add-line"
-        icon-place="left"
-        onclick={commandeDocuments.ajoute}
-      ></dsfr-button>
+      {#if !estLectureSeule}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Ajouter ce document"
+          kind="secondary"
+          type="button"
+          has-icon
+          icon="add-line"
+          icon-place="left"
+          onclick={commandeDocuments.ajoute}
+        ></dsfr-button>
+      {/if}
     </div>
 
     {#if documents.length > 0}
@@ -83,17 +88,19 @@
         {#each documents as document, index (`${document}-${index}`)}
           <li>
             <span class="nom">{document}</span>
-            <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-            <dsfr-button
-              label="Supprimer"
-              kind="secondary"
-              has-icon
-              icon="delete-line"
-              icon-place="left"
-              type="button"
-              size="sm"
-              onclick={() => commandeDocuments.supprime(index)}
-            ></dsfr-button>
+            {#if !estLectureSeule}
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+              <dsfr-button
+                label="Supprimer"
+                kind="secondary"
+                has-icon
+                icon="delete-line"
+                icon-place="left"
+                type="button"
+                size="sm"
+                onclick={() => commandeDocuments.supprime(index)}
+              ></dsfr-button>
+            {/if}
           </li>
         {/each}
       </ul>
