@@ -51,6 +51,11 @@
   .bandeau-actions {
     display: flex;
     gap: 0.75rem;
-    margin-top: 2rem;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 24px 0 24px 72px;
+    margin: auto -24px -24px -72px;
   }
 </style>

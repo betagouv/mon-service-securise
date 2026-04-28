@@ -174,6 +174,9 @@
         margin-bottom: 24px;
         width: 100%;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
 
         h1 {
           font-size: 1.75rem;
@@ -194,6 +197,9 @@
 
         .conteneur-composant-page {
           padding-top: 24px;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
         }
       }
     }
