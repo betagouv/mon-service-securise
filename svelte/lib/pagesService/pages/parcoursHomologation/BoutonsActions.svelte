@@ -6,6 +6,7 @@
     onenregistrer: () => void;
     estPremiereEtape: boolean;
     estDerniereEtape: boolean;
+    peutHomologuer: boolean;
   }
 
   let props: Props = $props();
@@ -21,15 +22,18 @@
     <dsfr-button label="Précédent" kind="tertiary" onclick={props.onprecedent}
     ></dsfr-button>
   {/if}
+
   {#if props.estDerniereEtape}
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Enregistrer la décision"
-      kind="primary"
-      icon="save-line"
-      icon-place="right"
-      onclick={props.onenregistrer}
-    ></dsfr-button>
+    {#if props.peutHomologuer}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Enregistrer la décision"
+        kind="primary"
+        icon="save-line"
+        icon-place="right"
+        onclick={props.onenregistrer}
+      ></dsfr-button>
+    {/if}
   {:else}
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button

@@ -140,6 +140,7 @@
     onenregistrer={enregistrerDecision}
     estPremiereEtape={detailsEtapeCourante.numero === 1}
     {estDerniereEtape}
+    {peutHomologuer}
   />
 {/if}
 
