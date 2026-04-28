@@ -28,6 +28,7 @@
     etapeCourante = $bindable(),
     statuts,
     servicesAssocies,
+    // eslint-disable-next-line no-useless-assignment
     boutonSuivantActif = $bindable(false),
     onModificationAAppliquer,
   }: Props = $props();
