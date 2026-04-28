@@ -8,7 +8,6 @@
     InstanceEtapeParcoursHomologation,
   } from './parcoursHomologation.types';
   import { etapeDeURL } from './routeurParcours';
-  import { routeurStore } from '../../store/routeur.store';
   import EtapeAutorite from './etapes/EtapeAutorite.svelte';
   import type { Dossier } from '../homologuer/homologuer.types';
   import EtapeAvis from './etapes/EtapeAvis.svelte';
@@ -22,6 +21,7 @@
   } from '../../pagesService.d';
   import VoirDemarcheIndicative from './kit/VoirDemarcheIndicative.svelte';
   import type { IdNiveauDeSecurite } from '../../../ui/types';
+  import { navigation } from './parcoursHomologation.navigation';
 
   interface Props {
     idService: string;
@@ -71,9 +71,7 @@
     await composantEtapeCourante?.enregistre();
     document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     if (detailsEtapeSuivante) {
-      routeurStore.navigue(
-        `/service/${idService}/homologation/edition/etape/${detailsEtapeSuivante.id}`
-      );
+      navigation.versEtape(idService, detailsEtapeSuivante.id);
     }
   };
 
@@ -81,22 +79,21 @@
     await composantEtapeCourante?.enregistre();
     document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     if (detailsEtapePrecedente) {
-      routeurStore.navigue(
-        `/service/${idService}/homologation/edition/etape/${detailsEtapePrecedente.id}`
-      );
+      navigation.versEtape(idService, detailsEtapePrecedente.id);
     }
   };
 
   const annuler = () => {
-    routeurStore.navigue(`/service/${idService}/dossiers`);
+    navigation.versDossiers(idService);
   };
 
   const enregistrerDecision = async () => {
-    const estRefusee = dossier.decision.refusee;
+    const refuseeAvantRechargement = dossier.decision.refusee;
     await api.enregistrement(idService).finalise();
     document.dispatchEvent(new CustomEvent('homologation-finalisee'));
-    routeurStore.navigue(
-      `/service/${idService}/dossiers?${estRefusee ? 'tab=refusees' : 'succesHomologation=true&tab=actif'}`
+    navigation.versDossiersApresFinalisation(
+      idService,
+      !!refuseeAvantRechargement
     );
   };
 
