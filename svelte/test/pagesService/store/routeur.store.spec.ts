@@ -2,7 +2,6 @@
 import { get } from 'svelte/store';
 import type { VersionService } from '../../../../src/modeles/versionService';
 import { type InformationsService } from '../../../lib/pagesService/store/routeur.store';
-import { pageCourante } from '../../../lib/pagesService/store/pageCourante.store';
 
 describe('Le routeur des pages service', () => {
   beforeEach(() => {
@@ -13,6 +12,12 @@ describe('Le routeur des pages service', () => {
     const routeur =
       await import('../../../lib/pagesService/store/routeur.store');
     return routeur.routeurStore;
+  };
+
+  const laPageCourante = async () => {
+    const pageCourante =
+      await import('../../../lib/pagesService/store/pageCourante.store');
+    return pageCourante.pageCourante;
   };
 
   it("s'initialise avec `window.location`", async () => {
@@ -137,8 +142,6 @@ describe('Le routeur des pages service', () => {
   });
 
   describe('concernant la page courante', () => {
-    const laPageCourante = async () => pageCourante;
-
     it('sait extraire la page courante de service', async () => {
       const routeurStore = await leRouteur();
       const pageCourante = await laPageCourante();
