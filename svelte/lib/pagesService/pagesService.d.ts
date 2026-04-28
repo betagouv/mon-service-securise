@@ -11,6 +11,7 @@ import type {
   ReferentielVraisemblances,
 } from '../risques/risques.d';
 import type { EtapeParcoursHomologation } from './pages/parcoursHomologation/parcoursHomologation.types';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 declare global {
   interface HTMLElementEventMap {
@@ -68,4 +69,12 @@ export type PagesServiceProps = {
     finalisationDescriptionServiceImporte: boolean;
   };
   peutHomologuer: boolean;
+};
+
+export type ServicePourPagesService = {
+  id: string;
+  nomService: string;
+  organisationResponsable: string;
+  version: VersionService;
+  documentsPdfDisponibles: string[];
 };
