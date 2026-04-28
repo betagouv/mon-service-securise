@@ -7,6 +7,7 @@
   import type { IdCategorie } from '../../../tableauDesMesures/tableauDesMesures.d';
   import RadarIndiceCyber from './RadarIndiceCyber.svelte';
   import type { EtapeService } from '../../../menuNavigationService/menuNavigationService.d';
+  import Pastille from '../../../ui/Pastille.svelte';
 
   interface Props {
     idService: string;
@@ -82,15 +83,17 @@
   >
     <div slot="tab-1" class="label-onglet">
       <span>Indice cyber ANSSI</span>
-      <span class="pastille" class:active={tabActive === 0}
-        >{indiceCyber.total.toFixed(1)}/{noteMax}</span
-      >
+      <Pastille
+        active={tabActive === 0}
+        contenu="{indiceCyber.total.toFixed(1)}/{noteMax}"
+      />
     </div>
     <div slot="tab-2" class="label-onglet">
       <span>Indice cyber personnalisé</span>
-      <span class="pastille" class:active={tabActive === 1}
-        >{indiceCyberPersonnalise.total.toFixed(1)}/{noteMax}</span
-      >
+      <Pastille
+        active={tabActive === 1}
+        contenu="{indiceCyberPersonnalise.total.toFixed(1)}/{noteMax}"
+      />
     </div>
     <div slot="panel-1" class="conteneur-onglet">
       <div class="cadre-indice-cyber">
@@ -396,22 +399,6 @@
     display: flex;
     gap: 8px;
     align-items: center;
-
-    .pastille {
-      background-color: white;
-      color: #161616;
-      padding: 2px 4px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 400;
-      line-height: 1rem;
-      height: fit-content;
-
-      &.active {
-        background-color: var(--bleu-mise-en-avant);
-        color: white;
-      }
-    }
   }
 
   .mise-en-avant {
