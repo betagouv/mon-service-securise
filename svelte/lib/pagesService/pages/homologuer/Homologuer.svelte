@@ -178,9 +178,49 @@
     </div>
   </dsfr-tabs>
 {/if}
+
 <ModaleEncartHomologation {idService} bind:this={modaleEncartHomologation} />
 
 <style lang="scss">
+  :global #formulaire-suppression-dossier-courant {
+    .requis {
+      position: relative;
+    }
+
+    .requis::before {
+      position: absolute;
+      left: -1em;
+      content: '*';
+      color: var(--rose-anssi);
+    }
+
+    .message-erreur {
+      position: relative;
+      display: none;
+      margin: 1em 0;
+      color: var(--rose-anssi);
+      font-weight: normal;
+      align-items: center;
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    .message-erreur::before {
+      content: '';
+      display: flex;
+      flex-shrink: 0;
+      background-image: url(/statique/assets/images/icone_attention_rose.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 24px;
+      height: 24px;
+    }
+
+    :is(input, select, textarea).touche:invalid ~ .message-erreur {
+      display: flex;
+    }
+  }
+
   .conteneur-onglet {
     display: flex;
     flex-direction: column;
