@@ -7,7 +7,7 @@
   import type { IdCategorie } from '../../../tableauDesMesures/tableauDesMesures.d';
   import RadarIndiceCyber from './RadarIndiceCyber.svelte';
   import type { EtapeService } from '../../../menuNavigationService/menuNavigationService.d';
-  import Pastille from '../../../ui/Pastille.svelte';
+  import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
 
   interface Props {
     idService: string;
@@ -81,20 +81,21 @@
     activeTabIndex={tabActive}
     ontabchanged={gereChangementTab}
   >
-    <div slot="tab-1" class="label-onglet">
-      <span>Indice cyber ANSSI</span>
-      <Pastille
+    <div slot="tab-1">
+      <TitreOngletDSFR
         active={tabActive === 0}
-        contenu="{indiceCyber.total.toFixed(1)}/{noteMax}"
+        libelle="Indice cyber ANSSI"
+        libellePastille="{indiceCyber.total.toFixed(1)}/{noteMax}"
       />
     </div>
-    <div slot="tab-2" class="label-onglet">
-      <span>Indice cyber personnalisé</span>
-      <Pastille
+    <div slot="tab-2">
+      <TitreOngletDSFR
         active={tabActive === 1}
-        contenu="{indiceCyberPersonnalise.total.toFixed(1)}/{noteMax}"
+        libelle="Indice cyber personnalisé"
+        libellePastille="{indiceCyberPersonnalise.total.toFixed(1)}/{noteMax}"
       />
     </div>
+
     <div slot="panel-1" class="conteneur-onglet">
       <div class="cadre-indice-cyber">
         <div class="disque-indice-cyber">
@@ -394,11 +395,6 @@
         }
       }
     }
-  }
-  .label-onglet {
-    display: flex;
-    gap: 8px;
-    align-items: center;
   }
 
   .mise-en-avant {
