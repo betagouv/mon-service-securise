@@ -7,6 +7,7 @@
   import ModaleDemarcheIndicative from '../../kit/ModaleDemarcheIndicative.svelte';
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { routeurStore } from '../../store/routeur.store';
+  import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -63,6 +64,10 @@
     }
     if (avecSucces) modaleEncartHomologation?.affiche();
   });
+
+  const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
+    idTabActive = e.detail.index;
+  };
 </script>
 
 <ModaleDemarcheIndicative
@@ -90,7 +95,18 @@
     {/if}
   </OngletVide>
 {:else}
-  <dsfr-tabs tabs={configurationsTabs} activeTabIndex={idTabActive}>
+  <dsfr-tabs
+    tabs={configurationsTabs}
+    activeTabIndex={idTabActive}
+    ontabchanged={gereChangementTab}
+  >
+    <div slot="tab-1">
+      <TitreOngletDSFR
+        active={idTabActive === 0}
+        libelle={configurationsTabs[0].label}
+        libellePastille={dossiers.dossierCourant ? '1' : undefined}
+      />
+    </div>
     <div slot="panel-1" class="conteneur-onglet">
       {#if dossiers.dossierCourant}
         <CarteDossier
@@ -124,6 +140,14 @@
         </div>
       {/if}
     </div>
+
+    <div slot="tab-2">
+      <TitreOngletDSFR
+        active={idTabActive === 1}
+        libelle={configurationsTabs[1].label}
+        libellePastille={dossiers.dossierActif ? '1' : undefined}
+      />
+    </div>
     <div slot="panel-2" class="conteneur-onglet">
       {#if dossiers.dossierActif}
         <CarteDossier
@@ -142,6 +166,16 @@
         </div>
       {/if}
     </div>
+
+    <div slot="tab-3">
+      <TitreOngletDSFR
+        active={idTabActive === 2}
+        libelle={configurationsTabs[2].label}
+        libellePastille={dossiers.dossiersPasses.length > 0
+          ? dossiers.dossiersPasses.length.toString()
+          : undefined}
+      />
+    </div>
     <div slot="panel-3" class="conteneur-onglet">
       {#if dossiers.dossiersPasses.length === 0}
         <div class="onglet-vide">
@@ -155,6 +189,16 @@
           <CarteDossier {dossier} {statutsHomologation} {idService} />
         {/each}
       {/if}
+    </div>
+
+    <div slot="tab-4">
+      <TitreOngletDSFR
+        active={idTabActive === 3}
+        libelle={configurationsTabs[3].label}
+        libellePastille={dossiers.dossiersRefuses.length > 0
+          ? dossiers.dossiersRefuses.length.toString()
+          : undefined}
+      />
     </div>
     <div slot="panel-4" class="conteneur-onglet">
       {#if dossiers.dossiersRefuses.length === 0}
