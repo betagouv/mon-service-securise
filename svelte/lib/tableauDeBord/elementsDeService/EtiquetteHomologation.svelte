@@ -14,6 +14,12 @@
     idService,
     dateExpiration = '',
   }: Props = $props();
+
+  const tabActive = $derived.by(() => {
+    if (statutHomologation === 'refusee') return 'refusees';
+    if (statutHomologation === 'nonRealisee') return 'courant';
+    return 'actif';
+  });
 </script>
 
 <dsfr-tag
@@ -25,7 +31,7 @@
   type="clickable"
   accent={couleursStatutHomologation[statutHomologation]}
   size="sm"
-  href="/service/{idService}/dossiers"
+  href="/service/{idService}/dossiers?tab={tabActive}"
 ></dsfr-tag>
 
 <style>
