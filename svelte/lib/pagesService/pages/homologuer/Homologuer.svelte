@@ -51,10 +51,16 @@
 
   let modaleEncartHomologation: ModaleEncartHomologation;
   let modaleDemarcheIndicative: ModaleDemarcheIndicative;
+  let idTabActive: number = $state(0);
 
   onMount(() => {
     const requete = new URLSearchParams(window.location.search);
     const avecSucces = requete.get('succesHomologation');
+    const tab = requete.get('tab');
+    if (tab) {
+      idTabActive = configurationsTabs.findIndex((ct) => ct.id === tab);
+      if (idTabActive === -1) idTabActive = 0;
+    }
     if (avecSucces) modaleEncartHomologation?.affiche();
   });
 </script>
@@ -84,7 +90,7 @@
     {/if}
   </OngletVide>
 {:else}
-  <dsfr-tabs tabs={configurationsTabs}>
+  <dsfr-tabs tabs={configurationsTabs} activeTabIndex={idTabActive}>
     <div slot="panel-1" class="conteneur-onglet">
       {#if dossiers.dossierCourant}
         <CarteDossier
