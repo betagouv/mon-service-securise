@@ -4,7 +4,7 @@
   interface Props {
     active: boolean;
     libelle: string;
-    libellePastille: string;
+    libellePastille?: string;
   }
 
   let props: Props = $props();
@@ -12,7 +12,9 @@
 
 <div class="label-onglet">
   <span>{props.libelle}</span>
-  <Pastille active={props.active} contenu={props.libellePastille} />
+  {#if props.libellePastille !== undefined}
+    <Pastille active={props.active} contenu={props.libellePastille} />
+  {/if}
 </div>
 
 <style lang="scss">
