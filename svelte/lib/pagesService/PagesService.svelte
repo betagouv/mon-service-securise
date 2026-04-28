@@ -6,7 +6,7 @@
   import MenuNavigationService from '../menuNavigationService/MenuNavigationService.svelte';
   import { metadonneesPages } from './pages.donnees';
   import type { VersionService } from '../../../src/modeles/versionService';
-  import { pageCourante, routeurStore } from './store/routeur.store';
+  import { routeurStore } from './store/routeur.store';
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
   import { tousRisques } from '../risques/risques';
   import type { Risques } from '../risques/risques.d';
@@ -15,6 +15,7 @@
   import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
   import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
   import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
+  import { pageCourante } from './store/pageCourante.store';
 
   let {
     idService,
