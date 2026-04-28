@@ -32,6 +32,7 @@
     echeancesRenouvellement: EcheancesRenouvellementHomologation;
     peutHomologuer: boolean;
     niveauSecurite: IdNiveauDeSecurite;
+    estLectureSeule: boolean;
   }
 
   let {
@@ -42,6 +43,7 @@
     echeancesRenouvellement,
     peutHomologuer,
     niveauSecurite,
+    estLectureSeule,
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
@@ -127,6 +129,7 @@
       {statutsAvisDossierHomologation}
       {echeancesRenouvellement}
       {peutHomologuer}
+      {estLectureSeule}
       bind:this={composantEtapeCourante}
     />
   </div>

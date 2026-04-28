@@ -18,6 +18,7 @@
     dossier: Dossier;
     statutsAvisDossierHomologation: StatutsAvisDossierHomologation;
     echeancesRenouvellement: EcheancesRenouvellementHomologation;
+    estLectureSeule: boolean;
   }
 
   let {
@@ -25,6 +26,7 @@
     dossier,
     statutsAvisDossierHomologation,
     echeancesRenouvellement,
+    estLectureSeule,
   }: Props = $props();
 
   const commandeAvis = {
@@ -109,6 +111,7 @@
   ]}
   status="default"
   value={avecAvis}
+  disabled={estLectureSeule}
 ></dsfr-radios-group>
 
 {#if avecAvis}
@@ -116,13 +119,16 @@
     {#each avis as unAvis, index (index)}
       <CarteFormulaire
         titre={`Avis n°${index + 1}`}
-        onsupprimer={() => commandeAvis.supprime(index)}
+        {...estLectureSeule
+          ? {}
+          : { onsupprimer: () => commandeAvis.supprime(index) }}
       >
         <TextareaDSFR
           label="Collaborateurs métier et techniques renseignant l'avis"
           hint="Un collaborateur par ligne"
           rows={3}
           bind:value={unAvis.collaborateursString}
+          disabled={estLectureSeule}
         />
         <dsfr-radios-group
           legend="Avis sur l'homologation du service"
@@ -136,6 +142,7 @@
             })
           )}
           value={unAvis.statut}
+          disabled={estLectureSeule}
         ></dsfr-radios-group>
 
         <dsfr-radios-group
@@ -150,28 +157,31 @@
             })
           )}
           value={unAvis.dureeValidite}
+          disabled={estLectureSeule}
         ></dsfr-radios-group>
 
         <TextareaDSFR
           label="Commentaires et recommandations"
           rows={6}
           bind:value={unAvis.commentaires}
+          disabled={estLectureSeule}
         ></TextareaDSFR>
       </CarteFormulaire>
     {/each}
   </div>
-
-  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-  <dsfr-button
-    class="ajouter-avis"
-    label="Ajouter un avis"
-    kind="tertiary"
-    has-icon
-    icon-place="left"
-    icon="add-line"
-    type="button"
-    onclick={commandeAvis.ajouteUnVide}
-  ></dsfr-button>
+  {#if !estLectureSeule}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      class="ajouter-avis"
+      label="Ajouter un avis"
+      kind="tertiary"
+      has-icon
+      icon-place="left"
+      icon="add-line"
+      type="button"
+      onclick={commandeAvis.ajouteUnVide}
+    ></dsfr-button>
+  {/if}
 {/if}
 
 <style lang="scss">
