@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { pageCourante, routeurStore } from '../store/routeur.store';
+  import { routeurStore } from '../store/routeur.store';
   import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
+  import { pageCourante } from '../store/pageCourante.store';
 
   interface Props {
     idService: string;
