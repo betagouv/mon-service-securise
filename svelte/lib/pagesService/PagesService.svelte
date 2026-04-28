@@ -1,11 +1,13 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import type { PagesServiceProps } from './pagesService.d';
+  import type {
+    PagesServiceProps,
+    ServicePourPagesService,
+  } from './pagesService.d';
   import EntetePageService from '../entetePageService/EntetePageService.svelte';
   import { onMount } from 'svelte';
   import MenuNavigationService from '../menuNavigationService/MenuNavigationService.svelte';
   import { metadonneesPages } from './pages.donnees';
-  import type { VersionService } from '../../../src/modeles/versionService';
   import { routeurStore } from './store/routeur.store';
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
   import { tousRisques } from '../risques/risques';
@@ -16,26 +18,9 @@
   import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
   import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
   import { pageCourante } from './store/pageCourante.store';
+  import { propsPourPage } from './PagesService.props';
 
-  let {
-    idService,
-    referentiel,
-    modeVisiteGuidee,
-    visible,
-    estLectureSeule,
-    featureFlags,
-    preferencesUtilisateur,
-    suggestionsService,
-    peutHomologuer,
-  }: PagesServiceProps = $props();
-
-  type ServicePourPagesService = {
-    id: string;
-    nomService: string;
-    organisationResponsable: string;
-    version: VersionService;
-    documentsPdfDisponibles: string[];
-  };
+  let props: PagesServiceProps = $props();
 
   let service: ServicePourPagesService | undefined = $state();
   let descriptionService: DescriptionServiceV2API | undefined = $state();
@@ -69,7 +54,9 @@
 
   const rafraichisResumeService = async () => {
     service = (
-      await axios.get<ServicePourPagesService>(`/api/service/${idService}`)
+      await axios.get<ServicePourPagesService>(
+        `/api/service/${props.idService}`
+      )
     ).data;
   };
 
@@ -81,7 +68,7 @@
         contactsUtiles: ContactsUtiles;
         indicesCyber: IndicesCyber;
         dossiers: DossiersHomologation;
-      }>(`/api/service/${idService}?complet=true`)
+      }>(`/api/service/${props.idService}?complet=true`)
     ).data;
 
     descriptionService = serviceComplet.descriptionService;
@@ -97,85 +84,24 @@
   onMount(async () => {
     await rafraichisResumeService();
     routeurStore.chargeInformationsService({
-      visible,
+      visible: props.visible,
       version: service!.version,
     });
     await rafraichisServiceComplet();
   });
 
-  let propsDuComposant = $derived.by(() => {
-    switch ($pageCourante) {
-      case 'mesures':
-        return {
-          estLectureSeule: estLectureSeule.mesures,
-          categories: referentiel.mesures.categories,
-          statuts: referentiel.mesures.statuts,
-          priorites: referentiel.mesures.priorites,
-          versionService: service?.version,
-          avecRisquesV2: featureFlags.avecRisquesV2,
-          afficheExplicationRisquesV2:
-            preferencesUtilisateur.afficheExplicationRisquesV2,
-        };
-      case 'descriptionService':
-        return {
-          lectureSeule: estLectureSeule.descriptionService,
-          descriptionService,
-          doitFinaliserDescription:
-            suggestionsService.finalisationDescriptionServiceImporte,
-        };
-      case 'risques':
-        return {
-          estLectureSeule: estLectureSeule.risques,
-          categoriesRisque: referentiel.risques.categories,
-          niveauxGravite: referentiel.risques.gravites,
-          niveauxVraisemblance: referentiel.risques.vraisemblances,
-          referentielRisques: referentiel.risques.descriptions,
-          matriceNiveauxRisque: referentiel.risques.matrice,
-          niveauxRisque: referentiel.risques.niveaux,
-          risques,
-        };
-      case 'rolesResponsabilites':
-        return {
-          contactsUtiles,
-        };
-      case 'indiceCyber':
-        return {
-          indiceCyber: indicesCyber?.indiceCyberAnssi,
-          indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise,
-          noteMax: referentiel.indiceCyber.noteMax,
-          referentielsMesureConcernes:
-            indicesCyber?.referentielsMesureConcernes,
-          nombreMesuresSpecifiques: indicesCyber?.nombreMesuresSpecifiques,
-          nombreMesuresNonFait: indicesCyber?.nombreMesuresNonFait,
-          categories: referentiel.mesures.categories,
-          tranches: indicesCyber?.tranches.indiceCyber,
-          tranchesPersonnalisees:
-            indicesCyber?.tranches.indiceCyberPersonnalise,
-        };
-      case 'dossiers':
-        return {
-          dossiers,
-          estLectureSeule: estLectureSeule.dossiers,
-          statutsHomologation: referentiel.dossiers.statutsHomologation,
-          indiceCyber: indicesCyber?.indiceCyberAnssi.total,
-          indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
-          documentsPdfDisponibles: service?.documentsPdfDisponibles,
-          niveauSecurite: descriptionService?.niveauSecurite,
-        };
-      case 'homologation':
-        return {
-          dossier: dossiers?.dossierCourant,
-          etapesParcours: referentiel.dossiers.etapesParcoursHomologation,
-          statutsAvisDossierHomologation:
-            referentiel.dossiers.statutsAvisDossierHomologation,
-          echeancesRenouvellement: referentiel.dossiers.echeancesRenouvellement,
-          peutHomologuer,
-          niveauSecurite: descriptionService?.niveauSecurite,
-        };
-      default:
-        return {};
-    }
-  });
+  let propsDuComposant = $derived.by(() =>
+    propsPourPage(
+      $pageCourante,
+      props,
+      service,
+      descriptionService,
+      risques,
+      contactsUtiles,
+      indicesCyber,
+      dossiers
+    )
+  );
 </script>
 
 <svelte:document
@@ -193,23 +119,23 @@
 {#if service && serviceCompletCharge}
   <div class="conteneur-pages-service">
     {#if service.version === 'v1'}
-      <BandeauReferentielV2 {idService} />
+      <BandeauReferentielV2 idService={props.idService} />
     {/if}
     <EntetePageService
-      {idService}
+      idService={props.idService}
       nomService={service.nomService}
       indiceCyber={indicesCyber?.indiceCyberAnssi?.total ?? 0}
       indiceCyberPersonnalise={indicesCyber?.indiceCyberPersonnalise?.total ??
         0}
-      noteMax={referentiel.indiceCyber.noteMax}
+      noteMax={props.referentiel.indiceCyber.noteMax}
       organisationResponsable={service.organisationResponsable}
-      avecIndiceCyber={visible.indiceCyber}
+      avecIndiceCyber={props.visible.indiceCyber}
     />
     <div class="contenu-page">
       <MenuNavigationService
-        {idService}
-        {visible}
-        {modeVisiteGuidee}
+        idService={props.idService}
+        visible={props.visible}
+        modeVisiteGuidee={props.modeVisiteGuidee}
         etapeActive={$pageCourante}
       />
       <div class="conteneur-page">
@@ -219,7 +145,11 @@
           <h1>{donneesPage?.titre}</h1>
           <h2>{donneesPage?.sousTitre}</h2>
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
-            <Composant {idService} {visible} {...propsDuComposant} />
+            <Composant
+              idService={props.idService}
+              visible={props.visible}
+              {...propsDuComposant}
+            />
           </div>
         {/key}
       </div>
