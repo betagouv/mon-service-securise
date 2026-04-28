@@ -77,8 +77,6 @@
   };
 
   const precedent = async () => {
-    await composantEtapeCourante?.enregistre();
-    document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     if (detailsEtapePrecedente) {
       navigation.versEtape(idService, detailsEtapePrecedente.id);
     }
