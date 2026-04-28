@@ -22,6 +22,7 @@
   import VoirDemarcheIndicative from './kit/VoirDemarcheIndicative.svelte';
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { navigation } from './parcoursHomologation.navigation';
+  import BoutonsActions from './BoutonsActions.svelte';
 
   interface Props {
     idService: string;
@@ -132,37 +133,14 @@
     />
   </div>
   <VoirDemarcheIndicative {etapeCourante} {niveauSecurite} />
-  <div class="bandeau-actions">
-    {#if detailsEtapeCourante.numero === 1}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button label="Annuler" kind="tertiary" onclick={annuler}
-      ></dsfr-button>
-    {:else}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button label="Précédent" kind="tertiary" onclick={precedent}
-      ></dsfr-button>
-    {/if}
-    {#if estDerniereEtape}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Enregistrer la décision"
-        kind="primary"
-        icon="save-line"
-        icon-place="right"
-        onclick={enregistrerDecision}
-      ></dsfr-button>
-    {:else}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Suivant"
-        kind="primary"
-        has-icon
-        icon="arrow-right-line"
-        icon-place="right"
-        onclick={suivant}
-      ></dsfr-button>
-    {/if}
-  </div>
+  <BoutonsActions
+    onannuler={annuler}
+    onprecedent={precedent}
+    onsuivant={suivant}
+    onenregistrer={enregistrerDecision}
+    estPremiereEtape={detailsEtapeCourante.numero === 1}
+    {estDerniereEtape}
+  />
 {/if}
 
 <style lang="scss">
@@ -182,11 +160,5 @@
     border: none;
     border-top: 1px solid #dddddd;
     margin-bottom: 2rem;
-  }
-
-  .bandeau-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 2rem;
   }
 </style>
