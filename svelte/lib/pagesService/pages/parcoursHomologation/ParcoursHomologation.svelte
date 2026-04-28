@@ -96,7 +96,7 @@
     await api.enregistrement(idService).finalise();
     document.dispatchEvent(new CustomEvent('homologation-finalisee'));
     routeurStore.navigue(
-      `/service/${idService}/dossiers${estRefusee ? '' : '?succesHomologation=true'}`
+      `/service/${idService}/dossiers?${estRefusee ? 'tab=refusees' : 'succesHomologation=true&tab=actif'}`
     );
   };
 
