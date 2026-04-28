@@ -27,6 +27,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/conseils-cyber',
     '/doctrine-homologation-anssi',
     '/industrialisez-vos-homologations',
+    '/securisez-votre-service-numerique',
   ].forEach((route) => {
     beforeEach(() => {
       testeur.adaptateurJWT().decode = () => ({});
