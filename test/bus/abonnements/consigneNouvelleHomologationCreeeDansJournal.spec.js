@@ -27,7 +27,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
       referentiel,
     })({
       idService: '123',
-      dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construit(),
+      dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construis(),
     });
 
     expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
@@ -44,7 +44,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
       referentiel,
     })({
       idService: '123',
-      dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construit(),
+      dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construis(),
       importe: true,
     });
 

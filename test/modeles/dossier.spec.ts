@@ -282,7 +282,7 @@ describe("Un dossier d'homologation", () => {
     it("est « Non réalisée » si le dossier n'est pas finalisé", () => {
       const nonFinalise = unDossier(referentiel)
         .quiEstNonFinalise()
-        .construit();
+        .construis();
 
       expect(nonFinalise.statutHomologation()).toBe('nonRealisee');
     });
@@ -292,7 +292,7 @@ describe("Un dossier d'homologation", () => {
         .quiEstComplet()
         .quiEstRefuse('2023-06-01')
         .quiEstArchive()
-        .construit();
+        .construis();
 
       expect(nonFinalise.statutHomologation()).toBe('refusee');
     });
@@ -304,7 +304,7 @@ describe("Un dossier d'homologation", () => {
       const actifLeDeuxJuin = unDossier(referentiel, maintenantPremierJuin)
         .quiEstComplet()
         .avecDateHomologation(new Date('2023-06-02'))
-        .construit();
+        .construis();
 
       expect(actifLeDeuxJuin.statutHomologation()).toBe('activee');
     });
@@ -316,7 +316,7 @@ describe("Un dossier d'homologation", () => {
       const expireDansDixJours = unDossier(referentiel, maintenantPremierJuin)
         .quiEstComplet()
         .avecDecision('2022-06-11', 'unAn')
-        .construit();
+        .construis();
 
       expect(expireDansDixJours.statutHomologation()).toBe('bientotExpiree');
     });
@@ -328,7 +328,7 @@ describe("Un dossier d'homologation", () => {
       const actifAnneeComplete = unDossier(referentiel, maintenantPremierJuin)
         .quiEstComplet()
         .avecDecision('2023-01-01', 'unAn')
-        .construit();
+        .construis();
 
       expect(actifAnneeComplete.statutHomologation()).toBe('activee');
     });
@@ -340,7 +340,7 @@ describe("Un dossier d'homologation", () => {
       const finiDepuis2022 = unDossier(referentiel, maintenantPremierJuin)
         .quiEstComplet()
         .avecDecision('2021-06-15', 'unAn')
-        .construit();
+        .construis();
 
       expect(finiDepuis2022.statutHomologation()).toBe('expiree');
     });
@@ -357,13 +357,13 @@ describe("Un dossier d'homologation", () => {
     it("retourne `false` si le dossier n'est pas finalisé", () => {
       const nonFinalise = unDossier(referentiel)
         .quiEstNonFinalise()
-        .construit();
+        .construis();
 
       expect(nonFinalise.estActif()).toEqual(false);
     });
 
     it('retourne `false` si le dossier est archivé', () => {
-      const dossierArchive = unDossier(referentiel).quiEstArchive().construit();
+      const dossierArchive = unDossier(referentiel).quiEstArchive().construis();
       expect(dossierArchive.estActif()).toEqual(false);
     });
 
@@ -371,7 +371,7 @@ describe("Un dossier d'homologation", () => {
       const dossierFinaliseNonArchive = unDossier(referentiel)
         .quiEstComplet()
         .nonArchive()
-        .construit();
+        .construis();
 
       expect(dossierFinaliseNonArchive.estActif()).toEqual(true);
     });
@@ -408,7 +408,7 @@ describe("Un dossier d'homologation", () => {
       const dossierComplet = unDossier(referentiel)
         .quiEstComplet()
         .quiEstNonFinalise()
-        .construit();
+        .construis();
 
       dossierComplet.enregistreFinalisation(3.5, 4.5);
       expect(dossierComplet.finalise).toBe(true);
@@ -436,7 +436,7 @@ describe("Un dossier d'homologation", () => {
     });
 
     it("renvoie l'étape « Récapitulatif » si toutes les étapes précédentes sont complètes", () => {
-      const dossierComplet = unDossier(referentiel).quiEstComplet().construit();
+      const dossierComplet = unDossier(referentiel).quiEstComplet().construis();
 
       expect(dossierComplet.etapeCourante()).toEqual('recapitulatif');
     });
@@ -444,7 +444,7 @@ describe("Un dossier d'homologation", () => {
     it("renvoie l'étape qui suit la dernière étape complète", () => {
       const etapeUneComplete = unDossier(referentiel)
         .avecAutorite('Jean', 'RSSI')
-        .construit();
+        .construis();
 
       expect(etapeUneComplete.etapeCourante()).toEqual('avis');
     });
@@ -483,7 +483,7 @@ describe("Un dossier d'homologation", () => {
       const dossierExpirantDans30Jours = unDossier(referentiel)
         .quiEstComplet()
         .quiVaExpirer(30, 'sixMois')
-        .construit();
+        .construis();
 
       expect(dossierExpirantDans30Jours.estBientotExpire()).toBe(true);
     });
@@ -498,7 +498,7 @@ describe("Un dossier d'homologation", () => {
       const dossierExpirantDansPlusDe2Mois = unDossier(referentiel)
         .quiEstComplet()
         .quiVaExpirer(65, 'sixMois')
-        .construit();
+        .construis();
 
       expect(dossierExpirantDansPlusDe2Mois.estBientotExpire()).toBe(false);
     });
@@ -516,7 +516,7 @@ describe("Un dossier d'homologation", () => {
       const dejaExpire = unDossier(referentiel, maintenantPremierJuin)
         .quiEstComplet()
         .avecDecision('2020-01-10', 'unAn')
-        .construit();
+        .construis();
 
       expect(dejaExpire.estBientotExpire()).toBe(false);
     });
@@ -534,7 +534,7 @@ describe("Un dossier d'homologation", () => {
       const dossierExpire = unDossier(referentiel)
         .quiEstComplet()
         .quiEstExpire()
-        .construit();
+        .construis();
 
       expect(dossierExpire.estExpire()).toBe(true);
     });
@@ -543,7 +543,7 @@ describe("Un dossier d'homologation", () => {
       const dossierActif = unDossier(referentiel)
         .quiEstComplet()
         .quiEstActif()
-        .construit();
+        .construis();
 
       expect(dossierActif.estExpire()).toBe(false);
     });
@@ -552,7 +552,7 @@ describe("Un dossier d'homologation", () => {
       const dossierExpire = unDossier(referentiel)
         .quiEstComplet()
         .quiEstRefuse()
-        .construit();
+        .construis();
 
       expect(dossierExpire.estExpire()).toBe(true);
     });
@@ -562,7 +562,7 @@ describe("Un dossier d'homologation", () => {
     it("archive le dossier s'il est finalisé", () => {
       const dossierFinalise = unDossier(referentiel)
         .quiEstComplet()
-        .construit();
+        .construis();
 
       expect(dossierFinalise.archive).toBe(undefined);
       dossierFinalise.enregistreArchivage();
@@ -572,7 +572,7 @@ describe("Un dossier d'homologation", () => {
     it("jette une erreur s'il n'est pas finalisé", () => {
       const dossierFinalise = unDossier(referentiel)
         .quiEstNonFinalise()
-        .construit();
+        .construis();
 
       try {
         dossierFinalise.enregistreArchivage();
