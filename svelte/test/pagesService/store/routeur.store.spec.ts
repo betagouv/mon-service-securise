@@ -139,6 +139,28 @@ describe('Le routeur des pages service', () => {
         '/service/1234/descriptionService'
       );
     });
+
+    it("navigue en dehors de la SPA si le routeur est en mode 'visiteGuidee'", async () => {
+      const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore, {
+        visible: {
+          rolesResponsabilites: true,
+          risques: true,
+          descriptionService: true,
+          mesures: true,
+          dossiers: true,
+          indiceCyber: true,
+          homologation: true,
+        },
+        version: 'v1' as VersionService,
+        modeVisiteGuidee: true,
+      });
+      const navigueHorsSPA = vi.fn();
+
+      routeurStore.navigue('/visiteGuidee/mesures', navigueHorsSPA);
+
+      expect(navigueHorsSPA).toHaveBeenCalledWith('/visiteGuidee/mesures');
+    });
   });
 
   describe('concernant la page courante', () => {

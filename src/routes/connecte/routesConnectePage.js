@@ -4,11 +4,9 @@ import Service from '../../modeles/service.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
-import Entite from '../../modeles/entite.js';
 
 const routesConnectePage = ({
   middleware,
-  moteurRegles,
   depotDonnees,
   referentiel,
   referentielV2,
@@ -104,12 +102,6 @@ const routesConnectePage = ({
       });
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
-      service.descriptionService.niveauSecurite = 'niveau2';
-      service.descriptionService.nomService = 'Nom de mon service';
-      service.descriptionService.organisationResponsable = new Entite({
-        nom: 'Nom de mon entité',
-      });
-      service.versionService = VersionService.v2;
 
       const { idEtape } = requete.params;
       const idEtapeCourante = idEtape.toUpperCase();
@@ -134,23 +126,16 @@ const routesConnectePage = ({
 
       if (idEtape === 'decrire') {
         reponse.render('visiteGuidee/creationService');
-      } else if (idEtape === 'securiser') {
-        const mesures = moteurRegles.mesures(service.descriptionService);
-
-        service.indiceCyber = () => ({ total: 4.3 });
-        service.indiceCyberPersonnalise = () => ({ total: 4.6 });
-        reponse.render('service/mesures', {
+      } else if (idEtape === 'mesures') {
+        reponse.render('service/pagesService', {
           referentiel,
           service,
           etapeActive: 'mesures',
-          mesures,
         });
-      } else if (idEtape === 'homologuer') {
-        reponse.render('service/dossiers', {
+      } else if (idEtape === 'dossiers') {
+        reponse.render('service/pagesService', {
           service,
           etapeActive: 'dossiers',
-          premiereEtapeParcours: referentiel.premiereEtapeParcours(),
-          peutVoirTamponHomologation: true,
           referentiel,
         });
       } else if (idEtape === 'piloter') {

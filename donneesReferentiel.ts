@@ -1679,21 +1679,21 @@ const donnees = {
   departements,
   etapesVisiteGuidee: {
     DECRIRE: {
-      idEtapeSuivante: 'SECURISER',
+      idEtapeSuivante: 'MESURES',
       urlEtape: '/visiteGuidee/decrire',
     },
-    SECURISER: {
+    MESURES: {
       idEtapePrecedente: 'DECRIRE',
-      idEtapeSuivante: 'HOMOLOGUER',
-      urlEtape: '/visiteGuidee/securiser',
+      idEtapeSuivante: 'DOSSIERS',
+      urlEtape: '/visiteGuidee/mesures',
     },
-    HOMOLOGUER: {
-      idEtapePrecedente: 'SECURISER',
+    DOSSIERS: {
+      idEtapePrecedente: 'MESURES',
       idEtapeSuivante: 'PILOTER',
-      urlEtape: '/visiteGuidee/homologuer',
+      urlEtape: '/visiteGuidee/dossiers',
     },
     PILOTER: {
-      idEtapePrecedente: 'HOMOLOGUER',
+      idEtapePrecedente: 'DOSSIERS',
       urlEtape: '/visiteGuidee/piloter',
     },
   },

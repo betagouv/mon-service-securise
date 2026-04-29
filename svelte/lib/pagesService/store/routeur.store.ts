@@ -8,6 +8,7 @@ import { pageDepuisURL } from './pageDepuisURL';
 export type InformationsService = {
   visible: Record<EtapeService, boolean>;
   version: VersionService;
+  modeVisiteGuidee?: boolean;
 };
 
 type RouteurStoreProps = {
@@ -34,8 +35,13 @@ const navigue = (
     window.location.href = url;
   }
 ) => {
-  const pageDemandee = pageDepuisURL(url) || '';
   const informationsService = get(routeurStore).informationsService;
+  if (informationsService?.modeVisiteGuidee) {
+    navigueHorsSPA(url);
+    return;
+  }
+
+  const pageDemandee = pageDepuisURL(url) || '';
   const pageVisible = informationsService?.visible[pageDemandee];
   const versionService = informationsService?.version;
 

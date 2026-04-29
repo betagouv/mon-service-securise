@@ -2,6 +2,7 @@
   import { fade } from 'svelte/transition';
   import type {
     PagesServiceProps,
+    ServiceComplet,
     ServicePourPagesService,
   } from './pagesService.d';
   import EntetePageService from '../entetePageService/EntetePageService.svelte';
@@ -11,7 +12,6 @@
   import { routeurStore } from './store/routeur.store';
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
   import { tousRisques } from '../risques/risques';
-  import type { Risques } from '../risques/risques.d';
   import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
   import Toaster from '../ui/Toaster.svelte';
   import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
@@ -20,6 +20,7 @@
   import { pageCourante } from './store/pageCourante.store';
   import { propsPourPage } from './PagesService.props';
   import { afficheTitrePageServiceStore } from './store/afficheTitrePageService.store';
+  import { donneesVisiteGuidee } from './donneesVisiteGuidees';
 
   let props: PagesServiceProps = $props();
 
@@ -54,23 +55,28 @@
   };
 
   const rafraichisResumeService = async () => {
-    service = (
-      await axios.get<ServicePourPagesService>(
-        `/api/service/${props.idService}`
-      )
-    ).data;
+    if (props.modeVisiteGuidee) {
+      service = donneesVisiteGuidee.service;
+    } else {
+      service = (
+        await axios.get<ServicePourPagesService>(
+          `/api/service/${props.idService}`
+        )
+      ).data;
+    }
   };
 
   const rafraichisServiceComplet = async () => {
-    const serviceComplet = (
-      await axios.get<{
-        descriptionService: DescriptionServiceV2API;
-        risques: Risques;
-        contactsUtiles: ContactsUtiles;
-        indicesCyber: IndicesCyber;
-        dossiers: DossiersHomologation;
-      }>(`/api/service/${props.idService}?complet=true`)
-    ).data;
+    let serviceComplet: ServiceComplet;
+    if (props.modeVisiteGuidee) {
+      serviceComplet = donneesVisiteGuidee.serviceComplet;
+    } else {
+      serviceComplet = (
+        await axios.get<ServiceComplet>(
+          `/api/service/${props.idService}?complet=true`
+        )
+      ).data;
+    }
 
     descriptionService = serviceComplet.descriptionService;
     risques = serviceComplet.risques
@@ -87,6 +93,7 @@
     routeurStore.chargeInformationsService({
       visible: props.visible,
       version: service!.version,
+      modeVisiteGuidee: props.modeVisiteGuidee,
     });
     await rafraichisServiceComplet();
   });
@@ -103,6 +110,8 @@
       dossiers
     )
   );
+
+  $effect(() => console.log($pageCourante));
 </script>
 
 <svelte:document
@@ -151,6 +160,7 @@
             <Composant
               idService={props.idService}
               visible={props.visible}
+              modeVisiteGuidee={props.modeVisiteGuidee}
               {...propsDuComposant}
             />
           </div>

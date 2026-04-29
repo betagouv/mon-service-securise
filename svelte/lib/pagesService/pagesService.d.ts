@@ -12,6 +12,11 @@ import type {
 } from '../risques/risques.d';
 import type { EtapeParcoursHomologation } from './pages/parcoursHomologation/parcoursHomologation.types';
 import type { VersionService } from '../../../src/modeles/versionService';
+import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
+import type { Risques } from '../risques/risques.d';
+import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
+import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
+import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
 
 declare global {
   interface HTMLElementEventMap {
@@ -77,4 +82,12 @@ export type ServicePourPagesService = {
   organisationResponsable: string;
   version: VersionService;
   documentsPdfDisponibles: string[];
+};
+
+export type ServiceComplet = {
+  descriptionService: DescriptionServiceV2API;
+  risques: Risques;
+  contactsUtiles: ContactsUtiles;
+  indicesCyber: IndicesCyber;
+  dossiers: DossiersHomologation;
 };

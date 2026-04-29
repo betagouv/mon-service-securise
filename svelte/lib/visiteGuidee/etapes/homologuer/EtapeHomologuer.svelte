@@ -11,16 +11,17 @@
 
   let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
-    cibleNouvelleHomologation = document.getElementById(
-      'commencer-homologation'
-    )!;
+    cibleNouvelleHomologation = document.querySelector(
+      'dsfr-button[nom="creer-homologation"]'
+    ) as HTMLButtonElement;
     cibleTelechargement = document.getElementById('voir-telechargement')!;
     sousEtapes = [
       {
         cible: cibleNouvelleHomologation,
-        callbackInitialeCible: async () => {
-          const bouton = document.getElementById('commencer-homologation');
-          if (bouton) bouton.inert = true;
+        callbackInitialeCible: async (cible) => {
+          if (cible) {
+            cible.inert = true;
+          }
         },
         positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',

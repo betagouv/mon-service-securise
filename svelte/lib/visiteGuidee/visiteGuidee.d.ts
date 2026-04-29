@@ -22,8 +22,8 @@ export type EtapeVisiteGuidee =
   | 'BIENVENUE'
   | 'PRESENTATION_MENU_NAV'
   | 'DECRIRE'
-  | 'SECURISER'
-  | 'HOMOLOGUER'
+  | 'MESURES'
+  | 'DOSSIERS'
   | 'PILOTER'
   | 'MASQUE';
 
