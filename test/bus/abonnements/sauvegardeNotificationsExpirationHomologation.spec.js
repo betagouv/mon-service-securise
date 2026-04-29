@@ -62,7 +62,7 @@ describe("L'abonnement qui sauvegarde (en base de données) les notifications d'
       referentiel,
     })({
       idService: '123',
-      dossier: unDossier(referentiel).quiEstComplet().construit(),
+      dossier: unDossier(referentiel).quiEstComplet().construis(),
     });
 
     expect(depotAppele).to.be(true);
@@ -85,7 +85,7 @@ describe("L'abonnement qui sauvegarde (en base de données) les notifications d'
       dossier: unDossier(referentiel)
         .quiEstComplet()
         .avecDecision('2024-01-01', 'unAn')
-        .construit(),
+        .construis(),
     });
 
     expect(notificationsRecus.length).to.be(2);
@@ -109,7 +109,7 @@ describe("L'abonnement qui sauvegarde (en base de données) les notifications d'
       dossier: unDossier(referentiel)
         .quiEstComplet()
         .avecDecision('2023-01-02', 'unAn')
-        .construit(),
+        .construis(),
     });
 
     expect(notificationsRecus.length).to.be(1);

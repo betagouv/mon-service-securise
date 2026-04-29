@@ -31,7 +31,7 @@ describe("Une notification d'expiration d'homologation", () => {
       const dossierRefuse = unDossier(referentiel)
         .quiEstComplet()
         .quiEstActif()
-        .construit();
+        .construis();
 
       const notifications = NotificationExpirationHomologation.pourUnDossier({
         idService: '123',
@@ -47,7 +47,7 @@ describe("Une notification d'expiration d'homologation", () => {
         .quiEstComplet()
         .quiEstActif()
         .avecDecision('2024-01-01', 'unAn')
-        .construit();
+        .construis();
 
       const notifications = NotificationExpirationHomologation.pourUnDossier({
         idService: '123',

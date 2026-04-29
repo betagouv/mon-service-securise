@@ -160,7 +160,7 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  construit() {
+  construis() {
     return new Dossier(this.donnees, this.referentiel, this.adaptateurHorloge);
   }
 }
