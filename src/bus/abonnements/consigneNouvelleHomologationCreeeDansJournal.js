@@ -21,6 +21,7 @@ function consigneNouvelleHomologationCreeeDansJournal({
       dureeHomologationMois: referentiel.nbMoisDecalage(
         dossier.decision.dureeValidite
       ),
+      refusee: dossier.decision.refusee,
       importe,
     });
 

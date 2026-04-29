@@ -52,6 +52,25 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
     expect(evenementRecu.donnees.importe).to.be(true);
   });
 
+  it('peut consigner un événement de "nouvelle homologation `refusee`"', async () => {
+    let evenementRecu = {};
+    adaptateurJournal.consigneEvenement = async (evenement) => {
+      evenementRecu = evenement;
+    };
+
+    await consigneNouvelleHomologationCreeeDansJournal({
+      adaptateurJournal,
+      referentiel,
+    })({
+      idService: '123',
+      dossier: unDossier(referentiel).quiEstRefuse('2026-04-29').construis(),
+    });
+
+    expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+    expect(evenementRecu.donnees.dateHomologation).to.be('2026-04-29');
+    expect(evenementRecu.donnees.refusee).to.be(true);
+  });
+
   [
     { propriete: 'idService', nom: "l'ID du service" },
     { propriete: 'dossier', nom: 'le dossier' },
