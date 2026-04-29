@@ -4,11 +4,11 @@ class EvenementNouvelleHomologationCreee extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.verifieProprietesRenseignees(donnees, [
-      'idService',
-      'dateHomologation',
-      'dureeHomologationMois',
-    ]);
+    const proprietesRequises = donnees.refusee
+      ? ['idService', 'dateHomologation']
+      : ['idService', 'dateHomologation', 'dureeHomologationMois'];
+
+    Evenement.verifieProprietesRenseignees(donnees, proprietesRequises);
 
     super(
       'NOUVELLE_HOMOLOGATION_CREEE',
@@ -16,6 +16,7 @@ class EvenementNouvelleHomologationCreee extends Evenement {
         idService: adaptateurChiffrement.hacheSha256(donnees.idService),
         dateHomologation: donnees.dateHomologation,
         dureeHomologationMois: donnees.dureeHomologationMois,
+        ...(donnees.refusee && { refusee: true }),
         ...(donnees.importe && { importe: true }),
       },
       date

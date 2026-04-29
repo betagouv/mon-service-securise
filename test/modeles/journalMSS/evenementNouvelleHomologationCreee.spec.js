@@ -57,7 +57,7 @@ describe('Un événement de nouvelle homologation', () => {
     });
   });
 
-  it("exige que la durée d'homologation soit renseignée", () => {
+  it("exige que la durée d'homologation soit renseignée si l'homologation n'est pas refusée", () => {
     expect(
       () =>
         new EvenementNouvelleHomologationCreee({
@@ -67,6 +67,17 @@ describe('Un événement de nouvelle homologation', () => {
     ).to.throwError((e) => {
       expect(e).to.be.an(ErreurDonneeManquante);
     });
+  });
+
+  it("accepte l'absence de durée d'homologation si l'homologation est refusée", () => {
+    expect(
+      () =>
+        new EvenementNouvelleHomologationCreee({
+          idService: 'abc',
+          dateHomologation: '2023-03-30',
+          refusee: true,
+        })
+    ).not.to.throwError();
   });
 
   it('peut avoir un attribut "importé"', () => {
