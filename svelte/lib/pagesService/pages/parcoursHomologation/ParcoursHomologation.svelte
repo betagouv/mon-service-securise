@@ -174,6 +174,10 @@
     width: calc(var(--parcours-homologation-largeur-formulaire) * 2 / 3);
   }
 
+  form {
+    flex-grow: 1;
+  }
+
   .etape-parcours {
     width: var(--parcours-homologation-largeur-formulaire);
   }
