@@ -72,12 +72,14 @@
   });
 
   const suivant = async () => {
-    try {
-      await composantEtapeCourante?.enregistre();
-    } catch {
-      return;
+    if (!estLectureSeule) {
+      try {
+        await composantEtapeCourante?.enregistre();
+      } catch {
+        return;
+      }
+      document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     }
-    document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     if (detailsEtapeSuivante) {
       navigation.versEtape(idService, detailsEtapeSuivante.id);
     }
