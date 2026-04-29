@@ -18,8 +18,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     '/profil',
     '/tableauDeBord',
     '/visiteGuidee/decrire',
-    '/visiteGuidee/securiser',
-    '/visiteGuidee/homologuer',
+    '/visiteGuidee/mesures',
+    '/visiteGuidee/dossiers',
     '/visiteGuidee/piloter',
     '/mesures',
   ].forEach((route) => {
@@ -79,7 +79,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         .middleware()
         .verifieChargementDeLExplicationDesRisquesV2(
           testeur.app(),
-          '/visiteGuidee/securiser'
+          '/visiteGuidee/mesures'
         );
     });
 
@@ -88,18 +88,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         const reponse = await testeur.get('/visiteGuidee/decrire');
 
         expect(reponse.text).to.contain('id="visite-guidee-creation-service"');
-      });
-    });
-
-    describe("concernant la version du 'faux' service utilisé", () => {
-      it('sert un service v2 par défaut', async () => {
-        const reponse = await testeur.get('/visiteGuidee/securiser');
-
-        const versionService = donneesPartagees(
-          reponse.text,
-          'version-service'
-        );
-        expect(versionService).to.be('v2');
       });
     });
   });

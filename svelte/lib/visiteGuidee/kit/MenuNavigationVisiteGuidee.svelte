@@ -49,15 +49,15 @@
       },
       {
         titre: 'Sécurisez',
-        id: 'SECURISER',
+        id: 'MESURES',
         icone: '/statique/assets/images/actionsSaisie/mesures.svg',
-        lien: '/visiteGuidee/securiser',
+        lien: '/visiteGuidee/mesures',
       },
       {
         titre: 'Homologuez',
-        id: 'HOMOLOGUER',
+        id: 'DOSSIERS',
         icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
-        lien: '/visiteGuidee/homologuer',
+        lien: '/visiteGuidee/dossiers',
       },
       {
         titre: 'Pilotez vos services',

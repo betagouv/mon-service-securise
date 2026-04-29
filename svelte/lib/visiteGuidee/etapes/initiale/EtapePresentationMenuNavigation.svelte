@@ -19,12 +19,12 @@
           },
           {
             titre: 'Sécurisez',
-            id: 'SECURISER',
+            id: 'MESURES',
             icone: '/statique/assets/images/actionsSaisie/mesures.svg',
           },
           {
             titre: 'Homologuez',
-            id: 'HOMOLOGUER',
+            id: 'DOSSIERS',
             icone: '/statique/assets/images/actionsSaisie/dossiers.svg',
           },
           {

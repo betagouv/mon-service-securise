@@ -91,6 +91,8 @@
         label="Créer un nouveau projet d'homologation"
         kind="primary"
         size="md"
+        nom="creer-homologation"
+        id="creer-homologation"
       ></dsfr-button>
     {/if}
   </OngletVide>

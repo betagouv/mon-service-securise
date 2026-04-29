@@ -85,9 +85,9 @@ export const composantVisiteGuidee = derived(
         return EtapePresentationMenuNavigation;
       case 'DECRIRE':
         return EtapeDecrireV2;
-      case 'SECURISER':
+      case 'MESURES':
         return EtapeSecuriser;
-      case 'HOMOLOGUER':
+      case 'DOSSIERS':
         return EtapeHomologuer;
       case 'PILOTER':
         return EtapePiloter;

@@ -23,7 +23,6 @@ const creeServeur = ({
   middleware,
   referentiel,
   referentielV2,
-  moteurRegles,
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,
@@ -112,7 +111,6 @@ const creeServeur = ({
     routesConnectePage({
       depotDonnees,
       middleware,
-      moteurRegles,
       referentiel,
       referentielV2,
       adaptateurCsv,

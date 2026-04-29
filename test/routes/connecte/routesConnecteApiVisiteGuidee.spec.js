@@ -23,8 +23,8 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
         etapesVisiteGuidee: {
-          DECRIRE: { idEtapeSuivante: 'SECURISER' },
-          SECURISER: { urlEtape: '/visiteGuidee/securiser' },
+          DECRIRE: { idEtapeSuivante: 'MESURES' },
+          MESURES: { urlEtape: '/visiteGuidee/mesures' },
         },
       });
     });
@@ -60,11 +60,11 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     it("renvoi l'URL de l'étape suivante", async () => {
       const reponse = await testeur.post('/api/visiteGuidee/DECRIRE/termine');
 
-      expect(reponse.body.urlEtapeSuivante).to.be('/visiteGuidee/securiser');
+      expect(reponse.body.urlEtapeSuivante).to.be('/visiteGuidee/mesures');
     });
 
     it("renvoi une URL `null` s'il n'y a pas d'étape suivante", async () => {
-      const reponse = await testeur.post('/api/visiteGuidee/SECURISER/termine');
+      const reponse = await testeur.post('/api/visiteGuidee/MESURES/termine');
 
       expect(reponse.body.urlEtapeSuivante).to.be(null);
     });
@@ -73,7 +73,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   describe('quand requête POST sur /visiteGuidee/termine', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
-        etapesVisiteGuidee: { DECRIRE: { idEtapeSuivante: 'SECURISER' } },
+        etapesVisiteGuidee: { DECRIRE: { idEtapeSuivante: 'MESURES' } },
       });
     });
 
