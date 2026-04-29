@@ -14,9 +14,10 @@
 
   let { idService, dossier, estLectureSeule }: Props = $props();
 
-  let avecDocuments = $state(untrack(() => dossier.avecDocuments ?? false));
+  let avecDocuments = $state(untrack(() => dossier.avecDocuments));
   let documents: string[] = $state(untrack(() => dossier.documents ?? []));
   let nouveauDocument = $state('');
+  let erreurListeDocumentsVide: string | null = $state(null);
 
   const commandeDocuments = {
     updateAvecDocuments: (e: { detail: boolean }) => {
@@ -26,6 +27,7 @@
     ajoute: () => {
       const titre = nouveauDocument.trim();
       if (!titre) return;
+      erreurListeDocumentsVide = null;
       documents.push(titre);
       nouveauDocument = '';
     },
@@ -36,6 +38,11 @@
   };
 
   export const enregistre = async () => {
+    if (avecDocuments && documents.length === 0) {
+      erreurListeDocumentsVide = 'Veuillez ajouter au moins un document.';
+      throw new Error(erreurListeDocumentsVide);
+    }
+    erreurListeDocumentsVide = null;
     await api.enregistrement(idService).documents(avecDocuments, documents);
   };
 </script>
@@ -59,6 +66,9 @@
   status="default"
   value={avecDocuments}
   disabled={estLectureSeule}
+  required
+  id="avecOuSansDocuments"
+  name="avecOuSansDocuments"
 ></dsfr-radios-group>
 
 {#if avecDocuments}
@@ -80,6 +90,9 @@
           icon-place="left"
           onclick={commandeDocuments.ajoute}
         ></dsfr-button>
+      {/if}
+      {#if erreurListeDocumentsVide}
+        <span class="erreur-champ-saisie-dsfr">{erreurListeDocumentsVide}</span>
       {/if}
     </div>
 
@@ -109,6 +122,11 @@
 {/if}
 
 <style lang="scss">
+  .erreur-champ-saisie-dsfr {
+    display: flex;
+    align-items: center;
+  }
+
   .ajout-document {
     display: flex;
     flex-direction: column;

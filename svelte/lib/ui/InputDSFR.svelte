@@ -1,5 +1,7 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLInputAttributes } from 'svelte/elements';
+
+  interface Props extends HTMLInputAttributes {
     id?: string;
     label: string;
     value: string;
@@ -12,6 +14,7 @@
     label,
     value = $bindable(),
     disabled,
+    ...props
   }: Props = $props();
 
   const metsAJour = (event: CustomEvent<string>) => {
@@ -19,5 +22,12 @@
   };
 </script>
 
-<dsfr-input {id} {label} {type} {value} {disabled} onvaluechanged={metsAJour}
+<dsfr-input
+  {id}
+  {label}
+  {type}
+  {value}
+  {disabled}
+  onvaluechanged={metsAJour}
+  {...props}
 ></dsfr-input>

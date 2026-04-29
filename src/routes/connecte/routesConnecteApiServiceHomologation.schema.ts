@@ -43,7 +43,7 @@ export const schemaPutAvisHomologation = (referentiel: ReferentielV2) => ({
       collaborateurs: z.array(z.string()).min(1),
       statut: z.enum(Object.keys(referentiel.statutsAvisDossierHomologation())),
       dureeValidite: z.enum(referentiel.identifiantsEcheancesRenouvellement()),
-      commentaires: z.string().optional(),
+      commentaires: z.string().max(1000).optional(),
     })
   ),
 });

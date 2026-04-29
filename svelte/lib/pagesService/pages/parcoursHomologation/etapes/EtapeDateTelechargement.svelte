@@ -16,13 +16,20 @@
     declenche: async () => {
       await api.enregistrement(idService).telechargement();
       document.dispatchEvent(new CustomEvent('homologation-modifiee'));
+      erreurDossierNonTelecharge = null;
     },
   };
 
+  let erreurDossierNonTelecharge: string | null = $state(null);
   let dateTelechargement = $derived(dossier.dateTelechargement?.date);
 
   // Rien à faire dans `enregistre()`aa : tout se passe au déclenchement du téléchargement
-  export const enregistre = async () => {};
+  export const enregistre = async () => {
+    if (!dateTelechargement) {
+      erreurDossierNonTelecharge = "Veuillez télécharger l'archive.";
+      throw new Error(erreurDossierNonTelecharge);
+    }
+  };
 </script>
 
 {#if peutHomologuer}
@@ -45,6 +52,9 @@
     blank
     download
   ></dsfr-tile>
+  {#if erreurDossierNonTelecharge}
+    <span class="erreur-champ-saisie-dsfr">{erreurDossierNonTelecharge}</span>
+  {/if}
 
   <ul class="consignes">
     <li>
@@ -72,6 +82,13 @@
 {/if}
 
 <style lang="scss">
+  .erreur-champ-saisie-dsfr {
+    display: flex;
+    align-items: center;
+    margin-top: -24px;
+    margin-bottom: 24px;
+  }
+
   .consignes {
     font-size: 1rem;
     line-height: 1.5rem;

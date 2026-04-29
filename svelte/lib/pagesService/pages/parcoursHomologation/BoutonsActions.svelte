@@ -2,7 +2,6 @@
   interface Props {
     onannuler: () => void;
     onprecedent: () => void;
-    onsuivant: () => void;
     onenregistrer: () => void;
     estPremiereEtape: boolean;
     estDerniereEtape: boolean;
@@ -35,14 +34,13 @@
       ></dsfr-button>
     {/if}
   {:else}
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Suivant"
       kind="primary"
       has-icon
       icon="arrow-right-line"
       icon-place="right"
-      onclick={props.onsuivant}
+      type="submit"
     ></dsfr-button>
   {/if}
 </div>

@@ -17,7 +17,13 @@
   let dateHomologation = $state(
     untrack(() => dossier.decision.dateHomologation ?? '')
   );
-  let validee = $state(untrack(() => dossier.decision.refusee !== true));
+  let validee = $state(
+    untrack(() =>
+      !dossier.decision.refusee && !dossier.decision.dureeValidite
+        ? undefined
+        : !dossier.decision.refusee
+    )
+  );
   let dureeValidite = $state(
     untrack(() => dossier.decision.dureeValidite ?? undefined)
   );
@@ -50,30 +56,39 @@
     type="date"
     id="date-homologation"
     bind:value={dateHomologation}
+    required
   />
 
-  <dsfr-radios-group
-    legend="Validation de l'homologation"
-    onvaluechanged={commandesDecision.updateValidee}
-    radios={[
-      { label: 'Oui', id: 'validee-oui', value: true },
-      { label: 'Non', id: 'validee-non', value: false },
-    ]}
-    value={validee}
-  ></dsfr-radios-group>
-
-  {#if validee}
+  <div>
     <dsfr-radios-group
-      legend="Durée de validité de l'homologation"
-      onvaluechanged={commandesDecision.updateDureeValidite}
-      radios={Object.entries(echeancesRenouvellement).map(([cle, valeur]) => ({
-        id: `duree-${cle}`,
-        label: valeur.description,
-        value: cle,
-      }))}
-      value={dureeValidite}
+      legend="Validation de l'homologation"
+      onvaluechanged={commandesDecision.updateValidee}
+      radios={[
+        { label: 'Oui', id: 'validee-oui', value: true },
+        { label: 'Non', id: 'validee-non', value: false },
+      ]}
+      value={validee}
+      required
+      name="decisionAcceptee"
     ></dsfr-radios-group>
-  {/if}
+
+    {#if validee}
+      <dsfr-radios-group
+        legend="Durée de validité de l'homologation"
+        onvaluechanged={commandesDecision.updateDureeValidite}
+        radios={Object.entries(echeancesRenouvellement).map(
+          ([cle, valeur]) => ({
+            id: `duree-${cle}`,
+            label: valeur.description,
+            value: cle,
+          })
+        )}
+        value={dureeValidite}
+        name="dureeValidite"
+        required
+      ></dsfr-radios-group>
+    {/if}
+  </div>
 </div>
 
 <style lang="scss">
@@ -82,5 +97,9 @@
     flex-direction: column;
     margin-top: 1.5rem;
     gap: 1.5rem;
+  }
+
+  dsfr-radios-group {
+    margin-bottom: -8px;
   }
 </style>
