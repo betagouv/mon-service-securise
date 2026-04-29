@@ -23,6 +23,7 @@
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { navigation } from './parcoursHomologation.navigation';
   import BoutonsActions from './BoutonsActions.svelte';
+  import { afficheTitrePageServiceStore } from '../../store/afficheTitrePageService.store';
 
   interface Props {
     idService: string;
@@ -113,6 +114,13 @@
     decision: EtapeDecision,
     recapitulatif: EtapeRecapitulatif,
   };
+
+  $effect(() => {
+    $afficheTitrePageServiceStore = etapeCourante === 'autorite';
+    return () => {
+      $afficheTitrePageServiceStore = true;
+    };
+  });
 </script>
 
 {#if etapeCourante && dossier && detailsEtapeCourante}

@@ -19,6 +19,7 @@
   import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
   import { pageCourante } from './store/pageCourante.store';
   import { propsPourPage } from './PagesService.props';
+  import { afficheTitrePageServiceStore } from './store/afficheTitrePageService.store';
 
   let props: PagesServiceProps = $props();
 
@@ -142,8 +143,10 @@
         {#key $routeurStore.location}
           {@const donneesPage = metadonneesPages[$pageCourante]}
           {@const Composant = donneesPage?.composant}
-          <h1>{donneesPage?.titre}</h1>
-          <h2>{donneesPage?.sousTitre}</h2>
+          {#if $afficheTitrePageServiceStore}
+            <h1>{donneesPage?.titre}</h1>
+            <h2>{donneesPage?.sousTitre}</h2>
+          {/if}
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
             <Composant
               idService={props.idService}
