@@ -16,7 +16,7 @@ const idListeInfolettre = Number(
   process.env.SENDINBLUE_ID_LISTE_POUR_INFOLETTRE
 );
 
-type ErreurBrevo = AxiosError<{ message: string }>;
+type ErreurBrevo = AxiosError<{ message: string; code: string }>;
 
 const desinscrisInfolettre = async (destinataire: string) => {
   // https://developers.brevo.com/reference/removecontactfromlist
@@ -67,52 +67,78 @@ const inscrisInfolettre = async (destinataire: string) => {
 const numeroTelephoneAvecIndicatif = (numero: string) =>
   numero ? `+33${numero.substring(1)}` : '';
 
-const creeContact = (
+const creeContact = async (
   destinataire: string,
   prenom: string,
   nom: string,
   telephone: string,
   bloqueNewsletter: boolean,
   bloqueMarketing: boolean
-) =>
-  axios
-    .post(
-      `${urlBase}/contacts`,
-      {
-        updateEnabled: true,
-        email: destinataire,
-        emailBlacklisted: bloqueMarketing,
-        attributes: {
-          PRENOM: prenom,
-          NOM: nom,
-          SMS: numeroTelephoneAvecIndicatif(telephone),
-        },
-        ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
-      },
-      enteteJSON
-    )
-    .catch((e) => {
-      if (e.response.data.message === 'Contact already exist')
-        return Promise.resolve();
+) => {
+  const codesErreurTelephone = ['duplicate_parameter', 'invalid_parameter'];
 
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par API Brevo': e.response.data,
-      });
-      return Promise.reject(e);
+  const construitCorps = (inclutTelephone: boolean) => ({
+    updateEnabled: true,
+    email: destinataire,
+    emailBlacklisted: bloqueMarketing,
+    attributes: {
+      PRENOM: prenom,
+      NOM: nom,
+      ...(inclutTelephone && {
+        SMS: numeroTelephoneAvecIndicatif(telephone),
+      }),
+    },
+    ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
+  });
+
+  try {
+    await axios.post(`${urlBase}/contacts`, construitCorps(true), enteteJSON);
+  } catch (e) {
+    const erreur = e as ErreurBrevo;
+
+    if (erreur.response?.data?.message === 'Contact already exist') return;
+
+    if (codesErreurTelephone.includes(erreur.response?.data?.code || '')) {
+      await axios.post(
+        `${urlBase}/contacts`,
+        construitCorps(false),
+        enteteJSON
+      );
+      return;
+    }
+
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
+    throw e;
+  }
+};
 
 const metAJourDonneesContact = async (
   destinataire: string,
   donnees: Record<string, unknown>
 ) => {
-  try {
-    await axios.put(
+  const codesErreurTelephone = ['duplicate_parameter', 'invalid_parameter'];
+
+  const requete = (attributs: Record<string, unknown>) =>
+    axios.put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
-      { attributes: donnees },
+      { attributes: attributs },
       enteteJSON
     );
+
+  try {
+    await requete(donnees);
   } catch (e) {
     const erreur = e as ErreurBrevo;
+
+    if (codesErreurTelephone.includes(erreur.response?.data?.code || '')) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { SMS: _, ...donnesSansTelephone } = donnees;
+      await requete(donnesSansTelephone);
+      return;
+    }
+
     fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
       'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
