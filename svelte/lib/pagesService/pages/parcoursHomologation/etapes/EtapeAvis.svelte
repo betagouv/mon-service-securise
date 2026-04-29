@@ -67,7 +67,7 @@
     collaborateursString: string;
   };
 
-  let avecAvis = $state(untrack(() => dossier.avecAvis ?? false));
+  let avecAvis = $state(untrack(() => dossier.avecAvis));
   let avis: AvisHomologationPourSaisie[] = $state(
     untrack(() =>
       dossier.avis?.map((a) => ({
@@ -112,6 +112,9 @@
   status="default"
   value={avecAvis}
   disabled={estLectureSeule}
+  id="avecOuSansAvis"
+  name="avecOuSansAvis"
+  required
 ></dsfr-radios-group>
 
 {#if avecAvis}
@@ -129,10 +132,12 @@
           rows={3}
           bind:value={unAvis.collaborateursString}
           disabled={estLectureSeule}
+          required
         />
         <dsfr-radios-group
           legend="Avis sur l'homologation du service"
           id="avis"
+          name="avis"
           onvaluechanged={commandeAvis.update(unAvis).statut}
           radios={Object.entries(statutsAvisDossierHomologation).map(
             ([cle, valeur]) => ({
@@ -143,11 +148,13 @@
           )}
           value={unAvis.statut}
           disabled={estLectureSeule}
+          required
         ></dsfr-radios-group>
 
         <dsfr-radios-group
           legend="Durée proposée de validité de l'homologation"
           id="duree"
+          name="duree"
           onvaluechanged={commandeAvis.update(unAvis).dureeValidite}
           radios={Object.entries(echeancesRenouvellement).map(
             ([cle, valeur]) => ({
@@ -158,11 +165,13 @@
           )}
           value={unAvis.dureeValidite}
           disabled={estLectureSeule}
+          required
         ></dsfr-radios-group>
 
         <TextareaDSFR
           label="Commentaires et recommandations"
           rows={6}
+          maxlength={1000}
           bind:value={unAvis.commentaires}
           disabled={estLectureSeule}
         ></TextareaDSFR>

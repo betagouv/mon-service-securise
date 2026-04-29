@@ -71,7 +71,11 @@
   });
 
   const suivant = async () => {
-    await composantEtapeCourante?.enregistre();
+    try {
+      await composantEtapeCourante?.enregistre();
+    } catch {
+      return;
+    }
     document.dispatchEvent(new CustomEvent('homologation-modifiee'));
     if (detailsEtapeSuivante) {
       navigation.versEtape(idService, detailsEtapeSuivante.id);
@@ -121,28 +125,34 @@
     {...detailsEtapeSuivante === undefined ? { 'hide-details': true } : {}}
   >
   </dsfr-stepper>
-  <div class="etape-parcours">
-    <hr />
-    <Composant
-      {idService}
-      {dossier}
-      {statutsAvisDossierHomologation}
-      {echeancesRenouvellement}
+  <form
+    onsubmit={(e) => {
+      e.preventDefault();
+      suivant();
+    }}
+  >
+    <div class="etape-parcours">
+      <hr />
+      <Composant
+        {idService}
+        {dossier}
+        {statutsAvisDossierHomologation}
+        {echeancesRenouvellement}
+        {peutHomologuer}
+        {estLectureSeule}
+        bind:this={composantEtapeCourante}
+      />
+    </div>
+    <VoirDemarcheIndicative {etapeCourante} {niveauSecurite} />
+    <BoutonsActions
+      onannuler={annuler}
+      onprecedent={precedent}
+      onenregistrer={enregistrerDecision}
+      estPremiereEtape={detailsEtapeCourante.numero === 1}
+      {estDerniereEtape}
       {peutHomologuer}
-      {estLectureSeule}
-      bind:this={composantEtapeCourante}
     />
-  </div>
-  <VoirDemarcheIndicative {etapeCourante} {niveauSecurite} />
-  <BoutonsActions
-    onannuler={annuler}
-    onprecedent={precedent}
-    onsuivant={suivant}
-    onenregistrer={enregistrerDecision}
-    estPremiereEtape={detailsEtapeCourante.numero === 1}
-    {estDerniereEtape}
-    {peutHomologuer}
-  />
+  </form>
 {/if}
 
 <style lang="scss">

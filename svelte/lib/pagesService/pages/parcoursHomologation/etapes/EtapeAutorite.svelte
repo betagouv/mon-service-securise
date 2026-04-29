@@ -38,16 +38,23 @@
     label="Prénom Nom"
     bind:value={autorite.nom}
     disabled={estLectureSeule}
+    required
+    minlength={1}
+    maxlength={200}
   />
   <InputDSFR
     label="Fonction"
     bind:value={autorite.fonction}
     disabled={estLectureSeule}
+    required
+    minlength={1}
+    maxlength={400}
   />
 </div>
 
 <style lang="scss">
-  .champs {
+  .champs,
+  form {
     display: flex;
     flex-direction: column;
     gap: 1rem;

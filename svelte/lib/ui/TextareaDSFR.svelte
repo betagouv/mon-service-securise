@@ -1,5 +1,7 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLTextareaAttributes } from 'svelte/elements';
+
+  interface Props extends HTMLTextareaAttributes {
     label: string;
     value: string;
     rows: number;
@@ -12,6 +14,7 @@
     value = $bindable(),
     rows = 6,
     disabled,
+    ...props
   }: Props = $props();
 
   const metsAJour = (event: CustomEvent<string>) => {
@@ -26,4 +29,5 @@
   {value}
   {disabled}
   onvaluechanged={metsAJour}
+  {...props}
 ></dsfr-textarea>
