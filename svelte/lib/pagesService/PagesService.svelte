@@ -110,8 +110,6 @@
       dossiers
     )
   );
-
-  $effect(() => console.log($pageCourante));
 </script>
 
 <svelte:document
