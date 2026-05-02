@@ -1,19 +1,26 @@
-import expect from 'expect.js';
 import * as depotDonneesSuperviseurs from '../../src/depots/depotDonneesSuperviseurs.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import Superviseur from '../../src/modeles/superviseur.js';
 import Entite from '../../src/modeles/entite.js';
+import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
+import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
+import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
+import { unUUID } from '../constructeurs/UUID.ts';
 
 describe('Le dépôt de données des superviseurs', () => {
-  let depot;
-  let adaptateurPersistance;
-  let adaptateurRechercheEntite;
+  let depot: DepotDonneesSuperviseurs;
+  let adaptateurPersistance: AdaptateurPersistance;
+  let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
 
   beforeEach(() => {
     adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
-    adaptateurPersistance = unePersistanceMemoire().construis();
-    depot = depotDonneesSuperviseurs.creeDepot({ adaptateurPersistance });
+    adaptateurPersistance =
+      unePersistanceMemoire().construis() as AdaptateurPersistance;
+    depot = depotDonneesSuperviseurs.creeDepot({
+      adaptateurPersistance,
+      adaptateurRechercheEntite,
+    });
   });
 
   it('délègue à la persistance la lecture des superviseurs concernés par un siret', async () => {
@@ -24,7 +31,7 @@ describe('Le dépôt de données des superviseurs', () => {
 
     await depot.lisSuperviseurs('SIRET');
 
-    expect(siretRecu).to.eql('SIRET');
+    expect(siretRecu).toEqual('SIRET');
   });
 
   it("complète les informations de l'organisation responsable et délègue à la persistance l'ajout d'établissements supervisés", async () => {
@@ -49,23 +56,24 @@ describe('Le dépôt de données des superviseurs', () => {
       adaptateurRechercheEntite,
     });
 
-    await depot.ajouteSiretAuSuperviseur('US1', 'SIRET-123');
+    await depot.ajouteSiretAuSuperviseur(unUUID('1'), 'SIRET-123');
 
-    expect(idSuperviseurRecu).to.eql('US1');
-    expect(entiteRecue.nom).to.eql('MonEntite');
-    expect(entiteRecue.departement).to.eql('75');
-    expect(entiteRecue.siret).to.eql('SIRET-123');
+    expect(idSuperviseurRecu).toEqual(unUUID('1'));
+    expect(entiteRecue!.nom).toEqual('MonEntite');
+    expect(entiteRecue!.departement).toEqual('75');
+    expect(entiteRecue!.siret).toEqual('SIRET-123');
   });
 
   it("délègue à la persistance la vérification qu'un utilisateur est superviseur", async () => {
     let idRecu;
     adaptateurPersistance.estSuperviseur = async (idUtilisateur) => {
       idRecu = idUtilisateur;
+      return true;
     };
 
-    await depot.estSuperviseur('U1');
+    await depot.estSuperviseur(unUUID('1'));
 
-    expect(idRecu).to.eql('U1');
+    expect(idRecu).toEqual(unUUID('1'));
   });
 
   it('délègue à la persistance la lecture des données du superviseur et retourne un superviseur', async () => {
@@ -75,12 +83,12 @@ describe('Le dépôt de données des superviseurs', () => {
       return { idUtilisateur, entitesSupervisees: [{ nom: 'NomEntite' }] };
     };
 
-    const superviseur = await depot.superviseur('U1');
+    const superviseur = await depot.superviseur(unUUID('1'));
 
-    expect(idRecu).to.eql('U1');
-    expect(superviseur).to.be.a(Superviseur);
-    expect(superviseur.entitesSupervisees[0]).to.be.an(Entite);
-    expect(superviseur.entitesSupervisees[0].nom).to.be('NomEntite');
+    expect(idRecu).toEqual(unUUID('1'));
+    expect(superviseur).toBeInstanceOf(Superviseur);
+    expect(superviseur.entitesSupervisees[0]).toBeInstanceOf(Entite);
+    expect(superviseur.entitesSupervisees[0].nom).toBe('NomEntite');
   });
 
   it("délègue à la persistance la révocation d'un superviseur", async () => {
@@ -89,8 +97,8 @@ describe('Le dépôt de données des superviseurs', () => {
       idRecu = idUtilisateur;
     };
 
-    await depot.revoqueSuperviseur('U1');
+    await depot.revoqueSuperviseur(unUUID('1'));
 
-    expect(idRecu).to.eql('U1');
+    expect(idRecu).toEqual(unUUID('1'));
   });
 });
