@@ -1,7 +1,7 @@
 import { ErreurDonneesObligatoiresManquantes } from '../erreurs.js';
 import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import InformationsService from './informationsService.js';
-import { ServiceAnnuaire } from '../annuaire/serviceAnnuaire.interface.js';
+import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -32,7 +32,7 @@ class Entite extends InformationsService {
 
   static async completeDonnees(
     donnees: DonneesEntite,
-    serviceAnnuaire: ServiceAnnuaire
+    serviceAnnuaire: AdaptateurRechercheEntreprise
   ) {
     const organisations = await serviceAnnuaire.rechercheOrganisations(
       donnees.siret
