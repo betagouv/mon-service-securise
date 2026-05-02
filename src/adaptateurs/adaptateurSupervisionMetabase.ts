@@ -1,10 +1,35 @@
 import Knex from 'knex';
 import jwt from 'jsonwebtoken';
 import { journalMSS } from './adaptateurEnvironnement.js';
+import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
+import { AdaptateurEnvironnement } from './adaptateurEnvironnement.interface.js';
+import { UUID } from '../typesBasiques.js';
+import Service from '../modeles/service.js';
+
+const correspondancesFiltreDate = {
+  aujourdhui: 'thisday',
+  hier: 'past1days',
+  septDerniersJours: 'past7days',
+  trenteDerniersJours: 'past30days',
+  unDernierMois: 'past1months',
+  troisDerniersMois: 'past3months',
+  douzeDerniersMois: 'past12months',
+} as const;
+
+type FiltreDate = keyof typeof correspondancesFiltreDate;
+
+export type FiltresSupervision = {
+  filtreDate?: FiltreDate;
+  filtreBesoinsSecurite?: string;
+  filtreEntite?: string;
+};
 
 const adaptateurSupervisionMetabase = ({
   adaptateurChiffrement,
   adaptateurEnvironnement,
+}: {
+  adaptateurChiffrement: AdaptateurChiffrement;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
 }) => {
   const config = {
     client: 'pg',
@@ -12,34 +37,27 @@ const adaptateurSupervisionMetabase = ({
     pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
   };
 
-  const correspondancesFiltreDate = {
-    aujourdhui: 'thisday',
-    hier: 'past1days',
-    septDerniersJours: 'past7days',
-    trenteDerniersJours: 'past30days',
-    unDernierMois: 'past1months',
-    troisDerniersMois: 'past3months',
-    douzeDerniersMois: 'past12months',
-  };
-
   const knex = Knex(config);
 
-  const hache = (id) => adaptateurChiffrement.hacheSha256(id);
+  const hache = (id: string) => adaptateurChiffrement.hacheSha256(id);
 
   return {
-    delieServiceDesSuperviseurs: async (idService) => {
+    delieServiceDesSuperviseurs: async (idService: UUID) => {
       const idServiceHash = hache(idService);
       await knex('journal_mss.superviseurs')
         .where('id_service', idServiceHash)
         .del();
     },
-    genereURLSupervision: (idSuperviseur, filtres) => {
+    genereURLSupervision: (
+      idSuperviseur: UUID,
+      filtres: FiltresSupervision
+    ) => {
       const urlDeBase = adaptateurEnvironnement
         .supervision()
         .domaineMetabaseMSS();
       const cleSecreteIntegration = adaptateurEnvironnement
         .supervision()
-        .cleSecreteIntegrationMetabase();
+        .cleSecreteIntegrationMetabase() as string;
       const idDashboardSupervision = adaptateurEnvironnement
         .supervision()
         .identifiantDashboardSupervision();
@@ -67,7 +85,10 @@ const adaptateurSupervisionMetabase = ({
       const jeton = jwt.sign(donnees, cleSecreteIntegration);
       return `${urlDeBase}embed/dashboard/${jeton}#bordered=false&titled=false`;
     },
-    relieSuperviseursAService: async (service, idSuperviseurs) => {
+    relieSuperviseursAService: async (
+      service: Service,
+      idSuperviseurs: Array<UUID>
+    ) => {
       const idServiceHash = hache(service.id);
       const siretServiceHash = hache(service.siretDeOrganisation());
       const idSuperviseursHash = idSuperviseurs.map(hache);
@@ -83,7 +104,7 @@ const adaptateurSupervisionMetabase = ({
         .onConflict()
         .ignore();
     },
-    revoqueSuperviseur: async (idSuperviseur) => {
+    revoqueSuperviseur: async (idSuperviseur: UUID) => {
       const idSuperviseurHash = hache(idSuperviseur);
 
       await knex('journal_mss.superviseurs')

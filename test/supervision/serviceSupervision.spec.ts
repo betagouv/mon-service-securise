@@ -1,22 +1,24 @@
-import expect from 'expect.js';
 import ServiceSupervision from '../../src/supervision/serviceSupervision.js';
 import { unService } from '../constructeurs/constructeurService.js';
+import { AdaptateurSupervision } from '../../src/adaptateurs/adaptateurSupervision.interface.ts';
+import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
+import { unUUID } from '../constructeurs/UUID.ts';
 
 describe('Le service de supervision', () => {
-  let adaptateurSupervision;
-  let depotDonnees;
-  let serviceSupervision;
+  let adaptateurSupervision: AdaptateurSupervision;
+  let depotDonnees: DepotDonnees;
+  let serviceSupervision: ServiceSupervision;
 
   beforeEach(() => {
     adaptateurSupervision = {
       revoqueSuperviseur: async () => {},
       relieSuperviseursAService: async () => {},
       delieServiceDesSuperviseurs: async () => {},
-    };
+    } as unknown as AdaptateurSupervision;
     depotDonnees = {
       lisSuperviseurs: async () => {},
       revoqueSuperviseur: async () => {},
-    };
+    } as unknown as DepotDonnees;
     serviceSupervision = new ServiceSupervision({
       depotDonnees,
       adaptateurSupervision,
@@ -24,11 +26,12 @@ describe('Le service de supervision', () => {
   });
 
   it("jette une erreur s'il n'est pas instancié avec les bons adaptateurs", () => {
-    expect(() => new ServiceSupervision({})).to.throwError((e) => {
-      expect(e.message).to.be(
+    // @ts-expect-error On force une mauvaise instanciation
+    expect(() => new ServiceSupervision({})).toThrow(
+      new Error(
         "Impossible d'instancier le service de supervision sans ses dépendances"
-      );
-    });
+      )
+    );
   });
 
   describe('sur demande de liaison entre un service et des superviseurs', () => {
@@ -44,7 +47,7 @@ describe('Le service de supervision', () => {
 
       await serviceSupervision.relieServiceEtSuperviseurs(service);
 
-      expect(siretRecu).to.be('12345');
+      expect(siretRecu).toBe('12345');
     });
 
     it("délègue à l'adaptateur la création du lien", async () => {
@@ -67,8 +70,8 @@ describe('Le service de supervision', () => {
 
       await serviceSupervision.relieServiceEtSuperviseurs(service);
 
-      expect(idsSuperviseurRecus).to.eql(['US1']);
-      expect(serviceRecu).to.be(service);
+      expect(idsSuperviseurRecus).toEqual(['US1']);
+      expect(serviceRecu).toBe(service);
     });
 
     it("n'appelle pas l'adaptateur si aucun superviseur n'est concerné par le service", async () => {
@@ -83,7 +86,7 @@ describe('Le service de supervision', () => {
 
       await serviceSupervision.relieServiceEtSuperviseurs(service);
 
-      expect(supervisionAppelee).to.be(false);
+      expect(supervisionAppelee).toBe(false);
     });
   });
 
@@ -94,9 +97,9 @@ describe('Le service de supervision', () => {
         idServiceRecu = idService;
       };
 
-      await serviceSupervision.delieServiceEtSuperviseurs('S1');
+      await serviceSupervision.delieServiceEtSuperviseurs(unUUID('1'));
 
-      expect(idServiceRecu).to.be('S1');
+      expect(idServiceRecu).toBe(unUUID('1'));
     });
   });
 
@@ -115,53 +118,52 @@ describe('Le service de supervision', () => {
 
       await serviceSupervision.modifieLienServiceEtSuperviseurs(service);
 
-      expect(idServiceRecuParSuppression).to.be('S1');
-      expect(serviceRecuParAjout.id).to.be('S1');
+      expect(idServiceRecuParSuppression).toBe('S1');
+      expect(serviceRecuParAjout!.id).toBe('S1');
     });
   });
 
   describe("sur demande de génération de l'URL de supervision", () => {
     it("délègue la génération à l'adaptateur de supervision", () => {
       let idRecu;
-      let filtreDateRecu;
-      adaptateurSupervision.genereURLSupervision = (
-        idSuperviseur,
-        filtreDate
-      ) => {
+      let filtreRecu;
+      adaptateurSupervision.genereURLSupervision = (idSuperviseur, filtres) => {
         idRecu = idSuperviseur;
-        filtreDateRecu = filtreDate;
+        filtreRecu = filtres;
         return 'URL1';
       };
 
-      const url = serviceSupervision.genereURLSupervision('S1', 'unFiltreDate');
+      const url = serviceSupervision.genereURLSupervision(unUUID('1'), {
+        filtreDate: 'aujourdhui',
+      });
 
-      expect(idRecu).to.be('S1');
-      expect(filtreDateRecu).to.be('unFiltreDate');
-      expect(url).to.be('URL1');
+      expect(idRecu).toBe(unUUID('1'));
+      expect(filtreRecu!.filtreDate).toBe('aujourdhui');
+      expect(url).toBe('URL1');
     });
   });
 
   describe('sur demande de révocation des droits de supervision', () => {
     it("délègue à l'adaptateur de supervision la suppression côté supervision", async () => {
       let idRecu;
-      adaptateurSupervision.revoqueSuperviseur = (idSuperviseur) => {
+      adaptateurSupervision.revoqueSuperviseur = async (idSuperviseur) => {
         idRecu = idSuperviseur;
       };
 
-      await serviceSupervision.revoqueSuperviseur('U1');
+      await serviceSupervision.revoqueSuperviseur(unUUID('1'));
 
-      expect(idRecu).to.be('U1');
+      expect(idRecu).toBe(unUUID('1'));
     });
 
     it('délègue au dépôt de données la suppression des liens siret-superviseur', async () => {
       let idRecu;
-      depotDonnees.revoqueSuperviseur = (idSuperviseur) => {
+      depotDonnees.revoqueSuperviseur = async (idSuperviseur) => {
         idRecu = idSuperviseur;
       };
 
-      await serviceSupervision.revoqueSuperviseur('U1');
+      await serviceSupervision.revoqueSuperviseur(unUUID('1'));
 
-      expect(idRecu).to.be('U1');
+      expect(idRecu).toBe(unUUID('1'));
     });
   });
 });
