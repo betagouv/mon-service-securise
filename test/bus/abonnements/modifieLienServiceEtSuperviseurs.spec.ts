@@ -1,15 +1,15 @@
-import expect from 'expect.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { modifieLienServiceEtSuperviseurs } from '../../../src/bus/abonnements/modifieLienServiceEtSuperviseurs.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import ServiceSupervision from '../../../src/supervision/serviceSupervision.ts';
 
 describe("L'abonné en charge de modifier le lien entre un service modifié et ses superviseurs", () => {
-  let serviceSupervision;
+  let serviceSupervision: ServiceSupervision;
 
   beforeEach(() => {
     serviceSupervision = {
       modifieLienServiceEtSuperviseurs: async () => {},
-    };
+    } as unknown as ServiceSupervision;
   });
 
   it("ne fait rien si le SIRET n'a pas changé", async () => {
@@ -35,7 +35,7 @@ describe("L'abonné en charge de modifier le lien entre un service modifié et s
       ancienneDescription,
     });
 
-    expect(serviceAppele).to.be(false);
+    expect(serviceAppele).toBe(false);
   });
 
   it('délègue au service de supervision la modification du lien si le SIRET a changé', async () => {
@@ -62,6 +62,6 @@ describe("L'abonné en charge de modifier le lien entre un service modifié et s
       ancienneDescription,
     });
 
-    expect(serviceRecu.id).to.be('S1');
+    expect(serviceRecu!.id).toBe('S1');
   });
 });
