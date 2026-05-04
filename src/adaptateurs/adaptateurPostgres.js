@@ -984,6 +984,8 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .where({ hash_jwt_revoque: jwtHashe })
       .first()) !== undefined;
 
+  const lisAdminsPour = async (_siret) => [];
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -1009,6 +1011,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     contributeursDesServicesDe,
     estJwtRevoque,
     estSuperviseur,
+    lisAdminsPour,
     lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,
