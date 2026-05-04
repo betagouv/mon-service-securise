@@ -264,6 +264,7 @@ describe('Une autorisation', () => {
         });
 
       expect(autorisationContributeur.donneesAPersister()).to.eql({
+        estAdmin: false,
         estProprietaire: false,
         id: unUUID('a'),
         idService: unUUID('s'),
@@ -289,6 +290,7 @@ describe('Une autorisation', () => {
 
       expect(autorisationProprietaire.donneesAPersister()).to.eql({
         estProprietaire: true,
+        estAdmin: false,
         id: unUUID('a'),
         idService: unUUID('s'),
         idUtilisateur: unUUID('u'),

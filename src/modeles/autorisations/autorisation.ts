@@ -24,6 +24,8 @@ export type DonneesAutorisation = {
 };
 
 export class Autorisation extends Base {
+  readonly estAdmin?: boolean;
+
   // @ts-expect-error La propriétés est définie dans `this.renseigneProprietes`
   droits: Partial<Droits>;
 
@@ -126,6 +128,7 @@ export class Autorisation extends Base {
   donneesAPersister() {
     return {
       estProprietaire: this.estProprietaire,
+      estAdmin: this.estUnAdmin(),
       id: this.id,
       idService: this.idService,
       idUtilisateur: this.idUtilisateur,
@@ -226,5 +229,9 @@ export class Autorisation extends Base {
       return this.peutGererContributeurs();
 
     return this.aLesPermissions(actionRecommandee.droitsNecessaires as Droits);
+  }
+
+  estUnAdmin() {
+    return !!this.estAdmin;
   }
 }
