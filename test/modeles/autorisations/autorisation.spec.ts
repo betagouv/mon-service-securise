@@ -370,4 +370,20 @@ describe('Une autorisation', () => {
       });
     });
   });
+
+  describe('pour un administrateur', () => {
+    const donnees = {
+      id: unUUID('a'),
+      idService: unUUID('s'),
+      idUtilisateur: unUUID('u'),
+    };
+
+    it('a la propriété estAdmin et estProprietaire à true', () => {
+      const nouvelleAutorisationAdmin =
+        Autorisation.NouvelleAutorisationAdmin(donnees);
+
+      expect(nouvelleAutorisationAdmin.estAdmin).toBe(true);
+      expect(nouvelleAutorisationAdmin.estProprietaire).toBe(true);
+    });
+  });
 });
