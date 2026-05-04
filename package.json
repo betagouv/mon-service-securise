@@ -68,7 +68,7 @@
     "puppeteer": "^24.39.0",
     "string-strip-html": "^8.4.0",
     "tippy.js": "^6.3.7",
-    "uuid": "^9.0.0",
+    "uuid": "^14.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.1.5"
   },
