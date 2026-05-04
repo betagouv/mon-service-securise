@@ -984,7 +984,12 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .where({ hash_jwt_revoque: jwtHashe })
       .first()) !== undefined;
 
-  const lisAdminsPour = async (_siret) => [];
+  const lisAdminsPour = async (siret) =>
+    (
+      await knex('admins_organisations')
+        .where({ siret_hash: siret })
+        .select('id_utilisateur')
+    ).map((admin) => admin.id_utilisateur);
 
   return {
     activitesMesure,

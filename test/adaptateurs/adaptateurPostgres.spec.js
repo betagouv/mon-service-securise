@@ -28,6 +28,7 @@ describe("L'adaptateur persistance Postgres", () => {
         'autorisations',
         'modeles_mesure_specifique',
         'modeles_mesure_specifique_association_aux_services',
+        'admins_organisations',
       ].map((table) => knex(table).truncate())
     );
   });
@@ -279,6 +280,22 @@ describe("L'adaptateur persistance Postgres", () => {
       } catch {
         assert.fail("L'appel n'aurait pas dû lever d'exception");
       }
+    });
+  });
+
+  describe("concernant les administrateurs d'organisations", () => {
+    it("peut lire les admins d'un siret haché", async () => {
+      const id = genereUUID();
+      await knex('admins_organisations').insert({
+        id_utilisateur: id,
+        siret_hash: 'siret-haché256',
+        donnees: {},
+      });
+
+      const admins = await persistance.lisAdminsPour('siret-haché256');
+
+      expect(admins.length).to.be(1);
+      expect(admins[0]).to.be(id);
     });
   });
 });
