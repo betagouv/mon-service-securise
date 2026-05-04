@@ -16,6 +16,7 @@ const { LECTURE, ECRITURE } = Permissions;
 
 export type DonneesAutorisation = {
   estProprietaire: boolean;
+  estAdmin?: boolean;
   id: UUID;
   idUtilisateur: UUID;
   idService: UUID;
@@ -35,6 +36,7 @@ export class Autorisation extends Base {
         'idService',
         'droits',
       ],
+      proprietesAtomiquesFacultatives: ['estAdmin'],
     });
     this.renseigneProprietes(donnees);
   }
@@ -50,6 +52,19 @@ export class Autorisation extends Base {
       ...donnees,
       droits: tousDroitsEnEcriture(),
       estProprietaire: true,
+    });
+
+  static NouvelleAutorisationAdmin = (
+    donnees: Omit<
+      DonneesAutorisation,
+      'droits' | 'estProprietaire' | 'estAdmin'
+    >
+  ) =>
+    new Autorisation({
+      ...donnees,
+      droits: tousDroitsEnEcriture(),
+      estProprietaire: true,
+      estAdmin: true,
     });
 
   aLaPermission(niveau: NiveauPermission, rubrique: Rubrique) {

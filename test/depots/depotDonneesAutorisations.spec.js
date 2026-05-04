@@ -121,6 +121,29 @@ describe('Le dépôt de données des autorisations', () => {
       expect(a.idService).to.equal('123');
     });
 
+    it("peut instancier une autorisation d'admin", async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur({ id: '999', email: 'jean.dupont@mail.fr' })
+        .ajouteUnService({
+          id: '123',
+          descriptionService: { nomService: 'Un service' },
+        })
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('456').dAdmin('999', '123').donnees
+        )
+        .construis();
+
+      const depot = creeDepot(adaptateurPersistance);
+
+      const a = await depot.autorisation('456');
+
+      expect(a.estAdmin).to.be(true);
+      expect(a.estProprietaire).to.be(true);
+      expect(a.id).to.equal('456');
+      expect(a.idUtilisateur).to.equal('999');
+      expect(a.idService).to.equal('123');
+    });
+
     it("retourne `undefined` si l'autorisation est inexistante", async () => {
       const depot = await depotVide();
       const autorisation = await depot.autorisation('123');

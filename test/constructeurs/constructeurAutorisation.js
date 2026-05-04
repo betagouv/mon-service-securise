@@ -24,6 +24,13 @@ class ConstructeurAutorisation {
     return this;
   }
 
+  dAdmin(idUtilisateur, idService) {
+    this.donnees.estAdmin = true;
+    this.donnees.idUtilisateur = idUtilisateur;
+    this.donnees.idService = idService;
+    return this;
+  }
+
   deContributeur(idUtilisateur, idService) {
     this.donnees.estProprietaire = false;
     this.donnees.idUtilisateur = idUtilisateur;
