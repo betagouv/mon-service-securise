@@ -4,6 +4,7 @@ import Service from '../../modeles/service.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
+import { adaptateurJWT } from '../../adaptateurs/adaptateurJWT.js';
 
 const routesConnectePage = ({
   middleware,
@@ -97,9 +98,10 @@ const routesConnectePage = ({
     middleware.chargeExplicationRisquesV2,
     middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
-      const utilisateurVisiteGuidee = new Utilisateur({
-        email: 'visite-guidee@cyber.gouv.fr',
-      });
+      const utilisateurVisiteGuidee = new Utilisateur(
+        { email: 'visite-guidee@cyber.gouv.fr' },
+        { adaptateurJWT }
+      );
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
 

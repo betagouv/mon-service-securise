@@ -803,11 +803,14 @@ describe('Le middleware MSS', () => {
           );
 
         depotDonnees.utilisateur = async () =>
-          new Utilisateur({
-            email: 'jeanne.delajardiniere@gouv.fr',
-            prenom: 'Jeanne',
-            dateCreation: '2025-01-01',
-          });
+          new Utilisateur(
+            {
+              email: 'jeanne.delajardiniere@gouv.fr',
+              prenom: 'Jeanne',
+              dateCreation: '2025-01-01',
+            },
+            { adaptateurJWT: {} }
+          );
 
         middleware = leMiddleware({ depotDonnees });
       });

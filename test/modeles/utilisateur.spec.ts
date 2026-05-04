@@ -1,29 +1,78 @@
-import expect from 'expect.js';
 import {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
 } from '../../src/erreurs.js';
-import Utilisateur from '../../src/modeles/utilisateur.js';
+import Utilisateur, {
+  DonneesUtilisateur,
+} from '../../src/modeles/utilisateur.js';
 import { fabriqueAdaptateurMailMemoire } from '../../src/adaptateurs/adaptateurMailMemoire.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { unUUID } from '../constructeurs/UUID.ts';
+import { AdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.interface.ts';
+import { adaptateurJWT as jwt } from '../../src/adaptateurs/adaptateurJWT.ts';
+import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
+import { UUID } from '../../src/typesBasiques.ts';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
+import { AdaptateurMail } from '../../src/adaptateurs/adaptateurMail.interface.ts';
 
 describe('Un utilisateur', () => {
+  let adaptateurJWT: AdaptateurJWT;
+  let cguActuelles: string;
+  let adaptateursParDefaut: {
+    adaptateurJWT: AdaptateurJWT;
+    cguActuelles: string;
+  };
+
+  beforeEach(() => {
+    adaptateurJWT = jwt({ adaptateurEnvironnement });
+    cguActuelles = 'v1';
+    adaptateursParDefaut = { adaptateurJWT, cguActuelles };
+  });
+
+  const donneesUtilisateur = (
+    surcharge: Partial<DonneesUtilisateur>
+  ): DonneesUtilisateur => ({
+    id: unUUID('1'),
+    prenom: 'Jean',
+    nom: 'Dujardin',
+    cguAcceptees: 'CGU',
+    dateCreation: new Date(),
+    email: 'jean.dujardin@beta.gouv.fr',
+    entite: { nom: 'ANSSI', siret: '1234', departement: '75' },
+    estimationNombreServices: { borneBasse: '0', borneHaute: '0' },
+    postes: [],
+    infolettreAcceptee: true,
+    transactionnelAccepte: true,
+    ...surcharge,
+  });
+
   describe("sur demande d'un profil complet ou non", () => {
     it("considère le profil « complet » et sans champ manquant dès lors que le nom et le siret de l'entite sont renseignés", () => {
-      const utilisateur = new Utilisateur({
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-        entite: { siret: '12345' },
-        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
-      });
-      expect(utilisateur.completudeProfil().estComplet).to.be(true);
-      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([]);
+      const utilisateur = new Utilisateur(
+        donneesUtilisateur({
+          nom: 'Dupont',
+          email: 'jean.dupont@mail.fr',
+          entite: { siret: '12345' },
+          estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
+        }),
+        adaptateursParDefaut
+      );
+      expect(utilisateur.completudeProfil().estComplet).toBe(true);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([]);
     });
 
     it("considère le profil « incomplet » à cause du nom, du SIRET et de l'estimation du nombre de services manquants s'ils ne sont pas renseignés", () => {
-      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.completudeProfil().estComplet).to.be(false);
-      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+      const utilisateur = new Utilisateur(
+        donneesUtilisateur({
+          email: 'jean.dupont@mail.fr',
+          nom: undefined,
+          entite: { siret: undefined },
+          estimationNombreServices: undefined,
+        }),
+        adaptateursParDefaut
+      );
+      expect(utilisateur.completudeProfil().estComplet).toBe(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([
         'nom',
         'siret',
         'estimationNombreServices',
@@ -31,169 +80,213 @@ describe('Un utilisateur', () => {
     });
 
     it("considère le profil « incomplet » à cause du SIRET manquant si le SIRET de l'entité n'est pas renseigné", () => {
-      const utilisateur = new Utilisateur({
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
-      });
-      expect(utilisateur.completudeProfil().estComplet).to.be(false);
-      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+      const utilisateur = new Utilisateur(
+        donneesUtilisateur({
+          estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
+          entite: { siret: undefined },
+        }),
+        adaptateursParDefaut
+      );
+      expect(utilisateur.completudeProfil().estComplet).toBe(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([
         'siret',
       ]);
     });
 
     it("considère le profil « incomplet » à cause de l'estimation du nombre de services manquante si les bornes sont égales à zéro", () => {
-      const utilisateur = new Utilisateur({
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-        entite: { siret: '12345' },
-        estimationNombreServices: { borneBasse: '0', borneHaute: '0' },
-      });
-      expect(utilisateur.completudeProfil().estComplet).to.be(false);
-      expect(utilisateur.completudeProfil().champsNonRenseignes).to.eql([
+      const utilisateur = new Utilisateur(
+        donneesUtilisateur({
+          estimationNombreServices: { borneBasse: '0', borneHaute: '0' },
+        }),
+        adaptateursParDefaut
+      );
+      expect(utilisateur.completudeProfil().estComplet).toBe(false);
+      expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([
         'estimationNombreServices',
       ]);
     });
   });
 
   it('connaît ses initiales', () => {
-    const jeanDupont = new Utilisateur({
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'jean.dupont@mail.fr',
-    });
-    expect(jeanDupont.initiales()).to.equal('JD');
+    const jeanDupont = new Utilisateur(
+      donneesUtilisateur({
+        prenom: 'Jean',
+        nom: 'Dupont',
+      }),
+      adaptateursParDefaut
+    );
+    expect(jeanDupont.initiales()).toEqual('JD');
   });
 
   it('connaît son « prénom / nom »', () => {
-    const jeanDupont = new Utilisateur({
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'jean.dupont@mail.fr',
-    });
-    expect(jeanDupont.prenomNom()).to.equal('Jean Dupont');
+    const jeanDupont = new Utilisateur(
+      donneesUtilisateur({
+        prenom: 'Jean',
+        nom: 'Dupont',
+      }),
+      adaptateursParDefaut
+    );
+    expect(jeanDupont.prenomNom()).toEqual('Jean Dupont');
   });
 
   it('combine toutes les informations de postes sur demande de son poste détaillé', () => {
-    const toutEnMemeTemps = new Utilisateur({
-      email: 'jean.dupont@mail.fr',
-      postes: ['RSSI', 'DPO', 'Maire'],
-    });
+    const toutEnMemeTemps = new Utilisateur(
+      donneesUtilisateur({
+        postes: ['RSSI', 'DPO', 'Maire'],
+      }),
+      adaptateursParDefaut
+    );
 
-    expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
+    expect(toutEnMemeTemps.posteDetaille()).toEqual('RSSI, DPO et Maire');
   });
 
   describe('concernant la génération de son token JWT', () => {
-    const adaptateurJWT = {
-      genereToken: (idUtilisateur, source, estInvite) => ({
+    beforeEach(() => {
+      // @ts-expect-error On mock la méthode
+      adaptateurJWT.genereToken = (
+        idUtilisateur: UUID,
+        source: SourceAuthentification,
+        estInvite: boolean
+      ) => ({
         idUtilisateur,
         source,
         estInvite,
-      }),
-    };
+      });
+    });
 
     it('sait générer son JWT', () => {
       const jean = new Utilisateur(
-        { id: '123', email: 'jean.dupont@mail.fr', cguAcceptees: 'v1' },
+        donneesUtilisateur({
+          id: unUUID('1'),
+        }),
         { adaptateurJWT, cguActuelles: 'v1' }
       );
 
-      const token = jean.genereToken('source');
+      const token = jean.genereToken(
+        'source' as SourceAuthentification
+      ) as unknown as {
+        idUtilisateur: UUID;
+        source: SourceAuthentification;
+      };
 
-      expect(token.idUtilisateur).to.be('123');
-      expect(token.source).to.be('source');
+      expect(token.idUtilisateur).toBe(unUUID('1'));
+      expect(token.source).toBe('source');
     });
   });
 
   it('sait détecter que les conditions générales actuelles ont été acceptées', () => {
     const accepteLesActuelles = new Utilisateur(
-      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
-      { cguActuelles: 'v1.0' }
+      donneesUtilisateur({
+        cguAcceptees: 'v1.0',
+      }),
+      { adaptateurJWT, cguActuelles: 'v1.0' }
     );
 
-    expect(accepteLesActuelles.accepteCGU()).to.be(true);
+    expect(accepteLesActuelles.accepteCGU()).toBe(true);
   });
 
   it("sait détecter que les conditions générales actuelles n'ont pas été acceptées", () => {
     const accepteObsoletes = new Utilisateur(
-      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
-      { cguActuelles: 'v1.1-8' }
+      donneesUtilisateur({
+        cguAcceptees: 'v1.0',
+      }),
+      { adaptateurJWT, cguActuelles: 'v1.1-8' }
     );
 
-    expect(accepteObsoletes.accepteCGU()).to.be(false);
+    expect(accepteObsoletes.accepteCGU()).toBe(false);
   });
 
   it("sait détecter que les conditions générales actuelles n'ont jamais été acceptées", () => {
     const jamaisAcceptees = new Utilisateur(
-      { email: 'jean.dupont@mail.fr' },
-      { cguActuelles: 'v1.0' }
+      donneesUtilisateur({ email: 'jean.dupont@mail.fr' }),
+      { adaptateurJWT, cguActuelles: 'v1.0' }
     );
 
-    expect(jamaisAcceptees.accepteCGU()).to.be(false);
+    expect(jamaisAcceptees.accepteCGU()).toBe(false);
   });
 
   it("est considéré comme « invité » s'il n'a aucune version de CGU acceptée (i.e. les CGU acceptées sont `undefined`)", () => {
-    const unInvite = new Utilisateur({
-      email: 'jean.dupont@mail.fr',
-      cguAcceptees: undefined,
-    });
+    const unInvite = new Utilisateur(
+      donneesUtilisateur({
+        cguAcceptees: undefined,
+      }),
+      adaptateursParDefaut
+    );
 
-    expect(unInvite.estUnInvite()).to.be(true);
+    expect(unInvite.estUnInvite()).toBe(true);
   });
 
   it("n'est plus un invité dès lors qu'une version de CGU a été acceptée, même s'il s'agit de CGU osbolètes", () => {
     const accepteObsolete = new Utilisateur(
-      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1' },
-      { cguActuelles: 'v2' }
+      donneesUtilisateur({ cguAcceptees: 'v1' }),
+      { adaptateurJWT, cguActuelles: 'v2' }
     );
 
-    expect(accepteObsolete.estUnInvite()).to.be(false);
+    expect(accepteObsolete.estUnInvite()).toBe(false);
   });
 
   it('sait détecter si le transactionnel a été acceptée', () => {
-    const utilisateur = new Utilisateur({
-      email: 'jean.dupont@mail.fr',
-      transactionnelAccepte: true,
-    });
-    expect(utilisateur.accepteTransactionnel()).to.be(true);
+    const utilisateur = new Utilisateur(
+      donneesUtilisateur({
+        transactionnelAccepte: true,
+      }),
+      adaptateursParDefaut
+    );
+    expect(utilisateur.accepteTransactionnel()).toBe(true);
 
-    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-    expect(autreUtilisateur.accepteTransactionnel()).to.be(false);
+    const autreUtilisateur = new Utilisateur(
+      donneesUtilisateur({
+        transactionnelAccepte: undefined,
+      }),
+      adaptateursParDefaut
+    );
+    expect(autreUtilisateur.accepteTransactionnel()).toBe(false);
   });
 
   it("sait détecter si l'infolettre a été acceptée", () => {
-    const utilisateur = new Utilisateur({
-      email: 'jean.dupont@mail.fr',
-      infolettreAcceptee: true,
-    });
-    expect(utilisateur.accepteInfolettre()).to.be(true);
+    const utilisateur = new Utilisateur(
+      donneesUtilisateur({
+        infolettreAcceptee: true,
+      }),
+      adaptateursParDefaut
+    );
+    expect(utilisateur.accepteInfolettre()).toBe(true);
 
-    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-    expect(autreUtilisateur.accepteInfolettre()).to.be(false);
+    const autreUtilisateur = new Utilisateur(
+      donneesUtilisateur({
+        infolettreAcceptee: undefined,
+      }),
+      adaptateursParDefaut
+    );
+    expect(autreUtilisateur.accepteInfolettre()).toBe(false);
   });
 
   it("exige que l'adresse électronique soit renseignée", () => {
-    try {
-      new Utilisateur({ prenom: 'Jean', nom: 'Dupont' });
-      expect().fail(
-        "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
-      );
-    } catch (e) {
-      expect(e).to.be.a(ErreurEmailManquant);
-    }
+    expect(
+      () =>
+        new Utilisateur(
+          donneesUtilisateur({
+            email: undefined,
+          }),
+          adaptateursParDefaut
+        )
+    ).toThrow(new ErreurEmailManquant());
   });
 
   it('connaît sa date de création', () => {
     const dateCreation = new Date(2000, 1, 1, 12, 0);
-    const utilisateur = new Utilisateur({
-      dateCreation,
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'email',
-    });
+    const utilisateur = new Utilisateur(
+      donneesUtilisateur({
+        dateCreation,
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'email',
+      }),
+      adaptateursParDefaut
+    );
 
-    expect(utilisateur.dateCreation).to.be.ok();
-    expect(utilisateur.dateCreation).to.eql(dateCreation);
+    expect(utilisateur.dateCreation).toBeDefined();
+    expect(utilisateur.dateCreation).toEqual(dateCreation);
   });
 
   it('connaît la liste des noms de ses propriétés de base', () => {
@@ -208,36 +301,42 @@ describe('Un utilisateur', () => {
       'postes.*',
       'estimationNombreServices.*',
     ];
-    expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
+    expect(Utilisateur.nomsProprietesBase()).toEqual(nomsProprietes);
   });
 
   it("initialise les postes s'ils ne sont pas définis", () => {
-    const utilisateur = new Utilisateur({
-      email: 'email',
-      postes: undefined,
-    });
+    const utilisateur = new Utilisateur(
+      donneesUtilisateur({
+        postes: undefined,
+      }),
+      adaptateursParDefaut
+    );
 
-    expect(utilisateur.postes).to.eql([]);
+    expect(utilisateur.postes).toEqual([]);
   });
 
   describe("sur une demande de validation des données d'un utilisateur", () => {
-    let donnees;
+    let donnees: Partial<DonneesUtilisateur>;
 
-    const verifiePresencePropriete = (clef, nom) => {
+    const verifiePresencePropriete = (clef: string, nom: string) => {
       if (clef.includes('.')) {
         const clefs = clef.split('.');
+        // @ts-expect-error On utilise une notation `clef.autreClef`
         delete donnees[clefs[0]][clefs[1]];
       } else {
+        // @ts-expect-error On utilise une notation `clef.autreClef`
         delete donnees[clef];
       }
       try {
         Utilisateur.valideDonnees(donnees);
-        expect().fail(
+        expect.fail(
           `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de donnée manquante`
         );
       } catch (error) {
-        expect(error).to.be.a(ErreurDonneesObligatoiresManquantes);
-        expect(error.message).to.equal(`La propriété "${clef}" est requise`);
+        expect(error).toBeInstanceOf(ErreurDonneesObligatoiresManquantes);
+        expect((error as Error).message).toEqual(
+          `La propriété "${clef}" est requise`
+        );
       }
     };
 
@@ -251,8 +350,8 @@ describe('Un utilisateur', () => {
           siret: '7524242424',
         },
         estimationNombreServices: {
-          borneBasse: 1,
-          borneHaute: 10,
+          borneBasse: '1',
+          borneHaute: '10',
         },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
@@ -276,12 +375,12 @@ describe('Un utilisateur', () => {
       try {
         Utilisateur.valideDonnees(donnees, true);
       } catch (erreur) {
-        let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
+        let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${(erreur as Error).message}`;
         if (erreur instanceof ErreurDonneesObligatoiresManquantes) {
           messageEchec =
             "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
         }
-        expect().fail(messageEchec);
+        expect.fail(messageEchec);
       }
     });
 
@@ -306,10 +405,11 @@ describe('Un utilisateur', () => {
   });
 
   describe('sur demande de changement de ses préférences de communication', () => {
-    let adaptateurEmail;
+    let adaptateurEmail: AdaptateurMail;
 
     beforeEach(() => {
-      adaptateurEmail = fabriqueAdaptateurMailMemoire();
+      adaptateurEmail =
+        fabriqueAdaptateurMailMemoire() as unknown as AdaptateurMail;
     });
 
     const jeanDupont = () => unUtilisateur().avecEmail('jean.dupont@mail.fr');
@@ -329,7 +429,7 @@ describe('Un utilisateur', () => {
         adaptateurEmail
       );
 
-      expect(inscriptionEffectuee).to.be('jean.dupont@mail.fr');
+      expect(inscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
     it("se désinscrit de l'infolettre s'il passe de « oui » à « non » sur ce canal de communication", async () => {
@@ -347,11 +447,12 @@ describe('Un utilisateur', () => {
         adaptateurEmail
       );
 
-      expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
+      expect(desinscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
     it("s'inscrit aux emails transactionnels s'il passe de « non » à « oui » sur ce canal de communications", async () => {
       let inscriptionEffectuee;
+      // @ts-expect-error On mock la méthode
       adaptateurEmail.inscrisEmailsTransactionnels = async (email) => {
         inscriptionEffectuee = email;
       };
@@ -368,11 +469,12 @@ describe('Un utilisateur', () => {
         adaptateurEmail
       );
 
-      expect(inscriptionEffectuee).to.be('jean.dupont@mail.fr');
+      expect(inscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
     it("se déinscrit des emails transactionnels s'il passe de « oui » à « non » sur ce canal de communications", async () => {
       let desinscriptionEffectuee;
+      // @ts-expect-error On mock la méthode
       adaptateurEmail.desinscrisEmailsTransactionnels = async (email) => {
         desinscriptionEffectuee = email;
       };
@@ -389,7 +491,7 @@ describe('Un utilisateur', () => {
         adaptateurEmail
       );
 
-      expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
+      expect(desinscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
     it('sait dire si un utilisateur a toutes les informations fournies par AgentConnect', () => {
@@ -400,8 +502,8 @@ describe('Un utilisateur', () => {
         .construis();
       const utilisateurIncomplet = unUtilisateur().construis();
 
-      expect(utilisateurComplet.aLesInformationsAgentConnect()).to.be(true);
-      expect(utilisateurIncomplet.aLesInformationsAgentConnect()).to.be(false);
+      expect(utilisateurComplet.aLesInformationsAgentConnect()).toBe(true);
+      expect(utilisateurIncomplet.aLesInformationsAgentConnect()).toBe(false);
     });
   });
 });

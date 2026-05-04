@@ -3,17 +3,63 @@ import {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
 } from '../erreurs.js';
-import Entite from './entite.js';
+import Entite, { DonneesEntite } from './entite.js';
 import { Identite } from './identite.js';
+import { UUID } from '../typesBasiques.js';
+import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
+import { SourceAuthentification } from './sourceAuthentification.js';
+import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 
-const valide = (donnees) => {
+export type EstimationNombreServices = {
+  borneBasse: string;
+  borneHaute: string;
+};
+
+export type DonneesUtilisateur = {
+  dateCreation: Date;
+  id: UUID;
+  prenom: string;
+  nom: string;
+  email: string;
+  telephone?: string;
+  cguAcceptees: string;
+  infolettreAcceptee: boolean;
+  transactionnelAccepte: boolean;
+  estimationNombreServices: EstimationNombreServices;
+  postes: Array<string>;
+  entite: Partial<DonneesEntite>;
+};
+
+const valide = (donnees: { email?: string | undefined }) => {
   const { email } = donnees;
   if (typeof email !== 'string' || email === '')
     throw new ErreurEmailManquant();
 };
 
 class Utilisateur extends Base {
-  constructor(donnees = {}, { adaptateurJWT, cguActuelles } = {}) {
+  readonly dateCreation!: Date;
+  readonly id!: UUID;
+  readonly prenom!: string;
+  private readonly nom!: string;
+  readonly email!: string;
+  private readonly telephone?: string;
+  private readonly cguAcceptees!: string;
+  private readonly infolettreAcceptee!: boolean;
+  private readonly transactionnelAccepte!: boolean;
+  private readonly estimationNombreServices!: EstimationNombreServices;
+  readonly postes!: Array<string>;
+  private readonly entite: Entite;
+  private readonly identite: Identite;
+  private readonly adaptateurJWT: AdaptateurJWT;
+  private readonly cguActuelles: string;
+
+  constructor(
+    donnees: DonneesUtilisateur,
+    {
+      adaptateurJWT,
+      cguActuelles,
+    }: { adaptateurJWT: AdaptateurJWT; cguActuelles: string }
+  ) {
     super({
       proprietesAtomiquesRequises: [
         'dateCreation',
@@ -37,14 +83,21 @@ class Utilisateur extends Base {
     this.identite = new Identite(donnees);
   }
 
-  static valideDonnees(donnees = {}, utilisateurExistant = false) {
-    const envoieErreurDonneeManquante = (propriete) => {
+  static valideDonnees(
+    donnees: Partial<DonneesUtilisateur> = {},
+    utilisateurExistant = false
+  ) {
+    const envoieErreurDonneeManquante = (
+      propriete: keyof DonneesUtilisateur
+    ) => {
       throw new ErreurDonneesObligatoiresManquantes(
         `La propriété "${propriete}" est requise`
       );
     };
 
-    const validePresenceProprietes = (proprietes) => {
+    const validePresenceProprietes = (
+      proprietes: Array<keyof DonneesUtilisateur>
+    ) => {
       proprietes.forEach((propriete) => {
         if (
           typeof donnees[propriete] !== 'string' ||
@@ -55,7 +108,9 @@ class Utilisateur extends Base {
       });
     };
 
-    const validePresenceProprietesObjet = (proprietes) => {
+    const validePresenceProprietesObjet = (
+      proprietes: Array<keyof DonneesUtilisateur>
+    ) => {
       proprietes.forEach((propriete) => {
         if (typeof donnees[propriete] !== 'object') {
           envoieErreurDonneeManquante(propriete);
@@ -63,7 +118,9 @@ class Utilisateur extends Base {
       });
     };
 
-    const validePresenceProprietesBooleenes = (proprietes) => {
+    const validePresenceProprietesBooleenes = (
+      proprietes: Array<keyof DonneesUtilisateur>
+    ) => {
       proprietes.forEach((propriete) => {
         if (typeof donnees[propriete] !== 'boolean') {
           envoieErreurDonneeManquante(propriete);
@@ -71,7 +128,9 @@ class Utilisateur extends Base {
       });
     };
 
-    const validePresenceProprieteListes = (proprietes) => {
+    const validePresenceProprieteListes = (
+      proprietes: Array<keyof DonneesUtilisateur>
+    ) => {
       proprietes.forEach((propriete) => {
         if (!Array.isArray(donnees[propriete])) {
           envoieErreurDonneeManquante(propriete);
@@ -84,7 +143,7 @@ class Utilisateur extends Base {
     }
     validePresenceProprietes(['prenom', 'nom']);
     validePresenceProprietesObjet(['entite', 'estimationNombreServices']);
-    Entite.valideDonnees(donnees.entite);
+    Entite.valideDonnees(donnees.entite!);
     validePresenceProprietesBooleenes([
       'infolettreAcceptee',
       'transactionnelAccepte',
@@ -122,8 +181,8 @@ class Utilisateur extends Base {
     return !!this.transactionnelAccepte;
   }
 
-  genereToken(source) {
-    return this.adaptateurJWT.genereToken(this.id, source);
+  genereToken(source: SourceAuthentification) {
+    return this.adaptateurJWT.genereToken(this.id, source, this.estUnInvite());
   }
 
   initiales() {
@@ -169,7 +228,13 @@ class Utilisateur extends Base {
     );
   }
 
-  async changePreferencesCommunication(nouvellesPreferences, adaptateurEmail) {
+  async changePreferencesCommunication(
+    nouvellesPreferences: {
+      infolettreAcceptee?: boolean;
+      transactionnelAccepte?: boolean;
+    },
+    adaptateurEmail: AdaptateurMail
+  ) {
     const infolettreActuelle = this.accepteInfolettre();
     const nouvelleInfolettre = nouvellesPreferences.infolettreAcceptee;
     const inscrisIL = !infolettreActuelle && nouvelleInfolettre;

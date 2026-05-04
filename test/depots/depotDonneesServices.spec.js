@@ -261,10 +261,13 @@ describe('Le dépôt de données des services', () => {
       const unDepotUtilisateur = {
         dechiffreUtilisateur: async (donneesUtilisateur) => {
           donneesUtilisateur.donnees.nom = `${donneesUtilisateur.id}-déchiffré`;
-          return new Utilisateur({
-            id: donneesUtilisateur.id,
-            ...donneesUtilisateur.donnees,
-          });
+          return new Utilisateur(
+            {
+              id: donneesUtilisateur.id,
+              ...donneesUtilisateur.donnees,
+            },
+            { adaptateurJWT: {} }
+          );
         },
       };
       const depot = unDepotDeDonneesServices()
@@ -2303,10 +2306,13 @@ describe('Le dépôt de données des services', () => {
     it('déchiffre les données des contributeurs', async () => {
       depotDonneesUtilisateurs.dechiffreUtilisateur = (donneesUtilisateur) => {
         donneesUtilisateur.donnees.nom = `${donneesUtilisateur.donnees.nom}-nom-déchiffré`;
-        return new Utilisateur({
-          id: donneesUtilisateur.id,
-          ...donneesUtilisateur.donnees,
-        });
+        return new Utilisateur(
+          {
+            id: donneesUtilisateur.id,
+            ...donneesUtilisateur.donnees,
+          },
+          { adaptateurJWT: {} }
+        );
       };
 
       const contributeurs = await depot.rechercheContributeurs('moi', '');
