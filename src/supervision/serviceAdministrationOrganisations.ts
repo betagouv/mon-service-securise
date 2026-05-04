@@ -1,7 +1,10 @@
 import { UUID } from '../typesBasiques.js';
 import Service from '../modeles/service.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
-import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
+import {
+  AdaptateurUUID,
+  fabriqueAdaptateurUUID,
+} from '../adaptateurs/adaptateurUUID.js';
 
 type DepotDonneesPourServiceAdmin = {
   lisAdminsPour: (siret: string) => Promise<Array<UUID>>;
@@ -14,7 +17,7 @@ export class ServiceAdministrationOrganisations {
 
   constructor({
     depotDonnees,
-    adaptateurUUID,
+    adaptateurUUID = fabriqueAdaptateurUUID(),
   }: {
     depotDonnees: DepotDonneesPourServiceAdmin;
     adaptateurUUID: AdaptateurUUID;

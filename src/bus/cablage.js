@@ -58,6 +58,8 @@ import { consigneServiceV1MigreEnV2 } from './abonnements/consigneServiceV1Migre
 import EvenementServiceV1MigreEnV2 from './evenementServiceV1MigreEnV2.js';
 import EvenementSimulationMigrationReferentielCreee from './evenementSimulationMigrationReferentielCreee.js';
 import { consigneSimulationMigrationReferentielCreee } from './abonnements/consigneSimulationMigrationReferentielCreeeDansJournal.js';
+import { rattacheServiceEtAdmins } from './abonnements/rattacheServiceEtAdmins.js';
+import { ServiceAdministrationOrganisations } from '../supervision/serviceAdministrationOrganisations.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -80,6 +82,8 @@ const cableTousLesAbonnes = (
     adaptateurSupervision,
     depotDonnees,
   });
+  const serviceAdministrationOrganisations =
+    new ServiceAdministrationOrganisations({ depotDonnees });
 
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
@@ -94,6 +98,7 @@ const cableTousLesAbonnes = (
       depotDonnees,
     }),
     relieServiceEtSuperviseurs({ serviceSupervision }),
+    rattacheServiceEtAdmins({ serviceAdministrationOrganisations }),
   ]);
 
   busEvenements.abonne(
