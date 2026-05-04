@@ -24,6 +24,7 @@ const nouvelAdaptateur = (
   donnees.brouillonsServices ||= [];
   donnees.simulationsMigrationReferentiel ||= [];
   donnees.revocationsJwt ||= [];
+  donnees.adminsOrganisations ||= [];
 
   const ajouteTeleversementServices = async (
     idUtilisateur,
@@ -693,7 +694,10 @@ const nouvelAdaptateur = (
     },
   ];
 
-  const lisAdminsPour = async () => [];
+  const lisAdminsPour = async (siret) =>
+    donnees.adminsOrganisations
+      .filter((a) => a.siretHash === siret)
+      .map((a) => a.idUtilisateur);
 
   return {
     activitesMesure,
