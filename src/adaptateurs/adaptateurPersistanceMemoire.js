@@ -693,6 +693,8 @@ const nouvelAdaptateur = (
     },
   ];
 
+  const lisAdminsPour = async () => [];
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -716,6 +718,7 @@ const nouvelAdaptateur = (
     contributeursDesServicesDe,
     estJwtRevoque,
     estSuperviseur,
+    lisAdminsPour,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,

@@ -22,6 +22,7 @@ import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurP
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
+import * as depotDonneesAdministrationOrganisations from './depots/depotDonneesAdministrationOrganisations.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -160,6 +161,12 @@ const creeDepot = (config = {}) => {
     persistance: adaptateurPersistance,
     decodeJwt: adaptateurJWT.decode,
   });
+
+  const depotAdministrationOragnisations =
+    depotDonneesAdministrationOrganisations.creeDepot({
+      chiffrement: adaptateurChiffrement,
+      persistance: adaptateurPersistance,
+    });
 
   const {
     ajouteDescriptionService,
@@ -322,6 +329,8 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
+  const { lisAdminsPour } = depotAdministrationOragnisations;
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -361,6 +370,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
+    lisAdminsPour,
     lisBrouillonService,
     lisBrouillonsService,
     lisDernierIndiceCyber,
