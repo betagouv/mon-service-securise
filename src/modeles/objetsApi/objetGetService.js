@@ -41,6 +41,7 @@ const donnees = (service, autorisation, referentiel) => {
       },
     }),
     nombreContributeurs: service.contributeurs.length,
+    estAdmin: autorisation.estUnAdmin(),
     estProprietaire: autorisation.estProprietaire,
     documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
     permissions: {

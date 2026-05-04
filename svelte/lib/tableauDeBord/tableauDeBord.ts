@@ -57,6 +57,7 @@ export const donneesVisiteGuidee = {
       },
       nombreContributeurs: 3,
       estProprietaire: true,
+      estAdmin: false,
       documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
       permissions: {
         gestionContributeurs: true,

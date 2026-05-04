@@ -211,7 +211,14 @@
               title="Ouvrir la page du service"
             >
               <span class="denomination-service">
-                {#if service.estProprietaire}
+                {#if service.estAdmin}
+                  <dsfr-badge
+                    label="Admin"
+                    type="accent"
+                    accent="blue-cumulus"
+                    size="sm"
+                  ></dsfr-badge>
+                {:else if service.estProprietaire}
                   <EtiquetteProprietaire />
                 {/if}
                 <span class="nom-service">{service.nomService}</span>
