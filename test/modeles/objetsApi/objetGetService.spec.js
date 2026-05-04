@@ -107,6 +107,7 @@ describe("L'objet d'API de `GET /service`", () => {
       },
       nombreContributeurs: 1 + 1,
       estProprietaire: false,
+      estAdmin: false,
       documentsPdfDisponibles: ['syntheseSecurite'],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
