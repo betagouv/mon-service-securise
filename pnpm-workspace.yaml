@@ -11,3 +11,5 @@ minimumReleaseAgeExclude:
   - axios@1.15.0
   # Renovate security update: vite@8.0.5
   - vite@8.0.5
+  # Renovate security update: uuid@14.0.0
+  - uuid@14.0.0
