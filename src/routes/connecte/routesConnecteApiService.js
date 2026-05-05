@@ -299,6 +299,11 @@ const routesConnecteApiService = ({
       }
 
       const ciblee = await depotDonnees.autorisation(idAutorisation);
+      if (ciblee.estUnAdmin()) {
+        reponse.sendStatus(403);
+        return;
+      }
+
       if (ciblee.idUtilisateur === idUtilisateurCourant) {
         reponse.status(422).json({ code: 'AUTO-MODIFICATION_INTERDITE' });
         return;
