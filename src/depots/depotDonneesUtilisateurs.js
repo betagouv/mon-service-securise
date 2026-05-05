@@ -70,6 +70,7 @@ function fabriquePersistance({
     return {
       ...donneesEnClair,
       id: donneesContributeur.id,
+      estAdmin: donneesContributeur.estAdmin,
     };
   };
 

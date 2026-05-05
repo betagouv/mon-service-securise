@@ -154,7 +154,7 @@ const nouvelAdaptateur = (
           ),
         utilisateurs: autorisationsDuService.map((a) => ({
           ...donnees.utilisateurs.find((u) => u.id === a.idUtilisateur),
-          estAdmin: a.estAdmin,
+          estAdmin: !!a.estAdmin,
         })),
         suggestions: donnees.suggestionsActions
           .filter((s) => s.idService === unService.id)
