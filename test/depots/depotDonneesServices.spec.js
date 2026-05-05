@@ -228,9 +228,7 @@ describe('Le dépôt de données des services', () => {
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
         .ajouteUnService(unService(r).avecId('S1').donnees)
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U1', 'S1').donnees
-        )
+        .ajouteUneAutorisation(uneAutorisation().dAdmin('U1', 'S1').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deContributeur('U2', 'S1').donnees
         );
@@ -244,7 +242,9 @@ describe('Le dépôt de données des services', () => {
       const { contributeurs } = service;
       expect(contributeurs.length).to.equal(2);
       expect(contributeurs[0].idUtilisateur).to.equal('U1');
+      expect(contributeurs[0].estAdmin).to.be(true);
       expect(contributeurs[1].idUtilisateur).to.equal('U2');
+      expect(contributeurs[1].estAdmin).to.be(false);
     });
 
     it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
