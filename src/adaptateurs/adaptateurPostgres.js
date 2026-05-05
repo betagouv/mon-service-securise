@@ -222,7 +222,10 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
                           WHERE date_acquittement IS NULL
                           GROUP BY id_service) suggestions_du_service ON suggestions_du_service.id_service = s.id
 
-               LEFT JOIN (SELECT (a.donnees ->>'idService')::uuid AS id_service, json_agg(u.*) AS utilisateurs
+               LEFT JOIN (SELECT (a.donnees ->>'idService')::uuid AS id_service,
+                          json_agg(
+                                to_jsonb(u) || jsonb_build_object('estAdmin', (a.donnees ->>'estAdmin')::boolean)
+                          ) AS utilisateurs
                           FROM autorisations a
                                  JOIN utilisateurs u ON (a.donnees ->>'idUtilisateur')::uuid = u.id
                           GROUP BY id_service) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
