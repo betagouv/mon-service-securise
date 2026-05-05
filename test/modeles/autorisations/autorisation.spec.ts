@@ -158,6 +158,15 @@ describe('Une autorisation', () => {
   });
 
   describe('sur demande de résumé de niveau de droit', () => {
+    it("retourne 'ADMIN' si l'utilisateur est admin du service", async () => {
+      const autorisationProprietaire =
+        Autorisation.NouvelleAutorisationAdmin(donneesAutorisation);
+
+      expect(autorisationProprietaire.resumeNiveauDroit()).toBe(
+        Autorisation.RESUME_NIVEAU_DROIT.ADMIN
+      );
+    });
+
     it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
       const autorisationProprietaire =
         Autorisation.NouvelleAutorisationProprietaire(donneesAutorisation);
@@ -263,7 +272,7 @@ describe('Une autorisation', () => {
           droits: tousDroitsEnEcriture(),
         });
 
-      expect(autorisationContributeur.donneesAPersister()).to.eql({
+      expect(autorisationContributeur.donneesAPersister()).toEqual({
         estAdmin: false,
         estProprietaire: false,
         id: unUUID('a'),
@@ -288,7 +297,7 @@ describe('Une autorisation', () => {
           idUtilisateur: unUUID('u'),
         });
 
-      expect(autorisationProprietaire.donneesAPersister()).to.eql({
+      expect(autorisationProprietaire.donneesAPersister()).toEqual({
         estProprietaire: true,
         estAdmin: false,
         id: unUUID('a'),
@@ -302,6 +311,17 @@ describe('Une autorisation', () => {
           SECURISER: 2,
         },
       });
+    });
+
+    it('connaît ses données pour une autorisation de admin', () => {
+      const autorisationAdmin = Autorisation.NouvelleAutorisationAdmin({
+        ...donneesAutorisation,
+        id: unUUID('a'),
+        idService: unUUID('s'),
+        idUtilisateur: unUUID('u'),
+      });
+
+      expect(autorisationAdmin.donneesAPersister().estAdmin).toBe(true);
     });
   });
 

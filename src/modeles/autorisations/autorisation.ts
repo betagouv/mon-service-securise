@@ -99,6 +99,7 @@ export class Autorisation extends Base {
   resumeNiveauDroit() {
     const { RESUME_NIVEAU_DROIT } = Autorisation;
 
+    if (this.estAdmin) return RESUME_NIVEAU_DROIT.ADMIN;
     if (this.estProprietaire) return RESUME_NIVEAU_DROIT.PROPRIETAIRE;
 
     const tousNiveaux = Object.values(Permissions).reduce(
@@ -137,6 +138,7 @@ export class Autorisation extends Base {
   }
 
   static RESUME_NIVEAU_DROIT = {
+    ADMIN: 'ADMIN',
     PROPRIETAIRE: 'PROPRIETAIRE',
     ECRITURE: 'ECRITURE',
     LECTURE: 'LECTURE',
