@@ -22,13 +22,28 @@ const donnees = (service, autorisation, referentiel) => {
     nomService: service.nomService(),
     organisationResponsable:
       service.descriptionService.organisationResponsable.nom ?? '',
-    contributeurs: service.contributeurs.map((c) => ({
-      id: c.idUtilisateur,
-      prenomNom: c.prenomNom(),
-      initiales: c.initiales(),
-      poste: c.posteDetaille(),
-      estUtilisateurCourant: autorisation.designeUtilisateur(c.idUtilisateur),
-    })),
+    contributeurs: service.contributeurs.map((c) => {
+      const designeLuiMeme = autorisation.designeUtilisateur(c.idUtilisateur);
+      const doitMasquerPourConfidentialite = c.estAdmin && !designeLuiMeme;
+
+      if (doitMasquerPourConfidentialite)
+        return {
+          estAdmin: true,
+          estUtilisateurCourant: false,
+          id: c.idUtilisateur,
+          prenomNom: 'Administrateur',
+          initiales: 'A',
+          poste: '',
+        };
+
+      return {
+        id: c.idUtilisateur,
+        prenomNom: c.prenomNom(),
+        initiales: c.initiales(),
+        poste: c.posteDetaille(),
+        estUtilisateurCourant: designeLuiMeme,
+      };
+    }),
     ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
       statutHomologation: {
         id: service.dossiers.statutHomologation(),

@@ -215,6 +215,45 @@ describe("L'objet d'API de `GET /service`", () => {
     expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
   });
 
+  describe('concernant les contributeurs admin', () => {
+    const serviceAvecAdminA = unService(referentiel)
+      .ajouteUnContributeur({
+        ...unUtilisateur().avecId('ADMIN').quiSAppelle('Jean Dupont').donnees,
+        estAdmin: true,
+      })
+      .construis();
+
+    it('masque leurs informations, dans un soucis de confidentialité', () => {
+      const pointDeVueDuNonAdmin = objetGetService.donnees(
+        serviceAvecAdminA,
+        uneAutorisation().deProprietaire('B', '123').construis(),
+        referentiel
+      );
+
+      const [admin] = pointDeVueDuNonAdmin.contributeurs;
+      expect(admin).to.eql({
+        estAdmin: true,
+        estUtilisateurCourant: false,
+        id: 'ADMIN',
+        initiales: 'A',
+        poste: '',
+        prenomNom: 'Administrateur',
+      });
+    });
+
+    it("donne quand même les informations de l'admin s'il s'agit de l'utilisateur courant", () => {
+      const pointDeVueDeAdminLuiMeme = objetGetService.donnees(
+        serviceAvecAdminA,
+        uneAutorisation().dAdmin('ADMIN', '123').construis(),
+        referentiel
+      );
+
+      const [admin] = pointDeVueDeAdminLuiMeme.contributeurs;
+      expect(admin.id).to.be('ADMIN');
+      expect(admin.prenomNom).to.be('Jean Dupont');
+    });
+  });
+
   describe('sur demande des permissions', () => {
     it("autorise la gestion de contributeurs si l'utilisateur est propriétaire", () => {
       const unServiceDontAestCreateur = unService()
