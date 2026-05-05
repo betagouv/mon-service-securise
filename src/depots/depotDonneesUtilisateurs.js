@@ -62,9 +62,22 @@ function fabriquePersistance({
     });
   };
 
+  const dechiffreDonneesContributeur = async (donneesContributeur) => {
+    if (!donneesContributeur) return undefined;
+    const donneesEnClair = await dechiffre.donneesUtilisateur(
+      donneesContributeur.donnees
+    );
+    return {
+      ...donneesEnClair,
+      id: donneesContributeur.id,
+    };
+  };
+
   return {
     dechiffreUtilisateur: async (donneesUtilisateur) =>
       dechiffreUtilisateur(donneesUtilisateur),
+    dechiffreDonneesContributeur: async (donneesContributeur) =>
+      dechiffreDonneesContributeur(donneesContributeur),
     lis: {
       donnees: {
         de: async (idUtilisateur) => {
@@ -156,6 +169,9 @@ const creeDepot = (config = {}) => {
 
   const dechiffreUtilisateur = async (donneesUtilisateur) =>
     p.dechiffreUtilisateur(donneesUtilisateur);
+
+  const dechiffreDonneesContributeur = async (donneesUtilisateur) =>
+    p.dechiffreDonneesContributeur(donneesUtilisateur);
 
   const utilisateur = async (identifiant) => p.lis.un(identifiant);
 
@@ -307,6 +323,7 @@ const creeDepot = (config = {}) => {
 
   return {
     dechiffreUtilisateur,
+    dechiffreDonneesContributeur,
     metsAJourUtilisateur,
     nouvelUtilisateur,
     rafraichisProfilUtilisateurLocal,

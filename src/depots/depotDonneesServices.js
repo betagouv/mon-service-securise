@@ -55,7 +55,7 @@ const fabriquePersistance = (
 
     serviceEnClair.contributeurs = await Promise.all(
       serviceEnClair.utilisateurs.map((d) =>
-        depotDonneesUtilisateurs.dechiffreUtilisateur(d)
+        depotDonneesUtilisateurs.dechiffreDonneesContributeur(d)
       )
     );
     delete serviceEnClair.utilisateurs;
