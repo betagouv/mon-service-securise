@@ -462,6 +462,28 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         });
     });
 
+    it("renvoie une erreur 403 si l'utilisateur courant tente de modifier les droits d'un admin", async () => {
+      const monAutorisation = uneAutorisation()
+        .deProprietaire('p1', 'ABC')
+        .construis();
+      const autorisationAdmin = uneAutorisation()
+        .dAdmin('a1', 'ABC')
+        .construis();
+
+      testeur.middleware().reinitialise({
+        idUtilisateur: '123',
+        autorisationACharger: monAutorisation,
+      });
+      testeur.depotDonnees().autorisation = async () => autorisationAdmin;
+
+      const reponse = await testeur.patch(
+        `/api/service/456/autorisations/${unUUIDRandom()}`,
+        { droits: tousDroitsEnEcriture() }
+      );
+
+      expect(reponse.status).to.equal(403);
+    });
+
     it("renvoie une erreur 422 si l'utilisateur courant tente de modifier ses propres droits", async () => {
       const monAutorisation = uneAutorisation()
         .deProprietaire('123', 'ABC')

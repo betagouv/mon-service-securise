@@ -5,8 +5,8 @@ import {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
-  ErreurUtilisateurInexistant,
   ErreurSuppressionImpossible,
+  ErreurUtilisateurInexistant,
 } from '../erreurs.js';
 
 import * as FabriqueAutorisation from '../modeles/autorisations/fabriqueAutorisation.js';
@@ -144,10 +144,17 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieSuppressionPermise = async () => {
-      const impossible = idContributeur === idUtilisateurCourant;
-      if (impossible)
+      const estLuiMeme = idContributeur === idUtilisateurCourant;
+      if (estLuiMeme)
         throw new ErreurSuppressionImpossible(
           `L'utilisateur "${idUtilisateurCourant}" ne peut pas supprimer sa propre autorisation`
+        );
+      const cibleEstAdmin = (
+        await autorisationPour(idContributeur, idService)
+      ).estUnAdmin();
+      if (cibleEstAdmin)
+        throw new ErreurSuppressionImpossible(
+          `L'utilisateur "${idContributeur}" ne peut pas être supprimé`
         );
     };
 
