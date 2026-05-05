@@ -41,6 +41,11 @@
 
     storeAutorisations.remplace(autorisationMAJ);
   };
+
+  let peutEtreModifie = derived(
+    autorisation,
+    ($a) => droitsModifiables && $a?.resumeNiveauDroit !== 'ADMIN'
+  );
 </script>
 
 <li class="ligne-contributeur">
@@ -60,14 +65,14 @@
     {#if afficheDroits && $autorisation?.resumeNiveauDroit && estUtilisateur(utilisateur)}
       <TagNiveauDroit
         niveau={$autorisation.resumeNiveauDroit}
-        {droitsModifiables}
+        droitsModifiables={$peutEtreModifie}
         onDroitsChange={(nouveauxDroits) => changeDroits(nouveauxDroits)}
         onChoixPersonnalisation={() =>
           store.navigation.affichePersonnalisationContributeur(utilisateur)}
       />
     {/if}
 
-    {#if droitsModifiables && estUtilisateur(utilisateur)}
+    {#if $peutEtreModifie && estUtilisateur(utilisateur)}
       <BoutonSuppressionContributeur
         onclick={() => store.navigation.afficheEtapeSuppression(utilisateur)}
       />

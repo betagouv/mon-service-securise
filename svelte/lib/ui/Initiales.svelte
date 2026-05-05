@@ -46,6 +46,14 @@
       hue-rotate(176deg) brightness(102%) contrast(91%);
   }
 
+  .ADMIN {
+    background: var(--background-contrast-blue-cumulus);
+  }
+
+  .initiales.ADMIN {
+    color: var(--text-label-blue-cumulus);
+  }
+
   .PROPRIETAIRE {
     background: var(--role-proprietaire);
   }
