@@ -61,6 +61,7 @@ import {
 import { VersionService } from '../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 import EvenementServiceV1MigreEnV2 from '../../src/bus/evenementServiceV1MigreEnV2.js';
+import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -248,38 +249,45 @@ describe('Le dépôt de données des services', () => {
 
     it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
       const r = Referentiel.creeReferentielVide();
+      const chiffrement = unAdaptateurChiffrementQuiWrap();
       const persistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
-        .ajouteUnService(unService(r).avecId('S1').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('U1', 'S1').donnees
         )
         .ajouteUneAutorisation(
           uneAutorisation().deContributeur('U2', 'S1').donnees
-        );
-      const unDepotUtilisateur = {
-        dechiffreUtilisateur: async (donneesUtilisateur) => {
-          donneesUtilisateur.donnees.nom = `${donneesUtilisateur.id}-déchiffré`;
-          return new Utilisateur(
-            {
-              id: donneesUtilisateur.id,
-              ...donneesUtilisateur.donnees,
-            },
-            { adaptateurJWT: {} }
-          );
-        },
-      };
+        )
+        .construis();
+      const u1 = await chiffrement.chiffre(
+        unUtilisateur().avecId('U1').avecEmail('u1@societe.fr').donnees
+      );
+      const u2 = await chiffrement.chiffre(
+        unUtilisateur().avecId('U2').avecEmail('u2@societe.fr').donnees
+      );
+      await persistance.ajouteUtilisateur('U1', u1);
+      await persistance.ajouteUtilisateur('U2', u2);
+
+      await persistance.sauvegardeService(
+        'S1',
+        await chiffrement.chiffre(unService(r).avecId('S1').donnees)
+      );
+
+      const unDepotUtilisateur = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement: chiffrement,
+      });
+
       const depot = unDepotDeDonneesServices()
+        .avecAdaptateurChiffrement(chiffrement)
         .avecDepotDonneesUtilisateurs(unDepotUtilisateur)
         .avecReferentiel(r)
-        .avecConstructeurDePersistance(persistance)
+        .avecAdaptateurPersistance(persistance)
         .construis();
 
       const service = await depot.service('S1');
 
-      expect(service.contributeurs[0].prenomNom()).to.equal('U1-déchiffré');
-      expect(service.contributeurs[1].prenomNom()).to.equal('U2-déchiffré');
+      expect(service.contributeurs[0].prenomNom()).to.equal('u1@societe.fr');
+      expect(service.contributeurs[1].prenomNom()).to.equal('u2@societe.fr');
     });
 
     it('associe ses suggestions d’actions au service', async () => {
