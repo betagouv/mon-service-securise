@@ -60,6 +60,7 @@ import EvenementSimulationMigrationReferentielCreee from './evenementSimulationM
 import { consigneSimulationMigrationReferentielCreee } from './abonnements/consigneSimulationMigrationReferentielCreeeDansJournal.js';
 import { rattacheServiceEtAdmins } from './abonnements/rattacheServiceEtAdmins.js';
 import { ServiceAdministrationOrganisations } from '../supervision/serviceAdministrationOrganisations.js';
+import { modifieRattachementServiceEtAdmins } from './abonnements/modifieRattachementServiceEtAdmins.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -134,6 +135,7 @@ const cableTousLesAbonnes = (
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     modifieLienServiceEtSuperviseurs({ serviceSupervision }),
+    modifieRattachementServiceEtAdmins({ serviceAdministrationOrganisations }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementAutorisationsServiceModifiees, [
