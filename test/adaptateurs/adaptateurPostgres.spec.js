@@ -77,6 +77,18 @@ describe("L'adaptateur persistance Postgres", () => {
     );
   }
 
+  async function insereAutorisationAdmin(idUtilisateur, idService) {
+    const idAutorisation = genereUUID();
+    const autorisation = Autorisation.NouvelleAutorisationAdmin({
+      idUtilisateur,
+      idService,
+    });
+    await persistance.ajouteAutorisation(
+      idAutorisation,
+      autorisation.donneesAPersister()
+    );
+  }
+
   describe('concernant la lecture complète de service', () => {
     it("sait lire les suggestions d'action d'un service", async () => {
       const idService = await insereService();
@@ -100,6 +112,19 @@ describe("L'adaptateur persistance Postgres", () => {
       const proprietaire = services[0].utilisateurs[0];
       expect(proprietaire.id).to.be(idUtilisateur);
       expect(proprietaire.email_hash).to.be('email');
+      expect(proprietaire.estAdmin).to.be(false);
+    });
+
+    it("sait dire qu'un contributeur est admin", async () => {
+      const idService = await insereService();
+      const idUtilisateur = await insereUtilisateur();
+      await insereAutorisationAdmin(idUtilisateur, idService);
+
+      const services = await persistance.servicesComplets({ idService });
+
+      const proprietaire = services[0].utilisateurs[0];
+      expect(proprietaire.id).to.be(idUtilisateur);
+      expect(proprietaire.estAdmin).to.be(true);
     });
 
     it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {

@@ -152,9 +152,10 @@ const nouvelAdaptateur = (
           donnees.simulationsMigrationReferentiel.some(
             (s) => s.idService === unService.id
           ),
-        utilisateurs: autorisationsDuService.map((a) =>
-          donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
-        ),
+        utilisateurs: autorisationsDuService.map((a) => ({
+          ...donnees.utilisateurs.find((u) => u.id === a.idUtilisateur),
+          estAdmin: a.estAdmin,
+        })),
         suggestions: donnees.suggestionsActions
           .filter((s) => s.idService === unService.id)
           .map((suggestion) => suggestion.nature),
