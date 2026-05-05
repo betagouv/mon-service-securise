@@ -7,16 +7,19 @@ export type DonneesContributeur = {
   prenom: string;
   nom: string;
   postes: string[];
+  estAdmin: boolean;
 };
 
 class Contributeur {
   public readonly idUtilisateur: UUID;
   private readonly identite: Identite;
+  public readonly estAdmin: boolean;
 
   constructor(donnees: DonneesContributeur) {
     const { id, email, prenom, nom, postes } = donnees;
     this.idUtilisateur = id;
     this.identite = new Identite({ email, prenom, nom, postes });
+    this.estAdmin = donnees.estAdmin;
   }
 
   prenomNom() {

@@ -11,6 +11,7 @@ describe('Un contributeur', () => {
     prenom: 'Jean',
     nom: 'Dujardin',
     postes: [],
+    estAdmin: false,
     ...surcharge,
   });
 
@@ -45,5 +46,15 @@ describe('Un contributeur', () => {
     );
 
     expect(contributeur.posteDetaille()).toEqual('RSSI, DPO et Maire');
+  });
+
+  it("sait s'il est admin", () => {
+    const contributeur = new Contributeur(
+      donneesContributeur({
+        estAdmin: true,
+      })
+    );
+
+    expect(contributeur.estAdmin).toBe(true);
   });
 });
