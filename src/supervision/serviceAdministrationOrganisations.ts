@@ -9,6 +9,7 @@ import {
 type DepotDonneesPourServiceAdmin = {
   lisAdminsPour: (siret: string) => Promise<Array<UUID>>;
   sauvegardeAutorisation: (autorisation: Autorisation) => Promise<void>;
+  supprimeAutorisationsAdminPour: (id: UUID) => Promise<void>;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -27,10 +28,11 @@ export class ServiceAdministrationOrganisations {
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
+    await this.depotDonnees.supprimeAutorisationsAdminPour(service.id);
+
     const lesAdmins = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
-
     const nouvellesAutorisations = lesAdmins.map((idAdmin) =>
       Autorisation.NouvelleAutorisationAdmin({
         id: this.adaptateurUUID.genereUUID(),
@@ -38,7 +40,6 @@ export class ServiceAdministrationOrganisations {
         idUtilisateur: idAdmin,
       })
     );
-
     await Promise.all(
       nouvellesAutorisations.map(this.depotDonnees.sauvegardeAutorisation)
     );

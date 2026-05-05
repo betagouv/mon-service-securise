@@ -24,6 +24,7 @@ describe("Le service de gestion des admins d'organisation", () => {
           depotDonnees: {
             ...depotAutorisations,
             lisAdminsPour: async () => [unUUID('u1')],
+            supprimeAutorisationsAdminPour: async () => {},
           },
         });
 
@@ -33,6 +34,29 @@ describe("Le service de gestion des admins d'organisation", () => {
         await depotAutorisations.autorisationsDuService(unUUID('s'));
       const [admin] = autorisationsDuService;
       expect(admin.idUtilisateur).toBe(unUUID('u1'));
+    });
+
+    it('délègue au dépôt la suppression des autorisations admins pré-existantes', async () => {
+      const constructeurService = unServiceV2()
+        .avecId(unUUID('s'))
+        .avecOrganisationResponsable({ siret: '1234' });
+
+      const mockSupprimeAutorisations = vi.fn();
+      const administrationOrganisations =
+        new ServiceAdministrationOrganisations({
+          adaptateurUUID: fabriqueAdaptateurUUID(),
+          depotDonnees: {
+            sauvegardeAutorisation: async () => {},
+            lisAdminsPour: async () => [unUUID('u1')],
+            supprimeAutorisationsAdminPour: mockSupprimeAutorisations,
+          },
+        });
+
+      await administrationOrganisations.rattacheLesAdministrateursDe(
+        constructeurService.construis()
+      );
+
+      expect(mockSupprimeAutorisations).toHaveBeenCalledWith(unUUID('s'));
     });
   });
 });
