@@ -77,6 +77,18 @@ describe("L'adaptateur persistance Postgres", () => {
     );
   }
 
+  async function insereAutorisationContributeur(idUtilisateur, idService) {
+    const idAutorisation = genereUUID();
+    const autorisation = Autorisation.NouvelleAutorisationContributeur({
+      idUtilisateur,
+      idService,
+    });
+    await persistance.ajouteAutorisation(
+      idAutorisation,
+      autorisation.donneesAPersister()
+    );
+  }
+
   async function insereAutorisationAdmin(idUtilisateur, idService) {
     const idAutorisation = genereUUID();
     const autorisation = Autorisation.NouvelleAutorisationAdmin({
@@ -321,6 +333,40 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(admins.length).to.be(1);
       expect(admins[0]).to.be(id);
+    });
+  });
+
+  describe("concernant la recherche des contributeurs des services d'un propriétaire", () => {
+    it('retourne les contributeurs de tous les services', async () => {
+      const idService = await insereService();
+      const idServicePasProprietaire = await insereService();
+      const proprietaire = await insereUtilisateur();
+      const autreContributeur = await insereUtilisateur();
+      await insereAutorisation(proprietaire, idService);
+      await insereAutorisation(autreContributeur, idService);
+      await insereAutorisationContributeur(
+        proprietaire,
+        idServicePasProprietaire
+      );
+
+      const lesContributeurs =
+        await persistance.contributeursDesServicesDe(proprietaire);
+
+      expect(lesContributeurs.length).to.be(1);
+      expect(lesContributeurs[0].id).to.be(autreContributeur);
+    });
+
+    it('exclue les autorisations admin dans un souci de confidentialité', async () => {
+      const idService = await insereService();
+      const proprietaire = await insereUtilisateur();
+      await insereAutorisation(proprietaire, idService);
+      const admin = await insereUtilisateur();
+      await insereAutorisationAdmin(admin, idService);
+
+      const lesContributeurs =
+        await persistance.contributeursDesServicesDe(proprietaire);
+
+      expect(lesContributeurs.length).to.be(0);
     });
   });
 });
