@@ -1,9 +1,25 @@
 <script lang="ts">
-  // eslint-disable-next-line no-empty-pattern
-  let {} = $props();
+  import { onMount } from 'svelte';
+  import type { Entite } from '../ui/types';
+  import { api } from './adminEntites.api';
+
+  let mesEntites: Entite[] = $state([]);
+
+  onMount(async () => {
+    mesEntites = await api.entitesDansMonPerimetre();
+  });
 </script>
 
 <h1>Entités</h1>
+
+<dsfr-table
+  columns={[
+    { key: 'siret', label: 'SIRET' },
+    { key: 'nom', label: 'Nom' },
+    { key: 'departement', label: 'Département' },
+  ]}
+  rows={mesEntites}
+></dsfr-table>
 
 <style lang="scss">
   :global(#conteneur-admin-entites) {
