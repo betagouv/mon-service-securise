@@ -43,9 +43,14 @@
     <ul class="liste-contributeurs contributeurs-actifs">
       {#if $serviceUnique}
         {#each $serviceUnique.contributeurs as contributeur (contributeur.id)}
+          {@const contributeurPasSoiMeme = !contributeur.estUtilisateurCourant}
+          {@const utilisateurPeutGererLesContributeurs =
+            $serviceUnique.permissions.gestionContributeurs}
+          {@const contributeurPasUnAdmin = !contributeur.estAdmin}
           <LigneContributeur
-            droitsModifiables={!contributeur.estUtilisateurCourant &&
-              $serviceUnique.permissions.gestionContributeurs}
+            droitsModifiables={contributeurPasSoiMeme &&
+              utilisateurPeutGererLesContributeurs &&
+              contributeurPasUnAdmin}
             utilisateur={contributeur}
           />
         {/each}

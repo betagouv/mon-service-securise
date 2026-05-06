@@ -35,6 +35,7 @@ export type Utilisateur = {
   poste: string;
   email: string;
   estUtilisateurCourant: boolean;
+  estAdmin?: boolean;
 };
 
 type Invisible = 0;
