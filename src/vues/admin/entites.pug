@@ -1,4 +1,8 @@
 extends ../mssConnecte
 
+block append scripts
+  +composantSvelte('adminEntites.js')
+  script(type = 'module', src = '/statique/admin/entites.mjs')
+
 block main
-  h1 les entités
+  #conteneur-admin-entites
