@@ -24,6 +24,7 @@ export type DonneesAutorisation = {
 };
 
 export class Autorisation extends Base {
+  readonly id!: UUID;
   readonly estAdmin?: boolean;
 
   // @ts-expect-error La propriétés est définie dans `this.renseigneProprietes`
