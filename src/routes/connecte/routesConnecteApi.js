@@ -41,6 +41,7 @@ import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMesureSpecifique.js';
 import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js';
 import { routesConnecteApiExplicationRisquesV2 } from './routesConnecteApiExplicationRisquesV2.js';
+import { routesConnecteApiAdmin } from './routesConnecteApiAdmin.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -416,6 +417,13 @@ const routesConnecteApi = ({
       referentielV2,
     })
   );
+
+  routes.use(
+    '/admin',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiAdmin()
+  );
+
   routes.post(
     '/autorisation',
     middleware.verificationAcceptationCGU,
