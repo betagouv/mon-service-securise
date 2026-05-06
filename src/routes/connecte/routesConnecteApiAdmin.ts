@@ -1,10 +1,21 @@
 import express from 'express';
+import { RequestRouteConnecte } from './routesConnecte.types.js';
+import { DepotDonneesAdministrationOrganisationsInterface } from '../../depots/depotDonneesAdministrationOrganisations.interface.js';
 
-const routesConnecteApiAdmin = () => {
+type Configuration = {
+  depotDonnees: DepotDonneesAdministrationOrganisationsInterface;
+};
+
+const routesConnecteApiAdmin = ({ depotDonnees }: Configuration) => {
   const routes = express.Router();
 
-  routes.get('/entites', async (_requete, reponse) => {
-    reponse.json([{ siret: '123', nom: 'Une entite', departement: '33' }]);
+  routes.get('/entites', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+
+    const entites =
+      await depotDonnees.entitesDansPerimetreDe(idUtilisateurCourant);
+
+    reponse.json(entites.map((entite) => entite.toJSON()));
   });
 
   return routes;

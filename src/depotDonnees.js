@@ -330,7 +330,8 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour } = depotAdministrationOragnisations;
+  const { lisAdminsPour, entitesDansPerimetreDe } =
+    depotAdministrationOragnisations;
 
   return {
     accesAutorise,
@@ -362,6 +363,7 @@ const creeDepot = (config = {}) => {
     confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
+    entitesDansPerimetreDe,
     estJwtRevoque,
     estSuperviseur,
     finaliseBrouillonService,
