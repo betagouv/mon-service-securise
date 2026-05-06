@@ -5,6 +5,7 @@ import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { adaptateurJWT } from '../../adaptateurs/adaptateurJWT.js';
+import { routesConnectePageAdmin } from './routesConnectePageAdmin.js';
 
 const routesConnectePage = ({
   middleware,
@@ -218,6 +219,12 @@ const routesConnectePage = ({
       adaptateurHorloge,
       adaptateurEnvironnement,
     })
+  );
+
+  routes.use(
+    '/admin',
+    middleware.verificationAcceptationCGU,
+    routesConnectePageAdmin()
   );
 
   return routes;
