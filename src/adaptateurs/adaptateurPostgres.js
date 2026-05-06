@@ -4,6 +4,7 @@ import config from '../../knexfile.js';
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
   email_hash: 'emailHash',
+  est_admin: 'estAdmin',
 };
 
 const nouvelAdaptateur = ({ env, knexSurcharge }) => {
@@ -446,6 +447,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
           JOIN utilisateurs AS u
         ON u.id::TEXT = a.donnees->>'idUtilisateur'
         WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
+          AND a.donnees->>'estAdmin' <> 'true'
           AND a.donnees->>'idUtilisateur' != ?
       `,
       [idProprietaire, idProprietaire]
