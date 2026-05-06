@@ -25,6 +25,16 @@ describe("Le serveur MSS des pages d'admin", () => {
         expect(reponse.status).to.equal(200);
         expect(reponse.headers['content-type']).to.contain('text/html');
       });
+
+      it("jette une erreur 404 si le feature flag de gestion des orgas n'est pas activé", async () => {
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecGestionDesOrganisations: () => false,
+        });
+
+        const reponse = await testeur.get(`${route}`);
+
+        expect(reponse.status).to.equal(404);
+      });
     });
   });
 });
