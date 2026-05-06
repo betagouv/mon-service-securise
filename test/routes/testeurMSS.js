@@ -122,6 +122,7 @@ const testeurMss = () => {
       trustProxy: () => 0,
       featureFlag: () => ({
         avecRisquesV2: () => true,
+        avecGestionDesOrganisations: () => true,
       }),
       oidc: () => ({ fournisseursAvecMFA: () => [] }),
     };

@@ -81,6 +81,8 @@ const chiffrement = () => ({
 const featureFlag = () => ({
   avecServiceMonProfilAnssi: () => process.env.PROFIL_ANSSI_ACTIF === 'true',
   avecRisquesV2: () => process.env.FEATURE_FLAG_AVEC_RISQUES_V2 === 'true',
+  avecGestionDesOrganisations: () =>
+    process.env.FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS === 'true',
 });
 
 const versionDeBuild = () => {
