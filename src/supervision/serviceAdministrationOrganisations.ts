@@ -31,12 +31,20 @@ export class ServiceAdministrationOrganisations {
   async rattacheLesAdministrateursDe(service: Service) {
     await this.depotDonnees.supprimeAutorisationsAdminPour(service.id);
 
+    const nouvellesAutorisations =
+      await this.fabriqueAutorisationsAdmin(service);
+
+    await this.sauvegardeAutorisations(nouvellesAutorisations);
+  }
+
+  private async fabriqueAutorisationsAdmin(service: Service) {
     const lesAdmins = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
     const autorisationsExistantes =
       await this.depotDonnees.autorisationsDuService(service.id);
-    const nouvellesAutorisations = lesAdmins.map((idAdmin) => {
+
+    return lesAdmins.map((idAdmin) => {
       const existante = autorisationsExistantes.find((a) =>
         a.designeUtilisateur(idAdmin)
       );
@@ -47,6 +55,11 @@ export class ServiceAdministrationOrganisations {
         idUtilisateur: idAdmin,
       });
     });
+  }
+
+  private async sauvegardeAutorisations(
+    nouvellesAutorisations: Autorisation[]
+  ) {
     await Promise.all(
       nouvellesAutorisations.map(this.depotDonnees.sauvegardeAutorisation)
     );
