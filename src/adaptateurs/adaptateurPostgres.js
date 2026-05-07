@@ -599,22 +599,25 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
 
   const sante = async () => knex.raw('SELECT 1 + 1;');
 
-  const lisSuperviseursConcernes = async (siret) =>
+  const lisSuperviseursConcernes = async (siretHash) =>
     (
       await knex('superviseurs')
-        .where({ siret_entite_supervisee: siret })
+        .where({ siret_hash: siretHash })
         .select({ idSuperviseur: 'id_superviseur' })
     ).map(({ idSuperviseur }) => idSuperviseur);
 
   const revoqueSuperviseur = async (idSuperviseur) =>
     knex('superviseurs').where({ id_superviseur: idSuperviseur }).delete();
 
-  const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
+  const ajouteEntiteAuSuperviseur = async (
+    idSuperviseur,
+    siretHash,
+    donneesChiffrees
+  ) =>
     knex('superviseurs').insert({
       id_superviseur: idSuperviseur,
-      siret_entite_supervisee: entite.siret,
-      nom_entite_supervisee: entite.nom,
-      departement_entite_supervisee: entite.departement,
+      siret_hash: siretHash,
+      donnees: donneesChiffrees,
     });
 
   const estSuperviseur = async (idUtilisateur) =>
@@ -625,15 +628,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     )[0].count >= 1;
 
   const superviseur = async (idUtilisateur) => {
-    const entitesSupervisees = await knex('superviseurs')
+    const donneesChiffrees = await knex('superviseurs')
       .where({ id_superviseur: idUtilisateur })
-      .select({
-        nom: 'nom_entite_supervisee',
-        departement: 'departement_entite_supervisee',
-        siret: 'siret_entite_supervisee',
-      });
-    if (entitesSupervisees && entitesSupervisees.length > 0) {
-      return { idUtilisateur, entitesSupervisees };
+      .select('donnees');
+    if (donneesChiffrees && donneesChiffrees.length > 0) {
+      return { idUtilisateur, donnees: donneesChiffrees.map((d) => d.donnees) };
     }
     return undefined;
   };

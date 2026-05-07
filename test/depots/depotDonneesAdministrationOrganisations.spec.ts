@@ -47,6 +47,7 @@ describe("Le dépôt de données d'admin des organisations", () => {
       depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
         adaptateurPersistance,
         adaptateurRechercheEntite,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
       });
       depot = creeDepot({
         persistance: adaptateurPersistance,
@@ -57,11 +58,15 @@ describe("Le dépôt de données d'admin des organisations", () => {
 
     it("utilise le dépôt des superviseurs pour lister les entités d'un superviseur", async () => {
       const idSuperviseur = unUUID('1');
-      await adaptateurPersistance.ajouteEntiteAuSuperviseur(idSuperviseur, {
-        nom: 'NomEntite',
-        siret: 'SIRET-123',
-        departement: '75',
-      });
+      await adaptateurPersistance.ajouteEntiteAuSuperviseur(
+        idSuperviseur,
+        'SIRET-123-haché',
+        {
+          nom: 'NomEntite',
+          siret: 'SIRET-123',
+          departement: '75',
+        }
+      );
 
       const entites = await depot.entitesAdministreesPar(idSuperviseur);
 
