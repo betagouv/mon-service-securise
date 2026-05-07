@@ -1,9 +1,9 @@
 import express from 'express';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
-import { DepotDonneesAdministrationOrganisationsInterface } from '../../depots/depotDonneesAdministrationOrganisations.interface.js';
+import { DepotDonneesAdministrationOrganisations } from '../../depots/depotDonneesAdministrationOrganisations.interface.js';
 
 type Configuration = {
-  depotDonnees: DepotDonneesAdministrationOrganisationsInterface;
+  depotDonnees: DepotDonneesAdministrationOrganisations;
 };
 
 const routesConnecteApiAdmin = ({ depotDonnees }: Configuration) => {
@@ -13,7 +13,7 @@ const routesConnecteApiAdmin = ({ depotDonnees }: Configuration) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
     const entites =
-      await depotDonnees.entitesDansPerimetreDe(idUtilisateurCourant);
+      await depotDonnees.entitesAdministreesPar(idUtilisateurCourant);
 
     reponse.json(entites.map((entite) => entite.toJSON()));
   });

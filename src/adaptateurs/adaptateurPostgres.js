@@ -996,12 +996,27 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         .select('id_utilisateur')
     ).map((admin) => admin.id_utilisateur);
 
+  const ajouteEntiteAAdmin = async (idAdmin, siretHash, donnees) =>
+    knex('admins_organisations').insert({
+      id_utilisateur: idAdmin,
+      siret_hash: siretHash,
+      donnees,
+    });
+
+  const lisEntitesAdministreesPar = async (idAdmin) =>
+    (
+      await knex('admins_organisations')
+        .where({ id_utilisateur: idAdmin })
+        .select('donnees')
+    ).map((a) => a.donnees);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
+    ajouteEntiteAAdmin,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajouteParrainage,
@@ -1024,6 +1039,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisAdminsPour,
     lisBrouillonsService,
     lisDernierIndiceCyber,
+    lisEntitesAdministreesPar,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
