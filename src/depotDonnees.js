@@ -163,7 +163,7 @@ const creeDepot = (config = {}) => {
     decodeJwt: adaptateurJWT.decode,
   });
 
-  const depotAdministrationOragnisations =
+  const depotAdministrationOrganisations =
     depotDonneesAdministrationOrganisations.creeDepot({
       adaptateurRechercheEntite,
       depotSuperviseurs,
@@ -333,8 +333,8 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin } =
-    depotAdministrationOragnisations;
+  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin, utilisateursAdministresPar } =
+    depotAdministrationOrganisations;
 
   return {
     accesAutorise,
@@ -452,6 +452,7 @@ const creeDepot = (config = {}) => {
     utilisateur,
     utilisateurExiste,
     utilisateurAvecEmail,
+    utilisateursAdministresPar,
     valideAcceptationCGUPourUtilisateur,
     verifieLaCoherenceDesSels,
     versionsServiceUtiliseesParUtilisateur,
