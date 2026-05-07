@@ -700,12 +700,25 @@ const nouvelAdaptateur = (
       .filter((a) => a.siretHash === siret)
       .map((a) => a.idUtilisateur);
 
+  const ajouteEntiteAAdmin = async (idAdmin, siretHash, donneesChiffrees) =>
+    donnees.adminsOrganisations.push({
+      idUtilisateur: idAdmin,
+      donnees: donneesChiffrees,
+      siretHash,
+    });
+
+  const lisEntitesAdministreesPar = async (idAdmin) =>
+    donnees.adminsOrganisations
+      .filter((a) => a.idUtilisateur === idAdmin)
+      .map((a) => a.donnees);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
+    ajouteEntiteAAdmin,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajoutePlusieursModelesMesureSpecifique,
@@ -725,6 +738,7 @@ const nouvelAdaptateur = (
     estSuperviseur,
     lisAdminsPour,
     lisBrouillonsService,
+    lisEntitesAdministreesPar,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,

@@ -164,6 +164,7 @@ const creeDepot = (config = {}) => {
 
   const depotAdministrationOragnisations =
     depotDonneesAdministrationOrganisations.creeDepot({
+      depotSuperviseurs,
       chiffrement: adaptateurChiffrement,
       persistance: adaptateurPersistance,
     });
@@ -330,7 +331,7 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesDansPerimetreDe } =
+  const { lisAdminsPour, entitesAdministreesPar } =
     depotAdministrationOragnisations;
 
   return {
@@ -363,7 +364,7 @@ const creeDepot = (config = {}) => {
     confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
-    entitesDansPerimetreDe,
+    entitesAdministreesPar,
     estJwtRevoque,
     estSuperviseur,
     finaliseBrouillonService,
