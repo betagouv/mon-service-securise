@@ -56,5 +56,14 @@ export const creeDepot = ({
     );
   };
 
-  return { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin };
+  const utilisateursAdministresPar = async () => {
+    throw new Error('Not implemented');
+  };
+
+  return {
+    ajouteSiretAAdmin,
+    entitesAdministreesPar,
+    lisAdminsPour,
+    utilisateursAdministresPar
+  };
 };

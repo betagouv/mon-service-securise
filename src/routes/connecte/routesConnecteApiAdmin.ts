@@ -18,6 +18,15 @@ const routesConnecteApiAdmin = ({ depotDonnees }: Configuration) => {
     reponse.json(entites.map((entite) => entite.toJSON()));
   });
 
+  routes.get('/utilisateurs', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+
+    const utilisateurs =
+      await depotDonnees.utilisateursAdministresPar(idUtilisateurCourant);
+
+    reponse.json(utilisateurs.map((u) => u.toJSON()));
+  });
+
   return routes;
 };
 

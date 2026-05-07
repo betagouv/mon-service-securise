@@ -1,6 +1,7 @@
 import testeurMSS from '../testeurMSS.js';
 import Entite, { DonneesEntite } from '../../../src/modeles/entite.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -38,6 +39,25 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(reponse.body).toEqual<DonneesEntite[]>([
         { siret: '123', nom: 'Une entite', departement: '33' },
       ]);
+    });
+  });
+
+  describe('quand requête GET sur `/api/admin/utilisateurs`', () => {
+    it("retourne la liste des utilisateurs dans le périmètre de l'utilisateur courant", async () => {
+      let idAdmin;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().utilisateursAdministresPar = async (
+        idUtilisateur: UUID
+      ) => {
+        idAdmin = idUtilisateur;
+        return [unUtilisateur().avecEmail('jean@dupond.fr').construis()];
+      };
+
+      const reponse = await testeur.get('/api/admin/utilisateurs');
+
+      expect(idAdmin).toBe('U1');
+      expect(reponse.body).toHaveLength(1);
+      expect(reponse.body[0].email).toBe('jean@dupond.fr');
     });
   });
 });
