@@ -1,18 +1,8 @@
 import AdminEntites from './AdminEntites.svelte';
-import { mount, unmount } from 'svelte';
+import { mount } from 'svelte';
 
-document.body.addEventListener(
-  'svelte-recharge-admin-entites',
-  async () => await rechargeApp()
-);
+const app = mount(AdminEntites, {
+  target: document.getElementById('conteneur-admin-entites')!,
+});
 
-let app: AdminEntites;
-const rechargeApp = async () => {
-  if (app) await unmount(app);
-
-  app = mount(AdminEntites, {
-    target: document.getElementById('conteneur-admin-entites')!,
-  });
-};
-
-export default app!;
+export default app;
