@@ -104,6 +104,7 @@ const creeDepot = (config = {}) => {
   const depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
     adaptateurPersistance,
     adaptateurRechercheEntite,
+    adaptateurChiffrement,
   });
 
   const depotParrainages = depotDonneesParrainages.creeDepot({

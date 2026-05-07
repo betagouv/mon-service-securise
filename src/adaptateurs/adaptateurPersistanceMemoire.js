@@ -426,13 +426,21 @@ const nouvelAdaptateur = (
     );
   };
 
-  const lisSuperviseursConcernes = async (siret) =>
+  const lisSuperviseursConcernes = async (siretHash) =>
     donnees.superviseurs
-      .filter(({ entiteSupervisee }) => entiteSupervisee.siret === siret)
+      .filter(({ siretHash: siretHashStocke }) => siretHashStocke === siretHash)
       .map(({ idSuperviseur }) => idSuperviseur);
 
-  const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
-    donnees.superviseurs.push({ idSuperviseur, entiteSupervisee: entite });
+  const ajouteEntiteAuSuperviseur = async (
+    idSuperviseur,
+    siretHash,
+    donneesChiffrees
+  ) =>
+    donnees.superviseurs.push({
+      idSuperviseur,
+      siretHash,
+      donnees: donneesChiffrees,
+    });
 
   const estSuperviseur = async (idUtilisateur) =>
     donnees.superviseurs.some(
@@ -440,11 +448,11 @@ const nouvelAdaptateur = (
     );
 
   const superviseur = async (idUtilisateur) => {
-    const entitesSupervisees = donnees.superviseurs
+    const donneesChiffrees = donnees.superviseurs
       .filter(({ idSuperviseur }) => idSuperviseur === idUtilisateur)
-      .map(({ entiteSupervisee }) => entiteSupervisee);
-    if (entitesSupervisees && entitesSupervisees.length > 0) {
-      return { idUtilisateur, entitesSupervisees };
+      .map(({ donnees: desDonnees }) => desDonnees);
+    if (donneesChiffrees && donneesChiffrees.length > 0) {
+      return { idUtilisateur, donnees: donneesChiffrees };
     }
     return undefined;
   };
