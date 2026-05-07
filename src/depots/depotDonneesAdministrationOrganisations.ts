@@ -26,14 +26,15 @@ export const creeDepot = ({
       await depotSuperviseurs.estSuperviseur(idUtilisateur);
     if (estSuperviseur) {
       const superviseur = await depotSuperviseurs.superviseur(idUtilisateur);
-      return superviseur.entitesSupervisees;
+      return superviseur!.entitesSupervisees;
     }
 
-    const donneesEntites =
+    const donneesChiffrees =
       await persistance.lisEntitesAdministreesPar(idUtilisateur);
-    return donneesEntites.map(
-      (donneesEntite: DonneesEntite) => new Entite(donneesEntite)
+    const donneesEntites = await Promise.all<DonneesEntite>(
+      donneesChiffrees.map(chiffrement.dechiffre)
     );
+    return donneesEntites.map((donneesEntite) => new Entite(donneesEntite));
   };
 
   return { lisAdminsPour, entitesAdministreesPar };
