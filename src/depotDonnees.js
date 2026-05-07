@@ -165,6 +165,7 @@ const creeDepot = (config = {}) => {
 
   const depotAdministrationOragnisations =
     depotDonneesAdministrationOrganisations.creeDepot({
+      adaptateurRechercheEntite,
       depotSuperviseurs,
       chiffrement: adaptateurChiffrement,
       persistance: adaptateurPersistance,
@@ -332,7 +333,7 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesAdministreesPar } =
+  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin } =
     depotAdministrationOragnisations;
 
   return {
@@ -352,6 +353,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
     ajouteSimulationMigrationReferentielSiNecessaire,
+    ajouteSiretAAdmin,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     analyseDesProprietaires,

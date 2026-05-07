@@ -27,6 +27,7 @@ describe("Le dépôt de données d'admin des organisations", () => {
         chiffrement:
           fauxAdaptateurChiffrement() as unknown as AdaptateurChiffrement,
         depotSuperviseurs: {} as unknown as DepotDonneesSuperviseurs,
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
 
       await depot.lisAdminsPour('SIRET');
@@ -56,6 +57,7 @@ describe("Le dépôt de données d'admin des organisations", () => {
         persistance: adaptateurPersistance,
         chiffrement: adaptateurChiffrement,
         depotSuperviseurs,
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
     });
 
@@ -103,6 +105,52 @@ describe("Le dépôt de données d'admin des organisations", () => {
           departement: '75',
         }),
       ]);
+    });
+  });
+
+  describe("concernant l'ajout d'une entité administrée à un utilisateur", () => {
+    let depot: DepotDonneesAdministrationOrganisations;
+    let adaptateurPersistance: AdaptateurPersistance;
+    let adaptateurChiffrement: AdaptateurChiffrement;
+
+    let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
+    beforeEach(() => {
+      adaptateurPersistance =
+        unePersistanceMemoire().construis() as AdaptateurPersistance;
+      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+      depot = creeDepot({
+        persistance: adaptateurPersistance,
+        chiffrement: adaptateurChiffrement,
+        depotSuperviseurs: {} as unknown as DepotDonneesSuperviseurs,
+        adaptateurRechercheEntite,
+      });
+    });
+
+    it("complète les informations de l'organisation responsable et délègue à la persistance la sauvegarde des entites chiffrées", async () => {
+      adaptateurRechercheEntite.rechercheOrganisations = async () => [
+        {
+          nom: 'MonEntite',
+          departement: '75',
+          siret: 'SIRET-123',
+        },
+      ];
+      adaptateurPersistance.ajouteEntiteAAdmin = vi.fn();
+
+      await depot.ajouteSiretAAdmin(unUUID('1'), 'SIRET-123');
+
+      expect(adaptateurPersistance.ajouteEntiteAAdmin).toHaveBeenCalledWith(
+        unUUID('1'),
+        'SIRET-123-haché256',
+        {
+          chiffre: true,
+          coffreFort: {
+            nom: 'MonEntite',
+            departement: '75',
+            siret: 'SIRET-123',
+          },
+        }
+      );
     });
   });
 });
