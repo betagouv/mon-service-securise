@@ -395,6 +395,7 @@ main {
 #home {
   .bloc-impact-national {
     padding-block: 3.5rem;
+    text-align: center;
 
     h3 {
       color: inherit;
