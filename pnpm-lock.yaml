@@ -30,11 +30,11 @@ importers:
         specifier: ^3.22.5
         version: 3.22.5(@tiptap/core@3.22.5(@tiptap/pm@3.22.5))(@tiptap/pm@3.22.5)
       axios:
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.2
+        version: 1.15.2
       axios-retry:
         specifier: ^4.5.0
-        version: 4.5.0(axios@1.15.0)
+        version: 4.5.0(axios@1.15.2)
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -1769,8 +1769,8 @@ packages:
     peerDependencies:
       axios: 0.x || 1.x
 
-  axios@1.15.0:
-    resolution: {integrity: sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==}
+  axios@1.15.2:
+    resolution: {integrity: sha512-wLrXxPtcrPTsNlJmKjkPnNPK2Ihe0hn0wGSaTEiHRPxwjvJwT3hKmXF4dpqxmPO9SoNb2FsYXj/xEo0gHN+D5A==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -4772,7 +4772,7 @@ snapshots:
 
   '@lab-anssi/lib@2.1.6(express@5.2.1)':
     dependencies:
-      axios: 1.15.0
+      axios: 1.15.2
       express: 5.2.1
       express-ipfilter: 1.4.0
       express-rate-limit: 7.5.1(express@5.2.1)
@@ -5855,12 +5855,12 @@ snapshots:
 
   axe-core@4.11.3: {}
 
-  axios-retry@4.5.0(axios@1.15.0):
+  axios-retry@4.5.0(axios@1.15.2):
     dependencies:
-      axios: 1.15.0
+      axios: 1.15.2
       is-retry-allowed: 2.2.0
 
-  axios@1.15.0:
+  axios@1.15.2:
     dependencies:
       follow-redirects: 1.15.11
       form-data: 4.0.5
