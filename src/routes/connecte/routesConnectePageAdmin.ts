@@ -22,6 +22,10 @@ const routesConnectePageAdmin = ({
     reponse.render('admin/entites');
   });
 
+  routes.get('/utilisateurs', async (_requete, reponse) => {
+    reponse.render('admin/utilisateurs');
+  });
+
   return routes;
 };
 

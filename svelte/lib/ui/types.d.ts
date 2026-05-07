@@ -108,3 +108,11 @@ export type Entite = {
   departement?: string;
   siret: string;
 };
+
+export type Utilisateur = {
+  id: string;
+  prenomNom: string;
+  entite: Entite;
+  postes: string[];
+  email: string;
+};
