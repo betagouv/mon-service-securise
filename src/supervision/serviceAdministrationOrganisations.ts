@@ -6,11 +6,13 @@ import {
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
 
-type DepotDonneesPourServiceAdmin = {
+export type DepotDonneesPourServiceAdmin = {
   autorisationsDuService: (id: UUID) => Promise<Array<Autorisation>>;
   lisAdminsPour: (siret: string) => Promise<Array<UUID>>;
   sauvegardeAutorisation: (autorisation: Autorisation) => Promise<void>;
   supprimeAutorisationsAdminPour: (id: UUID) => Promise<void>;
+  ajouteSiretAAdmin: (idUtilisateur: UUID, siret: string) => Promise<void>;
+  tousLesServicesAvecSiret: (siret: string) => Promise<Service[]>;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -32,12 +34,12 @@ export class ServiceAdministrationOrganisations {
     await this.depotDonnees.supprimeAutorisationsAdminPour(service.id);
 
     const nouvellesAutorisations =
-      await this.fabriqueAutorisationsAdmin(service);
+      await this.fabriqueAutorisationsAdminPourService(service);
 
     await this.sauvegardeAutorisations(nouvellesAutorisations);
   }
 
-  private async fabriqueAutorisationsAdmin(service: Service) {
+  private async fabriqueAutorisationsAdminPourService(service: Service) {
     const lesAdmins = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
@@ -63,5 +65,42 @@ export class ServiceAdministrationOrganisations {
     await Promise.all(
       nouvellesAutorisations.map(this.depotDonnees.sauvegardeAutorisation)
     );
+  }
+
+  async rattacheEntiteA(siret: string, idAdmin: UUID) {
+    await this.depotDonnees.ajouteSiretAAdmin(idAdmin, siret);
+
+    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+
+    const nouvellesAutorisations = this.fabriqueAutorisationsAdminPourServices(
+      services,
+      idAdmin
+    );
+
+    await this.sauvegardeAutorisations(
+      await Promise.all(nouvellesAutorisations)
+    );
+  }
+
+  private fabriqueAutorisationsAdminPourServices(
+    services: Service[],
+    idAdmin: UUID
+  ) {
+    return services.map(async (s) => {
+      const autorisationsExistantes =
+        await this.depotDonnees.autorisationsDuService(s.id);
+
+      const autorisationExistantePourAdmin = autorisationsExistantes.find((a) =>
+        a.designeUtilisateur(idAdmin)
+      );
+
+      return Autorisation.NouvelleAutorisationAdmin({
+        id: autorisationExistantePourAdmin
+          ? autorisationExistantePourAdmin.id
+          : this.adaptateurUUID.genereUUID(),
+        idService: s.id,
+        idUtilisateur: idAdmin,
+      });
+    });
   }
 }
