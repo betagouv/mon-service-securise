@@ -1,0 +1,21 @@
+.bloc-communaute {
+  background-color: var(--background-flat-blue-france-lab);
+
+  .conteneur-colonnes {
+    --colonnes-gap: 1.5rem;
+
+    color: var(--text-inverted-grey);
+  }
+
+  .titre {
+    color: currentColor;
+  }
+
+  .description {
+    margin-block: 0 1.5rem;
+  }
+
+  ul {
+    margin-block: 1.5rem;
+  }
+}

@@ -1,6 +1,7 @@
 extends mssDeconnecte
 include ./fragments/entites
 include ./fragments/fonctionnalitesSegmentees
+include ./fragments/blocCommunaute
 
 block title
   title Industrialisez vos homologations | MonServiceSécurisé
@@ -239,37 +240,7 @@ block main
           temoignages='[{"citation":"Nous avons commencé à utiliser MSS qui correspond bien à nos objectifs en termes de sécurité et de protection des données personnelles : la complémentarité entre DSI, RSSI et DPO. L\'utilisation du service est simple. Nous y intégrons désormais les nouveaux projets au fur et à mesure que nous en sommes informés. Cela contribue au respect des principes de privacy et security by design.","auteur":"Robert Malek","source":"IMT"},{"citation":"L\'idée d\'une gestion pilotée par la direction générale s\'est révélée être un point de départ essentiel, permettant de dépasser l\'image de \'gadget technique\' souvent associée à une direction opérationnelle. Bien au contraire, chez nous, cet outil est devenu un moyen commun au service de tous. Merci donc pour cette initiative ! ","auteur":"Lionel Pérès","source":"Ville de Vaison-la-Romaine · Directeur général des services"},{"citation":"Après avoir expérimenté l\'outil sur quelques projets en 2023, l\'établissement a décidé de systématiser la démarche d\'homologation de sécurité à tous les nouveaux projets numériques. Il va ainsi accélérer sa mise en conformité avec la nouvelle réglementation et au-delà, se donner les moyens d\'opérer un Numérique plus sûr, garant d\'un service public de confiance.","auteur":"Jacques Hertzberg","source":"Université de Pau · RMSI"},{"citation":"Nous étions à la recherche d\'un outil d’analyse de risques afin de dresser une cartographie des risques de nos SI. Les critères de choix étaient : efficacité et exhaustivité dans les analyses réalisées, facilité d\'emploi pour tous, avec un gestion granulaire des droits d\'accès, aspect collaboratif sur les projets transverses, (etc…). Après une étude de l\'état de l\'art, la solution MonServiceSécurisé a répondu à tous ces critères.","auteur":"Brice Dal Pra","source":"IMT · Responsable de la Sécurité des Systèmes d\'Information IMT"},{"citation":"MonServiceSécurisé est un outil très utile qui m\'a permis de définir plus clairement le niveau de maturité du service que nous mettons à disposition de nos administrés (site Web), et il nous aide dans la construction d\'un plan d\'action SSI, basé sur une analyse du besoin en sécurité et de l\'évaluation du risque sécurité.","auteur":"David Henocq","source":"Boivre-la-Vallée · Conseiller Mairie"},{"citation":"MonServiceSécurisé nous permet d’homologuer l’ensemble de nos sites internet et de rassurer nos collectivités sur notre démarche de sécurisation de nos sites internet, mais aussi de rassurer les habitants des collectivités qui nous font confiance sur la sécurité du site internet de leurs communes.","auteur":"Maxime Virot","source":"OPSN Adico · Responsable du pôle infrastructures"},{"citation":"J\'ai utilisé MonServiceSécurisé comme support dans le cadre de l\'homologation RGS de notre produit. Dans les premières phases, cela a été très utile pour faire un panorama de notre situation d\'un point de vue sécurité. Et par la suite d\'avoir l\'outil comme boussole pour évaluer l\'évolution de notre score en fonction des différentes actions menées.","auteur":"Sonia Perelroizen","source":"Inclusion Connect | La Plateforme de l\'inclusion · Gestionnaire produit"},{"citation":"Un grand vide de comblé. Un bel outil simple à utiliser. Une équipe réactive pour la prise en compte de nouveaux besoins ou des évolutions. Un grand merci à tous.","auteur":"Jean-Paul Baudic","source":"SGDSN · FSSI"},{"citation":"L’outil s’avère efficace, et permet d’harmoniser l’approche d’homologation, quel que soit l’agent qui rédige le dossier. Au final, nous gagnons du temps et de la rigueur dans la création de nos dossiers d’homologation. À ajouter dans sa boîte à outils « cyber ».","auteur":"Sylvain Bart","source":"Pas de Calais · RSSI"},{"citation":"L\'outil MonServiceSécurisé permet une prise de conscience pour les entités proposants des services à travers Internet et donne de sérieuses pistes d\'amélioration et de sécurisation. Il nous reste du pain sur la planche !","auteur":"Baptiste Fostein","source":"La Fibre64 · DSSI"}]'
         )
 
-    .bloc-contenu.bloc-communaute
-      dsfr-container
-        .conteneur-colonnes.inverse
-          .principale
-            h2.titre Rejoignez la communauté MonServiceSécurisé et Innovation ANSSI !
-            p.description En tant que&nbsp;
-              strong membre de la communauté&nbsp;
-              | vous pourrez :
-            ul.list
-              li
-                strong Echanger&nbsp;
-                | directement avec vos pairs pour une collaboration facilitée.
-              li
-                strong Découvrir&nbsp;
-                | en avant-première les nouvelles fonctionnalités à venir.
-              li
-                strong Participer&nbsp;
-                | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
-            dsfr-button(
-              label="Rejoindre la communauté"
-              kind="inverted-primary"
-              markup="a"
-              href="https://tally.so/r/wa6o22"
-              centered
-            )
-          figure.secondaire
-            img.illustration(
-              loading="lazy"
-              src="/statique/assets/images/home/illustration_communaute.svg"
-              alt=""
-            )
+    +blocCommunaute()
 
     .bloc-contenu.bloc-securite
       dsfr-container
