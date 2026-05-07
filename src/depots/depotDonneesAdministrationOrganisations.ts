@@ -4,15 +4,18 @@ import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.inte
 import { DepotDonneesAdministrationOrganisations } from './depotDonneesAdministrationOrganisations.interface.js';
 import Entite, { DonneesEntite } from '../modeles/entite.js';
 import { DepotDonneesSuperviseurs } from './depotDonneesSuperviseurs.interface.js';
+import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 
 export const creeDepot = ({
   persistance,
   chiffrement,
   depotSuperviseurs,
+  adaptateurRechercheEntite,
 }: {
   persistance: AdaptateurPersistance;
   chiffrement: AdaptateurChiffrement;
   depotSuperviseurs: DepotDonneesSuperviseurs;
+  adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
 }): DepotDonneesAdministrationOrganisations => {
   const lisAdminsPour = async (siret: string): Promise<Array<UUID>> => {
     const siretHache = chiffrement.hacheSha256(siret);
@@ -37,5 +40,21 @@ export const creeDepot = ({
     return donneesEntites.map((donneesEntite) => new Entite(donneesEntite));
   };
 
-  return { lisAdminsPour, entitesAdministreesPar };
+  const ajouteSiretAAdmin = async (idAdmin: UUID, siret: string) => {
+    const entite = await Entite.completeDonnees(
+      { siret },
+      adaptateurRechercheEntite
+    );
+
+    const siretHache = chiffrement.hacheSha256(siret);
+    const donneesChiffrees = await chiffrement.chiffre(entite);
+
+    return persistance.ajouteEntiteAAdmin(
+      idAdmin,
+      siretHache,
+      donneesChiffrees
+    );
+  };
+
+  return { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin };
 };
