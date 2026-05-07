@@ -14,6 +14,14 @@ main {
 
 #home {
   color: var(--text-default-grey);
+  --titre-font-size: 1.75rem;
+  --titre-line-height: 2.25rem;
+  --titre-margin-block: 0 0.75rem;
+
+  @media (min-width: 992px) {
+    --titre-font-size: 2rem;
+    --titre-line-height: 2.5rem;
+  }
 
   .bloc-contenu {
     padding: 24px 16px;
