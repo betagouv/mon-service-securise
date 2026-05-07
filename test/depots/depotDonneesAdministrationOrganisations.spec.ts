@@ -10,6 +10,7 @@ import { DepotDonneesAdministrationOrganisations } from '../../src/depots/depotD
 import { unUUID } from '../constructeurs/UUID.ts';
 import Entite from '../../src/modeles/entite.ts';
 import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
+import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
 
 describe("Le dépôt de données d'admin des organisations", () => {
   describe("concernant la lecture des admins d'une organisation", () => {
@@ -39,19 +40,21 @@ describe("Le dépôt de données d'admin des organisations", () => {
     let depotSuperviseurs: DepotDonneesSuperviseurs;
     let adaptateurPersistance: AdaptateurPersistance;
     let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
+    let adaptateurChiffrement: AdaptateurChiffrement;
 
     beforeEach(() => {
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
       adaptateurPersistance =
         unePersistanceMemoire().construis() as AdaptateurPersistance;
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
       depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
         adaptateurPersistance,
         adaptateurRechercheEntite,
-        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurChiffrement,
       });
       depot = creeDepot({
         persistance: adaptateurPersistance,
-        chiffrement: fauxAdaptateurChiffrement(),
+        chiffrement: adaptateurChiffrement,
         depotSuperviseurs,
       });
     });
@@ -61,11 +64,11 @@ describe("Le dépôt de données d'admin des organisations", () => {
       await adaptateurPersistance.ajouteEntiteAuSuperviseur(
         idSuperviseur,
         'SIRET-123-haché',
-        {
+        await adaptateurChiffrement.chiffre({
           nom: 'NomEntite',
           siret: 'SIRET-123',
           departement: '75',
-        }
+        })
       );
 
       const entites = await depot.entitesAdministreesPar(idSuperviseur);
@@ -84,11 +87,11 @@ describe("Le dépôt de données d'admin des organisations", () => {
       await adaptateurPersistance.ajouteEntiteAAdmin(
         idAdmin,
         'SIRET-123-haché',
-        {
+        await adaptateurChiffrement.chiffre({
           nom: 'NomEntite',
           siret: 'SIRET-123',
           departement: '75',
-        }
+        })
       );
 
       const entites = await depot.entitesAdministreesPar(idAdmin);
