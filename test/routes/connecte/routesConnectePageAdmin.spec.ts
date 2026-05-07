@@ -6,7 +6,7 @@ describe("Le serveur MSS des pages d'admin", () => {
 
   beforeEach(() => testeur.initialise());
 
-  ['/admin/entites'].forEach((route) => {
+  ['/admin/entites', '/admin/utilisateurs'].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
