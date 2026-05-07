@@ -1,0 +1,35 @@
+block append styles
+  link(href='/statique/assets/styles/blocCommunaute.css', rel='stylesheet')
+
+mixin blocCommunaute()
+  .bloc-contenu.bloc-communaute
+    dsfr-container
+      .conteneur-colonnes.inverse
+        .principale
+          h2.titre Rejoignez la communauté MonServiceSécurisé et Innovation ANSSI !
+          p.description En tant que&nbsp;
+            strong membre de la communauté&nbsp;
+            | vous pourrez :
+          ul.list
+            li
+              strong Echanger&nbsp;
+              | directement avec vos pairs pour une collaboration facilitée.
+            li
+              strong Découvrir&nbsp;
+              | en avant-première les nouvelles fonctionnalités à venir.
+            li
+              strong Participer&nbsp;
+              | activement au développement de MonServiceSécurisé en nous partageant vos besoins et suggestions d’amélioration.
+          dsfr-button(
+            label="Rejoindre la communauté"
+            kind="inverted-primary"
+            markup="a"
+            href="https://tally.so/r/wa6o22"
+            centered
+          )
+        figure.secondaire
+          img.illustration(
+            loading="lazy"
+            src="/statique/assets/images/home/illustration_communaute.svg"
+            alt=""
+          )
