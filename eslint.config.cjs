@@ -65,6 +65,7 @@ module.exports = defineConfig([
       ],
 
       'import/prefer-default-export': 'off',
+      'max-classes-per-file': 'off',
       '@vitest/expect-expect': 'off',
       '@vitest/no-conditional-expect': 'off',
     },

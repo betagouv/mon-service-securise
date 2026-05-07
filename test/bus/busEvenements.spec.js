@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import expect from 'expect.js';
 
 import BusEvenements from '../../src/bus/busEvenements.js';
