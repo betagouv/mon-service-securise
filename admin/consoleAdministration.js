@@ -34,6 +34,7 @@ import ServiceSupervision from '../src/supervision/serviceSupervision.js';
 import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 import { adaptateurChiffrementChaCha20 } from '../src/adaptateurs/adaptateurChiffrementChaCha20.js';
 import EvenementCguAcceptees from '../src/modeles/journalMSS/evenementCguAcceptees.js';
+import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAdministrationOrganisations.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -674,6 +675,36 @@ class ConsoleAdministration {
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
     /* eslint-enable no-continue */
+  }
+
+  async ajouteSiretsAAdmin(emailAdmin, sirets) {
+    const admin = await this.depotDonnees.utilisateurAvecEmail(emailAdmin);
+    if (!admin)
+      throw new Error(
+        `Impossible de trouve l'utilisateur avec l'email ${emailAdmin}`
+      );
+
+    const serviceAdminOrgas = new ServiceAdministrationOrganisations({
+      depotDonnees: this.depotDonnees,
+      adaptateurUUID: fabriqueAdaptateurUUID(),
+    });
+
+    /* eslint-disable no-restricted-syntax */
+    /* eslint-disable no-await-in-loop */
+    for (const siret of sirets) {
+      console.log(`Ajout du SIRET ${siret}`);
+      try {
+        await serviceAdminOrgas.rattacheEntiteA(siret, admin.id);
+      } catch (e) {
+        if (e.detail.includes('already exists')) {
+          console.log(`L'admin supervise déjà le SIRET ${siret}`);
+        } else {
+          throw e;
+        }
+      }
+    }
+    /* eslint-enable no-restricted-syntax */
+    /* eslint-enable no-await-in-loop */
   }
 
   // eslint-disable-next-line class-methods-use-this
