@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import expect from 'expect.js';
 
 import InformationsService from '../../src/modeles/informationsService.js';
