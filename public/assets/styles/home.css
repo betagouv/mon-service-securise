@@ -272,6 +272,7 @@ main {
     flex-direction: column-reverse;
     gap: 2rem;
     padding-block: 2rem;
+    box-sizing: content-box;
   }
 
   .conteneur-photos-equipe {
