@@ -1,9 +1,9 @@
 import express from 'express';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
-import { DepotDonneesAdministrationOrganisations } from '../../depots/depotDonneesAdministrationOrganisations.interface.js';
+import { DepotDonneesAdminsOrganisations } from '../../depots/depotDonneesAdminsOrganisations.interface.js';
 
 type Configuration = {
-  depotDonnees: DepotDonneesAdministrationOrganisations;
+  depotDonnees: DepotDonneesAdminsOrganisations;
 };
 
 const routesConnecteApiAdmin = ({ depotDonnees }: Configuration) => {
