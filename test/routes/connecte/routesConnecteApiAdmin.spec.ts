@@ -24,7 +24,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it("retourne la liste des entités dans le périmètre de l'utilisateur courant", async () => {
       let idAdmin;
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.depotDonnees().entitesAdministreesPar = async (
+      testeur.serviceAdministrationOrganisations().entitesDe = async (
         idUtilisateur: UUID
       ) => {
         idAdmin = idUtilisateur;
