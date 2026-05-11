@@ -2,6 +2,7 @@ import { creeDepot as creeDepotAutorisation } from '../../src/depots/depotDonnee
 import { creeDepot as creeDepotAdminOrga } from '../../src/depots/depotDonneesAdminsOrganisations.js';
 import { creeDepot as creeDepotService } from '../../src/depots/depotDonneesServices.js';
 import { creeDepot as creeDepotUtilisateur } from '../../src/depots/depotDonneesUtilisateurs.js';
+import { creeDepot as creerDepotSuperviseur } from '../../src/depots/depotDonneesSuperviseurs.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
@@ -22,22 +23,24 @@ import Service from '../../src/modeles/service.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 
 describe("Le service de gestion des admins d'organisation", () => {
-  describe("sur demande de rattachement d'un service à ses admins", () => {
-    let depotAutorisations: DepotDonneesAutorisation;
-    let depotParDefaut: DepotDonneesPourServiceAdmin;
-    beforeEach(() => {
-      depotAutorisations = creeDepotAutorisation({
-        adaptateurPersistance: unePersistanceMemoire().construis(),
-        busEvenements: fabriqueBusPourLesTests(),
-      });
-      depotParDefaut = {
-        ...depotAutorisations,
-        lisAdminsPour: async () => [],
-        ajouteSiretAAdmin: async () => {},
-        tousLesServicesAvecSiret: async () => [],
-      };
+  let depotParDefaut: DepotDonneesPourServiceAdmin;
+  let depotAutorisations: DepotDonneesAutorisation;
+  beforeEach(() => {
+    depotAutorisations = creeDepotAutorisation({
+      adaptateurPersistance: unePersistanceMemoire().construis(),
+      busEvenements: fabriqueBusPourLesTests(),
     });
+    depotParDefaut = {
+      ...depotAutorisations,
+      superviseur: async () => undefined,
+      entitesAdministreesPar: async () => [],
+      lisAdminsPour: async () => [],
+      ajouteSiretAAdmin: async () => {},
+      tousLesServicesAvecSiret: async () => [],
+    };
+  });
 
+  describe("sur demande de rattachement d'un service à ses admins", () => {
     it('crée les autorisations admins correspondantes', async () => {
       const unService = unServiceV2()
         .avecId(unUUID('s'))
@@ -112,7 +115,6 @@ describe("Le service de gestion des admins d'organisation", () => {
   });
 
   describe("sur demande de rattachement d'un admin à une entité", () => {
-    let depotAutorisations: DepotDonneesAutorisation;
     let depotAdministrationOrganisations: DepotDonneesAdminsOrganisations;
     let adaptateurPersistance: AdaptateurPersistance;
     let administrationOrganisations: ServiceAdministrationOrganisations;
@@ -162,6 +164,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       administrationOrganisations = new ServiceAdministrationOrganisations({
         adaptateurUUID: fabriqueAdaptateurUUID(),
         depotDonnees: {
+          ...depotParDefaut,
           ...depotAutorisations,
           ...depotAdministrationOrganisations,
           ...depotServices,
@@ -202,6 +205,80 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(autorisationsAdmin).toHaveLength(1);
       expect(autorisationsAdmin[0].idService).toBe(unUUID('s3'));
       expect(autorisationsAdmin[0].estAdmin).toBe(true);
+    });
+  });
+
+  describe("sur demande des entités dans le périmètre d'un utilisateur", () => {
+    it("renvoie les entités d'un admin", async () => {
+      const adaptateurPersistance = unePersistanceMemoire().construis();
+      await adaptateurPersistance.ajouteEntiteAAdmin(
+        unUUID('A'),
+        'SIRET-123-haché',
+        { siret: 'SIRET-123' }
+      );
+      const depotDonneesAdminsOrganisations = creeDepotAdminOrga({
+        persistance: adaptateurPersistance as AdaptateurPersistance,
+        chiffrement: fauxAdaptateurChiffrement(),
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      });
+      const service = new ServiceAdministrationOrganisations({
+        depotDonnees: {
+          ...depotParDefaut,
+          ...depotDonneesAdminsOrganisations,
+        },
+        adaptateurUUID: fabriqueAdaptateurUUID(),
+      });
+
+      const entitesDe = await service.entitesDe(unUUID('A'));
+
+      expect(entitesDe).toHaveLength(1);
+      expect(entitesDe[0].siret).toBe('SIRET-123');
+    });
+
+    it("renvoie les entités d'un superviseur s'il n'est pas admin", async () => {
+      const adaptateurPersistance = unePersistanceMemoire().construis();
+      await adaptateurPersistance.ajouteEntiteAuSuperviseur(
+        unUUID('S'),
+        'SIRET-123-haché',
+        { siret: 'SIRET-123' }
+      );
+      const depotDonneesSuperviseur = creerDepotSuperviseur({
+        adaptateurPersistance: adaptateurPersistance as AdaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      });
+      const service = new ServiceAdministrationOrganisations({
+        depotDonnees: {
+          ...depotParDefaut,
+          ...depotDonneesSuperviseur,
+        },
+        adaptateurUUID: fabriqueAdaptateurUUID(),
+      });
+
+      const entitesDe = await service.entitesDe(unUUID('S'));
+
+      expect(entitesDe).toHaveLength(1);
+      expect(entitesDe[0].siret).toBe('SIRET-123');
+    });
+
+    it("renvoie un tableau vide s'il n'est ni admin ni superviseur", async () => {
+      const depotDonneesSuperviseur = creerDepotSuperviseur({
+        adaptateurPersistance:
+          unePersistanceMemoire().construis() as AdaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      });
+      const service = new ServiceAdministrationOrganisations({
+        depotDonnees: {
+          ...depotParDefaut,
+          ...depotDonneesSuperviseur,
+        },
+        adaptateurUUID: fabriqueAdaptateurUUID(),
+      });
+
+      const entitesDe = await service.entitesDe(unUUID('U'));
+
+      expect(entitesDe).toHaveLength(0);
     });
   });
 });
