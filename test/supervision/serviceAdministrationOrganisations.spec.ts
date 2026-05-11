@@ -1,5 +1,5 @@
 import { creeDepot as creeDepotAutorisation } from '../../src/depots/depotDonneesAutorisations.js';
-import { creeDepot as creeDepotAdminOrga } from '../../src/depots/depotDonneesAdministrationOrganisations.js';
+import { creeDepot as creeDepotAdminOrga } from '../../src/depots/depotDonneesAdminsOrganisations.js';
 import { creeDepot as creeDepotService } from '../../src/depots/depotDonneesServices.js';
 import { creeDepot as creeDepotUtilisateur } from '../../src/depots/depotDonneesUtilisateurs.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
@@ -13,11 +13,10 @@ import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.ts'
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 import { DepotDonneesAutorisation } from '../../src/depots/depotDonneesAutorisations.interface.ts';
-import { DepotDonneesAdministrationOrganisations } from '../../src/depots/depotDonneesAdministrationOrganisations.interface.ts';
+import { DepotDonneesAdminsOrganisations } from '../../src/depots/depotDonneesAdminsOrganisations.interface.ts';
 import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
-import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
 import { DepotDonneesService } from '../../src/depots/depotDonneesService.interface.ts';
 import Service from '../../src/modeles/service.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
@@ -114,7 +113,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande de rattachement d'un admin à une entité", () => {
     let depotAutorisations: DepotDonneesAutorisation;
-    let depotAdministrationOrganisations: DepotDonneesAdministrationOrganisations;
+    let depotAdministrationOrganisations: DepotDonneesAdminsOrganisations;
     let adaptateurPersistance: AdaptateurPersistance;
     let administrationOrganisations: ServiceAdministrationOrganisations;
     let depotServices: DepotDonneesService & {
@@ -159,7 +158,6 @@ describe("Le service de gestion des admins d'organisation", () => {
         persistance: adaptateurPersistance,
         chiffrement: adaptateurChiffrement,
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
-        depotSuperviseurs: {} as DepotDonneesSuperviseurs,
       });
       administrationOrganisations = new ServiceAdministrationOrganisations({
         adaptateurUUID: fabriqueAdaptateurUUID(),

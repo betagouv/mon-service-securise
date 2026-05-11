@@ -1,15 +1,13 @@
-import { creeDepot } from '../../src/depots/depotDonneesAdministrationOrganisations.ts';
+import { creeDepot } from '../../src/depots/depotDonneesAdminsOrganisations.ts';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
 import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.ts';
 import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
-import * as depotDonneesSuperviseurs from '../../src/depots/depotDonneesSuperviseurs.ts';
-import { DepotDonneesAdministrationOrganisations } from '../../src/depots/depotDonneesAdministrationOrganisations.interface.ts';
+import { DepotDonneesAdminsOrganisations } from '../../src/depots/depotDonneesAdminsOrganisations.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import Entite from '../../src/modeles/entite.ts';
-import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
 
 describe("Le dépôt de données d'admin des organisations", () => {
@@ -26,7 +24,6 @@ describe("Le dépôt de données d'admin des organisations", () => {
         } as unknown as AdaptateurPersistance,
         chiffrement:
           fauxAdaptateurChiffrement() as unknown as AdaptateurChiffrement,
-        depotSuperviseurs: {} as unknown as DepotDonneesSuperviseurs,
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
 
@@ -36,55 +33,23 @@ describe("Le dépôt de données d'admin des organisations", () => {
     });
   });
 
-  describe('concernant la lecture des entités administrées par un utilisateur', () => {
-    let depot: DepotDonneesAdministrationOrganisations;
-    let depotSuperviseurs: DepotDonneesSuperviseurs;
+  describe('concernant la lecture des entités administrées par un admin', () => {
+    let depot: DepotDonneesAdminsOrganisations;
     let adaptateurPersistance: AdaptateurPersistance;
-    let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
     let adaptateurChiffrement: AdaptateurChiffrement;
 
     beforeEach(() => {
-      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
       adaptateurPersistance =
         unePersistanceMemoire().construis() as AdaptateurPersistance;
       adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
-      depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
-        adaptateurPersistance,
-        adaptateurRechercheEntite,
-        adaptateurChiffrement,
-      });
       depot = creeDepot({
         persistance: adaptateurPersistance,
         chiffrement: adaptateurChiffrement,
-        depotSuperviseurs,
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
     });
 
-    it("utilise le dépôt des superviseurs pour lister les entités d'un superviseur", async () => {
-      const idSuperviseur = unUUID('1');
-      await adaptateurPersistance.ajouteEntiteAuSuperviseur(
-        idSuperviseur,
-        'SIRET-123-haché',
-        await adaptateurChiffrement.chiffre({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        })
-      );
-
-      const entites = await depot.entitesAdministreesPar(idSuperviseur);
-
-      expect(entites).toEqual([
-        new Entite({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        }),
-      ]);
-    });
-
-    it("utilise la persistance pour lister les entités d'un admin", async () => {
+    it("déchiffre les données d'entité persistées", async () => {
       const idAdmin = unUUID('1');
       await adaptateurPersistance.ajouteEntiteAAdmin(
         idAdmin,
@@ -109,7 +74,7 @@ describe("Le dépôt de données d'admin des organisations", () => {
   });
 
   describe("concernant l'ajout d'une entité administrée à un utilisateur", () => {
-    let depot: DepotDonneesAdministrationOrganisations;
+    let depot: DepotDonneesAdminsOrganisations;
     let adaptateurPersistance: AdaptateurPersistance;
     let adaptateurChiffrement: AdaptateurChiffrement;
 
@@ -122,7 +87,6 @@ describe("Le dépôt de données d'admin des organisations", () => {
       depot = creeDepot({
         persistance: adaptateurPersistance,
         chiffrement: adaptateurChiffrement,
-        depotSuperviseurs: {} as unknown as DepotDonneesSuperviseurs,
         adaptateurRechercheEntite,
       });
     });

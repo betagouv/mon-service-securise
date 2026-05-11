@@ -22,7 +22,7 @@ import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurP
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
-import * as depotDonneesAdministrationOrganisations from './depots/depotDonneesAdministrationOrganisations.js';
+import * as depotDonneesAdminsOrganisations from './depots/depotDonneesAdminsOrganisations.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -164,9 +164,8 @@ const creeDepot = (config = {}) => {
   });
 
   const depotAdministrationOrganisations =
-    depotDonneesAdministrationOrganisations.creeDepot({
+    depotDonneesAdminsOrganisations.creeDepot({
       adaptateurRechercheEntite,
-      depotSuperviseurs,
       chiffrement: adaptateurChiffrement,
       persistance: adaptateurPersistance,
     });
@@ -333,8 +332,12 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin, utilisateursAdministresPar } =
-    depotAdministrationOrganisations;
+  const {
+    lisAdminsPour,
+    entitesAdministreesPar,
+    ajouteSiretAAdmin,
+    utilisateursAdministresPar,
+  } = depotAdministrationOrganisations;
 
   return {
     accesAutorise,
