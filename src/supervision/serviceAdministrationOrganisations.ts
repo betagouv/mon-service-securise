@@ -5,6 +5,8 @@ import {
   AdaptateurUUID,
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
+import Entite from '../modeles/entite.js';
+import Superviseur from '../modeles/superviseur.js';
 
 export type DepotDonneesPourServiceAdmin = {
   autorisationsDuService: (id: UUID) => Promise<Array<Autorisation>>;
@@ -13,6 +15,8 @@ export type DepotDonneesPourServiceAdmin = {
   supprimeAutorisationsAdminPour: (id: UUID) => Promise<void>;
   ajouteSiretAAdmin: (idUtilisateur: UUID, siret: string) => Promise<void>;
   tousLesServicesAvecSiret: (siret: string) => Promise<Service[]>;
+  entitesAdministreesPar: (idUtilisateur: UUID) => Promise<Array<Entite>>;
+  superviseur: (id: UUID) => Promise<Superviseur | undefined>;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -102,5 +106,16 @@ export class ServiceAdministrationOrganisations {
         idUtilisateur: idAdmin,
       });
     });
+  }
+
+  async entitesDe(idUtilisateur: UUID) {
+    const administreesPar =
+      await this.depotDonnees.entitesAdministreesPar(idUtilisateur);
+    if (administreesPar.length > 0) return administreesPar;
+
+    const superviseur = await this.depotDonnees.superviseur(idUtilisateur);
+    if (superviseur) return superviseur.entitesSupervisees;
+
+    return [];
   }
 }
