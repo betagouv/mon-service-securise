@@ -48,6 +48,7 @@ const testeurMss = () => {
   let cmsCrisp;
   let serveur;
   let app;
+  let serviceAdministrationOrganisations;
 
   const verifieSessionDeposee = (reponse) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
@@ -84,6 +85,7 @@ const testeurMss = () => {
   ) => {
     serviceAnnuaire = {};
     serviceSupervision = {};
+    serviceAdministrationOrganisations = {};
     adaptateurHorloge = fabriqueAdaptateurHorloge();
     const contenuCrisp = {
       contenuMarkdown: 'Un contenu',
@@ -198,6 +200,7 @@ const testeurMss = () => {
         adaptateurTeleversementServices,
         adaptateurTeleversementModelesMesureSpecifique,
         cmsCrisp,
+        serviceAdministrationOrganisations,
         serviceSupervision,
         serviceGestionnaireSession,
         serviceCgu,
@@ -229,6 +232,8 @@ const testeurMss = () => {
 
   return {
     app: () => app,
+    serviceAdministrationOrganisations: () =>
+      serviceAdministrationOrganisations,
     serviceAnnuaire: () => serviceAnnuaire,
     serviceGestionnaireSession: () => serviceGestionnaireSession,
     serviceSupervision: () => serviceSupervision,

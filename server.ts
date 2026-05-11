@@ -34,6 +34,8 @@ import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerif
 import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
+import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
+import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -118,6 +120,12 @@ const serviceSupervision = new ServiceSupervision({
   adaptateurSupervision,
 });
 
+const serviceAdministrationOrganisations =
+  new ServiceAdministrationOrganisations({
+    depotDonnees,
+    adaptateurUUID: fabriqueAdaptateurUUID(),
+  });
+
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
 
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
@@ -145,6 +153,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurProfilAnssi,
     cmsCrisp,
     lecteurDeFormData,
+    serviceAdministrationOrganisations,
     serviceGestionnaireSession,
     serviceSupervision,
     serviceCgu,

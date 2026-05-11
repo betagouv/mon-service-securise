@@ -64,6 +64,7 @@ const routesConnecteApi = ({
   adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
   procedures,
+  serviceAdministrationOrganisations,
   serviceAnnuaire,
   serviceGestionnaireSession,
   serviceSupervision,
@@ -421,7 +422,7 @@ const routesConnecteApi = ({
   routes.use(
     '/admin',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiAdmin({ depotDonnees })
+    routesConnecteApiAdmin({ depotDonnees, serviceAdministrationOrganisations })
   );
 
   routes.post(
