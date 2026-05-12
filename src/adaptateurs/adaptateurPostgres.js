@@ -1009,6 +1009,28 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         .select('donnees')
     ).map((a) => a.donnees);
 
+  const utilisateursAdministresPar = async (idUtilisateur) => {
+    const contributeurs = await knex.raw(
+      `
+        WITH mes_services
+               AS (SELECT donnees ->>'idService' AS ids_services
+        FROM autorisations
+        WHERE donnees->>'idUtilisateur' = ?
+          AND (donnees->>'estAdmin')::boolean = true
+          )
+        SELECT DISTINCT
+        ON (u.id) u.id, u.donnees
+        FROM autorisations AS a
+          JOIN utilisateurs AS u
+        ON u.id::TEXT = a.donnees->>'idUtilisateur'
+        WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
+          AND a.donnees->>'idUtilisateur' != ?
+      `,
+      [idUtilisateur, idUtilisateur]
+    );
+    return contributeurs.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -1101,6 +1123,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
+    utilisateursAdministresPar,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

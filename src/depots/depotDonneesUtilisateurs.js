@@ -106,6 +106,13 @@ function fabriquePersistance({
           tousUtilisateurs.map((d) => dechiffreUtilisateur(d))
         );
       },
+      ceuxAdministresPar: async (idUtilisateur) => {
+        const donneesUtilisateurs =
+          await adaptateurPersistance.utilisateursAdministresPar(idUtilisateur);
+        return Promise.all(
+          donneesUtilisateurs.map((d) => dechiffreUtilisateur(d))
+        );
+      },
     },
     ajoute: async (id, donneesUtilisateur) => {
       const emailHash = adaptateurChiffrement.hacheSha256(
@@ -322,6 +329,9 @@ const creeDepot = (config = {}) => {
     }
   };
 
+  const utilisateursAdministresPar = async (idUtilisateur) =>
+    p.lis.ceuxAdministresPar(idUtilisateur);
+
   return {
     dechiffreUtilisateur,
     dechiffreDonneesContributeur,
@@ -333,6 +343,7 @@ const creeDepot = (config = {}) => {
     utilisateur,
     utilisateurExiste,
     utilisateurAvecEmail,
+    utilisateursAdministresPar,
     valideAcceptationCGUPourUtilisateur,
   };
 };

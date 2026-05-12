@@ -369,4 +369,42 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(lesContributeurs.length).to.be(0);
     });
   });
+
+  describe('concernant la lecture des utilisateurs administrés par un utilisateur', () => {
+    let u1;
+    let u2;
+    let admin;
+
+    beforeEach(async () => {
+      const idService1 = await insereService();
+      const idService2 = await insereService();
+      u1 = await insereUtilisateur();
+      u2 = await insereUtilisateur();
+      admin = await insereUtilisateur();
+      await insereAutorisation(u1, idService1);
+      await insereAutorisation(u2, idService2);
+      await insereAutorisation(u1, idService2);
+      await insereAutorisationAdmin(admin, idService1);
+      await insereAutorisationAdmin(admin, idService2);
+    });
+
+    it("retourne les contributeurs des services sur lesquels l'utilisateur est admin", async () => {
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.map((u) => u.id)).to.contain(u1);
+      expect(utilisateurs.map((u) => u.id)).to.contain(u2);
+    });
+
+    it("ne retourne pas l'utilisateur admin lui-même", async () => {
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.map((u) => u.id)).not.to.contain(admin);
+    });
+
+    it('retourne les contributeurs sans doublon', async () => {
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.length).to.be(2);
+    });
+  });
 });

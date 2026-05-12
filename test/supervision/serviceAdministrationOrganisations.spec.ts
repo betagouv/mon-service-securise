@@ -1,7 +1,13 @@
 import { creeDepot as creeDepotAutorisation } from '../../src/depots/depotDonneesAutorisations.js';
-import { creeDepot as creeDepotAdminOrga } from '../../src/depots/depotDonneesAdminsOrganisations.js';
+import {
+  creeDepot,
+  creeDepot as creeDepotAdminOrga,
+} from '../../src/depots/depotDonneesAdminsOrganisations.js';
 import { creeDepot as creeDepotService } from '../../src/depots/depotDonneesServices.js';
-import { creeDepot as creeDepotUtilisateur } from '../../src/depots/depotDonneesUtilisateurs.js';
+import {
+  creeDepot as creerDepotUtilisateur,
+  creeDepot as creeDepotUtilisateur,
+} from '../../src/depots/depotDonneesUtilisateurs.js';
 import { creeDepot as creerDepotSuperviseur } from '../../src/depots/depotDonneesSuperviseurs.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unUUID } from '../constructeurs/UUID.ts';
@@ -21,6 +27,9 @@ import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntre
 import { DepotDonneesService } from '../../src/depots/depotDonneesService.interface.ts';
 import Service from '../../src/modeles/service.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.ts';
+import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
+import { DepotDonneesUtilisateurs } from '../../src/depots/depotDonneesUtilisateurs.interface.ts';
 
 describe("Le service de gestion des admins d'organisation", () => {
   let depotParDefaut: DepotDonneesPourServiceAdmin;
@@ -32,6 +41,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
     depotParDefaut = {
       ...depotAutorisations,
+      utilisateursAdministresPar: async () => [],
       superviseur: async () => undefined,
       entitesAdministreesPar: async () => [],
       lisAdminsPour: async () => [],
@@ -279,6 +289,65 @@ describe("Le service de gestion des admins d'organisation", () => {
       const entitesDe = await service.entitesDe(unUUID('U'));
 
       expect(entitesDe).toHaveLength(0);
+    });
+  });
+
+  describe("sur demande des utilisateurs dans le périmètre d'un utilisateur", () => {
+    let depot: DepotDonneesAdminsOrganisations;
+    let depotDonneesUtilisateurs: DepotDonneesUtilisateurs;
+    let adaptateurPersistance: AdaptateurPersistance;
+    let adaptateurChiffrement: AdaptateurChiffrement;
+    let service: ServiceAdministrationOrganisations;
+    let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
+
+    const idAdmin = unUUID('A');
+    const idU1 = unUUID('U1');
+    const idU2 = unUUID('U2');
+    const idS1 = unUUID('S1');
+    const idS2 = unUUID('S2');
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idU2).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS1).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS2).donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS2).donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur(idU1, idS1).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur(idU2, idS2).donnees
+        )
+        .construis() as AdaptateurPersistance;
+      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
+      adaptateurChiffrement = fauxAdaptateurChiffrement();
+      depotDonneesUtilisateurs = creerDepotUtilisateur({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+      depot = creeDepot({
+        persistance: adaptateurPersistance,
+        chiffrement: adaptateurChiffrement,
+        adaptateurRechercheEntite,
+      });
+      service = new ServiceAdministrationOrganisations({
+        adaptateurUUID: fabriqueAdaptateurUUID(),
+        depotDonnees: {
+          ...depotParDefaut,
+          ...depotDonneesUtilisateurs,
+          ...depot,
+        },
+      });
+    });
+
+    it("retourne les contributeurs des services d'un admin", async () => {
+      const utilisateurs = await service.utilisateursDansLePerimetreDe(idAdmin);
+
+      expect(utilisateurs).toHaveLength(2);
+      expect(utilisateurs[0].id).toBe(idU1);
+      expect(utilisateurs[1].id).toBe(idU2);
     });
   });
 });
