@@ -1,9 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { Utilisateur } from '../ui/types';
-  import { api } from './adminUtilisateurs.api';
+  import { api, type UtilisateurAdministre } from './adminUtilisateurs.api';
 
-  let mesUtilisateurs: Utilisateur[] = $state([]);
+  let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
 
   onMount(async () => {
     mesUtilisateurs = await api.utilisateursDansMonPerimetre();
@@ -14,13 +13,31 @@
 
 <dsfr-table
   columns={[
-    { key: 'nom', label: 'Nom' },
-    { key: 'entite', label: 'Entité' },
+    { key: 'prenomNom', label: 'Nom' },
     { key: 'postes', label: 'Rôle' },
+    { key: 'entite', label: 'Entité' },
     { key: 'actions', label: 'Actions' },
   ]}
   rows={mesUtilisateurs}
-></dsfr-table>
+  rich
+  multiline
+>
+  {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
+    <div slot="cell:prenomNom:{i}">
+      <span>{utilisateur.prenomNom} ({utilisateur.email})</span>
+    </div>
+    <div slot="cell:entite:{i}">
+      <span>{utilisateur.entite.nom ?? '-'}</span>
+    </div>
+    <div slot="cell:postes:{i}">
+      <span
+        >{utilisateur.postes.length > 0
+          ? utilisateur.postes.join(', ')
+          : '-'}</span
+      >
+    </div>
+  {/each}
+</dsfr-table>
 
 <style lang="scss">
   :global(#conteneur-admin-utilisateurs) {
