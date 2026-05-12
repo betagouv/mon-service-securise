@@ -41,8 +41,6 @@ const navigue = (
     return;
   }
 
-  if (url.includes('export.csv')) return navigueHorsSPA(url);
-
   const pageDemandee = pageDepuisURL(url) || '';
   const pageVisible = informationsService?.visible[pageDemandee];
   const versionService = informationsService?.version;
