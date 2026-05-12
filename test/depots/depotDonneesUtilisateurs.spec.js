@@ -20,6 +20,7 @@ import EvenementUtilisateurInscrit from '../../src/bus/evenementUtilisateurInscr
 import { EvenementCguAccepteesParUtilisateur } from '../../src/bus/evenementCguAccepteesParUtilisateur.js';
 import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
+import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -992,6 +993,49 @@ describe('Le dépôt de données des utilisateurs', () => {
       ).donnees;
 
       expect(apresRafraichissement.telephone).to.be('monTelephoneDansMSS');
+    });
+  });
+
+  describe('sur demande de tous les utilisateurs administrés par un utilisateur', () => {
+    it('délègue à la persistance la lecture des utilisateurs', async () => {
+      let idUtilisateurRecu;
+      const adaptateurPersistance = {
+        utilisateursAdministresPar: (idUtilisateur) => {
+          idUtilisateurRecu = idUtilisateur;
+          return [];
+        },
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      await depot.utilisateursAdministresPar('U1');
+
+      expect(idUtilisateurRecu).to.be('U1');
+    });
+
+    it('déchiffre les données des utilisateurs', async () => {
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+      const adaptateurPersistance = {
+        utilisateursAdministresPar: async () => [
+          {
+            donnees: await adaptateurChiffrement.chiffre(
+              unUtilisateur().quiSAppelle('Jean Dubois').donnees
+            ),
+            id: 'U2',
+          },
+        ],
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      const utilisateurs = await depot.utilisateursAdministresPar('U1');
+
+      expect(utilisateurs[0].id).to.be('U2');
+      expect(utilisateurs[0].prenomNom()).to.be('Jean Dubois');
     });
   });
 });

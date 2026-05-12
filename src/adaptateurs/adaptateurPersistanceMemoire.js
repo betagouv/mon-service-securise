@@ -720,6 +720,22 @@ const nouvelAdaptateur = (
       .filter((a) => a.idUtilisateur === idAdmin)
       .map((a) => a.donnees);
 
+  const utilisateursAdministresPar = async (idUtilisateur) => {
+    const servicesAdministres = donnees.autorisations
+      .filter((a) => a.idUtilisateur === idUtilisateur && !!a.estAdmin)
+      .map((a) => a.idService);
+    const contributeurs = new Set(
+      donnees.autorisations
+        .filter(
+          (a) =>
+            servicesAdministres.includes(a.idService) &&
+            a.idUtilisateur !== idUtilisateur
+        )
+        .map((a) => a.idUtilisateur)
+    );
+    return donnees.utilisateurs.filter((u) => contributeurs.has(u.id));
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -804,6 +820,7 @@ const nouvelAdaptateur = (
     toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
+    utilisateursAdministresPar,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

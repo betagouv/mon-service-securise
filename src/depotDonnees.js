@@ -214,6 +214,7 @@ const creeDepot = (config = {}) => {
     utilisateur,
     utilisateurExiste,
     utilisateurAvecEmail,
+    utilisateursAdministresPar,
     valideAcceptationCGUPourUtilisateur,
   } = depotUtilisateurs;
 
@@ -332,12 +333,8 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const {
-    lisAdminsPour,
-    entitesAdministreesPar,
-    ajouteSiretAAdmin,
-    utilisateursAdministresPar,
-  } = depotAdministrationOrganisations;
+  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin } =
+    depotAdministrationOrganisations;
 
   return {
     accesAutorise,

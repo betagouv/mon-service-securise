@@ -7,6 +7,7 @@ import {
 } from '../adaptateurs/adaptateurUUID.js';
 import Entite from '../modeles/entite.js';
 import Superviseur from '../modeles/superviseur.js';
+import Utilisateur from '../modeles/utilisateur.js';
 
 export type DepotDonneesPourServiceAdmin = {
   autorisationsDuService: (id: UUID) => Promise<Array<Autorisation>>;
@@ -17,6 +18,7 @@ export type DepotDonneesPourServiceAdmin = {
   tousLesServicesAvecSiret: (siret: string) => Promise<Service[]>;
   entitesAdministreesPar: (idUtilisateur: UUID) => Promise<Array<Entite>>;
   superviseur: (id: UUID) => Promise<Superviseur | undefined>;
+  utilisateursAdministresPar: (id: UUID) => Promise<Array<Utilisateur>>;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -117,5 +119,11 @@ export class ServiceAdministrationOrganisations {
     if (superviseur) return superviseur.entitesSupervisees;
 
     return [];
+  }
+
+  async utilisateursDansLePerimetreDe(
+    idUtilisateur: UUID
+  ): Promise<Array<Utilisateur>> {
+    return this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
   }
 }
