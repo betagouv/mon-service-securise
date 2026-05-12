@@ -65,6 +65,16 @@ describe("L'adaptateur persistance Postgres", () => {
     return idUtilisateur;
   }
 
+  async function ajouteEntiteAuPerimetreSuperviseur(idSuperviseur, siret) {
+    await persistance.ajouteEntiteAuSuperviseur(idSuperviseur, siret, {});
+  }
+  async function ajouteEntiteAuPerimetreAdministrateur(
+    idAdministrateur,
+    siret
+  ) {
+    await persistance.ajouteEntiteAAdmin(idAdministrateur, siret, {});
+  }
+
   async function insereAutorisation(idUtilisateur, idService) {
     const idAutorisation = genereUUID();
     const autorisation = Autorisation.NouvelleAutorisationProprietaire({
@@ -405,6 +415,46 @@ describe("L'adaptateur persistance Postgres", () => {
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
       expect(utilisateurs.length).to.be(2);
+    });
+  });
+
+  describe('concernant la lecture des utilisateurs supervisés par un utilisateur', () => {
+    let superviseur;
+    let admin1;
+    let admin2;
+
+    beforeEach(async () => {
+      superviseur = await insereUtilisateur();
+      admin1 = await insereUtilisateur();
+      admin2 = await insereUtilisateur();
+      await ajouteEntiteAuPerimetreSuperviseur(superviseur, 'siret-1');
+      await ajouteEntiteAuPerimetreAdministrateur(admin1, 'siret-1');
+      await ajouteEntiteAuPerimetreAdministrateur(admin2, 'siret-1');
+    });
+
+    it('retourne les administrateurs sur le périmètre du superviseur', async () => {
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.map((u) => u.id)).to.contain(admin1);
+      expect(admins.map((u) => u.id)).to.contain(admin2);
+    });
+
+    it("ne retourne pas l'utilisateur superviseur lui-même, même s'il est admin", async () => {
+      // C'est un cas rare, mais certains superviseurs seront aussi admin
+      await ajouteEntiteAuPerimetreAdministrateur(superviseur, 'siret-1');
+
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.map((u) => u.id)).not.to.contain(superviseur);
+    });
+
+    it('retourne les admins sans doublon', async () => {
+      await ajouteEntiteAuPerimetreSuperviseur(superviseur, 'siret-2');
+      await ajouteEntiteAuPerimetreAdministrateur(admin1, 'siret-2');
+
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.length).to.be(2);
     });
   });
 });
