@@ -64,7 +64,9 @@
     const reponse = await axios.get('/api/annuaire/organisations', {
       params: {
         recherche: saisie,
-        departement: filtreDepartement?.code,
+        ...(filtreDepartement?.code
+          ? { departement: filtreDepartement?.code }
+          : {}),
       },
     });
 
