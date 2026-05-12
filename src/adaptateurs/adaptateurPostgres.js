@@ -1031,6 +1031,26 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return contributeurs.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
   };
 
+  const utilisateursSupervisesPar = async (idUtilisateur) => {
+    const admins = await knex.raw(
+      `
+        WITH mes_sirets AS (
+          SELECT siret_hash FROM superviseurs
+          WHERE id_superviseur = ?
+        )
+        SELECT DISTINCT
+        ON (u.id) u.id, u.donnees
+        FROM admins_organisations
+          JOIN utilisateurs AS u
+        ON u.id = admins_organisations.id_utilisateur
+        WHERE siret_hash IN (SELECT siret_hash FROM mes_sirets)
+        AND u.id <> ?
+      `,
+      [idUtilisateur, idUtilisateur]
+    );
+    return admins.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -1124,6 +1144,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateursAdministresPar,
+    utilisateursSupervisesPar,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

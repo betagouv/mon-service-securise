@@ -5,8 +5,10 @@ import { VersionService } from '../../src/modeles/versionService.js';
 
 class ConstructeurAdaptateurPersistanceMemoire {
   constructor(adaptateurChiffrement) {
+    this.adminsOrganisations = [];
     this.autorisations = [];
     this.services = [];
+    this.superviseurs = [];
     this.utilisateurs = [];
     this.notificationsExpirationHomologation = [];
     this.suggestionsActions = [];
@@ -98,14 +100,38 @@ class ConstructeurAdaptateurPersistanceMemoire {
     return this;
   }
 
+  ajouteAdminSurPerimetre(idAdmin, siretsDuPerimetre) {
+    const lignes = siretsDuPerimetre.map((siret) => ({
+      idAdmin,
+      siretHash: this.adaptateurChiffrement.hacheSha256(siret),
+    }));
+
+    this.adminsOrganisations.push(...lignes);
+
+    return this;
+  }
+
+  ajouteSuperviseurSurPerimetre(idSuperviseur, siretsDuPerimetre) {
+    const lignes = siretsDuPerimetre.map((siret) => ({
+      idSuperviseur,
+      siretHash: this.adaptateurChiffrement.hacheSha256(siret),
+    }));
+
+    this.superviseurs.push(...lignes);
+
+    return this;
+  }
+
   construis() {
     return AdaptateurPersistanceMemoire.nouvelAdaptateur({
+      adminsOrganisations: this.adminsOrganisations,
       autorisations: this.autorisations,
       services: this.services,
       utilisateurs: this.utilisateurs,
       notificationsExpirationHomologation:
         this.notificationsExpirationHomologation,
       suggestionsActions: this.suggestionsActions,
+      superviseurs: this.superviseurs,
       activitesMesure: this.activitesMesure,
       modelesMesureSpecifique: this.modelesMesureSpecifique,
       associationModelesMesureSpecifiqueServices:

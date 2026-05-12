@@ -1038,4 +1038,47 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(utilisateurs[0].prenomNom()).to.be('Jean Dubois');
     });
   });
+
+  describe('sur demande de tous les utilisateurs supervisés par un admin', () => {
+    it('délègue à la persistance la lecture des utilisateurs', async () => {
+      let idUtilisateurRecu;
+      const adaptateurPersistance = {
+        utilisateursSupervisesPar: (idUtilisateur) => {
+          idUtilisateurRecu = idUtilisateur;
+          return [];
+        },
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      await depot.utilisateursSupervisesPar('U1');
+
+      expect(idUtilisateurRecu).to.be('U1');
+    });
+
+    it('déchiffre les données des utilisateurs', async () => {
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+      const adaptateurPersistance = {
+        utilisateursSupervisesPar: async () => [
+          {
+            donnees: await adaptateurChiffrement.chiffre(
+              unUtilisateur().quiSAppelle('Jean Dubois').donnees
+            ),
+            id: 'U2',
+          },
+        ],
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      const utilisateurs = await depot.utilisateursSupervisesPar('U1');
+
+      expect(utilisateurs[0].id).to.be('U2');
+      expect(utilisateurs[0].prenomNom()).to.be('Jean Dubois');
+    });
+  });
 });

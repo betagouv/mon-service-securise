@@ -18,7 +18,12 @@ export type DepotDonneesPourServiceAdmin = {
   tousLesServicesAvecSiret: (siret: string) => Promise<Service[]>;
   entitesAdministreesPar: (idUtilisateur: UUID) => Promise<Array<Entite>>;
   superviseur: (id: UUID) => Promise<Superviseur | undefined>;
-  utilisateursAdministresPar: (id: UUID) => Promise<Array<Utilisateur>>;
+  utilisateursAdministresPar: (
+    idUtilisateur: UUID
+  ) => Promise<Array<Utilisateur>>;
+  utilisateursSupervisesPar: (
+    idUtilisateur: UUID
+  ) => Promise<Array<Utilisateur>>;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -124,6 +129,10 @@ export class ServiceAdministrationOrganisations {
   async utilisateursDansLePerimetreDe(
     idUtilisateur: UUID
   ): Promise<Array<Utilisateur>> {
-    return this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
+    const sousUnAdmin =
+      await this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
+    if (sousUnAdmin.length > 0) return sousUnAdmin;
+
+    return this.depotDonnees.utilisateursSupervisesPar(idUtilisateur);
   }
 }

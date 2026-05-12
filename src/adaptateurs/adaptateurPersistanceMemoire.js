@@ -736,6 +736,18 @@ const nouvelAdaptateur = (
     return donnees.utilisateurs.filter((u) => contributeurs.has(u.id));
   };
 
+  const utilisateursSupervisesPar = async (idUtilisateur) => {
+    const siretsDuPerimetre = donnees.superviseurs
+      .filter((s) => s.idSuperviseur === idUtilisateur)
+      .map((s) => s.siretHash);
+
+    const idDesAdmins = donnees.adminsOrganisations
+      .filter((admin) => siretsDuPerimetre.includes(admin.siretHash))
+      .map((admin) => admin.idAdmin);
+
+    return donnees.utilisateurs.filter((u) => idDesAdmins.includes(u.id));
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -821,6 +833,7 @@ const nouvelAdaptateur = (
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateursAdministresPar,
+    utilisateursSupervisesPar,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

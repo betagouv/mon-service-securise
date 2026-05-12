@@ -109,9 +109,13 @@ function fabriquePersistance({
       ceuxAdministresPar: async (idUtilisateur) => {
         const donneesUtilisateurs =
           await adaptateurPersistance.utilisateursAdministresPar(idUtilisateur);
-        return Promise.all(
-          donneesUtilisateurs.map((d) => dechiffreUtilisateur(d))
-        );
+        return Promise.all(donneesUtilisateurs.map(dechiffreUtilisateur));
+      },
+      ceuxSupervisesPar: async (idUtilisateur) => {
+        const donneesUtilisateurs =
+          await adaptateurPersistance.utilisateursSupervisesPar(idUtilisateur);
+
+        return Promise.all(donneesUtilisateurs.map(dechiffreUtilisateur));
       },
     },
     ajoute: async (id, donneesUtilisateur) => {
@@ -332,6 +336,9 @@ const creeDepot = (config = {}) => {
   const utilisateursAdministresPar = async (idUtilisateur) =>
     p.lis.ceuxAdministresPar(idUtilisateur);
 
+  const utilisateursSupervisesPar = async (idUtilisateur) =>
+    p.lis.ceuxSupervisesPar(idUtilisateur);
+
   return {
     dechiffreUtilisateur,
     dechiffreDonneesContributeur,
@@ -344,6 +351,7 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     utilisateursAdministresPar,
+    utilisateursSupervisesPar,
     valideAcceptationCGUPourUtilisateur,
   };
 };

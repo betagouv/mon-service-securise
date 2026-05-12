@@ -42,6 +42,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     depotParDefaut = {
       ...depotAutorisations,
       utilisateursAdministresPar: async () => [],
+      utilisateursSupervisesPar: async () => [],
       superviseur: async () => undefined,
       entitesAdministreesPar: async () => [],
       lisAdminsPour: async () => [],
@@ -152,7 +153,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire(unUUID('P'), unUUID('s3')).donnees
         )
-        .construis() as AdaptateurPersistance;
+        .construis() as unknown as AdaptateurPersistance;
       depotAutorisations = creeDepotAutorisation({
         adaptateurPersistance,
         busEvenements: fabriqueBusPourLesTests(),
@@ -227,7 +228,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         { siret: 'SIRET-123' }
       );
       const depotDonneesAdminsOrganisations = creeDepotAdminOrga({
-        persistance: adaptateurPersistance as AdaptateurPersistance,
+        persistance: adaptateurPersistance as unknown as AdaptateurPersistance,
         chiffrement: fauxAdaptateurChiffrement(),
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
@@ -253,7 +254,8 @@ describe("Le service de gestion des admins d'organisation", () => {
         { siret: 'SIRET-123' }
       );
       const depotDonneesSuperviseur = creerDepotSuperviseur({
-        adaptateurPersistance: adaptateurPersistance as AdaptateurPersistance,
+        adaptateurPersistance:
+          adaptateurPersistance as unknown as AdaptateurPersistance,
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
@@ -274,7 +276,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("renvoie un tableau vide s'il n'est ni admin ni superviseur", async () => {
       const depotDonneesSuperviseur = creerDepotSuperviseur({
         adaptateurPersistance:
-          unePersistanceMemoire().construis() as AdaptateurPersistance,
+          unePersistanceMemoire().construis() as unknown as AdaptateurPersistance,
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       });
@@ -301,12 +303,16 @@ describe("Le service de gestion des admins d'organisation", () => {
     let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
 
     const idAdmin = unUUID('A');
+    const idSuperviseur = unUUID('S');
     const idU1 = unUUID('U1');
     const idU2 = unUUID('U2');
     const idS1 = unUUID('S1');
     const idS2 = unUUID('S2');
+
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
+        .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
+        .ajouteSuperviseurSurPerimetre(idSuperviseur, ['SIRET-1'])
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU2).donnees)
@@ -320,7 +326,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUneAutorisation(
           uneAutorisation().deContributeur(idU2, idS2).donnees
         )
-        .construis() as AdaptateurPersistance;
+        .construis() as unknown as AdaptateurPersistance;
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
       adaptateurChiffrement = fauxAdaptateurChiffrement();
       depotDonneesUtilisateurs = creerDepotUtilisateur({
@@ -348,6 +354,14 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(utilisateurs).toHaveLength(2);
       expect(utilisateurs[0].id).toBe(idU1);
       expect(utilisateurs[1].id).toBe(idU2);
+    });
+
+    it('retourne les utilisateurs administrés par un superviseur', async () => {
+      const utilisateurs =
+        await service.utilisateursDansLePerimetreDe(idSuperviseur);
+
+      expect(utilisateurs).toHaveLength(1);
+      expect(utilisateurs[0].id).toBe(idAdmin);
     });
   });
 });
