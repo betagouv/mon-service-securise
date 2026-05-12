@@ -8,6 +8,7 @@
     "npm",
     "nvm"
   ],
+  "gitAuthor": "Le bot Renovate du LabANSSI <renovate@monservicesecurise.beta.gouv.fr>",
   "dependencyDashboard": true,
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
