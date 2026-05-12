@@ -48,7 +48,7 @@ class Utilisateur extends Base {
   private readonly transactionnelAccepte!: boolean;
   private readonly estimationNombreServices!: EstimationNombreServices;
   readonly postes!: Array<string>;
-  private readonly entite: Entite;
+  readonly entite: Entite;
   private readonly identite: Identite;
   private readonly adaptateurJWT: AdaptateurJWT;
   private readonly cguActuelles: string;

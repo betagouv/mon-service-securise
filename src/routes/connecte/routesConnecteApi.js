@@ -422,7 +422,7 @@ const routesConnecteApi = ({
   routes.use(
     '/admin',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiAdmin({ depotDonnees, serviceAdministrationOrganisations })
+    routesConnecteApiAdmin({ serviceAdministrationOrganisations })
   );
 
   routes.post(

@@ -1,15 +1,12 @@
 import express from 'express';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
-import { DepotDonneesAdminsOrganisations } from '../../depots/depotDonneesAdminsOrganisations.interface.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
 
 type Configuration = {
-  depotDonnees: DepotDonneesAdminsOrganisations;
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 };
 
 const routesConnecteApiAdmin = ({
-  depotDonnees,
   serviceAdministrationOrganisations,
 }: Configuration) => {
   const routes = express.Router();
@@ -27,9 +24,19 @@ const routesConnecteApiAdmin = ({
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
     const utilisateurs =
-      await depotDonnees.utilisateursAdministresPar(idUtilisateurCourant);
+      await serviceAdministrationOrganisations.utilisateursDansLePerimetreDe(
+        idUtilisateurCourant
+      );
 
-    reponse.json(utilisateurs.map((u) => u.toJSON()));
+    reponse.json(
+      utilisateurs.map((u) => ({
+        id: u.id,
+        prenomNom: u.prenomNom(),
+        email: u.email,
+        entite: u.entite.toJSON(),
+        postes: u.postes,
+      }))
+    );
   });
 
   return routes;
