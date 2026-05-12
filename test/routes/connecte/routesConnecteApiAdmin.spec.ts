@@ -45,19 +45,42 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
   describe('quand requête GET sur `/api/admin/utilisateurs`', () => {
     it("retourne la liste des utilisateurs dans le périmètre de l'utilisateur courant", async () => {
       let idAdmin;
-      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.depotDonnees().utilisateursAdministresPar = async (
-        idUtilisateur: UUID
-      ) => {
-        idAdmin = idUtilisateur;
-        return [unUtilisateur().avecEmail('jean@dupond.fr').construis()];
-      };
+      testeur.middleware().reinitialise({ idUtilisateur: 'A1' });
+      testeur.serviceAdministrationOrganisations().utilisateursDansLePerimetreDe =
+        async (idUtilisateur: UUID) => {
+          idAdmin = idUtilisateur;
+          return [
+            unUtilisateur()
+              .avecEmail('jean@dupond.fr')
+              .quiSAppelle('Jean Dupond')
+              .quiTravaillePour({
+                nom: 'Mon entite',
+                siret: 'SIRET',
+                departement: '75',
+              })
+              .avecPostes(['RSSI'])
+              .avecId('U1')
+              .construis(),
+          ];
+        };
 
       const reponse = await testeur.get('/api/admin/utilisateurs');
 
-      expect(idAdmin).toBe('U1');
+      expect(idAdmin).toBe('A1');
       expect(reponse.body).toHaveLength(1);
-      expect(reponse.body[0].email).toBe('jean@dupond.fr');
+      expect(reponse.body).toEqual([
+        {
+          id: 'U1',
+          prenomNom: 'Jean Dupond',
+          email: 'jean@dupond.fr',
+          entite: {
+            nom: 'Mon entite',
+            siret: 'SIRET',
+            departement: '75',
+          },
+          postes: ['RSSI'],
+        },
+      ]);
     });
   });
 });
