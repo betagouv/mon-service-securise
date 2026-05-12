@@ -142,6 +142,18 @@ describe('Le routeur des pages service', () => {
 
     it("navigue en dehors de la SPA si le routeur est en mode 'visiteGuidee'", async () => {
       const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore);
+      const navigueHorsSPA = vi.fn();
+
+      routeurStore.navigue('/service/1234/mesures/export.csv', navigueHorsSPA);
+
+      expect(navigueHorsSPA).toHaveBeenCalledWith(
+        '/service/1234/mesures/export.csv'
+      );
+    });
+
+    it("navigue en dehors de la SPA sur l'export CSV des mesures", async () => {
+      const routeurStore = await leRouteur();
       chargeInformationsService(routeurStore, {
         visible: {
           rolesResponsabilites: true,
