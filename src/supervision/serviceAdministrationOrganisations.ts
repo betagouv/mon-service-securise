@@ -5,9 +5,10 @@ import {
   AdaptateurUUID,
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
-import Entite from '../modeles/entite.js';
+import Entite, { DonneesEntite } from '../modeles/entite.js';
 import Superviseur from '../modeles/superviseur.js';
 import Utilisateur from '../modeles/utilisateur.js';
+import { DepotDonneesAdminsOrganisationsOO } from '../depots/depotDonneesAdminsOrganisationsOO.js';
 
 export type DepotDonneesPourServiceAdmin = {
   autorisationsDuService: (id: UUID) => Promise<Array<Autorisation>>;
@@ -28,16 +29,20 @@ export type DepotDonneesPourServiceAdmin = {
 
 export class ServiceAdministrationOrganisations {
   private readonly depotDonnees: DepotDonneesPourServiceAdmin;
+  private readonly depotDonneesAdminsOrganisationsOO?: DepotDonneesAdminsOrganisationsOO;
   private readonly adaptateurUUID: AdaptateurUUID;
 
   constructor({
     depotDonnees,
+    depotDonneesAdminsOrganisationsOO,
     adaptateurUUID = fabriqueAdaptateurUUID(),
   }: {
     depotDonnees: DepotDonneesPourServiceAdmin;
+    depotDonneesAdminsOrganisationsOO?: DepotDonneesAdminsOrganisationsOO;
     adaptateurUUID: AdaptateurUUID;
   }) {
     this.depotDonnees = depotDonnees;
+    this.depotDonneesAdminsOrganisationsOO = depotDonneesAdminsOrganisationsOO;
     this.adaptateurUUID = adaptateurUUID;
   }
 
@@ -115,10 +120,12 @@ export class ServiceAdministrationOrganisations {
     });
   }
 
-  async entitesDe(idUtilisateur: UUID) {
-    const administreesPar =
-      await this.depotDonnees.entitesAdministreesPar(idUtilisateur);
-    if (administreesPar.length > 0) return administreesPar;
+  async entitesDe(idUtilisateur: UUID): Promise<Array<DonneesEntite>> {
+    const admin =
+      await this.depotDonneesAdminsOrganisationsOO?.lisAdminOrganisations(
+        idUtilisateur
+      );
+    if (admin) return admin.donnees().entitesAdministrees;
 
     const superviseur = await this.depotDonnees.superviseur(idUtilisateur);
     if (superviseur) return superviseur.entitesSupervisees;

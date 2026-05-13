@@ -1,3 +1,4 @@
+import Knex from 'knex';
 import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptateurProfilAnssi.js';
 import CmsCrisp from './src/cms/cmsCrisp.js';
 import Middleware from './src/http/middleware.js';
@@ -36,6 +37,9 @@ import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailM
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
 import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
+import { DepotDonneesAdminsOrganisationsOO } from './src/depots/depotDonneesAdminsOrganisationsOO.js';
+import { AdaptateurPostgresTS } from './src/adaptateurs/adaptateurPostgresTS.js';
+import configKnex from './knexfile.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -123,6 +127,12 @@ const serviceSupervision = new ServiceSupervision({
 const serviceAdministrationOrganisations =
   new ServiceAdministrationOrganisations({
     depotDonnees,
+    depotDonneesAdminsOrganisationsOO: new DepotDonneesAdminsOrganisationsOO({
+      persistance: new AdaptateurPostgresTS({
+        chiffrement: adaptateurChiffrement,
+        knex: Knex(configKnex.production),
+      }),
+    }),
     adaptateurUUID: fabriqueAdaptateurUUID(),
   });
 

@@ -1,5 +1,5 @@
 import testeurMSS from '../testeurMSS.js';
-import Entite, { DonneesEntite } from '../../../src/modeles/entite.ts';
+import { DonneesEntite } from '../../../src/modeles/entite.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
@@ -28,9 +28,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         idUtilisateur: UUID
       ) => {
         idAdmin = idUtilisateur;
-        return [
-          new Entite({ siret: '123', nom: 'Une entite', departement: '33' }),
-        ];
+        return [{ siret: '123', nom: 'Une entite', departement: '33' }];
       };
 
       const reponse = await testeur.get('/api/admin/entites');
