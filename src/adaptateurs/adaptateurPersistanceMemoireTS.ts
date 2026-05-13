@@ -7,7 +7,13 @@ type DonneesPersistanceMemoire = {
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
-  constructor(private readonly donnees: DonneesPersistanceMemoire) {}
+  private readonly donnees: DonneesPersistanceMemoire = {
+    adminsOrganisations: [],
+  };
+
+  constructor(donnees?: DonneesPersistanceMemoire) {
+    if (donnees) this.donnees = donnees;
+  }
 
   async lisAdminOrganisations(
     idUtilisateur: UUID

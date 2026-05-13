@@ -17,7 +17,7 @@ const routesConnecteApiAdmin = ({
     const entites =
       await serviceAdministrationOrganisations.entitesDe(idUtilisateurCourant);
 
-    reponse.json(entites.map((entite) => entite.toJSON()));
+    reponse.json(entites);
   });
 
   routes.get('/utilisateurs', async (requete, reponse) => {
