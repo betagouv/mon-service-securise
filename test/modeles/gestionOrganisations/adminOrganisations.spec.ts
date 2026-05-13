@@ -25,16 +25,20 @@ describe("Un admin d'organisations", () => {
     });
 
     it("accepte silencieusement d'administrer une entité deux fois : elle n'est pas doublonnée", () => {
-      const admin = AdminOrganisations.nouveau(unUUID('U'));
+      const admin = AdminOrganisations.hydrate({
+        idUtilisateur: unUUID('U'),
+        entitesAdministrees: [
+          { siret: 'SIRET-123', nom: 'Un nom', departement: '75' },
+        ],
+      });
 
-      const entite = new Entite({
+      const laMeme = new Entite({
         siret: 'SIRET-123',
         nom: 'Un nom',
         departement: '75',
       });
 
-      admin.administre(entite);
-      admin.administre(entite);
+      admin.administre(laMeme);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(1);
     });
@@ -42,33 +46,38 @@ describe("Un admin d'organisations", () => {
 
   describe("sur le retrait d'une entité administrée", () => {
     it("n'administre plus cette entité", () => {
-      const admin = AdminOrganisations.nouveau(unUUID('U'));
+      const admin = AdminOrganisations.hydrate({
+        idUtilisateur: unUUID('U'),
+        entitesAdministrees: [
+          { siret: 'SIRET-123', nom: 'Un nom', departement: '75' },
+        ],
+      });
+
       const entite = new Entite({
         siret: 'SIRET-123',
         nom: 'Un nom',
         departement: '75',
       });
 
-      admin.administre(entite);
       admin.cesseDAdministrer(entite);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(0);
     });
 
     it('accepte silencieusement de retirer un entité non administrée', () => {
-      const admin = AdminOrganisations.nouveau(unUUID('U'));
-      const entiteA = new Entite({
-        siret: 'SIRET-A',
-        nom: 'Un nom',
-        departement: '75',
+      const admin = AdminOrganisations.hydrate({
+        idUtilisateur: unUUID('U'),
+        entitesAdministrees: [
+          { siret: 'SIRET-A', nom: 'Un nom', departement: '75' },
+        ],
       });
+
       const entiteB = new Entite({
         siret: 'SIRET-B',
         nom: 'Un nom',
         departement: '75',
       });
 
-      admin.administre(entiteA);
       admin.cesseDAdministrer(entiteB);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(1);

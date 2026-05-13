@@ -1,20 +1,26 @@
 import { UUID } from '../../typesBasiques.js';
 import Entite, { DonneesEntite } from '../entite.js';
 
-type DonneesAdminOrganisations = {
+export type DonneesAdminOrganisations = {
   entitesAdministrees: DonneesEntite[];
   idUtilisateur: UUID;
 };
 
 export class AdminOrganisations {
-  private entitesAdministrees: Entite[];
-
-  constructor(private idUtilisateur: UUID) {
-    this.entitesAdministrees = [];
-  }
+  constructor(
+    private idUtilisateur: UUID,
+    private entitesAdministrees: Entite[]
+  ) {}
 
   static nouveau(idUtilisateur: UUID) {
-    return new AdminOrganisations(idUtilisateur);
+    return new AdminOrganisations(idUtilisateur, []);
+  }
+
+  static hydrate(donnees: DonneesAdminOrganisations) {
+    return new AdminOrganisations(
+      donnees.idUtilisateur,
+      donnees.entitesAdministrees.map((e) => new Entite(e))
+    );
   }
 
   donnees(): DonneesAdminOrganisations {
