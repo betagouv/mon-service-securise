@@ -34,4 +34,13 @@ export class AdminOrganisations {
 
     this.entitesAdministrees.push(entite);
   }
+
+  cesseDAdministrer(entite: Entite) {
+    const cible = this.entitesAdministrees.findIndex(
+      (e) => e.siret === entite.siret
+    );
+    if (cible === -1) return;
+
+    this.entitesAdministrees.splice(cible, 1);
+  }
 }
