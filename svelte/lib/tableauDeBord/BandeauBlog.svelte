@@ -27,7 +27,7 @@
   {:else}
     <CarteDePromotion
       titre="Notre équipe est à votre écoute"
-      href="https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1"
+      href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique?s=fd6032fa-4833-4403-8087-3945d168752e"
     >
       {#snippet illustration()}
         <img
