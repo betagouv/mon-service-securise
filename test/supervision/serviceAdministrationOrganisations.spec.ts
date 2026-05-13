@@ -13,7 +13,6 @@ import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistan
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
-import { DepotDonneesAdminsOrganisationsOO } from '../../src/depots/depotDonneesAdminsOrganisationsOO.ts';
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import BusEvenements from '../../src/bus/busEvenements.js';
@@ -180,15 +179,11 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande des entités dans le périmètre d'un utilisateur", () => {
     it("renvoie les entités d'un admin", async () => {
-      const depotDonneesAdminsOrganisationsOO =
-        new DepotDonneesAdminsOrganisationsOO({
-          persistance: unePersistanceMemoireTS()
-            .ajouteAdminSurPerimetre(unUUID('A'), [{ siret: 'SIRET-123' }])
-            .construis(),
-        });
+      const adaptateurPersistanceTS = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(unUUID('A'), [{ siret: 'SIRET-123' }])
+        .construis();
       const service = new ServiceAdministrationOrganisations({
-        depotDonnees: depotComplet,
-        depotDonneesAdminsOrganisationsOO,
+        depotDonnees: unDepotComplet({ adaptateurPersistanceTS }),
         adaptateurUUID: fabriqueAdaptateurUUID(),
       });
 
