@@ -26,7 +26,7 @@ export class AdminOrganisations {
     };
   }
 
-  administreCetteEntite(entite: Entite) {
+  administre(entite: Entite) {
     const dejaAdministree = this.entitesAdministrees.find(
       (e) => e.siret === entite.siret
     );
