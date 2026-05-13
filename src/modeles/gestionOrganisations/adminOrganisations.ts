@@ -27,6 +27,11 @@ export class AdminOrganisations {
   }
 
   administreCetteEntite(entite: Entite) {
+    const dejaAdministree = this.entitesAdministrees.find(
+      (e) => e.siret === entite.siret
+    );
+    if (dejaAdministree) return;
+
     this.entitesAdministrees.push(entite);
   }
 }
