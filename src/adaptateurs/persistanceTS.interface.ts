@@ -1,0 +1,8 @@
+import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
+import { UUID } from '../typesBasiques.js';
+
+export interface PersistanceTS {
+  lisAdminOrganisations: (
+    idUtilisateur: UUID
+  ) => Promise<DonneesAdminOrganisations | undefined>;
+}
