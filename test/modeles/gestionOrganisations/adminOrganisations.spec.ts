@@ -13,7 +13,7 @@ describe("Un admin d'organisations", () => {
     it("administre l'entité", () => {
       const admin = AdminOrganisations.nouveau(unUUID('U'));
 
-      admin.administreCetteEntite(
+      admin.administre(
         new Entite({ siret: 'SIRET-123', nom: 'Un nom', departement: '75' })
       );
 
@@ -33,8 +33,8 @@ describe("Un admin d'organisations", () => {
         departement: '75',
       });
 
-      admin.administreCetteEntite(entite);
-      admin.administreCetteEntite(entite);
+      admin.administre(entite);
+      admin.administre(entite);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(1);
     });
@@ -49,7 +49,7 @@ describe("Un admin d'organisations", () => {
         departement: '75',
       });
 
-      admin.administreCetteEntite(entite);
+      admin.administre(entite);
       admin.cesseDAdministrer(entite);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(0);
@@ -68,7 +68,7 @@ describe("Un admin d'organisations", () => {
         departement: '75',
       });
 
-      admin.administreCetteEntite(entiteA);
+      admin.administre(entiteA);
       admin.cesseDAdministrer(entiteB);
 
       expect(admin.donnees().entitesAdministrees).toHaveLength(1);
