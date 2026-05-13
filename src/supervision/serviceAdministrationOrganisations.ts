@@ -5,44 +5,22 @@ import {
   AdaptateurUUID,
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
-import Entite, { DonneesEntite } from '../modeles/entite.js';
-import Superviseur from '../modeles/superviseur.js';
+import { DonneesEntite } from '../modeles/entite.js';
 import Utilisateur from '../modeles/utilisateur.js';
-import { DepotDonneesAdminsOrganisationsOO } from '../depots/depotDonneesAdminsOrganisationsOO.js';
-
-export type DepotDonneesPourServiceAdmin = {
-  autorisationsDuService: (id: UUID) => Promise<Array<Autorisation>>;
-  lisAdminsPour: (siret: string) => Promise<Array<UUID>>;
-  sauvegardeAutorisation: (autorisation: Autorisation) => Promise<void>;
-  supprimeAutorisationsAdminPour: (id: UUID) => Promise<void>;
-  ajouteSiretAAdmin: (idUtilisateur: UUID, siret: string) => Promise<void>;
-  tousLesServicesAvecSiret: (siret: string) => Promise<Service[]>;
-  entitesAdministreesPar: (idUtilisateur: UUID) => Promise<Array<Entite>>;
-  superviseur: (id: UUID) => Promise<Superviseur | undefined>;
-  utilisateursAdministresPar: (
-    idUtilisateur: UUID
-  ) => Promise<Array<Utilisateur>>;
-  utilisateursSupervisesPar: (
-    idUtilisateur: UUID
-  ) => Promise<Array<Utilisateur>>;
-};
+import { DepotDonnees } from '../depotDonnees.interface.js';
 
 export class ServiceAdministrationOrganisations {
-  private readonly depotDonnees: DepotDonneesPourServiceAdmin;
-  private readonly depotDonneesAdminsOrganisationsOO?: DepotDonneesAdminsOrganisationsOO;
+  private readonly depotDonnees: DepotDonnees;
   private readonly adaptateurUUID: AdaptateurUUID;
 
   constructor({
     depotDonnees,
-    depotDonneesAdminsOrganisationsOO,
     adaptateurUUID = fabriqueAdaptateurUUID(),
   }: {
-    depotDonnees: DepotDonneesPourServiceAdmin;
-    depotDonneesAdminsOrganisationsOO?: DepotDonneesAdminsOrganisationsOO;
+    depotDonnees: DepotDonnees;
     adaptateurUUID: AdaptateurUUID;
   }) {
     this.depotDonnees = depotDonnees;
-    this.depotDonneesAdminsOrganisationsOO = depotDonneesAdminsOrganisationsOO;
     this.adaptateurUUID = adaptateurUUID;
   }
 
@@ -63,7 +41,7 @@ export class ServiceAdministrationOrganisations {
       await this.depotDonnees.autorisationsDuService(service.id);
 
     return lesAdmins.map((idAdmin) => {
-      const existante = autorisationsExistantes.find((a) =>
+      const existante = autorisationsExistantes.find((a: Autorisation) =>
         a.designeUtilisateur(idAdmin)
       );
 
@@ -106,8 +84,8 @@ export class ServiceAdministrationOrganisations {
       const autorisationsExistantes =
         await this.depotDonnees.autorisationsDuService(s.id);
 
-      const autorisationExistantePourAdmin = autorisationsExistantes.find((a) =>
-        a.designeUtilisateur(idAdmin)
+      const autorisationExistantePourAdmin = autorisationsExistantes.find(
+        (a: Autorisation) => a.designeUtilisateur(idAdmin)
       );
 
       return Autorisation.NouvelleAutorisationAdmin({
@@ -121,10 +99,7 @@ export class ServiceAdministrationOrganisations {
   }
 
   async entitesDe(idUtilisateur: UUID): Promise<Array<DonneesEntite>> {
-    const admin =
-      await this.depotDonneesAdminsOrganisationsOO?.lisAdminOrganisations(
-        idUtilisateur
-      );
+    const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (admin) return admin.donnees().entitesAdministrees;
 
     const superviseur = await this.depotDonnees.superviseur(idUtilisateur);

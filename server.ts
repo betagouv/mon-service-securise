@@ -1,4 +1,3 @@
-import Knex from 'knex';
 import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptateurProfilAnssi.js';
 import CmsCrisp from './src/cms/cmsCrisp.js';
 import Middleware from './src/http/middleware.js';
@@ -7,6 +6,7 @@ import * as MSS from './src/mss.js';
 import { fabriqueAnnuaire } from './src/annuaire/serviceAnnuaire.js';
 import * as adaptateurCsv from './src/adaptateurs/adaptateurCsv.js';
 import * as adaptateurEnvironnement from './src/adaptateurs/adaptateurEnvironnement.js';
+import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurGestionErreur } from './src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import fabriqueAdaptateurTracking from './src/adaptateurs/fabriqueAdaptateurTracking.js';
 import { fabriqueAdaptateurHorloge } from './src/adaptateurs/adaptateurHorloge.js';
@@ -32,14 +32,10 @@ import { fabriqueServiceCgu } from './src/serviceCgu.js';
 import ServiceSupervision from './src/supervision/serviceSupervision.js';
 import { fabriqueServiceGestionnaireSession } from './src/session/serviceGestionnaireSession.js';
 import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerificationCoherenceSels.js';
-import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
 import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
-import { DepotDonneesAdminsOrganisationsOO } from './src/depots/depotDonneesAdminsOrganisationsOO.js';
-import { AdaptateurPostgresTS } from './src/adaptateurs/adaptateurPostgresTS.js';
-import configKnex from './knexfile.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -127,12 +123,6 @@ const serviceSupervision = new ServiceSupervision({
 const serviceAdministrationOrganisations =
   new ServiceAdministrationOrganisations({
     depotDonnees,
-    depotDonneesAdminsOrganisationsOO: new DepotDonneesAdminsOrganisationsOO({
-      persistance: new AdaptateurPostgresTS({
-        chiffrement: adaptateurChiffrement,
-        knex: Knex(configKnex.production),
-      }),
-    }),
     adaptateurUUID: fabriqueAdaptateurUUID(),
   });
 
