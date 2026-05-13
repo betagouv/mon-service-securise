@@ -36,11 +36,8 @@ export class AdminOrganisations {
   }
 
   cesseDAdministrer(entite: Entite) {
-    const cible = this.entitesAdministrees.findIndex(
-      (e) => e.siret === entite.siret
+    this.entitesAdministrees = this.entitesAdministrees.filter(
+      (e) => e.siret !== entite.siret
     );
-    if (cible === -1) return;
-
-    this.entitesAdministrees.splice(cible, 1);
   }
 }
