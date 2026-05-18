@@ -703,18 +703,6 @@ const nouvelAdaptateur = (
     },
   ];
 
-  const lisAdminsPour = async (siret) =>
-    donnees.adminsOrganisations
-      .filter((a) => a.siretHash === siret)
-      .map((a) => a.idUtilisateur);
-
-  const ajouteEntiteAAdmin = async (idAdmin, siretHash, donneesChiffrees) =>
-    donnees.adminsOrganisations.push({
-      idUtilisateur: idAdmin,
-      donnees: donneesChiffrees,
-      siretHash,
-    });
-
   const utilisateursAdministresPar = async (idUtilisateur) => {
     const servicesAdministres = donnees.autorisations
       .filter((a) => a.idUtilisateur === idUtilisateur && !!a.estAdmin)
@@ -749,7 +737,6 @@ const nouvelAdaptateur = (
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
-    ajouteEntiteAAdmin,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajoutePlusieursModelesMesureSpecifique,
@@ -767,7 +754,6 @@ const nouvelAdaptateur = (
     contributeursDesServicesDe,
     estJwtRevoque,
     estSuperviseur,
-    lisAdminsPour,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
