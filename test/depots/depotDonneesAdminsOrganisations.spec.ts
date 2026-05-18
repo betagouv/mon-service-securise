@@ -1,120 +1,79 @@
-import { creeDepot } from '../../src/depots/depotDonneesAdminsOrganisations.ts';
-import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
-import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
-import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.ts';
-import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
-import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
-import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
-import { DepotDonneesAdminsOrganisations } from '../../src/depots/depotDonneesAdminsOrganisations.interface.ts';
+import { DepotDonneesAdminsOrganisations } from '../../src/depots/depotDonneesAdminsOrganisations.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
-import Entite from '../../src/modeles/entite.ts';
-import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
+import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/adminOrganisations.ts';
+import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 
-describe("Le dépôt de données d'admin des organisations", () => {
-  describe("concernant la lecture des admins d'une organisation", () => {
-    it('appelle la persistance avec un SIRET haché', async () => {
-      let siretPersistance;
+describe("Le dépôt de données « mode OO » des adminitrateurs d'organisations", () => {
+  const idAdmin = unUUID('A');
 
-      const depot = creeDepot({
-        persistance: {
-          lisAdminsPour: (siret: string) => {
-            siretPersistance = siret;
-            return [];
-          },
-        } as unknown as AdaptateurPersistance,
-        chiffrement:
-          fauxAdaptateurChiffrement() as unknown as AdaptateurChiffrement,
-        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+  describe("sur demande de lecture d'un admin", () => {
+    it('peut lire un admin via son ID', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'siret-A' }])
+        .construis();
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+      const admin = await depot.lisAdminOrganisations(idAdmin);
+
+      expect(admin).toBeInstanceOf(AdminOrganisations);
+      expect(admin!.donnees().idUtilisateur).toBe(idAdmin);
+    });
+
+    it("ne retourne rien si l'utilisateur demandé n'est pas admin : on ne veut pas instancier d'admin via le dépôt par mégarde", async () => {
+      const persistanceVide = unePersistanceMemoireTS().construis();
+      const depot = new DepotDonneesAdminsOrganisations({
+        persistance: persistanceVide,
       });
 
-      await depot.lisAdminsPour('SIRET');
+      const admin = await depot.lisAdminOrganisations(unUUID('X'));
 
-      expect(siretPersistance).toBe('SIRET-haché256');
+      expect(admin).toBeUndefined();
     });
   });
 
-  describe('concernant la lecture des entités administrées par un admin', () => {
-    let depot: DepotDonneesAdminsOrganisations;
-    let adaptateurPersistance: AdaptateurPersistance;
-    let adaptateurChiffrement: AdaptateurChiffrement;
+  it("peut lire les admins d'une entité", async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
+      .ajouteAdminSurPerimetre(unUUID('A2'), [{ siret: 'siret-B' }])
+      .ajouteAdminSurPerimetre(unUUID('A3'), [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesAdminsOrganisations({ persistance });
 
-    beforeEach(() => {
-      adaptateurPersistance =
-        unePersistanceMemoire().construis() as AdaptateurPersistance;
-      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
-      depot = creeDepot({
-        persistance: adaptateurPersistance,
-        chiffrement: adaptateurChiffrement,
-        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
-      });
-    });
+    const admins = await depot.lisAdminsPour('siret-A');
 
-    it("déchiffre les données d'entité persistées", async () => {
-      const idAdmin = unUUID('1');
-      await adaptateurPersistance.ajouteEntiteAAdmin(
-        idAdmin,
-        'SIRET-123-haché',
-        await adaptateurChiffrement.chiffre({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        })
-      );
-
-      const entites = await depot.entitesAdministreesPar(idAdmin);
-
-      expect(entites).toEqual([
-        new Entite({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        }),
-      ]);
-    });
+    expect(admins).toHaveLength(2);
+    expect(admins[0]).toBeInstanceOf(AdminOrganisations);
+    expect(admins[0].donnees().idUtilisateur).toBe(unUUID('A1'));
+    expect(admins[1]).toBeInstanceOf(AdminOrganisations);
+    expect(admins[1].donnees().idUtilisateur).toBe(unUUID('A3'));
   });
 
-  describe("concernant l'ajout d'une entité administrée à un utilisateur", () => {
-    let depot: DepotDonneesAdminsOrganisations;
-    let adaptateurPersistance: AdaptateurPersistance;
-    let adaptateurChiffrement: AdaptateurChiffrement;
-
-    let adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
-    beforeEach(() => {
-      adaptateurPersistance =
-        unePersistanceMemoire().construis() as AdaptateurPersistance;
-      adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
-      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
-      depot = creeDepot({
-        persistance: adaptateurPersistance,
-        chiffrement: adaptateurChiffrement,
-        adaptateurRechercheEntite,
-      });
+  it('sauvegarder un admin en le chiffrant', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteAdminSurPerimetre(idAdmin, [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesAdminsOrganisations({ persistance });
+    const admin = AdminOrganisations.hydrate({
+      idUtilisateur: idAdmin,
+      entitesAdministrees: [{ siret: 'siret-B' }, { siret: 'siret-C' }],
     });
 
-    it("complète les informations de l'organisation responsable et délègue à la persistance la sauvegarde des entites chiffrées", async () => {
-      adaptateurRechercheEntite.rechercheOrganisations = async () => [
-        {
-          nom: 'MonEntite',
-          departement: '75',
-          siret: 'SIRET-123',
-        },
-      ];
-      adaptateurPersistance.ajouteEntiteAAdmin = vi.fn();
+    await depot.sauvegardeAdminOrganisations(admin);
 
-      await depot.ajouteSiretAAdmin(unUUID('1'), 'SIRET-123');
-
-      expect(adaptateurPersistance.ajouteEntiteAAdmin).toHaveBeenCalledWith(
-        unUUID('1'),
-        'SIRET-123-haché256',
-        {
-          chiffre: true,
-          coffreFort: {
-            nom: 'MonEntite',
-            departement: '75',
-            siret: 'SIRET-123',
-          },
-        }
-      );
+    const adminSauvegarde = await depot.lisAdminOrganisations(idAdmin);
+    expect(adminSauvegarde!.donnees().idUtilisateur).toBe(unUUID('A'));
+    expect(adminSauvegarde!.donnees().entitesAdministrees).toHaveLength(2);
+    expect(adminSauvegarde!.donnees().entitesAdministrees[0]).toEqual({
+      siret: 'siret-B',
+    });
+    expect(adminSauvegarde!.donnees().entitesAdministrees[1]).toEqual({
+      siret: 'siret-C',
     });
   });
 });

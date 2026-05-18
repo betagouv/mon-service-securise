@@ -84,7 +84,10 @@ const cableTousLesAbonnes = (
     depotDonnees,
   });
   const serviceAdministrationOrganisations =
-    new ServiceAdministrationOrganisations({ depotDonnees });
+    new ServiceAdministrationOrganisations({
+      depotDonnees,
+      adaptateurRechercheEntite: adaptateurRechercheEntreprise,
+    });
 
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),

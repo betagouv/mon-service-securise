@@ -9,6 +9,10 @@ import {
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import { uneTacheDeService } from '../constructeurs/constructeurTacheDeService.js';
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 describe('Le centre de notifications', () => {
   let referentiel;
@@ -23,7 +27,13 @@ describe('Le centre de notifications', () => {
       naturesTachesService: { natureDeTest: { titre: '', lien: '/…' } },
       tachesCompletudeProfil: [],
     });
-    depotDonnees = creeDepot();
+    depotDonnees = creeDepot({
+      adaptateurEnvironnement,
+      referentielV2: creeReferentielV2(),
+      serviceCgu: { versionActuelle: () => '1' },
+      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      busEvenements: fabriqueBusPourLesTests(),
+    });
 
     depotDonnees.utilisateur = async () =>
       unUtilisateur()

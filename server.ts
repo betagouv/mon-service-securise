@@ -6,6 +6,7 @@ import * as MSS from './src/mss.js';
 import { fabriqueAnnuaire } from './src/annuaire/serviceAnnuaire.js';
 import * as adaptateurCsv from './src/adaptateurs/adaptateurCsv.js';
 import * as adaptateurEnvironnement from './src/adaptateurs/adaptateurEnvironnement.js';
+import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurGestionErreur } from './src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import fabriqueAdaptateurTracking from './src/adaptateurs/fabriqueAdaptateurTracking.js';
 import { fabriqueAdaptateurHorloge } from './src/adaptateurs/adaptateurHorloge.js';
@@ -31,7 +32,6 @@ import { fabriqueServiceCgu } from './src/serviceCgu.js';
 import ServiceSupervision from './src/supervision/serviceSupervision.js';
 import { fabriqueServiceGestionnaireSession } from './src/session/serviceGestionnaireSession.js';
 import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerificationCoherenceSels.js';
-import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
@@ -124,6 +124,7 @@ const serviceAdministrationOrganisations =
   new ServiceAdministrationOrganisations({
     depotDonnees,
     adaptateurUUID: fabriqueAdaptateurUUID(),
+    adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
   });
 
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });

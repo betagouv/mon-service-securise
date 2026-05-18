@@ -5,10 +5,14 @@ import 'tsx/esm'; // Pour que `knex.migrate.latest()` s'exécute dans un écosyt
 import { nouvelAdaptateur } from '../../src/adaptateurs/adaptateurPostgres.js';
 import { genereUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
+import { AdaptateurPostgresTS } from '../../src/adaptateurs/adaptateurPostgresTS.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex;
   let persistance;
+  let persistanceTS;
+  const chiffrement = fauxAdaptateurChiffrement();
   const ID_UTILISATEUR_1 = genereUUID();
   const ID_UTILISATEUR_2 = genereUUID();
   const ID_SERVICE_1 = genereUUID();
@@ -17,6 +21,7 @@ describe("L'adaptateur persistance Postgres", () => {
     knex = Knex({ client: ClientPgLite, dialect: 'postgres', connection: {} });
     await knex.migrate.latest();
     persistance = nouvelAdaptateur({ knexSurcharge: knex });
+    persistanceTS = new AdaptateurPostgresTS({ knex, chiffrement });
   });
 
   afterEach(async () => {
@@ -66,13 +71,18 @@ describe("L'adaptateur persistance Postgres", () => {
   }
 
   async function ajouteEntiteAuPerimetreSuperviseur(idSuperviseur, siret) {
-    await persistance.ajouteEntiteAuSuperviseur(idSuperviseur, siret, {});
+    await persistance.ajouteEntiteAuSuperviseur(
+      idSuperviseur,
+      chiffrement.hacheSha256(siret),
+      {}
+    );
   }
-  async function ajouteEntiteAuPerimetreAdministrateur(
-    idAdministrateur,
-    siret
-  ) {
-    await persistance.ajouteEntiteAAdmin(idAdministrateur, siret, {});
+
+  async function ajouteAdminAvecEntite(idUtilisateur, ...sirets) {
+    await persistanceTS.sauvegardeAdminOrganisations({
+      idUtilisateur,
+      entitesAdministrees: sirets.map((s) => ({ siret: s })),
+    });
   }
 
   async function insereAutorisation(idUtilisateur, idService) {
@@ -330,22 +340,6 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
-  describe("concernant les administrateurs d'organisations", () => {
-    it("peut lire les admins d'un siret haché", async () => {
-      const id = genereUUID();
-      await knex('admins_organisations').insert({
-        id_utilisateur: id,
-        siret_hash: 'siret-haché256',
-        donnees: {},
-      });
-
-      const admins = await persistance.lisAdminsPour('siret-haché256');
-
-      expect(admins.length).to.be(1);
-      expect(admins[0]).to.be(id);
-    });
-  });
-
   describe("concernant la recherche des contributeurs des services d'un propriétaire", () => {
     it('retourne les contributeurs de tous les services', async () => {
       const idService = await insereService();
@@ -428,8 +422,8 @@ describe("L'adaptateur persistance Postgres", () => {
       admin1 = await insereUtilisateur();
       admin2 = await insereUtilisateur();
       await ajouteEntiteAuPerimetreSuperviseur(superviseur, 'siret-1');
-      await ajouteEntiteAuPerimetreAdministrateur(admin1, 'siret-1');
-      await ajouteEntiteAuPerimetreAdministrateur(admin2, 'siret-1');
+      await ajouteAdminAvecEntite(admin1, 'siret-1');
+      await ajouteAdminAvecEntite(admin2, 'siret-1');
     });
 
     it('retourne les administrateurs sur le périmètre du superviseur', async () => {
@@ -441,7 +435,7 @@ describe("L'adaptateur persistance Postgres", () => {
 
     it("ne retourne pas l'utilisateur superviseur lui-même, même s'il est admin", async () => {
       // C'est un cas rare, mais certains superviseurs seront aussi admin
-      await ajouteEntiteAuPerimetreAdministrateur(superviseur, 'siret-1');
+      await ajouteAdminAvecEntite(superviseur, 'siret-1');
 
       const admins = await persistance.utilisateursSupervisesPar(superviseur);
 
@@ -449,8 +443,10 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it('retourne les admins sans doublon', async () => {
+      // superviseur supervise déjà siret-1
       await ajouteEntiteAuPerimetreSuperviseur(superviseur, 'siret-2');
-      await ajouteEntiteAuPerimetreAdministrateur(admin1, 'siret-2');
+      await ajouteAdminAvecEntite(admin1, 'siret-1', 'siret-2');
+      await ajouteAdminAvecEntite(admin2, 'siret-1');
 
       const admins = await persistance.utilisateursSupervisesPar(superviseur);
 

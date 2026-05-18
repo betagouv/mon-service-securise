@@ -1,7 +1,10 @@
+import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
 import { fabriqueAdaptateurJWT } from './adaptateurs/adaptateurJWT.js';
-import { fabriqueAdaptateurUUID } from './adaptateurs/adaptateurUUID.js';
+import {
+  AdaptateurUUID,
+  fabriqueAdaptateurUUID,
+} from './adaptateurs/adaptateurUUID.js';
 import fabriqueAdaptateurPersistance from './adaptateurs/fabriqueAdaptateurPersistance.js';
-import * as Referentiel from './referentiel.js';
 import * as depotDonneesAutorisations from './depots/depotDonneesAutorisations.js';
 import * as depotDonneesServices from './depots/depotDonneesServices.js';
 import * as depotDonneesNotificationsExpirationHomologation from './depots/depotDonneesNotificationsExpirationHomologation.js';
@@ -22,17 +25,49 @@ import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurP
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
-import * as depotDonneesAdminsOrganisations from './depots/depotDonneesAdminsOrganisations.js';
+import { fabriqueAdaptateurPersistanceTS } from './adaptateurs/fabriqueAdaptateurPersistanceTS.js';
+import { DepotDonneesAdminsOrganisations } from './depots/depotDonneesAdminsOrganisations.js';
+import { AdaptateurChiffrement } from './adaptateurs/adaptateurChiffrement.interface.js';
+import { AdaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement.interface.js';
+import { AdaptateurJWT } from './adaptateurs/adaptateurJWT.interface.js';
+import { AdaptateurPersistance } from './adaptateurs/adaptateurPersistance.interface.js';
+import { PersistanceTS } from './adaptateurs/persistanceTS.interface.js';
+import { Referentiel, ReferentielV2 } from './referentiel.interface.js';
+import { creeReferentiel } from './referentiel.js';
+import { AdaptateurRechercheEntreprise } from './adaptateurs/adaptateurRechercheEntreprise.interface.js';
+import BusEvenements from './bus/busEvenements.js';
+import { ServiceCgu } from './serviceCgu.interface.js';
 
-const creeDepot = (config = {}) => {
+export type ConfigDepotDonnees = {
+  adaptateurChiffrement?: AdaptateurChiffrement;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
+  adaptateurJWT?: AdaptateurJWT;
+  adaptateurPersistance?: AdaptateurPersistance;
+  adaptateurPersistanceTS?: PersistanceTS;
+  adaptateurProfilAnssi?: AdaptateurProfilAnssi;
+  adaptateurUUID?: AdaptateurUUID;
+  referentiel?: Referentiel;
+  referentielV2: ReferentielV2;
+  adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
+  busEvenements: BusEvenements;
+  serviceCgu: ServiceCgu;
+};
+
+const creeDepot = (config: ConfigDepotDonnees) => {
   const {
     adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
     adaptateurEnvironnement,
     adaptateurJWT = fabriqueAdaptateurJWT(),
-    adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
+    adaptateurPersistance = fabriqueAdaptateurPersistance(
+      process.env.NODE_ENV
+    ) as AdaptateurPersistance,
+    adaptateurPersistanceTS = fabriqueAdaptateurPersistanceTS(
+      process.env.NODE_ENV!,
+      adaptateurChiffrement
+    ),
     adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi(),
     adaptateurUUID = fabriqueAdaptateurUUID(),
-    referentiel = Referentiel.creeReferentiel(),
+    referentiel = creeReferentiel(),
     referentielV2,
     adaptateurRechercheEntite,
     busEvenements,
@@ -121,6 +156,7 @@ const creeDepot = (config = {}) => {
     depotDonneesTeleversementServices.creeDepot({
       adaptateurChiffrement,
       adaptateurPersistance,
+      referentiel,
       referentielV2,
     });
 
@@ -160,15 +196,12 @@ const creeDepot = (config = {}) => {
   const depotSession = depotDonneesSession.creeDepot({
     chiffrement: adaptateurChiffrement,
     persistance: adaptateurPersistance,
-    decodeJwt: adaptateurJWT.decode,
+    decodeJwt: adaptateurJWT.decode as (jwt: string) => { exp: number },
   });
 
-  const depotAdministrationOrganisations =
-    depotDonneesAdminsOrganisations.creeDepot({
-      adaptateurRechercheEntite,
-      chiffrement: adaptateurChiffrement,
-      persistance: adaptateurPersistance,
-    });
+  const depotAdminsOrganisations = new DepotDonneesAdminsOrganisations({
+    persistance: adaptateurPersistanceTS,
+  });
 
   const {
     ajouteDescriptionService,
@@ -334,10 +367,7 @@ const creeDepot = (config = {}) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin } =
-    depotAdministrationOrganisations;
-
-  return {
+  const tousLesDepotsLegacy = {
     accesAutorise,
     accesAutoriseAUneListeDeService,
     acquitteSuggestionAction,
@@ -354,7 +384,6 @@ const creeDepot = (config = {}) => {
     ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
     ajouteSimulationMigrationReferentielSiNecessaire,
-    ajouteSiretAAdmin,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     analyseDesProprietaires,
@@ -368,7 +397,6 @@ const creeDepot = (config = {}) => {
     confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
-    entitesAdministreesPar,
     estJwtRevoque,
     estSuperviseur,
     finaliseBrouillonService,
@@ -378,7 +406,6 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
-    lisAdminsPour,
     lisBrouillonService,
     lisBrouillonsService,
     lisDernierIndiceCyber,
@@ -459,6 +486,20 @@ const creeDepot = (config = {}) => {
     verifieLaCoherenceDesSels,
     versionsServiceUtiliseesParUtilisateur,
   };
+  type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
+
+  // le proxy sert d'aiguillage entre les dépôts en mode classe et les dépôts en mode procédural
+  return new Proxy(depotAdminsOrganisations, {
+    get(target, prop) {
+      if (prop in target)
+        return target[prop as keyof DepotDonneesAdminsOrganisations];
+      const legacy =
+        tousLesDepotsLegacy[prop as keyof typeof tousLesDepotsLegacy];
+      return typeof legacy === 'function'
+        ? legacy.bind(tousLesDepotsLegacy)
+        : legacy;
+    },
+  }) as TousLesDepotsLegacy & DepotDonneesAdminsOrganisations;
 };
 
 export { creeDepot };
