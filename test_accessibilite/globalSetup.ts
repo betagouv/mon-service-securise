@@ -31,10 +31,10 @@ export default async (config: FullConfig) => {
     try {
       await page.goto(`${urlBase}/connexion`);
       await page.click('a[href^="/oidc/connexion"]');
-      await page.waitForURL(/dev-agentconnect/);
+      await page.waitForURL(/connect/);
       await page.fill('input[type="email"]', process.env.EMAIL_CONNEXION!);
       await page.click('button[type="submit"]');
-      await page.waitForURL(/dev-agentconnect/);
+      await page.waitForURL(/connect/);
       await page.click('button[type="submit"]');
       await page.waitForURL(/creation-compte/);
       await page.click('text=Suivant');
