@@ -18,17 +18,31 @@ import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import BusEvenements from '../../src/bus/busEvenements.js';
 import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeReferentielV2 } from '../../src/referentielV2.ts';
+import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 
 describe("Le service de gestion des admins d'organisation", () => {
+  const idService = unUUID('s');
+  const idAdmin = unUUID('u1');
+  const entite = { siret: '1234' };
+  const unService = unServiceV2()
+    .avecId(idService)
+    .avecOrganisationResponsable(entite)
+    .construis();
   let depotComplet: DepotDonnees;
   let adaptateurPersistance: AdaptateurPersistance;
+  let adaptateurPersistanceTS: PersistanceTS;
 
   const unDepotComplet = (surcharge?: Partial<ConfigDepotDonnees>) => {
-    adaptateurPersistance =
-      unePersistanceMemoire().construis() as AdaptateurPersistance;
+    adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnService(unService)
+      .construis() as AdaptateurPersistance;
+    adaptateurPersistanceTS = unePersistanceMemoireTS()
+      .ajouteAdminSurPerimetre(idAdmin, [entite])
+      .construis();
+
     return creeDepotComplet({
       adaptateurPersistance,
-      adaptateurPersistanceTS: unePersistanceMemoireTS().construis(),
+      adaptateurPersistanceTS,
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
       adaptateurEnvironnement,
       referentielV2: creeReferentielV2(),
@@ -44,11 +58,6 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande de rattachement d'un service à ses admins", () => {
     it('crée les autorisations admins correspondantes', async () => {
-      const unService = unServiceV2()
-        .avecId(unUUID('s'))
-        .avecOrganisationResponsable({ siret: '1234' })
-        .construis();
-      depotComplet.lisAdminsPour = async () => [unUUID('u1')];
       const administrationOrganisations =
         new ServiceAdministrationOrganisations({
           adaptateurUUID: fabriqueAdaptateurUUID(),
@@ -57,24 +66,16 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
-      const autorisationsDuService = await depotComplet.autorisationsDuService(
-        unUUID('s')
-      );
+      const autorisationsDuService =
+        await depotComplet.autorisationsDuService(idService);
       const [admin] = autorisationsDuService;
-      expect(admin.idUtilisateur).toBe(unUUID('u1'));
+      expect(admin.idUtilisateur).toBe(idAdmin);
     });
 
     it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
-      const idService = unUUID('s');
-      const idProprietaire = unUUID('u1');
-      const unService = unServiceV2()
-        .avecId(idService)
-        .avecOrganisationResponsable({ siret: '1234' })
-        .construis();
       await depotComplet.sauvegardeAutorisation(
-        uneAutorisation().deProprietaire(idProprietaire, idService).construis()
+        uneAutorisation().deProprietaire(idAdmin, idService).construis()
       );
-      depotComplet.lisAdminsPour = async () => [idProprietaire];
       const administrationOrganisations =
         new ServiceAdministrationOrganisations({
           adaptateurUUID: fabriqueAdaptateurUUID(),
@@ -90,12 +91,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it('délègue au dépôt la suppression des autorisations admins pré-existantes', async () => {
-      const constructeurService = unServiceV2()
-        .avecId(unUUID('s'))
-        .avecOrganisationResponsable({ siret: '1234' });
-
       const mockSupprimeAutorisations = vi.fn();
-      depotComplet.lisAdminsPour = async () => [unUUID('u1')];
       depotComplet.supprimeAutorisationsAdminPour = mockSupprimeAutorisations;
       const administrationOrganisations =
         new ServiceAdministrationOrganisations({
@@ -103,11 +99,9 @@ describe("Le service de gestion des admins d'organisation", () => {
           depotDonnees: depotComplet,
         });
 
-      await administrationOrganisations.rattacheLesAdministrateursDe(
-        constructeurService.construis()
-      );
+      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
-      expect(mockSupprimeAutorisations).toHaveBeenCalledWith(unUUID('s'));
+      expect(mockSupprimeAutorisations).toHaveBeenCalledWith(idService);
     });
   });
 
@@ -179,7 +173,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande des entités dans le périmètre d'un utilisateur", () => {
     it("renvoie les entités d'un admin", async () => {
-      const adaptateurPersistanceTS = unePersistanceMemoireTS()
+      adaptateurPersistanceTS = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(unUUID('A'), [{ siret: 'SIRET-123' }])
         .construis();
       const service = new ServiceAdministrationOrganisations({
@@ -225,7 +219,6 @@ describe("Le service de gestion des admins d'organisation", () => {
   describe("sur demande des utilisateurs dans le périmètre d'un utilisateur", () => {
     let service: ServiceAdministrationOrganisations;
 
-    const idAdmin = unUUID('A');
     const idSuperviseur = unUUID('S');
     const idU1 = unUUID('U1');
     const idU2 = unUUID('U2');
