@@ -198,7 +198,7 @@
       <div class="cadre-indice-cyber">
         <div class="disque-indice-cyber">
           <IndiceCyberPersonnalise
-            indiceCyberPersonnalise={indiceCyber.total}
+            indiceCyberPersonnalise={indiceCyberPersonnalise.total}
             {noteMax}
             {idService}
           />
