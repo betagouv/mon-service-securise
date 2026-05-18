@@ -17,4 +17,10 @@ export class DepotDonneesAdminsOrganisationsOO {
 
     return donnees ? AdminOrganisations.hydrate(donnees) : undefined;
   }
+
+  async lisAdminsPour(siret: string): Promise<Array<AdminOrganisations>> {
+    const donnees = await this.persistance.lisAdminsOrganisation(siret);
+
+    return donnees.map((d) => AdminOrganisations.hydrate(d));
+  }
 }

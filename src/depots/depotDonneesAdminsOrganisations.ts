@@ -14,11 +14,6 @@ export const creeDepot = ({
   chiffrement: AdaptateurChiffrement;
   adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
 }): DepotDonneesAdminsOrganisations => {
-  const lisAdminsPour = async (siret: string): Promise<Array<UUID>> => {
-    const siretHache = chiffrement.hacheSha256(siret);
-    return persistance.lisAdminsPour(siretHache);
-  };
-
   const ajouteSiretAAdmin = async (idAdmin: UUID, siret: string) => {
     const entite = await Entite.completeDonnees(
       { siret },
@@ -37,6 +32,5 @@ export const creeDepot = ({
 
   return {
     ajouteSiretAAdmin,
-    lisAdminsPour,
   };
 };

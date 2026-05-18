@@ -4,7 +4,7 @@ import 'tsx/esm'; // Pour que `knex.migrate.latest()` s'exécute dans un écosyt
 import { unUUIDRandom } from '../constructeurs/UUID.ts';
 import { AdaptateurPostgresTS } from '../../src/adaptateurs/adaptateurPostgresTS.ts';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
-import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface';
+import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.js';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -51,6 +51,52 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(admin).toEqual({
         idUtilisateur: idAdmin,
         entitesAdministrees: [donneesEntite],
+      });
+    });
+  });
+
+  describe("sur demande de lecture des admins d'une organisation", () => {
+    it("retourne une liste vide s'il n'en existe pas", async () => {
+      const admin = await persistance.lisAdminsOrganisation('siret-inconnu');
+
+      expect(admin).toEqual([]);
+    });
+
+    it('peut lire des admins chiffrés', async () => {
+      const idAdmin1 = unUUIDRandom();
+      const idAdmin2 = unUUIDRandom();
+      const donneesEntite1 = { nom: 'nom', siret: 'SIRET', departement: '75' };
+      const donneesEntite2 = {
+        nom: 'nom2',
+        siret: 'SIRET2',
+        departement: '75',
+      };
+      const siretHash = chiffrement.hacheSha256('SIRET');
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin1,
+        siret_hash: siretHash,
+        donnees: await chiffrement.chiffre(donneesEntite1),
+      });
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin2,
+        siret_hash: siretHash,
+        donnees: await chiffrement.chiffre(donneesEntite1),
+      });
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin2,
+        siret_hash: chiffrement.hacheSha256('SIRET2'),
+        donnees: await chiffrement.chiffre(donneesEntite2),
+      });
+
+      const [admin, admin2] = await persistance.lisAdminsOrganisation('SIRET');
+
+      expect(admin).toEqual({
+        idUtilisateur: idAdmin1,
+        entitesAdministrees: [donneesEntite1],
+      });
+      expect(admin2).toEqual({
+        idUtilisateur: idAdmin2,
+        entitesAdministrees: [donneesEntite1, donneesEntite2],
       });
     });
   });

@@ -40,7 +40,8 @@ export class ServiceAdministrationOrganisations {
     const autorisationsExistantes =
       await this.depotDonnees.autorisationsDuService(service.id);
 
-    return lesAdmins.map((idAdmin) => {
+    return lesAdmins.map((admin) => {
+      const idAdmin = admin.donnees().idUtilisateur;
       const existante = autorisationsExistantes.find((a: Autorisation) =>
         a.designeUtilisateur(idAdmin)
       );

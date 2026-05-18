@@ -5,4 +5,7 @@ export interface PersistanceTS {
   lisAdminOrganisations: (
     idUtilisateur: UUID
   ) => Promise<DonneesAdminOrganisations | undefined>;
+  lisAdminsOrganisation: (
+    siret: string
+  ) => Promise<Array<DonneesAdminOrganisations>>;
 }
