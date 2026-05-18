@@ -22,4 +22,12 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       (a) => a.idUtilisateur === idUtilisateur
     );
   }
+
+  async lisAdminsOrganisation(
+    siret: string
+  ): Promise<Array<DonneesAdminOrganisations>> {
+    return this.donnees.adminsOrganisations.filter((a) =>
+      a.entitesAdministrees.map((e) => e.siret).includes(siret)
+    );
+  }
 }

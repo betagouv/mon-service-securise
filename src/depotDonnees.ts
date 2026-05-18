@@ -375,7 +375,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, ajouteSiretAAdmin } = depotAdministrationOrganisations;
+  const { ajouteSiretAAdmin } = depotAdministrationOrganisations;
 
   const tousLesDepotsLegacy = {
     accesAutorise,
@@ -417,7 +417,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
-    lisAdminsPour,
     lisBrouillonService,
     lisBrouillonsService,
     lisDernierIndiceCyber,
