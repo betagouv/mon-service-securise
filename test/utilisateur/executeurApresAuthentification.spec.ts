@@ -73,7 +73,7 @@ describe("L'executeur après authentification", () => {
   beforeEach(() => {
     adaptateurJWT = {
       signeDonnees: () => 'données-signées',
-    } as AdaptateurJWT;
+    } as unknown as AdaptateurJWT;
     adaptateurEnvironnement = {
       mss: () => ({
         urlBase: () => '',
