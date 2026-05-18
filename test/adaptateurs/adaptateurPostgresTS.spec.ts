@@ -100,4 +100,62 @@ describe("L'adaptateur persistance Postgres", () => {
       });
     });
   });
+
+  describe("sur demande de mise à jour d'un admin d'organisations", () => {
+    it("ajoute le nouvel admin s'il n'existe pas", async () => {
+      const idAdmin = unUUIDRandom();
+      const donneesEntite = { siret: 'siret' };
+
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [donneesEntite],
+      });
+
+      const adminSauvegarde = await persistance.lisAdminOrganisations(idAdmin);
+      expect(adminSauvegarde).toEqual({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [donneesEntite],
+      });
+    });
+
+    it("mets à jour les entités de l'admin s'il existe", async () => {
+      const idAdmin = unUUIDRandom();
+      const donneesEntiteA = {
+        nom: 'nomA',
+        siret: 'siretA',
+        departement: '75',
+      };
+      const donneesEntiteB = {
+        nom: 'nomB',
+        siret: 'siretB',
+        departement: '75',
+      };
+      const donneesEntiteC = {
+        nom: 'nomC',
+        siret: 'siretC',
+        departement: '75',
+      };
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin,
+        siret_hash: chiffrement.hacheSha256('siretA'),
+        donnees: await chiffrement.chiffre(donneesEntiteA),
+      });
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin,
+        siret_hash: chiffrement.hacheSha256('siretB'),
+        donnees: await chiffrement.chiffre(donneesEntiteB),
+      });
+
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [donneesEntiteB, donneesEntiteC],
+      });
+
+      const admin = await persistance.lisAdminOrganisations(idAdmin);
+      expect(admin).toEqual({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [donneesEntiteB, donneesEntiteC],
+      });
+    });
+  });
 });

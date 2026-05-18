@@ -30,4 +30,13 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       a.entitesAdministrees.map((e) => e.siret).includes(siret)
     );
   }
+
+  async sauvegardeAdminOrganisations(
+    donnees: DonneesAdminOrganisations
+  ): Promise<void> {
+    this.donnees.adminsOrganisations = this.donnees.adminsOrganisations.filter(
+      (d) => d.idUtilisateur !== donnees.idUtilisateur
+    );
+    this.donnees.adminsOrganisations.push(donnees);
+  }
 }

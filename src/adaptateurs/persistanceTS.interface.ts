@@ -8,4 +8,7 @@ export interface PersistanceTS {
   lisAdminsOrganisation: (
     siret: string
   ) => Promise<Array<DonneesAdminOrganisations>>;
+  sauvegardeAdminOrganisations: (
+    donnees: DonneesAdminOrganisations
+  ) => Promise<void>;
 }
