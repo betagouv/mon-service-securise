@@ -124,6 +124,7 @@ const serviceAdministrationOrganisations =
   new ServiceAdministrationOrganisations({
     depotDonnees,
     adaptateurUUID: fabriqueAdaptateurUUID(),
+    adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
   });
 
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
