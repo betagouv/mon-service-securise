@@ -687,6 +687,7 @@ class ConsoleAdministration {
     const serviceAdminOrgas = new ServiceAdministrationOrganisations({
       depotDonnees: this.depotDonnees,
       adaptateurUUID: fabriqueAdaptateurUUID(),
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });
 
     /* eslint-disable no-restricted-syntax */

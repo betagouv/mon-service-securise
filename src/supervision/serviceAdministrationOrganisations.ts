@@ -5,22 +5,28 @@ import {
   AdaptateurUUID,
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
-import { DonneesEntite } from '../modeles/entite.js';
+import Entite, { DonneesEntite } from '../modeles/entite.js';
 import Utilisateur from '../modeles/utilisateur.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
+import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
+import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 
 export class ServiceAdministrationOrganisations {
   private readonly depotDonnees: DepotDonnees;
+  private readonly adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
   private readonly adaptateurUUID: AdaptateurUUID;
 
   constructor({
     depotDonnees,
+    adaptateurRechercheEntite,
     adaptateurUUID = fabriqueAdaptateurUUID(),
   }: {
     depotDonnees: DepotDonnees;
+    adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
     adaptateurUUID: AdaptateurUUID;
   }) {
     this.depotDonnees = depotDonnees;
+    this.adaptateurRechercheEntite = adaptateurRechercheEntite;
     this.adaptateurUUID = adaptateurUUID;
   }
 
@@ -63,7 +69,7 @@ export class ServiceAdministrationOrganisations {
   }
 
   async rattacheEntiteA(siret: string, idAdmin: UUID) {
-    await this.depotDonnees.ajouteSiretAAdmin(idAdmin, siret);
+    await this.ajouteSiretAAdmin(siret, idAdmin);
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
 
@@ -75,6 +81,22 @@ export class ServiceAdministrationOrganisations {
     await this.sauvegardeAutorisations(
       await Promise.all(nouvellesAutorisations)
     );
+  }
+
+  private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {
+    let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
+    if (!admin) {
+      admin = AdminOrganisations.nouveau(idAdmin);
+    }
+
+    const donneesEntite = await Entite.completeDonnees(
+      { siret },
+      this.adaptateurRechercheEntite
+    );
+
+    admin.administre(new Entite(donneesEntite));
+
+    await this.depotDonnees.sauvegardeAdminOrganisations(admin);
   }
 
   private fabriqueAutorisationsAdminPourServices(
