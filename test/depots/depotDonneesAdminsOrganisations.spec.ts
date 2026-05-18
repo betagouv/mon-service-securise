@@ -1,4 +1,4 @@
-import { DepotDonneesAdminsOrganisationsOO } from '../../src/depots/depotDonneesAdminsOrganisationsOO.ts';
+import { DepotDonneesAdminsOrganisations } from '../../src/depots/depotDonneesAdminsOrganisations.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
@@ -11,7 +11,7 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
       const persistance = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'siret-A' }])
         .construis();
-      const depot = new DepotDonneesAdminsOrganisationsOO({ persistance });
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
 
       const admin = await depot.lisAdminOrganisations(idAdmin);
 
@@ -21,7 +21,7 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
 
     it("ne retourne rien si l'utilisateur demandé n'est pas admin : on ne veut pas instancier d'admin via le dépôt par mégarde", async () => {
       const persistanceVide = unePersistanceMemoireTS().construis();
-      const depot = new DepotDonneesAdminsOrganisationsOO({
+      const depot = new DepotDonneesAdminsOrganisations({
         persistance: persistanceVide,
       });
 
@@ -40,7 +40,7 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
         { siret: 'siret-A' },
       ])
       .construis();
-    const depot = new DepotDonneesAdminsOrganisationsOO({ persistance });
+    const depot = new DepotDonneesAdminsOrganisations({ persistance });
 
     const admins = await depot.lisAdminsPour('siret-A');
 
@@ -58,7 +58,7 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
         { siret: 'siret-A' },
       ])
       .construis();
-    const depot = new DepotDonneesAdminsOrganisationsOO({ persistance });
+    const depot = new DepotDonneesAdminsOrganisations({ persistance });
     const admin = AdminOrganisations.hydrate({
       idUtilisateur: idAdmin,
       entitesAdministrees: [{ siret: 'siret-B' }, { siret: 'siret-C' }],

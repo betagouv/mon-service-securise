@@ -3,7 +3,7 @@ import { UUID } from '../typesBasiques.js';
 
 import { PersistanceTS } from '../adaptateurs/persistanceTS.interface.js';
 
-export class DepotDonneesAdminsOrganisationsOO {
+export class DepotDonneesAdminsOrganisations {
   private readonly persistance: PersistanceTS;
 
   constructor({ persistance }: { persistance: PersistanceTS }) {
