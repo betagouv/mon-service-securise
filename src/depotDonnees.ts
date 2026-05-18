@@ -26,7 +26,7 @@ import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonSer
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
 import { fabriqueAdaptateurPersistanceTS } from './adaptateurs/fabriqueAdaptateurPersistanceTS.js';
-import { DepotDonneesAdminsOrganisationsOO } from './depots/depotDonneesAdminsOrganisationsOO.js';
+import { DepotDonneesAdminsOrganisations } from './depots/depotDonneesAdminsOrganisations.js';
 import { AdaptateurChiffrement } from './adaptateurs/adaptateurChiffrement.interface.js';
 import { AdaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement.interface.js';
 import { AdaptateurJWT } from './adaptateurs/adaptateurJWT.interface.js';
@@ -199,7 +199,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     decodeJwt: adaptateurJWT.decode as (jwt: string) => { exp: number },
   });
 
-  const depotAdminsOrganisations = new DepotDonneesAdminsOrganisationsOO({
+  const depotAdminsOrganisations = new DepotDonneesAdminsOrganisations({
     persistance: adaptateurPersistanceTS,
   });
 
@@ -492,14 +492,14 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   return new Proxy(depotAdminsOrganisations, {
     get(target, prop) {
       if (prop in target)
-        return target[prop as keyof DepotDonneesAdminsOrganisationsOO];
+        return target[prop as keyof DepotDonneesAdminsOrganisations];
       const legacy =
         tousLesDepotsLegacy[prop as keyof typeof tousLesDepotsLegacy];
       return typeof legacy === 'function'
         ? legacy.bind(tousLesDepotsLegacy)
         : legacy;
     },
-  }) as TousLesDepotsLegacy & DepotDonneesAdminsOrganisationsOO;
+  }) as TousLesDepotsLegacy & DepotDonneesAdminsOrganisations;
 };
 
 export { creeDepot };
