@@ -35,30 +35,30 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   await checkDEtape('decrire-2');
 
   await page.click('text=Suivant ');
-  await page.waitForURL('/visiteGuidee/securiser');
-  await checkDEtape('securiser-1');
+  await page.waitForURL('/visiteGuidee/mesures');
+  await checkDEtape('mesures-1');
 
   await page.click('text=Suivant ');
-  await checkDEtape('securiser-2');
+  await checkDEtape('mesures-2');
 
   await page.click('text=Suivant ');
-  await checkDEtape('securiser-3');
+  await checkDEtape('mesures-3');
 
   await page.click('text=Suivant ');
-  await checkDEtape('securiser-4');
+  await checkDEtape('mesures-4');
 
   await page.click('text=Suivant ');
-  await checkDEtape('securiser-5');
+  await checkDEtape('mesures-5');
 
   await page.click('text=Suivant ');
-  await checkDEtape('securiser-6');
+  await checkDEtape('mesures-6');
 
   await page.click('text=Suivant ');
-  await page.waitForURL('/visiteGuidee/homologuer');
-  await checkDEtape('homologuer-1');
+  await page.waitForURL('/visiteGuidee/dossiers');
+  await checkDEtape('dossiers-1');
 
   await page.click('text=Suivant ');
-  await checkDEtape('homologuer-2');
+  await checkDEtape('dossiers-2');
 
   await page.click('text=Suivant ');
   await page.waitForURL('/visiteGuidee/piloter');
