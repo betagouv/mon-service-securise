@@ -33,46 +33,6 @@ describe("Le dépôt de données d'admin des organisations", () => {
     });
   });
 
-  describe('concernant la lecture des entités administrées par un admin', () => {
-    let depot: DepotDonneesAdminsOrganisations;
-    let adaptateurPersistance: AdaptateurPersistance;
-    let adaptateurChiffrement: AdaptateurChiffrement;
-
-    beforeEach(() => {
-      adaptateurPersistance =
-        unePersistanceMemoire().construis() as AdaptateurPersistance;
-      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
-      depot = creeDepot({
-        persistance: adaptateurPersistance,
-        chiffrement: adaptateurChiffrement,
-        adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
-      });
-    });
-
-    it("déchiffre les données d'entité persistées", async () => {
-      const idAdmin = unUUID('1');
-      await adaptateurPersistance.ajouteEntiteAAdmin(
-        idAdmin,
-        'SIRET-123-haché',
-        await adaptateurChiffrement.chiffre({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        })
-      );
-
-      const entites = await depot.entitesAdministreesPar(idAdmin);
-
-      expect(entites).toEqual([
-        new Entite({
-          nom: 'NomEntite',
-          siret: 'SIRET-123',
-          departement: '75',
-        }),
-      ]);
-    });
-  });
-
   describe("concernant l'ajout d'une entité administrée à un utilisateur", () => {
     let depot: DepotDonneesAdminsOrganisations;
     let adaptateurPersistance: AdaptateurPersistance;

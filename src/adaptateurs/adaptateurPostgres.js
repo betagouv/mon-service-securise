@@ -1002,13 +1002,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees,
     });
 
-  const lisEntitesAdministreesPar = async (idAdmin) =>
-    (
-      await knex('admins_organisations')
-        .where({ id_utilisateur: idAdmin })
-        .select('donnees')
-    ).map((a) => a.donnees);
-
   const utilisateursAdministresPar = async (idUtilisateur) => {
     const contributeurs = await knex.raw(
       `
@@ -1080,7 +1073,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisAdminsPour,
     lisBrouillonsService,
     lisDernierIndiceCyber,
-    lisEntitesAdministreesPar,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,

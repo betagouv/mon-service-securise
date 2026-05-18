@@ -375,8 +375,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { lisAdminsPour, entitesAdministreesPar, ajouteSiretAAdmin } =
-    depotAdministrationOrganisations;
+  const { lisAdminsPour, ajouteSiretAAdmin } = depotAdministrationOrganisations;
 
   const tousLesDepotsLegacy = {
     accesAutorise,
@@ -409,7 +408,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
-    entitesAdministreesPar,
     estJwtRevoque,
     estSuperviseur,
     finaliseBrouillonService,

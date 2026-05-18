@@ -715,11 +715,6 @@ const nouvelAdaptateur = (
       siretHash,
     });
 
-  const lisEntitesAdministreesPar = async (idAdmin) =>
-    donnees.adminsOrganisations
-      .filter((a) => a.idUtilisateur === idAdmin)
-      .map((a) => a.donnees);
-
   const utilisateursAdministresPar = async (idUtilisateur) => {
     const servicesAdministres = donnees.autorisations
       .filter((a) => a.idUtilisateur === idUtilisateur && !!a.estAdmin)
@@ -774,7 +769,6 @@ const nouvelAdaptateur = (
     estSuperviseur,
     lisAdminsPour,
     lisBrouillonsService,
-    lisEntitesAdministreesPar,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
