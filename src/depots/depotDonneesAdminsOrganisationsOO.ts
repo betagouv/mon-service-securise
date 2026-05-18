@@ -23,4 +23,8 @@ export class DepotDonneesAdminsOrganisationsOO {
 
     return donnees.map((d) => AdminOrganisations.hydrate(d));
   }
+
+  async sauvegardeAdminOrganisations(admin: AdminOrganisations) {
+    await this.persistance.sauvegardeAdminOrganisations(admin.donnees());
+  }
 }

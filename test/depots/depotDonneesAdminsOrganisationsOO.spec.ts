@@ -4,9 +4,10 @@ import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/admin
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 
 describe("Le dépôt de données « mode OO » des adminitrateurs d'organisations", () => {
+  const idAdmin = unUUID('A');
+
   describe("sur demande de lecture d'un admin", () => {
     it('peut lire un admin via son ID', async () => {
-      const idAdmin = unUUID('A');
       const persistance = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'siret-A' }])
         .construis();
@@ -48,5 +49,31 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
     expect(admins[0].donnees().idUtilisateur).toBe(unUUID('A1'));
     expect(admins[1]).toBeInstanceOf(AdminOrganisations);
     expect(admins[1].donnees().idUtilisateur).toBe(unUUID('A3'));
+  });
+
+  it('sauvegarder un admin en le chiffrant', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteAdminSurPerimetre(idAdmin, [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesAdminsOrganisationsOO({ persistance });
+    const admin = AdminOrganisations.hydrate({
+      idUtilisateur: idAdmin,
+      entitesAdministrees: [{ siret: 'siret-B' }, { siret: 'siret-C' }],
+    });
+
+    await depot.sauvegardeAdminOrganisations(admin);
+
+    const adminSauvegarde = await depot.lisAdminOrganisations(idAdmin);
+    expect(adminSauvegarde!.donnees().idUtilisateur).toBe(unUUID('A'));
+    expect(adminSauvegarde!.donnees().entitesAdministrees).toHaveLength(2);
+    expect(adminSauvegarde!.donnees().entitesAdministrees[0]).toEqual({
+      siret: 'siret-B',
+    });
+    expect(adminSauvegarde!.donnees().entitesAdministrees[1]).toEqual({
+      siret: 'siret-C',
+    });
   });
 });
