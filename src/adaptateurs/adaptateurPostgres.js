@@ -988,20 +988,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .where({ hash_jwt_revoque: jwtHashe })
       .first()) !== undefined;
 
-  const lisAdminsPour = async (siret) =>
-    (
-      await knex('admins_organisations')
-        .where({ siret_hash: siret })
-        .select('id_utilisateur')
-    ).map((admin) => admin.id_utilisateur);
-
-  const ajouteEntiteAAdmin = async (idAdmin, siretHash, donnees) =>
-    knex('admins_organisations').insert({
-      id_utilisateur: idAdmin,
-      siret_hash: siretHash,
-      donnees,
-    });
-
   const utilisateursAdministresPar = async (idUtilisateur) => {
     const contributeurs = await knex.raw(
       `
@@ -1050,7 +1036,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
-    ajouteEntiteAAdmin,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajouteParrainage,
@@ -1070,7 +1055,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     contributeursDesServicesDe,
     estJwtRevoque,
     estSuperviseur,
-    lisAdminsPour,
     lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,

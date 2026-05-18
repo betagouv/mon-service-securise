@@ -25,7 +25,6 @@ import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurP
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
-import * as depotDonneesAdminsOrganisations from './depots/depotDonneesAdminsOrganisations.js';
 import { fabriqueAdaptateurPersistanceTS } from './adaptateurs/fabriqueAdaptateurPersistanceTS.js';
 import { DepotDonneesAdminsOrganisationsOO } from './depots/depotDonneesAdminsOrganisationsOO.js';
 import { AdaptateurChiffrement } from './adaptateurs/adaptateurChiffrement.interface.js';
@@ -200,13 +199,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     decodeJwt: adaptateurJWT.decode as (jwt: string) => { exp: number },
   });
 
-  const depotAdministrationOrganisations =
-    depotDonneesAdminsOrganisations.creeDepot({
-      adaptateurRechercheEntite,
-      chiffrement: adaptateurChiffrement,
-      persistance: adaptateurPersistance,
-    });
-
   const depotAdminsOrganisations = new DepotDonneesAdminsOrganisationsOO({
     persistance: adaptateurPersistanceTS,
   });
@@ -375,8 +367,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const { ajouteSiretAAdmin } = depotAdministrationOrganisations;
-
   const tousLesDepotsLegacy = {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -394,7 +384,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
     ajouteSimulationMigrationReferentielSiNecessaire,
-    ajouteSiretAAdmin,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     analyseDesProprietaires,
