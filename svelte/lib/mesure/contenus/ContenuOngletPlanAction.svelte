@@ -54,6 +54,7 @@
             {estLectureSeule}
             referentielStatuts={statuts}
             version="accentuee"
+            label="Statut"
           />
         </div>
       </div>
@@ -67,14 +68,14 @@
   <SelectionPriorite
     id="priorite"
     bind:priorite={$store.mesureEditee.mesure.priorite}
-    label="Priorité"
     estLectureSeule={selectionDesactivee}
+    avecLabel
     avecLibelleOption
     {priorites}
   />
   <SelectionEcheance
     bind:echeance={$store.mesureEditee.mesure.echeance}
-    avecLabel={true}
+    avecLabel
     estLectureSeule={selectionDesactivee}
   />
   <div>

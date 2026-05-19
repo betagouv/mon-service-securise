@@ -25,6 +25,7 @@
     id="configuration-mesure"
     bind:statut={statutSelectionne}
     referentielStatuts={statuts}
+    avecLabel
     label="Statut de la mesure"
     labelChoixVide="Ne pas modifier le statut"
   />

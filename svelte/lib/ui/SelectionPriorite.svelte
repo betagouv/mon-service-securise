@@ -6,7 +6,7 @@
   interface Props {
     id: IdDom;
     priorite: PrioriteMesure | undefined | '';
-    label?: string;
+    avecLabel?: boolean;
     estLectureSeule?: boolean;
     avecLibelleOption?: boolean;
     priorites: ReferentielPriorite;
@@ -16,7 +16,7 @@
   let {
     id,
     priorite = $bindable(),
-    label = '',
+    avecLabel = false,
     estLectureSeule = false,
     avecLibelleOption = false,
     priorites,
@@ -34,8 +34,10 @@
   };
 </script>
 
-<label for={`priorite-${id}`} class:a-label={label !== ''}>
-  {label}
+<label for={`priorite-${id}`} class:a-label={avecLabel} aria-label="Priorité">
+  {#if avecLabel}
+    Priorité
+  {/if}
   <select
     bind:value={priorite}
     id={`priorite-${id}`}
