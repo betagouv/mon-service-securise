@@ -7,7 +7,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   $effect(() => {
@@ -22,11 +21,14 @@
   };
 </script>
 
-<label for="presentation" class="titre-question">
+<span class="titre-question" aria-hidden="true">
   Présentez votre service en quelques lignes
-</label>
+</span>
 <dsfr-textarea
+  id="presentationService"
   rows={5}
+  label="Présentez votre service en quelques lignes"
+  hideLabel
   value={$leBrouillon.presentation}
   status={estInvalide ? 'error' : 'info'}
   infoMessage={estInvalide ? '' : '2000 caractères maximum'}

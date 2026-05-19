@@ -10,7 +10,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   const illustrations: Record<TypeService, string> = {
@@ -35,24 +34,47 @@
   ][];
 </script>
 
-<label for="type-service" class="titre-question">
-  Quel est le type de service à sécuriser ?*
+<div>
+  <span class="titre-question">
+    Quel est le type de service à sécuriser ?*
+  </span>
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each typesDeService as [idType, details] (idType)}
-    {@const nomImage = illustrations[idType]}
-    <CheckboxIllustree
-      id={idType}
-      nomGroupe="type-service"
-      bind:valeurs={$leBrouillon.typeService}
-      {details}
-      illustration="/statique/assets/images/typesService/{nomImage}"
-    />
-  {/each}
-</label>
+  <fieldset>
+    <legend>Type de service</legend>
+    {#each typesDeService as [idType, details] (idType)}
+      {@const nomImage = illustrations[idType]}
+      <CheckboxIllustree
+        id={idType}
+        nomGroupe="type-service"
+        bind:valeurs={$leBrouillon.typeService}
+        {details}
+        illustration="/statique/assets/images/typesService/{nomImage}"
+      />
+    {/each}
+  </fieldset>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      legend {
+        display: none;
+      }
+    }
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;

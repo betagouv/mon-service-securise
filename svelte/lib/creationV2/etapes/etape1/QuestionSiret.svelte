@@ -35,10 +35,13 @@
   });
 </script>
 
-<label for="siret" class="titre-question">
+<span class="titre-question" aria-hidden="true">
   Quel est le nom ou siret de l’organisation ?*
-</label>
+</span>
 
 {#key $leBrouillon.siret}
-  <ChampOrganisation bind:siret={$leBrouillon.siret} />
+  <ChampOrganisation
+    bind:siret={$leBrouillon.siret}
+    label="Quel est le nom ou siret de l’organisation ?*"
+  />
 {/key}

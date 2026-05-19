@@ -11,7 +11,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   $effect(() => {
@@ -25,8 +24,8 @@
   };
 </script>
 
-<label for="statut-deploiement" class="titre-question">
-  Quelle est l'audience cible du service ?*
+<div>
+  <span class="titre-question">Quelle est l'audience cible du service ?*</span>
 
   <span class="sous-titre-question">
     *En cas de socle technique (ex. système d'hébergement d'autres systèmes),
@@ -44,10 +43,15 @@
       onchange={metsAJour}
     />
   {/each}
-</label>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
     .sous-titre-question {
       margin-top: -8px;
       font-size: 0.75rem;

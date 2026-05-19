@@ -11,7 +11,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   $effect(() => {
@@ -26,8 +25,10 @@
   };
 </script>
 
-<label for="volumetrie-donnees" class="titre-question">
-  Quel est le volume des données traitées au sein du système d’information ?*
+<div>
+  <span class="titre-question"
+    >Quel est le volume des données traitées au sein du système d’information ?*</span
+  >
 
   <span class="indication">Sélectionnez une réponse</span>
   {#each Object.entries(questionsV2.volumetrieDonneesTraitees) as [idType, { nom, description }] (idType)}
@@ -39,10 +40,15 @@
       onchange={metsAJour}
     />
   {/each}
-</label>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;

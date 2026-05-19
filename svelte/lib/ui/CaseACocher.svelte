@@ -46,7 +46,7 @@
     gap: 8px;
 
     &.inactif span {
-      opacity: 0.5;
+      opacity: 0.6;
     }
     span {
       font-size: 1rem;

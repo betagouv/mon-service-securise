@@ -7,7 +7,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   let elementHtml:
@@ -42,11 +41,13 @@
   };
 </script>
 
-<label for="nom-service" class="titre-question">
+<span class="titre-question" aria-hidden="true">
   Nom du service à sécuriser*
-</label>
+</span>
 <dsfr-input
   bind:this={elementHtml}
+  label="Nom du service à sécuriser*"
+  hideLabel
   type="text"
   id="nom-service"
   nom="nom-service"

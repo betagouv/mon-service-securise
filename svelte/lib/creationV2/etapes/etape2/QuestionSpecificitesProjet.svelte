@@ -10,10 +10,8 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  // eslint-disable-next-line no-useless-assignment
   estComplete = true;
 
   const illustrations: Record<SpecificiteProjet, string> = {
@@ -37,25 +35,48 @@
   ][];
 </script>
 
-<label for="specificite-projet" class="titre-question">
-  L'une ou plusieurs des spécificités suivantes sont-elles incluses dans le
-  périmètre de l'homologation ?
+<div>
+  <span class="titre-question">
+    L'une ou plusieurs des spécificités suivantes sont-elles incluses dans le
+    périmètre de l'homologation ?
+  </span>
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each specificiteProjet as [idType, details] (idType)}
-    {@const nomImage = illustrations[idType]}
-    <CheckboxIllustree
-      id={idType}
-      nomGroupe="specificite-projet"
-      bind:valeurs={$leBrouillon.specificitesProjet}
-      {details}
-      illustration="/statique/assets/images/specificiteProjet/{nomImage}"
-    />
-  {/each}
-</label>
+  <fieldset>
+    <legend>Spécificité</legend>
+    {#each specificiteProjet as [idType, details] (idType)}
+      {@const nomImage = illustrations[idType]}
+      <CheckboxIllustree
+        id={idType}
+        nomGroupe="specificite-projet"
+        bind:valeurs={$leBrouillon.specificitesProjet}
+        {details}
+        illustration="/statique/assets/images/specificiteProjet/{nomImage}"
+      />
+    {/each}
+  </fieldset>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      legend {
+        display: none;
+      }
+    }
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;

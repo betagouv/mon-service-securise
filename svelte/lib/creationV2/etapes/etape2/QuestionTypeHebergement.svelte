@@ -12,7 +12,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
   $effect(() => {
     estComplete = !!$leBrouillon.typeHebergement;
@@ -43,8 +42,10 @@
   };
 </script>
 
-<label for="type-hebergement" class="titre-question">
-  Quel type de cloud/hébergement utilisez-vous ?*
+<div class="selection-type-hebergement">
+  <span class="titre-question">
+    Quel type de cloud/hébergement utilisez-vous ?*
+  </span>
 
   <span class="indication">Sélectionnez une réponse</span>
 
@@ -56,7 +57,7 @@
       onchange={externaliseSiNecessaire}
     />
   {/each}
-</label>
+</div>
 
 <div
   class="titre-question activites-externalisees"
@@ -94,22 +95,26 @@
   .indication-libelle {
     font-size: 0.75rem;
     line-height: 1.25rem;
-    color: #666;
     font-weight: normal;
     margin-left: 33px;
 
     &.inactif {
-      opacity: 0.5;
+      opacity: 0.7;
     }
   }
 
-  label {
-    .indication {
-      font-size: 0.75rem;
-      line-height: 1.15rem;
-      color: #666;
-      font-weight: normal;
-      margin-top: 8px;
-    }
+  .selection-type-hebergement {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+  }
+
+  .indication {
+    font-size: 0.75rem;
+    line-height: 1.15rem;
+    color: #666;
+    font-weight: normal;
+    margin-top: 8px;
   }
 </style>

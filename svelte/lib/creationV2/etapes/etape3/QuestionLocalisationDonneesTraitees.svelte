@@ -35,8 +35,8 @@
   ) as Array<[LocalisationDonneesTraitees, { nom: string }]>;
 </script>
 
-<label for="localisations-donnees-traitees" class="titre-question">
-  Où sont localisées les données traitées ?*
+<div>
+  <span class="titre-question">Où sont localisées les données traitées ?*</span>
   <span class="indication">Sélectionnez une réponse</span>
   {#each localisations as [idType, { nom }] (idType)}
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
@@ -48,10 +48,15 @@
       onchange={metsAJour}
     />
   {/each}
-</label>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;
