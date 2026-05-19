@@ -14,7 +14,7 @@ block append styles
 
 mixin uneCarteDeStats(illustration, chiffre, label, evolution, avecSuffixe = true)
   .carte
-    img(src=`/statique/assets/images/${illustration}.svg`)
+    img(src=`/statique/assets/images/${illustration}.svg` alt="")
     .chiffre #{chiffre}
     .label #{label}
     .evolution #{evolution} #{avecSuffixe ? 'depuis 1 an' : ''}
@@ -24,7 +24,7 @@ block main
   .bandeau
     .fil-ariane
       a(href='/') Accueil
-      img(src='/statique/assets/images/forme_chevron_blanc.svg')
+      img(src='/statique/assets/images/forme_chevron_blanc.svg' alt="")
       span Nos statistiques
     h1 Nos statistiques
     h2 L'impact de MonServiceSécurisé en quelques chiffres
