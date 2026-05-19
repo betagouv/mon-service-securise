@@ -112,13 +112,13 @@
   );
 </script>
 
+<svelte:body on:mesure-modifiee={rafraichisServiceComplet} />
 <svelte:document
   onclick={interecepteNavigation}
   on:description-service-modifiee={rafraichisResumeService}
   on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
   on:homologation-supprimee={rafraichisServiceComplet}
   on:homologation-modifiee={rafraichisServiceComplet}
-  on:mesure-modifiee={rafraichisServiceComplet}
   on:parcours-homologation-initie={rafraichisServiceComplet}
   on:homologation-finalisee={rafraichisServiceComplet}
 />
