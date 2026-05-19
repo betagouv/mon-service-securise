@@ -265,11 +265,12 @@
       class:inactif={seulementNomServiceEditable}
       id="url-du-service"
     >
-      <label for="url-service">URL du service</label>
+      <span class="label">URL du service</span>
       <ListeChampTexte
         nomGroupe="pointsAcces"
         bind:valeurs={donnees.pointsAcces}
         onAjout={ajouteValeurPointAcces}
+        libelleAccessibilite="URL du service"
         titreSuppression="Supprimer l'URL"
         titreAjout="Ajouter une URL"
         inactif={seulementNomServiceEditable}
@@ -432,9 +433,10 @@
       class="conteneur-liste-champs conteneur-marge-haute-negative"
       class:inactif={seulementNomServiceEditable}
     >
-      <label for="url-service">Données traitées supplémentaires</label>
+      <span class="label">Données traitées supplémentaires</span>
       <ListeChampTexte
         nomGroupe="categoriesDonneesTraiteesSupplementaires"
+        libelleAccessibilite="Données traitées supplémentaires"
         bind:valeurs={donnees.categoriesDonneesTraiteesSupplementaires}
         onAjout={ajouteCategoriesDonneesTraiteesSupplementaires}
         titreSuppression="Supprimer les données"
@@ -502,7 +504,7 @@
     font-size: 1.375rem;
     line-height: 1.75;
   }
-  label {
+  span.label {
     font-size: 1rem;
     line-height: 1.5rem;
     color: #161616;
@@ -512,7 +514,7 @@
     flex-direction: column;
     gap: 0.5rem;
 
-    &.inactif label {
+    &.inactif span.label {
       color: #929292;
     }
   }

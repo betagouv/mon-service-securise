@@ -1,6 +1,7 @@
 <script lang="ts">
   interface Props {
     valeurs: string[];
+    libelleAccessibilite: string;
     nomGroupe: string;
     titreSuppression: string;
     titreAjout: string;
@@ -13,6 +14,7 @@
 
   let {
     valeurs = $bindable(),
+    libelleAccessibilite,
     nomGroupe,
     titreSuppression,
     titreAjout,
@@ -34,6 +36,8 @@
   <div class="conteneur-champs-texte">
     <dsfr-input
       type="text"
+      label={libelleAccessibilite}
+      hideLabel
       id={`${nomGroupe}-${index}`}
       nom={nomGroupe}
       value={valeur}

@@ -6,14 +6,16 @@
 
   interface Props {
     siret?: string | undefined;
-    label?: string;
+    label: string;
+    afficheLabel?: boolean;
     disabled?: boolean;
     onSiretChoisi?: (siret: string) => void;
   }
 
   let {
     siret = $bindable(undefined),
-    label = '',
+    label,
+    afficheLabel = false,
     disabled = false,
     onSiretChoisi,
   }: Props = $props();
@@ -113,6 +115,7 @@
   <dsfr-input
     bind:this={elementInput}
     {label}
+    hideLabel={!afficheLabel}
     type="text"
     id="siret"
     nom="siret"
@@ -143,7 +146,7 @@
       </div>
     {/each}
   </div>
-  <input type="text" bind:value={siret} class="valeur-cache" />
+  <input type="hidden" bind:value={siret} class="valeur-cache" />
 </div>
 
 <style lang="scss">

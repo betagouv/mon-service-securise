@@ -80,31 +80,32 @@
   ) as [CategorieDonneesTraitees, { nom: string; exemple: string }][];
 </script>
 
-<label for="categories-donnees-traitees" class="titre-question">
-  Quelles données sont traitées ?
+<div>
+  <span class="titre-question">Quelles données sont traitées ?</span>
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-
-  {#each categorieDonneesTraitees as [idType, details] (idType)}
-    {@const nomImage = illustrations[idType]}
-    <CheckboxIllustree
-      id={idType}
-      nomGroupe="categories-donnees-traitees"
-      illustration="/statique/assets/images/categorieDonneesTraitees/{nomImage}"
-      {details}
-      bind:valeurs={valeurCategoriesDonneesTraitees}
-    />
-  {/each}
-  <label
-    for="categoriesDonneesTraiteesSupplementaires"
-    class="titre-liste-donnees-supplementaires"
-  >
-    {#if $leBrouillon.categoriesDonneesTraiteesSupplementaires?.length > 0}
-      <span>Nom de la donnée</span>
-    {/if}
+  <fieldset>
+    <legend>Données traitées</legend>
+    {#each categorieDonneesTraitees as [idType, details] (idType)}
+      {@const nomImage = illustrations[idType]}
+      <CheckboxIllustree
+        id={idType}
+        nomGroupe="categories-donnees-traitees"
+        illustration="/statique/assets/images/categorieDonneesTraitees/{nomImage}"
+        {details}
+        bind:valeurs={valeurCategoriesDonneesTraitees}
+      />
+    {/each}
+  </fieldset>
+  <fieldset class="titre-liste-donnees-supplementaires">
+    <legend
+      class:visible={$leBrouillon.categoriesDonneesTraiteesSupplementaires
+        ?.length > 0}>Nom de la donnée</legend
+    >
 
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
+      libelleAccessibilite="Données traitées supplémentaires"
       bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
       onAjout={ajouteValeur}
       titreSuppression="Supprimer la donnée"
@@ -117,8 +118,8 @@
         if (estComplete) enregistre();
       }}
     />
-  </label>
-</label>
+  </fieldset>
+</div>
 
 <style lang="scss">
   .titre-liste-donnees-supplementaires {
@@ -128,18 +129,41 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem;
-
-    span {
-      margin-bottom: -8px;
-    }
   }
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;
       color: #666;
       font-weight: normal;
       margin-top: 8px;
+    }
+
+    fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      legend {
+        display: none;
+      }
+
+      legend.visible {
+        display: block;
+        margin: 0 0 8px;
+        padding: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5rem;
+      }
     }
   }
 </style>

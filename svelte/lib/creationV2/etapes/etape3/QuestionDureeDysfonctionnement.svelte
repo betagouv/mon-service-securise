@@ -11,7 +11,6 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   $effect(() => {
@@ -26,8 +25,11 @@
   };
 </script>
 
-<label for="duree-dysfonctionnement-acceptable" class="titre-question">
-  Quelle serait la durée maximale acceptable de dysfonctionnement du système ?*
+<div>
+  <span class="titre-question"
+    >Quelle serait la durée maximale acceptable de dysfonctionnement du système
+    ?*</span
+  >
 
   <span class="indication">Sélectionnez une réponse</span>
   {#each Object.entries(questionsV2.dureeDysfonctionnementAcceptable) as [idType, { nom }] (idType)}
@@ -38,10 +40,15 @@
       onchange={metsAJour}
     />
   {/each}
-</label>
+</div>
 
 <style lang="scss">
-  label {
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 586px;
+
     .indication {
       font-size: 0.75rem;
       line-height: 1.15rem;

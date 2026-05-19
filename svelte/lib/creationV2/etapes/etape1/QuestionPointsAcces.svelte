@@ -41,14 +41,15 @@
   };
 </script>
 
-<label for="pointsAcces" class="titre-question">
+<span class="titre-question">
   Quelle est l'URL de votre service?
 
   <span class="sous-titre"> exemple : https://www.exemple.com </span>
-</label>
+</span>
 <div class="liste">
   <ListeChampTexte
     nomGroupe="pointsAcces"
+    libelleAccessibilite="URL du service"
     bind:valeurs={$leBrouillon.pointsAcces}
     onAjout={ajouteValeur}
     titreSuppression="Supprimer l'URL"
