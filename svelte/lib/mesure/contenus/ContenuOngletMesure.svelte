@@ -96,6 +96,7 @@
       id="statut"
       {estLectureSeule}
       referentielStatuts={statuts}
+      avecLabel
       label="Statut"
       requis
     />

@@ -7,7 +7,8 @@
     id: string;
     statut: string | undefined;
     referentielStatuts: ReferentielStatut;
-    label?: string;
+    label: string;
+    avecLabel?: boolean;
     estLectureSeule?: boolean;
     requis?: boolean;
     version?: 'normale' | 'accentuee';
@@ -19,7 +20,8 @@
     id,
     statut = $bindable(),
     referentielStatuts,
-    label = '',
+    label,
+    avecLabel = false,
     estLectureSeule = false,
     requis = false,
     version = 'normale',
@@ -39,10 +41,13 @@
 <label
   for={`statut-${id}`}
   class:requis
-  class:a-label={label !== ''}
-  class:avecAsterisqueRequis={!!label}
+  class:a-label={avecLabel}
+  class:avecAsterisqueRequis={avecLabel}
+  aria-label={label}
 >
-  {label}
+  {#if avecLabel}
+    {label}
+  {/if}
   <select
     bind:value={statut}
     id={`statut-${id}`}

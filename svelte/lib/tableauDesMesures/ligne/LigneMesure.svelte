@@ -136,6 +136,7 @@
       {referentielStatuts}
       onStatutChange={(statut) => onModificationStatut(statut)}
       requis
+      label="Statut"
     />
   </td>
 </tr>
