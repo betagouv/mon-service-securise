@@ -4,31 +4,47 @@ block variables
   - const titrePage = 'À propos'
 
 block contenu-documentation
-  p.
-    MonServiceSécurisé est une solution de cybersécurité conçue par
-    <a href="https://cyber.gouv.fr/rapports-dactivites/">le laboratoire d'innovation de l'ANSSI</a>,
-    en lien avec l'incubateur de services numériques <a href="https://beta.gouv.fr/startups/">"BetaGouv"</a>
-    de la direction interministérielle du numérique (DINUM). Pensé pour et par les
-    entités publiques, MonServiceSécurisé a pour mission d'aider les
-    entités publiques à sécuriser et homologuer les services publics
-    numériques (sites web, applications mobiles et API).
+  p
+    | MonServiceSécurisé est une solution de cybersécurité conçue par
+    |
+    dsfr-link(href="https://cyber.gouv.fr/rapports-dactivites/" label="le laboratoire d'innovation de l'ANSSI" blank neutral)
+    | , en lien avec l'incubateur de services numériques
+    |
+    dsfr-link(href="https://beta.gouv.fr/startups/" label="BetaGouv" blank neutral)
+    |
+    | de la direction interministérielle du numérique (DINUM). Pensé pour et par les
+    | entités publiques, MonServiceSécurisé a pour mission d'aider les
+    | entités publiques à sécuriser et homologuer les services publics
+    | numériques (sites web, applications mobiles et API).
 
   p Cette solution est :
 
   ul
-    li.
-      développée par une équipe de développeurs et de designers UX/UI via
-      <a href="https://omnicite.fr/">Omnicité</a>;
-    li.
-      hébergée chez
-      <a href="https://www.clever-cloud">Clever Cloud</a> prenant appui sur Cloud Temple qualifié SecNumCloud et certifié ISO 27001 ainsi que HDS;
-    li.
-      sous licence
-      <a href="https://github.com/betagouv/mon-service-securise/blob/master/LICENSE">Apache-2.0</a>.
+    li
+      | développée par une équipe de développeurs et de designers UX/UI via
+      |
+      dsfr-link(href="https://www.cremedelacreme.io/" label="Crème De La Crème" neutral blank)
+      |
+      | ;
+    li
+      | hébergée chez
+      |
+      dsfr-link(href="https://www.clever-cloud" label="Clever Cloud" neutral blank)
+      |
+      | prenant appui sur Cloud Temple qualifié SecNumCloud et certifié ISO 27001 ainsi que HDS&nbsp;;
+    li
+      | sous licence
+      |
+      dsfr-link(href="https://github.com/betagouv/mon-service-securise/blob/master/LICENSE" label="Apache-2.0" neutral blank)
+      | .
 
-  p: a(href = 'https://github.com/betagouv/mon-service-securise') Le code est accessible en ligne.
+  p
+    dsfr-link(href = 'https://github.com/betagouv/mon-service-securise' label='Le code est accessible en ligne' neutral blank)
+    | .
 
-  p.
-    Pour toute question ou suggestion concernant les
-    fonctionnalités de MonServiceSécurisé ou sa sécurité, contactez l'équipe à
-    <a href="mailto:contact@monservicesecurise.beta.gouv.fr">contact@monservicesecurise.beta.gouv.fr</a>.
+  p
+    | Pour toute question ou suggestion concernant les
+    | fonctionnalités de MonServiceSécurisé ou sa sécurité, contactez l'équipe à l'adresse
+    |
+    dsfr-link(href="mailto:contact@monservicesecurise.beta.gouv.fr" label="contact@monservicesecurise.beta.gouv.fr" neutral blank)
+    | .
