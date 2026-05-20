@@ -30,4 +30,30 @@ describe('Le dépôt de données OO des superviseurs', () => {
       expect(superviseur).toBeUndefined();
     });
   });
+
+  it('sauvegarde un superviseur', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteSuperviseurSurPerimetre(idSuperviseur, [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesSuperviseursOO({ persistance });
+    const superviseur = Superviseur.hydrate({
+      idUtilisateur: idSuperviseur,
+      entitesSupervisees: [{ siret: 'siret-B' }, { siret: 'siret-C' }],
+    });
+
+    await depot.sauvegardeSuperviseur(superviseur);
+
+    const superviseurSauvegarde = await depot.lisSuperviseur(idSuperviseur);
+    expect(superviseurSauvegarde!.donnees().idUtilisateur).toBe(idSuperviseur);
+    expect(superviseurSauvegarde!.donnees().entitesSupervisees).toHaveLength(2);
+    expect(superviseurSauvegarde!.donnees().entitesSupervisees[0]).toEqual({
+      siret: 'siret-B',
+    });
+    expect(superviseurSauvegarde!.donnees().entitesSupervisees[1]).toEqual({
+      siret: 'siret-C',
+    });
+  });
 });
