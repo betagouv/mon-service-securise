@@ -97,6 +97,13 @@ const genererMarkdown = (
     (acc, v) => {
       // eslint-disable-next-line no-param-reassign
       acc[v.impact] = (acc[v.impact] ?? 0) + 1;
+      // eslint-disable-next-line no-param-reassign
+      acc[`${v.impact}-pages`] =
+        (acc[`${v.impact}-pages`] ?? 0) + v.occurrences.length;
+      // eslint-disable-next-line no-param-reassign
+      acc[`${v.impact}-nodes`] =
+        (acc[`${v.impact}-nodes`] ?? 0) +
+        v.occurrences.map((n) => n.noeuds.length).reduce((a, b) => a + b, 0);
       return acc;
     },
     {}
@@ -107,12 +114,12 @@ const genererMarkdown = (
     .map(([impact]) => {
       const emoji = EMOJI_IMPACT[impact] ?? '';
       const libelle = LIBELLE_IMPACT[impact] ?? impact;
-      return `| ${emoji} ${libelle} | ${compteParImpact[impact]} |`;
+      return `| ${emoji} ${libelle} | ${compteParImpact[impact]} | ${compteParImpact[`${impact}-pages`]} | ${compteParImpact[`${impact}-nodes`]} |`;
     });
 
   const sommaire =
     lignesSommaire.length > 0
-      ? `| Impact | Nombre |\n|--------|--------|\n${lignesSommaire.join('\n')}`
+      ? `| Sévérité | Nombre de règles non respectées | Nombre de pages impactées | Nombre de nœuds concernés |\n|--------|--------|--------|--------|\n${lignesSommaire.join('\n')}`
       : 'Aucune violation. ✅';
 
   const sections = violations
