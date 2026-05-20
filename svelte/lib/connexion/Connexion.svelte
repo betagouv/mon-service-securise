@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Lien from '../ui/Lien.svelte';
-
   interface Props {
     urlRedirection: string;
   }
