@@ -32,9 +32,6 @@ const creeDepot = ({
     );
   };
 
-  const estSuperviseur = async (idUtilisateur: UUID) =>
-    adaptateurPersistance.estSuperviseur(idUtilisateur);
-
   const lisSuperviseurs = async (siret: string) => {
     const siretHache = adaptateurChiffrement.hacheSha256(siret);
     return adaptateurPersistance.lisSuperviseursConcernes(siretHache);
@@ -45,7 +42,6 @@ const creeDepot = ({
 
   return {
     ajouteSiretAuSuperviseur,
-    estSuperviseur,
     lisSuperviseurs,
     revoqueSuperviseur,
   };

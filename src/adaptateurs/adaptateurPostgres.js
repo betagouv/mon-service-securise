@@ -620,13 +620,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees: donneesChiffrees,
     });
 
-  const estSuperviseur = async (idUtilisateur) =>
-    (
-      await knex('superviseurs')
-        .where({ id_superviseur: idUtilisateur })
-        .count('id_superviseur')
-    )[0].count >= 1;
-
   const ajouteParrainage = async (
     idUtilisateurFilleul,
     idUtilisateurParrain,
@@ -1044,7 +1037,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     autorisationsDuService,
     contributeursDesServicesDe,
     estJwtRevoque,
-    estSuperviseur,
     lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,
