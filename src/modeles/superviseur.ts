@@ -7,14 +7,10 @@ export type DonneesSuperviseur = {
 };
 
 class Superviseur {
-  readonly entitesSupervisees: Entite[];
-
   private constructor(
     private readonly idUtilisateur: UUID,
-    entitesSupervisees: Entite[]
-  ) {
-    this.entitesSupervisees = entitesSupervisees;
-  }
+    private readonly entitesSupervisees: Entite[]
+  ) {}
 
   static nouveau(idUtilisateur: UUID) {
     return new Superviseur(idUtilisateur, []);
@@ -25,6 +21,15 @@ class Superviseur {
       donnees.idUtilisateur,
       donnees.entitesSupervisees.map((d) => new Entite(d))
     );
+  }
+
+  supervise(entite: Entite) {
+    const dejaSupervisee = this.entitesSupervisees.find(
+      (e) => e.siret === entite.siret
+    );
+    if (dejaSupervisee) return;
+
+    this.entitesSupervisees.push(entite);
   }
 
   donnees(): DonneesSuperviseur {

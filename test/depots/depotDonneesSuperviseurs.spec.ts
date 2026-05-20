@@ -2,7 +2,6 @@ import * as depotDonneesSuperviseurs from '../../src/depots/depotDonneesSupervis
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import Superviseur from '../../src/modeles/superviseur.js';
-import Entite from '../../src/modeles/entite.js';
 import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
 import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
 import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
@@ -103,8 +102,7 @@ describe('Le dépôt de données des superviseurs', () => {
 
     expect(idRecu).toEqual(unUUID('1'));
     expect(superviseur).toBeInstanceOf(Superviseur);
-    expect(superviseur!.entitesSupervisees[0]).toBeInstanceOf(Entite);
-    expect(superviseur!.entitesSupervisees[0].nom).toBe('NomEntite');
+    expect(superviseur!.donnees().entitesSupervisees[0].nom).toBe('NomEntite');
   });
 
   it("délègue à la persistance la révocation d'un superviseur", async () => {

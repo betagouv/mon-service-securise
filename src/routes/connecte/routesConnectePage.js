@@ -34,7 +34,7 @@ const routesConnectePage = ({
       }
       reponse.render('supervision', {
         referentiel,
-        entitesSupervisees: superviseur.entitesSupervisees,
+        entitesSupervisees: superviseur.donnees().entitesSupervisees,
       });
     }
   );
