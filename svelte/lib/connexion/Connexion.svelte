@@ -28,35 +28,40 @@
           >
         </a>
         <p>
-          <a
+          <dsfr-link
             href="https://www.proconnect.gouv.fr"
-            target="_blank"
+            blank
             rel="noopener noreferrer"
             title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
+            label="Qu'est-ce que ProConnect ?"
           >
-            Qu'est-ce que ProConnect ?
-          </a>
+          </dsfr-link>
         </p>
       </div>
-      <div class="mise-en-avant">
-        <lab-anssi-icone nom="info-line" taille="md"></lab-anssi-icone>
-        <span class="titre"><b>Évolution des modes de connexion</b></span>
-        <br />
-        <span>
-          Depuis le 5 mars 2026, la connexion à MonServiceSécurisé se fait
-          uniquement via ProConnect.
-        </span>
-        <Lien
-          titre="En savoir plus"
+      <dsfr-callout
+        text="Depuis le 5 mars 2026, la connexion à MonServiceSécurisé se fait uniquement via ProConnect.
+"
+        title="Évolution des modes de connexion"
+        title-markup="h3"
+        button-label="En savoir plus"
+        icon="info-line"
+        has-title
+        has-icon
+        has-button
+      >
+        <dsfr-button
+          slot="button"
+          markup="a"
+          label="En savoir plus"
           href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/la-connexion-a-monservicesecurise-evolue-1jr2z6k"
-          type="bouton-secondaire"
+          kind="primary"
           target="_blank"
-        />
-      </div>
+        ></dsfr-button>
+      </dsfr-callout>
 
       <div class="pas-encore-compte">
         <span>Vous n'avez pas encore de compte ?</span>
-        <a href="/inscription">S'inscrire</a>
+        <dsfr-link href="/inscription" label="S'inscrire"></dsfr-link>
       </div>
     </div>
   </div>
@@ -111,29 +116,8 @@
     justify-content: center;
   }
 
-  .mise-en-avant {
-    margin-top: 40px;
-    padding: 16px 24px;
+  dsfr-callout {
     text-align: left;
-    color: #3a3a3a;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background: #eee;
-    border-left: 4px solid var(--bleu-mise-en-avant);
-    margin-bottom: 8px;
-
-    .titre {
-      color: #161616;
-      font-size: 1.375rem;
-      line-height: 1.75rem;
-    }
-
-    span {
-      font-size: 1.125rem;
-      font-weight: 400;
-      line-height: 1.75rem;
-    }
   }
 
   .pas-encore-compte {
