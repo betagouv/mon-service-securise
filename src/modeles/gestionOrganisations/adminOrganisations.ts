@@ -7,8 +7,8 @@ export type DonneesAdminOrganisations = {
 };
 
 export class AdminOrganisations {
-  constructor(
-    private idUtilisateur: UUID,
+  private constructor(
+    private readonly idUtilisateur: UUID,
     private entitesAdministrees: Entite[]
   ) {}
 
