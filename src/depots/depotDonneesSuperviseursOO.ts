@@ -18,4 +18,10 @@ export class DepotDonneesSuperviseursOO {
   async sauvegardeSuperviseur(superviseur: Superviseur): Promise<void> {
     await this.persistance.sauvegardeSuperviseur(superviseur.donnees());
   }
+
+  async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
+    const superviseur = await this.lisSuperviseur(idUtilisateur);
+
+    return superviseur !== undefined;
+  }
 }

@@ -442,11 +442,6 @@ const nouvelAdaptateur = (
       donnees: donneesChiffrees,
     });
 
-  const estSuperviseur = async (idUtilisateur) =>
-    donnees.superviseurs.some(
-      ({ idSuperviseur }) => idSuperviseur === idUtilisateur
-    );
-
   const verifieTousLesServicesExistent = async (idsServices) =>
     idsServices.every((unId) => donnees.services.find((s) => s.id === unId));
 
@@ -743,7 +738,6 @@ const nouvelAdaptateur = (
     autorisationsDuService,
     contributeursDesServicesDe,
     estJwtRevoque,
-    estSuperviseur,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,

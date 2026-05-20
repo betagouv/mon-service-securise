@@ -308,12 +308,8 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const {
-    ajouteSiretAuSuperviseur,
-    estSuperviseur,
-    lisSuperviseurs,
-    revoqueSuperviseur,
-  } = depotSuperviseurs;
+  const { ajouteSiretAuSuperviseur, lisSuperviseurs, revoqueSuperviseur } =
+    depotSuperviseurs;
 
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
@@ -402,7 +398,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
     estJwtRevoque,
-    estSuperviseur,
     finaliseBrouillonService,
     service,
     serviceExiste,
@@ -492,6 +487,8 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotSuperviseursOO.lisSuperviseur.bind(depotSuperviseursOO),
     sauvegardeSuperviseur:
       depotSuperviseursOO.sauvegardeSuperviseur.bind(depotSuperviseursOO),
+    estSuperviseur:
+      depotSuperviseursOO.estSuperviseur.bind(depotSuperviseursOO),
   };
   type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
 

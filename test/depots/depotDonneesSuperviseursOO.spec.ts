@@ -31,6 +31,26 @@ describe('Le dépôt de données OO des superviseurs', () => {
     });
   });
 
+  describe("sur demande de vérification qu'un utilisateur est superviseur", () => {
+    it('retourne vrai si le superviseur existe', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteSuperviseurSurPerimetre(idSuperviseur, [{ siret: 'siret-A' }])
+        .construis();
+      const depot = new DepotDonneesSuperviseursOO({ persistance });
+
+      expect(await depot.estSuperviseur(idSuperviseur)).toBe(true);
+    });
+
+    it("retourne faux si l'utilisateur n'est pas superviseur", async () => {
+      const persistanceVide = unePersistanceMemoireTS().construis();
+      const depot = new DepotDonneesSuperviseursOO({
+        persistance: persistanceVide,
+      });
+
+      expect(await depot.estSuperviseur(unUUID('X'))).toBe(false);
+    });
+  });
+
   it('sauvegarde un superviseur', async () => {
     const persistance = unePersistanceMemoireTS()
       .ajouteSuperviseurSurPerimetre(idSuperviseur, [
