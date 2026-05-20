@@ -7,15 +7,33 @@ export type DonneesSuperviseur = {
 };
 
 class Superviseur {
-  private readonly idUtilisateur: UUID;
   readonly entitesSupervisees: Entite[];
 
-  constructor(donnees: DonneesSuperviseur) {
-    const { idUtilisateur, entitesSupervisees } = donnees;
-    this.idUtilisateur = idUtilisateur;
-    this.entitesSupervisees = entitesSupervisees.map(
-      (donneesEntite) => new Entite(donneesEntite)
+  private constructor(
+    private readonly idUtilisateur: UUID,
+    entitesSupervisees: Entite[]
+  ) {
+    this.entitesSupervisees = entitesSupervisees;
+  }
+
+  static nouveau(idUtilisateur: UUID) {
+    return new Superviseur(idUtilisateur, []);
+  }
+
+  static hydrate(donnees: DonneesSuperviseur) {
+    return new Superviseur(
+      donnees.idUtilisateur,
+      donnees.entitesSupervisees.map((d) => new Entite(d))
     );
+  }
+
+  donnees(): DonneesSuperviseur {
+    return {
+      idUtilisateur: this.idUtilisateur,
+      entitesSupervisees: this.entitesSupervisees.map(
+        (e) => e.toJSON() as DonneesEntite
+      ),
+    };
   }
 }
 

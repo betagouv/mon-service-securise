@@ -47,7 +47,7 @@ const creeDepot = ({
       )
     );
 
-    return new Superviseur({ idUtilisateur, entitesSupervisees });
+    return Superviseur.hydrate({ idUtilisateur, entitesSupervisees });
   };
 
   const lisSuperviseurs = async (siret: string) => {
