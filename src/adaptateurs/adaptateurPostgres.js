@@ -627,16 +627,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         .count('id_superviseur')
     )[0].count >= 1;
 
-  const superviseur = async (idUtilisateur) => {
-    const donneesChiffrees = await knex('superviseurs')
-      .where({ id_superviseur: idUtilisateur })
-      .select('donnees');
-    if (donneesChiffrees && donneesChiffrees.length > 0) {
-      return { idUtilisateur, donnees: donneesChiffrees.map((d) => d.donnees) };
-    }
-    return undefined;
-  };
-
   const ajouteParrainage = async (
     idUtilisateurFilleul,
     idUtilisateurParrain,
@@ -1091,7 +1081,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     sauvegardeSimulationMigrationReferentiel,
     serviceExisteAvecHashNom,
     servicesComplets,
-    superviseur,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,

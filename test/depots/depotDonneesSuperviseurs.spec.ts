@@ -1,7 +1,6 @@
 import * as depotDonneesSuperviseurs from '../../src/depots/depotDonneesSuperviseurs.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
-import Superviseur from '../../src/modeles/superviseur.js';
 import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.interface.ts';
 import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
 import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
@@ -86,23 +85,6 @@ describe('Le dépôt de données des superviseurs', () => {
     await depot.estSuperviseur(unUUID('1'));
 
     expect(idRecu).toEqual(unUUID('1'));
-  });
-
-  it('délègue à la persistance la lecture des données du superviseur et retourne un superviseur déchiffré', async () => {
-    let idRecu;
-    adaptateurPersistance.superviseur = async (idUtilisateur) => {
-      idRecu = idUtilisateur;
-      return {
-        idUtilisateur,
-        donnees: [await adaptateurChiffrement.chiffre({ nom: 'NomEntite' })],
-      };
-    };
-
-    const superviseur = await depot.superviseur(unUUID('1'));
-
-    expect(idRecu).toEqual(unUUID('1'));
-    expect(superviseur).toBeInstanceOf(Superviseur);
-    expect(superviseur!.donnees().entitesSupervisees[0].nom).toBe('NomEntite');
   });
 
   it("délègue à la persistance la révocation d'un superviseur", async () => {

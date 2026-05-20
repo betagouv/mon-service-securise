@@ -24,7 +24,7 @@ const routesConnectePage = ({
     '/supervision',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const superviseur = await depotDonnees.superviseur(
+      const superviseur = await depotDonnees.lisSuperviseur(
         requete.idUtilisateurCourant
       );
 
