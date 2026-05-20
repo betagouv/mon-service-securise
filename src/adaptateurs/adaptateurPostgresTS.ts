@@ -76,6 +76,25 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     return { idUtilisateur, entitesSupervisees: entitesDechiffrees };
   }
 
+  async sauvegardeSuperviseur(donnees: DonneesSuperviseur): Promise<void> {
+    const donneesAInserer = await Promise.all(
+      donnees.entitesSupervisees.map(async (d) => ({
+        id_superviseur: donnees.idUtilisateur,
+        siret_hash: this.chiffrement.hacheSha256(d.siret),
+        donnees: await this.chiffrement.chiffre(d),
+      }))
+    );
+    const siretsHashAConserver = donneesAInserer.map((d) => d.siret_hash);
+    await this.knex(TABLES.SUPERVISEURS)
+      .where({ id_superviseur: donnees.idUtilisateur })
+      .whereNotIn('siret_hash', siretsHashAConserver)
+      .delete();
+    await this.knex(TABLES.SUPERVISEURS)
+      .insert(donneesAInserer)
+      .onConflict()
+      .ignore();
+  }
+
   async lisAdminsOrganisation(
     siret: string
   ): Promise<Array<DonneesAdminOrganisations>> {

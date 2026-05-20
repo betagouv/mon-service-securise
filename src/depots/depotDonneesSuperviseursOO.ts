@@ -14,4 +14,8 @@ export class DepotDonneesSuperviseursOO {
 
     return donnees ? Superviseur.hydrate(donnees) : undefined;
   }
+
+  async sauvegardeSuperviseur(superviseur: Superviseur): Promise<void> {
+    await this.persistance.sauvegardeSuperviseur(superviseur.donnees());
+  }
 }

@@ -149,6 +149,53 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe("sur demande de mise à jour d'un superviseur", () => {
+    it("ajoute le nouveau superviseur s'il n'existe pas", async () => {
+      const idSuperviseur = unUUIDRandom();
+      const donneesEntite = { siret: 'siret', nom: 'nom', departement: '75' };
+
+      await persistance.sauvegardeSuperviseur({
+        idUtilisateur: idSuperviseur,
+        entitesSupervisees: [donneesEntite],
+      });
+
+      const superviseurSauvegarde =
+        await persistance.lisSuperviseur(idSuperviseur);
+      expect(superviseurSauvegarde).toEqual({
+        idUtilisateur: idSuperviseur,
+        entitesSupervisees: [donneesEntite],
+      });
+    });
+
+    it("met à jour les entités du superviseur s'il existe", async () => {
+      const idSuperviseur = unUUIDRandom();
+      const entiteA = { siret: 'siretA', nom: 'nomA', departement: '75' };
+      const entiteB = { siret: 'siretB', nom: 'nomB', departement: '75' };
+      const entiteC = { siret: 'siretC', nom: 'nomC', departement: '75' };
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur,
+        siret_hash: chiffrement.hacheSha256('siretA'),
+        donnees: await chiffrement.chiffre(entiteA),
+      });
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur,
+        siret_hash: chiffrement.hacheSha256('siretB'),
+        donnees: await chiffrement.chiffre(entiteB),
+      });
+
+      await persistance.sauvegardeSuperviseur({
+        idUtilisateur: idSuperviseur,
+        entitesSupervisees: [entiteB, entiteC],
+      });
+
+      const superviseur = await persistance.lisSuperviseur(idSuperviseur);
+      expect(superviseur).toEqual({
+        idUtilisateur: idSuperviseur,
+        entitesSupervisees: [entiteB, entiteC],
+      });
+    });
+  });
+
   describe("sur demande de mise à jour d'un admin d'organisations", () => {
     it("ajoute le nouvel admin s'il n'existe pas", async () => {
       const idAdmin = unUUIDRandom();
