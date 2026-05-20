@@ -447,16 +447,6 @@ const nouvelAdaptateur = (
       ({ idSuperviseur }) => idSuperviseur === idUtilisateur
     );
 
-  const superviseur = async (idUtilisateur) => {
-    const donneesChiffrees = donnees.superviseurs
-      .filter(({ idSuperviseur }) => idSuperviseur === idUtilisateur)
-      .map(({ donnees: desDonnees }) => desDonnees);
-    if (donneesChiffrees && donneesChiffrees.length > 0) {
-      return { idUtilisateur, donnees: donneesChiffrees };
-    }
-    return undefined;
-  };
-
   const verifieTousLesServicesExistent = async (idsServices) =>
     idsServices.every((unId) => donnees.services.find((s) => s.id === unId));
 
@@ -784,7 +774,6 @@ const nouvelAdaptateur = (
     sauvegardeSimulationMigrationReferentiel,
     serviceExisteAvecHashNom,
     servicesComplets,
-    superviseur,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,

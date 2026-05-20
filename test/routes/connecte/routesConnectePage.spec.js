@@ -253,7 +253,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
     it("insère les entités supervisées dans la page si l'utilisateur est superviseur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
-      testeur.depotDonnees().superviseur = async () =>
+      testeur.depotDonnees().lisSuperviseur = async () =>
         Superviseur.hydrate({
           idUtilisateur: '456',
           entitesSupervisees: [{ siret: 'SIRET-123', nom: 'MonEntite' }],

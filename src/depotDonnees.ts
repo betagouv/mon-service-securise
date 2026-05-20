@@ -311,7 +311,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const {
     ajouteSiretAuSuperviseur,
     estSuperviseur,
-    superviseur,
     lisSuperviseurs,
     revoqueSuperviseur,
   } = depotSuperviseurs;
@@ -460,7 +459,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     enregistreNouvelleConnexionUtilisateur,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeSimulationMigrationReferentiel,
-    superviseur,
     supprimeAutorisationsAdminPour,
     supprimeBrouillonService,
     supprimeContributeur,
