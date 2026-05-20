@@ -1,4 +1,5 @@
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
+import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { UUID } from '../typesBasiques.js';
 
 export interface PersistanceTS {
@@ -11,4 +12,7 @@ export interface PersistanceTS {
   sauvegardeAdminOrganisations: (
     donnees: DonneesAdminOrganisations
   ) => Promise<void>;
+  lisSuperviseur: (
+    idUtilisateur: UUID
+  ) => Promise<DonneesSuperviseur | undefined>;
 }

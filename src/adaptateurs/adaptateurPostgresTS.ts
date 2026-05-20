@@ -2,11 +2,13 @@ import Knex from 'knex';
 import { UUID } from 'node:crypto';
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { DonneesEntite } from '../modeles/entite.js';
+import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
+  SUPERVISEURS = 'superviseurs',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -56,6 +58,22 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     );
 
     return { idUtilisateur, entitesAdministrees: entitesDechiffrees };
+  }
+
+  async lisSuperviseur(
+    idUtilisateur: UUID
+  ): Promise<DonneesSuperviseur | undefined> {
+    const chaqueLigne = await this.knex(TABLES.SUPERVISEURS)
+      .select({ donnees: 'donnees' })
+      .where({ id_superviseur: idUtilisateur });
+
+    if (chaqueLigne.length === 0) return undefined;
+
+    const entitesDechiffrees = await Promise.all<DonneesEntite>(
+      chaqueLigne.map((c) => this.chiffrement.dechiffre(c.donnees))
+    );
+
+    return { idUtilisateur, entitesSupervisees: entitesDechiffrees };
   }
 
   async lisAdminsOrganisation(

@@ -1,18 +1,25 @@
 import { UUID } from '../typesBasiques.js';
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
+import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
+  superviseurs: DonneesSuperviseur[];
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   private readonly donnees: DonneesPersistanceMemoire = {
     adminsOrganisations: [],
+    superviseurs: [],
   };
 
-  constructor(donnees?: DonneesPersistanceMemoire) {
-    if (donnees) this.donnees = donnees;
+  constructor(donnees?: Partial<DonneesPersistanceMemoire>) {
+    if (donnees)
+      this.donnees = {
+        adminsOrganisations: donnees.adminsOrganisations ?? [],
+        superviseurs: donnees.superviseurs ?? [],
+      };
   }
 
   async lisAdminOrganisations(
@@ -38,5 +45,13 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       (d) => d.idUtilisateur !== donnees.idUtilisateur
     );
     this.donnees.adminsOrganisations.push(donnees);
+  }
+
+  async lisSuperviseur(
+    idUtilisateur: UUID
+  ): Promise<DonneesSuperviseur | undefined> {
+    return this.donnees.superviseurs.find(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
   }
 }
