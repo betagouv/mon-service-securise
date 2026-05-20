@@ -25,18 +25,21 @@
           >
         </a>
         <p>
-          <a
+          <dsfr-link
             href="https://www.proconnect.gouv.fr"
-            target="_blank"
+            blank
             rel="noopener noreferrer"
             title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
+            label="Qu'est-ce que ProConnect ?"
           >
-            Qu'est-ce que ProConnect ?
-          </a>
+          </dsfr-link>
         </p>
       </div>
       <p class="deja-un-compte">
-        Vous avez déjà un compte ? <a href="/connexion">Se connecter</a>
+        Vous avez déjà un compte ? <dsfr-link
+          href="/connexion"
+          label="Se connecter"
+        ></dsfr-link>
       </p>
     </div>
   </div>
