@@ -19,6 +19,7 @@ import BusEvenements from '../../src/bus/busEvenements.js';
 import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
+import Superviseur from '../../src/modeles/superviseur.ts';
 
 describe("Le service de gestion des admins d'organisation", () => {
   const idService = unUUID('s');
@@ -214,10 +215,12 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("renvoie les entités d'un superviseur s'il n'est pas admin", async () => {
-      await adaptateurPersistance.ajouteEntiteAuSuperviseur(
-        unUUID('S'),
-        'SIRET-123-haché',
-        { siret: 'SIRET-123' }
+      const superviseur = Superviseur.hydrate({
+        idUtilisateur: unUUID('S'),
+        entitesSupervisees: [{ siret: 'SIRET-123' }],
+      });
+      await adaptateurPersistanceTS.sauvegardeSuperviseur(
+        superviseur.donnees()
       );
       const service = new ServiceAdministrationOrganisations({
         depotDonnees: depotComplet,

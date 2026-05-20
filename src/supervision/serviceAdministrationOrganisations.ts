@@ -125,7 +125,7 @@ export class ServiceAdministrationOrganisations {
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (admin) return admin.donnees().entitesAdministrees;
 
-    const superviseur = await this.depotDonnees.superviseur(idUtilisateur);
+    const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
     if (superviseur) return superviseur.donnees().entitesSupervisees;
 
     return [];
