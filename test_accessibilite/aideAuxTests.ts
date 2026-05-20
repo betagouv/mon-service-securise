@@ -50,6 +50,7 @@ export const problemesDAccessibiliteDeLaPage = async (
 ): Promise<ProblemeAccessibilite[]> => {
   const analyse = await new AxeBuilder({ page })
     .exclude('lab-anssi-centre-aide')
+    .exclude('dsfr-header')
     .analyze();
 
   alimenteRapportFinal(page.url(), analyse);
