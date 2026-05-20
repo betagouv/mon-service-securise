@@ -51,7 +51,7 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
     expect(admins[1].donnees().idUtilisateur).toBe(unUUID('A3'));
   });
 
-  it('sauvegarder un admin en le chiffrant', async () => {
+  it('sauvegarde un admin', async () => {
     const persistance = unePersistanceMemoireTS()
       .ajouteAdminSurPerimetre(idAdmin, [
         { siret: 'siret-B' },
