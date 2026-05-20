@@ -27,6 +27,7 @@ import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimul
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
 import { fabriqueAdaptateurPersistanceTS } from './adaptateurs/fabriqueAdaptateurPersistanceTS.js';
 import { DepotDonneesAdminsOrganisations } from './depots/depotDonneesAdminsOrganisations.js';
+import { DepotDonneesSuperviseursOO } from './depots/depotDonneesSuperviseursOO.js';
 import { AdaptateurChiffrement } from './adaptateurs/adaptateurChiffrement.interface.js';
 import { AdaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement.interface.js';
 import { AdaptateurJWT } from './adaptateurs/adaptateurJWT.interface.js';
@@ -200,6 +201,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   });
 
   const depotAdminsOrganisations = new DepotDonneesAdminsOrganisations({
+    persistance: adaptateurPersistanceTS,
+  });
+
+  const depotSuperviseursOO = new DepotDonneesSuperviseursOO({
     persistance: adaptateurPersistanceTS,
   });
 
@@ -485,6 +490,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     valideAcceptationCGUPourUtilisateur,
     verifieLaCoherenceDesSels,
     versionsServiceUtiliseesParUtilisateur,
+    lisSuperviseur:
+      depotSuperviseursOO.lisSuperviseur.bind(depotSuperviseursOO),
+    sauvegardeSuperviseur:
+      depotSuperviseursOO.sauvegardeSuperviseur.bind(depotSuperviseursOO),
   };
   type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
 
