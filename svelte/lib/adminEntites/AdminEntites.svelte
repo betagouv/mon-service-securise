@@ -25,6 +25,9 @@
   multiline
 >
   {#each mesEntites as entite, i (entite.siret)}
+    <div slot="cell:nom:{i}">
+      <span><b>{entite.nom}</b></span>
+    </div>
     <div slot="cell:admins:{i}" class="conteneur-admins">
       {#each entite.administrateurs as administrateur, j (j)}
         <dsfr-badge
