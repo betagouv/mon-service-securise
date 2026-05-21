@@ -36,7 +36,7 @@ class ServiceSupervision {
   }
 
   async relieServiceEtSuperviseurs(service: Service) {
-    const superviseurs = await this.depotDonnees.lisSuperviseurs(
+    const superviseurs = await this.depotDonnees.lisSuperviseursPour(
       service.siretDeOrganisation()
     );
 
@@ -44,7 +44,7 @@ class ServiceSupervision {
 
     await this.adaptateurSupervision.relieSuperviseursAService(
       service,
-      superviseurs
+      superviseurs.map((s) => s.donnees().idUtilisateur)
     );
   }
 

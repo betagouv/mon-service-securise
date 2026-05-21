@@ -10,7 +10,7 @@ describe('Le dépôt de données des superviseurs', () => {
 
   beforeEach(() => {
     adaptateurPersistance =
-      unePersistanceMemoire().construis() as AdaptateurPersistance;
+      unePersistanceMemoire().construis() as unknown as AdaptateurPersistance;
     depot = depotDonneesSuperviseurs.creeDepot({
       adaptateurPersistance,
     });

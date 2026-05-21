@@ -599,13 +599,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
 
   const sante = async () => knex.raw('SELECT 1 + 1;');
 
-  const lisSuperviseursConcernes = async (siretHash) =>
-    (
-      await knex('superviseurs')
-        .where({ siret_hash: siretHash })
-        .select({ idSuperviseur: 'id_superviseur' })
-    ).map(({ idSuperviseur }) => idSuperviseur);
-
   const revoqueSuperviseur = async (idSuperviseur) =>
     knex('superviseurs').where({ id_superviseur: idSuperviseur }).delete();
 
@@ -1044,7 +1037,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,
     lisSimulationMigrationReferentiel,
-    lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     lisToutesActivitesMesures,
