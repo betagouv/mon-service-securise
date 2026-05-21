@@ -11,6 +11,10 @@ import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 
+export type DonneesEntiteSupervisee = DonneesEntite & {
+  administrateurs: Array<{ prenomNom: string }>;
+};
+
 export class ServiceAdministrationOrganisations {
   private readonly depotDonnees: DepotDonnees;
   private readonly adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
@@ -121,14 +125,40 @@ export class ServiceAdministrationOrganisations {
     });
   }
 
-  async entitesDe(idUtilisateur: UUID): Promise<Array<DonneesEntite>> {
+  async entitesDe(
+    idUtilisateur: UUID
+  ): Promise<Array<DonneesEntite | DonneesEntiteSupervisee>> {
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (admin) return admin.donnees().entitesAdministrees;
 
     const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
-    if (superviseur) return superviseur.donnees().entitesSupervisees;
+    if (superviseur) {
+      const toutesEntites = superviseur.donnees().entitesSupervisees;
+      return Promise.all(
+        toutesEntites.map((e) => this.enrichisEntiteSupervisee(e))
+      );
+    }
 
     return [];
+  }
+
+  private async enrichisEntiteSupervisee(
+    uneEntite: DonneesEntite
+  ): Promise<DonneesEntiteSupervisee> {
+    const admins = await this.depotDonnees.lisAdminsPour(uneEntite.siret);
+    const administrateurs = await Promise.all(
+      admins.map((a) =>
+        this.depotDonnees.utilisateur(a.donnees().idUtilisateur)
+      )
+    );
+
+    return {
+      siret: uneEntite.siret,
+      nom: uneEntite.nom,
+      administrateurs: administrateurs.map((u) => ({
+        prenomNom: u!.prenomNom(),
+      })),
+    };
   }
 
   async utilisateursDansLePerimetreDe(
