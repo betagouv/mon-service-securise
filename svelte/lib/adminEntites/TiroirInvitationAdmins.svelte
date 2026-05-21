@@ -12,34 +12,60 @@
   export const titre: string = `Gestion des admins de ${untrack(() => entite.nom)}`;
   export const sousTitre: string =
     'Invitez et gérez les administrateurs de votre entité';
+
+  let etatAffichage: 'LISTE' | 'INVITATION' = $state('LISTE');
+  let nouvelAdmin = $state('');
+  let listeAdminsAInviter: string[] = $state([]);
+
+  const inviteAdmin = () => {
+    etatAffichage = 'INVITATION';
+    listeAdminsAInviter.push(nouvelAdmin);
+    nouvelAdmin = '';
+  };
 </script>
 
 <ContenuTiroir>
   <dsfr-input
+    value={nouvelAdmin}
+    onvaluechanged={(e: CustomEvent<string>) => (nouvelAdmin = e.detail)}
     type="email"
     label="Ajouter un administrateur"
     hint="Vous pouvez ajouter un administrateur via son adresse e-mail."
     status="info"
     infoMessage="L’utilisateur doit toutefois déjà disposer d’un compte sur MonServiceSécurisé ; dans le cas contraire, il ne pourra pas être ajouté en tant qu’administrateur."
   ></dsfr-input>
+  <dsfr-button label="Nommer admin" onclick={() => inviteAdmin()} size="sm"
+  ></dsfr-button>
 
   <div class="conteneur-admins">
-    <hr />
-    <h3>Administrateurs de l’entité</h3>
-    <span class="sous-titre"
-      >Consultez la liste des utilisateurs disposant des droits admins.</span
-    >
-    <div class="conteneur-cartouches">
-      {#each entite.administrateurs as admin, i (i)}
-        <div class="cartouche-admin">
-          <div class="initiales"><span>{admin.initiales}</span></div>
-          <div class="identite">
-            <span class="nom-prenom">{admin.prenomNom}</span>
-            <span class="postes">{admin.postes}</span>
+    {#if etatAffichage === 'LISTE'}
+      <hr />
+      <h3>Administrateurs de l’entité</h3>
+      <span class="sous-titre"
+        >Consultez la liste des utilisateurs disposant des droits admins.</span
+      >
+      <div class="conteneur-cartouches">
+        {#each entite.administrateurs as admin, i (i)}
+          <div class="cartouche-admin">
+            <div class="initiales"><span>{admin.initiales}</span></div>
+            <div class="identite">
+              <span class="nom-prenom">{admin.prenomNom}</span>
+              <span class="postes">{admin.postes}</span>
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="conteneur-cartouches">
+        {#each listeAdminsAInviter as emailAdmin, i (i)}
+          <div class="cartouche-admin">
+            <div class="identite">
+              <span class="nom-prenom">{emailAdmin}</span>
+            </div>
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
 </ContenuTiroir>
 <ActionsTiroir></ActionsTiroir>
