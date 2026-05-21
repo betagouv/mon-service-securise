@@ -38,6 +38,7 @@
       'Invitation envoyée',
       `${listeAdminsAInviter.length} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
     );
+    document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
     tiroirStore.ferme();
   };
 </script>
@@ -52,7 +53,8 @@
     status="info"
     infoMessage="L’utilisateur doit toutefois déjà disposer d’un compte sur MonServiceSécurisé ; dans le cas contraire, il ne pourra pas être ajouté en tant qu’administrateur."
   ></dsfr-input>
-  <dsfr-button label="Nommer admin" onclick={() => inviteAdmin()} size="sm"
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button label="Nommer admin" size="sm" onclick={() => inviteAdmin()}
   ></dsfr-button>
 
   <div class="conteneur-admins">
@@ -88,11 +90,13 @@
 </ContenuTiroir>
 {#if etatAffichage === 'INVITATION'}
   <ActionsTiroir>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Annuler"
       onclick={() => retourModeListe()}
       kind="tertiary-no-outline"
     ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Envoyer une invitation"
       onclick={() => envoieInvitations()}
