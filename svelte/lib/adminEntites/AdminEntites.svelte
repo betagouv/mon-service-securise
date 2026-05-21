@@ -17,22 +17,13 @@
     { key: 'nom', label: 'Entité' },
     { key: 'admins', label: 'Admin(s)' },
     { key: 'nombreServices', label: 'Nombre de services' },
+    { key: 'nombreUtilisateurs', label: "Nombre d'utilisateurs" },
   ]}
   rows={mesEntites}
   rich
   multiline
 >
   {#each mesEntites as entite, i (entite.siret)}
-    <div slot="cell:nombreServices:{i}">
-      <span>
-        {#if entite.nombreServices === 0}
-          Aucun service
-        {:else}
-          {entite.nombreServices} service{entite.nombreServices > 1
-            ? 's'
-            : ''}{/if}
-      </span>
-    </div>
     <div slot="cell:admins:{i}" class="conteneur-admins">
       {#each entite.administrateurs as administrateur, j (j)}
         <dsfr-badge
@@ -43,6 +34,26 @@
         ></dsfr-badge>
       {/each}
     </div>
+    <div slot="cell:nombreServices:{i}">
+      <span>
+        {#if entite.nombreServices === 0}
+          Aucun service
+        {:else}
+          {entite.nombreServices} service{entite.nombreServices > 1 ? 's' : ''}
+        {/if}
+      </span>
+    </div>
+    <div slot="cell:nombreUtilisateurs:{i}">
+      <span>
+        {#if entite.nombreUtilisateurs === 0}
+          Aucun utilisateur
+        {:else}
+          {entite.nombreUtilisateurs} utilisateur{entite.nombreUtilisateurs > 1
+            ? 's'
+            : ''}
+        {/if}
+      </span>
+    </div>
   {/each}
 </dsfr-table>
 
@@ -52,6 +63,10 @@
     background: #fff;
     width: 100%;
     padding: 32px 48px;
+  }
+
+  :global(main) {
+    background: white;
   }
 
   h1 {

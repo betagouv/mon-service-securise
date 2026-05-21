@@ -10,10 +10,12 @@ import Utilisateur from '../modeles/utilisateur.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
+import { Contributeur } from '../modeles/contributeur.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{ prenomNom: string }>;
   nombreServices: number;
+  nombreUtilisateurs: number;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -160,6 +162,11 @@ export class ServiceAdministrationOrganisations {
       siret: uneEntite.siret,
       nom: uneEntite.nom,
       nombreServices: services.length,
+      nombreUtilisateurs: new Set(
+        services.flatMap((s) =>
+          s.contributeurs.map((c: Contributeur) => c.idUtilisateur)
+        )
+      ).size,
       administrateurs: administrateurs.map((u) => ({
         prenomNom: u!.prenomNom(),
       })),
