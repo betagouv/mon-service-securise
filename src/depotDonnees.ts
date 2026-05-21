@@ -26,7 +26,7 @@ import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimul
 import * as depotDonneesSession from './depots/depotDonneesSession.js';
 import { fabriqueAdaptateurPersistanceTS } from './adaptateurs/fabriqueAdaptateurPersistanceTS.js';
 import { DepotDonneesAdminsOrganisations } from './depots/depotDonneesAdminsOrganisations.js';
-import { DepotDonneesSuperviseursOO } from './depots/depotDonneesSuperviseursOO.js';
+import { DepotDonneesSuperviseurs } from './depots/depotDonneesSuperviseurs.js';
 import { AdaptateurChiffrement } from './adaptateurs/adaptateurChiffrement.interface.js';
 import { AdaptateurEnvironnement } from './adaptateurs/adaptateurEnvironnement.interface.js';
 import { AdaptateurJWT } from './adaptateurs/adaptateurJWT.interface.js';
@@ -197,7 +197,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     persistance: adaptateurPersistanceTS,
   });
 
-  const depotSuperviseursOO = new DepotDonneesSuperviseursOO({
+  const depotSuperviseurs = new DepotDonneesSuperviseurs({
     persistance: adaptateurPersistanceTS,
   });
 
@@ -470,16 +470,14 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     valideAcceptationCGUPourUtilisateur,
     verifieLaCoherenceDesSels,
     versionsServiceUtiliseesParUtilisateur,
-    lisSuperviseur:
-      depotSuperviseursOO.lisSuperviseur.bind(depotSuperviseursOO),
+    lisSuperviseur: depotSuperviseurs.lisSuperviseur.bind(depotSuperviseurs),
     sauvegardeSuperviseur:
-      depotSuperviseursOO.sauvegardeSuperviseur.bind(depotSuperviseursOO),
-    estSuperviseur:
-      depotSuperviseursOO.estSuperviseur.bind(depotSuperviseursOO),
+      depotSuperviseurs.sauvegardeSuperviseur.bind(depotSuperviseurs),
+    estSuperviseur: depotSuperviseurs.estSuperviseur.bind(depotSuperviseurs),
     lisSuperviseursPour:
-      depotSuperviseursOO.lisSuperviseursPour.bind(depotSuperviseursOO),
+      depotSuperviseurs.lisSuperviseursPour.bind(depotSuperviseurs),
     supprimeSuperviseur:
-      depotSuperviseursOO.supprimeSuperviseur.bind(depotSuperviseursOO),
+      depotSuperviseurs.supprimeSuperviseur.bind(depotSuperviseurs),
   };
   type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
 

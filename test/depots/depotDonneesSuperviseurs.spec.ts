@@ -1,9 +1,9 @@
-import { DepotDonneesSuperviseursOO } from '../../src/depots/depotDonneesSuperviseursOO.ts';
+import { DepotDonneesSuperviseurs } from '../../src/depots/depotDonneesSuperviseurs.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 
-describe('Le dépôt de données OO des superviseurs', () => {
+describe('Le dépôt de données des superviseurs', () => {
   const idSuperviseur = unUUID('S');
 
   describe("sur demande de lecture d'un superviseur", () => {
@@ -11,7 +11,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
       const persistance = unePersistanceMemoireTS()
         .ajouteSuperviseurSurPerimetre(idSuperviseur, [{ siret: 'siret-A' }])
         .construis();
-      const depot = new DepotDonneesSuperviseursOO({ persistance });
+      const depot = new DepotDonneesSuperviseurs({ persistance });
 
       const superviseur = await depot.lisSuperviseur(idSuperviseur);
 
@@ -21,7 +21,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
 
     it("ne retourne rien si l'utilisateur demandé n'est pas superviseur", async () => {
       const persistanceVide = unePersistanceMemoireTS().construis();
-      const depot = new DepotDonneesSuperviseursOO({
+      const depot = new DepotDonneesSuperviseurs({
         persistance: persistanceVide,
       });
 
@@ -34,7 +34,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
   describe("sur demande de lecture des superviseurs d'une organisation", () => {
     it("retourne une liste vide s'il n'y en a pas", async () => {
       const persistanceVide = unePersistanceMemoireTS().construis();
-      const depot = new DepotDonneesSuperviseursOO({
+      const depot = new DepotDonneesSuperviseurs({
         persistance: persistanceVide,
       });
 
@@ -52,7 +52,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
           { siret: 'siret-A' },
         ])
         .construis();
-      const depot = new DepotDonneesSuperviseursOO({ persistance });
+      const depot = new DepotDonneesSuperviseurs({ persistance });
 
       const superviseurs = await depot.lisSuperviseursPour('siret-A');
 
@@ -69,14 +69,14 @@ describe('Le dépôt de données OO des superviseurs', () => {
       const persistance = unePersistanceMemoireTS()
         .ajouteSuperviseurSurPerimetre(idSuperviseur, [{ siret: 'siret-A' }])
         .construis();
-      const depot = new DepotDonneesSuperviseursOO({ persistance });
+      const depot = new DepotDonneesSuperviseurs({ persistance });
 
       expect(await depot.estSuperviseur(idSuperviseur)).toBe(true);
     });
 
     it("retourne faux si l'utilisateur n'est pas superviseur", async () => {
       const persistanceVide = unePersistanceMemoireTS().construis();
-      const depot = new DepotDonneesSuperviseursOO({
+      const depot = new DepotDonneesSuperviseurs({
         persistance: persistanceVide,
       });
 
@@ -88,7 +88,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
     const persistance = unePersistanceMemoireTS()
       .ajouteSuperviseurSurPerimetre(idSuperviseur, [{ siret: 'siret-A' }])
       .construis();
-    const depot = new DepotDonneesSuperviseursOO({ persistance });
+    const depot = new DepotDonneesSuperviseurs({ persistance });
 
     await depot.supprimeSuperviseur(idSuperviseur);
 
@@ -102,7 +102,7 @@ describe('Le dépôt de données OO des superviseurs', () => {
         { siret: 'siret-A' },
       ])
       .construis();
-    const depot = new DepotDonneesSuperviseursOO({ persistance });
+    const depot = new DepotDonneesSuperviseurs({ persistance });
     const superviseur = Superviseur.hydrate({
       idUtilisateur: idSuperviseur,
       entitesSupervisees: [{ siret: 'siret-B' }, { siret: 'siret-C' }],
