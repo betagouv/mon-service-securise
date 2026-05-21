@@ -55,6 +55,49 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe("sur demande de lecture des superviseurs d'une organisation", () => {
+    it("retourne une liste vide s'il n'en existe pas", async () => {
+      const superviseurs =
+        await persistance.lisSuperviseursOrganisation('siret-inconnu');
+
+      expect(superviseurs).toEqual([]);
+    });
+
+    it('peut lire des superviseurs chiffrés', async () => {
+      const idSuperviseur1 = unUUIDRandom();
+      const idSuperviseur2 = unUUIDRandom();
+      const entite1 = { nom: 'nom', siret: 'SIRET', departement: '75' };
+      const entite2 = { nom: 'nom2', siret: 'SIRET2', departement: '75' };
+      const siretHash = chiffrement.hacheSha256('SIRET');
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur1,
+        siret_hash: siretHash,
+        donnees: await chiffrement.chiffre(entite1),
+      });
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur2,
+        siret_hash: siretHash,
+        donnees: await chiffrement.chiffre(entite1),
+      });
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur2,
+        siret_hash: chiffrement.hacheSha256('SIRET2'),
+        donnees: await chiffrement.chiffre(entite2),
+      });
+
+      const [s1, s2] = await persistance.lisSuperviseursOrganisation('SIRET');
+
+      expect(s1).toEqual({
+        idUtilisateur: idSuperviseur1,
+        entitesSupervisees: [entite1],
+      });
+      expect(s2).toEqual({
+        idUtilisateur: idSuperviseur2,
+        entitesSupervisees: [entite1, entite2],
+      });
+    });
+  });
+
   describe("sur demande de lecture des admins d'une organisation", () => {
     it("retourne une liste vide s'il n'en existe pas", async () => {
       const admin = await persistance.lisAdminsOrganisation('siret-inconnu');

@@ -61,4 +61,12 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     );
     this.donnees.superviseurs.push(donnees);
   }
+
+  async lisSuperviseursOrganisation(
+    siret: string
+  ): Promise<Array<DonneesSuperviseur>> {
+    return this.donnees.superviseurs.filter((s) =>
+      s.entitesSupervisees.map((e) => e.siret).includes(siret)
+    );
+  }
 }
