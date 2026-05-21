@@ -1,12 +1,17 @@
 import express from 'express';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPostAdminNomme } from './routesConnecteApiAdmin.schema.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
 
 type Configuration = {
+  depotDonnees: DepotDonnees;
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 };
 
 const routesConnecteApiAdmin = ({
+  depotDonnees,
   serviceAdministrationOrganisations,
 }: Configuration) => {
   const routes = express.Router();
@@ -38,6 +43,34 @@ const routesConnecteApiAdmin = ({
       }))
     );
   });
+
+  routes.post(
+    '/nomme',
+    valideBody(schemaPostAdminNomme),
+    async (requete, reponse) => {
+      const { emails, siret } = requete.body;
+      const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+
+      const superviseur =
+        await depotDonnees.lisSuperviseur(idUtilisateurCourant);
+      if (!superviseur || !superviseur.estSuperviseurDe(siret)) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      const nommeAdmin = async (email: string) => {
+        const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
+        if (!utilisateur) return;
+        await serviceAdministrationOrganisations.rattacheEntiteA(
+          siret,
+          utilisateur!.id
+        );
+      };
+
+      await Promise.all(emails.map(nommeAdmin));
+      reponse.sendStatus(200);
+    }
+  );
 
   return routes;
 };
