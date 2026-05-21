@@ -13,6 +13,7 @@ import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRecherch
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{ prenomNom: string }>;
+  nombreServices: number;
 };
 
 export class ServiceAdministrationOrganisations {
@@ -151,10 +152,14 @@ export class ServiceAdministrationOrganisations {
         this.depotDonnees.utilisateur(a.donnees().idUtilisateur)
       )
     );
+    const services = await this.depotDonnees.tousLesServicesAvecSiret(
+      uneEntite.siret
+    );
 
     return {
       siret: uneEntite.siret,
       nom: uneEntite.nom,
+      nombreServices: services.length,
       administrateurs: administrateurs.map((u) => ({
         prenomNom: u!.prenomNom(),
       })),
