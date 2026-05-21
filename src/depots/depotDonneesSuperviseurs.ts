@@ -2,7 +2,7 @@ import Superviseur from '../modeles/superviseur.js';
 import { UUID } from '../typesBasiques.js';
 import { PersistanceTS } from '../adaptateurs/persistanceTS.interface.js';
 
-export class DepotDonneesSuperviseursOO {
+export class DepotDonneesSuperviseurs {
   private readonly persistance: PersistanceTS;
 
   constructor({ persistance }: { persistance: PersistanceTS }) {
