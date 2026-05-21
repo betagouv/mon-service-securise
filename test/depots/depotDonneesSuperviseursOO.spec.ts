@@ -31,6 +31,39 @@ describe('Le dépôt de données OO des superviseurs', () => {
     });
   });
 
+  describe("sur demande de lecture des superviseurs d'une organisation", () => {
+    it("retourne une liste vide s'il n'y en a pas", async () => {
+      const persistanceVide = unePersistanceMemoireTS().construis();
+      const depot = new DepotDonneesSuperviseursOO({
+        persistance: persistanceVide,
+      });
+
+      const superviseurs = await depot.lisSuperviseursPour('siret-inconnu');
+
+      expect(superviseurs).toEqual([]);
+    });
+
+    it('retourne les superviseurs concernés par le siret', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteSuperviseurSurPerimetre(unUUID('S1'), [{ siret: 'siret-A' }])
+        .ajouteSuperviseurSurPerimetre(unUUID('S2'), [{ siret: 'siret-B' }])
+        .ajouteSuperviseurSurPerimetre(unUUID('S3'), [
+          { siret: 'siret-B' },
+          { siret: 'siret-A' },
+        ])
+        .construis();
+      const depot = new DepotDonneesSuperviseursOO({ persistance });
+
+      const superviseurs = await depot.lisSuperviseursPour('siret-A');
+
+      expect(superviseurs).toHaveLength(2);
+      expect(superviseurs[0]).toBeInstanceOf(Superviseur);
+      expect(superviseurs[0].donnees().idUtilisateur).toBe(unUUID('S1'));
+      expect(superviseurs[1]).toBeInstanceOf(Superviseur);
+      expect(superviseurs[1].donnees().idUtilisateur).toBe(unUUID('S3'));
+    });
+  });
+
   describe("sur demande de vérification qu'un utilisateur est superviseur", () => {
     it('retourne vrai si le superviseur existe', async () => {
       const persistance = unePersistanceMemoireTS()

@@ -19,6 +19,12 @@ export class DepotDonneesSuperviseursOO {
     await this.persistance.sauvegardeSuperviseur(superviseur.donnees());
   }
 
+  async lisSuperviseursPour(siret: string): Promise<Array<Superviseur>> {
+    const donnees = await this.persistance.lisSuperviseursOrganisation(siret);
+
+    return donnees.map((d) => Superviseur.hydrate(d));
+  }
+
   async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
     const superviseur = await this.lisSuperviseur(idUtilisateur);
 
