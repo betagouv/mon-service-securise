@@ -113,6 +113,12 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     );
   }
 
+  async supprimeSuperviseur(idUtilisateur: UUID): Promise<void> {
+    await this.knex(TABLES.SUPERVISEURS)
+      .where({ id_superviseur: idUtilisateur })
+      .delete();
+  }
+
   async lisAdminsOrganisation(
     siret: string
   ): Promise<Array<DonneesAdminOrganisations>> {

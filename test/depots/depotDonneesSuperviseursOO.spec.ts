@@ -84,6 +84,17 @@ describe('Le dépôt de données OO des superviseurs', () => {
     });
   });
 
+  it('supprime un superviseur', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteSuperviseurSurPerimetre(idSuperviseur, [{ siret: 'siret-A' }])
+      .construis();
+    const depot = new DepotDonneesSuperviseursOO({ persistance });
+
+    await depot.supprimeSuperviseur(idSuperviseur);
+
+    expect(await depot.lisSuperviseur(idSuperviseur)).toBeUndefined();
+  });
+
   it('sauvegarde un superviseur', async () => {
     const persistance = unePersistanceMemoireTS()
       .ajouteSuperviseurSurPerimetre(idSuperviseur, [

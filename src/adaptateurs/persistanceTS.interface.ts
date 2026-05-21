@@ -19,4 +19,5 @@ export interface PersistanceTS {
   lisSuperviseursOrganisation: (
     siret: string
   ) => Promise<Array<DonneesSuperviseur>>;
+  supprimeSuperviseur: (idUtilisateur: UUID) => Promise<void>;
 }

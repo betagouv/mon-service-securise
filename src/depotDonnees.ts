@@ -486,6 +486,8 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotSuperviseursOO.estSuperviseur.bind(depotSuperviseursOO),
     lisSuperviseursPour:
       depotSuperviseursOO.lisSuperviseursPour.bind(depotSuperviseursOO),
+    supprimeSuperviseur:
+      depotSuperviseursOO.supprimeSuperviseur.bind(depotSuperviseursOO),
   };
   type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
 
