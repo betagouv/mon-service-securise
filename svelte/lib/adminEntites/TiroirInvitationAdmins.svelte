@@ -3,6 +3,9 @@
   import ActionsTiroir from '../ui/tiroirs/ActionsTiroir.svelte';
   import type { EntiteSupervisee } from './adminEntites.types';
   import { untrack } from 'svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import { toasterStore } from '../ui/stores/toaster.store';
+  import { api } from './adminEntites.api';
 
   interface Props {
     entite: EntiteSupervisee;
@@ -21,6 +24,21 @@
     etatAffichage = 'INVITATION';
     listeAdminsAInviter.push(nouvelAdmin);
     nouvelAdmin = '';
+  };
+
+  const retourModeListe = () => {
+    etatAffichage = 'LISTE';
+    listeAdminsAInviter = [];
+    nouvelAdmin = '';
+  };
+
+  const envoieInvitations = async () => {
+    await api.envoieInvitations(listeAdminsAInviter, entite.siret);
+    toasterStore.succes(
+      'Invitation envoyée',
+      `${listeAdminsAInviter.length} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
+    );
+    tiroirStore.ferme();
   };
 </script>
 
@@ -68,7 +86,22 @@
     {/if}
   </div>
 </ContenuTiroir>
-<ActionsTiroir></ActionsTiroir>
+{#if etatAffichage === 'INVITATION'}
+  <ActionsTiroir>
+    <dsfr-button
+      label="Annuler"
+      onclick={() => retourModeListe()}
+      kind="tertiary-no-outline"
+    ></dsfr-button>
+    <dsfr-button
+      label="Envoyer une invitation"
+      onclick={() => envoieInvitations()}
+      kind="primary"
+      hasIcon
+      icon="send-plane-line"
+    ></dsfr-button>
+  </ActionsTiroir>
+{/if}
 
 <style>
   .conteneur-admins {
