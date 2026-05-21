@@ -32,17 +32,11 @@ const creeDepot = ({
     );
   };
 
-  const lisSuperviseurs = async (siret: string) => {
-    const siretHache = adaptateurChiffrement.hacheSha256(siret);
-    return adaptateurPersistance.lisSuperviseursConcernes(siretHache);
-  };
-
   const revoqueSuperviseur = async (idUtilisateur: UUID) =>
     adaptateurPersistance.revoqueSuperviseur(idUtilisateur);
 
   return {
     ajouteSiretAuSuperviseur,
-    lisSuperviseurs,
     revoqueSuperviseur,
   };
 };

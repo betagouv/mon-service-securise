@@ -308,8 +308,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const { ajouteSiretAuSuperviseur, lisSuperviseurs, revoqueSuperviseur } =
-    depotSuperviseurs;
+  const { ajouteSiretAuSuperviseur, revoqueSuperviseur } = depotSuperviseurs;
 
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
@@ -413,7 +412,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     lisParcoursUtilisateur,
     lisPourcentageProgressionTeleversementServices,
     lisSimulationMigrationReferentiel,
-    lisSuperviseurs,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     marqueNouveauteLue,

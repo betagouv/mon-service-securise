@@ -426,11 +426,6 @@ const nouvelAdaptateur = (
     );
   };
 
-  const lisSuperviseursConcernes = async (siretHash) =>
-    donnees.superviseurs
-      .filter(({ siretHash: siretHashStocke }) => siretHashStocke === siretHash)
-      .map(({ idSuperviseur }) => idSuperviseur);
-
   const ajouteEntiteAuSuperviseur = async (
     idSuperviseur,
     siretHash,
@@ -744,7 +739,6 @@ const nouvelAdaptateur = (
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,
     lisSimulationMigrationReferentiel,
-    lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     lisToutesActivitesMesures,

@@ -3,6 +3,7 @@ import { unService } from '../constructeurs/constructeurService.js';
 import { AdaptateurSupervision } from '../../src/adaptateurs/adaptateurSupervision.interface.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
+import Superviseur from '../../src/modeles/superviseur.ts';
 
 describe('Le service de supervision', () => {
   let adaptateurSupervision: AdaptateurSupervision;
@@ -16,7 +17,7 @@ describe('Le service de supervision', () => {
       delieServiceDesSuperviseurs: async () => {},
     } as unknown as AdaptateurSupervision;
     depotDonnees = {
-      lisSuperviseurs: async () => {},
+      lisSuperviseursPour: async () => {},
       revoqueSuperviseur: async () => {},
     } as unknown as DepotDonnees;
     serviceSupervision = new ServiceSupervision({
@@ -37,7 +38,7 @@ describe('Le service de supervision', () => {
   describe('sur demande de liaison entre un service et des superviseurs', () => {
     it('délègue au dépôt la lecture des superviseurs concernés', async () => {
       let siretRecu;
-      depotDonnees.lisSuperviseurs = async (siret) => {
+      depotDonnees.lisSuperviseursPour = async (siret) => {
         siretRecu = siret;
         return [];
       };
@@ -60,8 +61,14 @@ describe('Le service de supervision', () => {
         idsSuperviseurRecus = idsSuperviseurs;
         serviceRecu = service;
       };
+      const idSuperviseur = unUUID('S');
 
-      depotDonnees.lisSuperviseurs = async () => ['US1'];
+      depotDonnees.lisSuperviseursPour = async () => [
+        Superviseur.hydrate({
+          idUtilisateur: idSuperviseur,
+          entitesSupervisees: [],
+        }),
+      ];
 
       const service = unService()
         .avecOrganisationResponsable({ siret: '12345' })
@@ -70,7 +77,7 @@ describe('Le service de supervision', () => {
 
       await serviceSupervision.relieServiceEtSuperviseurs(service);
 
-      expect(idsSuperviseurRecus).toEqual(['US1']);
+      expect(idsSuperviseurRecus).toEqual([idSuperviseur]);
       expect(serviceRecu).toBe(service);
     });
 
@@ -80,7 +87,7 @@ describe('Le service de supervision', () => {
         supervisionAppelee = true;
       };
 
-      depotDonnees.lisSuperviseurs = async () => [];
+      depotDonnees.lisSuperviseursPour = async () => [];
 
       const service = unService().construis();
 
