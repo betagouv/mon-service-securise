@@ -14,7 +14,6 @@ import * as depotDonneesNotifications from './depots/depotDonneesNotifications.j
 import * as depotDonneesSuggestionsActions from './depots/depotDonneesSuggestionsActions.js';
 import * as depotDonneesActivitesMesure from './depots/depotDonneesActivitesMesure.js';
 import * as depotDonneesEvolutionsIndiceCyber from './depots/depotDonneesEvolutionsIndiceCyber.js';
-import * as depotDonneesSuperviseurs from './depots/depotDonneesSuperviseurs.js';
 import * as depotDonneesParrainages from './depots/depotDonneesParrainages.js';
 import * as depotDonneesSelsDeHachage from './depots/depotDonneesSelsDeHachage.js';
 import * as depotDonneesTeleversementServices from './depots/depotDonneesTeleversementServices.js';
@@ -136,10 +135,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     depotDonneesEvolutionsIndiceCyber.creeDepot({
       adaptateurPersistance,
     });
-
-  const depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
-    adaptateurPersistance,
-  });
 
   const depotParrainages = depotDonneesParrainages.creeDepot({
     adaptateurPersistance,
@@ -306,8 +301,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const { revoqueSuperviseur } = depotSuperviseurs;
-
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
 
@@ -440,7 +433,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     rafraichisProfilUtilisateurLocal,
     rechercheContributeurs,
     revoqueJwt,
-    revoqueSuperviseur,
     santeDuDepot,
     sauvegardeAutorisation,
     sauvegardeBrouillonService,

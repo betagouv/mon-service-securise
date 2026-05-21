@@ -599,9 +599,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
 
   const sante = async () => knex.raw('SELECT 1 + 1;');
 
-  const revoqueSuperviseur = async (idSuperviseur) =>
-    knex('superviseurs').where({ id_superviseur: idSuperviseur }).delete();
-
   const ajouteParrainage = async (
     idUtilisateurFilleul,
     idUtilisateurParrain,
@@ -1042,7 +1039,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     nouveautesPourUtilisateur,
     parrainagePour,
     revoqueJwt,
-    revoqueSuperviseur,
     sante,
     sauvegardeAutorisation,
     sauvegardeBrouillonService,
