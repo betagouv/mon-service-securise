@@ -2,6 +2,8 @@ import testeurMSS from '../testeurMSS.js';
 import { DonneesEntite } from '../../../src/modeles/entite.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
+import Superviseur from '../../../src/modeles/superviseur.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -79,6 +81,93 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           postes: ['RSSI'],
         },
       ]);
+    });
+  });
+
+  describe('quand requête POST sur `/api/admin/nomme`', () => {
+    const siret = '13000766900018';
+    const idSuperviseur = unUUID('S');
+
+    beforeEach(() => {
+      testeur.depotDonnees().lisSuperviseur = () =>
+        Superviseur.hydrate({
+          idUtilisateur: idSuperviseur,
+          entitesSupervisees: [{ siret }],
+        });
+    });
+
+    it('jette une erreur si les données sont invalides', async () => {
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: [1, 2],
+        siret: false,
+      });
+
+      expect(status).toBe(400);
+    });
+
+    it("jette une erreur si l'utilisateur n'est pas superviseur", async () => {
+      testeur.depotDonnees().lisSuperviseur = () => undefined;
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: ['inconnu@mail.fr'],
+        siret,
+      });
+
+      expect(status).toBe(403);
+    });
+
+    it("jette une erreur si le siret n'est pas supervisé par le superviseur", async () => {
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: ['inconnu@mail.fr'],
+        siret: '13000766999999',
+      });
+
+      expect(status).toBe(403);
+    });
+
+    it('ne fait rien pour un utilisateur non existant', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
+      testeur.depotDonnees().utilisateurAvecEmail = async () => undefined;
+      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: ['inconnu@mail.fr'],
+        siret,
+      });
+
+      expect(status).toBe(200);
+      expect(
+        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+      ).not.toHaveBeenCalled();
+    });
+
+    it("délègue au service d'administration l'ajout des admins sur le siret", async () => {
+      const idAdminA = unUUID('A');
+      const idAdminB = unUUID('B');
+      const emailA = 'jean.dujardin@beta.gouv.fr';
+      const emailB = 'jeanne.dujardin@beta.gouv.fr';
+      testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
+      testeur.depotDonnees().utilisateurAvecEmail = async (e: string) =>
+        e === emailA || e === emailB
+          ? unUtilisateur()
+              .avecId(e === emailA ? idAdminA : idAdminB)
+              .avecEmail(e)
+              .construis()
+          : undefined;
+      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: [emailA, emailB],
+        siret,
+      });
+
+      expect(status).toBe(200);
+      expect(
+        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+      ).toHaveBeenCalledWith(siret, idAdminA);
+      expect(
+        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+      ).toHaveBeenCalledWith(siret, idAdminB);
     });
   });
 });

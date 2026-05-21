@@ -32,6 +32,10 @@ class Superviseur {
     this.entitesSupervisees.push(entite);
   }
 
+  estSuperviseurDe(siret: string) {
+    return this.entitesSupervisees.map((e) => e.siret).includes(siret);
+  }
+
   donnees(): DonneesSuperviseur {
     return {
       idUtilisateur: this.idUtilisateur,
