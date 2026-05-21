@@ -82,6 +82,7 @@ const cableTousLesAbonnes = (
   const serviceSupervision = new ServiceSupervision({
     adaptateurSupervision,
     depotDonnees,
+    adaptateurRechercheEntite: adaptateurRechercheEntreprise,
   });
   const serviceAdministrationOrganisations =
     new ServiceAdministrationOrganisations({

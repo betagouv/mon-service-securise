@@ -118,6 +118,7 @@ const inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
 const serviceSupervision = new ServiceSupervision({
   depotDonnees,
   adaptateurSupervision,
+  adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
 });
 
 const serviceAdministrationOrganisations =

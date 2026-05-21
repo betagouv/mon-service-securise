@@ -4,6 +4,7 @@ import { AdaptateurSupervision } from '../../src/adaptateurs/adaptateurSupervisi
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 
 describe('Le service de supervision', () => {
   let adaptateurSupervision: AdaptateurSupervision;
@@ -18,11 +19,15 @@ describe('Le service de supervision', () => {
     } as unknown as AdaptateurSupervision;
     depotDonnees = {
       lisSuperviseursPour: async () => {},
+      lisSuperviseur: async () => undefined,
+      sauvegardeSuperviseur: async () => {},
+      tousLesServicesAvecSiret: async () => [],
       revoqueSuperviseur: async () => {},
     } as unknown as DepotDonnees;
     serviceSupervision = new ServiceSupervision({
       depotDonnees,
       adaptateurSupervision,
+      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
     });
   });
 
@@ -147,6 +152,89 @@ describe('Le service de supervision', () => {
       expect(idRecu).toBe(unUUID('1'));
       expect(filtreRecu!.filtreDate).toBe('aujourdhui');
       expect(url).toBe('URL1');
+    });
+  });
+
+  describe("sur demande d'attachement d'une entité à un superviseur", () => {
+    it("crée le superviseur s'il n'existe pas", async () => {
+      let superviseurSauvegarde: Superviseur | undefined;
+      depotDonnees.lisSuperviseur = async () => undefined;
+      depotDonnees.sauvegardeSuperviseur = async (s: Superviseur) => {
+        superviseurSauvegarde = s;
+      };
+
+      await serviceSupervision.rattacheEntiteAuSuperviseur(
+        'SIRET-123',
+        unUUID('S')
+      );
+
+      expect(superviseurSauvegarde!.donnees().idUtilisateur).toBe(unUUID('S'));
+    });
+
+    it("ajoute l'entité supervisée au superviseur existant", async () => {
+      const superviseurExistant = Superviseur.hydrate({
+        idUtilisateur: unUUID('S'),
+        entitesSupervisees: [{ siret: 'SIRET-A' }],
+      });
+      depotDonnees.lisSuperviseur = async () => superviseurExistant;
+      let superviseurSauvegarde: Superviseur | undefined;
+      depotDonnees.sauvegardeSuperviseur = async (s: Superviseur) => {
+        superviseurSauvegarde = s;
+      };
+
+      await serviceSupervision.rattacheEntiteAuSuperviseur(
+        'SIRET-123',
+        unUUID('S')
+      );
+
+      expect(superviseurSauvegarde!.donnees().entitesSupervisees).toHaveLength(
+        2
+      );
+    });
+
+    it("complète les données de l'entité grâce à la recherche entreprise", async () => {
+      let siretRecu;
+      const adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
+      adaptateurRechercheEntite.rechercheOrganisations = async (siret) => {
+        siretRecu = siret;
+        return [];
+      };
+      serviceSupervision = new ServiceSupervision({
+        depotDonnees,
+        adaptateurSupervision,
+        adaptateurRechercheEntite,
+      });
+
+      await serviceSupervision.rattacheEntiteAuSuperviseur(
+        'SIRET-123',
+        unUUID('S')
+      );
+
+      expect(siretRecu).toBe('SIRET-123');
+    });
+
+    it('lie les services existants avec ce siret au superviseur', async () => {
+      const service = unService()
+        .avecOrganisationResponsable({ siret: 'SIRET-123' })
+        .construis();
+      depotDonnees.tousLesServicesAvecSiret = async () => [service];
+      depotDonnees.lisSuperviseursPour = async () => [
+        Superviseur.hydrate({
+          idUtilisateur: unUUID('S'),
+          entitesSupervisees: [{ siret: 'SIRET-123' }],
+        }),
+      ];
+      let serviceRecu;
+      adaptateurSupervision.relieSuperviseursAService = async (s) => {
+        serviceRecu = s;
+      };
+
+      await serviceSupervision.rattacheEntiteAuSuperviseur(
+        'SIRET-123',
+        unUUID('S')
+      );
+
+      expect(serviceRecu).toBe(service);
     });
   });
 

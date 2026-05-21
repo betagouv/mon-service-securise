@@ -624,6 +624,7 @@ class ConsoleAdministration {
     const serviceSupervision = new ServiceSupervision({
       depotDonnees: this.depotDonnees,
       adaptateurSupervision: this.adaptateurSupervision,
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });
 
     await serviceSupervision.revoqueSuperviseur(idUtilisateur);
@@ -640,41 +641,20 @@ class ConsoleAdministration {
     const serviceSupervision = new ServiceSupervision({
       depotDonnees: this.depotDonnees,
       adaptateurSupervision: this.adaptateurSupervision,
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     });
 
     /* eslint-disable no-restricted-syntax */
     /* eslint-disable no-await-in-loop */
-    /* eslint-disable no-continue */
     for (const siret of sirets) {
       console.log(`Ajout du SIRET ${siret}`);
-      try {
-        await this.depotDonnees.ajouteSiretAuSuperviseur(superviseur.id, siret);
-      } catch (e) {
-        if (e.detail.includes('already exists')) {
-          console.log(`Le superviseur supervise déjà le SIRET ${siret}`);
-          continue;
-        } else {
-          throw e;
-        }
-      }
-
-      const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-
-      console.log(`${services.length} services trouvés pour ce siret`);
-      for (const s of services) {
-        try {
-          await serviceSupervision.relieServiceEtSuperviseurs(s);
-        } catch (e) {
-          console.warn(
-            `Une erreur est survenu lors de la liaison du service ${s.id}`
-          );
-          console.warn(e);
-        }
-      }
+      await serviceSupervision.rattacheEntiteAuSuperviseur(
+        siret,
+        superviseur.id
+      );
     }
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
-    /* eslint-enable no-continue */
   }
 
   async ajouteSiretsAAdmin(emailAdmin, sirets) {
@@ -694,15 +674,7 @@ class ConsoleAdministration {
     /* eslint-disable no-await-in-loop */
     for (const siret of sirets) {
       console.log(`Ajout du SIRET ${siret}`);
-      try {
-        await serviceAdminOrgas.rattacheEntiteA(siret, admin.id);
-      } catch (e) {
-        if (e.detail.includes('already exists')) {
-          console.log(`L'admin supervise déjà le SIRET ${siret}`);
-        } else {
-          throw e;
-        }
-      }
+      await serviceAdminOrgas.rattacheEntiteA(siret, admin.id);
     }
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
