@@ -1,6 +1,6 @@
-import type { Entite } from '../ui/types';
+import type { EntiteSupervisee } from './adminEntites.types';
 
 export const api = {
-  entitesDansMonPerimetre: async (): Promise<Entite[]> =>
-    (await axios.get<Entite[]>('/api/admin/entites')).data,
+  entitesDansMonPerimetre: async (): Promise<Array<EntiteSupervisee>> =>
+    (await axios.get<Array<EntiteSupervisee>>('/api/admin/entites')).data,
 };

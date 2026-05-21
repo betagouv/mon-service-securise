@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { Entite } from '../ui/types';
   import { api } from './adminEntites.api';
+  import type { EntiteSupervisee } from './adminEntites.types';
 
-  let mesEntites: Entite[] = $state([]);
+  let mesEntites: Array<EntiteSupervisee> = $state([]);
 
   onMount(async () => {
     mesEntites = await api.entitesDansMonPerimetre();
@@ -14,12 +14,26 @@
 
 <dsfr-table
   columns={[
-    { key: 'siret', label: 'SIRET' },
-    { key: 'nom', label: 'Nom' },
-    { key: 'departement', label: 'Département' },
+    { key: 'nom', label: 'Entité' },
+    { key: 'admins', label: 'Admin(s)' },
   ]}
   rows={mesEntites}
-></dsfr-table>
+  rich
+  multiline
+>
+  {#each mesEntites as entite, i (entite.siret)}
+    <div slot="cell:admins:{i}" class="conteneur-admins">
+      {#each entite.administrateurs as administrateur, j (j)}
+        <dsfr-badge
+          label={administrateur.prenomNom}
+          type="accent"
+          accent="blue-ecume"
+          size="sm"
+        ></dsfr-badge>
+      {/each}
+    </div>
+  {/each}
+</dsfr-table>
 
 <style lang="scss">
   :global(#conteneur-admin-entites) {
@@ -33,5 +47,10 @@
     font-size: 2.5rem;
     line-height: 3rem;
     margin: 0;
+  }
+
+  .conteneur-admins {
+    display: flex;
+    gap: 8px;
   }
 </style>
