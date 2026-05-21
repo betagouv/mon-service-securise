@@ -239,7 +239,8 @@ describe("Le service de gestion des admins d'organisation", () => {
         );
         await adaptateurPersistance.ajouteUtilisateur(
           unUUID('A'),
-          unUtilisateur().quiSAppelle('Jean Dujardin').donnees
+          unUtilisateur().quiSAppelle('Jean Dujardin').avecPostes(['RSSI'])
+            .donnees
         );
         await adaptateurPersistance.sauvegardeService(
           unUUID('S'),
@@ -275,7 +276,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         expect(entitesDe[0].nombreServices).toBe(1);
         expect(entitesDe[0].nombreUtilisateurs).toBe(1);
         expect(entitesDe[0].administrateurs).toEqual([
-          { prenomNom: 'Jean Dujardin' },
+          { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
         ]);
       });
 

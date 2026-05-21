@@ -169,6 +169,8 @@ export class ServiceAdministrationOrganisations {
       ).size,
       administrateurs: administrateurs.map((u) => ({
         prenomNom: u!.prenomNom(),
+        initiales: u!.initiales(),
+        postes: u!.posteDetaille(),
       })),
     };
   }
