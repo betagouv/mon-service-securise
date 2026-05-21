@@ -169,5 +169,26 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         testeur.serviceAdministrationOrganisations().rattacheEntiteA
       ).toHaveBeenCalledWith(siret, idAdminB);
     });
+
+    it('dédoublonne les emails', async () => {
+      const idAdmin = unUUID('A');
+      const email = 'jean.dujardin@beta.gouv.fr';
+      testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
+      testeur.depotDonnees().utilisateurAvecEmail = async (e: string) =>
+        e === email
+          ? unUtilisateur().avecId(idAdmin).avecEmail(email).construis()
+          : undefined;
+      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: [email, email],
+        siret,
+      });
+
+      expect(status).toBe(200);
+      expect(
+        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+      ).toHaveBeenCalledTimes(1);
+    });
   });
 });
