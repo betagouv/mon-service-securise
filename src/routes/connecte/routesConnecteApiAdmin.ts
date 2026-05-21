@@ -67,7 +67,7 @@ const routesConnecteApiAdmin = ({
         );
       };
 
-      await Promise.all(emails.map(nommeAdmin));
+      await Promise.all([...new Set(emails)].map(nommeAdmin));
       reponse.sendStatus(200);
     }
   );
