@@ -18,6 +18,7 @@
     { key: 'admins', label: 'Admin(s)' },
     { key: 'nombreServices', label: 'Nombre de services' },
     { key: 'nombreUtilisateurs', label: "Nombre d'utilisateurs" },
+    { key: 'actions', label: 'Actions' },
   ]}
   rows={mesEntites}
   rich
@@ -53,6 +54,20 @@
             : ''}
         {/if}
       </span>
+    </div>
+    <div slot="cell:actions:{i}">
+      {#if entite.administrateurs.length === 0}
+        <dsfr-button
+          kind="primary"
+          label="Nommer un admin"
+          size="sm"
+          hasIcon
+          icon="add-line"
+        ></dsfr-button>
+      {:else}
+        <dsfr-button kind="secondary" label="Gérer les admins" size="sm"
+        ></dsfr-button>
+      {/if}
     </div>
   {/each}
 </dsfr-table>
