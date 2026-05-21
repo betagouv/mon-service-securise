@@ -6,7 +6,7 @@ import { envoieMailsNotificationExpirationHomologation } from '../../src/taches/
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
 const main = async () => {
-  const depotDonnees = DepotDonnees.creeDepot();
+  const depotDonnees = DepotDonnees.creeDepot({});
   const adaptateurHorloge = fabriqueAdaptateurHorloge();
   return envoieMailsNotificationExpirationHomologation({
     depotDonnees,
