@@ -85,8 +85,12 @@ describe("L'adaptateur persistance Postgres", () => {
         donnees: await chiffrement.chiffre(entite2),
       });
 
-      const [s1, s2] = await persistance.lisSuperviseursOrganisation('SIRET');
+      const superviseurs =
+        await persistance.lisSuperviseursOrganisation('SIRET');
 
+      const s1 = superviseurs.find((s) => s.idUtilisateur === idSuperviseur1);
+      const s2 = superviseurs.find((s) => s.idUtilisateur === idSuperviseur2);
+      expect(superviseurs).toHaveLength(2);
       expect(s1).toEqual({
         idUtilisateur: idSuperviseur1,
         entitesSupervisees: [entite1],
@@ -189,6 +193,23 @@ describe("L'adaptateur persistance Postgres", () => {
         idUtilisateur: idSuperviseur,
         entitesSupervisees: [entiteA, entiteB],
       });
+    });
+  });
+
+  describe("sur demande de suppression d'un superviseur", () => {
+    it('supprime toutes les lignes du superviseur', async () => {
+      const idSuperviseur = unUUIDRandom();
+      const donneesEntite = { siret: 'siret', nom: 'nom', departement: '75' };
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur,
+        siret_hash: chiffrement.hacheSha256('siret'),
+        donnees: await chiffrement.chiffre(donneesEntite),
+      });
+
+      await persistance.supprimeSuperviseur(idSuperviseur);
+
+      const superviseur = await persistance.lisSuperviseur(idSuperviseur);
+      expect(superviseur).toBeUndefined();
     });
   });
 

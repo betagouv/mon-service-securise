@@ -25,6 +25,10 @@ export class DepotDonneesSuperviseursOO {
     return donnees.map((d) => Superviseur.hydrate(d));
   }
 
+  async supprimeSuperviseur(idUtilisateur: UUID): Promise<void> {
+    await this.persistance.supprimeSuperviseur(idUtilisateur);
+  }
+
   async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
     const superviseur = await this.lisSuperviseur(idUtilisateur);
 

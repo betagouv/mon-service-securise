@@ -69,4 +69,10 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       s.entitesSupervisees.map((e) => e.siret).includes(siret)
     );
   }
+
+  async supprimeSuperviseur(idUtilisateur: UUID): Promise<void> {
+    this.donnees.superviseurs = this.donnees.superviseurs.filter(
+      (s) => s.idUtilisateur !== idUtilisateur
+    );
+  }
 }

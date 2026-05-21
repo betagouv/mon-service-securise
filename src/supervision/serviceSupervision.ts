@@ -90,7 +90,7 @@ class ServiceSupervision {
 
   async revoqueSuperviseur(idUtilisateur: UUID) {
     await this.adaptateurSupervision.revoqueSuperviseur(idUtilisateur);
-    await this.depotDonnees.revoqueSuperviseur(idUtilisateur);
+    await this.depotDonnees.supprimeSuperviseur(idUtilisateur);
   }
 }
 

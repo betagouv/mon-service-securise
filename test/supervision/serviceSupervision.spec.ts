@@ -22,7 +22,7 @@ describe('Le service de supervision', () => {
       lisSuperviseur: async () => undefined,
       sauvegardeSuperviseur: async () => {},
       tousLesServicesAvecSiret: async () => [],
-      revoqueSuperviseur: async () => {},
+      supprimeSuperviseur: async () => {},
     } as unknown as DepotDonnees;
     serviceSupervision = new ServiceSupervision({
       depotDonnees,
@@ -252,7 +252,7 @@ describe('Le service de supervision', () => {
 
     it('délègue au dépôt de données la suppression des liens siret-superviseur', async () => {
       let idRecu;
-      depotDonnees.revoqueSuperviseur = async (idSuperviseur) => {
+      depotDonnees.supprimeSuperviseur = async (idSuperviseur) => {
         idRecu = idSuperviseur;
       };
 

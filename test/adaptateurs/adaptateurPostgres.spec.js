@@ -71,11 +71,11 @@ describe("L'adaptateur persistance Postgres", () => {
   }
 
   async function ajouteEntiteAuPerimetreSuperviseur(idSuperviseur, siret) {
-    await persistance.ajouteEntiteAuSuperviseur(
-      idSuperviseur,
-      chiffrement.hacheSha256(siret),
-      {}
-    );
+    await knex('superviseurs').insert({
+      id_superviseur: idSuperviseur,
+      siret_hash: chiffrement.hacheSha256(siret),
+      donnees: await chiffrement.chiffre({ siret }),
+    });
   }
 
   async function ajouteAdminAvecEntite(idUtilisateur, ...sirets) {
