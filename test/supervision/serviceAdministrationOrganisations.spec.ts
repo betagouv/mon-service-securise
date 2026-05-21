@@ -3,7 +3,7 @@ import {
   creeDepot as creeDepotComplet,
 } from '../../src/depotDonnees.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
-import { unUUID } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import {
   DonneesEntiteSupervisee,
@@ -53,6 +53,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
       ...surcharge,
     });
   };
@@ -218,7 +219,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(entitesDe[0].siret).toBe('SIRET-123');
     });
 
-    it("renvoie les entités d'un superviseur s'il n'est pas admin, avec la liste des administrateurs", async () => {
+    it("renvoie les entités supervisées d'un superviseur s'il n'est pas admin", async () => {
       const superviseur = Superviseur.hydrate({
         idUtilisateur: unUUID('S'),
         entitesSupervisees: [{ siret: 'SIRET-123', nom: 'Mon entité' }],
@@ -235,8 +236,13 @@ describe("Le service de gestion des admins d'organisation", () => {
       );
       await adaptateurPersistance.ajouteUtilisateur(
         unUUID('A'),
-        unUtilisateur().quiSAppelle('Jean Dujardin').donnees,
-        'SIRET-123-haché'
+        unUtilisateur().quiSAppelle('Jean Dujardin').donnees
+      );
+      await adaptateurPersistance.sauvegardeService(
+        unUUIDRandom(),
+        unServiceV2().donnees,
+        '',
+        'SIRET-123-haché256'
       );
       const service = new ServiceAdministrationOrganisations({
         depotDonnees: depotComplet,
@@ -251,6 +257,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(entitesDe).toHaveLength(1);
       expect(entitesDe[0].siret).toBe('SIRET-123');
       expect(entitesDe[0].nom).toBe('Mon entité');
+      expect(entitesDe[0].nombreServices).toBe(1);
       expect(entitesDe[0].administrateurs).toEqual([
         { prenomNom: 'Jean Dujardin' },
       ]);
