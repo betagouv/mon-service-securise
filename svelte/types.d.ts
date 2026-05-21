@@ -16,5 +16,6 @@ declare module 'svelte/elements' {
     'on:homologation-finalisee'?: (event: CustomEvent<never>) => void;
     'on:parcours-homologation-initie'?: (event: CustomEvent<never>) => void;
     'on:contacts-utiles-service-modifiee'?: (event: CustomEvent<never>) => void;
+    'on:admins-entites-modifiees'?: (event: CustomEvent<never>) => void;
   }
 }

@@ -4,14 +4,21 @@
   import type { EntiteSupervisee } from './adminEntites.types';
   import TiroirInvitationAdmins from './TiroirInvitationAdmins.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
+  import Toaster from '../ui/Toaster.svelte';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
 
   onMount(async () => {
-    mesEntites = await api.entitesDansMonPerimetre();
+    await rafraichis();
   });
+
+  const rafraichis = async () => {
+    mesEntites = await api.entitesDansMonPerimetre();
+  };
 </script>
 
+<Toaster />
+<svelte:document on:admins-entites-modifiees={rafraichis} />
 <h1>Entités</h1>
 <dsfr-table
   columns={[
