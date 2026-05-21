@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { api } from './adminEntites.api';
   import type { EntiteSupervisee } from './adminEntites.types';
+  import TiroirInvitationAdmins from './TiroirInvitationAdmins.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
 
@@ -11,7 +13,6 @@
 </script>
 
 <h1>Entités</h1>
-
 <dsfr-table
   columns={[
     { key: 'nom', label: 'Entité' },
@@ -60,15 +61,26 @@
     </div>
     <div slot="cell:actions:{i}">
       {#if entite.administrateurs.length === 0}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-button
           kind="primary"
           label="Nommer un admin"
           size="sm"
           hasIcon
           icon="add-line"
+          onclick={() => {
+            tiroirStore.afficheContenu(TiroirInvitationAdmins, { entite });
+          }}
         ></dsfr-button>
       {:else}
-        <dsfr-button kind="secondary" label="Gérer les admins" size="sm"
+        <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+        <dsfr-button
+          kind="secondary"
+          label="Gérer les admins"
+          size="sm"
+          onclick={() => {
+            tiroirStore.afficheContenu(TiroirInvitationAdmins, { entite });
+          }}
         ></dsfr-button>
       {/if}
     </div>
