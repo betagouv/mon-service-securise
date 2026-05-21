@@ -602,17 +602,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const revoqueSuperviseur = async (idSuperviseur) =>
     knex('superviseurs').where({ id_superviseur: idSuperviseur }).delete();
 
-  const ajouteEntiteAuSuperviseur = async (
-    idSuperviseur,
-    siretHash,
-    donneesChiffrees
-  ) =>
-    knex('superviseurs').insert({
-      id_superviseur: idSuperviseur,
-      siret_hash: siretHash,
-      donnees: donneesChiffrees,
-    });
-
   const ajouteParrainage = async (
     idUtilisateurFilleul,
     idUtilisateurParrain,
@@ -1012,7 +1001,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
-    ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajouteParrainage,
     ajoutePlusieursModelesMesureSpecifique,

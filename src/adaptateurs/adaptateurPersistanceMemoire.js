@@ -426,17 +426,6 @@ const nouvelAdaptateur = (
     );
   };
 
-  const ajouteEntiteAuSuperviseur = async (
-    idSuperviseur,
-    siretHash,
-    donneesChiffrees
-  ) =>
-    donnees.superviseurs.push({
-      idSuperviseur,
-      siretHash,
-      donnees: donneesChiffrees,
-    });
-
   const verifieTousLesServicesExistent = async (idsServices) =>
     idsServices.every((unId) => donnees.services.find((s) => s.id === unId));
 
@@ -717,7 +706,6 @@ const nouvelAdaptateur = (
     ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
-    ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajoutePlusieursModelesMesureSpecifique,
     ajouteSuggestionAction,

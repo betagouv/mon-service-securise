@@ -139,8 +139,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
     adaptateurPersistance,
-    adaptateurRechercheEntite,
-    adaptateurChiffrement,
   });
 
   const depotParrainages = depotDonneesParrainages.creeDepot({
@@ -308,7 +306,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const { ajouteSiretAuSuperviseur, revoqueSuperviseur } = depotSuperviseurs;
+  const { revoqueSuperviseur } = depotSuperviseurs;
 
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
@@ -383,7 +381,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
     ajouteSimulationMigrationReferentielSiNecessaire,
-    ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     analyseDesProprietaires,
     associeModeleMesureSpecifiqueAuxServices,
