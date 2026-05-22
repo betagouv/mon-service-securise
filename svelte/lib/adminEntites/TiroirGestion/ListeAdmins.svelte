@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CartoucheAdmin from './CartoucheAdmin.svelte';
   import type { AdminSupervise } from '../adminEntites.types';
 
   interface Props {
@@ -15,13 +16,11 @@
 >
 <div class="conteneur-cartouches">
   {#each administrateurs as admin, i (i)}
-    <div class="cartouche-admin">
-      <div class="initiales"><span>{admin.initiales}</span></div>
-      <div class="identite">
-        <span class="nom-prenom">{admin.prenomNom}</span>
-        <span class="postes">{admin.postes}</span>
-      </div>
-    </div>
+    <CartoucheAdmin
+      prenomNom={admin.prenomNom}
+      initiales={admin.initiales}
+      postes={admin.postes}
+    />
   {/each}
 </div>
 
@@ -47,48 +46,5 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-
-    .cartouche-admin {
-      padding: 24px;
-      border: 1px solid #dddddd;
-      border-radius: 8px;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-
-      .identite {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-
-        .nom-prenom {
-          font-size: 1rem;
-          line-height: 1.5rem;
-          color: #3a3a3a;
-        }
-
-        .postes {
-          font-size: 1rem;
-          line-height: 1.5rem;
-          color: #666666;
-        }
-      }
-
-      .initiales {
-        width: 40px;
-        height: 40px;
-        background: var(--purple-glycine-925-125);
-        border-radius: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        span {
-          font-size: 0.875rem;
-          line-height: 1.5rem;
-          color: var(--purple-glycine-sun-319-moon-630);
-        }
-      }
-    }
   }
 </style>
