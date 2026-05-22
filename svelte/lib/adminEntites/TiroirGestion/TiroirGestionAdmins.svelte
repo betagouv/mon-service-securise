@@ -2,6 +2,7 @@
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import ListeAdmins from './ListeAdmins.svelte';
+  import CartoucheAdmin from './CartoucheAdmin.svelte';
   import type { EntiteSupervisee } from '../adminEntites.types';
   import { untrack } from 'svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
@@ -65,11 +66,7 @@
     {:else}
       <div class="conteneur-cartouches">
         {#each listeAdminsAInviter as emailAdmin, i (i)}
-          <div class="cartouche-admin">
-            <div class="identite">
-              <span class="nom-prenom">{emailAdmin}</span>
-            </div>
-          </div>
+          <CartoucheAdmin prenomNom={emailAdmin} />
         {/each}
       </div>
     {/if}
@@ -101,27 +98,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-
-      .cartouche-admin {
-        padding: 24px;
-        border: 1px solid #dddddd;
-        border-radius: 8px;
-        display: flex;
-        gap: 16px;
-        align-items: center;
-
-        .identite {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-
-          .nom-prenom {
-            font-size: 1rem;
-            line-height: 1.5rem;
-            color: #3a3a3a;
-          }
-        }
-      }
     }
   }
 </style>
