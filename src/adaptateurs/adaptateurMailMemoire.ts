@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { emailMemoire } from './adaptateurEnvironnement.js';
+import { AdaptateurMail } from './adaptateurMail.interface.js';
 
 const fabriqueAdaptateurMailMemoire = () => {
   const doitLoguer = emailMemoire().logEmailDansConsole();
 
   const envoyer = (texte: string, ...args: unknown[]) => {
-    // eslint-disable-next-line no-console
     if (doitLoguer) console.log(texte, args);
   };
 
@@ -63,25 +64,24 @@ const fabriqueAdaptateurMailMemoire = () => {
 
   const recupereIdentifiantContact = async (email: string) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(
         `Récupération de l'identifiant Brevo pour l'utilisateur ${email}`
       );
-    return 42;
+    return '42';
   };
 
   const recupereEntreprise = async (siret: string) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(`Récupération de l'entreprise Brevo pour le SIRET ${siret}`);
+    return 'ID-ENTREPRISE-FACTICE';
   };
 
   const recupereEntrepriseDuContact = async (idContact: string) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(
         `Récupération de l'entreprise Brevo pour le contact ${idContact}`
       );
+    return 'ID-ENTREPRISE-FACTICE';
   };
 
   const relieContactAEntreprise = async (
@@ -89,7 +89,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     idEntreprise: string
   ) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(
         `Relie l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
       );
@@ -100,7 +99,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     idEntreprise: string
   ) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(
         `Supprime le lien entre l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
       );
@@ -108,18 +106,16 @@ const fabriqueAdaptateurMailMemoire = () => {
 
   const creeEntreprise = async (...args: unknown[]) => {
     if (doitLoguer)
-      // eslint-disable-next-line no-console
       console.log(
         `Création d'une entreprise Brevo avec les paramètres: ${JSON.stringify(
           args
         )}`
       );
+    return 'ID-ENTREPRISE-FACTICE';
   };
 
   const supprimeContact = async (email: string) => {
-    if (doitLoguer)
-      // eslint-disable-next-line no-console
-      console.log(`Suppression du contact ${email}`);
+    if (doitLoguer) console.log(`Suppression du contact ${email}`);
   };
 
   return {
@@ -142,7 +138,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     relieContactAEntreprise,
     supprimeContact,
     supprimeLienEntreContactEtEntreprise,
-  };
+  } satisfies AdaptateurMail;
 };
 
 export { fabriqueAdaptateurMailMemoire };

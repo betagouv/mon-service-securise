@@ -3,6 +3,7 @@ import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErre
 import { enCadence } from '../utilitaires/pThrottle.js';
 import { UUID } from '../typesBasiques.js';
 import { ErreurApiBrevo } from '../erreurs.js';
+import { AdaptateurMail } from './adaptateurMail.interface.js';
 
 const enteteJSON = {
   headers: {
@@ -435,10 +436,10 @@ const envoieNotificationExpirationHomologationCadencee = async (
   );
 };
 
-export {
+export const adaptateurMailSendinblue = {
   creeContact,
   metAJourContact,
-  metAJourDonneesContactCadencee as metAJourDonneesContact,
+  metAJourDonneesContact: metAJourDonneesContactCadencee,
   creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
@@ -448,11 +449,12 @@ export {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageNominationAdmin,
-  envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
+  envoieNotificationExpirationHomologation:
+    envoieNotificationExpirationHomologationCadencee,
   recupereEntreprise,
   recupereEntrepriseDuContact,
   recupereIdentifiantContact,
   relieContactAEntreprise,
   supprimeContact,
   supprimeLienEntreContactEtEntreprise,
-};
+} satisfies AdaptateurMail;

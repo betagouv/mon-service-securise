@@ -18,7 +18,7 @@ import * as FabriqueAutorisation from '../src/modeles/autorisations/fabriqueAuto
 import { EvenementCollaboratifServiceModifie } from '../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
 import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import * as adaptateurRechercheEntrepriseAPI from '../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
-import * as adaptateurMail from '../src/adaptateurs/adaptateurMailSendinblue.js';
+import { adaptateurMailSendinblue as adaptateurMail } from '../src/adaptateurs/adaptateurMailSendinblue.js';
 import CrmBrevo from '../src/crm/crmBrevo.js';
 import { verifieCoherenceDesDroits } from '../src/modeles/autorisations/gestionDroits.js';
 import BusEvenements from '../src/bus/busEvenements.js';
