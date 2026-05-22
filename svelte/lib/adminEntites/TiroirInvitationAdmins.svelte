@@ -6,6 +6,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { api } from './adminEntites.api';
+  import { SvelteSet } from 'svelte/reactivity';
 
   interface Props {
     entite: EntiteSupervisee;
@@ -18,25 +19,25 @@
 
   let etatAffichage: 'LISTE' | 'INVITATION' = $state('LISTE');
   let nouvelAdmin = $state('');
-  let listeAdminsAInviter: string[] = $state([]);
+  const listeAdminsAInviter: SvelteSet<string> = new SvelteSet<string>();
 
   const inviteAdmin = () => {
     etatAffichage = 'INVITATION';
-    listeAdminsAInviter.push(nouvelAdmin);
+    listeAdminsAInviter.add(nouvelAdmin);
     nouvelAdmin = '';
   };
 
   const retourModeListe = () => {
     etatAffichage = 'LISTE';
-    listeAdminsAInviter = [];
+    listeAdminsAInviter.clear();
     nouvelAdmin = '';
   };
 
   const envoieInvitations = async () => {
-    await api.envoieInvitations(listeAdminsAInviter, entite.siret);
+    await api.envoieInvitations([...listeAdminsAInviter], entite.siret);
     toasterStore.succes(
       'Invitation envoyée',
-      `${listeAdminsAInviter.length} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
+      `${listeAdminsAInviter.size} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
     );
     document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
     tiroirStore.ferme();
