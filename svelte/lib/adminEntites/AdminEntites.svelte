@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { api } from './adminEntites.api';
   import type { EntiteSupervisee } from './adminEntites.types';
-  import TiroirGestionAdmins from './TiroirGestionAdmins.svelte';
+  import TiroirGestionAdmins from './TiroirGestion/TiroirGestionAdmins.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import Toaster from '../ui/Toaster.svelte';
 
