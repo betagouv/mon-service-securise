@@ -2,7 +2,7 @@ import testeurMSS from '../testeurMSS.js';
 import { DonneesEntite } from '../../../src/modeles/entite.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
-import { unUUID } from '../../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import Superviseur from '../../../src/modeles/superviseur.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
@@ -81,6 +81,48 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           postes: ['RSSI'],
         },
       ]);
+    });
+  });
+
+  describe('quand requete POST sur `/api/admin/verifieEmail', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().lisSuperviseur = async () =>
+        Superviseur.nouveau(unUUIDRandom());
+    });
+
+    it("renvoie une erreur 403 si l'utilisateur courant n'est pas superviseur", async () => {
+      testeur.depotDonnees().lisSuperviseur = async () => undefined;
+
+      const { status } = await testeur.post('/api/admin/verifieEmail', {
+        email: 'a@a.fr',
+      });
+
+      expect(status).toBe(403);
+    });
+
+    it("jette une erreur 400 si l'email est invalide", async () => {
+      const { status } = await testeur.post('/api/admin/verifieEmail', {
+        email: 'pasUnEmail',
+      });
+      expect(status).toBe(400);
+    });
+
+    it("renvoie l'information de l'existence ou non de l'email", async () => {
+      testeur.depotDonnees().utilisateurAvecEmail = async (email: string) => {
+        if (email === 'existe@societe.fr') return unUtilisateur().donnees;
+
+        return undefined;
+      };
+
+      const oui = await testeur.post('/api/admin/verifieEmail', {
+        email: 'existe@societe.fr',
+      });
+      expect(oui.body).toEqual({ existe: true });
+
+      const non = await testeur.post('/api/admin/verifieEmail', {
+        email: 'fantome@societe.fr',
+      });
+      expect(non.body).toEqual({ existe: false });
     });
   });
 
