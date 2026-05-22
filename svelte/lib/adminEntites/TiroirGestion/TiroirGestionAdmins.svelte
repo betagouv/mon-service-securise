@@ -3,6 +3,7 @@
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import ListeAdmins from './ListeAdmins.svelte';
   import CartoucheAdmin from './CartoucheAdmin.svelte';
+  import SaisieEmailAdmin from './SaisieEmailAdmin.svelte';
   import type { EntiteSupervisee } from '../adminEntites.types';
   import { untrack } from 'svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
@@ -20,19 +21,16 @@
     'Invitez et gérez les administrateurs de votre entité';
 
   let etatAffichage: 'LISTE' | 'INVITATION' = $state('LISTE');
-  let nouvelAdmin = $state('');
   const listeAdminsAInviter: SvelteSet<string> = new SvelteSet<string>();
 
-  const inviteAdmin = () => {
+  const inviteAdmin = (email: string) => {
     etatAffichage = 'INVITATION';
-    listeAdminsAInviter.add(nouvelAdmin);
-    nouvelAdmin = '';
+    listeAdminsAInviter.add(email);
   };
 
   const retourModeListe = () => {
     etatAffichage = 'LISTE';
     listeAdminsAInviter.clear();
-    nouvelAdmin = '';
   };
 
   const envoieInvitations = async () => {
@@ -47,18 +45,7 @@
 </script>
 
 <ContenuTiroir>
-  <dsfr-input
-    value={nouvelAdmin}
-    onvaluechanged={(e: CustomEvent<string>) => (nouvelAdmin = e.detail)}
-    type="email"
-    label="Ajouter un administrateur"
-    hint="Vous pouvez ajouter un administrateur via son adresse e-mail."
-    status="info"
-    infoMessage="L’utilisateur doit toutefois déjà disposer d’un compte sur MonServiceSécurisé ; dans le cas contraire, il ne pourra pas être ajouté en tant qu’administrateur."
-  ></dsfr-input>
-  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-  <dsfr-button label="Nommer admin" size="sm" onclick={() => inviteAdmin()}
-  ></dsfr-button>
+  <SaisieEmailAdmin onemailvalide={inviteAdmin} />
 
   <div class="conteneur-admins">
     {#if etatAffichage === 'LISTE'}
