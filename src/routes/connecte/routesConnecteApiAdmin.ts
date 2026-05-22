@@ -1,4 +1,5 @@
 import express from 'express';
+import z from 'zod';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
 import { valideBody } from '../../http/validePayloads.js';
@@ -43,6 +44,24 @@ const routesConnecteApiAdmin = ({
       }))
     );
   });
+
+  routes.post(
+    '/verifieEmail',
+    valideBody(z.strictObject({ email: z.email() })),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+      const superviseur =
+        await depotDonnees.lisSuperviseur(idUtilisateurCourant);
+      if (!superviseur) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      const cible = await depotDonnees.utilisateurAvecEmail(requete.body.email);
+
+      reponse.json({ existe: !!cible });
+    }
+  );
 
   routes.post(
     '/nomme',
