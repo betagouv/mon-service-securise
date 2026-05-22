@@ -164,10 +164,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(200);
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(siret, idAdminA);
+      ).toHaveBeenCalledWith(siret, idAdminA, 'jean.dujardin@beta.gouv.fr');
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(siret, idAdminB);
+      ).toHaveBeenCalledWith(siret, idAdminB, 'jeanne.dujardin@beta.gouv.fr');
     });
 
     it('dédoublonne les emails', async () => {
