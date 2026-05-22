@@ -115,5 +115,10 @@
   .conteneur-admins {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  dsfr-button {
+    white-space: nowrap;
   }
 </style>
