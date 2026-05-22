@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { api } from './adminEntites.api';
   import type { EntiteSupervisee } from './adminEntites.types';
-  import TiroirInvitationAdmins from './TiroirInvitationAdmins.svelte';
+  import TiroirGestionAdmins from './TiroirGestionAdmins.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import Toaster from '../ui/Toaster.svelte';
 
@@ -76,7 +76,7 @@
           hasIcon
           icon="add-line"
           onclick={() => {
-            tiroirStore.afficheContenu(TiroirInvitationAdmins, { entite });
+            tiroirStore.afficheContenu(TiroirGestionAdmins, { entite });
           }}
         ></dsfr-button>
       {:else}
@@ -86,7 +86,7 @@
           label="Gérer les admins"
           size="sm"
           onclick={() => {
-            tiroirStore.afficheContenu(TiroirInvitationAdmins, { entite });
+            tiroirStore.afficheContenu(TiroirGestionAdmins, { entite });
           }}
         ></dsfr-button>
       {/if}
