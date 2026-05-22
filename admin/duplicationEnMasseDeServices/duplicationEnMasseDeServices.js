@@ -11,7 +11,7 @@ import * as Referentiel from '../../src/referentiel.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
 import * as AdaptateurPostgres from '../../src/adaptateurs/adaptateurPostgres.js';
 import { fabriqueProcedures } from '../../src/routes/procedures.js';
-import * as adaptateurMail from '../../src/adaptateurs/adaptateurMailSendinblue.js';
+import { adaptateurMailSendinblue as adaptateurMail } from '../../src/adaptateurs/adaptateurMailSendinblue.js';
 import fabriqueAdaptateurTracking from '../../src/adaptateurs/fabriqueAdaptateurTracking.js';
 import { EvenementServiceRattacheAPrestataire } from '../../src/bus/evenementServiceRattacheAPrestataire.js';
 import { cableTousLesAbonnes } from '../../src/bus/cablage.js';

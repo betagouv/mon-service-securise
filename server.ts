@@ -6,12 +6,10 @@ import * as MSS from './src/mss.js';
 import { fabriqueAnnuaire } from './src/annuaire/serviceAnnuaire.js';
 import * as adaptateurCsv from './src/adaptateurs/adaptateurCsv.js';
 import * as adaptateurEnvironnement from './src/adaptateurs/adaptateurEnvironnement.js';
-import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurGestionErreur } from './src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import fabriqueAdaptateurTracking from './src/adaptateurs/fabriqueAdaptateurTracking.js';
 import { fabriqueAdaptateurHorloge } from './src/adaptateurs/adaptateurHorloge.js';
 import { fabriqueAdaptateurJWT } from './src/adaptateurs/adaptateurJWT.js';
-import * as adaptateurMailSendinblue from './src/adaptateurs/adaptateurMailSendinblue.js';
 import * as adaptateurPdf from './src/adaptateurs/adaptateurPdf.js';
 import * as lecteurDeFormData from './src/http/lecteurDeFormData.js';
 import * as adaptateurTeleversementServices from './src/adaptateurs/adaptateurTeleversementServices.xls.js';
@@ -32,10 +30,10 @@ import { fabriqueServiceCgu } from './src/serviceCgu.js';
 import ServiceSupervision from './src/supervision/serviceSupervision.js';
 import { fabriqueServiceGestionnaireSession } from './src/session/serviceGestionnaireSession.js';
 import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerificationCoherenceSels.js';
-import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
 import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
+import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -46,9 +44,7 @@ const adaptateurJournal = fabriqueAdaptateurJournalMSS();
 const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
 const adaptateurOidc = fabriqueAdaptateurOidc();
 const adaptateurSupervision = fabriqueAdaptateurSupervision();
-const adaptateurMail = sendinblue().clefAPIEmail()
-  ? adaptateurMailSendinblue
-  : fabriqueAdaptateurMailMemoire();
+const adaptateurMail = fabriqueAdaptateurMail();
 
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 3000;

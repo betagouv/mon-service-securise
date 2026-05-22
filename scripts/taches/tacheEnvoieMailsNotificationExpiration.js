@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
 import * as DepotDonnees from '../../src/depotDonnees.js';
 import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
-import * as adaptateurMail from '../../src/adaptateurs/adaptateurMailSendinblue.js';
+import { adaptateurMailSendinblue as adaptateurMail } from '../../src/adaptateurs/adaptateurMailSendinblue.js';
 import { envoieMailsNotificationExpirationHomologation } from '../../src/taches/envoieMailsNotificationExpirationHomologation.js';
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
