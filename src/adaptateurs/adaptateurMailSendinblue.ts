@@ -186,7 +186,7 @@ const desinscrisEmailsTransactionnels = async (destinataire: string) =>
 const envoieEmail = async (
   destinataire: string,
   idTemplate: number,
-  params: Record<string, unknown>
+  params?: Record<string, unknown>
 ): Promise<void> => {
   try {
     await axios.post(
@@ -273,9 +273,11 @@ const envoieMessageFelicitationHomologation = (
     { id_service: idService }
   );
 
-const envoieMessageNominationAdmin = async (destinataire: string) => {
-  console.log(`✉️ NOUVEL ADMIN : ${destinataire}`);
-};
+const envoieMessageNominationAdmin = (destinataire: string) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_NOUVEL_ADMIN as string, 10)
+  );
 
 const recupereIdentifiantContact = async (email: string) => {
   const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
