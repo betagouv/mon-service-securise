@@ -61,7 +61,7 @@ const routesConnecteApiAdmin = ({
       const nommeAdmin = async (email: string) => {
         const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
         if (!utilisateur) return;
-        await serviceAdministrationOrganisations.rattacheEntiteA(
+        await serviceAdministrationOrganisations.nommeAdmin(
           siret,
           utilisateur!.id
         );

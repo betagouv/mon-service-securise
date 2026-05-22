@@ -75,16 +75,14 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  async rattacheEntiteA(siret: string, idAdmin: UUID) {
+  async nommeAdmin(siret: string, idAdmin: UUID) {
     await this.ajouteSiretAAdmin(siret, idAdmin);
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-
     const nouvellesAutorisations = this.fabriqueAutorisationsAdminPourServices(
       services,
       idAdmin
     );
-
     await this.sauvegardeAutorisations(
       await Promise.all(nouvellesAutorisations)
     );

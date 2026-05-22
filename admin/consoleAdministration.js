@@ -674,7 +674,7 @@ class ConsoleAdministration {
     /* eslint-disable no-await-in-loop */
     for (const siret of sirets) {
       console.log(`Ajout du SIRET ${siret}`);
-      await serviceAdminOrgas.rattacheEntiteA(siret, admin.id);
+      await serviceAdminOrgas.nommeAdmin(siret, admin.id);
     }
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
