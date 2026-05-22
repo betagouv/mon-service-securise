@@ -128,7 +128,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it('ne fait rien pour un utilisateur non existant', async () => {
       testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
       testeur.depotDonnees().utilisateurAvecEmail = async () => undefined;
-      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+      testeur.serviceAdministrationOrganisations().nommeAdmin = vi.fn();
 
       const { status } = await testeur.post('/api/admin/nomme', {
         emails: ['inconnu@mail.fr'],
@@ -137,7 +137,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
       expect(status).toBe(200);
       expect(
-        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+        testeur.serviceAdministrationOrganisations().nommeAdmin
       ).not.toHaveBeenCalled();
     });
 
@@ -154,7 +154,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
               .avecEmail(e)
               .construis()
           : undefined;
-      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+      testeur.serviceAdministrationOrganisations().nommeAdmin = vi.fn();
 
       const { status } = await testeur.post('/api/admin/nomme', {
         emails: [emailA, emailB],
@@ -163,10 +163,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
       expect(status).toBe(200);
       expect(
-        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+        testeur.serviceAdministrationOrganisations().nommeAdmin
       ).toHaveBeenCalledWith(siret, idAdminA);
       expect(
-        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+        testeur.serviceAdministrationOrganisations().nommeAdmin
       ).toHaveBeenCalledWith(siret, idAdminB);
     });
 
@@ -178,7 +178,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         e === email
           ? unUtilisateur().avecId(idAdmin).avecEmail(email).construis()
           : undefined;
-      testeur.serviceAdministrationOrganisations().rattacheEntiteA = vi.fn();
+      testeur.serviceAdministrationOrganisations().nommeAdmin = vi.fn();
 
       const { status } = await testeur.post('/api/admin/nomme', {
         emails: [email, email],
@@ -187,7 +187,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
       expect(status).toBe(200);
       expect(
-        testeur.serviceAdministrationOrganisations().rattacheEntiteA
+        testeur.serviceAdministrationOrganisations().nommeAdmin
       ).toHaveBeenCalledTimes(1);
     });
   });

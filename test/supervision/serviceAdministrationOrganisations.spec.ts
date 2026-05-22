@@ -114,7 +114,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
   });
 
-  describe("sur demande de rattachement d'un admin à une entité", () => {
+  describe("sur demande de nommage d'un admin sur une entité", () => {
     let administrationOrganisations: ServiceAdministrationOrganisations;
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
@@ -155,10 +155,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it('crée le nouvel admin', async () => {
-      await administrationOrganisations.rattacheEntiteA(
-        entite.siret,
-        unUUID('A')
-      );
+      await administrationOrganisations.nommeAdmin(entite.siret, unUUID('A'));
 
       const admins = await depotComplet.lisAdminsPour(entite.siret);
       expect(admins.map((a) => a.donnees().idUtilisateur)).toContain(
@@ -167,14 +164,14 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("ajoute l'entité administrée à l'admin existant", async () => {
-      await administrationOrganisations.rattacheEntiteA('SIRET-567', idAdmin);
+      await administrationOrganisations.nommeAdmin('SIRET-567', idAdmin);
 
       const admins = await depotComplet.lisAdminsPour('SIRET-567');
       expect(admins.map((a) => a.donnees().idUtilisateur)).toContain(idAdmin);
     });
 
     it("complète les données de l'entité grâce à la recherche entreprise", async () => {
-      await administrationOrganisations.rattacheEntiteA('SIRET-567', idAdmin);
+      await administrationOrganisations.nommeAdmin('SIRET-567', idAdmin);
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin?.donnees().entitesAdministrees[0].nom).toBeDefined();
@@ -182,7 +179,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it('ajoute les autorisations correspondantes', async () => {
-      await administrationOrganisations.rattacheEntiteA('1234', unUUID('A'));
+      await administrationOrganisations.nommeAdmin('1234', unUUID('A'));
 
       const autorisationsAdmin = await depotComplet.autorisations(unUUID('A'));
 
@@ -192,7 +189,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
-      await administrationOrganisations.rattacheEntiteA('4567', unUUID('P'));
+      await administrationOrganisations.nommeAdmin('4567', unUUID('P'));
 
       const autorisationsAdmin = await depotComplet.autorisations(unUUID('P'));
 
