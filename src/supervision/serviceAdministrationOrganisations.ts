@@ -11,6 +11,7 @@ import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 import { Contributeur } from '../modeles/contributeur.js';
+import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{ prenomNom: string }>;
@@ -22,19 +23,23 @@ export class ServiceAdministrationOrganisations {
   private readonly depotDonnees: DepotDonnees;
   private readonly adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
   private readonly adaptateurUUID: AdaptateurUUID;
+  private readonly adaptateurMail: AdaptateurMail;
 
   constructor({
     depotDonnees,
     adaptateurRechercheEntite,
     adaptateurUUID = fabriqueAdaptateurUUID(),
+    adaptateurMail,
   }: {
     depotDonnees: DepotDonnees;
     adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
     adaptateurUUID: AdaptateurUUID;
+    adaptateurMail: AdaptateurMail;
   }) {
     this.depotDonnees = depotDonnees;
     this.adaptateurRechercheEntite = adaptateurRechercheEntite;
     this.adaptateurUUID = adaptateurUUID;
+    this.adaptateurMail = adaptateurMail;
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
@@ -75,7 +80,7 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  async nommeAdmin(siret: string, idAdmin: UUID) {
+  async nommeAdmin(siret: string, idAdmin: UUID, emailAdmin: string) {
     await this.ajouteSiretAAdmin(siret, idAdmin);
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
@@ -86,6 +91,7 @@ export class ServiceAdministrationOrganisations {
     await this.sauvegardeAutorisations(
       await Promise.all(nouvellesAutorisations)
     );
+    await this.adaptateurMail.envoieMessageNominationAdmin(emailAdmin);
   }
 
   private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {

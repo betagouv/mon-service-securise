@@ -63,7 +63,8 @@ const routesConnecteApiAdmin = ({
         if (!utilisateur) return;
         await serviceAdministrationOrganisations.nommeAdmin(
           siret,
-          utilisateur!.id
+          utilisateur!.id,
+          utilisateur!.email
         );
       };
 

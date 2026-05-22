@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 import { enCadence } from '../utilitaires/pThrottle.js';
 import { UUID } from '../typesBasiques.js';
@@ -158,19 +158,24 @@ const metAJourContact = (
     SMS: numeroTelephoneAvecIndicatif(telephone),
   });
 
-const basculeEmailsTransactionnels = (destinataire: string, etat: boolean) =>
-  axios
-    .put(
+const basculeEmailsTransactionnels = async (
+  destinataire: string,
+  etat: boolean
+): Promise<void> => {
+  try {
+    await axios.put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
       { emailBlacklisted: etat },
       enteteJSON
-    )
-    .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par API Brevo': e.response.data,
-      });
-      return Promise.reject(e);
+    );
+  } catch (e) {
+    const ea = e as AxiosError;
+    fabriqueAdaptateurGestionErreur().logueErreur(ea, {
+      'Erreur renvoyée par API Brevo': ea.response?.data,
     });
+    throw ea;
+  }
+};
 
 const inscrisEmailsTransactionnels = async (destinataire: string) =>
   basculeEmailsTransactionnels(destinataire, false);
@@ -178,13 +183,13 @@ const inscrisEmailsTransactionnels = async (destinataire: string) =>
 const desinscrisEmailsTransactionnels = async (destinataire: string) =>
   basculeEmailsTransactionnels(destinataire, true);
 
-const envoieEmail = (
+const envoieEmail = async (
   destinataire: string,
   idTemplate: number,
   params: Record<string, unknown>
-) =>
-  axios
-    .post(
+): Promise<void> => {
+  try {
+    await axios.post(
       `${urlBase}/smtp/email`,
       {
         to: [{ email: destinataire }],
@@ -192,13 +197,15 @@ const envoieEmail = (
         params,
       },
       enteteJSON
-    )
-    .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par SMTP Brevo': e.response.data,
-      });
-      return Promise.reject(e);
+    );
+  } catch (e) {
+    const ea = e as AxiosError;
+    fabriqueAdaptateurGestionErreur().logueErreur(ea, {
+      'Erreur renvoyée par SMTP Brevo': ea.response?.data,
     });
+    throw ea;
+  }
+};
 
 const envoieMessageInvitationContribution = (
   destinataire: string,
@@ -263,10 +270,12 @@ const envoieMessageFelicitationHomologation = (
       process.env.SENDINBLUE_TEMPLATE_FELICITATION_HOMOLOGATION as string,
       10
     ),
-    {
-      id_service: idService,
-    }
+    { id_service: idService }
   );
+
+const envoieMessageNominationAdmin = async (destinataire: string) => {
+  console.log(`✉️ NOUVEL ADMIN : ${destinataire}`);
+};
 
 const recupereIdentifiantContact = async (email: string) => {
   const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
@@ -406,17 +415,17 @@ let cadenceEnvoieNotification: (
   destinataire: string,
   idService: UUID,
   delaiAvantExpirationMois: number
-) => Promise<AxiosResponse>;
+) => Promise<void>;
 const envoieNotificationExpirationHomologationCadencee = async (
   destinataire: string,
   idService: UUID,
   delaiAvantExpirationMois: number
 ) => {
   if (!cadenceEnvoieNotification)
-    cadenceEnvoieNotification = enCadence<
-      [string, UUID, number],
-      AxiosResponse
-    >(300, envoieNotificationExpirationHomologation);
+    cadenceEnvoieNotification = enCadence<[string, UUID, number], void>(
+      300,
+      envoieNotificationExpirationHomologation
+    );
   await cadenceEnvoieNotification(
     destinataire,
     idService,
@@ -436,6 +445,7 @@ export {
   envoieMessageFelicitationHomologation,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
+  envoieMessageNominationAdmin,
   envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
   recupereEntreprise,
   recupereEntrepriseDuContact,
