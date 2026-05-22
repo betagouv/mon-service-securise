@@ -1,11 +1,12 @@
 <script lang="ts">
-  import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
-  import ActionsTiroir from '../ui/tiroirs/ActionsTiroir.svelte';
-  import type { EntiteSupervisee } from './adminEntites.types';
+  import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
+  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
+  import ListeAdmins from './ListeAdmins.svelte';
+  import type { EntiteSupervisee } from '../adminEntites.types';
   import { untrack } from 'svelte';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
-  import { toasterStore } from '../ui/stores/toaster.store';
-  import { api } from './adminEntites.api';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import { api } from '../adminEntites.api';
   import { SvelteSet } from 'svelte/reactivity';
 
   interface Props {
@@ -60,22 +61,7 @@
 
   <div class="conteneur-admins">
     {#if etatAffichage === 'LISTE'}
-      <hr />
-      <h3>Administrateurs de l’entité</h3>
-      <span class="sous-titre"
-        >Consultez la liste des utilisateurs disposant des droits admins.</span
-      >
-      <div class="conteneur-cartouches">
-        {#each entite.administrateurs as admin, i (i)}
-          <div class="cartouche-admin">
-            <div class="initiales"><span>{admin.initiales}</span></div>
-            <div class="identite">
-              <span class="nom-prenom">{admin.prenomNom}</span>
-              <span class="postes">{admin.postes}</span>
-            </div>
-          </div>
-        {/each}
-      </div>
+      <ListeAdmins administrateurs={entite.administrateurs} />
     {:else}
       <div class="conteneur-cartouches">
         {#each listeAdminsAInviter as emailAdmin, i (i)}
@@ -110,22 +96,6 @@
 
 <style>
   .conteneur-admins {
-    hr {
-      border: none;
-      border-top: 1px solid #dddddd;
-    }
-    h3 {
-      font-size: 1rem;
-      line-height: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .sous-titre {
-      font-size: 0.75rem;
-      line-height: 1.125rem;
-      color: #666666;
-    }
-
     .conteneur-cartouches {
       margin-top: 32px;
       display: flex;
@@ -149,28 +119,6 @@
             font-size: 1rem;
             line-height: 1.5rem;
             color: #3a3a3a;
-          }
-
-          .postes {
-            font-size: 1rem;
-            line-height: 1.5rem;
-            color: #666666;
-          }
-        }
-
-        .initiales {
-          width: 40px;
-          height: 40px;
-          background: var(--purple-glycine-925-125);
-          border-radius: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          span {
-            font-size: 0.875rem;
-            line-height: 1.5rem;
-            color: var(--purple-glycine-sun-319-moon-630);
           }
         }
       }
