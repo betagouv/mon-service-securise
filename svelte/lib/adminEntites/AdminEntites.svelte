@@ -5,6 +5,7 @@
   import TiroirGestionAdmins from './TiroirGestion/TiroirGestionAdmins.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import Toaster from '../ui/Toaster.svelte';
+  import Tuiles from './Tuiles.svelte';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
 
@@ -19,7 +20,11 @@
 
 <Toaster />
 <svelte:document on:admins-entites-modifiees={rafraichis} />
+
 <h1>Entités</h1>
+
+<Tuiles {mesEntites} />
+
 <dsfr-table
   columns={[
     { key: 'nom', label: 'Entité' },
