@@ -10,6 +10,7 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { api } from '../adminEntites.api';
   import { SvelteSet } from 'svelte/reactivity';
+  import AucunAdmin from './AucunAdmin.svelte';
 
   interface Props {
     entite: EntiteSupervisee;
@@ -49,8 +50,19 @@
 
   <div class="conteneur-admins">
     {#if etatAffichage === 'LISTE'}
-      <ListeAdmins administrateurs={entite.administrateurs} />
-    {:else}
+      <hr />
+      <h3>Administrateurs de l’entité</h3>
+      <span class="sous-titre">
+        Consultez la liste des utilisateurs disposant des droits admins.
+      </span>
+      {#if entite.administrateurs.length === 0}
+        <AucunAdmin />
+      {:else}
+        <ListeAdmins administrateurs={entite.administrateurs} />
+      {/if}
+    {/if}
+
+    {#if etatAffichage === 'INVITATION'}
       <div class="conteneur-cartouches">
         {#each listeAdminsAInviter as emailAdmin, i (i)}
           <CartoucheAdmin prenomNom={emailAdmin} />
@@ -85,6 +97,22 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #dddddd;
+    }
+    h3 {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .sous-titre {
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+      color: #666666;
     }
   }
 </style>
