@@ -33,7 +33,7 @@ class Superviseur {
   }
 
   estSuperviseurDe(siret: string) {
-    return this.entitesSupervisees.map((e) => e.siret).includes(siret);
+    return this.entitesSupervisees.some((e) => e.siret === siret);
   }
 
   donnees(): DonneesSuperviseur {
