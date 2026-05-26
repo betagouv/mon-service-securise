@@ -263,7 +263,12 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(entitesDe[0].nombreServices).toBe(1);
       expect(entitesDe[0].nombreUtilisateurs).toBe(1);
       expect(entitesDe[0].administrateurs).toEqual([
-        { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
+        {
+          id: unUUID('A'),
+          prenomNom: 'Jean Dujardin',
+          initiales: 'JD',
+          postes: 'RSSI',
+        },
       ]);
     });
 
@@ -278,7 +283,12 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(entitesDe[0].nombreServices).toBe(1);
       expect(entitesDe[0].nombreUtilisateurs).toBe(1);
       expect(entitesDe[0].administrateurs).toEqual([
-        { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
+        {
+          id: unUUID('A'),
+          prenomNom: 'Jean Dujardin',
+          initiales: 'JD',
+          postes: 'RSSI',
+        },
       ]);
     });
 
