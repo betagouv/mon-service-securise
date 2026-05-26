@@ -2,12 +2,8 @@ export type UtilisateurAdministre = {
   id: string;
   prenomNom: string;
   email: string;
-  entite: {
-    nom: string;
-    siret: string;
-    departement: string;
-  };
-  postes: Array<string>;
+  postes: string;
+  estAdmin: boolean;
 };
 
 export const api = {
