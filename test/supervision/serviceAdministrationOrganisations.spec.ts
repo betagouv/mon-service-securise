@@ -5,10 +5,7 @@ import {
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
-import {
-  DonneesEntiteSupervisee,
-  ServiceAdministrationOrganisations,
-} from '../../src/supervision/serviceAdministrationOrganisations.js';
+import { ServiceAdministrationOrganisations } from '../../src/supervision/serviceAdministrationOrganisations.js';
 import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.ts';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
@@ -213,96 +210,96 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
   });
 
-  describe("sur demande des entités dans le périmètre d'un utilisateur", () => {
-    it("renvoie les entités d'un admin", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteAdminSurPerimetre(unUUID('A'), [{ siret: 'SIRET-123' }])
-        .construis();
-      const service = leService({
-        depotDonnees: unDepotComplet({ adaptateurPersistanceTS }),
+  describe("sur demande des entités dans le périmètre d'un utilisateur, qu'il soit admin ou superviseur", () => {
+    let serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
+
+    beforeEach(async () => {
+      const mairieDeX = { siret: 'SIRET-123', nom: 'Mon entité' };
+      const superviseur = Superviseur.hydrate({
+        idUtilisateur: unUUID('S'),
+        entitesSupervisees: [mairieDeX],
       });
+      const adminSurSiret123 = AdminOrganisations.hydrate({
+        idUtilisateur: unUUID('A'),
+        entitesAdministrees: [mairieDeX],
+      });
+      await adaptateurPersistanceTS.sauvegardeSuperviseur(
+        superviseur.donnees()
+      );
+      await adaptateurPersistanceTS.sauvegardeAdminOrganisations(
+        adminSurSiret123.donnees()
+      );
+      await adaptateurPersistance.ajouteUtilisateur(
+        unUUID('A'),
+        unUtilisateur().quiSAppelle('Jean Dujardin').avecPostes(['RSSI'])
+          .donnees
+      );
+      await adaptateurPersistance.sauvegardeService(
+        unUUID('S'),
+        unServiceV2().donnees,
+        '',
+        'SIRET-123-haché256'
+      );
+      await adaptateurPersistance.ajouteAutorisation(
+        unUUIDRandom(),
+        uneAutorisation().deProprietaire(unUUID('P'), unUUID('S')).donnees
+      );
+      await adaptateurPersistance.ajouteUtilisateur(
+        unUUID('P'),
+        unUtilisateur().donnees
+      );
+
+      serviceAdministrationOrganisations = leService();
+    });
+
+    it("sait renvoyer les entités du point-de-vue d'un admin : l'admin est alors lui-même présent dans les admins renvoyés", async () => {
+      const service = leService();
 
       const entitesDe = await service.entitesDe(unUUID('A'));
 
       expect(entitesDe).toHaveLength(1);
       expect(entitesDe[0].siret).toBe('SIRET-123');
+      expect(entitesDe[0].nom).toBe('Mon entité');
+      expect(entitesDe[0].nombreServices).toBe(1);
+      expect(entitesDe[0].nombreUtilisateurs).toBe(1);
+      expect(entitesDe[0].administrateurs).toEqual([
+        { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
+      ]);
     });
 
-    describe('concernant les entités supervisées', () => {
-      let serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
+    it("sait renvoyer les entités du point-de-vue d'un superviseur (s'il n'est pas admin) : même structure que ci-dessus", async () => {
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
 
-      beforeEach(async () => {
-        const superviseur = Superviseur.hydrate({
-          idUtilisateur: unUUID('S'),
-          entitesSupervisees: [{ siret: 'SIRET-123', nom: 'Mon entité' }],
-        });
-        await adaptateurPersistanceTS.sauvegardeSuperviseur(
-          superviseur.donnees()
-        );
-        const adminSurSiret123 = AdminOrganisations.hydrate({
-          idUtilisateur: unUUID('A'),
-          entitesAdministrees: [{ siret: 'SIRET-123' }],
-        });
-        await adaptateurPersistanceTS.sauvegardeAdminOrganisations(
-          adminSurSiret123.donnees()
-        );
-        await adaptateurPersistance.ajouteUtilisateur(
-          unUUID('A'),
-          unUtilisateur().quiSAppelle('Jean Dujardin').avecPostes(['RSSI'])
-            .donnees
-        );
-        await adaptateurPersistance.sauvegardeService(
-          unUUID('S'),
-          unServiceV2().donnees,
-          '',
-          'SIRET-123-haché256'
-        );
-        await adaptateurPersistance.ajouteAutorisation(
-          unUUIDRandom(),
-          uneAutorisation().deProprietaire(unUUID('P'), unUUID('S')).donnees
-        );
-        await adaptateurPersistance.ajouteUtilisateur(
-          unUUID('P'),
-          unUtilisateur().donnees
-        );
+      expect(entitesDe).toHaveLength(1);
+      expect(entitesDe[0].siret).toBe('SIRET-123');
+      expect(entitesDe[0].nom).toBe('Mon entité');
+      expect(entitesDe[0].nombreServices).toBe(1);
+      expect(entitesDe[0].nombreUtilisateurs).toBe(1);
+      expect(entitesDe[0].administrateurs).toEqual([
+        { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
+      ]);
+    });
 
-        serviceAdministrationOrganisations = leService();
-      });
+    it("ne compte qu'une fois chaque utilisateur", async () => {
+      await adaptateurPersistance.sauvegardeService(
+        unUUID('S2'),
+        unServiceV2().donnees,
+        '',
+        'SIRET-123-haché256'
+      );
+      await adaptateurPersistance.ajouteAutorisation(
+        unUUIDRandom(),
+        uneAutorisation().deProprietaire(unUUID('P'), unUUID('S2')).donnees
+      );
 
-      it("renvoie les entités supervisées d'un superviseur s'il n'est pas admin", async () => {
-        const entitesDe = (await serviceAdministrationOrganisations.entitesDe(
-          unUUID('S')
-        )) as unknown as Array<DonneesEntiteSupervisee>;
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
 
-        expect(entitesDe).toHaveLength(1);
-        expect(entitesDe[0].siret).toBe('SIRET-123');
-        expect(entitesDe[0].nom).toBe('Mon entité');
-        expect(entitesDe[0].nombreServices).toBe(1);
-        expect(entitesDe[0].nombreUtilisateurs).toBe(1);
-        expect(entitesDe[0].administrateurs).toEqual([
-          { prenomNom: 'Jean Dujardin', initiales: 'JD', postes: 'RSSI' },
-        ]);
-      });
-
-      it("ne compte qu'une fois chaque utilisateur", async () => {
-        await adaptateurPersistance.sauvegardeService(
-          unUUID('S2'),
-          unServiceV2().donnees,
-          '',
-          'SIRET-123-haché256'
-        );
-        await adaptateurPersistance.ajouteAutorisation(
-          unUUIDRandom(),
-          uneAutorisation().deProprietaire(unUUID('P'), unUUID('S2')).donnees
-        );
-
-        const entitesDe = (await serviceAdministrationOrganisations.entitesDe(
-          unUUID('S')
-        )) as unknown as Array<DonneesEntiteSupervisee>;
-
-        expect(entitesDe[0].nombreServices).toBe(2);
-        expect(entitesDe[0].nombreUtilisateurs).toBe(1);
-      });
+      expect(entitesDe[0].nombreServices).toBe(2);
+      expect(entitesDe[0].nombreUtilisateurs).toBe(1);
     });
 
     it("renvoie un tableau vide s'il n'est ni admin ni superviseur", async () => {

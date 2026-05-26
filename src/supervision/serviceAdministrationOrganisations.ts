@@ -134,9 +134,14 @@ export class ServiceAdministrationOrganisations {
 
   async entitesDe(
     idUtilisateur: UUID
-  ): Promise<Array<DonneesEntite | DonneesEntiteSupervisee>> {
+  ): Promise<Array<DonneesEntiteSupervisee>> {
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
-    if (admin) return admin.donnees().entitesAdministrees;
+    if (admin) {
+      const toutesEntites = admin.donnees().entitesAdministrees;
+      return Promise.all(
+        toutesEntites.map((e) => this.enrichisEntiteSupervisee(e))
+      );
+    }
 
     const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
     if (superviseur) {
@@ -153,7 +158,7 @@ export class ServiceAdministrationOrganisations {
     uneEntite: DonneesEntite
   ): Promise<DonneesEntiteSupervisee> {
     const admins = await this.depotDonnees.lisAdminsPour(uneEntite.siret);
-    const administrateurs = await Promise.all(
+    const enUtilisateurs = await Promise.all(
       admins.map((a) =>
         this.depotDonnees.utilisateur(a.donnees().idUtilisateur)
       )
@@ -171,7 +176,7 @@ export class ServiceAdministrationOrganisations {
           s.contributeurs.map((c: Contributeur) => c.idUtilisateur)
         )
       ).size,
-      administrateurs: administrateurs.map((u) => ({
+      administrateurs: enUtilisateurs.map((u) => ({
         prenomNom: u!.prenomNom(),
         initiales: u!.initiales(),
         postes: u!.posteDetaille(),
