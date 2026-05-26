@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Tuile from './Tuile.svelte';
+  import Tuile from '../ui/Tuile.svelte';
   import type { EntiteSupervisee } from './adminEntites.types';
 
   interface Props {

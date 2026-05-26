@@ -1,15 +1,27 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { api, type UtilisateurAdministre } from './adminUtilisateurs.api';
+  import { api as apiEntites } from '../adminEntites/adminEntites.api';
+  import Tuiles from './Tuiles.svelte';
+  import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
 
+  let mesEntites: Array<EntiteSupervisee> = $state([]);
+
   onMount(async () => {
-    mesUtilisateurs = await api.utilisateursDansMonPerimetre();
+    await rafraichis();
   });
+
+  const rafraichis = async () => {
+    mesUtilisateurs = await api.utilisateursDansMonPerimetre();
+    mesEntites = await apiEntites.entitesDansMonPerimetre();
+  };
 </script>
 
 <h1>Utilisateurs</h1>
+
+<Tuiles nombreUtilisateurs={mesUtilisateurs.length} {mesEntites} />
 
 <dsfr-table
   columns={[
