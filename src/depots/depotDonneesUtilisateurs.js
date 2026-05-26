@@ -76,7 +76,8 @@ function fabriquePersistance({
       id,
       { nom, prenom, email, postes },
       donneesUtilisateur.estAdmin,
-      donneesUtilisateur.nombreEntites
+      donneesUtilisateur.nombreEntites,
+      donneesUtilisateur.nombreServices
     );
   };
 

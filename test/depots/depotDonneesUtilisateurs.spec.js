@@ -1053,6 +1053,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             id: 'U2',
             estAdmin: true,
             nombreEntites: 3,
+            nombreServices: 6,
           },
         ],
       };
@@ -1071,6 +1072,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(utilisateur.posteDetaille()).to.be('RSSI');
       expect(utilisateur.estAdmin).to.be(true);
       expect(utilisateur.nombreEntites).to.be(3);
+      expect(utilisateur.nombreServices).to.be(6);
     });
   });
 

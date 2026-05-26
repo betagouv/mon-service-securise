@@ -439,6 +439,17 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(utilisateurs.find((u) => u.id === u1).nombreEntites).to.be(1);
     });
+
+    it("précise le nombre de services du périmètre de l'admin appelant sur lesquels l'utilisateur est contributeur", async () => {
+      await insereAdmin(admin, 'siret-1');
+      const idServicePasAdministre = await insereService('autre-siret');
+      await insereAutorisation(u1, idServicePasAdministre);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.find((u) => u.id === u1).nombreServices).to.be(2);
+      expect(utilisateurs.find((u) => u.id === u2).nombreServices).to.be(1);
+    });
   });
 
   describe('concernant la lecture des utilisateurs supervisés par un utilisateur', () => {
