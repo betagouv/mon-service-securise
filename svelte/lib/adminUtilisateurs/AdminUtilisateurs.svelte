@@ -6,6 +6,7 @@
 
   onMount(async () => {
     mesUtilisateurs = await api.utilisateursDansMonPerimetre();
+    console.log(mesUtilisateurs);
   });
 </script>
 
@@ -15,7 +16,6 @@
   columns={[
     { key: 'prenomNom', label: 'Nom' },
     { key: 'postes', label: 'Rôle' },
-    { key: 'entite', label: 'Entité' },
     { key: 'actions', label: 'Actions' },
   ]}
   rows={mesUtilisateurs}
@@ -24,17 +24,20 @@
 >
   {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
     <div slot="cell:prenomNom:{i}">
-      <span>{utilisateur.prenomNom} ({utilisateur.email})</span>
-    </div>
-    <div slot="cell:entite:{i}">
-      <span>{utilisateur.entite.nom ?? '-'}</span>
-    </div>
-    <div slot="cell:postes:{i}">
-      <span
-        >{utilisateur.postes.length > 0
-          ? utilisateur.postes.join(', ')
-          : '-'}</span
-      >
+      <div class="conteneur-nom">
+        {#if utilisateur.estAdmin}
+          <dsfr-badge
+            label="Admin"
+            type="accent"
+            accent="blue-cumulus"
+            size="sm"
+          ></dsfr-badge>
+        {/if}
+        <span><b>{utilisateur.prenomNom}</b></span>
+        {#if utilisateur.email !== utilisateur.prenomNom}
+          <span>{utilisateur.email}</span>
+        {/if}
+      </div>
     </div>
   {/each}
 </dsfr-table>
@@ -51,5 +54,13 @@
     font-size: 2.5rem;
     line-height: 3rem;
     margin: 0;
+  }
+
+  .conteneur-nom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
   }
 </style>
