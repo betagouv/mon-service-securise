@@ -966,10 +966,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
           EXISTS (
             SELECT 1 FROM admins_organisations ao
             WHERE ao.id_utilisateur = u.id
-              AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
-          ) AS "estAdmin"
+                AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
+          ) AS "estAdmin",
+          (
+            SELECT COUNT(DISTINCT s.siret_hash)
+            FROM autorisations a2
+            JOIN services s ON s.id = (a2.donnees->>'idService')::uuid
+            WHERE (a2.donnees->>'idUtilisateur')::uuid = u.id
+                AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+          ) AS "nombreEntites"
         FROM autorisations AS a
-          JOIN utilisateurs AS u ON u.id::TEXT = a.donnees->>'idUtilisateur'
+          JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
         WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
           AND a.donnees->>'idUtilisateur' != ?
       `,
