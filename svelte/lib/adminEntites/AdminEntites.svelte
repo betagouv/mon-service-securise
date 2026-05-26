@@ -2,10 +2,13 @@
   import { onMount } from 'svelte';
   import { api } from './adminEntites.api';
   import type { EntiteSupervisee } from './adminEntites.types';
-  import TiroirGestionAdmins from './TiroirGestion/TiroirGestionAdmins.svelte';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
   import Toaster from '../ui/Toaster.svelte';
   import Tuiles from './Tuiles.svelte';
+  import BadgeAdministrateur from './LignesDuTableau/BadgeAdministrateur.svelte';
+  import NombreServices from './LignesDuTableau/NombreServices.svelte';
+  import NombreUtilisateurs from './LignesDuTableau/NombreUtilisateurs.svelte';
+  import NommerUnAdmin from './LignesDuTableau/NommerUnAdmin.svelte';
+  import GererLesAdmins from './LignesDuTableau/GererLesAdmins.svelte';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
 
@@ -42,58 +45,21 @@
       <span><b>{entite.nom}</b></span>
     </div>
     <div slot="cell:admins:{i}" class="conteneur-admins">
-      {#each entite.administrateurs as administrateur, j (j)}
-        <dsfr-badge
-          label={administrateur.prenomNom}
-          type="accent"
-          accent="blue-ecume"
-          size="sm"
-        ></dsfr-badge>
+      {#each entite.administrateurs as { prenomNom }, j (j)}
+        <BadgeAdministrateur {prenomNom} />
       {/each}
     </div>
     <div slot="cell:nombreServices:{i}">
-      <span>
-        {#if entite.nombreServices === 0}
-          Aucun service
-        {:else}
-          {entite.nombreServices} service{entite.nombreServices > 1 ? 's' : ''}
-        {/if}
-      </span>
+      <NombreServices nombreServices={entite.nombreServices} />
     </div>
     <div slot="cell:nombreUtilisateurs:{i}">
-      <span>
-        {#if entite.nombreUtilisateurs === 0}
-          Aucun utilisateur
-        {:else}
-          {entite.nombreUtilisateurs} utilisateur{entite.nombreUtilisateurs > 1
-            ? 's'
-            : ''}
-        {/if}
-      </span>
+      <NombreUtilisateurs nombreUtilisateurs={entite.nombreUtilisateurs} />
     </div>
     <div slot="cell:actions:{i}">
       {#if entite.administrateurs.length === 0}
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          kind="primary"
-          label="Nommer un admin"
-          size="sm"
-          hasIcon
-          icon="add-line"
-          onclick={() => {
-            tiroirStore.afficheContenu(TiroirGestionAdmins, { entite });
-          }}
-        ></dsfr-button>
+        <NommerUnAdmin {entite} />
       {:else}
-        <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-        <dsfr-button
-          kind="secondary"
-          label="Gérer les admins"
-          size="sm"
-          onclick={() => {
-            tiroirStore.afficheContenu(TiroirGestionAdmins, { entite });
-          }}
-        ></dsfr-button>
+        <GererLesAdmins {entite} />
       {/if}
     </div>
   {/each}
@@ -121,9 +87,5 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-  }
-
-  dsfr-button {
-    white-space: nowrap;
   }
 </style>
