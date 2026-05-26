@@ -3,8 +3,12 @@ import z from 'zod';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
 import { valideBody } from '../../http/validePayloads.js';
-import { schemaPostAdminNomme } from './routesConnecteApiAdmin.schema.js';
+import {
+  schemaDeleteAdmin,
+  schemaPostAdminNomme,
+} from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { UUID } from '../../typesBasiques.js';
 
 type Configuration = {
   depotDonnees: DepotDonnees;
@@ -16,6 +20,14 @@ const routesConnecteApiAdmin = ({
   serviceAdministrationOrganisations,
 }: Configuration) => {
   const routes = express.Router();
+
+  const estAutoriseSurSiret = async (idUtilisateur: UUID, siret: string) => {
+    const superviseur = await depotDonnees.lisSuperviseur(idUtilisateur);
+    if (superviseur?.estSuperviseurDe(siret)) return true;
+
+    const admin = await depotDonnees.lisAdminOrganisations(idUtilisateur);
+    return admin ? admin.estAdminDe(siret) : false;
+  };
 
   routes.get('/entites', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
@@ -75,16 +87,7 @@ const routesConnecteApiAdmin = ({
       const { emails, siret } = requete.body;
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
-      const superviseur =
-        await depotDonnees.lisSuperviseur(idUtilisateurCourant);
-      const nonPourSuperviseur =
-        !superviseur || !superviseur.estSuperviseurDe(siret);
-
-      const admin =
-        await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
-      const nonPourAdmin = !admin || !admin.estAdminDe(siret);
-
-      if (nonPourSuperviseur && nonPourAdmin) {
+      if (!(await estAutoriseSurSiret(idUtilisateurCourant, siret))) {
         reponse.sendStatus(403);
         return;
       }
@@ -100,6 +103,26 @@ const routesConnecteApiAdmin = ({
       };
 
       await Promise.all([...new Set(emails)].map(nommeAdmin));
+      reponse.sendStatus(200);
+    }
+  );
+
+  routes.delete(
+    '/',
+    valideBody(schemaDeleteAdmin),
+    async (requete, reponse) => {
+      const { siret, idUtilisateur } = requete.body;
+      const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+
+      if (!(await estAutoriseSurSiret(idUtilisateurCourant, siret))) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      await serviceAdministrationOrganisations.retireAdmin(
+        siret,
+        idUtilisateur as UUID
+      );
       reponse.sendStatus(200);
     }
   );
