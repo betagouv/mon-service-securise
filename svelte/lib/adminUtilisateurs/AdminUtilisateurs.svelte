@@ -6,7 +6,6 @@
 
   onMount(async () => {
     mesUtilisateurs = await api.utilisateursDansMonPerimetre();
-    console.log(mesUtilisateurs);
   });
 </script>
 
@@ -16,6 +15,7 @@
   columns={[
     { key: 'prenomNom', label: 'Nom' },
     { key: 'postes', label: 'Rôle' },
+    { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
     { key: 'actions', label: 'Actions' },
   ]}
   rows={mesUtilisateurs}
@@ -23,21 +23,26 @@
   multiline
 >
   {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
-    <div slot="cell:prenomNom:{i}">
-      <div class="conteneur-nom">
-        {#if utilisateur.estAdmin}
-          <dsfr-badge
-            label="Admin"
-            type="accent"
-            accent="blue-cumulus"
-            size="sm"
-          ></dsfr-badge>
+    <div slot="cell:prenomNom:{i}" class="conteneur-nom">
+      {#if utilisateur.estAdmin}
+        <dsfr-badge label="Admin" type="accent" accent="blue-cumulus" size="sm"
+        ></dsfr-badge>
+      {/if}
+      <span><b>{utilisateur.prenomNom}</b></span>
+      {#if utilisateur.email !== utilisateur.prenomNom}
+        <span>{utilisateur.email}</span>
+      {/if}
+    </div>
+    <div slot="cell:nombreEntites:{i}">
+      <span>
+        {#if utilisateur.nombreEntites === 0}
+          Aucune entité
+        {:else}
+          {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
+            ? 's'
+            : ''}
         {/if}
-        <span><b>{utilisateur.prenomNom}</b></span>
-        {#if utilisateur.email !== utilisateur.prenomNom}
-          <span>{utilisateur.email}</span>
-        {/if}
-      </div>
+      </span>
     </div>
   {/each}
 </dsfr-table>
