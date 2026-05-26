@@ -6,12 +6,12 @@ import {
   fabriqueAdaptateurUUID,
 } from '../adaptateurs/adaptateurUUID.js';
 import Entite, { DonneesEntite } from '../modeles/entite.js';
-import Utilisateur from '../modeles/utilisateur.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 import { Contributeur } from '../modeles/contributeur.js';
 import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
+import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{ prenomNom: string }>;
@@ -181,11 +181,7 @@ export class ServiceAdministrationOrganisations {
 
   async utilisateursDansLePerimetreDe(
     idUtilisateur: UUID
-  ): Promise<Array<Utilisateur>> {
-    const sousUnAdmin =
-      await this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
-    if (sousUnAdmin.length > 0) return sousUnAdmin;
-
-    return this.depotDonnees.utilisateursSupervisesPar(idUtilisateur);
+  ): Promise<Array<UtilisateurAdministre>> {
+    return this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
   }
 }
