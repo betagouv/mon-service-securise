@@ -16,6 +16,7 @@
     { key: 'prenomNom', label: 'Nom' },
     { key: 'postes', label: 'Rôle' },
     { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
+    { key: 'nombreServices', label: 'Service(s) associé(s)' },
     { key: 'actions', label: 'Actions' },
   ]}
   rows={mesUtilisateurs}
@@ -39,6 +40,17 @@
           Aucune entité
         {:else}
           {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
+            ? 's'
+            : ''}
+        {/if}
+      </span>
+    </div>
+    <div slot="cell:nombreServices:{i}">
+      <span>
+        {#if utilisateur.nombreServices === 0}
+          Aucun service
+        {:else}
+          {utilisateur.nombreServices} service{utilisateur.nombreServices > 1
             ? 's'
             : ''}
         {/if}
