@@ -46,4 +46,8 @@ export class AdminOrganisations {
       (e) => e.siret !== entite.siret
     );
   }
+
+  estAdminDe(siret: string) {
+    return this.entitesAdministrees.some((e) => e.siret === siret);
+  }
 }

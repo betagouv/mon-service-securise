@@ -54,7 +54,10 @@ const routesConnecteApiAdmin = ({
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
       const superviseur =
         await depotDonnees.lisSuperviseur(idUtilisateurCourant);
-      if (!superviseur) {
+      const admin =
+        await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
+
+      if (!superviseur && !admin) {
         reponse.sendStatus(403);
         return;
       }
@@ -74,7 +77,14 @@ const routesConnecteApiAdmin = ({
 
       const superviseur =
         await depotDonnees.lisSuperviseur(idUtilisateurCourant);
-      if (!superviseur || !superviseur.estSuperviseurDe(siret)) {
+      const nonPourSuperviseur =
+        !superviseur || !superviseur.estSuperviseurDe(siret);
+
+      const admin =
+        await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
+      const nonPourAdmin = !admin || !admin.estAdminDe(siret);
+
+      if (nonPourSuperviseur && nonPourAdmin) {
         reponse.sendStatus(403);
         return;
       }
