@@ -1,9 +1,10 @@
 <script lang="ts">
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
-  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import ListeAdmins from './ListeAdmins.svelte';
   import CartoucheAdmin from './CartoucheAdmin.svelte';
   import SaisieEmailAdmin from './SaisieEmailAdmin.svelte';
+  import ActionsSurInvitation from './ActionsSurInvitation.svelte';
+  import ActionsSurConfirmationSuppression from './ActionsSurConfirmationSuppression.svelte';
   import type { AdminSupervise, EntiteSupervisee } from '../adminEntites.types';
   import { untrack } from 'svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
@@ -107,38 +108,16 @@
 </ContenuTiroir>
 
 {#if etatAffichage === 'INVITATION'}
-  <ActionsTiroir>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Annuler"
-      onclick={() => invitation.annuler()}
-      kind="tertiary-no-outline"
-    ></dsfr-button>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Envoyer une invitation"
-      onclick={() => invitation.envoyer()}
-      kind="primary"
-      hasIcon
-      icon="send-plane-line"
-    ></dsfr-button>
-  </ActionsTiroir>
+  <ActionsSurInvitation
+    onannuler={invitation.annuler}
+    onvalider={invitation.envoyer}
+  />
 {/if}
 {#if etatAffichage === 'CONFIRMATION_SUPPRESSION'}
-  <ActionsTiroir>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Annuler"
-      onclick={() => suppression.annuler()}
-      kind="tertiary-no-outline"
-    ></dsfr-button>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Confirmer"
-      onclick={async () => await suppression.valider()}
-      kind="primary"
-    ></dsfr-button>
-  </ActionsTiroir>
+  <ActionsSurConfirmationSuppression
+    onannuler={suppression.annuler}
+    onvalider={suppression.valider}
+  />
 {/if}
 
 <style>
