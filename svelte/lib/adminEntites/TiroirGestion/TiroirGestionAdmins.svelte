@@ -28,14 +28,24 @@
   const listeAdminsAInviter: SvelteSet<string> = new SvelteSet<string>();
   let adminPourSuppression: AdminSupervise | undefined = $state();
 
-  const inviteAdmin = (email: string) => {
-    etatAffichage = 'INVITATION';
-    listeAdminsAInviter.add(email);
-  };
-
-  const retourModeListe = () => {
-    etatAffichage = 'LISTE';
-    listeAdminsAInviter.clear();
+  const invitation = {
+    ajouter: (email: string) => {
+      etatAffichage = 'INVITATION';
+      listeAdminsAInviter.add(email);
+    },
+    annuler: () => {
+      etatAffichage = 'LISTE';
+      listeAdminsAInviter.clear();
+    },
+    envoyer: async () => {
+      await api.envoieInvitations([...listeAdminsAInviter], entite.siret);
+      toasterStore.succes(
+        'Invitation envoyée',
+        `${listeAdminsAInviter.size} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
+      );
+      document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
+      tiroirStore.ferme();
+    },
   };
 
   const suppression = {
@@ -52,21 +62,11 @@
       etatAffichage = 'LISTE';
     },
   };
-
-  const envoieInvitations = async () => {
-    await api.envoieInvitations([...listeAdminsAInviter], entite.siret);
-    toasterStore.succes(
-      'Invitation envoyée',
-      `${listeAdminsAInviter.size} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
-    );
-    document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
-    tiroirStore.ferme();
-  };
 </script>
 
 <ContenuTiroir>
   {#if etatAffichage === 'LISTE' || etatAffichage === 'INVITATION'}
-    <SaisieEmailAdmin onemailvalide={inviteAdmin} />
+    <SaisieEmailAdmin onemailvalide={invitation.ajouter} />
 
     <div class="conteneur-admins">
       {#if etatAffichage === 'LISTE'}
@@ -104,13 +104,13 @@
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Annuler"
-      onclick={() => retourModeListe()}
+      onclick={() => invitation.annuler()}
       kind="tertiary-no-outline"
     ></dsfr-button>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label="Envoyer une invitation"
-      onclick={() => envoieInvitations()}
+      onclick={() => invitation.envoyer()}
       kind="primary"
       hasIcon
       icon="send-plane-line"
