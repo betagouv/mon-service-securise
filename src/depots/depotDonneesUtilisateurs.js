@@ -14,6 +14,7 @@ import EvenementUtilisateurInscrit from '../bus/evenementUtilisateurInscrit.js';
 import { EvenementCguAccepteesParUtilisateur } from '../bus/evenementCguAccepteesParUtilisateur.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { fabriqueAdaptateurProfilAnssiVide } from '../adaptateurs/adaptateurProfilAnssiVide.js';
+import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
@@ -60,6 +61,22 @@ function fabriquePersistance({
       adaptateurJWT,
       cguActuelles: serviceCgu.versionActuelle(),
     });
+  };
+
+  const dechiffreUtilisateurAdministre = async (donneesUtilisateur) => {
+    if (!donneesUtilisateur) return undefined;
+
+    const donneesDechiffrees =
+      await dechiffreDonneesUtilisateur(donneesUtilisateur);
+    if (!donneesDechiffrees) return undefined;
+
+    const { id, nom, prenom, email, postes } = donneesDechiffrees;
+
+    return new UtilisateurAdministre(
+      id,
+      { nom, prenom, email, postes },
+      donneesUtilisateur.estAdmin
+    );
   };
 
   const dechiffreDonneesContributeur = async (donneesContributeur) => {
@@ -109,7 +126,9 @@ function fabriquePersistance({
       ceuxAdministresPar: async (idUtilisateur) => {
         const donneesUtilisateurs =
           await adaptateurPersistance.utilisateursAdministresPar(idUtilisateur);
-        return Promise.all(donneesUtilisateurs.map(dechiffreUtilisateur));
+        return Promise.all(
+          donneesUtilisateurs.map(dechiffreUtilisateurAdministre)
+        );
       },
       ceuxSupervisesPar: async (idUtilisateur) => {
         const donneesUtilisateurs =

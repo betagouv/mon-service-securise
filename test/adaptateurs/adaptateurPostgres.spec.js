@@ -42,6 +42,14 @@ describe("L'adaptateur persistance Postgres", () => {
     await knex.destroy();
   });
 
+  async function insereAdmin(idUtilisateur, siret) {
+    await knex('admins_organisations').insert({
+      id_utilisateur: idUtilisateur,
+      siret_hash: chiffrement.hacheSha256(siret),
+      donnees: {},
+    });
+  }
+
   async function insereModeleMesureSpecifique(donnees) {
     const id = genereUUID();
     await knex('modeles_mesure_specifique').insert({
@@ -409,6 +417,17 @@ describe("L'adaptateur persistance Postgres", () => {
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
       expect(utilisateurs.length).to.be(2);
+    });
+
+    it("précise si le contributeur est admin sur une entité du périmètre de l'admin appelant", async () => {
+      await insereAdmin(admin, 'siret-1');
+      await insereAdmin(u1, 'siret-1');
+      await insereAdmin(u2, 'siret-pas-géré-par-admin');
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.find((u) => u.id === u1).estAdmin).to.be(true);
+      expect(utilisateurs.find((u) => u.id === u2).estAdmin).to.be(false);
     });
   });
 

@@ -953,21 +953,27 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const utilisateursAdministresPar = async (idUtilisateur) => {
     const contributeurs = await knex.raw(
       `
-        WITH mes_services
-               AS (SELECT donnees ->>'idService' AS ids_services
-        FROM autorisations
-        WHERE donnees->>'idUtilisateur' = ?
-          AND (donnees->>'estAdmin')::boolean = true
-          )
-        SELECT DISTINCT
-        ON (u.id) u.id, u.donnees
+        WITH mes_services AS (
+          SELECT donnees ->>'idService' AS ids_services
+          FROM autorisations
+          WHERE donnees->>'idUtilisateur' = ?
+            AND (donnees->>'estAdmin')::boolean = true
+        ),
+        mes_sirets_haches AS (
+          SELECT siret_hash FROM admins_organisations WHERE id_utilisateur = ?
+        )
+        SELECT DISTINCT ON (u.id) u.id, u.donnees,
+          EXISTS (
+            SELECT 1 FROM admins_organisations ao
+            WHERE ao.id_utilisateur = u.id
+              AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
+          ) AS "estAdmin"
         FROM autorisations AS a
-          JOIN utilisateurs AS u
-        ON u.id::TEXT = a.donnees->>'idUtilisateur'
-        WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
+          JOIN utilisateurs AS u ON u.id::TEXT = a.donnees->>'idUtilisateur'
+        WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
           AND a.donnees->>'idUtilisateur' != ?
       `,
-      [idUtilisateur, idUtilisateur]
+      [idUtilisateur, idUtilisateur, idUtilisateur]
     );
     return contributeurs.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
   };

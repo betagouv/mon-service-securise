@@ -21,6 +21,7 @@ import { EvenementCguAccepteesParUtilisateur } from '../../src/bus/evenementCguA
 import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
+import { UtilisateurAdministre } from '../../src/modeles/gestionOrganisations/utilisateurAdministre.js';
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -1036,6 +1037,38 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       expect(utilisateurs[0].id).to.be('U2');
       expect(utilisateurs[0].prenomNom()).to.be('Jean Dubois');
+    });
+
+    it("retourne une liste d'utilisateurs administrés", async () => {
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+      const adaptateurPersistance = {
+        utilisateursAdministresPar: async () => [
+          {
+            donnees: await adaptateurChiffrement.chiffre(
+              unUtilisateur()
+                .avecEmail('jean.dubois@mail.com')
+                .avecPostes(['RSSI'])
+                .quiSAppelle('Jean Dubois').donnees
+            ),
+            id: 'U2',
+            estAdmin: true,
+          },
+        ],
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      const utilisateurs = await depot.utilisateursAdministresPar('U1');
+
+      const utilisateur = utilisateurs[0];
+      expect(utilisateur).to.be.a(UtilisateurAdministre);
+      expect(utilisateur.id).to.be('U2');
+      expect(utilisateur.email()).to.be('jean.dubois@mail.com');
+      expect(utilisateur.prenomNom()).to.be('Jean Dubois');
+      expect(utilisateur.posteDetaille()).to.be('RSSI');
+      expect(utilisateur.estAdmin).to.be(true);
     });
   });
 

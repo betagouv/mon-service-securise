@@ -10,7 +10,7 @@ export type DonneesIdentite = {
 class Identite {
   private readonly prenom: string;
   private readonly nom: string;
-  private readonly email: string;
+  readonly email: string;
   private readonly postes: string[];
 
   constructor(donnees: DonneesIdentite) {
