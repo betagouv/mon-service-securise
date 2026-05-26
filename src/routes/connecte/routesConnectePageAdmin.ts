@@ -1,11 +1,15 @@
 import express from 'express';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { RequestRouteConnecte } from './routesConnecte.types.js';
 
 type Configuration = {
+  depotDonnees: DepotDonnees;
   adaptateurEnvironnement: AdaptateurEnvironnement;
 };
 
 const routesConnectePageAdmin = ({
+  depotDonnees,
   adaptateurEnvironnement,
 }: Configuration) => {
   const routes = express.Router();
@@ -22,7 +26,16 @@ const routesConnectePageAdmin = ({
     reponse.render('admin/entites');
   });
 
-  routes.get('/utilisateurs', async (_requete, reponse) => {
+  routes.get('/utilisateurs', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+    const adminCourant =
+      await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
+
+    if (!adminCourant) {
+      reponse.status(404).render('404');
+      return;
+    }
+
     reponse.render('admin/utilisateurs');
   });
 
