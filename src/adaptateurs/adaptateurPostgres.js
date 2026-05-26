@@ -974,7 +974,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
             JOIN services s ON s.id = (a2.donnees->>'idService')::uuid
             WHERE (a2.donnees->>'idUtilisateur')::uuid = u.id
                 AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
-          ) AS "nombreEntites"
+          ) AS "nombreEntites",
+          (
+            SELECT COUNT(DISTINCT a3.donnees->>'idService')
+            FROM autorisations a3
+            WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
+                AND a3.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+          ) AS "nombreServices"
         FROM autorisations AS a
           JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
         WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)

@@ -60,7 +60,8 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
                 postes: ['RSSI'],
               },
               true,
-              3
+              3,
+              6
             ),
           ];
         };
@@ -77,6 +78,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           postes: 'RSSI',
           estAdmin: true,
           nombreEntites: 3,
+          nombreServices: 6,
         },
       ]);
     });
