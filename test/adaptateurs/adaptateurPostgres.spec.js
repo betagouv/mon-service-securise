@@ -66,9 +66,9 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   }
 
-  async function insereService() {
+  async function insereService(siretHash) {
     const idService = genereUUID();
-    await persistance.sauvegardeService(idService, {}, 'service-1', 'siret-1');
+    await persistance.sauvegardeService(idService, {}, 'service-1', siretHash);
     return idService;
   }
 
@@ -131,7 +131,7 @@ describe("L'adaptateur persistance Postgres", () => {
 
   describe('concernant la lecture complète de service', () => {
     it("sait lire les suggestions d'action d'un service", async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       await persistance.ajouteSuggestionAction({
         idService,
         nature: 'une nature',
@@ -143,7 +143,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it("sait lire les contributeurs d'un service", async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       const idUtilisateur = await insereUtilisateur();
       await insereAutorisation(idUtilisateur, idService);
 
@@ -156,7 +156,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it("sait dire qu'un contributeur est admin", async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       const idUtilisateur = await insereUtilisateur();
       await insereAutorisationAdmin(idUtilisateur, idService);
 
@@ -168,7 +168,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       const idUtilisateur = await insereUtilisateur();
       await insereAutorisation(idUtilisateur, idService);
 
@@ -189,7 +189,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it('sait lire la version du service', async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       const idUtilisateur = await insereUtilisateur();
       await insereAutorisation(idUtilisateur, idService);
 
@@ -199,7 +199,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it('sait indiquer si une simulation est en cours pour un service', async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       await persistance.sauvegardeSimulationMigrationReferentiel(idService, {});
 
       const services = await persistance.servicesComplets({ idService });
@@ -208,7 +208,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it("sait indiquer si une simulation n'est pas en cours pour un service", async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
 
       const services = await persistance.servicesComplets({ idService });
 
@@ -350,8 +350,8 @@ describe("L'adaptateur persistance Postgres", () => {
 
   describe("concernant la recherche des contributeurs des services d'un propriétaire", () => {
     it('retourne les contributeurs de tous les services', async () => {
-      const idService = await insereService();
-      const idServicePasProprietaire = await insereService();
+      const idService = await insereService('siret-1');
+      const idServicePasProprietaire = await insereService('siret-1');
       const proprietaire = await insereUtilisateur();
       const autreContributeur = await insereUtilisateur();
       await insereAutorisation(proprietaire, idService);
@@ -369,7 +369,7 @@ describe("L'adaptateur persistance Postgres", () => {
     });
 
     it('exclue les autorisations admin dans un souci de confidentialité', async () => {
-      const idService = await insereService();
+      const idService = await insereService('siret-1');
       const proprietaire = await insereUtilisateur();
       await insereAutorisation(proprietaire, idService);
       const admin = await insereUtilisateur();
@@ -388,8 +388,8 @@ describe("L'adaptateur persistance Postgres", () => {
     let admin;
 
     beforeEach(async () => {
-      const idService1 = await insereService();
-      const idService2 = await insereService();
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-1');
       u1 = await insereUtilisateur();
       u2 = await insereUtilisateur();
       admin = await insereUtilisateur();
@@ -428,6 +428,16 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(utilisateurs.find((u) => u.id === u1).estAdmin).to.be(true);
       expect(utilisateurs.find((u) => u.id === u2).estAdmin).to.be(false);
+    });
+
+    it("précise le nombre d'entités distinctes du périmètre de l'admin appelant sur lesquelles l'utilisateur a un service", async () => {
+      await insereAdmin(admin, 'siret-1');
+      const idServicePasAdministre = await insereService('autre-siret');
+      await insereAutorisation(u1, idServicePasAdministre);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.find((u) => u.id === u1).nombreEntites).to.be(1);
     });
   });
 

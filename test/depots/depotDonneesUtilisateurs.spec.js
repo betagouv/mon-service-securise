@@ -1052,6 +1052,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             ),
             id: 'U2',
             estAdmin: true,
+            nombreEntites: 3,
           },
         ],
       };
@@ -1069,6 +1070,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(utilisateur.prenomNom()).to.be('Jean Dubois');
       expect(utilisateur.posteDetaille()).to.be('RSSI');
       expect(utilisateur.estAdmin).to.be(true);
+      expect(utilisateur.nombreEntites).to.be(3);
     });
   });
 

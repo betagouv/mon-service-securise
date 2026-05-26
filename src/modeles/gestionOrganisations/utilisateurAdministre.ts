@@ -7,7 +7,8 @@ export class UtilisateurAdministre {
   constructor(
     readonly id: UUID,
     donneesIdentite: DonneesIdentite,
-    readonly estAdmin: boolean
+    readonly estAdmin: boolean,
+    readonly nombreEntites: number
   ) {
     this.identite = new Identite(donneesIdentite);
   }

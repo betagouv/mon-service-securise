@@ -59,7 +59,8 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
                 nom: 'Dupond',
                 postes: ['RSSI'],
               },
-              true
+              true,
+              3
             ),
           ];
         };
@@ -75,6 +76,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           email: 'jean@dupond.fr',
           postes: 'RSSI',
           estAdmin: true,
+          nombreEntites: 3,
         },
       ]);
     });

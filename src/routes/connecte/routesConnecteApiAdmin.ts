@@ -41,6 +41,7 @@ const routesConnecteApiAdmin = ({
         email: u.email(),
         postes: u.posteDetaille(),
         estAdmin: u.estAdmin,
+        nombreEntites: u.nombreEntites,
       }))
     );
   });
