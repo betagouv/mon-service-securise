@@ -4,6 +4,7 @@ export type UtilisateurAdministre = {
   email: string;
   postes: string;
   estAdmin: boolean;
+  nombreEntites: number;
 };
 
 export const api = {
