@@ -14,7 +14,7 @@ import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
-  administrateurs: Array<{ prenomNom: string }>;
+  administrateurs: Array<{ id: UUID; prenomNom: string }>;
   nombreServices: number;
   nombreUtilisateurs: number;
 };
@@ -177,6 +177,7 @@ export class ServiceAdministrationOrganisations {
         )
       ).size,
       administrateurs: enUtilisateurs.map((u) => ({
+        id: u!.id,
         prenomNom: u!.prenomNom(),
         initiales: u!.initiales(),
         postes: u!.posteDetaille(),
