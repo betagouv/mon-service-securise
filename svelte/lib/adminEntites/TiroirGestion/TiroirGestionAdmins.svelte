@@ -33,6 +33,10 @@
       etatAffichage = 'INVITATION';
       listeAdminsAInviter.add(email);
     },
+    retirer: (email: string) => {
+      listeAdminsAInviter.delete(email);
+      if (listeAdminsAInviter.size === 0) etatAffichage = 'LISTE';
+    },
     annuler: () => {
       etatAffichage = 'LISTE';
       listeAdminsAInviter.clear();
@@ -88,7 +92,10 @@
       {#if etatAffichage === 'INVITATION'}
         <div class="conteneur-cartouches">
           {#each listeAdminsAInviter as emailAdmin, i (i)}
-            <CartoucheAdmin prenomNom={emailAdmin} />
+            <CartoucheAdmin
+              prenomNom={emailAdmin}
+              onsupprimer={() => invitation.retirer(emailAdmin)}
+            />
           {/each}
         </div>
       {/if}
