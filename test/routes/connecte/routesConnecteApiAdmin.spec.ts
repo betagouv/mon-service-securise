@@ -4,6 +4,7 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import Superviseur from '../../../src/modeles/superviseur.ts';
+import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -50,17 +51,16 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         async (idUtilisateur: UUID) => {
           idAdmin = idUtilisateur;
           return [
-            unUtilisateur()
-              .avecEmail('jean@dupond.fr')
-              .quiSAppelle('Jean Dupond')
-              .quiTravaillePour({
-                nom: 'Mon entite',
-                siret: 'SIRET',
-                departement: '75',
-              })
-              .avecPostes(['RSSI'])
-              .avecId('U1')
-              .construis(),
+            new UtilisateurAdministre(
+              unUUID('U'),
+              {
+                email: 'jean@dupond.fr',
+                prenom: 'Jean',
+                nom: 'Dupond',
+                postes: ['RSSI'],
+              },
+              true
+            ),
           ];
         };
 
@@ -70,15 +70,11 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(reponse.body).toHaveLength(1);
       expect(reponse.body).toEqual([
         {
-          id: 'U1',
+          id: unUUID('U'),
           prenomNom: 'Jean Dupond',
           email: 'jean@dupond.fr',
-          entite: {
-            nom: 'Mon entite',
-            siret: 'SIRET',
-            departement: '75',
-          },
-          postes: ['RSSI'],
+          postes: 'RSSI',
+          estAdmin: true,
         },
       ]);
     });

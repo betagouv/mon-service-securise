@@ -38,9 +38,9 @@ const routesConnecteApiAdmin = ({
       utilisateurs.map((u) => ({
         id: u.id,
         prenomNom: u.prenomNom(),
-        email: u.email,
-        entite: u.entite.toJSON(),
-        postes: u.postes,
+        email: u.email(),
+        postes: u.posteDetaille(),
+        estAdmin: u.estAdmin,
       }))
     );
   });

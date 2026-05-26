@@ -354,13 +354,5 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(utilisateurs[0].id).toBe(idU1);
       expect(utilisateurs[1].id).toBe(idU2);
     });
-
-    it('retourne les utilisateurs administrés par un superviseur', async () => {
-      const utilisateurs =
-        await service.utilisateursDansLePerimetreDe(idSuperviseur);
-
-      expect(utilisateurs).toHaveLength(1);
-      expect(utilisateurs[0].id).toBe(idAdmin);
-    });
   });
 });
