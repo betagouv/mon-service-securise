@@ -9,7 +9,7 @@
   <img
     class="bouton-suppression-contributeur"
     src="/statique/assets/images/icone_supprimer_gris.svg"
-    alt="bouton de suppression d'un contributeur"
+    alt=""
   />
 </button>
 
