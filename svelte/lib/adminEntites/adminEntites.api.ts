@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import type { EntiteSupervisee } from './adminEntites.types';
+import type { AdminSupervise, EntiteSupervisee } from './adminEntites.types';
 
 export const api = {
   entitesDansMonPerimetre: async (): Promise<Array<EntiteSupervisee>> =>
@@ -19,5 +19,8 @@ export const api = {
 
       throw e;
     }
+  },
+  supprimerAdmin: async (cible: AdminSupervise) => {
+    console.log(`✅ SUPPRESSION DE`, cible);
   },
 };
