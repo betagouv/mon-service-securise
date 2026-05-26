@@ -72,6 +72,10 @@
 </dsfr-table>
 
 <style lang="scss">
+  :global(main) {
+    background: white;
+  }
+
   :global(#conteneur-admin-utilisateurs) {
     text-align: left;
     background: #fff;
