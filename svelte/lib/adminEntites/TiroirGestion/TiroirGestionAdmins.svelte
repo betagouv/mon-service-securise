@@ -4,13 +4,14 @@
   import ListeAdmins from './ListeAdmins.svelte';
   import CartoucheAdmin from './CartoucheAdmin.svelte';
   import SaisieEmailAdmin from './SaisieEmailAdmin.svelte';
-  import type { EntiteSupervisee } from '../adminEntites.types';
+  import type { AdminSupervise, EntiteSupervisee } from '../adminEntites.types';
   import { untrack } from 'svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { api } from '../adminEntites.api';
   import { SvelteSet } from 'svelte/reactivity';
   import AucunAdmin from './AucunAdmin.svelte';
+  import ConfirmationSuppression from './ConfirmationSuppression.svelte';
 
   interface Props {
     entite: EntiteSupervisee;
@@ -21,8 +22,11 @@
   export const sousTitre: string =
     'Invitez et gérez les administrateurs de votre entité';
 
-  let etatAffichage: 'LISTE' | 'INVITATION' = $state('LISTE');
+  let etatAffichage: 'LISTE' | 'INVITATION' | 'CONFIRMATION_SUPPRESSION' =
+    $state('LISTE');
+
   const listeAdminsAInviter: SvelteSet<string> = new SvelteSet<string>();
+  let adminPourSuppression: AdminSupervise | undefined = $state();
 
   const inviteAdmin = (email: string) => {
     etatAffichage = 'INVITATION';
@@ -32,6 +36,21 @@
   const retourModeListe = () => {
     etatAffichage = 'LISTE';
     listeAdminsAInviter.clear();
+  };
+
+  const suppression = {
+    demanderConfirmation: (admin: AdminSupervise) => {
+      adminPourSuppression = admin;
+      etatAffichage = 'CONFIRMATION_SUPPRESSION';
+    },
+    annuler: () => {
+      adminPourSuppression = undefined;
+      etatAffichage = 'LISTE';
+    },
+    valider: async () => {
+      await api.supprimerAdmin(adminPourSuppression!);
+      etatAffichage = 'LISTE';
+    },
   };
 
   const envoieInvitations = async () => {
@@ -46,31 +65,40 @@
 </script>
 
 <ContenuTiroir>
-  <SaisieEmailAdmin onemailvalide={inviteAdmin} />
+  {#if etatAffichage === 'LISTE' || etatAffichage === 'INVITATION'}
+    <SaisieEmailAdmin onemailvalide={inviteAdmin} />
 
-  <div class="conteneur-admins">
-    {#if etatAffichage === 'LISTE'}
-      <hr />
-      <h3>Administrateurs de l’entité</h3>
-      <span class="sous-titre">
-        Consultez la liste des utilisateurs disposant des droits admins.
-      </span>
-      {#if entite.administrateurs.length === 0}
-        <AucunAdmin />
-      {:else}
-        <ListeAdmins administrateurs={entite.administrateurs} />
+    <div class="conteneur-admins">
+      {#if etatAffichage === 'LISTE'}
+        <hr />
+        <h3>Administrateurs de l’entité</h3>
+        <span class="sous-titre">
+          Consultez la liste des utilisateurs disposant des droits admins.
+        </span>
+        {#if entite.administrateurs.length === 0}
+          <AucunAdmin />
+        {:else}
+          <ListeAdmins
+            administrateurs={entite.administrateurs}
+            onsupprimer={suppression.demanderConfirmation}
+          />
+        {/if}
       {/if}
-    {/if}
 
-    {#if etatAffichage === 'INVITATION'}
-      <div class="conteneur-cartouches">
-        {#each listeAdminsAInviter as emailAdmin, i (i)}
-          <CartoucheAdmin prenomNom={emailAdmin} />
-        {/each}
-      </div>
-    {/if}
-  </div>
+      {#if etatAffichage === 'INVITATION'}
+        <div class="conteneur-cartouches">
+          {#each listeAdminsAInviter as emailAdmin, i (i)}
+            <CartoucheAdmin prenomNom={emailAdmin} />
+          {/each}
+        </div>
+      {/if}
+    </div>
+  {/if}
+  {#if etatAffichage === 'CONFIRMATION_SUPPRESSION'}
+    <ConfirmationSuppression admin={adminPourSuppression!} />
+  {/if}
 </ContenuTiroir>
+
 {#if etatAffichage === 'INVITATION'}
   <ActionsTiroir>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -86,6 +114,22 @@
       kind="primary"
       hasIcon
       icon="send-plane-line"
+    ></dsfr-button>
+  </ActionsTiroir>
+{/if}
+{#if etatAffichage === 'CONFIRMATION_SUPPRESSION'}
+  <ActionsTiroir>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Annuler"
+      onclick={() => suppression.annuler()}
+      kind="tertiary-no-outline"
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Confirmer"
+      onclick={async () => await suppression.valider()}
+      kind="primary"
     ></dsfr-button>
   </ActionsTiroir>
 {/if}

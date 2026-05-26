@@ -4,9 +4,10 @@
 
   interface Props {
     administrateurs: Array<AdminSupervise>;
+    onsupprimer: (admin: AdminSupervise) => void;
   }
 
-  let { administrateurs }: Props = $props();
+  let { administrateurs, onsupprimer }: Props = $props();
 </script>
 
 <div class="conteneur-cartouches">
@@ -15,6 +16,7 @@
       prenomNom={admin.prenomNom}
       initiales={admin.initiales}
       postes={admin.postes}
+      onsupprimer={() => onsupprimer(admin)}
     />
   {/each}
 </div>

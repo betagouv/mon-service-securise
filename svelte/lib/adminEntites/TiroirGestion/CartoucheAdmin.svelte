@@ -1,11 +1,14 @@
 <script lang="ts">
+  import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
+
   interface Props {
     prenomNom: string;
     initiales?: string;
     postes?: string;
+    onsupprimer?: () => void;
   }
 
-  let { prenomNom, initiales, postes }: Props = $props();
+  let { prenomNom, initiales, postes, onsupprimer }: Props = $props();
 </script>
 
 <div class="cartouche-admin">
@@ -18,6 +21,9 @@
       <span class="postes">{postes}</span>
     {/if}
   </div>
+  {#if onsupprimer}
+    <BoutonSuppressionContributeur onclick={onsupprimer} />
+  {/if}
 </div>
 
 <style>
@@ -33,6 +39,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      flex: 1;
 
       .nom-prenom {
         font-size: 1rem;
