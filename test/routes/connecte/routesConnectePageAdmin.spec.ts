@@ -1,5 +1,7 @@
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
+import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 
 describe("Le serveur MSS des pages d'admin", () => {
   const testeur = testeurMSS();
@@ -11,6 +13,11 @@ describe("Le serveur MSS des pages d'admin", () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
         testeur.depotDonnees().utilisateur = async () => utilisateur;
+        testeur.depotDonnees().lisAdminOrganisations = async () =>
+          AdminOrganisations.hydrate({
+            idUtilisateur: unUUID('U'),
+            entitesAdministrees: [{ siret: '1234' }],
+          });
       });
 
       it("vérifie que l'utilisateur a accepté les CGU", async () => {
@@ -36,5 +43,13 @@ describe("Le serveur MSS des pages d'admin", () => {
         expect(reponse.status).to.equal(404);
       });
     });
+  });
+
+  it("ne donne accès à la page admin/utilisateurs qu'aux admins", async () => {
+    testeur.depotDonnees().lisAdminOrganisations = async () => undefined;
+
+    const reponse = await testeur.get('/admin/utilisateurs');
+
+    expect(reponse.status).to.equal(404);
   });
 });
