@@ -80,6 +80,12 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async retireAdmin(siret: string, idUtilisateur: UUID) {
+    // eslint-disable-next-line no-console
+    console.log('retireAdmin', { siret, idUtilisateur });
+  }
+
   async nommeAdmin(siret: string, idAdmin: UUID, emailAdmin: string) {
     await this.ajouteSiretAAdmin(siret, idAdmin);
 

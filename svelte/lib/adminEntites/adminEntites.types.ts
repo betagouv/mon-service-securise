@@ -1,6 +1,7 @@
 import type { Entite } from '../ui/types';
 
 export type AdminSupervise = {
+  id: string;
   prenomNom: string;
   initiales: string;
   postes: string;
