@@ -93,7 +93,7 @@ const articlesCrisp = [
   'fixer-des-contraintes-de-longueur-et-de-complexite-des-mots-de-passe',
   'mais-a-quoi-ca-sert-dhomologuer',
   'definir-une-politique-de-gestion-des-incidents-de-securite',
-  'mais-qui-doit-etre-lautorite-dhomologation-au-juste',
+  'mais-qui-doit-etre-lautorite-dhomologation',
   'installer-un-certificat-de-signature-electronique-conforme-a-la-reglementation',
   'heberger-le-service-et-les-donnees-aupres-dun-prestataire-secnumcloud',
 ];
