@@ -81,7 +81,7 @@
     ></dsfr-button>
   </div>
   <div class="conteneur-matrice">
-    <div class="relatif">
+    <div class="relatif" aria-hidden="true">
       <MatriceRisquesV2 risques={[]} />
       <div
         class="matrice"
@@ -139,7 +139,9 @@
         </div>
       </div>
     </div>
-    <LegendeMatrice />
+    <div aria-hidden="true">
+      <LegendeMatrice />
+    </div>
     <dsfr-transcription
       fullscreen="Agrandir"
       fullscreen-aria-label="Agrandir la transcription"
