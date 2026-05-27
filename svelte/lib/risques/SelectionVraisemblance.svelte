@@ -24,6 +24,7 @@
 
 <div class="conteneur-vraisemblance">
   <select
+    aria-label="Sélection du niveau de vraisemblance"
     class="niveau-vraisemblance {niveauVraisemblance}"
     class:vide={!niveauVraisemblance}
     class:avecLibelleOption

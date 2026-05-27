@@ -22,6 +22,7 @@
     placeholder="Rechercher"
     bind:value={recherche}
     disabled={desactive}
+    aria-label="Rechercher"
   />
   {#if recherche && !desactive}
     <button class="suppression-recherche" onclick={supprimeRecherche}>
