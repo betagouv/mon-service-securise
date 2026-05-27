@@ -384,7 +384,7 @@
         onclick={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
-        <div>
+        <div class="conteneur-cartouches">
           <CartoucheReferentiel referentiel={donnee.referentiel} />
           <CartoucheCategorieMesure categorie={donnee.categorie} />
           {#if donnee.thematique}
@@ -453,6 +453,10 @@
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
     cursor: pointer;
     color: var(--bleu-mise-en-avant);
+  }
+
+  .conteneur-cartouches {
+    align-items: center;
   }
 
   .description-mesure {

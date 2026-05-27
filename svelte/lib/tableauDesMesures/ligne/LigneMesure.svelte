@@ -93,7 +93,7 @@
         <CartoucheIndispensable {indispensable} />
       {/if}
       <CartoucheReferentiel {referentiel} />
-      <span class="categorie">{categorie}</span>
+      <dsfr-badge label={categorie} size="sm"></dsfr-badge>
       {#if mesure.thematique}
         <CartoucheThematique thematique={mesure.thematique} />
       {/if}
