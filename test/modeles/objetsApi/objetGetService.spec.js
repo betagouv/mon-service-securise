@@ -46,7 +46,7 @@ describe("L'objet d'API de `GET /service`", () => {
   const service = unService(referentiel)
     .avecId('123')
     .avecNomService('Un service')
-    .avecOrganisationResponsable({ nom: 'Une organisation' })
+    .avecOrganisationResponsable({ nom: 'Une organisation', siret: 'SIRET' })
     .ajouteUnContributeur(
       unUtilisateur()
         .avecId('A')
@@ -82,6 +82,7 @@ describe("L'objet d'API de `GET /service`", () => {
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
+      siretOrganisationResponsable: 'SIRET',
       contributeurs: [
         {
           id: 'A',

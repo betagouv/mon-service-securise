@@ -22,6 +22,8 @@ const donnees = (service, autorisation, referentiel) => {
     nomService: service.nomService(),
     organisationResponsable:
       service.descriptionService.organisationResponsable.nom ?? '',
+    siretOrganisationResponsable:
+      service.descriptionService.organisationResponsable.siret,
     contributeurs: service.contributeurs.map((c) => {
       const designeLuiMeme = autorisation.designeUtilisateur(c.idUtilisateur);
       const doitMasquerPourConfidentialite = c.estAdmin && !designeLuiMeme;

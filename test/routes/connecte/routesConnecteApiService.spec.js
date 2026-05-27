@@ -365,6 +365,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         nomService: 'Nom service',
         version: 'v1',
         organisationResponsable: 'ANSSI',
+        siretOrganisationResponsable: '12345',
         contributeurs: [
           {
             id: 'AAA',
