@@ -50,9 +50,9 @@
 <MenuFlottant parDessusDeclencheur={true}>
   {#snippet declencheur()}
     <div>
-      <button class="bouton bouton-secondaire bouton-filtre">
+      <span class="bouton bouton-secondaire bouton-filtre">
         <IconeFiltre filtresActifs={$nombreResultats.aDesFiltresAppliques} />
-      </button>
+      </span>
     </div>
   {/snippet}
 
