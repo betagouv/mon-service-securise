@@ -4,9 +4,10 @@
   import { api as apiEntites } from '../adminEntites/adminEntites.api';
   import Tuiles from './Tuiles.svelte';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
-
   let mesEntites: Array<EntiteSupervisee> = $state([]);
 
   onMount(async () => {
@@ -67,6 +68,20 @@
             : ''}
         {/if}
       </span>
+    </div>
+    <div slot="cell:actions:{i}">
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="secondary"
+        label="Gérer les accès aux services"
+        size="sm"
+        onclick={() => {
+          tiroirStore.afficheContenu(TiroirGestionUtilisateurAdministre, {
+            utilisateur,
+            toutesEntites: mesEntites,
+          });
+        }}
+      ></dsfr-button>
     </div>
   {/each}
 </dsfr-table>
