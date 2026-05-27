@@ -21,6 +21,7 @@
 
 <div class="conteneur-gravite">
   <select
+    aria-label="Sélection du niveau de gravité"
     class="niveau-gravite {niveauGravite}"
     class:vide={!niveauGravite}
     class:avecLibelleOption

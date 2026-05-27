@@ -92,10 +92,12 @@
   <div slot="panel-1" class="conteneur-onglet">
     <CarteFormulaire titre="Autorité d'homologation">
       <InputDSFR
+        id="nomAutoriteHomologation"
         label="Prénom / Nom"
         bind:value={contactsUtiles.autoriteHomologation.nom}
       ></InputDSFR>
       <InputDSFR
+        id="fonctionAutoriteHomologation"
         label="Fonction"
         bind:value={contactsUtiles.autoriteHomologation.fonction}
       ></InputDSFR>
@@ -103,10 +105,12 @@
 
     <CarteFormulaire titre="Spécialiste cybersécurité">
       <InputDSFR
+        id="nomExpertCyber"
         label="Prénom / Nom"
         bind:value={contactsUtiles.expertCybersecurite.nom}
       ></InputDSFR>
       <InputDSFR
+        id="fonctionExpertCyber"
         label="Fonction"
         bind:value={contactsUtiles.expertCybersecurite.fonction}
       ></InputDSFR>
@@ -116,10 +120,12 @@
       titre="Délégué·e à la protection des données à caractère personnel"
     >
       <InputDSFR
+        id="nomDelegueProtectionDonnees"
         label="Prénom / Nom"
         bind:value={contactsUtiles.delegueProtectionDonnees.nom}
       ></InputDSFR>
       <InputDSFR
+        id="fonctionDelegueProtectionDonnees"
         label="Fonction"
         bind:value={contactsUtiles.delegueProtectionDonnees.fonction}
       ></InputDSFR>
@@ -127,10 +133,12 @@
 
     <CarteFormulaire titre="Responsables métier du projet">
       <InputDSFR
+        id="nomPiloteProjet"
         label="Prénom / Nom"
         bind:value={contactsUtiles.piloteProjet.nom}
       ></InputDSFR>
       <InputDSFR
+        id="fonctionPiloteProjet"
         label="Fonction"
         bind:value={contactsUtiles.piloteProjet.fonction}
       ></InputDSFR>
@@ -139,14 +147,17 @@
     {#each contactsUtiles.acteursHomologation as _, index (index)}
       <CarteFormulaire onsupprimer={() => supprimeActeur(index)}>
         <InputDSFR
+          id="roleActeur{index}"
           label="Rôle au regard du projet"
           bind:value={contactsUtiles.acteursHomologation[index].role}
         ></InputDSFR>
         <InputDSFR
+          id="nomActeur{index}"
           label="Prénom / Nom"
           bind:value={contactsUtiles.acteursHomologation[index].nom}
         ></InputDSFR>
         <InputDSFR
+          id="fonctionActeur{index}"
           label="Fonction"
           bind:value={contactsUtiles.acteursHomologation[index].fonction}
         ></InputDSFR>
@@ -169,16 +180,19 @@
     {#each toutesPartiesPrenantes as typePartiePrenante (typePartiePrenante)}
       <CarteFormulaire titre={labelsPartiesPrenantes[typePartiePrenante]}>
         <InputDSFR
+          id="nomEntite{typePartiePrenante}"
           label="Nom de l'entité externe ou interne"
           bind:value={contactsUtiles.partiesPrenantes[typePartiePrenante].nom}
         ></InputDSFR>
         <InputDSFR
+          id="natureAccesEntite{typePartiePrenante}"
           label="Nature de l'accès au service numérique"
           bind:value={
             contactsUtiles.partiesPrenantes[typePartiePrenante].natureAcces
           }
         ></InputDSFR>
         <InputDSFR
+          id="pointContactEntite{typePartiePrenante}"
           label="Point de contact"
           bind:value={
             contactsUtiles.partiesPrenantes[typePartiePrenante].pointContact
@@ -190,16 +204,19 @@
     {#each contactsUtiles.partiesPrenantesSpecifiques as _, index (index)}
       <CarteFormulaire onsupprimer={() => supprimePartiePrenante(index)}>
         <InputDSFR
+          id="nomPartiePrenante{index}"
           label="Nom de l'entité"
           bind:value={contactsUtiles.partiesPrenantesSpecifiques[index].nom}
         ></InputDSFR>
         <InputDSFR
+          id="natureAccesPartiePrenante{index}"
           label="Nature de l'accès au service numérique"
           bind:value={
             contactsUtiles.partiesPrenantesSpecifiques[index].natureAcces
           }
         ></InputDSFR>
         <InputDSFR
+          id="pointContactPartiePrenante{index}"
           label="Point de contact"
           bind:value={
             contactsUtiles.partiesPrenantesSpecifiques[index].pointContact

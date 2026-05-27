@@ -26,4 +26,4 @@ mixin fonctionnalitesSegmentees(labels, contenu, baliseSousTitre = "p")
               img(src=fonctionnalite.img, alt=`Illustration pour ${fonctionnalite.titre}`, class=`${idx === 0 ? "" : "invisible"}`)
             if idx < groupeFonctionnalites.length - 1
               hr
-      img(class="illustration-fonctionnalites-segmentees-desktop" src=contenu[0][0].img)
+      img(class="illustration-fonctionnalites-segmentees-desktop" src=contenu[0][0].img alt="Illustration du plan d'action")
