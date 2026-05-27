@@ -13,7 +13,7 @@
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
   "prHourlyLimit": 10,
-  "prConcurrentLimit": 2,
+  "prConcurrentLimit": 3,
   "platform": "github",
   "repositories": ["betagouv/mon-service-securise"],
   "packageRules": [
