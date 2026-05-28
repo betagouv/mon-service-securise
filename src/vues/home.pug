@@ -33,7 +33,7 @@ mixin carteCarrousel(numero, titre, sousTitre)
 
 mixin carrousel(id)
   div(id=id)
-    .conteneur-carrousel
+    .conteneur-carrousel(tabindex=0)
       block
     .conteneur-liens-carrousel
       dsfr-button(label='Précédent' has-icon icon='arrow-left-s-line' kind='tertiary-no-outline' disabled).precedent
