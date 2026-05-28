@@ -275,10 +275,4 @@
   .onglet-vide {
     padding: 48px 0;
   }
-
-  .bouton-creation {
-    position: absolute;
-    top: 32px;
-    right: 24px;
-  }
 </style>
