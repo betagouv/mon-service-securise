@@ -81,7 +81,7 @@
     ></dsfr-button>
   </div>
   <div class="conteneur-matrice">
-    <div class="relatif" aria-hidden="true">
+    <div class="relatif" aria-describedby="transcription">
       <MatriceRisquesV2 risques={[]} />
       <div
         class="matrice"
@@ -103,6 +103,8 @@
       </div>
       <div class="conteneur-slider">
         <dsfr-range
+          label="Sélection des risques bruts/résiduels/cibles"
+          hideLabel
           id="matrice-visible"
           size="md"
           min={1}
@@ -143,6 +145,7 @@
       <LegendeMatrice />
     </div>
     <dsfr-transcription
+      id="transcription"
       fullscreen="Agrandir"
       fullscreen-aria-label="Agrandir la transcription"
     >
