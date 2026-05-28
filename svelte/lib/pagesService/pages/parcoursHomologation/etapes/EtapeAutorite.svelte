@@ -53,8 +53,7 @@
 </div>
 
 <style lang="scss">
-  .champs,
-  form {
+  .champs {
     display: flex;
     flex-direction: column;
     gap: 1rem;
