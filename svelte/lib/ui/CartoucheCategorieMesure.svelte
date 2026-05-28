@@ -14,4 +14,4 @@
   };
 </script>
 
-<dsfr-badge label={labelsCategories[categorie]} size="sm"></dsfr-badge>
+<dsfr-tag label={labelsCategories[categorie]} size="sm"></dsfr-tag>

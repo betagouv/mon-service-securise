@@ -8,9 +8,4 @@
   let { referentiel }: Props = $props();
 </script>
 
-<dsfr-badge
-  label={referentiel}
-  type="accent"
-  accent={referentiel === 'Mesures ajoutées' ? 'blue-ecume' : 'blue-cumulus'}
-  size="sm"
-></dsfr-badge>
+<dsfr-tag label={referentiel} size="sm"></dsfr-tag>
