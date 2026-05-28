@@ -35,7 +35,7 @@
 </script>
 
 <details open={!repliee}>
-  <summary></summary>
+  <summary>Description de la mesure</summary>
   <p class="description">
     {@html descriptionAAfficher}
   </p>
@@ -64,12 +64,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
-
-  summary:before {
-    content: 'Description de la mesure';
     font-size: 1rem;
     line-height: 1.5rem;
     color: #282828;
