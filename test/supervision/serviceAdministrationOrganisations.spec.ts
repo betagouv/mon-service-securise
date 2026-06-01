@@ -60,7 +60,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
   };
 
-  const leService = (surcharge: Surcharge = {}) =>
+  const leServiceDAdministrationDesOrgas = (surcharge: Surcharge = {}) =>
     new ServiceAdministrationOrganisations({
       adaptateurUUID: fabriqueAdaptateurUUID(),
       depotDonnees: depotComplet,
@@ -75,7 +75,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande de rattachement d'un service à ses admins", () => {
     it('crée les autorisations admins correspondantes', async () => {
-      const administrationOrganisations = leService();
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
       await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
@@ -89,7 +89,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       await depotComplet.sauvegardeAutorisation(
         uneAutorisation().deProprietaire(idAdmin, idService).construis()
       );
-      const administrationOrganisations = leService();
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
       await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
@@ -102,7 +102,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it('délègue au dépôt la suppression des autorisations admins pré-existantes', async () => {
       const mockSupprimeAutorisations = vi.fn();
       depotComplet.supprimeAutorisationsAdminPour = mockSupprimeAutorisations;
-      const administrationOrganisations = leService();
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
       await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
@@ -143,7 +143,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
       });
 
-      administrationOrganisations = leService();
+      administrationOrganisations = leServiceDAdministrationDesOrgas();
     });
 
     it('crée le nouvel admin', async () => {
@@ -200,7 +200,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       adaptateurMail.envoieMessageNominationAdmin =
         envoieMessageNominationAdmin;
 
-      const service = leService({ adaptateurMail });
+      const service = leServiceDAdministrationDesOrgas({ adaptateurMail });
 
       await service.nommeAdmin('1234', unUUID('A'), 'nouvel-admin@mail.fr');
 
@@ -249,11 +249,11 @@ describe("Le service de gestion des admins d'organisation", () => {
         unUtilisateur().donnees
       );
 
-      serviceAdministrationOrganisations = leService();
+      serviceAdministrationOrganisations = leServiceDAdministrationDesOrgas();
     });
 
     it("sait renvoyer les entités du point-de-vue d'un admin : l'admin est alors lui-même présent dans les admins renvoyés", async () => {
-      const service = leService();
+      const service = leServiceDAdministrationDesOrgas();
 
       const entitesDe = await service.entitesDe(unUUID('A'));
 
@@ -313,7 +313,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("renvoie un tableau vide s'il n'est ni admin ni superviseur", async () => {
-      const service = leService();
+      const service = leServiceDAdministrationDesOrgas();
 
       const entitesDe = await service.entitesDe(unUUID('U'));
 
@@ -351,7 +351,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       depotComplet = unDepotComplet({ adaptateurPersistance });
 
-      service = leService();
+      service = leServiceDAdministrationDesOrgas();
     });
 
     it("retourne les contributeurs des services d'un admin", async () => {
@@ -360,6 +360,73 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(utilisateurs).toHaveLength(2);
       expect(utilisateurs[0].id).toBe(idU1);
       expect(utilisateurs[1].id).toBe(idU2);
+    });
+  });
+
+  describe("sur demande de retrait d'une entité administrée", () => {
+    let service: ServiceAdministrationOrganisations;
+    const siret = 'SIRET-1';
+    const autreSiret = '12345';
+    const idService2 = unUUID('S2');
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteAdminSurPerimetre(idAdmin, [siret])
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnService(
+          unServiceV2().avecId(idService).avecOrganisationResponsable({ siret })
+            .donnees
+        )
+        .ajouteUnService(
+          unServiceV2()
+            .avecId(idService2)
+            .avecOrganisationResponsable({ siret: autreSiret }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idAdmin, idService).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire(unUUIDRandom(), idService).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire(idAdmin, idService2).donnees
+        )
+        .construis() as unknown as AdaptateurPersistance;
+      adaptateurPersistanceTS = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(idAdmin, [{ siret }])
+        .construis();
+
+      depotComplet = unDepotComplet({
+        adaptateurPersistance,
+        adaptateurPersistanceTS,
+      });
+
+      service = leServiceDAdministrationDesOrgas();
+    });
+
+    it.todo(
+      "ne supprime pas l'autorisation si l'admin est seul contributeur d'un service"
+    );
+
+    it("ne jette pas d'erreur si l'utilisateur n'est pas admin", async () => {
+      await expect(
+        service.retireAdmin(siret, unUUIDRandom())
+      ).resolves.not.toThrow();
+    });
+
+    it("retire l'entité du périmètre de l'admin", async () => {
+      await service.retireAdmin(siret, idAdmin);
+
+      const adminAJour = await depotComplet.lisAdminOrganisations(idAdmin);
+      expect(adminAJour?.estAdminDe(siret)).toBe(false);
+    });
+
+    it('supprime les autorisations admin sur les services de ce siret', async () => {
+      await service.retireAdmin(siret, idAdmin);
+
+      const autorisations = await depotComplet.autorisations(idAdmin);
+      expect(autorisations).toHaveLength(1);
+      expect(autorisations[0].idService).toBe(idService2);
     });
   });
 });

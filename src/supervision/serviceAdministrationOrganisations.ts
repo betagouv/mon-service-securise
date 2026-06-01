@@ -80,10 +80,18 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async retireAdmin(siret: string, idUtilisateur: UUID) {
-    // eslint-disable-next-line no-console
-    console.log('retireAdmin', { siret, idUtilisateur });
+    const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
+
+    if (!admin) return;
+
+    admin?.cesseDAdministrer(new Entite({ siret }));
+    await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
+
+    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+    await Promise.all(
+      services.map((service) => this.rattacheLesAdministrateursDe(service))
+    );
   }
 
   async nommeAdmin(siret: string, idAdmin: UUID, emailAdmin: string) {
