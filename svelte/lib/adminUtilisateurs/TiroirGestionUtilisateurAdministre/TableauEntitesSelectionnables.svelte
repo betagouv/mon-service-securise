@@ -1,7 +1,8 @@
 <script lang="ts">
   import { SvelteSet } from 'svelte/reactivity';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
-  import type { ServiceAdministre } from '../adminUtilisateurs.api';
+  import { labelsRole, type ServiceAdministre } from '../adminUtilisateurs.api';
+  import BadgeAdmin from '../BadgeAdmin.svelte';
 
   type SIRET = string;
 
@@ -58,53 +59,99 @@
 </script>
 
 <table>
+  <thead>
+    <tr>
+      <th>Nom du service</th>
+      <th>Rôle</th>
+    </tr>
+  </thead>
   <tbody>
     {#each Object.entries(servicesParEntite) as [siretEntite, services] (siretEntite)}
       {@const nomEntite = toutesEntites.find(
         (e) => e.siret === siretEntite
       )?.nom}
       {@const ouvert = siretEntitesDepliees.has(siretEntite)}
-      <tr onclick={() => deplieEntite(siretEntite)} class="ligne-entite">
+      {@const estAdmin = services.every((s) => s.role === 'ADMIN')}
+      <tr
+        onclick={() => deplieEntite(siretEntite)}
+        class="ligne-entite"
+        class:estAdmin
+      >
         <td>
           <div class="conteneur-ligne-entite">
             <div class="icone-fleche" class:ouvert>
               <lab-anssi-icone nom="arrow-down-s-line" taille="sm"
               ></lab-anssi-icone>
             </div>
-            <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-            <dsfr-checkbox
-              id="checkbox-{siretEntite}"
-              size="sm"
-              name="checkbox-{siretEntite}"
-              onclick={(e: MouseEvent) => {
-                e.stopPropagation();
-              }}
-              onvaluechanged={() => {
-                basculeSelectionEntite(siretEntite);
-              }}
-              checked={entitesSelectionnes[siretEntite] === 'Tout'}
-              indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
-            ></dsfr-checkbox>
+            {#if !estAdmin}
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+              <dsfr-checkbox
+                id="checkbox-{siretEntite}"
+                size="sm"
+                name="checkbox-{siretEntite}"
+                onclick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                }}
+                onvaluechanged={() => {
+                  basculeSelectionEntite(siretEntite);
+                }}
+                checked={entitesSelectionnes[siretEntite] === 'Tout'}
+                indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
+              ></dsfr-checkbox>
+            {/if}
             <span>{nomEntite}</span>
+            {#if estAdmin}
+              <BadgeAdmin />
+            {/if}
+            <dsfr-tag
+              label={`${services.length} service${services.length > 1 ? 's' : ''}`}
+              type="default"
+              accent="défaut"
+              size="sm"
+            ></dsfr-tag>
           </div>
+        </td>
+        <td>
+          {#if estAdmin}
+            <span class="nombre-services">Géré via le droit admin</span>
+          {:else}
+            {@const nombreServicesSelectionnes = services.filter((s) =>
+              servicesSelectionnes.has(s.id)
+            ).length}
+            <span class="nombre-services"
+              >{nombreServicesSelectionnes} sélectionné{nombreServicesSelectionnes >
+              1
+                ? 's'
+                : ''} sur {services.length}</span
+            >
+          {/if}
         </td>
       </tr>
       {#if ouvert}
         {#each services as service (service.id)}
           <tr>
             <td>
-              <div class="conteneur-ligne-service">
-                <dsfr-checkbox
-                  id="checkbox-{service.id}"
-                  size="sm"
-                  name="checkbox-{service.id}"
-                  checked={servicesSelectionnes.has(service.id)}
-                  onvaluechanged={(e: CustomEvent<boolean>) => {
-                    selectionneService(service.id, e.detail);
-                  }}
-                ></dsfr-checkbox>
+              <div class="conteneur-ligne-service" class:estAdmin>
+                {#if !estAdmin}
+                  <dsfr-checkbox
+                    id="checkbox-{service.id}"
+                    size="sm"
+                    name="checkbox-{service.id}"
+                    checked={servicesSelectionnes.has(service.id)}
+                    onvaluechanged={(e: CustomEvent<boolean>) => {
+                      selectionneService(service.id, e.detail);
+                    }}
+                  ></dsfr-checkbox>
+                {/if}
                 <span>{service.nomService}</span>
               </div>
+            </td>
+            <td>
+              {#if estAdmin}
+                <BadgeAdmin />
+              {:else if service.role}
+                <span>{labelsRole[service.role]}</span>
+              {/if}
             </td>
           </tr>
         {/each}
@@ -125,6 +172,12 @@
         display: flex;
         gap: 16px;
 
+        &.estAdmin {
+          span {
+            color: #666666;
+          }
+        }
+
         span {
           color: #3a3a3a;
           font-size: 0.875rem;
@@ -137,13 +190,21 @@
       }
 
       &.ligne-entite {
-        background: #f6f6f6;
-        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+          background: #eeeeee;
+        }
+
+        &.estAdmin {
+          span {
+            color: #666666;
+          }
+        }
 
         span {
           color: #3a3a3a;
           font-size: 0.875rem;
-          font-weight: 700;
           line-height: 1.5rem;
         }
 
@@ -164,8 +225,23 @@
         }
       }
 
-      td {
+      td,
+      th {
         padding: 8px 16px;
+      }
+
+      th {
+        background: #f6f6f6;
+        color: #3a3a3a;
+        font-size: 0.875rem;
+        font-weight: 700;
+        line-height: 1.5rem;
+      }
+
+      .nombre-services {
+        font-size: 0.75rem;
+        color: #929292;
+        white-space: nowrap;
       }
     }
   }

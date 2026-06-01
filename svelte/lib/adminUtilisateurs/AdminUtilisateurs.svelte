@@ -6,6 +6,7 @@
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
+  import BadgeAdmin from './BadgeAdmin.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
@@ -39,8 +40,7 @@
   {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
     <div slot="cell:prenomNom:{i}" class="conteneur-nom">
       {#if utilisateur.estAdmin}
-        <dsfr-badge label="Admin" type="accent" accent="blue-cumulus" size="sm"
-        ></dsfr-badge>
+        <BadgeAdmin />
       {/if}
       <span><b>{utilisateur.prenomNom}</b></span>
       {#if utilisateur.email !== utilisateur.prenomNom}

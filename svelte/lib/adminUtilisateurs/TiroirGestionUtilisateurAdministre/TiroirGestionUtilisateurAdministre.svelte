@@ -32,13 +32,12 @@
   export const titre: string = `Gérer les accès de ${untrack(() => utilisateur.prenomNom)}`;
   export const sousTitre: string =
     'Gérez les accès de cet utilisateur : vous pouvez le retirer des entités et services actuels, en ajouter de nouveaux, ou lui attribuer automatiquement tous les futurs services de votre périmètre.';
+  export const taille: string = 'large';
 
   let idsServicesActuels = $derived(
     new Set(servicesDeUtilisateur.map((s) => s.id))
   );
-  let servicesActuels = $derived(
-    tousServices.filter((s) => idsServicesActuels.has(s.id))
-  );
+  let servicesActuels = $derived(servicesDeUtilisateur);
   let servicesActuelsParEntite = $derived(
     Object.groupBy(servicesActuels, (s) => s.siretOrganisationResponsable)
   ) as Record<string, ServiceAdministre[]>;
@@ -88,7 +87,7 @@
       <TitreOngletDSFR
         active={idTabActive === 0}
         libelle={configurationsTabs[0].label}
-        libellePastille={`${servicesActuels.length} service(s)`}
+        libellePastille={`${servicesActuels.length} service${servicesActuels.length > 1 ? 's' : ''}`}
       />
     </div>
     <div slot="panel-1" class="conteneur-onglet">
@@ -103,7 +102,7 @@
       <TitreOngletDSFR
         active={idTabActive === 1}
         libelle={configurationsTabs[1].label}
-        libellePastille={`${servicesDisponibles.length} service(s)`}
+        libellePastille={`${servicesDisponibles.length} service${servicesDisponibles.length > 1 ? 's' : ''}`}
       />
     </div>
     <div slot="panel-2" class="conteneur-onglet">

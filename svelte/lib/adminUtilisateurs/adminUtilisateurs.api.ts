@@ -8,11 +8,22 @@ export type UtilisateurAdministre = {
   nombreServices: number;
 };
 
+type Role = 'LECTURE' | 'ECRITURE' | 'PERSONNALISE' | 'ADMIN' | 'PROPRIETAIRE';
+
+export const labelsRole: Record<Role, string> = {
+  ADMIN: 'Admin',
+  ECRITURE: 'Éditeur',
+  LECTURE: 'Lecteur',
+  PERSONNALISE: 'Personnalisé',
+  PROPRIETAIRE: 'Propriétaire',
+};
+
 export type ServiceAdministre = {
   id: string;
   nomService: string;
   organisationResponsable: string;
   siretOrganisationResponsable: string;
+  role?: Role;
 };
 
 export const api = {
@@ -22,8 +33,17 @@ export const api = {
     {
       id: '4fc3a60d-7c32-414e-8c49-063b588b1728',
       nomService: 'Mon service',
-      organisationResponsable: 'SIRET',
-      siretOrganisationResponsable: '1234',
+      organisationResponsable: 'TMZN',
+      siretOrganisationResponsable: '93939105800012',
+      role: 'ADMIN',
+    },
+    {
+      id: '4fc3a60d-7c32-414e-8c49-063b588b172f',
+      nomService: 'Mon service pas administré',
+      organisationResponsable:
+        'DIRECTION INTERMINISTERIELLE DU NUMERIQUE (DINUM)',
+      siretOrganisationResponsable: '13002526500013',
+      role: 'LECTURE',
     },
   ],
   tousServices: async (): Promise<ServiceAdministre[]> =>
