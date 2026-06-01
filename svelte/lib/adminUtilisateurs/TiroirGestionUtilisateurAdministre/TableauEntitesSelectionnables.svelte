@@ -9,9 +9,12 @@
   interface Props {
     toutesEntites: Array<EntiteSupervisee>;
     servicesParEntite: Record<SIRET, ServiceAdministre[]>;
+    onAjouteRole: (idServicesSelectionnes: string[]) => void;
+    onRetireAcces: (idServicesSelectionnes: string[]) => void;
   }
 
-  let { toutesEntites, servicesParEntite }: Props = $props();
+  let { toutesEntites, servicesParEntite, onAjouteRole, onRetireAcces }: Props =
+    $props();
 
   let siretEntitesDepliees = new SvelteSet<string>();
   const deplieEntite = (siret: string) => {
@@ -90,6 +93,28 @@
     {/if}
   </span>
   <div>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Attribuer un rôle commun"
+      onclick={() => onAjouteRole([...servicesSelectionnes])}
+      kind="tertiary-no-outline"
+      size="sm"
+      has-icon
+      icon="edit-line"
+      icon-place="left"
+      disabled={servicesSelectionnes.size === 0}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Retirer"
+      onclick={() => onRetireAcces([...servicesSelectionnes])}
+      kind="tertiary-no-outline"
+      size="sm"
+      has-icon
+      icon="delete-bin-line"
+      icon-place="left"
+      disabled={servicesSelectionnes.size === 0}
+    ></dsfr-button>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label={toutEstSelectionne ? 'Tout désélectionner' : 'Tout sélectionner'}
@@ -286,6 +311,13 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    & > div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   .sous-texte {
