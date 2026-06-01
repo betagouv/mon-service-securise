@@ -5,7 +5,7 @@
   let { onclick }: Props = $props();
 </script>
 
-<button type="button" {onclick}>
+<button type="button" {onclick} aria-label="Supprimer le contributeur">
   <img
     class="bouton-suppression-contributeur"
     src="/statique/assets/images/icone_supprimer_gris.svg"
