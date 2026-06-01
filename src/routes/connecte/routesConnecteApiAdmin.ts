@@ -119,6 +119,11 @@ const routesConnecteApiAdmin = ({
       const { siret, idUtilisateur } = requete.body;
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
+      if (idUtilisateurCourant === idUtilisateur) {
+        reponse.sendStatus(400);
+        return;
+      }
+
       if (!(await estAutoriseSurSiret(idUtilisateurCourant, siret))) {
         reponse.sendStatus(403);
         return;

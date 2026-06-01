@@ -310,6 +310,17 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(400);
     });
 
+    it("jette une erreur 400 si l'utilisateur courant essaie de se supprimer", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: idAdminASupprimer });
+
+      const { status } = await testeur.delete('/api/admin', {
+        siret,
+        idUtilisateur: idAdminASupprimer,
+      });
+
+      expect(status).toBe(400);
+    });
+
     it('jette une erreur 422 si la suppression est impossible', async () => {
       testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
       testeur.serviceAdministrationOrganisations().retireAdmin = async () => {
