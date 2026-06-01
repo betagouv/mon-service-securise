@@ -258,6 +258,23 @@ describe("L'adaptateur persistance Postgres", () => {
         entitesSupervisees: [entiteB, entiteC],
       });
     });
+    it("supprime le superviseur s'il n'a plus d'entité supervisée", async () => {
+      const idSuperviseur = unUUIDRandom();
+      const entiteA = { siret: 'siretA', nom: 'nomA', departement: '75' };
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur,
+        siret_hash: chiffrement.hacheSha256('siretA'),
+        donnees: await chiffrement.chiffre(entiteA),
+      });
+
+      await persistance.sauvegardeSuperviseur({
+        idUtilisateur: idSuperviseur,
+        entitesSupervisees: [],
+      });
+
+      const superviseur = await persistance.lisSuperviseur(idSuperviseur);
+      expect(superviseur).toBeUndefined();
+    });
   });
 
   describe("sur demande de mise à jour d'un admin d'organisations", () => {

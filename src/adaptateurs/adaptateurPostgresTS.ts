@@ -85,6 +85,11 @@ export class AdaptateurPostgresTS implements PersistanceTS {
   }
 
   async sauvegardeSuperviseur(donnees: DonneesSuperviseur): Promise<void> {
+    if (donnees.entitesSupervisees.length === 0) {
+      await this.supprimeSuperviseur(donnees.idUtilisateur);
+      return;
+    }
+
     const donneesAInserer = await Promise.all(
       donnees.entitesSupervisees.map(async (d) => ({
         id_superviseur: donnees.idUtilisateur,
