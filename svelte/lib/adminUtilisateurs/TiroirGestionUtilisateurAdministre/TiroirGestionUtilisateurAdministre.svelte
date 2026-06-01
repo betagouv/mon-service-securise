@@ -32,7 +32,7 @@
   export const titre: string = `Gérer les accès de ${untrack(() => utilisateur.prenomNom)}`;
   export const sousTitre: string =
     'Gérez les accès de cet utilisateur : vous pouvez le retirer des entités et services actuels, en ajouter de nouveaux, ou lui attribuer automatiquement tous les futurs services de votre périmètre.';
-  export const taille: string = 'large';
+  export const taille = 'large';
 
   let idsServicesActuels = $derived(
     new Set(servicesDeUtilisateur.map((s) => s.id))
