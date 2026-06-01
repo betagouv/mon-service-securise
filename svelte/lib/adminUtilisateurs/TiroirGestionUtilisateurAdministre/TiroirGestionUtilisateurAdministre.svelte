@@ -91,6 +91,12 @@
       />
     </div>
     <div slot="panel-1" class="conteneur-onglet">
+      <div class="titre-tableau">
+        <h4>Entités et services auxquels {utilisateur.prenomNom} a accès</h4>
+        <span
+          >Modifier son rôle ou retirer son accès sur un ou plusieurs services.</span
+        >
+      </div>
       <TableauEntitesSelectionnables
         {toutesEntites}
         servicesParEntite={servicesActuelsParEntite}
@@ -106,6 +112,13 @@
       />
     </div>
     <div slot="panel-2" class="conteneur-onglet">
+      <div class="titre-tableau">
+        <h4>Ajouter {utilisateur.prenomNom} à d'autres services</h4>
+        <span
+          >Sélectionnez les entités et services de votre périmètre auxquels {utilisateur.prenomNom}
+          n'a pas encore accès. Vous devez attribuer un rôle.</span
+        >
+      </div>
       <TableauEntitesSelectionnables
         {toutesEntites}
         servicesParEntite={servicesDisponiblesParEntite}
@@ -116,5 +129,25 @@
 </ContenuTiroir>
 <ActionsTiroir></ActionsTiroir>
 
-<style>
+<style lang="scss">
+  .titre-tableau {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    h4 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      line-height: 1.75rem;
+      margin: 0;
+    }
+
+    span {
+      color: #666666;
+      max-width: 620px;
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+      margin-bottom: 24px;
+    }
+  }
 </style>

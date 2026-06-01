@@ -56,8 +56,23 @@
       selectionneService(service.id, doitSelectionner);
     }
   };
+
+  let nombreTotalServices = $derived(
+    Object.values(servicesParEntite).flatMap((s) => s).length
+  );
 </script>
 
+<div class="barre-actions">
+  <span class="sous-texte">
+    {#if servicesSelectionnes.size > 0}
+      {@const pluriel = servicesSelectionnes.size > 1 ? 's' : ''}
+      {servicesSelectionnes.size} service{pluriel} sélectionné{pluriel}
+    {:else}
+      {nombreTotalServices} service{nombreTotalServices > 1 ? 's' : ''} au total
+    {/if}
+  </span>
+  <div></div>
+</div>
 <table>
   <thead>
     <tr>
@@ -113,12 +128,12 @@
         </td>
         <td>
           {#if estAdmin}
-            <span class="nombre-services">Géré via le droit admin</span>
+            <span class="sous-texte">Géré via le droit admin</span>
           {:else}
             {@const nombreServicesSelectionnes = services.filter((s) =>
               servicesSelectionnes.has(s.id)
             ).length}
-            <span class="nombre-services"
+            <span class="sous-texte"
               >{nombreServicesSelectionnes} sélectionné{nombreServicesSelectionnes >
               1
                 ? 's'
@@ -237,12 +252,17 @@
         font-weight: 700;
         line-height: 1.5rem;
       }
-
-      .nombre-services {
-        font-size: 0.75rem;
-        color: #929292;
-        white-space: nowrap;
-      }
     }
+  }
+
+  .barre-actions {
+    margin-bottom: 12px;
+  }
+
+  .sous-texte {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #929292;
+    white-space: nowrap;
   }
 </style>
