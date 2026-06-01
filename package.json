@@ -39,7 +39,7 @@
     "@tiptap/extension-placeholder": "^3.22.5",
     "@tiptap/starter-kit": "^3.22.5",
     "@tiptap/suggestion": "^3.22.5",
-    "axios": "^1.15.2",
+    "axios": "^1.16.0",
     "axios-retry": "^4.5.0",
     "bcrypt": "^6.0.0",
     "commander": "^14.0.0",
