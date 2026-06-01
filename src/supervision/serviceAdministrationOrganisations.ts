@@ -12,6 +12,7 @@ import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRecherch
 import { Contributeur } from '../modeles/contributeur.js';
 import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
+import { ErreurSuppressionImpossible } from '../erreurs.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{ id: UUID; prenomNom: string }>;
@@ -85,10 +86,12 @@ export class ServiceAdministrationOrganisations {
 
     if (!admin) return;
 
+    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+    if (services.some((s) => s.contributeurs.length === 1))
+      throw new ErreurSuppressionImpossible();
+
     admin?.cesseDAdministrer(new Entite({ siret }));
     await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
-
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
     await Promise.all(
       services.map((service) => this.rattacheLesAdministrateursDe(service))
     );

@@ -6,6 +6,7 @@ import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import Superviseur from '../../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
+import { ErreurSuppressionImpossible } from '../../../src/erreurs.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -202,7 +203,6 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
 
     it('dédoublonne les emails', async () => {
-      const idAdmin = unUUID('A');
       const email = 'jean.dujardin@beta.gouv.fr';
       testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
       testeur.depotDonnees().utilisateurAvecEmail = async (e: string) =>
@@ -308,6 +308,20 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       });
 
       expect(status).toBe(400);
+    });
+
+    it('jette une erreur 422 si la suppression est impossible', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
+      testeur.serviceAdministrationOrganisations().retireAdmin = async () => {
+        throw new ErreurSuppressionImpossible();
+      };
+
+      const { status } = await testeur.delete('/api/admin', {
+        siret,
+        idUtilisateur: idAdminASupprimer,
+      });
+
+      expect(status).toBe(422);
     });
 
     describe('applique les contrôles de permissions suivants', () => {

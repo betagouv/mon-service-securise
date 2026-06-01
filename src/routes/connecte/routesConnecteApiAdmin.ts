@@ -10,6 +10,7 @@ import {
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
 import { Middleware } from '../../http/middleware.interface.js';
+import { ErreurSuppressionImpossible } from '../../erreurs.js';
 
 type Configuration = {
   depotDonnees: DepotDonnees;
@@ -114,7 +115,7 @@ const routesConnecteApiAdmin = ({
   routes.delete(
     '/',
     valideBody(schemaDeleteAdmin),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       const { siret, idUtilisateur } = requete.body;
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
@@ -123,11 +124,19 @@ const routesConnecteApiAdmin = ({
         return;
       }
 
-      await serviceAdministrationOrganisations.retireAdmin(
-        siret,
-        idUtilisateur as UUID
-      );
-      reponse.sendStatus(200);
+      try {
+        await serviceAdministrationOrganisations.retireAdmin(
+          siret,
+          idUtilisateur as UUID
+        );
+        reponse.sendStatus(200);
+      } catch (erreur) {
+        if (erreur instanceof ErreurSuppressionImpossible) {
+          reponse.sendStatus(422);
+          return;
+        }
+        suite(erreur);
+      }
     }
   );
 
