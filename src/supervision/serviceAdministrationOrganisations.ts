@@ -15,7 +15,12 @@ import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisate
 import { ErreurSuppressionImpossible } from '../erreurs.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
-  administrateurs: Array<{ id: UUID; prenomNom: string }>;
+  administrateurs: Array<{
+    id: UUID;
+    prenomNom: string;
+    initiales: string;
+    postes: string;
+  }>;
   nombreServices: number;
   nombreUtilisateurs: number;
 };

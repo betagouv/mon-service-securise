@@ -1,5 +1,4 @@
 import testeurMSS from '../testeurMSS.js';
-import { DonneesEntite } from '../../../src/modeles/entite.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
@@ -33,14 +32,31 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         idUtilisateur: UUID
       ) => {
         idAdmin = idUtilisateur;
-        return [{ siret: '123', nom: 'Une entite', departement: '33' }];
+        return [
+          {
+            siret: '123',
+            nom: 'Une entite',
+            nombreServices: 2,
+            nombreUtilisateurs: 4,
+            administrateurs: [{ id: 'U1' }, { id: 'U2' }],
+          },
+        ];
       };
 
       const reponse = await testeur.get('/api/admin/entites');
 
       expect(idAdmin).toBe('U1');
-      expect(reponse.body).toEqual<DonneesEntite[]>([
-        { siret: '123', nom: 'Une entite', departement: '33' },
+      expect(reponse.body).toEqual([
+        {
+          siret: '123',
+          nom: 'Une entite',
+          nombreServices: 2,
+          nombreUtilisateurs: 4,
+          administrateurs: [
+            { id: 'U1', estUtilisateurCourant: true },
+            { id: 'U2', estUtilisateurCourant: false },
+          ],
+        },
       ]);
     });
   });
