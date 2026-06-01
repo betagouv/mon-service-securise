@@ -13,6 +13,7 @@
   import { SvelteSet } from 'svelte/reactivity';
   import AucunAdmin from './AucunAdmin.svelte';
   import ConfirmationSuppression from './ConfirmationSuppression.svelte';
+  import type { AxiosError } from 'axios';
 
   interface Props {
     entite: EntiteSupervisee;
@@ -63,8 +64,25 @@
       etatAffichage = 'LISTE';
     },
     valider: async () => {
-      await api.supprimerAdmin(adminPourSuppression!);
-      etatAffichage = 'LISTE';
+      try {
+        await api.supprimeAdmin(adminPourSuppression!, entite.siret);
+        etatAffichage = 'LISTE';
+        toasterStore.succes(
+          'Admin supprimé avec succès',
+          `L'administrateur a bien été supprimé de l'entité ${entite.nom}`
+        );
+        document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
+        tiroirStore.ferme();
+      } catch (e) {
+        const erreurAxios = e as AxiosError;
+        if (erreurAxios?.response?.status === 422) {
+          toasterStore.erreur(
+            "Impossible de supprimer l'admin",
+            `L'administrateur est seul contributeur d'un service de ${entite.nom} : il ne peut pas être supprimé`
+          );
+          etatAffichage = 'LISTE';
+        }
+      }
     },
   };
 </script>
