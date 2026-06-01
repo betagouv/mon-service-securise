@@ -67,6 +67,14 @@
 
   let tableauActuels: TableauEntitesSelectionnables;
   let tableauDisponibles: TableauEntitesSelectionnables;
+
+  const onAjouteRole = (idServicesSelectionnes: string[]) => {
+    console.log(idServicesSelectionnes);
+  };
+
+  const onRetireAcces = (idServicesSelectionnes: string[]) => {
+    console.log(idServicesSelectionnes);
+  };
 </script>
 
 <ContenuTiroir>
@@ -101,6 +109,8 @@
         {toutesEntites}
         servicesParEntite={servicesActuelsParEntite}
         bind:this={tableauActuels}
+        {onAjouteRole}
+        {onRetireAcces}
       />
     </div>
 
@@ -123,6 +133,8 @@
         {toutesEntites}
         servicesParEntite={servicesDisponiblesParEntite}
         bind:this={tableauDisponibles}
+        {onAjouteRole}
+        {onRetireAcces}
       />
     </div>
   </dsfr-tabs>
