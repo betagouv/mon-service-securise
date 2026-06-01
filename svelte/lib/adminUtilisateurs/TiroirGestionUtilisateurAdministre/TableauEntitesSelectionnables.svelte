@@ -60,6 +60,24 @@
   let nombreTotalServices = $derived(
     Object.values(servicesParEntite).flatMap((s) => s).length
   );
+  let nombreTotalServicesSelectionnables = $derived(
+    Object.values(servicesParEntite)
+      .flatMap((s) => s)
+      .filter((s) => s.role !== 'ADMIN').length
+  );
+
+  let toutEstSelectionne = $derived(
+    servicesSelectionnes.size === nombreTotalServicesSelectionnables
+  );
+  const basculeTouteSelection = () => {
+    if (toutEstSelectionne) servicesSelectionnes.clear();
+    else
+      for (const service of Object.values(servicesParEntite).flatMap(
+        (s) => s
+      )) {
+        if (service.role !== 'ADMIN') servicesSelectionnes.add(service.id);
+      }
+  };
 </script>
 
 <div class="barre-actions">
@@ -71,7 +89,15 @@
       {nombreTotalServices} service{nombreTotalServices > 1 ? 's' : ''} au total
     {/if}
   </span>
-  <div></div>
+  <div>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label={toutEstSelectionne ? 'Tout désélectionner' : 'Tout sélectionner'}
+      onclick={() => basculeTouteSelection()}
+      kind="tertiary-no-outline"
+      size="sm"
+    ></dsfr-button>
+  </div>
 </div>
 <table>
   <thead>
@@ -257,6 +283,9 @@
 
   .barre-actions {
     margin-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .sous-texte {
