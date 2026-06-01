@@ -22,11 +22,12 @@
         href="#les-documents-utiles"
         icone="telecharger-blanc"
       />
-      <Lien
-        titre="Consulter les articles"
-        type="bouton-secondaire"
+      <dsfr-button
+        markup="a"
+        label="Consulter les articles"
+        kind="inverted-primary"
         href="/conseils-cyber"
-      />
+      ></dsfr-button>
     </div>
   </div>
   <img
