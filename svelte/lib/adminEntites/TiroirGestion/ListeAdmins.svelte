@@ -17,6 +17,7 @@
       initiales={admin.initiales}
       postes={admin.postes}
       onsupprimer={() => onsupprimer(admin)}
+      estSeulAdmin={administrateurs.length === 1}
     />
   {/each}
 </div>
