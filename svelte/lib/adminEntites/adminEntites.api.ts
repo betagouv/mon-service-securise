@@ -20,7 +20,8 @@ export const api = {
       throw e;
     }
   },
-  supprimerAdmin: async (cible: AdminSupervise) => {
-    console.log(`✅ SUPPRESSION DE`, cible);
-  },
+  supprimeAdmin: async (cible: AdminSupervise, siret: string) =>
+    await axios.delete('/api/admin', {
+      data: { siret, idUtilisateur: cible.id },
+    }),
 };
