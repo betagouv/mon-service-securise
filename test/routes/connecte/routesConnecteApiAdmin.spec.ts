@@ -91,6 +91,13 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         Superviseur.nouveau(unUUIDRandom());
     });
 
+    it('applique une protection de trafic', async () => {
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+        method: 'post',
+        url: '/api/admin/verifieEmail',
+      });
+    });
+
     it("renvoie une erreur 403 si l'utilisateur courant n'est pas superviseur", async () => {
       testeur.depotDonnees().lisSuperviseur = async () => undefined;
 

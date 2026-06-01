@@ -9,14 +9,17 @@ import {
 } from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
+import { Middleware } from '../../http/middleware.interface.js';
 
 type Configuration = {
   depotDonnees: DepotDonnees;
+  middleware: Middleware;
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 };
 
 const routesConnecteApiAdmin = ({
   depotDonnees,
+  middleware,
   serviceAdministrationOrganisations,
 }: Configuration) => {
   const routes = express.Router();
@@ -61,6 +64,7 @@ const routesConnecteApiAdmin = ({
 
   routes.post(
     '/verifieEmail',
+    middleware.protegeTrafic(),
     valideBody(z.strictObject({ email: z.email() })),
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
