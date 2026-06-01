@@ -16,7 +16,9 @@
       prenomNom={admin.prenomNom}
       initiales={admin.initiales}
       postes={admin.postes}
-      onsupprimer={() => onsupprimer(admin)}
+      onsupprimer={admin.estUtilisateurCourant
+        ? undefined
+        : () => onsupprimer(admin)}
       estSeulAdmin={administrateurs.length === 1}
     />
   {/each}

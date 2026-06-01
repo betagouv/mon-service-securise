@@ -5,6 +5,7 @@ export type AdminSupervise = {
   prenomNom: string;
   initiales: string;
   postes: string;
+  estUtilisateurCourant: boolean;
 };
 
 export type EntiteSupervisee = Entite & {
