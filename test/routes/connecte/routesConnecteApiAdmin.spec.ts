@@ -137,6 +137,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
   describe('quand requête POST sur `/api/admin/nomme`', () => {
     const siret = '13000766900018';
     const idSuperviseur = unUUID('S');
+    const idAdmin = unUUID('A');
 
     beforeEach(() => {
       testeur.depotDonnees().lisSuperviseur = async () =>
@@ -221,7 +222,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    describe('applique les contrôles de permissions suivants', () => {
+    describe('applique les contrôles de permissions', () => {
       beforeEach(() => {
         testeur.depotDonnees().lisSuperviseur = async () => undefined;
         testeur.depotDonnees().lisAdminOrganisations = async () => undefined;
@@ -229,14 +230,14 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
       it("jette une erreur si l'utilisateur n'est ni superviseur, ni admin", async () => {
         const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['inconnu@mail.fr'],
+          emails: ['utilisateur_lambda@mail.fr'],
           siret,
         });
 
         expect(status).toBe(403);
       });
 
-      it("jette une erreur si un superviseur veut nommer sur un SIRET qui n'est pas dans on périmètre", async () => {
+      it("jette une erreur si un superviseur veut nommer sur un SIRET qui n'est pas dans son périmètre", async () => {
         testeur.depotDonnees().lisSuperviseur = async () =>
           Superviseur.hydrate({
             idUtilisateur: idSuperviseur,
@@ -245,23 +246,23 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
         const unAutreSiret = '13000766900999';
         const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['inconnu@mail.fr'],
+          emails: ['futur_admin@mail.fr'],
           siret: unAutreSiret,
         });
 
         expect(status).toBe(403);
       });
 
-      it("jette une erreur si un admin veut nommer sur un SIRET qui n'est pas dans on périmètre", async () => {
+      it("jette une erreur si un admin veut nommer sur un SIRET qui n'est pas dans son périmètre", async () => {
         testeur.depotDonnees().lisAdminOrganisations = async () =>
           AdminOrganisations.hydrate({
-            idUtilisateur: idSuperviseur,
+            idUtilisateur: idAdmin,
             entitesAdministrees: [{ siret }],
           });
 
         const unAutreSiret = '13000766900999';
         const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['inconnu@mail.fr'],
+          emails: ['futur_admin@mail.fr'],
           siret: unAutreSiret,
         });
 
