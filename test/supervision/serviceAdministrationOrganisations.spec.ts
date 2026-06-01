@@ -22,6 +22,7 @@ import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/adminOrganisations.ts';
+import { ErreurSuppressionImpossible } from '../../src/erreurs.ts';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -367,11 +368,13 @@ describe("Le service de gestion des admins d'organisation", () => {
     let service: ServiceAdministrationOrganisations;
     const siret = 'SIRET-1';
     const autreSiret = '12345';
+    const siretEnErreur = 'SIRET-ERREUR';
     const idService2 = unUUID('S2');
+    const idService3 = unUUID('S3');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
-        .ajouteAdminSurPerimetre(idAdmin, [siret])
+        .ajouteAdminSurPerimetre(idAdmin, [siret, siretEnErreur])
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUnService(
           unServiceV2().avecId(idService).avecOrganisationResponsable({ siret })
@@ -382,6 +385,11 @@ describe("Le service de gestion des admins d'organisation", () => {
             .avecId(idService2)
             .avecOrganisationResponsable({ siret: autreSiret }).donnees
         )
+        .ajouteUnService(
+          unServiceV2()
+            .avecId(idService3)
+            .avecOrganisationResponsable({ siret: siretEnErreur }).donnees
+        )
         .ajouteUneAutorisation(
           uneAutorisation().dAdmin(idAdmin, idService).donnees
         )
@@ -390,6 +398,9 @@ describe("Le service de gestion des admins d'organisation", () => {
         )
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire(idAdmin, idService2).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idAdmin, idService3).donnees
         )
         .construis() as unknown as AdaptateurPersistance;
       adaptateurPersistanceTS = unePersistanceMemoireTS()
@@ -403,10 +414,6 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       service = leServiceDAdministrationDesOrgas();
     });
-
-    it.todo(
-      "ne supprime pas l'autorisation si l'admin est seul contributeur d'un service"
-    );
 
     it("ne jette pas d'erreur si l'utilisateur n'est pas admin", async () => {
       await expect(
@@ -425,8 +432,14 @@ describe("Le service de gestion des admins d'organisation", () => {
       await service.retireAdmin(siret, idAdmin);
 
       const autorisations = await depotComplet.autorisations(idAdmin);
-      expect(autorisations).toHaveLength(1);
+      expect(autorisations).toHaveLength(2);
       expect(autorisations[0].idService).toBe(idService2);
+    });
+
+    it("jette une erreur si l'admin est seul contributeurs d'un des services administrés", async () => {
+      await expect(service.retireAdmin(siretEnErreur, idAdmin)).rejects.toThrow(
+        new ErreurSuppressionImpossible()
+      );
     });
   });
 });
