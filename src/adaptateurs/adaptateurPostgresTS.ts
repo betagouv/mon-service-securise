@@ -27,6 +27,13 @@ export class AdaptateurPostgresTS implements PersistanceTS {
   }
 
   async sauvegardeAdminOrganisations(donnees: DonneesAdminOrganisations) {
+    if (donnees.entitesAdministrees.length === 0) {
+      await this.knex(TABLES.ADMINS_ORGANISATIONS)
+        .where('id_utilisateur', donnees.idUtilisateur)
+        .delete();
+      return;
+    }
+
     const donneesAInserer = await Promise.all(
       donnees.entitesAdministrees.map(async (d) => ({
         id_utilisateur: donnees.idUtilisateur,
@@ -37,6 +44,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     const siretsHashAConserver = donneesAInserer.map((d) => d.siret_hash);
     await this.knex(TABLES.ADMINS_ORGANISATIONS)
       .whereNotIn('siret_hash', siretsHashAConserver)
+      .where('id_utilisateur', donnees.idUtilisateur)
       .delete();
     await this.knex(TABLES.ADMINS_ORGANISATIONS)
       .insert(donneesAInserer)

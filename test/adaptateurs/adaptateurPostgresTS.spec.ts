@@ -316,5 +316,41 @@ describe("L'adaptateur persistance Postgres", () => {
         entitesAdministrees: [donneesEntiteB, donneesEntiteC],
       });
     });
+
+    it("supprime l'admin s'il n'a plus d'entités administrées", async () => {
+      const idAdmin = unUUIDRandom();
+      const donneesEntite = { siret: 'siret' };
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [donneesEntite],
+      });
+
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin,
+        entitesAdministrees: [],
+      });
+
+      const adminSauvegarde = await persistance.lisAdminOrganisations(idAdmin);
+      expect(adminSauvegarde).toBeUndefined();
+    });
+
+    it('ne supprime pas les autres admins', async () => {
+      const idAdmin1 = unUUIDRandom();
+      const idAdmin2 = unUUIDRandom();
+      const donneesEntite1 = { siret: 'siret-1' };
+      const donneesEntite2 = { siret: 'siret-2' };
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin1,
+        entitesAdministrees: [donneesEntite1],
+      });
+
+      await persistance.sauvegardeAdminOrganisations({
+        idUtilisateur: idAdmin2,
+        entitesAdministrees: [donneesEntite2],
+      });
+
+      const adminSauvegarde = await persistance.lisAdminOrganisations(idAdmin1);
+      expect(adminSauvegarde).toBeDefined();
+    });
   });
 });
