@@ -1,14 +1,22 @@
 <script lang="ts">
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
+  import Infobulle from '../../ui/Infobulle.svelte';
 
   interface Props {
     prenomNom: string;
     initiales?: string;
     postes?: string;
     onsupprimer?: () => void;
+    estSeulAdmin?: boolean;
   }
 
-  let { prenomNom, initiales, postes, onsupprimer }: Props = $props();
+  let {
+    prenomNom,
+    initiales,
+    postes,
+    onsupprimer,
+    estSeulAdmin = false,
+  }: Props = $props();
 </script>
 
 <div class="cartouche-admin">
@@ -16,12 +24,20 @@
     <div class="initiales"><span>{initiales}</span></div>
   {/if}
   <div class="identite">
-    <span class="nom-prenom">{prenomNom}</span>
+    <span class="nom-prenom"
+      >{prenomNom}
+
+      {#if estSeulAdmin}
+        <Infobulle
+          contenu="Cet admin ne peut être supprimé car il est potentiellement seul contributeur des services de cette entité."
+        />
+      {/if}
+    </span>
     {#if postes}
       <span class="postes">{postes}</span>
     {/if}
   </div>
-  {#if onsupprimer}
+  {#if onsupprimer && !estSeulAdmin}
     <BoutonSuppressionContributeur onclick={onsupprimer} />
   {/if}
 </div>
@@ -45,6 +61,9 @@
         font-size: 1rem;
         line-height: 1.5rem;
         color: #3a3a3a;
+        display: flex;
+        gap: 4px;
+        align-items: center;
       }
 
       .postes {
