@@ -60,10 +60,11 @@
     </div>
     <div slot="cell:nombreServices:{i}">
       <span>
-        {#if utilisateur.nombreServices === 0}
+        {#if utilisateur.autorisations.length === 0}
           Aucun service
         {:else}
-          {utilisateur.nombreServices} service{utilisateur.nombreServices > 1
+          {utilisateur.autorisations.length} service{utilisateur.autorisations
+            .length > 1
             ? 's'
             : ''}
         {/if}
