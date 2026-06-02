@@ -8,6 +8,7 @@
   import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
   import BadgeAdmin from './BadgeAdmin.svelte';
   import type { UtilisateurAdministre } from './adminUtilisateurs.types';
+  import Toaster from '../ui/Toaster.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
@@ -22,6 +23,7 @@
   };
 </script>
 
+<Toaster />
 <h1>Utilisateurs</h1>
 
 <Tuiles nombreUtilisateurs={mesUtilisateurs.length} {mesEntites} />
