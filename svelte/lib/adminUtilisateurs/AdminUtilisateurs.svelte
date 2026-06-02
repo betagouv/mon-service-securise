@@ -7,6 +7,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
   import BadgeAdmin from './BadgeAdmin.svelte';
+  import TiroirNommerAdmin from './TiroirNommerAdmin/TiroirNommerAdmin.svelte';
   import type { UtilisateurAdministre } from './adminUtilisateurs.types';
   import Toaster from '../ui/Toaster.svelte';
 
@@ -84,6 +85,20 @@
         size="sm"
         onclick={() => {
           tiroirStore.afficheContenu(TiroirGestionUtilisateurAdministre, {
+            utilisateur,
+            toutesEntites: mesEntites,
+          });
+        }}
+      ></dsfr-button>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="secondary"
+        label={utilisateur.estAdmin
+          ? 'Gérer le droit admin'
+          : "Nommer en tant qu'admin"}
+        size="sm"
+        onclick={() => {
+          tiroirStore.afficheContenu(TiroirNommerAdmin, {
             utilisateur,
             toutesEntites: mesEntites,
           });
