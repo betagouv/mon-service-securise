@@ -10,7 +10,7 @@
     toutesEntites: Array<EntiteSupervisee>;
     servicesParEntite: Record<SIRET, ServiceAdministre[]>;
     onAjouteRole: (idServicesSelectionnes: string[]) => void;
-    onRetireAcces: (idServicesSelectionnes: string[]) => void;
+    onRetireAcces?: (idServicesSelectionnes: string[]) => void;
   }
 
   let { toutesEntites, servicesParEntite, onAjouteRole, onRetireAcces }: Props =
@@ -104,17 +104,19 @@
       icon-place="left"
       disabled={servicesSelectionnes.size === 0}
     ></dsfr-button>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Retirer"
-      onclick={() => onRetireAcces([...servicesSelectionnes])}
-      kind="tertiary-no-outline"
-      size="sm"
-      has-icon
-      icon="delete-bin-line"
-      icon-place="left"
-      disabled={servicesSelectionnes.size === 0}
-    ></dsfr-button>
+    {#if onRetireAcces}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Retirer"
+        onclick={() => onRetireAcces([...servicesSelectionnes])}
+        kind="tertiary-no-outline"
+        size="sm"
+        has-icon
+        icon="delete-bin-line"
+        icon-place="left"
+        disabled={servicesSelectionnes.size === 0}
+      ></dsfr-button>
+    {/if}
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
       label={toutEstSelectionne ? 'Tout désélectionner' : 'Tout sélectionner'}

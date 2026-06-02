@@ -101,9 +101,9 @@
     <div slot="panel-1" class="conteneur-onglet">
       <div class="titre-tableau">
         <h4>Entités et services auxquels {utilisateur.prenomNom} a accès</h4>
-        <span
-          >Modifier son rôle ou retirer son accès sur un ou plusieurs services.</span
-        >
+        <span>
+          Modifier son rôle ou retirer son accès sur un ou plusieurs services.
+        </span>
       </div>
       <TableauEntitesSelectionnables
         {toutesEntites}
@@ -134,7 +134,6 @@
         servicesParEntite={servicesDisponiblesParEntite}
         bind:this={tableauDisponibles}
         {onAjouteRole}
-        {onRetireAcces}
       />
     </div>
   </dsfr-tabs>
