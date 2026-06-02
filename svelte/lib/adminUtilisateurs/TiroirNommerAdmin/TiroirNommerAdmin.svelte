@@ -4,6 +4,8 @@
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import { siretsOuIlEstAdmin, statsDesEntites } from './tiroirNommerAdmin';
+  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -68,6 +70,24 @@
       (siretsSelectionnes = e.detail.keys)}
   ></dsfr-table>
 </ContenuTiroir>
+
+<ActionsTiroir>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button
+    label="Annuler"
+    onclick={tiroirStore.ferme}
+    kind="tertiary-no-outline"
+  ></dsfr-button>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button
+    label="Récapitulatif"
+    onclick={() => {}}
+    kind="primary"
+    hasIcon
+    icon-place="right"
+    icon="arrow-right-line"
+  ></dsfr-button>
+</ActionsTiroir>
 
 <style lang="scss">
   h1 {
