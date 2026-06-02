@@ -2,6 +2,7 @@
   import { untrack } from 'svelte';
   import type { UtilisateurAdministre } from '../adminUtilisateurs.api';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
+  import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -23,11 +24,22 @@
   );
 
   export const taille = 'large';
+
+  let etape: 'SELECTION' | 'RECAPITULATIF' = $state('SELECTION');
 </script>
 
-<pre>{JSON.stringify(utilisateur, null, 2)}</pre>
+<ContenuTiroir>
+  <dsfr-stepper
+    title={etape === 'SELECTION' ? 'Sélection des entités' : 'Récapitulatif'}
+    nextStep={etape === 'SELECTION' ? 'Récapitulatif' : undefined}
+    currentStep={etape === 'SELECTION' ? 1 : 2}
+    stepCount={2}
+  ></dsfr-stepper>
 
-<pre>{JSON.stringify(toutesEntites, null, 2)}</pre>
+  <pre>{JSON.stringify(utilisateur, null, 2)}</pre>
+
+  <pre>{JSON.stringify(toutesEntites, null, 2)}</pre>
+</ContenuTiroir>
 
 <style lang="scss">
   h1 {
