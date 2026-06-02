@@ -3,7 +3,7 @@
   import type { UtilisateurAdministre } from '../adminUtilisateurs.api';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
-  import { siretsOuIlEstAdmin } from './tiroirNommerAdmin';
+  import { siretsOuIlEstAdmin, statsDesEntites } from './tiroirNommerAdmin';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -31,6 +31,9 @@
   let siretsSelectionnes: Array<string> = $state(
     untrack(() => siretsOuIlEstAdmin(utilisateur.id, toutesEntites))
   );
+  let stats = $derived.by(() =>
+    statsDesEntites(toutesEntites, siretsSelectionnes)
+  );
 </script>
 
 <ContenuTiroir>
@@ -42,6 +45,13 @@
   ></dsfr-stepper>
 
   <pre>{siretsSelectionnes}</pre>
+
+  <dsfr-callout
+    has-title
+    title={`${utilisateur.prenomNom} sera admin de ${siretsSelectionnes.length} entité(s))`}
+    text={`soit ${stats.nombreServices} service(s) rattaché(s) et ${stats.nombreUtilisateurs} utilisateur(s) concerné(s)`}
+    accent="blue-ecume"
+  ></dsfr-callout>
 
   <dsfr-table
     columns={[

@@ -1,4 +1,7 @@
-import { siretsOuIlEstAdmin } from '../../../lib/adminUtilisateurs/TiroirNommerAdmin/tiroirNommerAdmin';
+import {
+  siretsOuIlEstAdmin,
+  statsDesEntites,
+} from '../../../lib/adminUtilisateurs/TiroirNommerAdmin/tiroirNommerAdmin';
 import type { EntiteSupervisee } from '../../../lib/adminEntites/adminEntites.types';
 
 describe('Les fonctions du TiroirNommerAdmin', () => {
@@ -30,5 +33,35 @@ describe('Les fonctions du TiroirNommerAdmin', () => {
     const lesSiretsDeU1 = siretsOuIlEstAdmin('U1', entites);
 
     expect(lesSiretsDeU1).toEqual(['SIRET-1']);
+  });
+
+  it("savent calculer le nombre de services et d'utilisateurs de plusieurs entités", () => {
+    const entite1: EntiteSupervisee = {
+      nombreServices: 8,
+      nombreUtilisateurs: 4,
+      siret: 'SIRET-1',
+      administrateurs: [],
+    };
+
+    const entite2: EntiteSupervisee = {
+      nombreServices: 2,
+      nombreUtilisateurs: 1,
+      siret: 'SIRET-2',
+      administrateurs: [],
+    };
+
+    const entite3: EntiteSupervisee = {
+      nombreServices: 2,
+      nombreUtilisateurs: 1,
+      siret: 'SIRET-3',
+      administrateurs: [],
+    };
+
+    const resultat = statsDesEntites(
+      [entite1, entite2, entite3],
+      ['SIRET-1', 'SIRET-2']
+    );
+
+    expect(resultat).toEqual({ nombreServices: 10, nombreUtilisateurs: 5 });
   });
 });
