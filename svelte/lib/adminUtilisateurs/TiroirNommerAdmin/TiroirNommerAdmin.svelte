@@ -46,47 +46,71 @@
     stepCount={2}
   ></dsfr-stepper>
 
-  <pre>{siretsSelectionnes}</pre>
+  {#if etape === 'SELECTION'}
+    <dsfr-callout
+      has-title
+      title={`${utilisateur.prenomNom} sera admin de ${siretsSelectionnes.length} entité(s))`}
+      text={`soit ${stats.nombreServices} service(s) rattaché(s) et ${stats.nombreUtilisateurs} utilisateur(s) concerné(s)`}
+      accent="blue-ecume"
+    ></dsfr-callout>
 
-  <dsfr-callout
-    has-title
-    title={`${utilisateur.prenomNom} sera admin de ${siretsSelectionnes.length} entité(s))`}
-    text={`soit ${stats.nombreServices} service(s) rattaché(s) et ${stats.nombreUtilisateurs} utilisateur(s) concerné(s)`}
-    accent="blue-ecume"
-  ></dsfr-callout>
-
-  <dsfr-table
-    columns={[
-      { key: 'nom', label: 'Nom' },
-      { key: 'siret', label: 'SIRET' },
-      { key: 'nombreServices', label: 'Services rattachés' },
-    ]}
-    rows={toutesEntites}
-    row-key="siret"
-    selectable
-    select-all
-    selected-row-keys={JSON.stringify(siretsSelectionnes)}
-    onselectionchanged={(e: CustomEvent<{ keys: Array<string> }>) =>
-      (siretsSelectionnes = e.detail.keys)}
-  ></dsfr-table>
+    <dsfr-table
+      columns={[
+        { key: 'nom', label: 'Nom' },
+        { key: 'siret', label: 'SIRET' },
+        { key: 'nombreServices', label: 'Services rattachés' },
+      ]}
+      rows={toutesEntites}
+      row-key="siret"
+      selectable
+      select-all
+      selected-row-keys={JSON.stringify(siretsSelectionnes)}
+      onselectionchanged={(e: CustomEvent<{ keys: Array<string> }>) =>
+        (siretsSelectionnes = e.detail.keys)}
+    ></dsfr-table>
+  {/if}
 </ContenuTiroir>
 
 <ActionsTiroir>
-  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-  <dsfr-button
-    label="Annuler"
-    onclick={tiroirStore.ferme}
-    kind="tertiary-no-outline"
-  ></dsfr-button>
-  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-  <dsfr-button
-    label="Récapitulatif"
-    onclick={() => {}}
-    kind="primary"
-    hasIcon
-    icon-place="right"
-    icon="arrow-right-line"
-  ></dsfr-button>
+  {#if etape === 'SELECTION'}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Annuler"
+      onclick={tiroirStore.ferme}
+      kind="tertiary-no-outline"
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Récapitulatif"
+      onclick={() => {
+        etape = 'RECAPITULATIF';
+      }}
+      kind="primary"
+      hasIcon
+      icon-place="right"
+      icon="arrow-right-line"
+    ></dsfr-button>
+  {/if}
+  {#if etape === 'RECAPITULATIF'}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Précédent"
+      onclick={() => (etape = 'SELECTION')}
+      kind="tertiary-no-outline"
+      hasIcon
+      icon="arrow-left-line"
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Enregistrer les modifications"
+      onclick={() => {
+        etape = 'RECAPITULATIF';
+      }}
+      kind="primary"
+      hasIcon
+      icon="check-line"
+    ></dsfr-button>
+  {/if}
 </ActionsTiroir>
 
 <style lang="scss">
