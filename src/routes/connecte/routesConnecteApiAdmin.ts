@@ -65,7 +65,10 @@ const routesConnecteApiAdmin = ({
         postes: u.posteDetaille(),
         estAdmin: u.estAdmin,
         nombreEntites: u.nombreEntites,
-        nombreServices: u.nombreServices,
+        autorisations: u.autorisations.map((a) => ({
+          idService: a.idService,
+          role: a.resumeNiveauDroit(),
+        })),
       }))
     );
   });

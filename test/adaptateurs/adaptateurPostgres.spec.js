@@ -103,6 +103,7 @@ describe("L'adaptateur persistance Postgres", () => {
       idAutorisation,
       autorisation.donneesAPersister()
     );
+    return idAutorisation;
   }
 
   async function insereAutorisationContributeur(idUtilisateur, idService) {
@@ -386,15 +387,18 @@ describe("L'adaptateur persistance Postgres", () => {
     let u1;
     let u2;
     let admin;
+    let idService1;
+    let idService2;
+    let idAutorisationU2;
 
     beforeEach(async () => {
-      const idService1 = await insereService('siret-1');
-      const idService2 = await insereService('siret-1');
+      idService1 = await insereService('siret-1');
+      idService2 = await insereService('siret-1');
       u1 = await insereUtilisateur();
       u2 = await insereUtilisateur();
       admin = await insereUtilisateur();
       await insereAutorisation(u1, idService1);
-      await insereAutorisation(u2, idService2);
+      idAutorisationU2 = await insereAutorisation(u2, idService2);
       await insereAutorisation(u1, idService2);
       await insereAutorisationAdmin(admin, idService1);
       await insereAutorisationAdmin(admin, idService2);
@@ -440,15 +444,34 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(utilisateurs.find((u) => u.id === u1).nombreEntites).to.be(1);
     });
 
-    it("précise le nombre de services du périmètre de l'admin appelant sur lesquels l'utilisateur est contributeur", async () => {
+    it("précise les autorisations de service du périmètre de l'admin appelant sur lesquels l'utilisateur est contributeur", async () => {
       await insereAdmin(admin, 'siret-1');
       const idServicePasAdministre = await insereService('autre-siret');
       await insereAutorisation(u1, idServicePasAdministre);
 
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
-      expect(utilisateurs.find((u) => u.id === u1).nombreServices).to.be(2);
-      expect(utilisateurs.find((u) => u.id === u2).nombreServices).to.be(1);
+      expect(utilisateurs.find((u) => u.id === u1).autorisations.length).to.be(
+        2
+      );
+      const autorisationsU2 = utilisateurs.find(
+        (u) => u.id === u2
+      ).autorisations;
+      expect(autorisationsU2.length).to.be(1);
+      expect(autorisationsU2[0]).to.eql({
+        estAdmin: false,
+        estProprietaire: true,
+        id: idAutorisationU2,
+        idService: idService2,
+        idUtilisateur: u2,
+        droits: {
+          CONTACTS: 2,
+          DECRIRE: 2,
+          HOMOLOGUER: 2,
+          RISQUES: 2,
+          SECURISER: 2,
+        },
+      });
     });
   });
 
