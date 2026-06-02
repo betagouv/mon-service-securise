@@ -25,3 +25,17 @@ export const statsDesEntites = (
     ),
   };
 };
+
+export const resumeDesModifications = (
+  siretsDepart: string[],
+  siretsArrivee: string[]
+) => {
+  const depart = new Set(siretsDepart);
+  const arrivee = new Set(siretsArrivee);
+
+  const nouvelles = [...arrivee.values().filter((s) => !depart.has(s))];
+  const retirees = [...depart.values().filter((s) => !arrivee.has(s))];
+  const conservees = [...depart.values().filter((s) => arrivee.has(s))];
+
+  return { nouvelles, retirees, conservees };
+};

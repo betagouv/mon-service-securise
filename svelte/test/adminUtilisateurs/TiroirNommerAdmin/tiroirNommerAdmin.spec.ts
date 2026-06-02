@@ -1,7 +1,9 @@
 import {
   siretsOuIlEstAdmin,
   statsDesEntites,
+  resumeDesModifications,
 } from '../../../lib/adminUtilisateurs/TiroirNommerAdmin/tiroirNommerAdmin';
+
 import type { EntiteSupervisee } from '../../../lib/adminEntites/adminEntites.types';
 
 describe('Les fonctions du TiroirNommerAdmin', () => {
@@ -63,5 +65,34 @@ describe('Les fonctions du TiroirNommerAdmin', () => {
     );
 
     expect(resultat).toEqual({ nombreServices: 10, nombreUtilisateurs: 5 });
+  });
+
+  describe('concernant le résumé des modifications', () => {
+    it('trouve les nouvelles entités qui font leur entrée', () => {
+      const siretsDepart = ['SIRET-1'];
+      const siretsArrivee = ['SIRET-1', 'SIRET-2'];
+
+      const resume = resumeDesModifications(siretsDepart, siretsArrivee);
+
+      expect(resume.nouvelles).toEqual(['SIRET-2']);
+    });
+
+    it('trouve les entités qui sont retirées', () => {
+      const siretsDepart = ['SIRET-1', 'SIRET-2', 'SIRET-3'];
+      const siretsArrivee = ['SIRET-2'];
+
+      const resume = resumeDesModifications(siretsDepart, siretsArrivee);
+
+      expect(resume.retirees).toEqual(['SIRET-1', 'SIRET-3']);
+    });
+
+    it('trouve les entités qui sont conservées', () => {
+      const siretsDepart = ['SIRET-1', 'SIRET-2', 'SIRET-3'];
+      const siretsArrivee = ['SIRET-2'];
+
+      const resume = resumeDesModifications(siretsDepart, siretsArrivee);
+
+      expect(resume.conservees).toEqual(['SIRET-2']);
+    });
   });
 });
