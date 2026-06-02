@@ -5,9 +5,17 @@ import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import Superviseur from '../../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
-import { ErreurSuppressionImpossible } from '../../../src/erreurs.ts';
+import {
+  EchecAutorisation,
+  ErreurServiceNonAdministre,
+  ErreurSuppressionImpossible,
+  ErreurUtilisateurNonAdministre,
+} from '../../../src/erreurs.ts';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
-import { DonneesAutorisation } from '../../../src/modeles/autorisations/autorisation.ts';
+import {
+  Autorisation,
+  DonneesAutorisation,
+} from '../../../src/modeles/autorisations/autorisation.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -105,6 +113,96 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           autorisations: [{ idService, role: 'PROPRIETAIRE' }],
         },
       ]);
+    });
+  });
+
+  describe('quand requête POST sur `/api/admin/utilisateurs/:idUtilisateur/roles`', () => {
+    const idAdmin = unUUIDRandom();
+    const idUtilisateurAdministre = unUUIDRandom();
+    const idService = unUUIDRandom();
+
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: idAdmin });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const reponse = await testeur.post(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { role: 'QUINEXISTEPAS', idsServices: false }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si l'id utilisateur est invalide", async () => {
+      const reponse = await testeur.post(
+        `/api/admin/utilisateurs/pas-un-uuid/roles`,
+        { role: 'PROPRIETAIRE', idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si l'utilisateur ne fait pas partie du périmètre de l'admin", async () => {
+      testeur.serviceAdministrationOrganisations().attribueRoleAUtilisateurAdministre =
+        async () => {
+          throw new ErreurUtilisateurNonAdministre();
+        };
+
+      const reponse = await testeur.post(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { role: 'PROPRIETAIRE', idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(403);
+    });
+
+    it("jette une erreur si le service ne fait pas partie du périmètre de l'admin", async () => {
+      testeur.serviceAdministrationOrganisations().attribueRoleAUtilisateurAdministre =
+        async () => {
+          throw new ErreurServiceNonAdministre();
+        };
+
+      const reponse = await testeur.post(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { role: 'PROPRIETAIRE', idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(403);
+    });
+
+    it('jette une erreur si la mise à jour du rôle a échoué', async () => {
+      testeur.serviceAdministrationOrganisations().attribueRoleAUtilisateurAdministre =
+        async () => {
+          throw new EchecAutorisation();
+        };
+
+      const reponse = await testeur.post(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { role: 'PROPRIETAIRE', idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(422);
+    });
+
+    it("délègue au service l'attribution du rôle", async () => {
+      testeur.serviceAdministrationOrganisations().attribueRoleAUtilisateurAdministre =
+        vi.fn();
+
+      await testeur.post(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { role: 'PROPRIETAIRE', idsServices: [idService] }
+      );
+
+      expect(
+        testeur.serviceAdministrationOrganisations()
+          .attribueRoleAUtilisateurAdministre
+      ).toHaveBeenCalledWith(
+        idAdmin,
+        idUtilisateurAdministre,
+        Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+        [idService]
+      );
     });
   });
 

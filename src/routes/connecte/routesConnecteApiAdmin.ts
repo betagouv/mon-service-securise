@@ -2,15 +2,21 @@ import express from 'express';
 import z from 'zod';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
-import { valideBody } from '../../http/validePayloads.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
+  schemaAttributionRoleServices,
   schemaDeleteAdmin,
   schemaPostAdminNomme,
 } from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
 import { Middleware } from '../../http/middleware.interface.js';
-import { ErreurSuppressionImpossible } from '../../erreurs.js';
+import {
+  EchecAutorisation,
+  ErreurServiceNonAdministre,
+  ErreurSuppressionImpossible,
+  ErreurUtilisateurNonAdministre,
+} from '../../erreurs.js';
 
 type Configuration = {
   depotDonnees: DepotDonnees;
@@ -72,6 +78,42 @@ const routesConnecteApiAdmin = ({
       }))
     );
   });
+
+  routes.post(
+    '/utilisateurs/:idUtilisateur/roles',
+    valideBody(schemaAttributionRoleServices),
+    valideParams(z.looseObject({ idUtilisateur: z.uuid() })),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const { idsServices, role } = requete.body;
+      const { idUtilisateur } = requete.params;
+
+      try {
+        await serviceAdministrationOrganisations.attribueRoleAUtilisateurAdministre(
+          idUtilisateurCourant,
+          idUtilisateur as UUID,
+          role,
+          idsServices as UUID[]
+        );
+      } catch (e) {
+        if (
+          e instanceof ErreurUtilisateurNonAdministre ||
+          e instanceof ErreurServiceNonAdministre
+        ) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof EchecAutorisation) {
+          reponse.sendStatus(422);
+          return;
+        }
+        suite(e);
+      }
+
+      reponse.sendStatus(200);
+    }
+  );
 
   routes.post(
     '/verifieEmail',
