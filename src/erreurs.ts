@@ -114,6 +114,9 @@ class ErreurBrouillonInexistant extends ErreurModele {}
 class ErreurMoteurDeReglesV2 extends ErreurModele {}
 class ErreurVersionServiceIncompatible extends ErreurModele {}
 class ErreurSimulationInexistante extends ErreurModele {}
+
+class ErreurUtilisateurNonAdministre extends ErreurModele {}
+class ErreurServiceNonAdministre extends ErreurModele {}
 /* eslint-enable max-classes-per-file */
 
 export {
@@ -174,9 +177,11 @@ export {
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
+  ErreurUtilisateurNonAdministre,
   ErreurValeurSelIncoherente,
   ErreurVersionSelInvalide,
   ErreurVersionServiceIncompatible,
+  ErreurServiceNonAdministre,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
   ErreurFichierXlsInvalide,

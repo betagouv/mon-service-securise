@@ -22,7 +22,13 @@ import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/adminOrganisations.ts';
-import { ErreurSuppressionImpossible } from '../../src/erreurs.ts';
+import {
+  EchecAutorisation,
+  ErreurServiceNonAdministre,
+  ErreurSuppressionImpossible,
+  ErreurUtilisateurNonAdministre,
+} from '../../src/erreurs.ts';
+import { Autorisation } from '../../src/modeles/autorisations/autorisation.ts';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -441,5 +447,98 @@ describe("Le service de gestion des admins d'organisation", () => {
         new ErreurSuppressionImpossible()
       );
     });
+  });
+
+  describe("sur demande d'attribution d'un rôle à un utilisateur administré", () => {
+    let service: ServiceAdministrationOrganisations;
+    const idU1 = unUUID('U1');
+    const idAutreAdmin = unUUID('A2');
+    const idS1 = unUUID('S1');
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
+        .ajouteAdminSurPerimetre(idAutreAdmin, ['SIRET-1'])
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAutreAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS1).donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idAutreAdmin, idS1).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur(idU1, idS1).donnees
+        )
+        .construis() as unknown as AdaptateurPersistance;
+
+      depotComplet = unDepotComplet({ adaptateurPersistance });
+
+      service = leServiceDAdministrationDesOrgas();
+    });
+
+    it("jette une erreur si l'utilisateur n'est pas administré par l'admin courant", async () => {
+      const unAutreUtilisateur = unUUIDRandom();
+
+      await expect(
+        service.attribueRoleAUtilisateurAdministre(
+          idAdmin,
+          unAutreUtilisateur,
+          Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+          [idS1]
+        )
+      ).rejects.toThrow(ErreurUtilisateurNonAdministre);
+    });
+
+    it("jette une erreur si un des services n'est pas administré", async () => {
+      await expect(
+        service.attribueRoleAUtilisateurAdministre(
+          idAdmin,
+          idU1,
+          Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+          [unUUIDRandom()]
+        )
+      ).rejects.toThrow(ErreurServiceNonAdministre);
+    });
+
+    it("jette une erreur si l'utilisateur cible est admin d'un des services ciblés", async () => {
+      await expect(
+        service.attribueRoleAUtilisateurAdministre(
+          idAdmin,
+          idAutreAdmin,
+          Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+          [idS1]
+        )
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
+    it.each([
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+        estProprietaireAttendu: true,
+      },
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.LECTURE,
+        estProprietaireAttendu: false,
+      },
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.ECRITURE,
+        estProprietaireAttendu: false,
+      },
+    ])(
+      'attribue le rôle $role sur chaque service',
+      async ({ role, estProprietaireAttendu }) => {
+        await service.attribueRoleAUtilisateurAdministre(idAdmin, idU1, role, [
+          idS1,
+        ]);
+
+        const autorisationAJour = await depotComplet.autorisationPour(
+          idU1,
+          idS1
+        );
+        expect(autorisationAJour.estProprietaire).toBe(estProprietaireAttendu);
+        expect(autorisationAJour.resumeNiveauDroit()).toBe(role);
+      }
+    );
   });
 });

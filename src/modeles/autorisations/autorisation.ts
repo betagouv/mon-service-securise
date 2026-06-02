@@ -23,9 +23,14 @@ export type DonneesAutorisation = {
   droits: Partial<Droits>;
 };
 
+export type Role =
+  (typeof Autorisation.RESUME_NIVEAU_DROIT)[keyof typeof Autorisation.RESUME_NIVEAU_DROIT];
+
 export class Autorisation extends Base {
   readonly id!: UUID;
   readonly estAdmin?: boolean;
+  readonly idUtilisateur!: UUID;
+  readonly idService!: UUID;
 
   // @ts-expect-error La propriétés est définie dans `this.renseigneProprietes`
   droits: Partial<Droits>;

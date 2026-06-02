@@ -59,6 +59,12 @@ export const tousDroitsEnEcriture = (): Droits =>
     {} as Droits
   );
 
+export const tousDroitsEnLecture = (): Droits =>
+  Object.values(Rubriques).reduce(
+    (droits, rubrique) => ({ ...droits, [rubrique]: Permissions.LECTURE }),
+    {} as Droits
+  );
+
 export const verifieCoherenceDesDroits = (
   droits: DroitsAvecEstProprietaire
 ) => {
