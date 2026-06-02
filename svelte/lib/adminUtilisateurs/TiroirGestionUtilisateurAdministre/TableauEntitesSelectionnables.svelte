@@ -1,8 +1,11 @@
 <script lang="ts">
   import { SvelteSet } from 'svelte/reactivity';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
-  import { labelsRole, type ServiceAdministre } from '../adminUtilisateurs.api';
   import BadgeAdmin from '../BadgeAdmin.svelte';
+  import {
+    labelsRole,
+    type ServiceAdministre,
+  } from '../adminUtilisateurs.types';
 
   type SIRET = string;
 
