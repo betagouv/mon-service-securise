@@ -1,6 +1,6 @@
 import { UUID } from '../typesBasiques.js';
 import Service from '../modeles/service.js';
-import { Autorisation } from '../modeles/autorisations/autorisation.js';
+import { Autorisation, Role } from '../modeles/autorisations/autorisation.js';
 import {
   AdaptateurUUID,
   fabriqueAdaptateurUUID,
@@ -12,7 +12,17 @@ import { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRecherch
 import { Contributeur } from '../modeles/contributeur.js';
 import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
-import { ErreurSuppressionImpossible } from '../erreurs.js';
+import {
+  EchecAutorisation,
+  ErreurServiceNonAdministre,
+  ErreurSuppressionImpossible,
+  ErreurUtilisateurNonAdministre,
+} from '../erreurs.js';
+import {
+  DroitsAvecEstProprietaire,
+  tousDroitsEnEcriture,
+  tousDroitsEnLecture,
+} from '../modeles/autorisations/gestionDroits.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -211,5 +221,86 @@ export class ServiceAdministrationOrganisations {
     idUtilisateur: UUID
   ): Promise<Array<UtilisateurAdministre>> {
     return this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
+  }
+
+  async attribueRoleAUtilisateurAdministre(
+    idAdmin: UUID,
+    idUtilisateurAdministre: UUID,
+    role: Role,
+    idsServices: UUID[]
+  ) {
+    await this.verifieUtilisateurEstAdministre(
+      idAdmin,
+      idUtilisateurAdministre
+    );
+
+    await this.verifieServicesSontAdministres(idAdmin, idsServices);
+
+    const autorisationsDeUtilisateurAdministre: Autorisation[] =
+      await this.depotDonnees.autorisations(idUtilisateurAdministre);
+    const autorisationsConcernees = autorisationsDeUtilisateurAdministre.filter(
+      (a) => idsServices.includes(a.idService)
+    );
+
+    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+      autorisationsConcernees
+    );
+
+    await this.appliqueRole(autorisationsConcernees, role);
+  }
+
+  private async appliqueRole(
+    autorisationsConcernees: Autorisation[],
+    role: Role
+  ) {
+    const roleEnDroits = (r: Role): DroitsAvecEstProprietaire => ({
+      ...(r === Autorisation.RESUME_NIVEAU_DROIT.LECTURE
+        ? tousDroitsEnLecture()
+        : tousDroitsEnEcriture()),
+      estProprietaire: r === Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+    });
+
+    autorisationsConcernees.forEach((a) =>
+      a.appliqueDroits(roleEnDroits(role))
+    );
+    await Promise.all(
+      autorisationsConcernees.map(this.depotDonnees.sauvegardeAutorisation)
+    );
+  }
+
+  private static verifieNeConcernePasAutorisationAdmin(
+    autorisationsConcernees: Autorisation[]
+  ) {
+    if (autorisationsConcernees.some((a) => a.estAdmin)) {
+      throw new EchecAutorisation();
+    }
+  }
+
+  private async verifieServicesSontAdministres(
+    idAdmin: UUID,
+    idsServices: UUID[]
+  ) {
+    const autorisationsDeLadmin: Autorisation[] =
+      await this.depotDonnees.autorisations(idAdmin);
+    const idServicesAdministres = autorisationsDeLadmin
+      .filter((a) => a.estAdmin)
+      .map((a) => a.idService);
+
+    if (!new Set(idsServices).isSubsetOf(new Set(idServicesAdministres))) {
+      throw new ErreurServiceNonAdministre();
+    }
+  }
+
+  private async verifieUtilisateurEstAdministre(
+    idAdmin: UUID,
+    idUtilisateurAdministre: UUID
+  ) {
+    const utilisateursAdministres =
+      await this.utilisateursDansLePerimetreDe(idAdmin);
+    if (
+      !utilisateursAdministres.find((u) => u.id === idUtilisateurAdministre)
+    ) {
+      throw new ErreurUtilisateurNonAdministre();
+    }
   }
 }
