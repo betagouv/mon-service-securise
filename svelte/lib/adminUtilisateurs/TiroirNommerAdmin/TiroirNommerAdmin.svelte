@@ -3,6 +3,7 @@
   import type { UtilisateurAdministre } from '../adminUtilisateurs.api';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
+  import { siretsOuIlEstAdmin } from './tiroirNommerAdmin';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -27,7 +28,9 @@
 
   let etape: 'SELECTION' | 'RECAPITULATIF' = $state('SELECTION');
 
-  let siretsSelectionnes: Array<string> = $state([]);
+  let siretsSelectionnes: Array<string> = $state(
+    untrack(() => siretsOuIlEstAdmin(utilisateur.id, toutesEntites))
+  );
 </script>
 
 <ContenuTiroir>
