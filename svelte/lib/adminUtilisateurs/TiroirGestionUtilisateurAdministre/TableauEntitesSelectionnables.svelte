@@ -11,10 +11,16 @@
     servicesParEntite: Record<SIRET, ServiceAdministre[]>;
     onAjouteRole: (idServicesSelectionnes: string[]) => void;
     onRetireAcces?: (idServicesSelectionnes: string[]) => void;
+    messageSiVide: string;
   }
 
-  let { toutesEntites, servicesParEntite, onAjouteRole, onRetireAcces }: Props =
-    $props();
+  let {
+    toutesEntites,
+    servicesParEntite,
+    onAjouteRole,
+    onRetireAcces,
+    messageSiVide,
+  }: Props = $props();
 
   let siretEntitesDepliees = new SvelteSet<string>();
   const deplieEntite = (siret: string) => {
@@ -83,150 +89,155 @@
   };
 </script>
 
-<div class="barre-actions">
-  <span class="sous-texte">
-    {#if servicesSelectionnes.size > 0}
-      {@const pluriel = servicesSelectionnes.size > 1 ? 's' : ''}
-      {servicesSelectionnes.size} service{pluriel} sélectionné{pluriel}
-    {:else}
-      {nombreTotalServices} service{nombreTotalServices > 1 ? 's' : ''} au total
-    {/if}
-  </span>
-  <div>
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label="Attribuer un rôle commun"
-      onclick={() => onAjouteRole([...servicesSelectionnes])}
-      kind="tertiary-no-outline"
-      size="sm"
-      has-icon
-      icon="edit-line"
-      icon-place="left"
-      disabled={servicesSelectionnes.size === 0}
-    ></dsfr-button>
-    {#if onRetireAcces}
+{#if Object.keys(servicesParEntite).length === 0}
+  <dsfr-alert title={messageSiVide} type="info" size="md" has-title
+  ></dsfr-alert>
+{:else}
+  <div class="barre-actions">
+    <span class="sous-texte">
+      {#if servicesSelectionnes.size > 0}
+        {@const pluriel = servicesSelectionnes.size > 1 ? 's' : ''}
+        {servicesSelectionnes.size} service{pluriel} sélectionné{pluriel}
+      {:else}
+        {nombreTotalServices} service{nombreTotalServices > 1 ? 's' : ''} au total
+      {/if}
+    </span>
+    <div>
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
-        label="Retirer"
-        onclick={() => onRetireAcces([...servicesSelectionnes])}
+        label="Attribuer un rôle commun"
+        onclick={() => onAjouteRole([...servicesSelectionnes])}
         kind="tertiary-no-outline"
         size="sm"
         has-icon
-        icon="delete-bin-line"
+        icon="edit-line"
         icon-place="left"
         disabled={servicesSelectionnes.size === 0}
       ></dsfr-button>
-    {/if}
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-    <dsfr-button
-      label={toutEstSelectionne ? 'Tout désélectionner' : 'Tout sélectionner'}
-      onclick={() => basculeTouteSelection()}
-      kind="tertiary-no-outline"
-      size="sm"
-    ></dsfr-button>
+      {#if onRetireAcces}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Retirer"
+          onclick={() => onRetireAcces([...servicesSelectionnes])}
+          kind="tertiary-no-outline"
+          size="sm"
+          has-icon
+          icon="delete-bin-line"
+          icon-place="left"
+          disabled={servicesSelectionnes.size === 0}
+        ></dsfr-button>
+      {/if}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label={toutEstSelectionne ? 'Tout désélectionner' : 'Tout sélectionner'}
+        onclick={() => basculeTouteSelection()}
+        kind="tertiary-no-outline"
+        size="sm"
+      ></dsfr-button>
+    </div>
   </div>
-</div>
-<table>
-  <thead>
-    <tr>
-      <th>Nom du service</th>
-      <th>Rôle</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each Object.entries(servicesParEntite) as [siretEntite, services] (siretEntite)}
-      {@const nomEntite = toutesEntites.find(
-        (e) => e.siret === siretEntite
-      )?.nom}
-      {@const ouvert = siretEntitesDepliees.has(siretEntite)}
-      {@const estAdmin = services.every((s) => s.role === 'ADMIN')}
-      <tr
-        onclick={() => deplieEntite(siretEntite)}
-        class="ligne-entite"
-        class:estAdmin
-      >
-        <td>
-          <div class="conteneur-ligne-entite">
-            <div class="icone-fleche" class:ouvert>
-              <lab-anssi-icone nom="arrow-down-s-line" taille="sm"
-              ></lab-anssi-icone>
-            </div>
-            {#if !estAdmin}
-              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-              <dsfr-checkbox
-                id="checkbox-{siretEntite}"
-                size="sm"
-                name="checkbox-{siretEntite}"
-                onclick={(e: MouseEvent) => {
-                  e.stopPropagation();
-                }}
-                onvaluechanged={() => {
-                  basculeSelectionEntite(siretEntite);
-                }}
-                checked={entitesSelectionnes[siretEntite] === 'Tout'}
-                indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
-              ></dsfr-checkbox>
-            {/if}
-            <span>{nomEntite}</span>
-            {#if estAdmin}
-              <BadgeAdmin />
-            {/if}
-            <dsfr-tag
-              label={`${services.length} service${services.length > 1 ? 's' : ''}`}
-              type="default"
-              accent="défaut"
-              size="sm"
-            ></dsfr-tag>
-          </div>
-        </td>
-        <td>
-          {#if estAdmin}
-            <span class="sous-texte">Géré via le droit admin</span>
-          {:else}
-            {@const nombreServicesSelectionnes = services.filter((s) =>
-              servicesSelectionnes.has(s.id)
-            ).length}
-            <span class="sous-texte"
-              >{nombreServicesSelectionnes} sélectionné{nombreServicesSelectionnes >
-              1
-                ? 's'
-                : ''} sur {services.length}</span
-            >
-          {/if}
-        </td>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom du service</th>
+        <th>Rôle</th>
       </tr>
-      {#if ouvert}
-        {#each services as service (service.id)}
-          <tr>
-            <td>
-              <div class="conteneur-ligne-service" class:estAdmin>
-                {#if !estAdmin}
-                  <dsfr-checkbox
-                    id="checkbox-{service.id}"
-                    size="sm"
-                    name="checkbox-{service.id}"
-                    checked={servicesSelectionnes.has(service.id)}
-                    onvaluechanged={(e: CustomEvent<boolean>) => {
-                      selectionneService(service.id, e.detail);
-                    }}
-                  ></dsfr-checkbox>
-                {/if}
-                <span>{service.nomService}</span>
+    </thead>
+    <tbody>
+      {#each Object.entries(servicesParEntite) as [siretEntite, services] (siretEntite)}
+        {@const nomEntite = toutesEntites.find(
+          (e) => e.siret === siretEntite
+        )?.nom}
+        {@const ouvert = siretEntitesDepliees.has(siretEntite)}
+        {@const estAdmin = services.every((s) => s.role === 'ADMIN')}
+        <tr
+          onclick={() => deplieEntite(siretEntite)}
+          class="ligne-entite"
+          class:estAdmin
+        >
+          <td>
+            <div class="conteneur-ligne-entite">
+              <div class="icone-fleche" class:ouvert>
+                <lab-anssi-icone nom="arrow-down-s-line" taille="sm"
+                ></lab-anssi-icone>
               </div>
-            </td>
-            <td>
+              {#if !estAdmin}
+                <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+                <dsfr-checkbox
+                  id="checkbox-{siretEntite}"
+                  size="sm"
+                  name="checkbox-{siretEntite}"
+                  onclick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                  }}
+                  onvaluechanged={() => {
+                    basculeSelectionEntite(siretEntite);
+                  }}
+                  checked={entitesSelectionnes[siretEntite] === 'Tout'}
+                  indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
+                ></dsfr-checkbox>
+              {/if}
+              <span>{nomEntite}</span>
               {#if estAdmin}
                 <BadgeAdmin />
-              {:else if service.role}
-                <span>{labelsRole[service.role]}</span>
               {/if}
-            </td>
-          </tr>
-        {/each}
-      {/if}
-    {/each}
-  </tbody>
-</table>
+              <dsfr-tag
+                label={`${services.length} service${services.length > 1 ? 's' : ''}`}
+                type="default"
+                accent="défaut"
+                size="sm"
+              ></dsfr-tag>
+            </div>
+          </td>
+          <td>
+            {#if estAdmin}
+              <span class="sous-texte">Géré via le droit admin</span>
+            {:else}
+              {@const nombreServicesSelectionnes = services.filter((s) =>
+                servicesSelectionnes.has(s.id)
+              ).length}
+              <span class="sous-texte"
+                >{nombreServicesSelectionnes} sélectionné{nombreServicesSelectionnes >
+                1
+                  ? 's'
+                  : ''} sur {services.length}</span
+              >
+            {/if}
+          </td>
+        </tr>
+        {#if ouvert}
+          {#each services as service (service.id)}
+            <tr>
+              <td>
+                <div class="conteneur-ligne-service" class:estAdmin>
+                  {#if !estAdmin}
+                    <dsfr-checkbox
+                      id="checkbox-{service.id}"
+                      size="sm"
+                      name="checkbox-{service.id}"
+                      checked={servicesSelectionnes.has(service.id)}
+                      onvaluechanged={(e: CustomEvent<boolean>) => {
+                        selectionneService(service.id, e.detail);
+                      }}
+                    ></dsfr-checkbox>
+                  {/if}
+                  <span>{service.nomService}</span>
+                </div>
+              </td>
+              <td>
+                {#if estAdmin}
+                  <BadgeAdmin />
+                {:else if service.role}
+                  <span>{labelsRole[service.role]}</span>
+                {/if}
+              </td>
+            </tr>
+          {/each}
+        {/if}
+      {/each}
+    </tbody>
+  </table>
+{/if}
 
 <style lang="scss">
   table {
