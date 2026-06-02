@@ -26,6 +26,8 @@
   export const taille = 'large';
 
   let etape: 'SELECTION' | 'RECAPITULATIF' = $state('SELECTION');
+
+  let siretsSelectionnes: Array<string> = $state([]);
 </script>
 
 <ContenuTiroir>
@@ -36,9 +38,22 @@
     stepCount={2}
   ></dsfr-stepper>
 
-  <pre>{JSON.stringify(utilisateur, null, 2)}</pre>
+  <pre>{siretsSelectionnes}</pre>
 
-  <pre>{JSON.stringify(toutesEntites, null, 2)}</pre>
+  <dsfr-table
+    columns={[
+      { key: 'nom', label: 'Nom' },
+      { key: 'siret', label: 'SIRET' },
+      { key: 'nombreServices', label: 'Services rattachés' },
+    ]}
+    rows={toutesEntites}
+    row-key="siret"
+    selectable
+    select-all
+    selected-row-keys={JSON.stringify(siretsSelectionnes)}
+    onselectionchanged={(e: CustomEvent<{ keys: Array<string> }>) =>
+      (siretsSelectionnes = e.detail.keys)}
+  ></dsfr-table>
 </ContenuTiroir>
 
 <style lang="scss">
