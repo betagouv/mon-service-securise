@@ -19,14 +19,12 @@
   let { utilisateur, toutesEntites }: Props = $props();
 
   let tousServices: ServiceAdministre[] = $state([]);
-  let servicesDeUtilisateur: ServiceAdministre[] = $state([]);
   onMount(async () => {
     const tous = await api.tousServices();
     const siretsDuPerimetre = new Set(toutesEntites.map((e) => e.siret));
     tousServices = tous.filter((s) =>
       siretsDuPerimetre.has(s.siretOrganisationResponsable)
     );
-    servicesDeUtilisateur = await api.servicesDeUtilisateur(utilisateur.id);
   });
 
   export const titre: string = `Gérer les accès de ${untrack(() => utilisateur.prenomNom)}`;
@@ -35,9 +33,16 @@
   export const taille = 'large';
 
   let idsServicesActuels = $derived(
-    new Set(servicesDeUtilisateur.map((s) => s.id))
+    new Set(utilisateur.autorisations.map((a) => a.idService))
   );
-  let servicesActuels = $derived(servicesDeUtilisateur);
+  let servicesActuels = $derived.by(() => {
+    const services = tousServices.filter((s) => idsServicesActuels.has(s.id));
+
+    return services.map((s) => ({
+      ...s,
+      role: utilisateur.autorisations.find((a) => a.idService === s.id)?.role,
+    }));
+  });
   let servicesActuelsParEntite = $derived(
     Object.groupBy(servicesActuels, (s) => s.siretOrganisationResponsable)
   ) as Record<string, ServiceAdministre[]>;
@@ -81,8 +86,8 @@
   <dsfr-callout
     title="{utilisateur.prenomNom} a accès à {Object.keys(
       servicesActuelsParEntite
-    )
-      .length}/{toutesEntites.length} entités · {servicesDeUtilisateur.length}/{tousServices.length} services"
+    ).length}/{toutesEntites.length} entités · {utilisateur.autorisations
+      .length}/{tousServices.length} services"
     accent="blue-cumulus"
     has-title
   ></dsfr-callout>
