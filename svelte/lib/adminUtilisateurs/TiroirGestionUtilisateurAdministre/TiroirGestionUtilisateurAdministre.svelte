@@ -2,14 +2,18 @@
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import { onMount, untrack } from 'svelte';
-  import {
-    api,
-    type ServiceAdministre,
-    type UtilisateurAdministre,
-  } from '../adminUtilisateurs.api';
+  import { api } from '../adminUtilisateurs.api';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import TableauEntitesSelectionnables from './TableauEntitesSelectionnables.svelte';
+  import {
+    labelsRole,
+    type Role,
+    rolesAssignables,
+    type ServiceAdministre,
+    type UtilisateurAdministre,
+  } from '../adminUtilisateurs.types';
+  import { singulierPluriel } from '../../outils/string';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -63,22 +67,36 @@
       label: 'Accès disponibles',
     },
   ];
+
   let idTabActive: number = $state(0);
+  let etapeActuelle: 'LISTE' | 'ACTION' = $state('LISTE');
+  let idServicesSelectionnes: string[] = $state([]);
+  let roleSelectionne: Role = $state('ECRITURE');
+
   const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
     idTabActive = e.detail.index;
-    tableauActuels.reinitialise();
-    tableauDisponibles.reinitialise();
+    tableauActuels?.reinitialise();
+    tableauDisponibles?.reinitialise();
+    idServicesSelectionnes = [];
+    etapeActuelle = 'LISTE';
+    roleSelectionne = 'ECRITURE';
   };
 
   let tableauActuels: TableauEntitesSelectionnables;
   let tableauDisponibles: TableauEntitesSelectionnables;
 
-  const onAjouteRole = (idServicesSelectionnes: string[]) => {
-    console.log(idServicesSelectionnes);
+  const onAjouteRole = (idServices: string[]) => {
+    etapeActuelle = 'ACTION';
+    idServicesSelectionnes = idServices;
   };
 
-  const onRetireAcces = (idServicesSelectionnes: string[]) => {
-    console.log(idServicesSelectionnes);
+  const onRetireAcces = (idServices: string[]) => {
+    etapeActuelle = 'ACTION';
+    idServicesSelectionnes = idServices;
+  };
+
+  const metAJourRole = (e: CustomEvent<Role>) => {
+    roleSelectionne = e.detail;
   };
 </script>
 
@@ -104,20 +122,79 @@
       />
     </div>
     <div slot="panel-1" class="conteneur-onglet">
-      <div class="titre-tableau">
-        <h4>Entités et services auxquels {utilisateur.prenomNom} a accès</h4>
-        <span>
-          Modifier son rôle ou retirer son accès sur un ou plusieurs services.
-        </span>
-      </div>
-      <TableauEntitesSelectionnables
-        {toutesEntites}
-        servicesParEntite={servicesActuelsParEntite}
-        bind:this={tableauActuels}
-        {onAjouteRole}
-        {onRetireAcces}
-        messageSiVide="Cet utilisateur n'a actuellement accès à aucun des services du périmètre"
-      />
+      {#if etapeActuelle === 'LISTE'}
+        <div class="titre-tableau">
+          <h4>Entités et services auxquels {utilisateur.prenomNom} a accès</h4>
+          <span>
+            Modifier son rôle ou retirer son accès sur un ou plusieurs services.
+          </span>
+        </div>
+        <TableauEntitesSelectionnables
+          {toutesEntites}
+          servicesParEntite={servicesActuelsParEntite}
+          bind:this={tableauActuels}
+          {onAjouteRole}
+          {onRetireAcces}
+          messageSiVide="Cet utilisateur n'a actuellement accès à aucun des services du périmètre"
+        />
+      {:else}
+        <div class="titre-tableau">
+          <h4>Attribuer un rôle commun</h4>
+          <span
+            >Choisissez un rôle : il sera appliqué aux services sélectionnés.</span
+          >
+        </div>
+        <dsfr-select
+          label="Rôle attribué à tous les services sélectionnés"
+          options={Object.entries(rolesAssignables).map(([role, libelle]) => ({
+            label: libelle,
+            value: role,
+          }))}
+          onvaluechanged={metAJourRole}
+          required
+          value={roleSelectionne}
+        ></dsfr-select>
+        <hr />
+        <h5>
+          {idServicesSelectionnes.length}
+          {singulierPluriel(
+            'service concerné',
+            'services concernés',
+            idServicesSelectionnes.length
+          )}
+        </h5>
+        <dsfr-table
+          columns={[
+            { key: 'entiteService', label: 'Entité / service' },
+            { key: 'role', label: 'Rôle après application' },
+          ]}
+          rich
+          rows={idServicesSelectionnes}
+          multiline
+        >
+          {#each idServicesSelectionnes as idService, i (idService)}
+            {@const service = tousServices.find(
+              (service) => service.id === idService
+            )}
+            {#if service}
+              {@const roleAvantChangement = utilisateur.autorisations.find(
+                (a) => a.idService === idService
+              )!.role}
+              <div slot="cell:entiteService:{i}" class="entite-service">
+                <span><b>{service.organisationResponsable}</b></span>
+                <span>{service.nomService}</span>
+              </div>
+              <div slot="cell:role:{i}" class="role">
+                <span class="ancien-role"
+                  >{labelsRole[roleAvantChangement]}</span
+                >
+                <span>→</span>
+                <span class="nouveau-role">{labelsRole[roleSelectionne!]}</span>
+              </div>
+            {/if}
+          {/each}
+        </dsfr-table>
+      {/if}
     </div>
 
     <div slot="tab-2">
@@ -166,6 +243,43 @@
       font-size: 0.875rem;
       line-height: 1.5rem;
       margin-bottom: 24px;
+    }
+  }
+
+  hr {
+    width: 100%;
+    color: #ddd;
+    background: #ddd;
+    border-color: transparent;
+    border-bottom: none;
+    padding: 0;
+    margin: 24px 0;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 -1rem;
+  }
+
+  .entite-service {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .role {
+    display: flex;
+    gap: 8px;
+
+    .ancien-role {
+      text-decoration: line-through;
+      color: #929292;
+    }
+
+    .nouveau-role {
+      color: var(--bleu-mise-en-avant);
+      font-weight: bold;
     }
   }
 </style>

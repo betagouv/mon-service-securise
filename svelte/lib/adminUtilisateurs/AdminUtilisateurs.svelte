@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { api, type UtilisateurAdministre } from './adminUtilisateurs.api';
+  import { api } from './adminUtilisateurs.api';
   import { api as apiEntites } from '../adminEntites/adminEntites.api';
   import Tuiles from './Tuiles.svelte';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
   import BadgeAdmin from './BadgeAdmin.svelte';
+  import type { UtilisateurAdministre } from './adminUtilisateurs.types';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
