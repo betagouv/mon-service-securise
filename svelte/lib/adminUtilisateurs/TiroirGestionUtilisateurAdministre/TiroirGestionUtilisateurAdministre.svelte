@@ -14,6 +14,7 @@
     type UtilisateurAdministre,
   } from '../adminUtilisateurs.types';
   import { singulierPluriel } from '../../outils/string';
+  import TitreContenuOnglet from './TitreContenuOnglet.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -123,12 +124,10 @@
     </div>
     <div slot="panel-1" class="conteneur-onglet">
       {#if etapeActuelle === 'LISTE'}
-        <div class="titre-tableau">
-          <h4>Entités et services auxquels {utilisateur.prenomNom} a accès</h4>
-          <span>
-            Modifier son rôle ou retirer son accès sur un ou plusieurs services.
-          </span>
-        </div>
+        <TitreContenuOnglet
+          titre="Entités et services auxquels {utilisateur.prenomNom} a accès"
+          description="Modifier son rôle ou retirer son accès sur un ou plusieurs services."
+        />
         <TableauEntitesSelectionnables
           {toutesEntites}
           servicesParEntite={servicesActuelsParEntite}
@@ -138,12 +137,10 @@
           messageSiVide="Cet utilisateur n'a actuellement accès à aucun des services du périmètre"
         />
       {:else}
-        <div class="titre-tableau">
-          <h4>Attribuer un rôle commun</h4>
-          <span
-            >Choisissez un rôle : il sera appliqué aux services sélectionnés.</span
-          >
-        </div>
+        <TitreContenuOnglet
+          titre="Attribuer un rôle commun"
+          description="Choisissez un rôle : il sera appliqué aux services sélectionnés."
+        />
         <dsfr-select
           label="Rôle attribué à tous les services sélectionnés"
           options={Object.entries(rolesAssignables).map(([role, libelle]) => ({
@@ -205,13 +202,11 @@
       />
     </div>
     <div slot="panel-2" class="conteneur-onglet">
-      <div class="titre-tableau">
-        <h4>Ajouter {utilisateur.prenomNom} à d'autres services</h4>
-        <span
-          >Sélectionnez les entités et services de votre périmètre auxquels {utilisateur.prenomNom}
-          n'a pas encore accès. Vous devez attribuer un rôle.</span
-        >
-      </div>
+      <TitreContenuOnglet
+        titre="Ajouter {utilisateur.prenomNom} à d'autres services"
+        description="Sélectionnez les entités et services de votre périmètre auxquels {utilisateur.prenomNom}
+          n'a pas encore accès. Vous devez attribuer un rôle."
+      />
       <TableauEntitesSelectionnables
         {toutesEntites}
         servicesParEntite={servicesDisponiblesParEntite}
@@ -225,27 +220,6 @@
 <ActionsTiroir></ActionsTiroir>
 
 <style lang="scss">
-  .titre-tableau {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    h4 {
-      font-size: 1.375rem;
-      font-weight: 700;
-      line-height: 1.75rem;
-      margin: 0;
-    }
-
-    span {
-      color: #666666;
-      max-width: 620px;
-      font-size: 0.875rem;
-      line-height: 1.5rem;
-      margin-bottom: 24px;
-    }
-  }
-
   hr {
     width: 100%;
     color: #ddd;
