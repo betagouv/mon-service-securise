@@ -168,6 +168,7 @@
                 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
                 <dsfr-checkbox
                   id="checkbox-{siretEntite}"
+                  label={nomEntite}
                   size="sm"
                   name="checkbox-{siretEntite}"
                   onclick={(e: MouseEvent) => {
@@ -180,7 +181,6 @@
                   indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
                 ></dsfr-checkbox>
               {/if}
-              <span>{nomEntite}</span>
               {#if estAdmin}
                 <BadgeAdmin />
               {/if}
@@ -216,6 +216,7 @@
                   {#if !estAdmin}
                     <dsfr-checkbox
                       id="checkbox-{service.id}"
+                      label={service.nomService}
                       size="sm"
                       name="checkbox-{service.id}"
                       checked={servicesSelectionnes.has(service.id)}
@@ -224,7 +225,6 @@
                       }}
                     ></dsfr-checkbox>
                   {/if}
-                  <span>{service.nomService}</span>
                 </div>
               </td>
               <td>
@@ -258,12 +258,6 @@
           span {
             color: #666666;
           }
-        }
-
-        span {
-          color: #3a3a3a;
-          font-size: 0.875rem;
-          line-height: 1.5rem;
         }
       }
 
