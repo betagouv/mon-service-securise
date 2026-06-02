@@ -7,11 +7,16 @@
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import TableauEntitesSelectionnables from './TableauEntitesSelectionnables.svelte';
   import {
+    labelsRole,
+    type Role,
     type ServiceAdministre,
     type UtilisateurAdministre,
   } from '../adminUtilisateurs.types';
   import TitreContenuOnglet from './TitreContenuOnglet.svelte';
   import ActionAttributionRole from './ActionAttributionRole.svelte';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import { singulierPluriel } from '../../outils/string';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -94,6 +99,20 @@
     etapeActuelle = 'ACTION';
     idServicesSelectionnes = idServices;
   };
+
+  let roleSelectionne: Role = $state('ECRITURE');
+  const appliqueNouveauxRoles = async () => {
+    await api.appliqueNouveauxRoles(
+      utilisateur.id,
+      idServicesSelectionnes,
+      roleSelectionne
+    );
+    toasterStore.succes(
+      'Nouveaux rôles attribués',
+      `Le rôle "${labelsRole[roleSelectionne]}" a été attribué à ${utilisateur.prenomNom} sur ${idServicesSelectionnes.length} ${singulierPluriel('service', 'services', idServicesSelectionnes.length)}`
+    );
+    tiroirStore.ferme();
+  };
 </script>
 
 <ContenuTiroir>
@@ -139,6 +158,7 @@
         <ActionAttributionRole
           utilisateurAdministre={utilisateur}
           {servicesSelectionnes}
+          bind:roleSelectionne
         />
       {/if}
     </div>
@@ -166,4 +186,21 @@
     </div>
   </dsfr-tabs>
 </ContenuTiroir>
-<ActionsTiroir></ActionsTiroir>
+{#if etapeActuelle === 'ACTION'}
+  <ActionsTiroir>
+    {#if idTabActive === 0}
+      <dsfr-button
+        label="Annuler les modifications"
+        onclick={() => (etapeActuelle = 'LISTE')}
+        kind="tertiary-no-outline"
+      ></dsfr-button>
+      <dsfr-button
+        label="Enregistrer toutes les modifications"
+        onclick={() => appliqueNouveauxRoles()}
+        kind="primary"
+        has-icon
+        icon="check-line"
+      ></dsfr-button>
+    {/if}
+  </ActionsTiroir>
+{/if}

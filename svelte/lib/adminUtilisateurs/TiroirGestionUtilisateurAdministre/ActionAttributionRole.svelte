@@ -11,11 +11,14 @@
   interface Props {
     servicesSelectionnes: ServiceAdministre[];
     utilisateurAdministre: UtilisateurAdministre;
+    roleSelectionne: Role;
   }
 
-  let { servicesSelectionnes, utilisateurAdministre }: Props = $props();
-
-  let roleSelectionne: Role = $state('ECRITURE');
+  let {
+    servicesSelectionnes,
+    utilisateurAdministre,
+    roleSelectionne = $bindable(),
+  }: Props = $props();
 
   const metAJourRole = (e: CustomEvent<Role>) => {
     roleSelectionne = e.detail;
