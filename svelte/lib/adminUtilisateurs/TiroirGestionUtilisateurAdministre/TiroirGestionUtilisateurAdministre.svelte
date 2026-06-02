@@ -116,6 +116,7 @@
         bind:this={tableauActuels}
         {onAjouteRole}
         {onRetireAcces}
+        messageSiVide="Cet utilisateur n'a actuellement accès à aucun des services du périmètre"
       />
     </div>
 
@@ -139,6 +140,7 @@
         servicesParEntite={servicesDisponiblesParEntite}
         bind:this={tableauDisponibles}
         {onAjouteRole}
+        messageSiVide="Cet utilisateur a déjà accès à tous les services du périmètre"
       />
     </div>
   </dsfr-tabs>
