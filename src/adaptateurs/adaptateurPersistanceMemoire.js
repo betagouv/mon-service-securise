@@ -676,16 +676,23 @@ const nouvelAdaptateur = (
     const servicesAdministres = donnees.autorisations
       .filter((a) => a.idUtilisateur === idUtilisateur && !!a.estAdmin)
       .map((a) => a.idService);
-    const contributeurs = new Set(
-      donnees.autorisations
-        .filter(
-          (a) =>
-            servicesAdministres.includes(a.idService) &&
-            a.idUtilisateur !== idUtilisateur
-        )
-        .map((a) => a.idUtilisateur)
+    const autorisationsDesUtilisateurs = donnees.autorisations.filter(
+      (a) =>
+        servicesAdministres.includes(a.idService) &&
+        a.idUtilisateur !== idUtilisateur
     );
-    return donnees.utilisateurs.filter((u) => contributeurs.has(u.id));
+    const contributeurs = new Set(
+      autorisationsDesUtilisateurs.map((a) => a.idUtilisateur)
+    );
+    const utilisateurs = donnees.utilisateurs.filter((u) =>
+      contributeurs.has(u.id)
+    );
+    return utilisateurs.map((u) => ({
+      ...u,
+      autorisations: autorisationsDesUtilisateurs.filter(
+        (a) => a.idUtilisateur === u.id
+      ),
+    }));
   };
 
   const utilisateursSupervisesPar = async (idUtilisateur) => {

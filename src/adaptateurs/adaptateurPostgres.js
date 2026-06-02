@@ -976,11 +976,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
                 AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
           ) AS "nombreEntites",
           (
-            SELECT COUNT(DISTINCT a3.donnees->>'idService')
+            SELECT json_agg(
+                     to_jsonb(a3.donnees) || jsonb_build_object('id', a3.id)
+                   )
             FROM autorisations a3
             WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
                 AND a3.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
-          ) AS "nombreServices"
+          ) AS autorisations
         FROM autorisations AS a
           JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
         WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)

@@ -6,6 +6,8 @@ import Superviseur from '../../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
 import { ErreurSuppressionImpossible } from '../../../src/erreurs.ts';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { DonneesAutorisation } from '../../../src/modeles/autorisations/autorisation.ts';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -64,6 +66,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
   describe('quand requête GET sur `/api/admin/utilisateurs`', () => {
     it("retourne la liste des utilisateurs dans le périmètre de l'utilisateur courant", async () => {
       let idAdmin;
+      const idService = unUUIDRandom();
       testeur.middleware().reinitialise({ idUtilisateur: 'A1' });
       testeur.serviceAdministrationOrganisations().utilisateursDansLePerimetreDe =
         async (idUtilisateur: UUID) => {
@@ -79,7 +82,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
               },
               true,
               3,
-              6
+              [
+                uneAutorisation().deProprietaire(unUUID('U'), idService)
+                  .donnees as DonneesAutorisation,
+              ]
             ),
           ];
         };
@@ -96,7 +102,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           postes: 'RSSI',
           estAdmin: true,
           nombreEntites: 3,
-          nombreServices: 6,
+          autorisations: [{ idService, role: 'PROPRIETAIRE' }],
         },
       ]);
     });

@@ -22,6 +22,7 @@ import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptat
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 import { UtilisateurAdministre } from '../../src/modeles/gestionOrganisations/utilisateurAdministre.js';
+import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -1024,6 +1025,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             donnees: await adaptateurChiffrement.chiffre(
               unUtilisateur().quiSAppelle('Jean Dubois').donnees
             ),
+            autorisations: [],
             id: 'U2',
           },
         ],
@@ -1053,7 +1055,9 @@ describe('Le dépôt de données des utilisateurs', () => {
             id: 'U2',
             estAdmin: true,
             nombreEntites: 3,
-            nombreServices: 6,
+            autorisations: [
+              uneAutorisation().deProprietaire('U2', 'S1').donnees,
+            ],
           },
         ],
       };
@@ -1072,7 +1076,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(utilisateur.posteDetaille()).to.be('RSSI');
       expect(utilisateur.estAdmin).to.be(true);
       expect(utilisateur.nombreEntites).to.be(3);
-      expect(utilisateur.nombreServices).to.be(6);
+      expect(utilisateur.autorisations[0]).to.be.a(Autorisation);
     });
   });
 
