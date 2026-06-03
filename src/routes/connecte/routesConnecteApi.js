@@ -482,8 +482,20 @@ const routesConnecteApi = ({
       const { idService, idContributeur } = requete.query;
 
       const verifiePermissionSuppression = async () => {
-        const a = await depotDonnees.autorisationPour(idUtilisateur, idService);
-        if (!a.peutGererContributeurs()) throw new EchecAutorisation();
+        const autorisationActeur = await depotDonnees.autorisationPour(
+          idUtilisateur,
+          idService
+        );
+        const autorisationCible = await depotDonnees.autorisationPour(
+          idContributeur,
+          idService
+        );
+
+        if (
+          !autorisationActeur.peutGererContributeurs() ||
+          autorisationCible.estUnAdmin()
+        )
+          throw new EchecAutorisation();
       };
 
       try {
