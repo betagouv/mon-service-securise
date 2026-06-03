@@ -23,7 +23,10 @@
   };
 </script>
 
+<svelte:document on:utilisateurs-administres-modifies={rafraichis} />
+
 <Toaster />
+
 <h1>Utilisateurs</h1>
 
 <Tuiles nombreUtilisateurs={mesUtilisateurs.length} {mesEntites} />
