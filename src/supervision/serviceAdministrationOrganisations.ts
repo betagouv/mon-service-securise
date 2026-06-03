@@ -23,6 +23,8 @@ import {
   tousDroitsEnEcriture,
   tousDroitsEnLecture,
 } from '../modeles/autorisations/gestionDroits.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRoleUtilisateurAdministreAttribue.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -40,22 +42,26 @@ export class ServiceAdministrationOrganisations {
   private readonly adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
   private readonly adaptateurUUID: AdaptateurUUID;
   private readonly adaptateurMail: AdaptateurMail;
+  private readonly busEvenements: BusEvenements;
 
   constructor({
     depotDonnees,
     adaptateurRechercheEntite,
     adaptateurUUID = fabriqueAdaptateurUUID(),
     adaptateurMail,
+    busEvenements,
   }: {
     depotDonnees: DepotDonnees;
     adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
     adaptateurUUID: AdaptateurUUID;
     adaptateurMail: AdaptateurMail;
+    busEvenements: BusEvenements;
   }) {
     this.depotDonnees = depotDonnees;
     this.adaptateurRechercheEntite = adaptateurRechercheEntite;
     this.adaptateurUUID = adaptateurUUID;
     this.adaptateurMail = adaptateurMail;
+    this.busEvenements = busEvenements;
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
@@ -247,6 +253,15 @@ export class ServiceAdministrationOrganisations {
     );
 
     await this.appliqueRole(autorisationsConcernees, role);
+
+    await this.busEvenements.publie(
+      new EvenementRoleUtilisateurAdministreAttribue({
+        idAdmin,
+        idUtilisateurAdministre,
+        role,
+        idsServices,
+      })
+    );
   }
 
   private async appliqueRole(

@@ -123,6 +123,7 @@ const serviceAdministrationOrganisations =
     adaptateurUUID: fabriqueAdaptateurUUID(),
     adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     adaptateurMail,
+    busEvenements,
   });
 
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });

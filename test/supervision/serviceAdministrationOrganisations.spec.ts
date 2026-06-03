@@ -29,6 +29,7 @@ import {
   ErreurUtilisateurNonAdministre,
 } from '../../src/erreurs.ts';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.ts';
+import { EvenementRoleUtilisateurAdministreAttribue } from '../../src/bus/evenementRoleUtilisateurAdministreAttribue.js';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -45,6 +46,7 @@ describe("Le service de gestion des admins d'organisation", () => {
   let depotComplet: DepotDonnees;
   let adaptateurPersistance: AdaptateurPersistance;
   let adaptateurPersistanceTS: PersistanceTS;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   const unDepotComplet = (surcharge?: Partial<ConfigDepotDonnees>) => {
     adaptateurPersistance = unePersistanceMemoire()
@@ -53,11 +55,12 @@ describe("Le service de gestion des admins d'organisation", () => {
     adaptateurPersistanceTS = unePersistanceMemoireTS()
       .ajouteAdminSurPerimetre(idAdmin, [entite])
       .construis();
+    busEvenements = fabriqueBusPourLesTests();
 
     return creeDepotComplet({
       adaptateurPersistance,
       adaptateurPersistanceTS,
-      busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
+      busEvenements: busEvenements as unknown as BusEvenements,
       adaptateurEnvironnement,
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
@@ -73,6 +76,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       depotDonnees: depotComplet,
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       adaptateurMail: fabriqueAdaptateurMailMemoire(),
+      busEvenements: busEvenements as unknown as BusEvenements,
       ...surcharge,
     });
 
@@ -540,5 +544,30 @@ describe("Le service de gestion des admins d'organisation", () => {
         expect(autorisationAJour.resumeNiveauDroit()).toBe(role);
       }
     );
+
+    it('publie un évènement de rôle utilisateur administré attribué sur le bus', async () => {
+      await service.attribueRoleAUtilisateurAdministre(
+        idAdmin,
+        idU1,
+        Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+        [idS1]
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(
+          EvenementRoleUtilisateurAdministreAttribue
+        )
+      ).toBe(true);
+      const evenement: EvenementRoleUtilisateurAdministreAttribue =
+        busEvenements.recupereEvenement(
+          EvenementRoleUtilisateurAdministreAttribue
+        );
+      expect(evenement.idAdmin).toBe(idAdmin);
+      expect(evenement.idUtilisateurAdministre).toBe(idU1);
+      expect(evenement.idsServices).toEqual([idS1]);
+      expect(evenement.role).toBe(
+        Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE
+      );
+    });
   });
 });
