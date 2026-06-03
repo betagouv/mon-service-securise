@@ -36,4 +36,9 @@ export type ServiceAdministre = {
   organisationResponsable: string;
   siretOrganisationResponsable: string;
   role?: Role;
+  contributeurs: {
+    id: string;
+    estAdmin: boolean;
+    estProprietaire: boolean;
+  }[];
 };

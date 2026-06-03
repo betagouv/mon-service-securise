@@ -17,6 +17,7 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { singulierPluriel } from '../../outils/string';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import ActionRetraitAcces from './ActionRetraitAcces.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -72,7 +73,8 @@
   ];
 
   let idTabActive: number = $state(0);
-  let etapeActuelle: 'LISTE' | 'ACTION' = $state('LISTE');
+  let etapeActuelle: 'LISTE' | 'ACTION_ATTRIBUTION' | 'ACTION_RETRAIT' =
+    $state('LISTE');
   let idServicesSelectionnes: string[] = $state([]);
 
   let servicesSelectionnes: ServiceAdministre[] = $derived(
@@ -91,12 +93,12 @@
   let tableauDisponibles: TableauEntitesSelectionnables | undefined = $state();
 
   const onAjouteRole = (idServices: string[]) => {
-    etapeActuelle = 'ACTION';
+    etapeActuelle = 'ACTION_ATTRIBUTION';
     idServicesSelectionnes = idServices;
   };
 
   const onRetireAcces = (idServices: string[]) => {
-    etapeActuelle = 'ACTION';
+    etapeActuelle = 'ACTION_RETRAIT';
     idServicesSelectionnes = idServices;
   };
 
@@ -153,7 +155,7 @@
           {onRetireAcces}
           messageSiVide="Cet utilisateur n'a actuellement accès à aucun des services du périmètre"
         />
-      {:else}
+      {:else if etapeActuelle === 'ACTION_ATTRIBUTION'}
         <TitreContenuOnglet
           titre="Attribuer un rôle commun"
           description="Choisissez un rôle : il sera appliqué aux services sélectionnés."
@@ -162,6 +164,15 @@
           utilisateurAdministre={utilisateur}
           {servicesSelectionnes}
           bind:roleSelectionne
+        />
+      {:else}
+        <TitreContenuOnglet
+          titre="Êtes-vous sûr de vouloir retirer {utilisateur.prenomNom} de ces services ?"
+          description="{utilisateur.prenomNom} perdra immédiatement l'accès aux services listés ci-dessous."
+        />
+        <ActionRetraitAcces
+          utilisateurAdministre={utilisateur}
+          {servicesSelectionnes}
         />
       {/if}
     </div>
@@ -189,7 +200,7 @@
     </div>
   </dsfr-tabs>
 </ContenuTiroir>
-{#if etapeActuelle === 'ACTION'}
+{#if etapeActuelle === 'ACTION_ATTRIBUTION'}
   <ActionsTiroir>
     {#if idTabActive === 0}
       <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
