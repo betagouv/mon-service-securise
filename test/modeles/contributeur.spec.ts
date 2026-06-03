@@ -12,6 +12,7 @@ describe('Un contributeur', () => {
     nom: 'Dujardin',
     postes: [],
     estAdmin: false,
+    estProprietaire: false,
     ...surcharge,
   });
 
@@ -56,5 +57,15 @@ describe('Un contributeur', () => {
     );
 
     expect(contributeur.estAdmin).toBe(true);
+  });
+
+  it("sait s'il est propriétaire", () => {
+    const contributeur = new Contributeur(
+      donneesContributeur({
+        estProprietaire: true,
+      })
+    );
+
+    expect(contributeur.estProprietaire).toBe(true);
   });
 });

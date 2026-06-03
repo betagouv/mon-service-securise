@@ -154,6 +154,7 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(proprietaire.id).to.be(idUtilisateur);
       expect(proprietaire.email_hash).to.be('email');
       expect(proprietaire.estAdmin).to.be(false);
+      expect(proprietaire.estProprietaire).to.be(true);
     });
 
     it("sait dire qu'un contributeur est admin", async () => {

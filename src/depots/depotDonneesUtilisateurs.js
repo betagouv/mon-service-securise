@@ -90,6 +90,7 @@ function fabriquePersistance({
       ...donneesEnClair,
       id: donneesContributeur.id,
       estAdmin: donneesContributeur.estAdmin,
+      estProprietaire: donneesContributeur.estProprietaire,
     };
   };
 
