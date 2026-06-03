@@ -111,6 +111,9 @@
       'Nouveaux rôles attribués',
       `Le rôle "${labelsRole[roleSelectionne]}" a été attribué à ${utilisateur.prenomNom} sur ${idServicesSelectionnes.length} ${singulierPluriel('service', 'services', idServicesSelectionnes.length)}`
     );
+    document.dispatchEvent(
+      new CustomEvent('utilisateurs-administres-modifies')
+    );
     tiroirStore.ferme();
   };
 </script>
