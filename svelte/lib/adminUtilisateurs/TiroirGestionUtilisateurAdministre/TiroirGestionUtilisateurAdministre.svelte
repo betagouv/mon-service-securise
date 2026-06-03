@@ -87,8 +87,8 @@
     etapeActuelle = 'LISTE';
   };
 
-  let tableauActuels: TableauEntitesSelectionnables;
-  let tableauDisponibles: TableauEntitesSelectionnables;
+  let tableauActuels: TableauEntitesSelectionnables | undefined = $state();
+  let tableauDisponibles: TableauEntitesSelectionnables | undefined = $state();
 
   const onAjouteRole = (idServices: string[]) => {
     etapeActuelle = 'ACTION';
@@ -189,11 +189,13 @@
 {#if etapeActuelle === 'ACTION'}
   <ActionsTiroir>
     {#if idTabActive === 0}
+      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
       <dsfr-button
         label="Annuler les modifications"
         onclick={() => (etapeActuelle = 'LISTE')}
         kind="tertiary-no-outline"
       ></dsfr-button>
+      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
       <dsfr-button
         label="Enregistrer toutes les modifications"
         onclick={() => appliqueNouveauxRoles()}
