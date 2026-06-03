@@ -9,6 +9,7 @@
     "build:back": "tsc && cp src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv ./dist/src/moteurRegles/v2/",
     "dev:back": "node --watch --import tsx server.ts",
     "dev:front": "cd svelte && vite dev --host 0.0.0.0",
+    "maj-ui-kit": "bash ./scripts/ui-kit/maj.sh",
     "migration-bdd": "tsx node_modules/knex/bin/cli.js migrate:latest",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
@@ -33,6 +34,7 @@
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
     "@lab-anssi/lib": "^2.1.6",
+    "@lab-anssi/ui-kit": "1.53.0",
     "@sentry/node": "^7.102.1",
     "@tiptap/core": "^3.22.5",
     "@tiptap/extension-mention": "^3.22.5",

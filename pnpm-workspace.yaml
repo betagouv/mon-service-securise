@@ -8,6 +8,7 @@ onlyBuiltDependencies:
 
 minimumReleaseAgeExclude:
   - '@lab-anssi/lib@2.1.6'
+  - '@lab-anssi/ui-kit'
   - axios@1.15.0
   # Renovate security update: vite@8.0.5
   - vite@8.0.5
