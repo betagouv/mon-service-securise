@@ -47,20 +47,24 @@ describe("L'objet d'API de `GET /service`", () => {
     .avecId('123')
     .avecNomService('Un service')
     .avecOrganisationResponsable({ nom: 'Une organisation', siret: 'SIRET' })
-    .ajouteUnContributeur(
-      unUtilisateur()
+    .ajouteUnContributeur({
+      ...unUtilisateur()
         .avecId('A')
         .avecEmail('email.proprietaire@mail.fr')
         .quiSAppelle('Jean Dupont')
-        .avecPostes(['RSSI']).donnees
-    )
-    .ajouteUnContributeur(
-      unUtilisateur()
+        .avecPostes(['RSSI']).donnees,
+      estProprietaire: false,
+      estAdmin: false,
+    })
+    .ajouteUnContributeur({
+      ...unUtilisateur()
         .avecId('B')
         .avecEmail('email.contributeur1@mail.fr')
         .quiSAppelle('Pierre Lecoux')
-        .avecPostes(['Maire']).donnees
-    )
+        .avecPostes(['Maire']).donnees,
+      estProprietaire: true,
+      estAdmin: false,
+    })
     .avecDossiers([
       unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
     ])
@@ -90,6 +94,8 @@ describe("L'objet d'API de `GET /service`", () => {
           initiales: 'JD',
           poste: 'RSSI',
           estUtilisateurCourant: false,
+          estProprietaire: false,
+          estAdmin: false,
         },
         {
           id: 'B',
@@ -97,6 +103,8 @@ describe("L'objet d'API de `GET /service`", () => {
           initiales: 'PL',
           poste: 'Maire',
           estUtilisateurCourant: false,
+          estProprietaire: true,
+          estAdmin: false,
         },
       ],
       statutHomologation: {
@@ -234,6 +242,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const [admin] = pointDeVueDuNonAdmin.contributeurs;
       expect(admin).to.eql({
         estAdmin: true,
+        estProprietaire: true,
         estUtilisateurCourant: false,
         id: 'ADMIN',
         initiales: 'A',

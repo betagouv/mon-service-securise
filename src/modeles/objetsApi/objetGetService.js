@@ -31,6 +31,7 @@ const donnees = (service, autorisation, referentiel) => {
       if (doitMasquerPourConfidentialite)
         return {
           estAdmin: true,
+          estProprietaire: true,
           estUtilisateurCourant: false,
           id: c.idUtilisateur,
           prenomNom: 'Administrateur',
@@ -44,6 +45,8 @@ const donnees = (service, autorisation, referentiel) => {
         initiales: c.initiales(),
         poste: c.posteDetaille(),
         estUtilisateurCourant: designeLuiMeme,
+        estProprietaire: c.estProprietaire,
+        estAdmin: c.estAdmin,
       };
     }),
     ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
