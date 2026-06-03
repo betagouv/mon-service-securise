@@ -61,6 +61,8 @@ import { consigneSimulationMigrationReferentielCreee } from './abonnements/consi
 import { rattacheServiceEtAdmins } from './abonnements/rattacheServiceEtAdmins.js';
 import { ServiceAdministrationOrganisations } from '../supervision/serviceAdministrationOrganisations.js';
 import { modifieRattachementServiceEtAdmins } from './abonnements/modifieRattachementServiceEtAdmins.js';
+import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtilisateurAdministreAttribue.js';
+import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -240,6 +242,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementSimulationMigrationReferentielCreee,
     consigneSimulationMigrationReferentielCreee({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementRoleUtilisateurAdministreAttribue,
+    consigneRoleUtilisateurAdministreAttribueDansJournal({ adaptateurJournal })
   );
 };
 
