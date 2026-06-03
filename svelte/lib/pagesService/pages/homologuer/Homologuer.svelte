@@ -261,7 +261,9 @@
       height: 24px;
     }
 
-    :is(input, select, textarea).touche:invalid ~ .message-erreur {
+    input.touche:invalid ~ .message-erreur,
+    select.touche:invalid ~ .message-erreur,
+    textarea.touche:invalid ~ .message-erreur {
       display: flex;
     }
   }
