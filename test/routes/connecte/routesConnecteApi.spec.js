@@ -1130,23 +1130,28 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         });
     });
 
-    it("vérifie que l'utilisateur a le droit de supprimer un contributeur", async () => {
-      let autorisationCherchee = {};
-      testeur.depotDonnees().autorisationPour = async (
-        idUtilisateur,
-        idService
-      ) => {
-        autorisationCherchee = { idUtilisateur, idService };
-        return uneAutorisation().deProprietaire().construis();
-      };
+    it("jette une erreur si l'utilisateur n'a pas le droit de supprimer le contributeur", async () => {
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().deContributeur().construis();
 
       const idService = unUUIDRandom();
-      await testeur.delete(
+      const reponse = await testeur.delete(
         `/api/autorisation?${uneQueryStringValide(idService)}`
       );
 
-      expect(autorisationCherchee.idUtilisateur).to.be('456');
-      expect(autorisationCherchee.idService).to.be(idService);
+      expect(reponse.status).to.equal(403);
+    });
+
+    it('jette une erreur si le contributeur est administrateur', async () => {
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().dAdmin().construis();
+
+      const idService = unUUIDRandom();
+      const reponse = await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide(idService)}`
+      );
+
+      expect(reponse.status).to.equal(403);
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", async () => {
