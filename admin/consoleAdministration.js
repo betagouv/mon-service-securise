@@ -52,7 +52,7 @@ class ConsoleAdministration {
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
-    const busEvenements = new BusEvenements({ adaptateurGestionErreur });
+    this.busEvenements = new BusEvenements({ adaptateurGestionErreur });
 
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
@@ -61,7 +61,7 @@ class ConsoleAdministration {
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-      busEvenements,
+      busEvenements: this.busEvenements,
     });
 
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
@@ -74,7 +74,7 @@ class ConsoleAdministration {
     const adaptateurHorloge = fabriqueAdaptateurHorloge();
     this.adaptateurSupervision = fabriqueAdaptateurSupervision();
 
-    cableTousLesAbonnes(busEvenements, {
+    cableTousLesAbonnes(this.busEvenements, {
       adaptateurHorloge,
       adaptateurTracking,
       adaptateurJournal: this.adaptateurJournalMSS,
@@ -668,6 +668,7 @@ class ConsoleAdministration {
       depotDonnees: this.depotDonnees,
       adaptateurUUID: fabriqueAdaptateurUUID(),
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      busEvenements: this.busEvenements,
     });
 
     /* eslint-disable no-restricted-syntax */
