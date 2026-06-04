@@ -1,11 +1,11 @@
 <script lang="ts">
   import { untrack } from 'svelte';
-  import type { UtilisateurAdministre } from '../adminUtilisateurs.api';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import { siretsOuIlEstAdmin, statsDesEntites } from './tiroirNommerAdmin';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import type { UtilisateurAdministre } from '../adminUtilisateurs.types';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
