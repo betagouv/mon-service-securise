@@ -25,6 +25,7 @@ import {
 } from '../modeles/autorisations/gestionDroits.js';
 import BusEvenements from '../bus/busEvenements.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRoleUtilisateurAdministreAttribue.js';
+import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAccesUtilisateurAdministreRetires.js';
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
@@ -296,6 +297,14 @@ export class ServiceAdministrationOrganisations {
           idAdmin
         )
       )
+    );
+
+    await this.busEvenements.publie(
+      new EvenementAccesUtilisateurAdministreRetires({
+        idAdmin,
+        idUtilisateurAdministre,
+        idsServices,
+      })
     );
   }
 
