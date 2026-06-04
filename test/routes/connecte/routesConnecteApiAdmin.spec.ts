@@ -206,6 +206,91 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
   });
 
+  describe('quand requête DELETE sur `/api/admin/utilisateurs/:idUtilisateur/roles`', () => {
+    const idAdmin = unUUIDRandom();
+    const idUtilisateurAdministre = unUUIDRandom();
+    const idService = unUUIDRandom();
+
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: idAdmin });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const reponse = await testeur.delete(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { idsServices: false }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si l'id utilisateur est invalide", async () => {
+      const reponse = await testeur.delete(
+        `/api/admin/utilisateurs/pas-un-uuid/roles`,
+        { idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si l'utilisateur ne fait pas partie du périmètre de l'admin", async () => {
+      testeur.serviceAdministrationOrganisations().retireAccesUtilisateurAdministre =
+        async () => {
+          throw new ErreurUtilisateurNonAdministre();
+        };
+
+      const reponse = await testeur.delete(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(403);
+    });
+
+    it("jette une erreur si le service ne fait pas partie du périmètre de l'admin", async () => {
+      testeur.serviceAdministrationOrganisations().retireAccesUtilisateurAdministre =
+        async () => {
+          throw new ErreurServiceNonAdministre();
+        };
+
+      const reponse = await testeur.delete(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(403);
+    });
+
+    it('jette une erreur si la mise à jour du rôle a échoué', async () => {
+      testeur.serviceAdministrationOrganisations().retireAccesUtilisateurAdministre =
+        async () => {
+          throw new EchecAutorisation();
+        };
+
+      const reponse = await testeur.delete(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { idsServices: [idService] }
+      );
+
+      expect(reponse.status).toBe(422);
+    });
+
+    it('délègue au service le retrait des accès', async () => {
+      testeur.serviceAdministrationOrganisations().retireAccesUtilisateurAdministre =
+        vi.fn();
+
+      await testeur.delete(
+        `/api/admin/utilisateurs/${idUtilisateurAdministre}/roles`,
+        { idsServices: [idService] }
+      );
+
+      expect(
+        testeur.serviceAdministrationOrganisations()
+          .retireAccesUtilisateurAdministre
+      ).toHaveBeenCalledWith(idAdmin, idUtilisateurAdministre, [idService]);
+    });
+  });
+
   describe('quand requete POST sur `/api/admin/verifieEmail', () => {
     beforeEach(() => {
       testeur.depotDonnees().lisSuperviseur = async () =>

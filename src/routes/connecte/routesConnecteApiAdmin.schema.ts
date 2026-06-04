@@ -20,3 +20,7 @@ export const schemaAttributionRoleServices = z.strictObject({
   ]),
   idsServices: z.array(z.uuid()).min(1),
 });
+
+export const schemaRetraitAccesServices = z.strictObject({
+  idsServices: z.array(z.uuid()).min(1),
+});
