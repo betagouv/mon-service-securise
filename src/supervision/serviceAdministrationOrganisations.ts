@@ -139,7 +139,16 @@ export class ServiceAdministrationOrganisations {
     if (!admin) return;
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-    if (services.some((s) => s.contributeurs.length === 1))
+    const seulProprietaireSurUnDesServices = services.some((s) => {
+      const autresContributeurs = s.contributeurs.filter(
+        (c: Contributeur) => c.idUtilisateur !== idUtilisateur
+      );
+      const autresProprietaires = autresContributeurs.filter(
+        (c: Contributeur) => c.estProprietaire
+      );
+      return autresProprietaires.length === 0;
+    });
+    if (seulProprietaireSurUnDesServices)
       throw new ErreurSuppressionImpossible();
 
     admin.cesseDAdministrer(new Entite({ siret }));
