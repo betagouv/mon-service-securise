@@ -202,34 +202,44 @@
         description="Sélectionnez les entités et services de votre périmètre auxquels {utilisateur.prenomNom}
           n'a pas encore accès. Vous devez attribuer un rôle."
       />
-      <TableauEntitesSelectionnables
-        {toutesEntites}
-        servicesParEntite={servicesDisponiblesParEntite}
-        bind:this={tableauDisponibles}
-        {onAjouteRole}
-        messageSiVide="Cet utilisateur a déjà accès à tous les services du périmètre"
-      />
+      {#if etapeActuelle === 'LISTE'}
+        <TableauEntitesSelectionnables
+          {toutesEntites}
+          servicesParEntite={servicesDisponiblesParEntite}
+          bind:this={tableauDisponibles}
+          {onAjouteRole}
+          messageSiVide="Cet utilisateur a déjà accès à tous les services du périmètre"
+        />
+      {:else}
+        <TitreContenuOnglet
+          titre="Attribuer un rôle commun"
+          description="Choisissez un rôle : il sera appliqué aux services sélectionnés."
+        />
+        <ActionAttributionRole
+          utilisateurAdministre={utilisateur}
+          {servicesSelectionnes}
+          bind:roleSelectionne
+        />
+      {/if}
     </div>
   </dsfr-tabs>
 </ContenuTiroir>
 {#if etapeActuelle === 'ACTION_ATTRIBUTION'}
   <ActionsTiroir>
-    {#if idTabActive === 0}
-      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-      <dsfr-button
-        label="Annuler les modifications"
-        onclick={() => (etapeActuelle = 'LISTE')}
-        kind="tertiary-no-outline"
-      ></dsfr-button>
-      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-      <dsfr-button
-        label="Enregistrer toutes les modifications"
-        onclick={() => appliqueNouveauxRoles()}
-        kind="primary"
-        has-icon
-        icon="check-line"
-      ></dsfr-button>
-    {/if}
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Annuler les modifications"
+      onclick={() => (etapeActuelle = 'LISTE')}
+      kind="tertiary-no-outline"
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Enregistrer toutes les modifications"
+      onclick={() => appliqueNouveauxRoles()}
+      kind="primary"
+      has-icon
+      icon="check-line"
+    ></dsfr-button>
   </ActionsTiroir>
 {/if}
 {#if etapeActuelle === 'ACTION_RETRAIT'}
