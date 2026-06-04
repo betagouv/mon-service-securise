@@ -5,8 +5,44 @@ const vitest = require('@vitest/eslint-plugin');
 const tsParser = require('@typescript-eslint/parser');
 const typescriptEslint = require('@typescript-eslint/eslint-plugin');
 const js = require('@eslint/js');
-
 const { FlatCompat } = require('@eslint/eslintrc');
+
+const FICHIER_AUTORISE_SUPPRESSION_CONTRIBUTEUR = [
+  'procedureSuppressionContributeur.ts',
+  'depotDonneesAutorisations.js',
+];
+
+const regleSupprimeContributeur = {
+  create(context) {
+    const nomFichier = context.filename;
+    if (
+      FICHIER_AUTORISE_SUPPRESSION_CONTRIBUTEUR.some((f) =>
+        nomFichier.endsWith(f)
+      )
+    )
+      return {};
+
+    return {
+      CallExpression(node) {
+        const { callee } = node;
+        const estAppelCible =
+          (callee.type === 'MemberExpression' &&
+            callee.property.name === 'supprimeContributeur') ||
+          (callee.type === 'Identifier' &&
+            callee.name === 'supprimeContributeur');
+
+        if (estAppelCible) {
+          context.report({
+            node,
+            message:
+              "L'appel à `supprimeContributeur` est réservé à `procedureSuppressionContributeur.ts`.\n" +
+              'src/modeles/autorisations/procedureSuppressionContributeur.ts',
+          });
+        }
+      },
+    };
+  },
+};
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -191,6 +227,19 @@ module.exports = defineConfig([
           devDependencies: true,
         },
       ],
+    },
+  },
+  {
+    files: ['src/**/*.js', 'src/**/*.ts'],
+    plugins: {
+      local: {
+        rules: {
+          'no-appel-supprime-contributeur': regleSupprimeContributeur,
+        },
+      },
+    },
+    rules: {
+      'local/no-appel-supprime-contributeur': 'error',
     },
   },
 ]);
