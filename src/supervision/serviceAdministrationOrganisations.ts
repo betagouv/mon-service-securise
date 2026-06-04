@@ -242,10 +242,9 @@ export class ServiceAdministrationOrganisations {
 
     await this.verifieServicesSontAdministres(idAdmin, idsServices);
 
-    const autorisationsDeUtilisateurAdministre: Autorisation[] =
-      await this.depotDonnees.autorisations(idUtilisateurAdministre);
-    const autorisationsConcernees = autorisationsDeUtilisateurAdministre.filter(
-      (a) => idsServices.includes(a.idService)
+    const autorisationsConcernees = await this.autorisationsPour(
+      idUtilisateurAdministre,
+      idsServices
     );
 
     ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
@@ -261,6 +260,49 @@ export class ServiceAdministrationOrganisations {
         role,
         idsServices,
       })
+    );
+  }
+
+  async retireAccesUtilisateurAdministre(
+    idAdmin: UUID,
+    idUtilisateurAdministre: UUID,
+    idsServices: UUID[]
+  ) {
+    await this.verifieUtilisateurEstAdministre(
+      idAdmin,
+      idUtilisateurAdministre
+    );
+
+    await this.verifieServicesSontAdministres(idAdmin, idsServices);
+
+    const autorisationsConcernees = await this.autorisationsPour(
+      idUtilisateurAdministre,
+      idsServices
+    );
+
+    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+      autorisationsConcernees
+    );
+
+    await Promise.all(
+      autorisationsConcernees.map((a) =>
+        this.depotDonnees.supprimeContributeur(
+          idUtilisateurAdministre,
+          a.idService,
+          idAdmin
+        )
+      )
+    );
+  }
+
+  private async autorisationsPour(
+    idUtilisateurAdministre: UUID,
+    idsServices: UUID[]
+  ) {
+    const autorisationsDeUtilisateurAdministre: Autorisation[] =
+      await this.depotDonnees.autorisations(idUtilisateurAdministre);
+    return autorisationsDeUtilisateurAdministre.filter((a) =>
+      idsServices.includes(a.idService)
     );
   }
 

@@ -570,4 +570,67 @@ describe("Le service de gestion des admins d'organisation", () => {
       );
     });
   });
+
+  describe("sur demande de retrait des accès d'un utilisateur administré", () => {
+    let service: ServiceAdministrationOrganisations;
+    const idU1 = unUUID('U1');
+    const idAutreAdmin = unUUID('A2');
+    const idS1 = unUUID('S1');
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
+        .ajouteAdminSurPerimetre(idAutreAdmin, ['SIRET-1'])
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAutreAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS1).donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idAutreAdmin, idS1).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur(idU1, idS1).donnees
+        )
+        .construis() as unknown as AdaptateurPersistance;
+
+      depotComplet = unDepotComplet({ adaptateurPersistance });
+
+      service = leServiceDAdministrationDesOrgas();
+    });
+
+    it("jette une erreur si l'utilisateur n'est pas administré par l'admin courant", async () => {
+      const unAutreUtilisateur = unUUIDRandom();
+
+      await expect(
+        service.retireAccesUtilisateurAdministre(idAdmin, unAutreUtilisateur, [
+          idS1,
+        ])
+      ).rejects.toThrow(ErreurUtilisateurNonAdministre);
+    });
+
+    it("jette une erreur si un des services n'est pas administré", async () => {
+      await expect(
+        service.retireAccesUtilisateurAdministre(idAdmin, idU1, [
+          unUUIDRandom(),
+        ])
+      ).rejects.toThrow(ErreurServiceNonAdministre);
+    });
+
+    it("jette une erreur si l'utilisateur cible est admin d'un des services ciblés", async () => {
+      await expect(
+        service.retireAccesUtilisateurAdministre(idAdmin, idAutreAdmin, [idS1])
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
+    it("supprime l'autorisations sur chaque service", async () => {
+      await service.retireAccesUtilisateurAdministre(idAdmin, idU1, [idS1]);
+
+      const autorisationSupprimee = await depotComplet.autorisationPour(
+        idU1,
+        idS1
+      );
+      expect(autorisationSupprimee).toBeUndefined();
+    });
+  });
 });
