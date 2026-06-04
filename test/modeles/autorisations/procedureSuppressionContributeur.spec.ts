@@ -1,4 +1,4 @@
-import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { unUUID } from '../../constructeurs/UUID.ts';
 import { unePersistanceMemoire } from '../../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
 import { creeDepot as creeDepotComplet } from '../../../src/depotDonnees.ts';

@@ -25,6 +25,7 @@ import {
 } from '../modeles/autorisations/gestionDroits.js';
 import BusEvenements from '../bus/busEvenements.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRoleUtilisateurAdministreAttribue.js';
+import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -284,9 +285,12 @@ export class ServiceAdministrationOrganisations {
       autorisationsConcernees
     );
 
+    const procedureSuppressionContributeur =
+      new ProcedureSuppressionContributeur({ depotDonnees: this.depotDonnees });
+
     await Promise.all(
       autorisationsConcernees.map((a) =>
-        this.depotDonnees.supprimeContributeur(
+        procedureSuppressionContributeur.execute(
           idUtilisateurAdministre,
           a.idService,
           idAdmin

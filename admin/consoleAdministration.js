@@ -35,6 +35,7 @@ import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironne
 import { adaptateurChiffrementChaCha20 } from '../src/adaptateurs/adaptateurChiffrementChaCha20.js';
 import EvenementCguAcceptees from '../src/modeles/journalMSS/evenementCguAcceptees.js';
 import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAdministrationOrganisations.js';
+import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -591,16 +592,13 @@ class ConsoleAdministration {
     }
 
     const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
+    const procedureSuppressionContributeur =
+      new ProcedureSuppressionContributeur({ depotDonnees: this.depotDonnees });
 
     // eslint-disable-next-line no-restricted-syntax
     for (const autorisationExistante of autorisations) {
       // eslint-disable-next-line no-await-in-loop
-      await this.depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
-        utilisateur.id,
-        autorisationExistante.idService
-      );
-      // eslint-disable-next-line no-await-in-loop
-      await this.depotDonnees.supprimeContributeur(
+      await procedureSuppressionContributeur.execute(
         utilisateur.id,
         autorisationExistante.idService,
         'consoleAdmin'
