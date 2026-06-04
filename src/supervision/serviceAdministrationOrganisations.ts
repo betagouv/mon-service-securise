@@ -28,6 +28,7 @@ import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRole
 import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAccesUtilisateurAdministreRetires.js';
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
+import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -46,6 +47,7 @@ export class ServiceAdministrationOrganisations {
   private readonly adaptateurUUID: AdaptateurUUID;
   private readonly adaptateurMail: AdaptateurMail;
   private readonly busEvenements: BusEvenements;
+  private readonly procedureSuppressionContributeurAdmin: ProcedureSuppressionContributeurAdmin;
 
   constructor({
     depotDonnees,
@@ -65,15 +67,41 @@ export class ServiceAdministrationOrganisations {
     this.adaptateurUUID = adaptateurUUID;
     this.adaptateurMail = adaptateurMail;
     this.busEvenements = busEvenements;
+    this.procedureSuppressionContributeurAdmin =
+      new ProcedureSuppressionContributeurAdmin({ depotDonnees });
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
-    await this.depotDonnees.supprimeAutorisationsAdminPour(service.id);
-
     const nouvellesAutorisations =
       await this.fabriqueAutorisationsAdminPourService(service);
 
     await this.sauvegardeAutorisations(nouvellesAutorisations);
+    await this.supprimeAutorisationsAdminObsoletes(service);
+  }
+
+  private async supprimeAutorisationsAdminObsoletes(service: Service) {
+    const adminsActuels = await this.depotDonnees.lisAdminsPour(
+      service.siretDeOrganisation()
+    );
+    const idAdminsActuels = adminsActuels.map(
+      (admin) => admin.donnees().idUtilisateur
+    );
+
+    const autorisationsDuService: Autorisation[] =
+      await this.depotDonnees.autorisationsDuService(service.id);
+
+    const autorisationsASupprimer = autorisationsDuService
+      .filter((a) => a.estAdmin)
+      .filter((a) => !idAdminsActuels.includes(a.idUtilisateur));
+
+    await Promise.all(
+      autorisationsASupprimer.map((a) =>
+        this.procedureSuppressionContributeurAdmin.execute(
+          a.idUtilisateur,
+          a.idService
+        )
+      )
+    );
   }
 
   private async fabriqueAutorisationsAdminPourService(service: Service) {

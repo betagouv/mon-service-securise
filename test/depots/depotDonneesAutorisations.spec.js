@@ -480,6 +480,100 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
+  describe("sur demande de suppression d'un contributeur administrateur", () => {
+    it("vérifie que l'autorisation de contribution existe", async () => {
+      const sansAutorisations = unePersistanceMemoire().construis();
+
+      const depot = creeDepot(sansAutorisations);
+
+      try {
+        await depot.supprimeContributeurAdmin('000', 'ABC');
+        expect().to.fail('La demande aurait dû lever une erreur');
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.equal(
+          'L\'utilisateur "000" n\'est pas contributeur du service "ABC"'
+        );
+      }
+    });
+
+    it('supprime le contributeur', async () => {
+      const avecUneAutorisation = unePersistanceMemoire()
+        .ajouteUnService(
+          unService().avecId('S1').avecDescription({ nom: 'S1' }).donnees
+        )
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin('U1', 'S1').donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin('U2', 'S1').donnees)
+        .construis();
+
+      const depot = creeDepot(avecUneAutorisation);
+
+      const avant = await depot.autorisationPour('U1', 'S1');
+      expect(avant).not.to.be(undefined);
+
+      await depot.supprimeContributeurAdmin('U1', 'S1');
+
+      const apres = await depot.autorisationPour('U1', 'S1');
+      expect(apres).to.be(undefined);
+    });
+
+    it('demande au dépôt données service de supprimer le contributeur', async () => {
+      const avecUneAutorisation = unePersistanceMemoire()
+        .ajouteUneAutorisation(uneAutorisation().dAdmin('U1', 'S1').donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin('U2', 'S1').donnees)
+        .construis();
+
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      const depotServices = {
+        supprimeContributeur: async (idService, idUtilisateur) => {
+          idServiceRecu = idService;
+          idUtilisateurRecu = idUtilisateur;
+        },
+      };
+      const depot = creeDepot(
+        avecUneAutorisation,
+        {},
+        fabriqueBusPourLesTests(),
+        depotServices
+      );
+
+      await depot.supprimeContributeurAdmin('U1', 'S1');
+
+      expect(idServiceRecu).to.be('S1');
+      expect(idUtilisateurRecu).to.be('U1');
+    });
+
+    it("publie les autorisations à jour sur le bus d'événements", async () => {
+      const bus = fabriqueBusPourLesTests();
+      const avecDeuxExistantes = unePersistanceMemoire()
+        .ajouteUnService(
+          unService().avecId('S1').avecDescription({ nom: 'S1' }).donnees
+        )
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('A1').dAdmin('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().avecId('A2').dAdmin('U2', 'S1').donnees
+        )
+        .construis();
+      const depot = creeDepot(avecDeuxExistantes, null, bus);
+
+      await depot.supprimeContributeurAdmin('U1', 'S1');
+
+      expect(
+        bus.recupereEvenement(EvenementAutorisationsServiceModifiees)
+      ).to.eql({
+        idService: 'S1',
+        autorisations: [{ droit: 'ADMIN', idUtilisateur: 'U2' }],
+      });
+    });
+  });
+
   it('connaît toutes les autorisations pour un service donné', async () => {
     const adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnUtilisateur({ id: '888' })

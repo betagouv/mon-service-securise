@@ -39,6 +39,7 @@ type Surcharge = Partial<
 describe("Le service de gestion des admins d'organisation", () => {
   const idService = unUUID('s');
   const idAdmin = unUUID('u1');
+  const idAncienAdmin = unUUIDRandom();
   const entite = { siret: '1234', nom: 'Un nom', departement: '75' };
   const unService = unServiceV2()
     .avecId(idService)
@@ -51,7 +52,14 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   const unDepotComplet = (surcharge?: Partial<ConfigDepotDonnees>) => {
     adaptateurPersistance = unePersistanceMemoire()
-      .ajouteUnService(unService)
+      .ajouteUnService(
+        unServiceV2().avecId(idService).avecOrganisationResponsable(entite)
+          .donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().dAdmin(idAncienAdmin, idService).donnees
+      )
+      .ajouteUnUtilisateur(unUtilisateur().avecId(idAncienAdmin).donnees)
       .construis() as AdaptateurPersistance;
     adaptateurPersistanceTS = unePersistanceMemoireTS()
       .ajouteAdminSurPerimetre(idAdmin, [entite])
@@ -111,14 +119,16 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(autorisationsDuService[0].estAdmin).toBe(true);
     });
 
-    it('délègue au dépôt la suppression des autorisations admins pré-existantes', async () => {
-      const mockSupprimeAutorisations = vi.fn();
-      depotComplet.supprimeAutorisationsAdminPour = mockSupprimeAutorisations;
+    it('supprime les autorisations des anciens admins', async () => {
       const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
       await administrationOrganisations.rattacheLesAdministrateursDe(unService);
 
-      expect(mockSupprimeAutorisations).toHaveBeenCalledWith(idService);
+      const autorisationSupprimee = await depotComplet.autorisationPour(
+        idAncienAdmin,
+        idService
+      );
+      expect(autorisationSupprimee).toBeUndefined();
     });
   });
 
