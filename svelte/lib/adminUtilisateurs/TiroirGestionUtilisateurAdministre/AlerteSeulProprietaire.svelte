@@ -4,9 +4,10 @@
 
   interface Props {
     servicesSeulProprietaire: ServiceAdministre[];
+    modeAttribution?: boolean;
   }
 
-  let { servicesSeulProprietaire }: Props = $props();
+  let { servicesSeulProprietaire, modeAttribution = false }: Props = $props();
 </script>
 
 {#if servicesSeulProprietaire.length > 0}
@@ -18,13 +19,14 @@
           'service',
           'services',
           servicesSeulProprietaire.length
-        )}. Après cette action, seul les administrateurs du périmètre auront
-        accès {singulierPluriel(
-          'au service',
-          'aux services',
-          servicesSeulProprietaire.length
-        )}. <b>Cette action est irréversible.</b></span
-      >
+        )}.
+        {#if !modeAttribution}
+          Après cette action, seul les administrateurs du périmètre auront accès {singulierPluriel(
+            'au service',
+            'aux services',
+            servicesSeulProprietaire.length
+          )}. <b>Cette action est irréversible.</b>{/if}
+      </span>
     </div>
   </dsfr-alert>
 {/if}

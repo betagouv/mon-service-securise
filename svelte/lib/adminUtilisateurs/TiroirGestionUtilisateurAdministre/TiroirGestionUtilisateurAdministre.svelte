@@ -188,6 +188,7 @@
           utilisateurAdministre={utilisateur}
           {servicesSelectionnes}
           bind:roleSelectionne
+          {servicesSeulProprietaire}
         />
       {:else}
         <TitreContenuOnglet
@@ -232,6 +233,7 @@
           utilisateurAdministre={utilisateur}
           {servicesSelectionnes}
           bind:roleSelectionne
+          {servicesSeulProprietaire}
         />
       {/if}
     </div>

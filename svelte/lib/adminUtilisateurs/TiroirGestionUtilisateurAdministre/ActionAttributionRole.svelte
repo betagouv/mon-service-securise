@@ -7,22 +7,30 @@
     type UtilisateurAdministre,
   } from '../adminUtilisateurs.types';
   import { singulierPluriel } from '../../outils/string';
+  import AlerteSeulProprietaire from './AlerteSeulProprietaire.svelte';
+  import IndicateurSeulProprietaire from './IndicateurSeulProprietaire.svelte';
 
   interface Props {
     servicesSelectionnes: ServiceAdministre[];
     utilisateurAdministre: UtilisateurAdministre;
     roleSelectionne: Role;
+    servicesSeulProprietaire: ServiceAdministre[];
   }
 
   let {
     servicesSelectionnes,
     utilisateurAdministre,
     roleSelectionne = $bindable(),
+    servicesSeulProprietaire,
   }: Props = $props();
 
   const metAJourRole = (e: CustomEvent<Role>) => {
     roleSelectionne = e.detail;
   };
+
+  let doitAfficherAlerteSeuleProprietaire = $derived(
+    roleSelectionne !== 'PROPRIETAIRE'
+  );
 </script>
 
 <dsfr-select
@@ -36,6 +44,9 @@
   value={roleSelectionne}
 ></dsfr-select>
 <hr />
+{#if doitAfficherAlerteSeuleProprietaire}
+  <AlerteSeulProprietaire {servicesSeulProprietaire} modeAttribution />
+{/if}
 <h5>
   {servicesSelectionnes.length}
   {singulierPluriel(
@@ -67,6 +78,11 @@
         <span>→</span>
       {/if}
       <span class="nouveau-role">{labelsRole[roleSelectionne!]}</span>
+      {#if doitAfficherAlerteSeuleProprietaire}
+        <div class="indicateur">
+          <IndicateurSeulProprietaire />
+        </div>
+      {/if}
     </div>
   {/each}
 </dsfr-table>
@@ -96,7 +112,8 @@
 
   .role {
     display: flex;
-    gap: 8px;
+    column-gap: 8px;
+    flex-wrap: wrap;
 
     .ancien-role {
       text-decoration: line-through;
@@ -106,6 +123,10 @@
     .nouveau-role {
       color: var(--bleu-mise-en-avant);
       font-weight: bold;
+    }
+
+    .indicateur {
+      flex-basis: 100%;
     }
   }
 </style>
