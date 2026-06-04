@@ -42,6 +42,7 @@ import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMe
 import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js';
 import { routesConnecteApiExplicationRisquesV2 } from './routesConnecteApiExplicationRisquesV2.js';
 import { routesConnecteApiAdmin } from './routesConnecteApiAdmin.js';
+import { ProcedureSuppressionContributeur } from '../../modeles/autorisations/procedureSuppressionContributeur.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -500,11 +501,9 @@ const routesConnecteApi = ({
 
       try {
         await verifiePermissionSuppression();
-        await depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
-          idContributeur,
-          idService
-        );
-        await depotDonnees.supprimeContributeur(
+        const procedureSuppressionContributeur =
+          new ProcedureSuppressionContributeur({ depotDonnees });
+        await procedureSuppressionContributeur.execute(
           idContributeur,
           idService,
           idUtilisateur
