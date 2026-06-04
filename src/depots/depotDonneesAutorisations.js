@@ -165,6 +165,22 @@ const creeDepot = (config = {}) => {
     await publieAutorisationsDuService(idService);
   };
 
+  const supprimeContributeurAdmin = async (idContributeur, idService) => {
+    const verifieAutorisationExiste = async () => {
+      const existe = await autorisationExiste(idContributeur, idService);
+      if (!existe) {
+        throw new ErreurAutorisationInexistante(
+          `L'utilisateur "${idContributeur}" n'est pas contributeur du service "${idService}"`
+        );
+      }
+    };
+
+    await verifieAutorisationExiste();
+    await adaptateurPersistance.supprimeAutorisation(idContributeur, idService);
+    await depotServices.supprimeContributeur(idService, idContributeur);
+    await publieAutorisationsDuService(idService);
+  };
+
   const analyseDesProprietaires = async (filtredomainesEmails = []) => {
     const lesProprietaires =
       await adaptateurPersistance.toutesLesAutorisationsDeProprietaire();
@@ -220,6 +236,7 @@ const creeDepot = (config = {}) => {
     sauvegardeAutorisation,
     supprimeAutorisationsAdminPour,
     supprimeContributeur,
+    supprimeContributeurAdmin,
   };
 };
 
