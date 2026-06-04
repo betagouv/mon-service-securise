@@ -19,4 +19,8 @@ export const api = {
       role,
       idsServices,
     }),
+  retireDesServices: async (idUtilisateur: string, idsServices: string[]) =>
+    await axios.delete(`/api/admin/utilisateurs/${idUtilisateur}/roles`, {
+      data: { idsServices },
+    }),
 };

@@ -118,6 +118,18 @@
     );
     tiroirStore.ferme();
   };
+
+  const retireDesServices = async () => {
+    await api.retireDesServices(utilisateur.id, idServicesSelectionnes);
+    toasterStore.succes(
+      'Accès retirés',
+      `${utilisateur.prenomNom} a été retiré de ${idServicesSelectionnes.length} ${singulierPluriel('service', 'services', idServicesSelectionnes.length)}`
+    );
+    document.dispatchEvent(
+      new CustomEvent('utilisateurs-administres-modifies')
+    );
+    tiroirStore.ferme();
+  };
 </script>
 
 <ContenuTiroir>
@@ -216,6 +228,30 @@
         kind="primary"
         has-icon
         icon="check-line"
+      ></dsfr-button>
+    {/if}
+  </ActionsTiroir>
+{/if}
+{#if etapeActuelle === 'ACTION_RETRAIT'}
+  <ActionsTiroir>
+    {#if idTabActive === 0}
+      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+      <dsfr-button
+        label="Annuler les modifications"
+        onclick={() => (etapeActuelle = 'LISTE')}
+        kind="tertiary-no-outline"
+      ></dsfr-button>
+      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+      <dsfr-button
+        label="Retirer {singulierPluriel(
+          'du service',
+          `de ${idServicesSelectionnes.length} services`,
+          idServicesSelectionnes.length
+        )}"
+        onclick={() => retireDesServices()}
+        kind="primary"
+        has-icon
+        icon="delete-bin-line"
       ></dsfr-button>
     {/if}
   </ActionsTiroir>
