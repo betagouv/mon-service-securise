@@ -81,6 +81,18 @@
     tousServices.filter((s) => idServicesSelectionnes.includes(s.id))
   );
 
+  let servicesSeulProprietaire: ServiceAdministre[] = $derived(
+    servicesSelectionnes.filter((s) => {
+      const utilisateurEstProprietaire =
+        utilisateur.autorisations.find((a) => a.idService === s.id)?.role ===
+        'PROPRIETAIRE';
+      const autreProprietaireExiste = s.contributeurs
+        .filter((c) => !c.estAdmin)
+        .some((c) => c.estProprietaire && c.id !== utilisateur.id);
+      return !autreProprietaireExiste && utilisateurEstProprietaire;
+    })
+  );
+
   const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
     idTabActive = e.detail.index;
     tableauActuels?.reinitialise();
@@ -185,6 +197,7 @@
         <ActionRetraitAcces
           utilisateurAdministre={utilisateur}
           {servicesSelectionnes}
+          {servicesSeulProprietaire}
         />
       {/if}
     </div>

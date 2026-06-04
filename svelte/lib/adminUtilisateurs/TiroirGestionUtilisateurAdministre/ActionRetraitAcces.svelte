@@ -5,46 +5,23 @@
     type UtilisateurAdministre,
   } from '../adminUtilisateurs.types';
   import { singulierPluriel } from '../../outils/string';
+  import AlerteSeulProprietaire from './AlerteSeulProprietaire.svelte';
+  import IndicateurSeulProprietaire from './IndicateurSeulProprietaire.svelte';
 
   interface Props {
     servicesSelectionnes: ServiceAdministre[];
     utilisateurAdministre: UtilisateurAdministre;
+    servicesSeulProprietaire: ServiceAdministre[];
   }
 
-  let { servicesSelectionnes, utilisateurAdministre }: Props = $props();
-
-  let servicesSeulProprietaire: ServiceAdministre[] = $derived(
-    servicesSelectionnes.filter((s) => {
-      const utilisateurEstProprietaire =
-        utilisateurAdministre.autorisations.find((a) => a.idService === s.id)
-          ?.role === 'PROPRIETAIRE';
-      const autreProprietaireExiste = s.contributeurs
-        .filter((c) => !c.estAdmin)
-        .some((c) => c.estProprietaire && c.id !== utilisateurAdministre.id);
-      return !autreProprietaireExiste && utilisateurEstProprietaire;
-    })
-  );
+  let {
+    servicesSelectionnes,
+    utilisateurAdministre,
+    servicesSeulProprietaire,
+  }: Props = $props();
 </script>
 
-{#if servicesSeulProprietaire.length > 0}
-  <dsfr-alert size="sm" type="warning" has-description>
-    <div slot="description" class="alerte">
-      <span
-        >Cet utilisateur est actuellement le <b>seul propriétaire</b> de {servicesSeulProprietaire.length}
-        {singulierPluriel(
-          'service',
-          'services',
-          servicesSeulProprietaire.length
-        )}. Après cette action, seul les administrateurs du périmètre auront
-        accès {singulierPluriel(
-          'au service',
-          'aux services',
-          servicesSeulProprietaire.length
-        )}. <b>Cette action est irréversible.</b></span
-      >
-    </div>
-  </dsfr-alert>
-{/if}
+<AlerteSeulProprietaire {servicesSeulProprietaire} />
 
 <h5>
   {servicesSelectionnes.length}
@@ -76,10 +53,7 @@
     </div>
     <div slot="cell:role:{i}">
       {#if seulProprietaire}
-        <span class="seul-proprietaire">
-          <lab-anssi-icone taille="sm" nom="warning-line"></lab-anssi-icone>
-          Seul propriétaire de ce service
-        </span>
+        <IndicateurSeulProprietaire />
       {:else}
         <span>{labelsRole[roleActuel]}</span>
       {/if}
@@ -98,19 +72,5 @@
   .entite-service {
     display: flex;
     flex-direction: column;
-  }
-
-  dsfr-alert {
-    margin-bottom: 24px;
-
-    .alerte {
-      padding-bottom: 0.75rem;
-      display: block;
-    }
-  }
-
-  .seul-proprietaire {
-    display: flex;
-    gap: 8px;
   }
 </style>
