@@ -389,14 +389,16 @@ describe("Le service de gestion des admins d'organisation", () => {
     let service: ServiceAdministrationOrganisations;
     const siret = 'SIRET-1';
     const autreSiret = '12345';
-    const siretEnErreur = 'SIRET-ERREUR';
+    const siretSeulAdmin = 'SIRET-SEUL-ADMIN';
     const idService2 = unUUID('S2');
     const idService3 = unUUID('S3');
+    const idContributeurS3 = unUUID('U3');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
-        .ajouteAdminSurPerimetre(idAdmin, [siret, siretEnErreur])
+        .ajouteAdminSurPerimetre(idAdmin, [siret, siretSeulAdmin])
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idContributeurS3).donnees)
         .ajouteUnService(
           unServiceV2().avecId(idService).avecOrganisationResponsable({ siret })
             .donnees
@@ -409,7 +411,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUnService(
           unServiceV2()
             .avecId(idService3)
-            .avecOrganisationResponsable({ siret: siretEnErreur }).donnees
+            .avecOrganisationResponsable({ siret: siretSeulAdmin }).donnees
         )
         .ajouteUneAutorisation(
           uneAutorisation().dAdmin(idAdmin, idService).donnees
@@ -422,6 +424,9 @@ describe("Le service de gestion des admins d'organisation", () => {
         )
         .ajouteUneAutorisation(
           uneAutorisation().dAdmin(idAdmin, idService3).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur(idContributeurS3, idService3).donnees
         )
         .construis() as unknown as AdaptateurPersistance;
       adaptateurPersistanceTS = unePersistanceMemoireTS()
@@ -457,10 +462,10 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(autorisations[0].idService).toBe(idService2);
     });
 
-    it("jette une erreur si l'admin est seul contributeurs d'un des services administrés", async () => {
-      await expect(service.retireAdmin(siretEnErreur, idAdmin)).rejects.toThrow(
-        new ErreurSuppressionImpossible()
-      );
+    it("jette une erreur si l'admin est dernier 'propriétaire' (ou admin) d'un des services administrés", async () => {
+      await expect(
+        service.retireAdmin(siretSeulAdmin, idAdmin)
+      ).rejects.toThrow(new ErreurSuppressionImpossible());
     });
   });
 
