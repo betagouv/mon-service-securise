@@ -27,6 +27,7 @@ import BusEvenements from '../bus/busEvenements.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRoleUtilisateurAdministreAttribue.js';
 import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAccesUtilisateurAdministreRetires.js';
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
+import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -113,7 +114,7 @@ export class ServiceAdministrationOrganisations {
     if (services.some((s) => s.contributeurs.length === 1))
       throw new ErreurSuppressionImpossible();
 
-    admin?.cesseDAdministrer(new Entite({ siret }));
+    admin.cesseDAdministrer(new Entite({ siret }));
     await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
     await Promise.all(
       services.map((service) => this.rattacheLesAdministrateursDe(service))
@@ -241,19 +242,37 @@ export class ServiceAdministrationOrganisations {
       idAdmin,
       idUtilisateurAdministre
     );
-
     await this.verifieServicesSontAdministres(idAdmin, idsServices);
 
-    const autorisationsConcernees = await this.autorisationsPour(
+    const autorisationsExistantes = await this.autorisationsPour(
       idUtilisateurAdministre,
       idsServices
     );
 
     ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
-      autorisationsConcernees
+      autorisationsExistantes
     );
 
-    await this.appliqueRole(autorisationsConcernees, role);
+    await this.appliqueRole(autorisationsExistantes, role);
+
+    const autorisationsACreer = idsServices
+      .filter(
+        (id) => !autorisationsExistantes.map((a) => a.idService).includes(id)
+      )
+      .map((idService) => {
+        const { estProprietaire, ...droits } =
+          ServiceAdministrationOrganisations.roleEnDroits(role);
+        return fabrique({
+          id: this.adaptateurUUID.genereUUID(),
+          idService,
+          idUtilisateur: idUtilisateurAdministre,
+          estProprietaire: !!estProprietaire,
+          droits,
+        });
+      });
+    await Promise.all(
+      autorisationsACreer.map(this.depotDonnees.sauvegardeAutorisation)
+    );
 
     await this.busEvenements.publie(
       new EvenementRoleUtilisateurAdministreAttribue({
@@ -263,6 +282,15 @@ export class ServiceAdministrationOrganisations {
         idsServices,
       })
     );
+  }
+
+  private static roleEnDroits(r: Role): DroitsAvecEstProprietaire {
+    return {
+      ...(r === Autorisation.RESUME_NIVEAU_DROIT.LECTURE
+        ? tousDroitsEnLecture()
+        : tousDroitsEnEcriture()),
+      estProprietaire: r === Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+    };
   }
 
   async retireAccesUtilisateurAdministre(
@@ -323,15 +351,8 @@ export class ServiceAdministrationOrganisations {
     autorisationsConcernees: Autorisation[],
     role: Role
   ) {
-    const roleEnDroits = (r: Role): DroitsAvecEstProprietaire => ({
-      ...(r === Autorisation.RESUME_NIVEAU_DROIT.LECTURE
-        ? tousDroitsEnLecture()
-        : tousDroitsEnEcriture()),
-      estProprietaire: r === Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
-    });
-
     autorisationsConcernees.forEach((a) =>
-      a.appliqueDroits(roleEnDroits(role))
+      a.appliqueDroits(ServiceAdministrationOrganisations.roleEnDroits(role))
     );
     await Promise.all(
       autorisationsConcernees.map(this.depotDonnees.sauvegardeAutorisation)
