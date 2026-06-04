@@ -56,14 +56,16 @@
   {#each servicesSelectionnes as service, i (service.id)}
     {@const roleAvantChangement = utilisateurAdministre.autorisations.find(
       (a) => a.idService === service.id
-    )!.role}
+    )?.role}
     <div slot="cell:entiteService:{i}" class="entite-service">
       <span><b>{service.organisationResponsable}</b></span>
       <span>{service.nomService}</span>
     </div>
     <div slot="cell:role:{i}" class="role">
-      <span class="ancien-role">{labelsRole[roleAvantChangement]}</span>
-      <span>→</span>
+      {#if roleAvantChangement}
+        <span class="ancien-role">{labelsRole[roleAvantChangement]}</span>
+        <span>→</span>
+      {/if}
       <span class="nouveau-role">{labelsRole[roleSelectionne!]}</span>
     </div>
   {/each}
