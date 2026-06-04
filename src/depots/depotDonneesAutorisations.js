@@ -202,27 +202,6 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const supprimeAutorisationsAdminPour = async (idService) => {
-    const duService = await autorisationsDuService(idService);
-    const idAdmins = duService
-      .filter((a) => a.estAdmin)
-      .map((a) => a.idUtilisateur);
-
-    if (idAdmins.length === 0) return;
-
-    await Promise.all(
-      idAdmins.map((idUtilisateur) =>
-        adaptateurPersistance.supprimeAutorisation(idUtilisateur, idService)
-      )
-    );
-    await Promise.all(
-      idAdmins.map((idUtilisateur) =>
-        depotServices.supprimeContributeur(idService, idUtilisateur)
-      )
-    );
-    await publieAutorisationsDuService(idService);
-  };
-
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -234,7 +213,6 @@ const creeDepot = (config = {}) => {
     autorisations,
     autorisationsDuService,
     sauvegardeAutorisation,
-    supprimeAutorisationsAdminPour,
     supprimeContributeur,
     supprimeContributeurAdmin,
   };
