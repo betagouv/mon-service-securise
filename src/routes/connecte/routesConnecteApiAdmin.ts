@@ -7,6 +7,7 @@ import {
   schemaAttributionRoleServices,
   schemaDeleteAdmin,
   schemaPostAdminNomme,
+  schemaRetraitAccesServices,
 } from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
@@ -94,6 +95,41 @@ const routesConnecteApiAdmin = ({
           idUtilisateurCourant,
           idUtilisateur as UUID,
           role,
+          idsServices as UUID[]
+        );
+      } catch (e) {
+        if (
+          e instanceof ErreurUtilisateurNonAdministre ||
+          e instanceof ErreurServiceNonAdministre
+        ) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof EchecAutorisation) {
+          reponse.sendStatus(422);
+          return;
+        }
+        suite(e);
+      }
+
+      reponse.sendStatus(200);
+    }
+  );
+
+  routes.delete(
+    '/utilisateurs/:idUtilisateur/roles',
+    valideBody(schemaRetraitAccesServices),
+    valideParams(z.looseObject({ idUtilisateur: z.uuid() })),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const { idsServices } = requete.body;
+      const { idUtilisateur } = requete.params;
+
+      try {
+        await serviceAdministrationOrganisations.retireAccesUtilisateurAdministre(
+          idUtilisateurCourant,
+          idUtilisateur as UUID,
           idsServices as UUID[]
         );
       } catch (e) {
