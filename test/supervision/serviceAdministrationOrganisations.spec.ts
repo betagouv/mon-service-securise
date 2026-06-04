@@ -459,6 +459,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     const idU1 = unUUID('U1');
     const idAutreAdmin = unUUID('A2');
     const idS1 = unUUID('S1');
+    const idS2 = unUUID('S2');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
@@ -468,7 +469,9 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAutreAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
         .ajouteUnService(unServiceV2().avecId(idS1).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS2).donnees)
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
+        .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS2).donnees)
         .ajouteUneAutorisation(
           uneAutorisation().dAdmin(idAutreAdmin, idS1).donnees
         )
@@ -570,6 +573,35 @@ describe("Le service de gestion des admins d'organisation", () => {
         Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE
       );
     });
+
+    it.each([
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+        estProprietaireAttendu: true,
+      },
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.LECTURE,
+        estProprietaireAttendu: false,
+      },
+      {
+        role: Autorisation.RESUME_NIVEAU_DROIT.ECRITURE,
+        estProprietaireAttendu: false,
+      },
+    ])(
+      "peut attribuer le rôle $role sur un service sur lequel l'utilisateur administré n'est pas contributeur",
+      async ({ role, estProprietaireAttendu }) => {
+        await service.attribueRoleAUtilisateurAdministre(idAdmin, idU1, role, [
+          idS2,
+        ]);
+
+        const autorisationAJour = await depotComplet.autorisationPour(
+          idU1,
+          idS2
+        );
+        expect(autorisationAJour.estProprietaire).toBe(estProprietaireAttendu);
+        expect(autorisationAJour.resumeNiveauDroit()).toBe(role);
+      }
+    );
   });
 
   describe("sur demande de retrait des accès d'un utilisateur administré", () => {
