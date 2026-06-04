@@ -63,6 +63,8 @@ import { ServiceAdministrationOrganisations } from '../supervision/serviceAdmini
 import { modifieRattachementServiceEtAdmins } from './abonnements/modifieRattachementServiceEtAdmins.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtilisateurAdministreAttribue.js';
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
+import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtilisateurAdministreRetires.js';
+import { consigneAccesUtilisateurAdministreRetiresDansJournal } from './abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -247,6 +249,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementRoleUtilisateurAdministreAttribue,
     consigneRoleUtilisateurAdministreAttribueDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementAccesUtilisateurAdministreRetires,
+    consigneAccesUtilisateurAdministreRetiresDansJournal({ adaptateurJournal })
   );
 };
 

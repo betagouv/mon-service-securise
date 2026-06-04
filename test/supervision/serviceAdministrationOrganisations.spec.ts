@@ -30,6 +30,7 @@ import {
 } from '../../src/erreurs.ts';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.ts';
 import { EvenementRoleUtilisateurAdministreAttribue } from '../../src/bus/evenementRoleUtilisateurAdministreAttribue.js';
+import { EvenementAccesUtilisateurAdministreRetires } from '../../src/bus/evenementAccesUtilisateurAdministreRetires.js';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -631,6 +632,23 @@ describe("Le service de gestion des admins d'organisation", () => {
         idS1
       );
       expect(autorisationSupprimee).toBeUndefined();
+    });
+
+    it("publie un évènement d'accès utilisateur administré retirés sur le bus", async () => {
+      await service.retireAccesUtilisateurAdministre(idAdmin, idU1, [idS1]);
+
+      expect(
+        busEvenements.aRecuUnEvenement(
+          EvenementAccesUtilisateurAdministreRetires
+        )
+      ).toBe(true);
+      const evenement: EvenementAccesUtilisateurAdministreRetires =
+        busEvenements.recupereEvenement(
+          EvenementAccesUtilisateurAdministreRetires
+        );
+      expect(evenement.idAdmin).toBe(idAdmin);
+      expect(evenement.idUtilisateurAdministre).toBe(idU1);
+      expect(evenement.idsServices).toEqual([idS1]);
     });
   });
 });
