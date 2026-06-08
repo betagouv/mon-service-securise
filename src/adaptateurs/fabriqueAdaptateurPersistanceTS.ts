@@ -1,8 +1,7 @@
-import Knex from 'knex';
-import configurationKnex from '../../knexfile.js';
 import { AdaptateurPersistanceMemoireTS } from './adaptateurPersistanceMemoireTS.js';
 import { AdaptateurPostgresTS } from './adaptateurPostgresTS.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
+import { knexMSS } from '../bdd/knex.js';
 
 export const fabriqueAdaptateurPersistanceTS = (
   env: string,
@@ -10,8 +9,7 @@ export const fabriqueAdaptateurPersistanceTS = (
 ) => {
   const veutDuPostgres = ['production', 'development'].includes(env);
   if (veutDuPostgres) {
-    const knex = Knex(configurationKnex);
-    return new AdaptateurPostgresTS({ knex, chiffrement });
+    return new AdaptateurPostgresTS({ knex: knexMSS, chiffrement });
   }
 
   return new AdaptateurPersistanceMemoireTS();

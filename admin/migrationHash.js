@@ -1,9 +1,9 @@
 import Knex from 'knex';
-import configKnex from '../knexfile.js';
 import { adaptateurChiffrement } from '../src/adaptateurs/adaptateurChiffrement.js';
 import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeDepot } from '../src/depots/depotDonneesSelsDeHachage.js';
 import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
+import { knexMSS } from '../src/bdd/knex.js';
 
 const tenteDeHacherAvecUnNouveauSel = (
   chaine,
@@ -34,7 +34,7 @@ class MigrationHash {
       },
     };
     this.knexMSSJournal = Knex(configDuJournal);
-    this.knexMSS = Knex(configKnex);
+    this.knexMSS = knexMSS;
     if (!adaptateurEnvironnement.modeMaintenance().actif()) {
       throw new Error(
         `La migration des hash requiert que l'application soit en mode maintenance !`
