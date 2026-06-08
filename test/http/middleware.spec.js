@@ -462,6 +462,7 @@ describe('Le middleware MSS', () => {
 
     it("jette une erreur technique si l'objet de droits est incohérent", async () => {
       const middleware = leMiddleware();
+      requete.params = { id: unUUIDRandom() };
 
       try {
         await middleware.trouveService({ mauvaiseCle: 'mauvaiseValeur' })(
@@ -511,6 +512,7 @@ describe('Le middleware MSS', () => {
       depotDonnees.service = async () => service;
       depotDonnees.accesAutorise = async () => true;
       const middleware = leMiddleware({ adaptateurJWT });
+      requete.params = { id: unUUIDRandom() };
 
       let appele = false;
       await middleware.trouveService({})(requete, reponse, () => {

@@ -199,7 +199,10 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       const resultat = z
         .looseObject({ id: z.uuid() })
         .safeParse(requete.params);
-      if (!resultat.success) reponse.sendStatus(400);
+      if (!resultat.success) {
+        reponse.sendStatus(400);
+        return;
+      }
 
       const idService = requete.params.id;
 
