@@ -6,6 +6,9 @@
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import type { UtilisateurAdministre } from '../adminUtilisateurs.types';
+  import { SvelteSet } from 'svelte/reactivity';
+  import { singulierPluriel } from '../../outils/string';
+  import BadgeAdmin from '../BadgeAdmin.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -22,20 +25,36 @@
 
   export const sousTitre: string = untrack(() =>
     utilisateur.estAdmin
-      ? `Cochez les entités sur lesquelles ${utilisateur.prenomNom} doit être Admin. Décochez celles à retirer.`
-      : `Sélectionnez les entités de votre périmètre que vous souhaitez déléguer. ${utilisateur.prenomNom} deviendra Admin de tous les services rattachés à ces entités.`
+      ? `Cochez les entités sur lesquelles ${utilisateur.prenomNom} doit être admin. Décochez celles à retirer.`
+      : `Sélectionnez les entités de votre périmètre que vous souhaitez déléguer. ${utilisateur.prenomNom} deviendra admin de tous les services rattachés à ces entités.`
   );
 
   export const taille = 'large';
 
   let etape: 'SELECTION' | 'RECAPITULATIF' = $state('SELECTION');
 
-  let siretsSelectionnes: Array<string> = $state(
-    untrack(() => siretsOuIlEstAdmin(utilisateur.id, toutesEntites))
+  let siretsSelectionnesInitialement = untrack(() =>
+    siretsOuIlEstAdmin(utilisateur.id, toutesEntites)
+  );
+  let siretsSelectionnes = new SvelteSet<string>(
+    siretsSelectionnesInitialement
   );
   let stats = $derived.by(() =>
-    statsDesEntites(toutesEntites, siretsSelectionnes)
+    statsDesEntites(toutesEntites, [...siretsSelectionnes])
   );
+
+  let nombreTotalEntites = $derived(toutesEntites.length);
+
+  let toutEstSelectionne = $derived(
+    siretsSelectionnes.size === nombreTotalEntites
+  );
+  const basculeTouteSelection = () => {
+    if (toutEstSelectionne) siretsSelectionnes.clear();
+    else
+      for (const entite of toutesEntites) {
+        siretsSelectionnes.add(entite.siret);
+      }
+  };
 </script>
 
 <ContenuTiroir>
@@ -47,27 +66,95 @@
   ></dsfr-stepper>
 
   {#if etape === 'SELECTION'}
-    <dsfr-callout
-      has-title
-      title={`${utilisateur.prenomNom} sera admin de ${siretsSelectionnes.length} entité(s))`}
-      text={`soit ${stats.nombreServices} service(s) rattaché(s) et ${stats.nombreUtilisateurs} utilisateur(s) concerné(s)`}
-      accent="blue-ecume"
-    ></dsfr-callout>
+    {#if siretsSelectionnes.size === 0}
+      <dsfr-callout
+        has-title
+        title="{utilisateur.prenomNom} ne sera plus admin"
+        accent="blue-ecume"
+      ></dsfr-callout>
+    {:else}
+      <dsfr-callout
+        has-title
+        title="{utilisateur.prenomNom} sera admin de {siretsSelectionnes.size} {singulierPluriel(
+          'entité',
+          'entités',
+          siretsSelectionnes.size
+        )}"
+        text="soit {stats.nombreServices} {singulierPluriel(
+          'service rattaché',
+          'services rattachés',
+          stats.nombreServices
+        )} et {stats.nombreUtilisateurs} {singulierPluriel(
+          'utilisateur concerné',
+          'utilisateurs concernés',
+          stats.nombreUtilisateurs
+        )}"
+        accent="blue-ecume"
+      ></dsfr-callout>
+    {/if}
 
-    <dsfr-table
-      columns={[
-        { key: 'nom', label: 'Nom' },
-        { key: 'siret', label: 'SIRET' },
-        { key: 'nombreServices', label: 'Services rattachés' },
-      ]}
-      rows={toutesEntites}
-      row-key="siret"
-      selectable
-      select-all
-      selected-row-keys={JSON.stringify(siretsSelectionnes)}
-      onselectionchanged={(e: CustomEvent<{ keys: Array<string> }>) =>
-        (siretsSelectionnes = e.detail.keys)}
-    ></dsfr-table>
+    <div>
+      <div class="barre-actions">
+        <span class="sous-texte">
+          {#if siretsSelectionnes.size > 0}
+            {siretsSelectionnes.size}
+            {singulierPluriel(
+              'entité sélectionnée',
+              'entités sélectionnées',
+              siretsSelectionnes.size
+            )}
+          {:else}
+            {nombreTotalEntites}
+            {singulierPluriel(
+              'entité au total',
+              'entités au total',
+              nombreTotalEntites
+            )}
+          {/if}
+        </span>
+        <div>
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            label={toutEstSelectionne
+              ? 'Tout désélectionner'
+              : 'Tout sélectionner'}
+            onclick={() => basculeTouteSelection()}
+            kind="tertiary-no-outline"
+            size="sm"
+          ></dsfr-button>
+        </div>
+      </div>
+      <dsfr-table
+        columns={[
+          { key: 'nom', label: 'Nom' },
+          { key: 'siret', label: 'SIRET' },
+          { key: 'nombreServices', label: 'Services rattachés' },
+          { key: 'statutActuel', label: 'Statut actuel' },
+        ]}
+        rows={toutesEntites}
+        row-key="siret"
+        selectable
+        rich
+        select-all
+        selected-row-keys={JSON.stringify([...siretsSelectionnes])}
+        onselectionchanged={(e: CustomEvent<{ keys: Array<string> }>) => {
+          siretsSelectionnes.clear();
+          e.detail.keys.forEach((key) => {
+            siretsSelectionnes.add(key);
+          });
+        }}
+      >
+        {#each toutesEntites as entite, i (entite.siret)}
+          <div slot="cell:statutActuel:{i}" class="statut-actuel">
+            {#if siretsSelectionnesInitialement.includes(entite.siret)}
+              <BadgeAdmin />
+            {:else}
+              <span>-</span>
+            {/if}
+          </div>
+        {/each}
+      </dsfr-table>
+    </div>
   {/if}
 </ContenuTiroir>
 
@@ -116,5 +203,29 @@
 <style lang="scss">
   h1 {
     text-align: center;
+  }
+  .barre-actions {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & > div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .sous-texte {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #929292;
+    white-space: nowrap;
+  }
+
+  dsfr-table {
+    margin-top: -1rem;
   }
 </style>
