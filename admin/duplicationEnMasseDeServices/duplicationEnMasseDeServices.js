@@ -75,19 +75,13 @@ const transformeEntreeEnTableau = (donnees) => {
 };
 
 class DuplicationEnMasseDeServices {
-  constructor(
-    environnementNode = process.env.NODE_ENV || 'development',
-    modeDryRun = true,
-    codePrestataire = ''
-  ) {
+  constructor(modeDryRun = true, codePrestataire = '') {
     this.modeDryRun = modeDryRun;
 
     if (!codePrestataire) throw new Error('Le code prestataire est requis');
     this.codePrestataire = codePrestataire;
 
-    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
-      env: environnementNode,
-    });
+    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({});
 
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 

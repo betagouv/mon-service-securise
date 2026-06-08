@@ -11,16 +11,14 @@ import BusEvenements from '../src/bus/busEvenements.js';
 import { fabriqueAdaptateurGestionErreur } from '../src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
 
 export class ConsoleAnalyseDonnees {
-  constructor(environnementNode = process.env.NODE_ENV || 'development') {
+  constructor() {
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
     const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
       adaptateurJWT: fabriqueAdaptateurJWT(),
-      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({
-        env: environnementNode,
-      }),
+      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({}),
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: Referentiel.creeReferentiel(donneesReferentiel),
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
