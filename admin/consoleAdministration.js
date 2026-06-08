@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 import { inspect } from 'util';
-import Knex from 'knex';
 import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
-import configKnex from '../knexfile.js';
+import { knexMSS } from '../src/bdd/knex.js';
 import donneesReferentiel from '../donneesReferentiel.js';
 import * as DepotDonnees from '../src/depotDonnees.js';
 import * as Referentiel from '../src/referentiel.js';
@@ -679,12 +678,11 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async chiffreDonneesChaCha20() {
-    const knex = Knex(configKnex);
     const { chiffre } = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement,
     });
 
-    await knex.transaction(async (trx) => {
+    await knexMSS.transaction(async (trx) => {
       const utilisateurs = await trx('utilisateurs');
 
       const majUtilisateurs = utilisateurs.map(async ({ id, donnees }) => {
@@ -728,12 +726,11 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async dechiffreDonneesChaCha20() {
-    const knex = Knex(configKnex);
     const { dechiffre } = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement,
     });
 
-    await knex.transaction(async (trx) => {
+    await knexMSS.transaction(async (trx) => {
       const utilisateurs = await trx('utilisateurs');
 
       const majUtilisateurs = utilisateurs.map(async ({ id, donnees }) => {
@@ -776,9 +773,8 @@ class ConsoleAdministration {
   }
 
   async extraitResultatsParrainage(nombre = 30) {
-    const knex = Knex(configKnex);
     const resultats = (
-      await knex.raw(
+      await knexMSS.raw(
         `
           SELECT id_utilisateur_parrain, COUNT(*) AS total_parrainages
           FROM parrainages
@@ -852,17 +848,15 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async rattrapageSuppressionSuggestionsActions() {
-    const knex = Knex(configKnex);
-    const nbSuppression = await knex('suggestions_actions')
-      .whereNotIn('id_service', knex('services').select('id'))
+    const nbSuppression = await knexMSS('suggestions_actions')
+      .whereNotIn('id_service', knexMSS('services').select('id'))
       .del();
     console.log(`${nbSuppression} suggestions supprimées`);
   }
 
   async rattrapeEvenementsAcceptationCGU() {
-    const knex = Knex(configKnex);
     const dateCreationParIdUtilisateur = Object.fromEntries(
-      await knex('utilisateurs').then((tous) =>
+      await knexMSS('utilisateurs').then((tous) =>
         tous.map(({ id: idUtilisateur, date_creation: dateCreation }) => [
           idUtilisateur,
           new Date(dateCreation),

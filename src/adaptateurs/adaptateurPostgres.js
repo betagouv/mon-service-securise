@@ -1,5 +1,4 @@
-import Knex from 'knex';
-import configKnex from '../../knexfile.js';
+import { knexMSS } from '../bdd/knex.js';
 
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
@@ -8,7 +7,7 @@ const CORRESPONDANCE_COLONNES_PROPRIETES = {
 };
 
 const nouvelAdaptateur = ({ knexSurcharge }) => {
-  const knex = knexSurcharge || Knex(configKnex);
+  const knex = knexSurcharge || knexMSS;
 
   const nomPropriete = (colonne) =>
     CORRESPONDANCE_COLONNES_PROPRIETES[colonne] || colonne;
