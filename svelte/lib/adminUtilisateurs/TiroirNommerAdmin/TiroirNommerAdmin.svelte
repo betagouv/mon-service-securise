@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import {
@@ -9,7 +9,10 @@
   } from './tiroirNommerAdmin';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
-  import type { UtilisateurAdministre } from '../adminUtilisateurs.types';
+  import type {
+    ServiceAdministre,
+    UtilisateurAdministre,
+  } from '../adminUtilisateurs.types';
   import { SvelteSet } from 'svelte/reactivity';
   import { singulierPluriel } from '../../outils/string';
   import BadgeAdmin from '../BadgeAdmin.svelte';
@@ -102,6 +105,39 @@
     );
     tiroirStore.ferme();
   };
+
+  let tousServices: ServiceAdministre[] = $state([]);
+  onMount(async () => {
+    const tous = await api.tousServices();
+    const siretsDuPerimetre = new Set(toutesEntites.map((e) => e.siret));
+    tousServices = tous.filter((s) =>
+      siretsDuPerimetre.has(s.siretOrganisationResponsable)
+    );
+  });
+
+  let siretsSeulProprietaire: Set<string> = $derived(
+    new Set(
+      tousServices
+        .filter((s) =>
+          siretsSelectionnesInitialement.includes(
+            s.siretOrganisationResponsable
+          )
+        )
+        .filter((s) => {
+          const autorisation = utilisateur.autorisations.find(
+            (a) => a.idService === s.id
+          );
+          const utilisateurEstProprietaire =
+            autorisation?.role === 'PROPRIETAIRE' ||
+            autorisation?.role === 'ADMIN';
+          const autreProprietaireExiste = s.contributeurs
+            .filter((c) => !c.estAdmin)
+            .some((c) => c.estProprietaire && c.id !== utilisateur.id);
+          return !autreProprietaireExiste && utilisateurEstProprietaire;
+        })
+        .map((s) => s.siretOrganisationResponsable)
+    )
+  );
 </script>
 
 <ContenuTiroir>
@@ -190,6 +226,7 @@
             siretsSelectionnes.add(key);
           });
         }}
+        disabled-row-keys={JSON.stringify([...siretsSeulProprietaire])}
       >
         {#each toutesEntites as entite, i (entite.siret)}
           <div slot="cell:statutActuel:{i}" class="statut-actuel">
