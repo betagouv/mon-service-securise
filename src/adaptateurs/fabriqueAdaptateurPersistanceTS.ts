@@ -8,8 +8,9 @@ export const fabriqueAdaptateurPersistanceTS = (
   env: string,
   chiffrement: AdaptateurChiffrement
 ) => {
-  if (Object.keys(configurationKnex).includes(env)) {
-    const knex = Knex(configurationKnex[env as keyof typeof configurationKnex]);
+  const veutDuPostgres = ['production', 'development'].includes(env);
+  if (veutDuPostgres) {
+    const knex = Knex(configurationKnex);
     return new AdaptateurPostgresTS({ knex, chiffrement });
   }
 

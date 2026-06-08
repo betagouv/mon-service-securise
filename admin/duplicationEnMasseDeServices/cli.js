@@ -23,7 +23,6 @@ program
   .action(async (options) => {
     const dryRunActif = options.dryRun !== 'false';
     const serviceDuplication = new DuplicationEnMasseDeServices(
-      'production',
       dryRunActif,
       options.codePrestataire
     );

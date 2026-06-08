@@ -1,5 +1,5 @@
 import Knex from 'knex';
-import config from '../../knexfile.js';
+import configKnex from '../../knexfile.js';
 
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
@@ -7,8 +7,8 @@ const CORRESPONDANCE_COLONNES_PROPRIETES = {
   est_admin: 'estAdmin',
 };
 
-const nouvelAdaptateur = ({ env, knexSurcharge }) => {
-  const knex = knexSurcharge || Knex(config[env]);
+const nouvelAdaptateur = ({ knexSurcharge }) => {
+  const knex = knexSurcharge || Knex(configKnex);
 
   const nomPropriete = (colonne) =>
     CORRESPONDANCE_COLONNES_PROPRIETES[colonne] || colonne;

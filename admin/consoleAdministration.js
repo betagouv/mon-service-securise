@@ -45,10 +45,8 @@ const log = {
 };
 
 class ConsoleAdministration {
-  constructor(environnementNode = process.env.NODE_ENV || 'development') {
-    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
-      env: environnementNode,
-    });
+  constructor() {
+    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({});
 
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 
@@ -681,7 +679,7 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async chiffreDonneesChaCha20() {
-    const knex = Knex(configKnex.production);
+    const knex = Knex(configKnex);
     const { chiffre } = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement,
     });
@@ -730,7 +728,7 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async dechiffreDonneesChaCha20() {
-    const knex = Knex(configKnex.production);
+    const knex = Knex(configKnex);
     const { dechiffre } = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement,
     });
@@ -778,7 +776,7 @@ class ConsoleAdministration {
   }
 
   async extraitResultatsParrainage(nombre = 30) {
-    const knex = Knex(configKnex.production);
+    const knex = Knex(configKnex);
     const resultats = (
       await knex.raw(
         `
@@ -854,7 +852,7 @@ class ConsoleAdministration {
 
   // eslint-disable-next-line class-methods-use-this
   async rattrapageSuppressionSuggestionsActions() {
-    const knex = Knex(configKnex.production);
+    const knex = Knex(configKnex);
     const nbSuppression = await knex('suggestions_actions')
       .whereNotIn('id_service', knex('services').select('id'))
       .del();
@@ -862,7 +860,7 @@ class ConsoleAdministration {
   }
 
   async rattrapeEvenementsAcceptationCGU() {
-    const knex = Knex(configKnex.production);
+    const knex = Knex(configKnex);
     const dateCreationParIdUtilisateur = Object.fromEntries(
       await knex('utilisateurs').then((tous) =>
         tous.map(({ id: idUtilisateur, date_creation: dateCreation }) => [

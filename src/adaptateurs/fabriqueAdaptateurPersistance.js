@@ -1,10 +1,9 @@
 import * as AdaptateurPersistanceMemoire from './adaptateurPersistanceMemoire.js';
 import * as AdaptateurPostgres from './adaptateurPostgres.js';
-import configurationKnex from '../../knexfile.js';
 
 const fabriqueAdaptateurPersistance = (env) => {
-  if (Object.keys(configurationKnex).includes(env))
-    return AdaptateurPostgres.nouvelAdaptateur({ env });
+  const veutDuPostgres = ['production', 'development'].includes(env);
+  if (veutDuPostgres) return AdaptateurPostgres.nouvelAdaptateur({});
 
   return AdaptateurPersistanceMemoire.nouvelAdaptateur();
 };

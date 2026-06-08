@@ -1,5 +1,5 @@
 import Knex from 'knex';
-import config from '../knexfile.js';
+import configKnex from '../knexfile.js';
 import { adaptateurChiffrement } from '../src/adaptateurs/adaptateurChiffrement.js';
 import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeDepot } from '../src/depots/depotDonneesSelsDeHachage.js';
@@ -24,7 +24,7 @@ const tenteDeHacherAvecUnNouveauSel = (
 
 /* eslint-disable no-console */
 class MigrationHash {
-  constructor(environnementNode = process.env.NODE_ENV || 'development') {
+  constructor() {
     const configDuJournal = {
       client: 'pg',
       connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
@@ -34,7 +34,7 @@ class MigrationHash {
       },
     };
     this.knexMSSJournal = Knex(configDuJournal);
-    this.knexMSS = Knex(config[environnementNode]);
+    this.knexMSS = Knex(configKnex);
     if (!adaptateurEnvironnement.modeMaintenance().actif()) {
       throw new Error(
         `La migration des hash requiert que l'application soit en mode maintenance !`
@@ -44,9 +44,7 @@ class MigrationHash {
       adaptateurEnvironnement,
     });
     this.depotDonneesSelsDeHachage = creeDepot({
-      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({
-        env: environnementNode,
-      }),
+      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({}),
       adaptateurEnvironnement,
       adaptateurChiffrement: this.adaptateurChiffrement,
     });
