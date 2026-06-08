@@ -29,7 +29,7 @@
   };
 
   let doitAfficherAlerteSeuleProprietaire = $derived(
-    roleSelectionne !== 'PROPRIETAIRE'
+    roleSelectionne !== 'PROPRIETAIRE' && servicesSeulProprietaire.length > 0
   );
 </script>
 
