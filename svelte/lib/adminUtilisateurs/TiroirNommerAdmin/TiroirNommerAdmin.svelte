@@ -13,6 +13,8 @@
   import { SvelteSet } from 'svelte/reactivity';
   import { singulierPluriel } from '../../outils/string';
   import BadgeAdmin from '../BadgeAdmin.svelte';
+  import { api } from '../adminUtilisateurs.api';
+  import { toasterStore } from '../../ui/stores/toaster.store';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -75,6 +77,31 @@
     ...recapitulatif.conservees.map(enEntite),
     ...recapitulatif.retirees.map(enEntite),
   ]);
+
+  const enregistreModifications = async () => {
+    await api.enregistreNouveauPerimetreAdmin(utilisateur.id, [
+      ...recapitulatif.nouvelles,
+      ...recapitulatif.conservees,
+    ]);
+    if (
+      recapitulatif.nouvelles.length > 0 ||
+      recapitulatif.conservees.length > 0
+    ) {
+      toasterStore.succes(
+        'Administrateur modifié',
+        `${utilisateur.prenomNom} a été ajouté sur ${recapitulatif.nouvelles.length} ${singulierPluriel('entité', 'entités', recapitulatif.nouvelles.length)} et supprimé sur ${recapitulatif.retirees.length} ${singulierPluriel('entité', 'entités', recapitulatif.retirees.length)}`
+      );
+    } else {
+      toasterStore.succes(
+        'Administrateur supprimé',
+        `${utilisateur.prenomNom} n'est plus administrateur`
+      );
+    }
+    document.dispatchEvent(
+      new CustomEvent('utilisateurs-administres-modifies')
+    );
+    tiroirStore.ferme();
+  };
 </script>
 
 <ContenuTiroir>
@@ -272,7 +299,7 @@
     <dsfr-button
       label="Enregistrer les modifications"
       onclick={() => {
-        etape = 'RECAPITULATIF';
+        enregistreModifications();
       }}
       kind="primary"
       hasIcon
