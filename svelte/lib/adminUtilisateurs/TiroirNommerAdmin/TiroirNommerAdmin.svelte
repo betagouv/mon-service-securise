@@ -2,7 +2,11 @@
   import { untrack } from 'svelte';
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
-  import { siretsOuIlEstAdmin, statsDesEntites } from './tiroirNommerAdmin';
+  import {
+    resumeDesModifications,
+    siretsOuIlEstAdmin,
+    statsDesEntites,
+  } from './tiroirNommerAdmin';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import type { UtilisateurAdministre } from '../adminUtilisateurs.types';
@@ -55,6 +59,22 @@
         siretsSelectionnes.add(entite.siret);
       }
   };
+
+  let recapitulatif = $derived(
+    resumeDesModifications(siretsSelectionnesInitialement, [
+      ...siretsSelectionnes,
+    ])
+  );
+
+  const enEntite = (siret: string): EntiteSupervisee => {
+    return toutesEntites.find((e) => e.siret === siret)!;
+  };
+
+  let toutesEntitesModifiees = $derived([
+    ...recapitulatif.nouvelles.map(enEntite),
+    ...recapitulatif.conservees.map(enEntite),
+    ...recapitulatif.retirees.map(enEntite),
+  ]);
 </script>
 
 <ContenuTiroir>
@@ -155,6 +175,65 @@
         {/each}
       </dsfr-table>
     </div>
+  {:else}
+    <div>
+      <dsfr-callout
+        has-title
+        title="Récapitulatif"
+        text="Vous êtes sur le point d'attribuer le rôle administrateur à {utilisateur.prenomNom} sur {recapitulatif
+          .nouvelles.length} {singulierPluriel(
+          'entité',
+          'entités',
+          recapitulatif.nouvelles.length
+        )} et de retirer son droit d'admin sur {recapitulatif.retirees
+          .length} {singulierPluriel(
+          'entité',
+          'entités',
+          recapitulatif.retirees.length
+        )}"
+        accent="blue-ecume"
+      ></dsfr-callout>
+      <dsfr-table
+        columns={[
+          { key: 'nom', label: 'Nom' },
+          { key: 'siret', label: 'SIRET' },
+          { key: 'nombreServices', label: 'Services rattachés' },
+          { key: 'action', label: 'Action' },
+        ]}
+        rows={toutesEntitesModifiees}
+        row-key="siret"
+        rich
+      >
+        {#each toutesEntitesModifiees as entite, i (entite.siret)}
+          <div slot="cell:nom:{i}">
+            {#if recapitulatif.retirees.includes(entite.siret)}
+              <span><s>{entite.nom}</s></span>
+            {:else}
+              <span>{entite.nom}</span>
+            {/if}
+          </div>
+          <div slot="cell:action:{i}">
+            {#if recapitulatif.nouvelles.includes(entite.siret)}
+              <dsfr-badge
+                label="Nouvel admin"
+                type="accent"
+                accent="green-emeraude"
+                size="sm"
+              ></dsfr-badge>
+            {:else if recapitulatif.conservees.includes(entite.siret)}
+              <dsfr-badge label="Admin conservé" size="sm"></dsfr-badge>
+            {:else}
+              <dsfr-badge
+                label="Admin retiré"
+                type="accent"
+                accent="pink-tuile"
+                size="sm"
+              ></dsfr-badge>
+            {/if}
+          </div>
+        {/each}
+      </dsfr-table>
+    </div>
   {/if}
 </ContenuTiroir>
 
@@ -172,6 +251,8 @@
       onclick={() => {
         etape = 'RECAPITULATIF';
       }}
+      disabled={recapitulatif.nouvelles.length === 0 &&
+        recapitulatif.retirees.length === 0}
       kind="primary"
       hasIcon
       icon-place="right"
