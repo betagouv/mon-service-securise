@@ -7,6 +7,7 @@ import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/ad
 import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
 import {
   EchecAutorisation,
+  ErreurEntiteNonAdministre,
   ErreurServiceNonAdministre,
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
@@ -288,6 +289,59 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         testeur.serviceAdministrationOrganisations()
           .retireAccesUtilisateurAdministre
       ).toHaveBeenCalledWith(idAdmin, idUtilisateurAdministre, [idService]);
+    });
+  });
+
+  describe('quand requête PUT sur `/api/admin/utilisateurs/:idUtilisateur/perimetre`', () => {
+    const idActeurAdmin = unUUIDRandom();
+    const idAdminModifie = unUUIDRandom();
+
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: idActeurAdmin });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const reponse = await testeur.put(
+        `/api/admin/utilisateurs/${idAdminModifie}/perimetre`,
+        { sirets: false }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si l'id utilisateur est invalide", async () => {
+      const reponse = await testeur.put(
+        `/api/admin/utilisateurs/pas-un-uuid/perimetre`,
+        { sirets: [] }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("jette une erreur si le périmètre demandé n'est pas entièrement administré", async () => {
+      testeur.serviceAdministrationOrganisations().assignePerimetre =
+        async () => {
+          throw new ErreurEntiteNonAdministre();
+        };
+
+      const reponse = await testeur.put(
+        `/api/admin/utilisateurs/${idAdminModifie}/perimetre`,
+        { sirets: ['13000766900999'] }
+      );
+
+      expect(reponse.status).toBe(403);
+    });
+
+    it("délègue au service l'assignation du périmètre", async () => {
+      testeur.serviceAdministrationOrganisations().assignePerimetre = vi.fn();
+
+      await testeur.put(`/api/admin/utilisateurs/${idAdminModifie}/perimetre`, {
+        sirets: ['13000766900999'],
+      });
+
+      expect(
+        testeur.serviceAdministrationOrganisations().assignePerimetre
+      ).toHaveBeenCalledWith(idActeurAdmin, idAdminModifie, ['13000766900999']);
     });
   });
 

@@ -24,3 +24,7 @@ export const schemaAttributionRoleServices = z.strictObject({
 export const schemaRetraitAccesServices = z.strictObject({
   idsServices: z.array(z.uuid()).min(1),
 });
+
+export const schemaPutPerimetreAdmin = z.strictObject({
+  sirets: z.array(schemaSiret.siret()),
+});

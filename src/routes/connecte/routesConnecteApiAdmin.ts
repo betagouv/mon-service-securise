@@ -7,6 +7,7 @@ import {
   schemaAttributionRoleServices,
   schemaDeleteAdmin,
   schemaPostAdminNomme,
+  schemaPutPerimetreAdmin,
   schemaRetraitAccesServices,
 } from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
@@ -14,6 +15,7 @@ import { UUID } from '../../typesBasiques.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import {
   EchecAutorisation,
+  ErreurEntiteNonAdministre,
   ErreurServiceNonAdministre,
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
@@ -142,6 +144,34 @@ const routesConnecteApiAdmin = ({
         }
         if (e instanceof EchecAutorisation) {
           reponse.sendStatus(422);
+          return;
+        }
+        suite(e);
+      }
+
+      reponse.sendStatus(200);
+    }
+  );
+
+  routes.put(
+    '/utilisateurs/:idUtilisateur/perimetre',
+    valideBody(schemaPutPerimetreAdmin),
+    valideParams(z.looseObject({ idUtilisateur: z.uuid() })),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant: idActeur } =
+        requete as unknown as RequestRouteConnecte;
+      const { idUtilisateur: idAdmin } = requete.params;
+      const { sirets } = requete.body;
+
+      try {
+        await serviceAdministrationOrganisations.assignePerimetre(
+          idActeur,
+          idAdmin as UUID,
+          sirets
+        );
+      } catch (e) {
+        if (e instanceof ErreurEntiteNonAdministre) {
+          reponse.sendStatus(403);
           return;
         }
         suite(e);
