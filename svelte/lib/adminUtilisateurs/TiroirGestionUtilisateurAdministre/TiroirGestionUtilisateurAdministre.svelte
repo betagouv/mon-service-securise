@@ -83,9 +83,11 @@
 
   let servicesSeulProprietaire: ServiceAdministre[] = $derived(
     servicesSelectionnes.filter((s) => {
+      const autorisation = utilisateur.autorisations.find(
+        (a) => a.idService === s.id
+      );
       const utilisateurEstProprietaire =
-        utilisateur.autorisations.find((a) => a.idService === s.id)?.role ===
-        'PROPRIETAIRE';
+        autorisation?.role === 'PROPRIETAIRE' || autorisation?.role === 'ADMIN';
       const autreProprietaireExiste = s.contributeurs
         .filter((c) => !c.estAdmin)
         .some((c) => c.estProprietaire && c.id !== utilisateur.id);
