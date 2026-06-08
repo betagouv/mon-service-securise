@@ -23,4 +23,11 @@ export const api = {
     await axios.delete(`/api/admin/utilisateurs/${idUtilisateur}/roles`, {
       data: { idsServices },
     }),
+  enregistreNouveauPerimetreAdmin: async (
+    idUtilisateur: string,
+    sirets: string[]
+  ) =>
+    await axios.put(`/api/admin/utilisateurs/${idUtilisateur}/perimetre`, {
+      sirets,
+    }),
 };
