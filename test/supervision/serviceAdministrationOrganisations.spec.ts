@@ -24,6 +24,7 @@ import Superviseur from '../../src/modeles/superviseur.ts';
 import { AdminOrganisations } from '../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import {
   EchecAutorisation,
+  ErreurEntiteNonAdministre,
   ErreurServiceNonAdministre,
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
@@ -696,6 +697,76 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(evenement.idAdmin).toBe(idAdmin);
       expect(evenement.idUtilisateurAdministre).toBe(idU1);
       expect(evenement.idsServices).toEqual([idS1]);
+    });
+  });
+
+  describe("sur demande d'assignation d'un périmètre à un admin", () => {
+    let service: ServiceAdministrationOrganisations;
+    const idActeur = unUUID('A1');
+    const idNouvelAdmin = unUUIDRandom();
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idNouvelAdmin).donnees)
+        .ajouteUnService(unServiceV2().avecId(idService).donnees)
+        .construis() as unknown as AdaptateurPersistance;
+
+      adaptateurPersistanceTS = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(idActeur, [
+          { siret: 'SIRET-1' },
+          { siret: 'SIRET-2' },
+        ])
+        .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'SIRET-2' }])
+        .construis();
+
+      depotComplet = unDepotComplet({
+        adaptateurPersistance,
+        adaptateurPersistanceTS,
+      });
+
+      service = leServiceDAdministrationDesOrgas();
+    });
+
+    it("jette une erreur si l'admin acteur n'administre pas le périmètre complet demandé", async () => {
+      await expect(() =>
+        service.assignePerimetre(idActeur, idAdmin, ['UN-AUTRE-SIRET'])
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur n'est pas admin", async () => {
+      const idPasAdmin = unUUIDRandom();
+      await expect(() =>
+        service.assignePerimetre(idPasAdmin, idAdmin, ['UN-AUTRE-SIRET'])
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("crée l'administrateur s'il n'existe pas", async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, ['SIRET-1']);
+
+      const admin = await depotComplet.lisAdminOrganisations(idNouvelAdmin);
+      expect(admin!.estAdminDe('SIRET-1')).toBeTruthy();
+    });
+
+    it('ajoute les nouvelles entités', async () => {
+      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-1']);
+
+      const admin = await depotComplet.lisAdminOrganisations(idAdmin);
+      expect(admin!.estAdminDe('SIRET-1')).toBeTruthy();
+    });
+
+    it('retire les entités qui ne sont plus adminisitrées', async () => {
+      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-1']);
+
+      const admin = await depotComplet.lisAdminOrganisations(idAdmin);
+      expect(admin!.estAdminDe('SIRET-2')).toBeFalsy();
+    });
+
+    it('conserve les entités encore administrées', async () => {
+      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-2']);
+
+      const admin = await depotComplet.lisAdminOrganisations(idAdmin);
+      expect(admin!.estAdminDe('SIRET-2')).toBeTruthy();
     });
   });
 });
