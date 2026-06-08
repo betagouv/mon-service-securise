@@ -117,6 +117,7 @@ class ErreurSimulationInexistante extends ErreurModele {}
 
 class ErreurUtilisateurNonAdministre extends ErreurModele {}
 class ErreurServiceNonAdministre extends ErreurModele {}
+class ErreurEntiteNonAdministre extends ErreurModele {}
 /* eslint-enable max-classes-per-file */
 
 export {
@@ -147,6 +148,7 @@ export {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurDureeValiditeInvalide,
   ErreurEcheanceMesureInvalide,
+  ErreurEntiteNonAdministre,
   ErreurEmailManquant,
   ErreurHashDeSelInvalide,
   ErreurIdentifiantNouveauteInconnu,

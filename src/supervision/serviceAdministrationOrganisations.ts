@@ -14,6 +14,7 @@ import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
 import { UtilisateurAdministre } from '../modeles/gestionOrganisations/utilisateurAdministre.js';
 import {
   EchecAutorisation,
+  ErreurEntiteNonAdministre,
   ErreurServiceNonAdministre,
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
@@ -29,6 +30,7 @@ import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAcce
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
 import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
+import Utilisateur from '../modeles/utilisateur.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -430,5 +432,42 @@ export class ServiceAdministrationOrganisations {
     ) {
       throw new ErreurUtilisateurNonAdministre();
     }
+  }
+
+  async assignePerimetre(idActeur: UUID, idAdmin: UUID, sirets: string[]) {
+    const acteur = await this.depotDonnees.lisAdminOrganisations(idActeur);
+
+    if (
+      !acteur ||
+      !new Set(sirets).isSubsetOf(
+        new Set(acteur.donnees().entitesAdministrees.map((e) => e.siret))
+      )
+    ) {
+      throw new ErreurEntiteNonAdministre();
+    }
+
+    const utilisateurAdmin = (await this.depotDonnees.utilisateur(
+      idAdmin
+    )) as Utilisateur;
+    const admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
+
+    const siretsAAjouter = sirets.filter(
+      (siret) => !admin || !admin.estAdminDe(siret)
+    );
+    await Promise.all(
+      siretsAAjouter.map((siret) =>
+        this.nommeAdmin(siret, idAdmin, utilisateurAdmin.email)
+      )
+    );
+
+    if (!admin) return;
+
+    const siretsARetirer = admin!
+      .donnees()
+      .entitesAdministrees.filter((e) => !sirets.includes(e.siret))
+      .map((e) => e.siret);
+    await Promise.all(
+      siretsARetirer.map((siret) => this.retireAdmin(siret, idAdmin))
+    );
   }
 }
