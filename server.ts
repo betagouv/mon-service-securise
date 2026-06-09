@@ -34,6 +34,7 @@ import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdministrationOrganisations.js';
 import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail.js';
+import { fabriqueAdaptateurAuditAdminOrganisations } from './src/adaptateurs/fabriqueAdaptateurAuditAdminOrganisations.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -78,6 +79,12 @@ const serviceVerificationCoherenceSels =
     depotDonnees,
   });
 
+const adaptateurAuditAdminOrganisations =
+  fabriqueAdaptateurAuditAdminOrganisations(
+    process.env.NODE_ENV!,
+    adaptateurChiffrement
+  );
+
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
   adaptateurTracking,
@@ -87,6 +94,7 @@ cableTousLesAbonnes(busEvenements, {
   adaptateurSupervision,
   depotDonnees,
   referentiel,
+  adaptateurAuditAdminOrganisations,
 });
 
 const middleware = Middleware({
