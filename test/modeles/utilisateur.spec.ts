@@ -270,7 +270,7 @@ describe('Un utilisateur', () => {
           }),
           adaptateursParDefaut
         )
-    ).toThrow(new ErreurEmailManquant());
+    ).toThrow(ErreurEmailManquant);
   });
 
   it('connaît sa date de création', () => {
@@ -452,7 +452,6 @@ describe('Un utilisateur', () => {
 
     it("s'inscrit aux emails transactionnels s'il passe de « non » à « oui » sur ce canal de communications", async () => {
       let inscriptionEffectuee;
-      // @ts-expect-error On mock la méthode
       adaptateurEmail.inscrisEmailsTransactionnels = async (email) => {
         inscriptionEffectuee = email;
       };
@@ -474,7 +473,6 @@ describe('Un utilisateur', () => {
 
     it("se déinscrit des emails transactionnels s'il passe de « oui » à « non » sur ce canal de communications", async () => {
       let desinscriptionEffectuee;
-      // @ts-expect-error On mock la méthode
       adaptateurEmail.desinscrisEmailsTransactionnels = async (email) => {
         desinscriptionEffectuee = email;
       };
