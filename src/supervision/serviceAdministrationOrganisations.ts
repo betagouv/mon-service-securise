@@ -30,6 +30,8 @@ import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAcce
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
 import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
+import { EvenementAdminNommeSurOrganisation } from '../bus/evenementAdminNommeSurOrganisation.js';
+import { EvenementAdminRetireDeOrganisation } from '../bus/evenementAdminRetireDeOrganisation.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -145,6 +147,31 @@ export class ServiceAdministrationOrganisations {
     if (!admin) return;
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
+      services,
+      idUtilisateur
+    );
+
+    admin.cesseDAdministrer(new Entite({ siret }));
+    await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
+
+    await Promise.all(
+      services.map((service) => this.rattacheLesAdministrateursDe(service))
+    );
+
+    await this.busEvenements.publie(
+      new EvenementAdminRetireDeOrganisation({
+        idActeur,
+        idCible: idUtilisateur,
+        siret,
+      })
+    );
+  }
+
+  private static verifieNEstPasSeulProprietaireDesServices(
+    services: Service[],
+    idUtilisateur: UUID
+  ) {
     const seulProprietaireSurUnDesServices = services.some((s) => {
       const autresContributeurs = s.contributeurs.filter(
         (c: Contributeur) => c.idUtilisateur !== idUtilisateur
@@ -154,14 +181,9 @@ export class ServiceAdministrationOrganisations {
       );
       return autresProprietaires.length === 0;
     });
+
     if (seulProprietaireSurUnDesServices)
       throw new ErreurSuppressionImpossible();
-
-    admin.cesseDAdministrer(new Entite({ siret }));
-    await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
-    await Promise.all(
-      services.map((service) => this.rattacheLesAdministrateursDe(service))
-    );
   }
 
   async nommeAdmin(idActeur: UUID, siret: string, idAdmin: UUID) {
@@ -184,6 +206,14 @@ export class ServiceAdministrationOrganisations {
 
     const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
     await this.adaptateurMail.envoieMessageNominationAdmin(nouvelAdmin!.email);
+
+    await this.busEvenements.publie(
+      new EvenementAdminNommeSurOrganisation({
+        idActeur,
+        idCible: idAdmin,
+        siret,
+      })
+    );
   }
 
   private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {
