@@ -30,7 +30,6 @@ import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAcce
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
 import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
-import Utilisateur from '../modeles/utilisateur.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -165,7 +164,13 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  async nommeAdmin(siret: string, idAdmin: UUID, emailAdmin: string) {
+  async nommeAdmin(idActeur: UUID, siret: string, idAdmin: UUID) {
+    await this.verifieEntiteAdministree(idActeur, siret);
+
+    if (idActeur === idAdmin) {
+      throw new EchecAutorisation();
+    }
+
     await this.ajouteSiretAAdmin(siret, idAdmin);
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
@@ -176,7 +181,9 @@ export class ServiceAdministrationOrganisations {
     await this.sauvegardeAutorisations(
       await Promise.all(nouvellesAutorisations)
     );
-    await this.adaptateurMail.envoieMessageNominationAdmin(emailAdmin);
+
+    const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
+    await this.adaptateurMail.envoieMessageNominationAdmin(nouvelAdmin!.email);
   }
 
   private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {
@@ -467,18 +474,13 @@ export class ServiceAdministrationOrganisations {
       throw new ErreurEntiteNonAdministre();
     }
 
-    const utilisateurAdmin = (await this.depotDonnees.utilisateur(
-      idAdmin
-    )) as Utilisateur;
     const admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
 
     const siretsAAjouter = sirets.filter(
       (siret) => !admin || !admin.estAdminDe(siret)
     );
     await Promise.all(
-      siretsAAjouter.map((siret) =>
-        this.nommeAdmin(siret, idAdmin, utilisateurAdmin.email)
-      )
+      siretsAAjouter.map((siret) => this.nommeAdmin(idActeur, siret, idAdmin))
     );
 
     if (!admin) return;

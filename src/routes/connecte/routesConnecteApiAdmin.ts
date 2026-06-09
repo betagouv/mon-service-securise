@@ -34,14 +34,6 @@ const routesConnecteApiAdmin = ({
 }: Configuration) => {
   const routes = express.Router();
 
-  const estAutoriseSurSiret = async (idUtilisateur: UUID, siret: string) => {
-    const superviseur = await depotDonnees.lisSuperviseur(idUtilisateur);
-    if (superviseur?.estSuperviseurDe(siret)) return true;
-
-    const admin = await depotDonnees.lisAdminOrganisations(idUtilisateur);
-    return admin ? admin.estAdminDe(siret) : false;
-  };
-
   routes.get('/entites', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
@@ -206,27 +198,34 @@ const routesConnecteApiAdmin = ({
   routes.post(
     '/nomme',
     valideBody(schemaPostAdminNomme),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       const { emails, siret } = requete.body;
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
-
-      if (!(await estAutoriseSurSiret(idUtilisateurCourant, siret))) {
-        reponse.sendStatus(403);
-        return;
-      }
 
       const nommeAdmin = async (email: string) => {
         const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
         if (!utilisateur) return;
         await serviceAdministrationOrganisations.nommeAdmin(
+          idUtilisateurCourant,
           siret,
-          utilisateur!.id,
-          utilisateur!.email
+          utilisateur!.id
         );
       };
 
-      await Promise.all([...new Set(emails)].map(nommeAdmin));
-      reponse.sendStatus(200);
+      try {
+        await Promise.all([...new Set(emails)].map(nommeAdmin));
+        reponse.sendStatus(200);
+      } catch (erreur) {
+        if (erreur instanceof ErreurEntiteNonAdministre) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (erreur instanceof EchecAutorisation) {
+          reponse.sendStatus(400);
+          return;
+        }
+        suite(erreur);
+      }
     }
   );
 
