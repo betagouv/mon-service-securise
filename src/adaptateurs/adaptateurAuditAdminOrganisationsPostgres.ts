@@ -1,16 +1,6 @@
 import Knex from 'knex';
-import Utilisateur from '../modeles/utilisateur.js';
-import Service from '../modeles/service.js';
-import Entite from '../modeles/entite.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
-
-export type TraceAudit = {
-  acteur: Utilisateur;
-  utilisateurCible: Utilisateur;
-  serviceCible?: Service;
-  entiteCible: Entite;
-  typeAction: 'ATTRIBUTION_ROLE';
-};
+import { TraceAudit } from '../modeles/gestionOrganisations/traceAudit.js';
 
 export class AdaptateurAuditAdminOrganisationsPostgres {
   private readonly knex: Knex.Knex;
