@@ -2,6 +2,7 @@ import { unUUID } from '../../constructeurs/UUID.ts';
 import {
   traceAccesUtilisateurAdministreRetiresDansAudit,
   traceNominationAdminSurOrganisationDansAudit,
+  traceRetraitAdminDeOrganisationDansAudit,
   traceRoleUtilisateurAdministreAttribueDansAudit,
 } from '../../../src/bus/abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
@@ -244,6 +245,55 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
           })(payload)
         ).rejects.toThrow(
           `Impossible de tracer une nomination d'admin sans avoir ${proprieteObligatoire} en paramètre.`
+        );
+      }
+    );
+  });
+
+  describe("lors du retrait d'un admin d'une organisation", () => {
+    it("consigne un événement de retrait d'un admin", async () => {
+      let donneesRecues: TraceAudit<'RETRAIT_ADMIN'> | undefined;
+      adaptateurAuditAdminOrganisations.trace = async (donnees) => {
+        donneesRecues = donnees;
+      };
+
+      await traceRetraitAdminDeOrganisationDansAudit({
+        depotDonnees,
+        adaptateurAuditAdminOrganisations,
+      })({
+        idActeur: idUtilisateurAdmin,
+        idCible: idUtilisateurCible,
+        siret: '1234',
+      });
+
+      expect(donneesRecues).toBeDefined();
+      expect(donneesRecues!.acteur.id).toBe(idUtilisateurAdmin);
+      expect(donneesRecues!.acteur.email).toBe('admin@mail.fr');
+      expect(donneesRecues!.utilisateurCible.id).toBe(idUtilisateurCible);
+      expect(donneesRecues!.utilisateurCible.email).toBe('cible@mail.fr');
+      expect(donneesRecues!.serviceCible).toBeUndefined();
+      expect(donneesRecues!.entiteCible.siret).toBe('1234');
+      expect(donneesRecues!.typeAction).toBe('RETRAIT_ADMIN');
+    });
+
+    it.each(['idActeur', 'idCible', 'siret'])(
+      "lève une exception s'il ne reçoit pas de %s",
+      async (proprieteObligatoire) => {
+        const payload = {
+          idActeur: idUtilisateurAdmin,
+          idCible: idUtilisateurCible,
+          siret: '1234',
+        };
+        // @ts-expect-error On supprime la propriété
+        delete payload[proprieteObligatoire];
+
+        await expect(
+          traceRetraitAdminDeOrganisationDansAudit({
+            depotDonnees,
+            adaptateurAuditAdminOrganisations,
+          })(payload)
+        ).rejects.toThrow(
+          `Impossible de tracer un retrait d'admin sans avoir ${proprieteObligatoire} en paramètre.`
         );
       }
     );

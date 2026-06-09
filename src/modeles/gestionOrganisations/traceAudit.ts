@@ -6,12 +6,14 @@ import { Role } from '../autorisations/autorisation.js';
 export type TypeActionAudit =
   | 'ATTRIBUTION_ROLE'
   | 'RETRAIT_ACCES'
-  | 'NOMINATION_ADMIN';
+  | 'NOMINATION_ADMIN'
+  | 'RETRAIT_ADMIN';
 
 interface DonneesAuditMap extends Record<TypeActionAudit, unknown> {
   ATTRIBUTION_ROLE: { role: Role };
   RETRAIT_ACCES: undefined;
   NOMINATION_ADMIN: undefined;
+  RETRAIT_ADMIN: undefined;
 }
 
 export type DonneesAudit<T extends TypeActionAudit> = DonneesAuditMap[T];
