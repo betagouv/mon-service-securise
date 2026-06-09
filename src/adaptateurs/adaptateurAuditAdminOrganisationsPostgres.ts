@@ -1,6 +1,9 @@
 import Knex from 'knex';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
-import { TraceAudit } from '../modeles/gestionOrganisations/traceAudit.js';
+import {
+  TraceAudit,
+  TypeActionAudit,
+} from '../modeles/gestionOrganisations/traceAudit.js';
 
 export class AdaptateurAuditAdminOrganisationsPostgres {
   private readonly knex: Knex.Knex;
@@ -17,11 +20,12 @@ export class AdaptateurAuditAdminOrganisationsPostgres {
     this.adaptateurChiffrement = adaptateurChiffrement;
   }
 
-  async trace(evenement: TraceAudit) {
+  async trace<T extends TypeActionAudit>(evenement: TraceAudit<T>) {
     const donneesChiffrees = await this.adaptateurChiffrement.chiffre({
       siret: evenement.entiteCible.siret,
       emailActeur: evenement.acteur.email,
       emailCible: evenement.utilisateurCible.email,
+      ...evenement.donneesSupplementaires,
     });
     await this.knex('admins_organisations_audit').insert({
       id_acteur: evenement.acteur.id,

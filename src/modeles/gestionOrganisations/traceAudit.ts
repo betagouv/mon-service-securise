@@ -1,11 +1,22 @@
 import Utilisateur from '../utilisateur.js';
 import Service from '../service.js';
 import Entite from '../entite.js';
+import { Role } from '../autorisations/autorisation.js';
 
-export type TraceAudit = {
+export type TypeActionAudit = 'ATTRIBUTION_ROLE' | 'RETRAIT_ACCES';
+
+interface DonneesAuditMap extends Record<TypeActionAudit, unknown> {
+  ATTRIBUTION_ROLE: { role: Role };
+  RETRAIT_ACCES: undefined;
+}
+
+export type DonneesAudit<T extends TypeActionAudit> = DonneesAuditMap[T];
+
+export type TraceAudit<T extends TypeActionAudit> = {
   acteur: Utilisateur;
   utilisateurCible: Utilisateur;
   entiteCible: Entite;
   serviceCible?: Service;
-  typeAction: 'ATTRIBUTION_ROLE' | 'RETRAIT_ACCES';
+  typeAction: T;
+  donneesSupplementaires: DonneesAudit<T>;
 };

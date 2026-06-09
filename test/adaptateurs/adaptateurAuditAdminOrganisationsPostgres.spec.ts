@@ -38,8 +38,8 @@ describe("L'adaptateur d'audit de l'administration des organisations", () => {
       knex: trx,
       adaptateurChiffrement,
     });
-
     const entite = new Entite({ siret: '1234' });
+
     await audit.trace({
       acteur: unUtilisateur()
         .avecId(idAdmin)
@@ -55,6 +55,7 @@ describe("L'adaptateur d'audit de l'administration des organisations", () => {
         .construis(),
       entiteCible: entite,
       typeAction: 'ATTRIBUTION_ROLE',
+      donneesSupplementaires: { role: 'PROPRIETAIRE' },
     });
 
     const toutesEntrees = await trx('admins_organisations_audit').select();
@@ -75,6 +76,7 @@ describe("L'adaptateur d'audit de l'administration des organisations", () => {
             siret: '1234',
             emailActeur: 'acteur@mail.fr',
             emailCible: 'cible@mail.fr',
+            role: 'PROPRIETAIRE',
           },
         },
       },
