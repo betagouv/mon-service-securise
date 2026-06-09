@@ -555,7 +555,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(200);
       expect(
         testeur.serviceAdministrationOrganisations().retireAdmin
-      ).toHaveBeenCalledWith(siret, idAdminASupprimer);
+      ).toHaveBeenCalledWith(idSuperviseur, siret, idAdminASupprimer);
     });
 
     it("jette une erreur 400 si l'id de l'utilisateur n'est pas un UUID valide", async () => {
@@ -571,6 +571,9 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
     it("jette une erreur 400 si l'utilisateur courant essaie de se supprimer", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: idAdminASupprimer });
+      testeur.serviceAdministrationOrganisations().retireAdmin = async () => {
+        throw new EchecAutorisation();
+      };
 
       const { status } = await testeur.delete('/api/admin', {
         siret,
@@ -578,6 +581,20 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       });
 
       expect(status).toBe(400);
+    });
+
+    it("jette une erreur 403 si l'entité n'est pas administrée", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: idSuperviseur });
+      testeur.serviceAdministrationOrganisations().retireAdmin = async () => {
+        throw new ErreurEntiteNonAdministre();
+      };
+
+      const { status } = await testeur.delete('/api/admin', {
+        siret,
+        idUtilisateur: idAdminASupprimer,
+      });
+
+      expect(status).toBe(403);
     });
 
     it('jette une erreur 422 si la suppression est impossible', async () => {
@@ -592,54 +609,6 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       });
 
       expect(status).toBe(422);
-    });
-
-    describe('applique les contrôles de permissions suivants', () => {
-      beforeEach(() => {
-        testeur.depotDonnees().lisSuperviseur = async () => undefined;
-        testeur.depotDonnees().lisAdminOrganisations = async () => undefined;
-      });
-
-      it("jette une erreur si l'utilisateur n'est ni superviseur, ni admin", async () => {
-        const { status } = await testeur.delete('/api/admin', {
-          siret,
-          idUtilisateur: idAdminASupprimer,
-        });
-
-        expect(status).toBe(403);
-      });
-
-      it("jette une erreur si un superviseur veut retirer un admin sur un SIRET qui n'est pas dans son périmètre", async () => {
-        testeur.depotDonnees().lisSuperviseur = async () =>
-          Superviseur.hydrate({
-            idUtilisateur: idSuperviseur,
-            entitesSupervisees: [{ siret }],
-          });
-
-        const unAutreSiret = '13000766900999';
-        const { status } = await testeur.delete('/api/admin', {
-          siret: unAutreSiret,
-          idUtilisateur: idAdminASupprimer,
-        });
-
-        expect(status).toBe(403);
-      });
-
-      it("jette une erreur si un admin veut retirer un admin sur un SIRET qui n'est pas dans son périmètre", async () => {
-        testeur.depotDonnees().lisAdminOrganisations = async () =>
-          AdminOrganisations.hydrate({
-            idUtilisateur: idSuperviseur,
-            entitesAdministrees: [{ siret }],
-          });
-
-        const unAutreSiret = '13000766900999';
-        const { status } = await testeur.delete('/api/admin', {
-          siret: unAutreSiret,
-          idUtilisateur: idAdminASupprimer,
-        });
-
-        expect(status).toBe(403);
-      });
     });
   });
 });

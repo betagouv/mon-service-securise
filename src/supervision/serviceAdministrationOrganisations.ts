@@ -135,9 +135,14 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  async retireAdmin(siret: string, idUtilisateur: UUID) {
-    const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
+  async retireAdmin(idActeur: UUID, siret: string, idUtilisateur: UUID) {
+    await this.verifieEntiteAdministree(idActeur, siret);
 
+    if (idActeur === idUtilisateur) {
+      throw new EchecAutorisation();
+    }
+
+    const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (!admin) return;
 
     const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
@@ -421,6 +426,22 @@ export class ServiceAdministrationOrganisations {
     }
   }
 
+  private async verifieEntiteAdministree(idActeur: UUID, siret: string) {
+    const acteurAdmin = await this.depotDonnees.lisAdminOrganisations(idActeur);
+    const acteurSuperviseur = await this.depotDonnees.lisSuperviseur(idActeur);
+    if (!acteurAdmin && !acteurSuperviseur) {
+      throw new ErreurEntiteNonAdministre();
+    }
+
+    if (acteurSuperviseur && !acteurSuperviseur.estSuperviseurDe(siret)) {
+      throw new ErreurEntiteNonAdministre();
+    }
+
+    if (acteurAdmin && !acteurAdmin.estAdminDe(siret)) {
+      throw new ErreurEntiteNonAdministre();
+    }
+  }
+
   private async verifieUtilisateurEstAdministre(
     idAdmin: UUID,
     idUtilisateurAdministre: UUID
@@ -467,7 +488,7 @@ export class ServiceAdministrationOrganisations {
       .entitesAdministrees.filter((e) => !sirets.includes(e.siret))
       .map((e) => e.siret);
     await Promise.all(
-      siretsARetirer.map((siret) => this.retireAdmin(siret, idAdmin))
+      siretsARetirer.map((siret) => this.retireAdmin(idActeur, siret, idAdmin))
     );
   }
 }

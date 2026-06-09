@@ -394,6 +394,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     const idService2 = unUUID('S2');
     const idService3 = unUUID('S3');
     const idContributeurS3 = unUUID('U3');
+    const idSuperviseur = unUUID('SU1');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
@@ -432,6 +433,10 @@ describe("Le service de gestion des admins d'organisation", () => {
         .construis() as unknown as AdaptateurPersistance;
       adaptateurPersistanceTS = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(idAdmin, [{ siret }])
+        .ajouteSuperviseurSurPerimetre(idSuperviseur, [
+          { siret },
+          { siret: siretSeulAdmin },
+        ])
         .construis();
 
       depotComplet = unDepotComplet({
@@ -442,21 +447,50 @@ describe("Le service de gestion des admins d'organisation", () => {
       service = leServiceDAdministrationDesOrgas();
     });
 
+    it("jette une erreur si l'acteur n'est ni superviseur ni admin", async () => {
+      const idActeur = unUUIDRandom();
+      await expect(
+        service.retireAdmin(idActeur, siret, unUUIDRandom())
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur n'est pas superviseur de l'entité demandée", async () => {
+      await expect(
+        service.retireAdmin(
+          idSuperviseur,
+          'UN-SIRET-PAS-SUPERVISÉ',
+          unUUIDRandom()
+        )
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur n'est pas admin de l'entité demandée", async () => {
+      await expect(
+        service.retireAdmin(idAdmin, 'UN-SIRET-PAS-SUPERVISÉ', unUUIDRandom())
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur essaye de se retirer lui même", async () => {
+      await expect(
+        service.retireAdmin(idAdmin, siret, idAdmin)
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
     it("ne jette pas d'erreur si l'utilisateur n'est pas admin", async () => {
       await expect(
-        service.retireAdmin(siret, unUUIDRandom())
+        service.retireAdmin(idAdmin, siret, unUUIDRandom())
       ).resolves.not.toThrow();
     });
 
     it("retire l'entité du périmètre de l'admin", async () => {
-      await service.retireAdmin(siret, idAdmin);
+      await service.retireAdmin(idSuperviseur, siret, idAdmin);
 
       const adminAJour = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(adminAJour?.estAdminDe(siret)).toBe(false);
     });
 
     it('supprime les autorisations admin sur les services de ce siret', async () => {
-      await service.retireAdmin(siret, idAdmin);
+      await service.retireAdmin(idSuperviseur, siret, idAdmin);
 
       const autorisations = await depotComplet.autorisations(idAdmin);
       expect(autorisations).toHaveLength(2);
@@ -465,8 +499,8 @@ describe("Le service de gestion des admins d'organisation", () => {
 
     it("jette une erreur si l'admin est dernier 'propriétaire' (ou admin) d'un des services administrés", async () => {
       await expect(
-        service.retireAdmin(siretSeulAdmin, idAdmin)
-      ).rejects.toThrow(new ErreurSuppressionImpossible());
+        service.retireAdmin(idSuperviseur, siretSeulAdmin, idAdmin)
+      ).rejects.toThrow(ErreurSuppressionImpossible);
     });
   });
 
