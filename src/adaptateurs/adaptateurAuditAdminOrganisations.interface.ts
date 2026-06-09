@@ -1,5 +1,8 @@
-import { TraceAudit } from '../modeles/gestionOrganisations/traceAudit.js';
+import {
+  TraceAudit,
+  TypeActionAudit,
+} from '../modeles/gestionOrganisations/traceAudit.js';
 
 export type AdaptateurAuditAdminOrganisations = {
-  trace: (evenement: TraceAudit) => Promise<void>;
+  trace: (evenement: TraceAudit<TypeActionAudit>) => Promise<void>;
 };

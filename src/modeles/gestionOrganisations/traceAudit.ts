@@ -24,5 +24,5 @@ export type TraceAudit<T extends TypeActionAudit> = {
   entiteCible: Entite;
   serviceCible?: Service;
   typeAction: T;
-  donneesSupplementaires: DonneesAudit<T>;
+  donneesSupplementaires?: DonneesAudit<T>;
 };
