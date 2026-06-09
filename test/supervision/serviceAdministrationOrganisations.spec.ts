@@ -32,6 +32,8 @@ import {
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.ts';
 import { EvenementRoleUtilisateurAdministreAttribue } from '../../src/bus/evenementRoleUtilisateurAdministreAttribue.js';
 import { EvenementAccesUtilisateurAdministreRetires } from '../../src/bus/evenementAccesUtilisateurAdministreRetires.js';
+import { EvenementAdminNommeSurOrganisation } from '../../src/bus/evenementAdminNommeSurOrganisation.ts';
+import { EvenementAdminRetireDeOrganisation } from '../../src/bus/evenementAdminRetireDeOrganisation.ts';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -304,6 +306,23 @@ describe("Le service de gestion des admins d'organisation", () => {
         'nouvel-admin@mail.fr'
       );
     });
+
+    it("publie un évènement d'admin nommé sur le bus", async () => {
+      await administrationOrganisations.nommeAdmin(
+        idSuperviseur,
+        siretSupervise,
+        idAdmin
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementAdminNommeSurOrganisation)
+      ).toBe(true);
+      const evenement: EvenementAdminNommeSurOrganisation =
+        busEvenements.recupereEvenement(EvenementAdminNommeSurOrganisation);
+      expect(evenement.idActeur).toBe(idSuperviseur);
+      expect(evenement.idCible).toBe(idAdmin);
+      expect(evenement.siret).toBe(siretSupervise);
+    });
   });
 
   describe("sur demande des entités dans le périmètre d'un utilisateur, qu'il soit admin ou superviseur", () => {
@@ -568,6 +587,19 @@ describe("Le service de gestion des admins d'organisation", () => {
       const autorisations = await depotComplet.autorisations(idAdmin);
       expect(autorisations).toHaveLength(2);
       expect(autorisations[0].idService).toBe(idService2);
+    });
+
+    it("publie un évènement d'admin retiré sur le bus", async () => {
+      await service.retireAdmin(idSuperviseur, siret, idAdmin);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementAdminRetireDeOrganisation)
+      ).toBe(true);
+      const evenement: EvenementAdminRetireDeOrganisation =
+        busEvenements.recupereEvenement(EvenementAdminRetireDeOrganisation);
+      expect(evenement.idActeur).toBe(idSuperviseur);
+      expect(evenement.idCible).toBe(idAdmin);
+      expect(evenement.siret).toBe(siret);
     });
 
     it("jette une erreur si l'admin est dernier 'propriétaire' (ou admin) d'un des services administrés", async () => {
