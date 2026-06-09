@@ -1,5 +1,8 @@
 import { unUUID } from '../../constructeurs/UUID.ts';
-import { traceAccesUtilisateurAdministreRetiresDansAudit } from '../../../src/bus/abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
+import {
+  traceAccesUtilisateurAdministreRetiresDansAudit,
+  traceRoleUtilisateurAdministreAttribueDansAudit,
+} from '../../../src/bus/abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { unePersistanceMemoire } from '../../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
@@ -120,6 +123,77 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
           })(payload)
         ).rejects.toThrow(
           `Impossible de tracer un retrait d'accès à un utilisateur administré sans avoir ${proprieteObligatoire} en paramètre.`
+        );
+      }
+    );
+  });
+
+  describe("lors de l'attribution de rôle à un utilisateur administré", () => {
+    it("consigne un événement d'attribution de rôle à un utilisateur administré", async () => {
+      let donneesRecues: TraceAudit<'ATTRIBUTION_ROLE'> | undefined;
+      adaptateurAuditAdminOrganisations.trace = async (donnees) => {
+        donneesRecues = donnees;
+      };
+
+      await traceRoleUtilisateurAdministreAttribueDansAudit({
+        depotDonnees,
+        adaptateurAuditAdminOrganisations,
+      })({
+        idAdmin: idUtilisateurAdmin,
+        idUtilisateurAdministre: idUtilisateurCible,
+        role: 'PROPRIETAIRE',
+        idsServices: [idService],
+      });
+
+      expect(donneesRecues).toBeDefined();
+      expect(donneesRecues!.acteur.id).toBe(idUtilisateurAdmin);
+      expect(donneesRecues!.acteur.email).toBe('admin@mail.fr');
+      expect(donneesRecues!.utilisateurCible.id).toBe(idUtilisateurCible);
+      expect(donneesRecues!.utilisateurCible.email).toBe('cible@mail.fr');
+      expect(donneesRecues!.serviceCible!.id).toBe(idService);
+      expect(donneesRecues!.serviceCible!.siretDeOrganisation()).toBe('1234');
+      expect(donneesRecues!.entiteCible.siret).toBe('1234');
+      expect(donneesRecues!.typeAction).toBe('ATTRIBUTION_ROLE');
+      expect(donneesRecues!.donneesSupplementaires).toEqual({
+        role: 'PROPRIETAIRE',
+      });
+    });
+
+    it("consigne un événement d'attribution de rôle par identifiant de service", async () => {
+      adaptateurAuditAdminOrganisations.trace = vi.fn();
+
+      await traceRoleUtilisateurAdministreAttribueDansAudit({
+        depotDonnees,
+        adaptateurAuditAdminOrganisations,
+      })({
+        idAdmin: idUtilisateurAdmin,
+        idUtilisateurAdministre: idUtilisateurCible,
+        role: 'PROPRIETAIRE',
+        idsServices: [idService, idService2],
+      });
+
+      expect(adaptateurAuditAdminOrganisations.trace).toHaveBeenCalledTimes(2);
+    });
+
+    it.each(['idAdmin', 'idUtilisateurAdministre', 'idsServices', 'role'])(
+      "lève une exception s'il ne reçoit pas de %s",
+      async (proprieteObligatoire) => {
+        const payload = {
+          idAdmin: idUtilisateurAdmin,
+          idUtilisateurAdministre: idUtilisateurCible,
+          role: 'PROPRIETAIRE',
+          idsServices: [idService],
+        };
+        // @ts-expect-error On supprime la propriété
+        delete payload[proprieteObligatoire];
+
+        await expect(
+          traceRoleUtilisateurAdministreAttribueDansAudit({
+            depotDonnees,
+            adaptateurAuditAdminOrganisations,
+          })(payload)
+        ).rejects.toThrow(
+          `Impossible de tracer une attribution de rôle à un utilisateur administré sans avoir ${proprieteObligatoire} en paramètre.`
         );
       }
     );

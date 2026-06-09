@@ -65,7 +65,10 @@ import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtili
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
 import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtilisateurAdministreRetires.js';
 import { consigneAccesUtilisateurAdministreRetiresDansJournal } from './abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.js';
-import { traceAccesUtilisateurAdministreRetiresDansAudit } from './abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
+import {
+  traceAccesUtilisateurAdministreRetiresDansAudit,
+  traceRoleUtilisateurAdministreAttribueDansAudit,
+} from './abonnements/traceEvenementsAuditAdministrationOrganisations.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -248,10 +251,13 @@ const cableTousLesAbonnes = (
     consigneSimulationMigrationReferentielCreee({ adaptateurJournal })
   );
 
-  busEvenements.abonne(
-    EvenementRoleUtilisateurAdministreAttribue,
-    consigneRoleUtilisateurAdministreAttribueDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementRoleUtilisateurAdministreAttribue, [
+    consigneRoleUtilisateurAdministreAttribueDansJournal({ adaptateurJournal }),
+    traceRoleUtilisateurAdministreAttribueDansAudit({
+      depotDonnees,
+      adaptateurAuditAdminOrganisations,
+    }),
+  ]);
 
   busEvenements.abonnePlusieurs(EvenementAccesUtilisateurAdministreRetires, [
     consigneAccesUtilisateurAdministreRetiresDansJournal({ adaptateurJournal }),
