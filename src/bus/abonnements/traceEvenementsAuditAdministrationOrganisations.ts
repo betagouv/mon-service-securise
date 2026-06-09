@@ -98,6 +98,9 @@ export function traceNominationAdminSurOrganisationDansAudit({
   depotDonnees: DepotDonnees;
   adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
 }) {
+  const descriptionTypeAction = "une nomination d'admin";
+  const typeAction = 'NOMINATION_ADMIN';
+
   return async (evenement: EvenementAdminNommeSurOrganisation) => {
     const { idCible, idActeur, siret } = evenement;
 
@@ -106,7 +109,7 @@ export function traceNominationAdminSurOrganisationDansAudit({
         keyof EvenementAdminNommeSurOrganisation
       >
     ).forEach((id) => {
-      if (!evenement[id]) leveException(id, "une nomination d'admin");
+      if (!evenement[id]) leveException(id, descriptionTypeAction);
     });
 
     const admin = await depotDonnees.utilisateur(idActeur);
@@ -116,7 +119,40 @@ export function traceNominationAdminSurOrganisationDansAudit({
       acteur: admin!,
       utilisateurCible: cible!,
       entiteCible: { siret },
-      typeAction: 'NOMINATION_ADMIN',
+      typeAction,
+    });
+  };
+}
+
+export function traceRetraitAdminDeOrganisationDansAudit({
+  depotDonnees,
+  adaptateurAuditAdminOrganisations,
+}: {
+  depotDonnees: DepotDonnees;
+  adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
+}) {
+  const descriptionTypeAction = "un retrait d'admin";
+  const typeAction = 'RETRAIT_ADMIN';
+
+  return async (evenement: EvenementAdminNommeSurOrganisation) => {
+    const { idCible, idActeur, siret } = evenement;
+
+    (
+      ['idCible', 'idActeur', 'siret'] as Array<
+        keyof EvenementAdminNommeSurOrganisation
+      >
+    ).forEach((id) => {
+      if (!evenement[id]) leveException(id, descriptionTypeAction);
+    });
+
+    const admin = await depotDonnees.utilisateur(idActeur);
+    const cible = await depotDonnees.utilisateur(idCible);
+
+    await adaptateurAuditAdminOrganisations.trace({
+      acteur: admin!,
+      utilisateurCible: cible!,
+      entiteCible: { siret },
+      typeAction,
     });
   };
 }
