@@ -135,30 +135,46 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande de nommage d'un admin sur une entité", () => {
     let administrationOrganisations: ServiceAdministrationOrganisations;
+    const idSuperviseur = unUUID('SU1');
+    const siretSupervise = 'SIRET-567';
+    const siretAvecUnProprietaire = '4567';
+
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnService(
           unServiceV2()
             .avecId(unUUID('s1'))
-            .avecOrganisationResponsable({ siret: '1234' }).donnees
+            .avecOrganisationResponsable({ siret: siretSupervise }).donnees
         )
         .ajouteUnService(
           unServiceV2()
             .avecId(unUUID('s2'))
-            .avecOrganisationResponsable({ siret: '1234' }).donnees
+            .avecOrganisationResponsable({ siret: siretSupervise }).donnees
         )
         .ajouteUnService(
           unServiceV2()
             .avecId(unUUID('s3'))
-            .avecOrganisationResponsable({ siret: '4567' }).donnees
+            .avecOrganisationResponsable({ siret: siretAvecUnProprietaire })
+            .donnees
         )
         .ajouteUnUtilisateur(unUtilisateur().avecId(unUUID('P')).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idSuperviseur).donnees)
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId(unUUID('A')).avecEmail('nouvel-admin@mail.fr')
+            .donnees
+        )
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire(unUUID('P'), unUUID('s3')).donnees
         )
         .construis() as unknown as AdaptateurPersistance;
       adaptateurPersistanceTS = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(idAdmin, [entite])
+        .ajouteAdminSurPerimetre(idSuperviseur, [
+          entite,
+          { siret: siretSupervise },
+          { siret: siretAvecUnProprietaire },
+        ])
         .construis();
       depotComplet = unDepotComplet({
         adaptateurPersistance,
@@ -169,11 +185,52 @@ describe("Le service de gestion des admins d'organisation", () => {
       administrationOrganisations = leServiceDAdministrationDesOrgas();
     });
 
+    it("jette une erreur si l'acteur n'est ni superviseur ni admin", async () => {
+      const idActeur = unUUIDRandom();
+      await expect(
+        administrationOrganisations.nommeAdmin(
+          idActeur,
+          'UN-SIRET',
+          unUUID('P')
+        )
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur n'est pas superviseur de l'entité demandée", async () => {
+      await expect(
+        administrationOrganisations.nommeAdmin(
+          idSuperviseur,
+          'UN-SIRET-PAS-SUPERVISÉ',
+          unUUID('P')
+        )
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("jette une erreur si l'acteur n'est pas admin de l'entité demandée", async () => {
+      await expect(
+        administrationOrganisations.nommeAdmin(
+          idAdmin,
+          'UN-SIRET-PAS-SUPERVISÉ',
+          unUUID('P')
+        )
+      ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it('jette une erreur si le superviseur essaye de se nommer admin soi-même', async () => {
+      await expect(
+        administrationOrganisations.nommeAdmin(
+          idSuperviseur,
+          entite.siret,
+          idSuperviseur
+        )
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
     it('crée le nouvel admin', async () => {
       await administrationOrganisations.nommeAdmin(
+        idAdmin,
         entite.siret,
-        unUUID('A'),
-        ''
+        unUUID('A')
       );
 
       const admins = await depotComplet.lisAdminsPour(entite.siret);
@@ -183,14 +240,22 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("ajoute l'entité administrée à l'admin existant", async () => {
-      await administrationOrganisations.nommeAdmin('SIRET-567', idAdmin, '');
+      await administrationOrganisations.nommeAdmin(
+        idSuperviseur,
+        siretSupervise,
+        idAdmin
+      );
 
-      const admins = await depotComplet.lisAdminsPour('SIRET-567');
+      const admins = await depotComplet.lisAdminsPour(siretSupervise);
       expect(admins.map((a) => a.donnees().idUtilisateur)).toContain(idAdmin);
     });
 
     it("complète les données de l'entité grâce à la recherche entreprise", async () => {
-      await administrationOrganisations.nommeAdmin('SIRET-567', idAdmin, '');
+      await administrationOrganisations.nommeAdmin(
+        idSuperviseur,
+        siretSupervise,
+        idAdmin
+      );
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin?.donnees().entitesAdministrees[0].nom).toBeDefined();
@@ -198,7 +263,11 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it('ajoute les autorisations correspondantes', async () => {
-      await administrationOrganisations.nommeAdmin('1234', unUUID('A'), '');
+      await administrationOrganisations.nommeAdmin(
+        idSuperviseur,
+        siretSupervise,
+        unUUID('A')
+      );
 
       const autorisationsAdmin = await depotComplet.autorisations(unUUID('A'));
 
@@ -208,7 +277,11 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
-      await administrationOrganisations.nommeAdmin('4567', unUUID('P'), '');
+      await administrationOrganisations.nommeAdmin(
+        idSuperviseur,
+        siretAvecUnProprietaire,
+        unUUID('P')
+      );
 
       const autorisationsAdmin = await depotComplet.autorisations(unUUID('P'));
 
@@ -225,7 +298,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       const service = leServiceDAdministrationDesOrgas({ adaptateurMail });
 
-      await service.nommeAdmin('1234', unUUID('A'), 'nouvel-admin@mail.fr');
+      await service.nommeAdmin(idSuperviseur, siretSupervise, unUUID('A'));
 
       expect(envoieMessageNominationAdmin).toHaveBeenCalledWith(
         'nouvel-admin@mail.fr'

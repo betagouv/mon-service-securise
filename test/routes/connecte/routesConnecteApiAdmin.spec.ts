@@ -3,7 +3,6 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import Superviseur from '../../../src/modeles/superviseur.ts';
-import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
 import { UtilisateurAdministre } from '../../../src/modeles/gestionOrganisations/utilisateurAdministre.ts';
 import {
   EchecAutorisation,
@@ -405,6 +404,8 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
           idUtilisateur: idSuperviseur,
           entitesSupervisees: [{ siret }],
         });
+      testeur.depotDonnees().utilisateurAvecEmail = async () =>
+        unUtilisateur().construis();
     });
 
     it('jette une erreur si les données sont invalides', async () => {
@@ -455,10 +456,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(200);
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(siret, idAdminA, 'jean.dujardin@beta.gouv.fr');
+      ).toHaveBeenCalledWith(idSuperviseur, siret, idAdminA);
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(siret, idAdminB, 'jeanne.dujardin@beta.gouv.fr');
+      ).toHaveBeenCalledWith(idSuperviseur, siret, idAdminB);
     });
 
     it('dédoublonne les emails', async () => {
@@ -481,52 +482,30 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    describe('applique les contrôles de permissions', () => {
-      beforeEach(() => {
-        testeur.depotDonnees().lisSuperviseur = async () => undefined;
-        testeur.depotDonnees().lisAdminOrganisations = async () => undefined;
+    it("jette une erreur si l'entité n'est pas supervisée", async () => {
+      testeur.serviceAdministrationOrganisations().nommeAdmin = async () => {
+        throw new ErreurEntiteNonAdministre();
+      };
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: ['utilisateur_lambda@mail.fr'],
+        siret,
       });
 
-      it("jette une erreur si l'utilisateur n'est ni superviseur, ni admin", async () => {
-        const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['utilisateur_lambda@mail.fr'],
-          siret,
-        });
+      expect(status).toBe(403);
+    });
 
-        expect(status).toBe(403);
+    it("jette une erreur si l'utilisateur essaye de se nommer soi-même", async () => {
+      testeur.serviceAdministrationOrganisations().nommeAdmin = async () => {
+        throw new EchecAutorisation();
+      };
+
+      const { status } = await testeur.post('/api/admin/nomme', {
+        emails: ['utilisateur_lambda@mail.fr'],
+        siret,
       });
 
-      it("jette une erreur si un superviseur veut nommer sur un SIRET qui n'est pas dans son périmètre", async () => {
-        testeur.depotDonnees().lisSuperviseur = async () =>
-          Superviseur.hydrate({
-            idUtilisateur: idSuperviseur,
-            entitesSupervisees: [{ siret }],
-          });
-
-        const unAutreSiret = '13000766900999';
-        const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['futur_admin@mail.fr'],
-          siret: unAutreSiret,
-        });
-
-        expect(status).toBe(403);
-      });
-
-      it("jette une erreur si un admin veut nommer sur un SIRET qui n'est pas dans son périmètre", async () => {
-        testeur.depotDonnees().lisAdminOrganisations = async () =>
-          AdminOrganisations.hydrate({
-            idUtilisateur: idAdmin,
-            entitesAdministrees: [{ siret }],
-          });
-
-        const unAutreSiret = '13000766900999';
-        const { status } = await testeur.post('/api/admin/nomme', {
-          emails: ['futur_admin@mail.fr'],
-          siret: unAutreSiret,
-        });
-
-        expect(status).toBe(403);
-      });
+      expect(status).toBe(400);
     });
   });
 
