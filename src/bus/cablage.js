@@ -65,7 +65,7 @@ import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtili
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
 import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtilisateurAdministreRetires.js';
 import { consigneAccesUtilisateurAdministreRetiresDansJournal } from './abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.js';
-import { traceAccesUtilisateurAdministreRetiresDansAudit } from './abonnements/traceAccesUtilisateurAdministreRetiresDansAudit.ts';
+import { traceAccesUtilisateurAdministreRetiresDansAudit } from './abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
 
 const cableTousLesAbonnes = (
   busEvenements,

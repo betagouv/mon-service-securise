@@ -1,5 +1,5 @@
 import { unUUID } from '../../constructeurs/UUID.ts';
-import { traceAccesUtilisateurAdministreRetiresDansAudit } from '../../../src/bus/abonnements/traceAccesUtilisateurAdministreRetiresDansAudit.ts';
+import { traceAccesUtilisateurAdministreRetiresDansAudit } from '../../../src/bus/abonnements/traceEvenementsAuditAdministrationOrganisations.ts';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { unePersistanceMemoire } from '../../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
@@ -15,7 +15,7 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { AdaptateurAuditAdminOrganisations } from '../../../src/adaptateurs/adaptateurAuditAdminOrganisations.interface.ts';
 import { TraceAudit } from '../../../src/modeles/gestionOrganisations/traceAudit.ts';
 
-describe("L'abonnement qui trace le retrait d'accès à un utilisateur administré dans l'audit'", () => {
+describe("L'abonnement qui trace les évènements d'administration d'organisations", () => {
   const idUtilisateurAdmin = unUUID('A');
   const idUtilisateurCible = unUUID('U');
   const idService = unUUID('S');
@@ -60,66 +60,68 @@ describe("L'abonnement qui trace le retrait d'accès à un utilisateur administr
     });
   });
 
-  it("consigne un événement de retrait d'accès à un utilisateur administré", async () => {
-    let donneesRecues: TraceAudit<'RETRAIT_ACCES'> | undefined;
-    adaptateurAuditAdminOrganisations.trace = async (donnees) => {
-      donneesRecues = donnees;
-    };
+  describe("sur retrait d'accès à un utilisateur administré", () => {
+    it("consigne un événement de retrait d'accès", async () => {
+      let donneesRecues: TraceAudit<'RETRAIT_ACCES'> | undefined;
+      adaptateurAuditAdminOrganisations.trace = async (donnees) => {
+        donneesRecues = donnees;
+      };
 
-    await traceAccesUtilisateurAdministreRetiresDansAudit({
-      depotDonnees,
-      adaptateurAuditAdminOrganisations,
-    })({
-      idAdmin: idUtilisateurAdmin,
-      idUtilisateurAdministre: idUtilisateurCible,
-      idsServices: [idService],
-    });
-
-    expect(donneesRecues).toBeDefined();
-    expect(donneesRecues!.acteur.id).toBe(idUtilisateurAdmin);
-    expect(donneesRecues!.acteur.email).toBe('admin@mail.fr');
-    expect(donneesRecues!.utilisateurCible.id).toBe(idUtilisateurCible);
-    expect(donneesRecues!.utilisateurCible.email).toBe('cible@mail.fr');
-    expect(donneesRecues!.serviceCible!.id).toBe(idService);
-    expect(donneesRecues!.serviceCible!.siretDeOrganisation()).toBe('1234');
-    expect(donneesRecues!.entiteCible.siret).toBe('1234');
-    expect(donneesRecues!.typeAction).toBe('RETRAIT_ACCES');
-  });
-
-  it("consigne un événement de retrait d'accès par identifiant de service", async () => {
-    adaptateurAuditAdminOrganisations.trace = vi.fn();
-
-    await traceAccesUtilisateurAdministreRetiresDansAudit({
-      depotDonnees,
-      adaptateurAuditAdminOrganisations,
-    })({
-      idAdmin: idUtilisateurAdmin,
-      idUtilisateurAdministre: idUtilisateurCible,
-      idsServices: [idService, idService2],
-    });
-
-    expect(adaptateurAuditAdminOrganisations.trace).toHaveBeenCalledTimes(2);
-  });
-
-  it.each(['idAdmin', 'idUtilisateurAdministre', 'idsServices'])(
-    "lève une exception s'il ne reçoit pas de %s",
-    async (proprieteObligatoire) => {
-      const payload = {
+      await traceAccesUtilisateurAdministreRetiresDansAudit({
+        depotDonnees,
+        adaptateurAuditAdminOrganisations,
+      })({
         idAdmin: idUtilisateurAdmin,
         idUtilisateurAdministre: idUtilisateurCible,
         idsServices: [idService],
-      };
-      // @ts-expect-error On supprime la propriété
-      delete payload[proprieteObligatoire];
+      });
 
-      await expect(
-        traceAccesUtilisateurAdministreRetiresDansAudit({
-          depotDonnees,
-          adaptateurAuditAdminOrganisations,
-        })(payload)
-      ).rejects.toThrow(
-        `Impossible de tracer un retrait d'accès à un utilisateur administré sans avoir ${proprieteObligatoire} en paramètre.`
-      );
-    }
-  );
+      expect(donneesRecues).toBeDefined();
+      expect(donneesRecues!.acteur.id).toBe(idUtilisateurAdmin);
+      expect(donneesRecues!.acteur.email).toBe('admin@mail.fr');
+      expect(donneesRecues!.utilisateurCible.id).toBe(idUtilisateurCible);
+      expect(donneesRecues!.utilisateurCible.email).toBe('cible@mail.fr');
+      expect(donneesRecues!.serviceCible!.id).toBe(idService);
+      expect(donneesRecues!.serviceCible!.siretDeOrganisation()).toBe('1234');
+      expect(donneesRecues!.entiteCible.siret).toBe('1234');
+      expect(donneesRecues!.typeAction).toBe('RETRAIT_ACCES');
+    });
+
+    it("consigne un événement de retrait d'accès par identifiant de service", async () => {
+      adaptateurAuditAdminOrganisations.trace = vi.fn();
+
+      await traceAccesUtilisateurAdministreRetiresDansAudit({
+        depotDonnees,
+        adaptateurAuditAdminOrganisations,
+      })({
+        idAdmin: idUtilisateurAdmin,
+        idUtilisateurAdministre: idUtilisateurCible,
+        idsServices: [idService, idService2],
+      });
+
+      expect(adaptateurAuditAdminOrganisations.trace).toHaveBeenCalledTimes(2);
+    });
+
+    it.each(['idAdmin', 'idUtilisateurAdministre', 'idsServices'])(
+      "lève une exception s'il ne reçoit pas de %s",
+      async (proprieteObligatoire) => {
+        const payload = {
+          idAdmin: idUtilisateurAdmin,
+          idUtilisateurAdministre: idUtilisateurCible,
+          idsServices: [idService],
+        };
+        // @ts-expect-error On supprime la propriété
+        delete payload[proprieteObligatoire];
+
+        await expect(
+          traceAccesUtilisateurAdministreRetiresDansAudit({
+            depotDonnees,
+            adaptateurAuditAdminOrganisations,
+          })(payload)
+        ).rejects.toThrow(
+          `Impossible de tracer un retrait d'accès à un utilisateur administré sans avoir ${proprieteObligatoire} en paramètre.`
+        );
+      }
+    );
+  });
 });
