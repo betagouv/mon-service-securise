@@ -67,8 +67,12 @@ import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtil
 import { consigneAccesUtilisateurAdministreRetiresDansJournal } from './abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.js';
 import {
   traceAccesUtilisateurAdministreRetiresDansAudit,
+  traceNominationAdminSurOrganisationDansAudit,
+  traceRetraitAdminDeOrganisationDansAudit,
   traceRoleUtilisateurAdministreAttribueDansAudit,
 } from './abonnements/traceEvenementsAuditAdministrationOrganisations.js';
+import { EvenementAdminNommeSurOrganisation } from './evenementAdminNommeSurOrganisation.js';
+import { EvenementAdminRetireDeOrganisation } from './evenementAdminRetireDeOrganisation.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -266,6 +270,22 @@ const cableTousLesAbonnes = (
       adaptateurAuditAdminOrganisations,
     }),
   ]);
+
+  busEvenements.abonne(
+    EvenementAdminNommeSurOrganisation,
+    traceNominationAdminSurOrganisationDansAudit({
+      depotDonnees,
+      adaptateurAuditAdminOrganisations,
+    })
+  );
+
+  busEvenements.abonne(
+    EvenementAdminRetireDeOrganisation,
+    traceRetraitAdminDeOrganisationDansAudit({
+      depotDonnees,
+      adaptateurAuditAdminOrganisations,
+    })
+  );
 };
 
 export { cableTousLesAbonnes };
