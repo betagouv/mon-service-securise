@@ -5,6 +5,7 @@ import { AdaptateurAuditAdminOrganisations } from '../../adaptateurs/adaptateurA
 import { UUID } from '../../typesBasiques.js';
 import { EvenementAdminNommeSurOrganisation } from '../evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from '../evenementAdminRetireDeOrganisation.js';
+import Entite from '../../modeles/entite.js';
 
 const leveException = (raison: string, typeEvenement: string) => {
   throw new Error(
@@ -126,7 +127,7 @@ const traceModificationPerimetreAdminDansAudit =
     await adaptateurAuditAdminOrganisations.trace({
       acteur: admin!,
       utilisateurCible: cible!,
-      entiteCible: { siret },
+      entiteCible: new Entite({ siret }),
       typeAction,
     });
   };
