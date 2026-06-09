@@ -65,6 +65,7 @@ import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtili
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
 import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtilisateurAdministreRetires.js';
 import { consigneAccesUtilisateurAdministreRetiresDansJournal } from './abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.js';
+import { traceAccesUtilisateurAdministreRetiresDansAudit } from './abonnements/traceAccesUtilisateurAdministreRetiresDansAudit.ts';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -77,6 +78,7 @@ const cableTousLesAbonnes = (
     adaptateurSupervision,
     depotDonnees,
     referentiel,
+    adaptateurAuditAdminOrganisations,
   }
 ) => {
   const crmBrevo = new CrmBrevo({
@@ -251,10 +253,13 @@ const cableTousLesAbonnes = (
     consigneRoleUtilisateurAdministreAttribueDansJournal({ adaptateurJournal })
   );
 
-  busEvenements.abonne(
-    EvenementAccesUtilisateurAdministreRetires,
-    consigneAccesUtilisateurAdministreRetiresDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementAccesUtilisateurAdministreRetires, [
+    consigneAccesUtilisateurAdministreRetiresDansJournal({ adaptateurJournal }),
+    traceAccesUtilisateurAdministreRetiresDansAudit({
+      depotDonnees,
+      adaptateurAuditAdminOrganisations,
+    }),
+  ]);
 };
 
 export { cableTousLesAbonnes };
