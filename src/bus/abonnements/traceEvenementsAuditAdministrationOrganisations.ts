@@ -3,6 +3,7 @@ import { EvenementRoleUtilisateurAdministreAttribue as MssRoleUtilisateurAdminis
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { AdaptateurAuditAdminOrganisations } from '../../adaptateurs/adaptateurAuditAdminOrganisations.interface.js';
 import { UUID } from '../../typesBasiques.js';
+import { EvenementAdminNommeSurOrganisation } from '../evenementAdminNommeSurOrganisation.js';
 
 const leveException = (raison: string, typeEvenement: string) => {
   throw new Error(
@@ -87,5 +88,35 @@ export function traceRoleUtilisateurAdministreAttribueDansAudit({
     };
 
     await Promise.all(idsServices.map(tracePourUnService));
+  };
+}
+
+export function traceNominationAdminSurOrganisationDansAudit({
+  depotDonnees,
+  adaptateurAuditAdminOrganisations,
+}: {
+  depotDonnees: DepotDonnees;
+  adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
+}) {
+  return async (evenement: EvenementAdminNommeSurOrganisation) => {
+    const { idCible, idActeur, siret } = evenement;
+
+    (
+      ['idCible', 'idActeur', 'siret'] as Array<
+        keyof EvenementAdminNommeSurOrganisation
+      >
+    ).forEach((id) => {
+      if (!evenement[id]) leveException(id, "une nomination d'admin");
+    });
+
+    const admin = await depotDonnees.utilisateur(idActeur);
+    const cible = await depotDonnees.utilisateur(idCible);
+
+    await adaptateurAuditAdminOrganisations.trace({
+      acteur: admin!,
+      utilisateurCible: cible!,
+      entiteCible: { siret },
+      typeAction: 'NOMINATION_ADMIN',
+    });
   };
 }
