@@ -237,18 +237,9 @@ const routesConnecteApiAdmin = ({
       const { siret, idUtilisateur } = requete.body;
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
-      if (idUtilisateurCourant === idUtilisateur) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      if (!(await estAutoriseSurSiret(idUtilisateurCourant, siret))) {
-        reponse.sendStatus(403);
-        return;
-      }
-
       try {
         await serviceAdministrationOrganisations.retireAdmin(
+          idUtilisateurCourant,
           siret,
           idUtilisateur as UUID
         );
@@ -256,6 +247,14 @@ const routesConnecteApiAdmin = ({
       } catch (erreur) {
         if (erreur instanceof ErreurSuppressionImpossible) {
           reponse.sendStatus(422);
+          return;
+        }
+        if (erreur instanceof ErreurEntiteNonAdministre) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (erreur instanceof EchecAutorisation) {
+          reponse.sendStatus(400);
           return;
         }
         suite(erreur);
