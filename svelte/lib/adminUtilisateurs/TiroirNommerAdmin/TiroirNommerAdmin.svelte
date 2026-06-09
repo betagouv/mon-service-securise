@@ -3,6 +3,8 @@
   import type { EntiteSupervisee } from '../../adminEntites/adminEntites.types';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import {
+    messageRecapitulatif,
+    messageSucces,
     resumeDesModifications,
     siretsOuIlEstAdmin,
     statsDesEntites,
@@ -92,7 +94,7 @@
     ) {
       toasterStore.succes(
         'Administrateur modifié',
-        `${utilisateur.prenomNom} a été ajouté sur ${recapitulatif.nouvelles.length} ${singulierPluriel('entité', 'entités', recapitulatif.nouvelles.length)} et supprimé sur ${recapitulatif.retirees.length} ${singulierPluriel('entité', 'entités', recapitulatif.retirees.length)}`
+        messageSucces(recapitulatif, utilisateur)
       );
     } else {
       toasterStore.succes(
@@ -244,17 +246,7 @@
       <dsfr-callout
         has-title
         title="Récapitulatif"
-        text="Vous êtes sur le point d'attribuer le rôle administrateur à {utilisateur.prenomNom} sur {recapitulatif
-          .nouvelles.length} {singulierPluriel(
-          'entité',
-          'entités',
-          recapitulatif.nouvelles.length
-        )} et de retirer son droit d'admin sur {recapitulatif.retirees
-          .length} {singulierPluriel(
-          'entité',
-          'entités',
-          recapitulatif.retirees.length
-        )}"
+        text={messageRecapitulatif(recapitulatif, utilisateur)}
         accent="blue-ecume"
       ></dsfr-callout>
       <dsfr-table
