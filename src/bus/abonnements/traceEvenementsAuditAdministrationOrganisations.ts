@@ -1,11 +1,12 @@
 import { EvenementAccesUtilisateurAdministreRetires as MssAccesUtilisateurAdministreRetires } from '../evenementAccesUtilisateurAdministreRetires.js';
+import { EvenementRoleUtilisateurAdministreAttribue as MssRoleUtilisateurAdministreAttribue } from '../evenementRoleUtilisateurAdministreAttribue.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { AdaptateurAuditAdminOrganisations } from '../../adaptateurs/adaptateurAuditAdminOrganisations.interface.js';
 import { UUID } from '../../typesBasiques.js';
 
-const leveException = (raison: keyof MssAccesUtilisateurAdministreRetires) => {
+const leveException = (raison: string, typeEvenement: string) => {
   throw new Error(
-    `Impossible de tracer un retrait d'accès à un utilisateur administré sans avoir ${raison} en paramètre.`
+    `Impossible de tracer ${typeEvenement} sans avoir ${raison} en paramètre.`
   );
 };
 
@@ -19,14 +20,17 @@ export function traceAccesUtilisateurAdministreRetiresDansAudit({
   return async (evenement: MssAccesUtilisateurAdministreRetires) => {
     const { idAdmin, idUtilisateurAdministre, idsServices } = evenement;
 
-    if (!idAdmin) leveException('idAdmin');
-    if (!idUtilisateurAdministre) leveException('idUtilisateurAdministre');
-    if (!idsServices) leveException('idsServices');
+    (
+      ['idAdmin', 'idUtilisateurAdministre', 'idsServices'] as Array<
+        keyof MssAccesUtilisateurAdministreRetires
+      >
+    ).forEach((id) => {
+      if (!evenement[id])
+        leveException(id, "un retrait d'accès à un utilisateur administré");
+    });
 
-    const admin = await depotDonnees.utilisateur(evenement.idAdmin);
-    const cible = await depotDonnees.utilisateur(
-      evenement.idUtilisateurAdministre
-    );
+    const admin = await depotDonnees.utilisateur(idAdmin);
+    const cible = await depotDonnees.utilisateur(idUtilisateurAdministre);
 
     const tracePourUnService = async (idService: UUID) => {
       const service = await depotDonnees.service(idService);
@@ -37,6 +41,48 @@ export function traceAccesUtilisateurAdministreRetiresDansAudit({
         entiteCible: service!.descriptionService.organisationResponsable,
         serviceCible: service,
         typeAction: 'RETRAIT_ACCES',
+      });
+    };
+
+    await Promise.all(idsServices.map(tracePourUnService));
+  };
+}
+
+export function traceRoleUtilisateurAdministreAttribueDansAudit({
+  depotDonnees,
+  adaptateurAuditAdminOrganisations,
+}: {
+  depotDonnees: DepotDonnees;
+  adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
+}) {
+  return async (evenement: MssRoleUtilisateurAdministreAttribue) => {
+    const { idAdmin, idUtilisateurAdministre, idsServices, role } = evenement;
+
+    (
+      ['idAdmin', 'idUtilisateurAdministre', 'idsServices', 'role'] as Array<
+        keyof MssRoleUtilisateurAdministreAttribue
+      >
+    ).forEach((id) => {
+      if (!evenement[id])
+        leveException(
+          id,
+          'une attribution de rôle à un utilisateur administré'
+        );
+    });
+
+    const admin = await depotDonnees.utilisateur(idAdmin);
+    const cible = await depotDonnees.utilisateur(idUtilisateurAdministre);
+
+    const tracePourUnService = async (idService: UUID) => {
+      const service = await depotDonnees.service(idService);
+
+      await adaptateurAuditAdminOrganisations.trace({
+        acteur: admin!,
+        utilisateurCible: cible!,
+        entiteCible: service!.descriptionService.organisationResponsable,
+        serviceCible: service,
+        typeAction: 'ATTRIBUTION_ROLE',
+        donneesSupplementaires: { role },
       });
     };
 
