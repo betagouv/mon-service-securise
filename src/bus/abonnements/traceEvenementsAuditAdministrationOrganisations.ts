@@ -4,6 +4,7 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { AdaptateurAuditAdminOrganisations } from '../../adaptateurs/adaptateurAuditAdminOrganisations.interface.js';
 import { UUID } from '../../typesBasiques.js';
 import { EvenementAdminNommeSurOrganisation } from '../evenementAdminNommeSurOrganisation.js';
+import { EvenementAdminRetireDeOrganisation } from '../evenementAdminRetireDeOrganisation.js';
 
 const leveException = (raison: string, typeEvenement: string) => {
   throw new Error(
@@ -91,22 +92,29 @@ export function traceRoleUtilisateurAdministreAttribueDansAudit({
   };
 }
 
-export function traceNominationAdminSurOrganisationDansAudit({
-  depotDonnees,
-  adaptateurAuditAdminOrganisations,
-}: {
-  depotDonnees: DepotDonnees;
-  adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
-}) {
-  const descriptionTypeAction = "une nomination d'admin";
-  const typeAction = 'NOMINATION_ADMIN';
-
-  return async (evenement: EvenementAdminNommeSurOrganisation) => {
+const traceModificationPerimetreAdminDansAudit =
+  ({
+    depotDonnees,
+    adaptateurAuditAdminOrganisations,
+    typeAction,
+    descriptionTypeAction,
+  }: {
+    depotDonnees: DepotDonnees;
+    adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
+    typeAction: 'NOMINATION_ADMIN' | 'RETRAIT_ADMIN';
+    descriptionTypeAction: string;
+  }) =>
+  async (
+    evenement:
+      | EvenementAdminNommeSurOrganisation
+      | EvenementAdminRetireDeOrganisation
+  ) => {
     const { idCible, idActeur, siret } = evenement;
 
     (
       ['idCible', 'idActeur', 'siret'] as Array<
-        keyof EvenementAdminNommeSurOrganisation
+        | keyof EvenementAdminNommeSurOrganisation
+        | keyof EvenementAdminRetireDeOrganisation
       >
     ).forEach((id) => {
       if (!evenement[id]) leveException(id, descriptionTypeAction);
@@ -122,6 +130,20 @@ export function traceNominationAdminSurOrganisationDansAudit({
       typeAction,
     });
   };
+
+export function traceNominationAdminSurOrganisationDansAudit({
+  depotDonnees,
+  adaptateurAuditAdminOrganisations,
+}: {
+  depotDonnees: DepotDonnees;
+  adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
+}) {
+  return traceModificationPerimetreAdminDansAudit({
+    depotDonnees,
+    adaptateurAuditAdminOrganisations,
+    typeAction: 'NOMINATION_ADMIN',
+    descriptionTypeAction: "une nomination d'admin",
+  });
 }
 
 export function traceRetraitAdminDeOrganisationDansAudit({
@@ -131,28 +153,10 @@ export function traceRetraitAdminDeOrganisationDansAudit({
   depotDonnees: DepotDonnees;
   adaptateurAuditAdminOrganisations: AdaptateurAuditAdminOrganisations;
 }) {
-  const descriptionTypeAction = "un retrait d'admin";
-  const typeAction = 'RETRAIT_ADMIN';
-
-  return async (evenement: EvenementAdminNommeSurOrganisation) => {
-    const { idCible, idActeur, siret } = evenement;
-
-    (
-      ['idCible', 'idActeur', 'siret'] as Array<
-        keyof EvenementAdminNommeSurOrganisation
-      >
-    ).forEach((id) => {
-      if (!evenement[id]) leveException(id, descriptionTypeAction);
-    });
-
-    const admin = await depotDonnees.utilisateur(idActeur);
-    const cible = await depotDonnees.utilisateur(idCible);
-
-    await adaptateurAuditAdminOrganisations.trace({
-      acteur: admin!,
-      utilisateurCible: cible!,
-      entiteCible: { siret },
-      typeAction,
-    });
-  };
+  return traceModificationPerimetreAdminDansAudit({
+    depotDonnees,
+    adaptateurAuditAdminOrganisations,
+    typeAction: 'RETRAIT_ADMIN',
+    descriptionTypeAction: "un retrait d'admin",
+  });
 }
