@@ -61,7 +61,7 @@ describe("L'abonnement qui trace le retrait d'accès à un utilisateur administr
   });
 
   it("consigne un événement de retrait d'accès à un utilisateur administré", async () => {
-    let donneesRecues: TraceAudit | undefined;
+    let donneesRecues: TraceAudit<'RETRAIT_ACCES'> | undefined;
     adaptateurAuditAdminOrganisations.trace = async (donnees) => {
       donneesRecues = donnees;
     };
