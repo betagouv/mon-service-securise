@@ -553,6 +553,7 @@ describe("L'adaptateur persistance Postgres", () => {
 
       const admins = await persistance.utilisateursSupervisesPar(superviseur);
 
+      expect(admins.find((u) => u.id === admin2).autorisations.length).to.be(0);
       expect(admins.find((u) => u.id === admin1).autorisations.length).to.be(1);
       const autorisationsAdmin = admins.find(
         (u) => u.id === admin1
