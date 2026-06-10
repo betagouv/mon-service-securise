@@ -1022,9 +1022,9 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
             AND ao2.siret_hash IN (SELECT siret_hash FROM mes_sirets)
           ) AS "nombreEntites",
           (
-            SELECT json_agg(
+            SELECT COALESCE(json_agg(
                      to_jsonb(a3.donnees) || jsonb_build_object('id', a3.id)
-                   )
+                   ), '[]'::json)
             FROM autorisations a3
             WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
               AND (a3.donnees->>'idService')::uuid IN (SELECT ids_services FROM mes_services_supervises)
