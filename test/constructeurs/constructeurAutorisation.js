@@ -1,11 +1,12 @@
 import { tousDroitsEnEcriture } from '../../src/modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
+import { unUUIDRandom } from './UUID.js';
 
 class ConstructeurAutorisation {
   constructor() {
     this.donnees = {
       estProprietaire: false,
-      id: '',
+      id: unUUIDRandom(),
       idUtilisateur: '',
       idService: '',
       droits: {},

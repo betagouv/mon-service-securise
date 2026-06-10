@@ -41,9 +41,12 @@ type Surcharge = Partial<
 
 describe("Le service de gestion des admins d'organisation", () => {
   const idService = unUUID('s');
+  const idService2 = unUUID('s2');
+  const idService3 = unUUID('s3');
   const idAdmin = unUUID('u1');
   const idAncienAdmin = unUUIDRandom();
   const entite = { siret: '1234', nom: 'Un nom', departement: '75' };
+  const entite2 = { siret: '4567', nom: 'Un nom 2', departement: '75' };
   const unService = unServiceV2()
     .avecId(idService)
     .avecOrganisationResponsable(entite)
@@ -483,8 +486,6 @@ describe("Le service de gestion des admins d'organisation", () => {
     const siret = 'SIRET-1';
     const autreSiret = '12345';
     const siretSeulAdmin = 'SIRET-SEUL-ADMIN';
-    const idService2 = unUUID('S2');
-    const idService3 = unUUID('S3');
     const idContributeurS3 = unUUID('U3');
     const idSuperviseur = unUUID('SU1');
 
@@ -847,16 +848,49 @@ describe("Le service de gestion des admins d'organisation", () => {
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
-        .ajouteUnUtilisateur(unUtilisateur().avecId(idNouvelAdmin).donnees)
-        .ajouteUnService(unServiceV2().avecId(idService).donnees)
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId(idNouvelAdmin)
+            .avecEmail('nouvel-admin@mail.fr').donnees
+        )
+        .ajouteUnService(
+          unServiceV2().avecId(idService).avecOrganisationResponsable(entite)
+            .donnees
+        )
+        .ajouteUnService(
+          unServiceV2().avecId(idService2).avecOrganisationResponsable(entite2)
+            .donnees
+        )
+        .ajouteUnService(
+          unServiceV2().avecId(idService3).avecOrganisationResponsable(entite2)
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idNouvelAdmin, idService).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire(idNouvelAdmin, idService3).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idActeur, idService).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idActeur, idService2).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idActeur, idService3).donnees
+        )
         .construis() as unknown as AdaptateurPersistance;
 
       adaptateurPersistanceTS = unePersistanceMemoireTS()
         .ajouteAdminSurPerimetre(idActeur, [
           { siret: 'SIRET-1' },
           { siret: 'SIRET-2' },
+          entite,
+          entite2,
         ])
         .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'SIRET-2' }])
+        .ajouteAdminSurPerimetre(idNouvelAdmin, [entite])
         .construis();
 
       depotComplet = unDepotComplet({
@@ -865,6 +899,12 @@ describe("Le service de gestion des admins d'organisation", () => {
       });
 
       service = leServiceDAdministrationDesOrgas();
+    });
+
+    it("jette une erreur s'il essaie de se nommer admin lui-même", async () => {
+      await expect(() =>
+        service.assignePerimetre(idActeur, idActeur, ['SIRET-1'])
+      ).rejects.toThrow(EchecAutorisation);
     });
 
     it("jette une erreur si l'admin acteur n'administre pas le périmètre complet demandé", async () => {
@@ -906,6 +946,95 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin!.estAdminDe('SIRET-2')).toBeTruthy();
+    });
+
+    it('supprime les autorisations admin sur les services des sirets retirés', async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, [entite2.siret]);
+
+      const autorisations = await depotComplet.autorisations(idAdmin);
+      expect(autorisations).toHaveLength(0);
+    });
+
+    it("publie un évènement d'admin retiré sur le bus", async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, [entite2.siret]);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementAdminRetireDeOrganisation)
+      ).toBe(true);
+      const evenement: EvenementAdminRetireDeOrganisation =
+        busEvenements.recupereEvenement(EvenementAdminRetireDeOrganisation);
+      expect(evenement.idActeur).toBe(idActeur);
+      expect(evenement.idCible).toBe(idNouvelAdmin);
+      expect(evenement.siret).toBe(entite.siret);
+    });
+
+    it('ajoute les autorisations correspondantes', async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, [
+        entite.siret,
+        entite2.siret,
+      ]);
+
+      const autorisationsAdmin: Autorisation[] =
+        await depotComplet.autorisations(idNouvelAdmin);
+
+      expect(autorisationsAdmin).toHaveLength(3);
+      expect(
+        autorisationsAdmin.find((a) => a.idService === idService)
+      ).toBeDefined();
+      expect(
+        autorisationsAdmin.find((a) => a.idService === idService2)
+      ).toBeDefined();
+      expect(
+        autorisationsAdmin.find((a) => a.idService === idService3)
+      ).toBeDefined();
+    });
+
+    it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, [
+        entite.siret,
+        entite2.siret,
+      ]);
+
+      const autorisationsAdmin: Autorisation[] =
+        await depotComplet.autorisations(idNouvelAdmin);
+      expect(
+        autorisationsAdmin
+          .find((a) => a.idService === idService3)
+          ?.resumeNiveauDroit()
+      ).toBe('ADMIN');
+    });
+
+    it("notifie par email l'admin nommé", async () => {
+      const adaptateurMail = fabriqueAdaptateurMailMemoire();
+      const envoieMessageNominationAdmin = vi.fn();
+      adaptateurMail.envoieMessageNominationAdmin =
+        envoieMessageNominationAdmin;
+      const leService = leServiceDAdministrationDesOrgas({ adaptateurMail });
+
+      await leService.assignePerimetre(idActeur, idNouvelAdmin, [
+        entite.siret,
+        entite2.siret,
+      ]);
+
+      expect(envoieMessageNominationAdmin).toHaveBeenCalledWith(
+        'nouvel-admin@mail.fr'
+      );
+    });
+
+    it("publie un évènement d'admin nommé sur le bus", async () => {
+      await service.assignePerimetre(idActeur, idNouvelAdmin, [
+        entite.siret,
+        entite2.siret,
+      ]);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementAdminNommeSurOrganisation)
+      ).toBe(true);
+      const evenement: EvenementAdminNommeSurOrganisation =
+        busEvenements.recupereEvenement(EvenementAdminNommeSurOrganisation);
+      expect(evenement.idActeur).toBe(idActeur);
+      expect(evenement.idCible).toBe(idNouvelAdmin);
+      expect(evenement.siret).toBe(entite2.siret);
     });
   });
 });
