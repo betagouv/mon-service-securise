@@ -34,5 +34,8 @@
   infoMessage="L’utilisateur doit toutefois déjà disposer d’un compte sur MonServiceSécurisé ; dans le cas contraire, il ne pourra pas être ajouté en tant qu’administrateur."
 ></dsfr-input>
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-<dsfr-button label="Nommer admin" size="sm" onclick={async () => await valide()}
+<dsfr-button
+  label="Ajouter cet admin"
+  size="sm"
+  onclick={async () => await valide()}
 ></dsfr-button>
