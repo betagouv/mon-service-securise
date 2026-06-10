@@ -1108,6 +1108,9 @@ describe('Le dépôt de données des utilisateurs', () => {
               unUtilisateur().quiSAppelle('Jean Dubois').donnees
             ),
             id: 'U2',
+            estAdmin: true,
+            nombreEntites: 3,
+            autorisations: [],
           },
         ],
       };
@@ -1120,6 +1123,44 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       expect(utilisateurs[0].id).to.be('U2');
       expect(utilisateurs[0].prenomNom()).to.be('Jean Dubois');
+    });
+
+    it("retourne une liste d'utilisateurs administrés", async () => {
+      adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+      const adaptateurPersistance = {
+        utilisateursSupervisesPar: async () => [
+          {
+            donnees: await adaptateurChiffrement.chiffre(
+              unUtilisateur()
+                .avecEmail('jean.dubois@mail.com')
+                .avecPostes(['RSSI'])
+                .quiSAppelle('Jean Dubois').donnees
+            ),
+            id: 'U2',
+            estAdmin: true,
+            nombreEntites: 3,
+            autorisations: [
+              uneAutorisation().deProprietaire('U2', 'S1').donnees,
+            ],
+          },
+        ],
+      };
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      });
+
+      const utilisateurs = await depot.utilisateursSupervisesPar('U1');
+
+      const utilisateur = utilisateurs[0];
+      expect(utilisateur).to.be.a(UtilisateurAdministre);
+      expect(utilisateur.id).to.be('U2');
+      expect(utilisateur.email()).to.be('jean.dubois@mail.com');
+      expect(utilisateur.prenomNom()).to.be('Jean Dubois');
+      expect(utilisateur.posteDetaille()).to.be('RSSI');
+      expect(utilisateur.estAdmin).to.be(true);
+      expect(utilisateur.nombreEntites).to.be(3);
+      expect(utilisateur.autorisations[0]).to.be.a(Autorisation);
     });
   });
 });

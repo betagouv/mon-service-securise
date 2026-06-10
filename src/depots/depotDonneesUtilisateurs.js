@@ -137,7 +137,9 @@ function fabriquePersistance({
         const donneesUtilisateurs =
           await adaptateurPersistance.utilisateursSupervisesPar(idUtilisateur);
 
-        return Promise.all(donneesUtilisateurs.map(dechiffreUtilisateur));
+        return Promise.all(
+          donneesUtilisateurs.map(dechiffreUtilisateurAdministre)
+        );
       },
     },
     ajoute: async (id, donneesUtilisateur) => {
