@@ -42,4 +42,23 @@ describe('Un superviseur', () => {
       expect(superviseur.donnees().entitesSupervisees).toHaveLength(1);
     });
   });
+
+  it("sait s'il est superviseur de tout un périmètre", () => {
+    const admin = Superviseur.hydrate({
+      idUtilisateur: unUUID('U'),
+      entitesSupervisees: [
+        { siret: 'SIRET-123', nom: 'Un nom', departement: '75' },
+        { siret: 'SIRET-456', nom: 'Un nom', departement: '75' },
+      ],
+    });
+
+    expect(admin.estSuperviseurDuPerimetre(['SIRET-123'])).toBeTruthy();
+    expect(
+      admin.estSuperviseurDuPerimetre(['SIRET-123', 'SIRET-456'])
+    ).toBeTruthy();
+    expect(
+      admin.estSuperviseurDuPerimetre(['SIRET-123', 'SIRET-124'])
+    ).toBeFalsy();
+    expect(admin.estSuperviseurDuPerimetre(['SIRET-124'])).toBeFalsy();
+  });
 });

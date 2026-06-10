@@ -83,4 +83,19 @@ describe("Un admin d'organisations", () => {
       expect(admin.donnees().entitesAdministrees).toHaveLength(1);
     });
   });
+
+  it("sait s'il est admin de tout un périmètre", () => {
+    const admin = AdminOrganisations.hydrate({
+      idUtilisateur: unUUID('U'),
+      entitesAdministrees: [
+        { siret: 'SIRET-123', nom: 'Un nom', departement: '75' },
+        { siret: 'SIRET-456', nom: 'Un nom', departement: '75' },
+      ],
+    });
+
+    expect(admin.estAdminDuPerimetre(['SIRET-123'])).toBeTruthy();
+    expect(admin.estAdminDuPerimetre(['SIRET-123', 'SIRET-456'])).toBeTruthy();
+    expect(admin.estAdminDuPerimetre(['SIRET-123', 'SIRET-124'])).toBeFalsy();
+    expect(admin.estAdminDuPerimetre(['SIRET-124'])).toBeFalsy();
+  });
 });

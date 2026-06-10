@@ -36,6 +36,12 @@ class Superviseur {
     return this.entitesSupervisees.some((e) => e.siret === siret);
   }
 
+  estSuperviseurDuPerimetre(sirets: string[]) {
+    return new Set(sirets).isSubsetOf(
+      new Set(this.entitesSupervisees.map((e) => e.siret))
+    );
+  }
+
   donnees(): DonneesSuperviseur {
     return {
       idUtilisateur: this.idUtilisateur,
