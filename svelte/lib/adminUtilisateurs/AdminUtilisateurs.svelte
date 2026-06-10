@@ -10,6 +10,7 @@
   import TiroirNommerAdmin from './TiroirNommerAdmin/TiroirNommerAdmin.svelte';
   import type { UtilisateurAdministre } from './adminUtilisateurs.types';
   import Toaster from '../ui/Toaster.svelte';
+  import BoutonAjouterPremierService from '../ui/BoutonAjouterPremierService.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
@@ -22,6 +23,12 @@
     mesUtilisateurs = await api.utilisateursDansMonPerimetre();
     mesEntites = await apiEntites.entitesDansMonPerimetre();
   };
+
+  const unAdminExisteAutreQueUtilisateurCourant = $derived(
+    mesEntites.some((e) =>
+      e.administrateurs.some((a) => !a.estUtilisateurCourant)
+    )
+  );
 </script>
 
 <svelte:document on:utilisateurs-administres-modifies={rafraichis} />
@@ -35,17 +42,25 @@
 {#if mesUtilisateurs.length === 0}
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
-    <h4>Aucun admin sur vos entités</h4>
-    <span
-      >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
-    >
-    <dsfr-button
-      size="md"
-      kind="primary"
-      markup="a"
-      href="/admin/entites"
-      label="Ajouter des admins à mes entités"
-    ></dsfr-button>
+    {#if unAdminExisteAutreQueUtilisateurCourant}
+      <h4>Aucun service ou contributeur sur vos entités</h4>
+      <span
+        >Ajoutez des services sur vos entités et invitez des contributeurs.</span
+      >
+      <BoutonAjouterPremierService />
+    {:else}
+      <h4>Aucun admin sur vos entités</h4>
+      <span
+        >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
+      >
+      <dsfr-button
+        size="md"
+        kind="primary"
+        markup="a"
+        href="/admin/entites"
+        label="Ajouter des admins à mes entités"
+      ></dsfr-button>
+    {/if}
   </div>
 {:else}
   <dsfr-table
