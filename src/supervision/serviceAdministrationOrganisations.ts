@@ -137,34 +137,16 @@ export class ServiceAdministrationOrganisations {
   }
 
   async retireAdmin(idActeur: UUID, siret: string, idUtilisateur: UUID) {
-    await this.verifieEntitesAdministrees(idActeur, [siret]);
-
-    if (idActeur === idUtilisateur) {
-      throw new EchecAutorisation();
-    }
-
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (!admin) return;
 
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
-      services,
-      idUtilisateur
-    );
-
-    admin.cesseDAdministrer(new Entite({ siret }));
-    await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
-
-    await Promise.all(
-      services.map((service) => this.rattacheLesAdministrateursDe(service))
-    );
-
-    await this.busEvenements.publie(
-      new EvenementAdminRetireDeOrganisation({
-        idActeur,
-        idCible: idUtilisateur,
-        siret,
-      })
+    await this.assignePerimetre(
+      idActeur,
+      idUtilisateur,
+      admin
+        .donnees()
+        .entitesAdministrees.map((e) => e.siret)
+        .filter((s) => s !== siret)
     );
   }
 
@@ -446,8 +428,6 @@ export class ServiceAdministrationOrganisations {
   async assignePerimetre(idActeur: UUID, idAdmin: UUID, sirets: string[]) {
     if (idActeur === idAdmin) throw new EchecAutorisation();
 
-    await this.verifieEntitesAdministrees(idActeur, sirets);
-
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
     if (!admin) {
       admin = AdminOrganisations.nouveau(idAdmin);
@@ -460,6 +440,9 @@ export class ServiceAdministrationOrganisations {
       .donnees()
       .entitesAdministrees.filter((e) => !sirets.includes(e.siret))
       .map((e) => e.siret);
+
+    const siretsModifies = [...siretsARetirer, ...siretsAAjouter];
+    await this.verifieEntitesAdministrees(idActeur, siretsModifies);
 
     const tableauDeTableauDeServicesARetirer = await Promise.all(
       siretsARetirer.map(this.depotDonnees.tousLesServicesAvecSiret)
@@ -486,12 +469,16 @@ export class ServiceAdministrationOrganisations {
     });
     await this.depotDonnees.sauvegardeAdminOrganisations(admin);
 
-    const tableauDeTableauDeServices = await Promise.all(
-      sirets.map(this.depotDonnees.tousLesServicesAvecSiret)
+    const tableauDeTableauDeServicesARafraichir = await Promise.all(
+      siretsModifies.map(this.depotDonnees.tousLesServicesAvecSiret)
     );
-    const services = tableauDeTableauDeServices.flatMap((v) => v);
+    const servicesARafraichir = tableauDeTableauDeServicesARafraichir.flatMap(
+      (v) => v
+    );
     await Promise.all(
-      services.map((service) => this.rattacheLesAdministrateursDe(service))
+      servicesARafraichir.map((service) =>
+        this.rattacheLesAdministrateursDe(service)
+      )
     );
 
     await Promise.all(
@@ -518,7 +505,7 @@ export class ServiceAdministrationOrganisations {
       )
     );
 
-    if (sirets.length > 0) {
+    if (siretsAAjouter.length > 0) {
       const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
       await this.adaptateurMail.envoieMessageNominationAdmin(
         nouvelAdmin!.email

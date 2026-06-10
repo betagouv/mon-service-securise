@@ -486,8 +486,10 @@ describe("Le service de gestion des admins d'organisation", () => {
     const siret = 'SIRET-1';
     const autreSiret = '12345';
     const siretSeulAdmin = 'SIRET-SEUL-ADMIN';
+    const siretPasSupervise = 'UN-SIRET-PAS-SUPERVISÉ';
     const idContributeurS3 = unUUID('U3');
     const idSuperviseur = unUUID('SU1');
+    const idAdminPasSupervise = unUUIDRandom();
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
@@ -525,7 +527,13 @@ describe("Le service de gestion des admins d'organisation", () => {
         )
         .construis() as unknown as AdaptateurPersistance;
       adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteAdminSurPerimetre(idAdmin, [{ siret }])
+        .ajouteAdminSurPerimetre(idAdminPasSupervise, [
+          { siret: siretPasSupervise },
+        ])
+        .ajouteAdminSurPerimetre(idAdmin, [
+          { siret },
+          { siret: siretSeulAdmin },
+        ])
         .ajouteSuperviseurSurPerimetre(idSuperviseur, [
           { siret },
           { siret: siretSeulAdmin },
@@ -543,7 +551,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("jette une erreur si l'acteur n'est ni superviseur ni admin", async () => {
       const idActeur = unUUIDRandom();
       await expect(
-        service.retireAdmin(idActeur, siret, unUUIDRandom())
+        service.retireAdmin(idActeur, siret, idAdmin)
       ).rejects.toThrow(ErreurEntiteNonAdministre);
     });
 
@@ -551,15 +559,15 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(
         service.retireAdmin(
           idSuperviseur,
-          'UN-SIRET-PAS-SUPERVISÉ',
-          unUUIDRandom()
+          siretPasSupervise,
+          idAdminPasSupervise
         )
       ).rejects.toThrow(ErreurEntiteNonAdministre);
     });
 
     it("jette une erreur si l'acteur n'est pas admin de l'entité demandée", async () => {
       await expect(
-        service.retireAdmin(idAdmin, 'UN-SIRET-PAS-SUPERVISÉ', unUUIDRandom())
+        service.retireAdmin(idAdmin, siretPasSupervise, idAdminPasSupervise)
       ).rejects.toThrow(ErreurEntiteNonAdministre);
     });
 
