@@ -455,8 +455,16 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU2).donnees)
-        .ajouteUnService(unServiceV2().avecId(idS1).donnees)
-        .ajouteUnService(unServiceV2().avecId(idS2).donnees)
+        .ajouteUnService(
+          unServiceV2()
+            .avecId(idS1)
+            .avecOrganisationResponsable({ siret: 'SIRET-1' }).donnees
+        )
+        .ajouteUnService(
+          unServiceV2()
+            .avecId(idS2)
+            .avecOrganisationResponsable({ siret: 'SIRET-1' }).donnees
+        )
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS2).donnees)
         .ajouteUneAutorisation(
@@ -478,6 +486,14 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(utilisateurs).toHaveLength(2);
       expect(utilisateurs[0].id).toBe(idU1);
       expect(utilisateurs[1].id).toBe(idU2);
+    });
+
+    it("retourne les administrateurs du périmètre d'un superviseur", async () => {
+      const utilisateurs =
+        await service.utilisateursDansLePerimetreDe(idSuperviseur);
+
+      expect(utilisateurs).toHaveLength(1);
+      expect(utilisateurs[0].id).toBe(idAdmin);
     });
   });
 
