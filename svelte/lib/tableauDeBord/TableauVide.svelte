@@ -6,9 +6,7 @@
     filtrageServices,
     filtrageServicesVide,
   } from './stores/filtrageServices.store';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
-  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
-  import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
+  import BoutonAjouterPremierService from '../ui/BoutonAjouterPremierService.svelte';
 
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
@@ -24,22 +22,7 @@
         Nous vous accompagnons sur toutes les étapes de sécurisation de votre
         service numérique.
       </p>
-      <BoutonAvecListeDeroulante
-        titre="Ajouter votre premier service"
-        options={[
-          {
-            label: 'Ajouter un service',
-            icone: 'plus',
-            href: '/service/v2/creation',
-          },
-          {
-            label: 'Téléverser des services',
-            icone: 'televerser',
-            action: () =>
-              tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {}),
-          },
-        ]}
-      />
+      <BoutonAjouterPremierService />
     </div>
   {:else if $affichageTableauVide.etat === 'aucunResultatDeRecherche'}
     <div class="aucun-resultat">
