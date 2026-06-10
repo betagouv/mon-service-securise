@@ -137,7 +137,7 @@ export class ServiceAdministrationOrganisations {
   }
 
   async retireAdmin(idActeur: UUID, siret: string, idUtilisateur: UUID) {
-    await this.verifieEntiteAdministree(idActeur, siret);
+    await this.verifieEntitesAdministrees(idActeur, [siret]);
 
     if (idActeur === idUtilisateur) {
       throw new EchecAutorisation();
@@ -187,68 +187,13 @@ export class ServiceAdministrationOrganisations {
   }
 
   async nommeAdmin(idActeur: UUID, siret: string, idAdmin: UUID) {
-    await this.verifieEntiteAdministree(idActeur, siret);
-
-    if (idActeur === idAdmin) {
-      throw new EchecAutorisation();
-    }
-
-    await this.ajouteSiretAAdmin(siret, idAdmin);
-
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-    const nouvellesAutorisations = this.fabriqueAutorisationsAdminPourServices(
-      services,
-      idAdmin
-    );
-    await this.sauvegardeAutorisations(
-      await Promise.all(nouvellesAutorisations)
-    );
-
-    const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
-    await this.adaptateurMail.envoieMessageNominationAdmin(nouvelAdmin!.email);
-
-    await this.busEvenements.publie(
-      new EvenementAdminNommeSurOrganisation({
-        idActeur,
-        idCible: idAdmin,
-        siret,
-      })
-    );
-  }
-
-  private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
-    if (!admin) {
-      admin = AdminOrganisations.nouveau(idAdmin);
-    }
+    if (!admin) admin = AdminOrganisations.nouveau(idAdmin);
 
-    const entite = await this.completeEntite(siret);
-
-    admin.administre(entite);
-
-    await this.depotDonnees.sauvegardeAdminOrganisations(admin);
-  }
-
-  private fabriqueAutorisationsAdminPourServices(
-    services: Service[],
-    idAdmin: UUID
-  ) {
-    return services.map(async (s) => {
-      const autorisationsExistantes =
-        await this.depotDonnees.autorisationsDuService(s.id);
-
-      const autorisationExistantePourAdmin = autorisationsExistantes.find(
-        (a: Autorisation) => a.designeUtilisateur(idAdmin)
-      );
-
-      return Autorisation.NouvelleAutorisationAdmin({
-        id: autorisationExistantePourAdmin
-          ? autorisationExistantePourAdmin.id
-          : this.adaptateurUUID.genereUUID(),
-        idService: s.id,
-        idUtilisateur: idAdmin,
-      });
-    });
+    await this.assignePerimetre(idActeur, idAdmin, [
+      ...admin.donnees().entitesAdministrees.map((e) => e.siret),
+      siret,
+    ]);
   }
 
   async entitesDe(
@@ -460,18 +405,18 @@ export class ServiceAdministrationOrganisations {
     }
   }
 
-  private async verifieEntiteAdministree(idActeur: UUID, siret: string) {
+  private async verifieEntitesAdministrees(idActeur: UUID, sirets: string[]) {
     const acteurAdmin = await this.depotDonnees.lisAdminOrganisations(idActeur);
     const acteurSuperviseur = await this.depotDonnees.lisSuperviseur(idActeur);
-    if (!acteurAdmin && !acteurSuperviseur) {
-      throw new ErreurEntiteNonAdministre();
-    }
 
-    if (acteurSuperviseur && !acteurSuperviseur.estSuperviseurDe(siret)) {
-      throw new ErreurEntiteNonAdministre();
-    }
-
-    if (acteurAdmin && !acteurAdmin.estAdminDe(siret)) {
+    if (
+      (!acteurAdmin && !acteurSuperviseur) ||
+      !(
+        (acteurAdmin && acteurAdmin.estAdminDuPerimetre(sirets)) ||
+        (acteurSuperviseur &&
+          acteurSuperviseur.estSuperviseurDuPerimetre(sirets))
+      )
+    ) {
       throw new ErreurEntiteNonAdministre();
     }
   }
@@ -501,15 +446,7 @@ export class ServiceAdministrationOrganisations {
   async assignePerimetre(idActeur: UUID, idAdmin: UUID, sirets: string[]) {
     if (idActeur === idAdmin) throw new EchecAutorisation();
 
-    const acteur = await this.depotDonnees.lisAdminOrganisations(idActeur);
-    if (
-      !acteur ||
-      !new Set(sirets).isSubsetOf(
-        new Set(acteur.donnees().entitesAdministrees.map((e) => e.siret))
-      )
-    ) {
-      throw new ErreurEntiteNonAdministre();
-    }
+    await this.verifieEntitesAdministrees(idActeur, sirets);
 
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
     if (!admin) {
