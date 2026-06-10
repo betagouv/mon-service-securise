@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-
-import { adaptateurChiffrement } from '../src/adaptateurs/adaptateurChiffrement.js';
+// eslint-disable-next-line import/extensions
+import { adaptateurChiffrement } from '../src/adaptateurs/adaptateurChiffrement.ts';
 
 const sel = process.argv[2];
 
