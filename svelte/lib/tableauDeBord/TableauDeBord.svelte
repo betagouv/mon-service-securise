@@ -18,6 +18,7 @@
 
   interface Props {
     estSuperviseur: boolean;
+    estAdmin: boolean;
     modeVisiteGuidee: boolean;
     dateInscriptionUtilisateur: Date;
     profilUtilisateurComplet?: boolean;
@@ -25,6 +26,7 @@
 
   let {
     estSuperviseur,
+    estAdmin,
     modeVisiteGuidee,
     dateInscriptionUtilisateur,
     profilUtilisateurComplet = true,
@@ -88,7 +90,7 @@
 <Toaster />
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
-    <h1>Mon tableau de bord</h1>
+    <h1>{estAdmin || estSuperviseur ? 'Services' : 'Mon tableau de bord'}</h1>
   </span>
 
   {#if enCoursChargement}
@@ -128,6 +130,8 @@
   }
 
   h1 {
+    font-size: 2.5rem;
+    line-height: 3rem;
     margin: 0;
   }
 
