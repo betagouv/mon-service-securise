@@ -74,7 +74,11 @@ describe("L'adaptateur persistance Postgres", () => {
 
   async function insereUtilisateur() {
     const idUtilisateur = genereUUID();
-    await persistance.ajouteUtilisateur(idUtilisateur, {}, 'email');
+    await persistance.ajouteUtilisateur(
+      idUtilisateur,
+      { email: 'unEmail' },
+      'email'
+    );
     return idUtilisateur;
   }
 
@@ -116,6 +120,7 @@ describe("L'adaptateur persistance Postgres", () => {
       idAutorisation,
       autorisation.donneesAPersister()
     );
+    return idAutorisation;
   }
 
   async function insereAutorisationAdmin(idUtilisateur, idService) {
@@ -128,6 +133,7 @@ describe("L'adaptateur persistance Postgres", () => {
       idAutorisation,
       autorisation.donneesAPersister()
     );
+    return idAutorisation;
   }
 
   describe('concernant la lecture complète de service', () => {
@@ -388,16 +394,18 @@ describe("L'adaptateur persistance Postgres", () => {
     let u1;
     let u2;
     let admin;
+    let autreAdmin;
     let idService1;
     let idService2;
     let idAutorisationU2;
 
     beforeEach(async () => {
-      idService1 = await insereService('siret-1');
-      idService2 = await insereService('siret-1');
+      idService1 = await insereService(chiffrement.hacheSha256('siret-1'));
+      idService2 = await insereService(chiffrement.hacheSha256('siret-1'));
       u1 = await insereUtilisateur();
       u2 = await insereUtilisateur();
       admin = await insereUtilisateur();
+      autreAdmin = await insereUtilisateur();
       await insereAutorisation(u1, idService1);
       idAutorisationU2 = await insereAutorisation(u2, idService2);
       await insereAutorisation(u1, idService2);
@@ -424,6 +432,20 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(utilisateurs.length).to.be(2);
     });
 
+    it("retourne les admin même si aucun service n'existe sur le siret administré", async () => {
+      await insereAdmin(autreAdmin, 'siret-2');
+      await insereAdmin(autreAdmin, 'siret-3');
+      await insereAdmin(admin, 'siret-1');
+      await insereAdmin(admin, 'siret-2');
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.length).to.be(3);
+      expect(utilisateurs.find((u) => u.id === autreAdmin).nombreEntites).to.be(
+        1
+      );
+    });
+
     it("précise si le contributeur est admin sur une entité du périmètre de l'admin appelant", async () => {
       await insereAdmin(admin, 'siret-1');
       await insereAdmin(u1, 'siret-1');
@@ -443,6 +465,24 @@ describe("L'adaptateur persistance Postgres", () => {
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
       expect(utilisateurs.find((u) => u.id === u1).nombreEntites).to.be(1);
+    });
+
+    it("précise le nombre d'entités distinctes du périmètre de l'admin appelant sur lesquelles l'utilisateur a un service ou est admin", async () => {
+      await insereAdmin(autreAdmin, 'siret-1');
+      await insereAdmin(autreAdmin, 'siret-2');
+      await insereAdmin(autreAdmin, 'siret-3');
+      await insereAdmin(admin, 'siret-1');
+      await insereAdmin(admin, 'siret-2');
+      const idServicePasAdministre = await insereService('autre-siret');
+      await insereAutorisation(autreAdmin, idServicePasAdministre);
+      await insereAutorisationAdmin(autreAdmin, idService1);
+      await insereAutorisationAdmin(autreAdmin, idService2);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.find((u) => u.id === autreAdmin).nombreEntites).to.be(
+        2
+      );
     });
 
     it("précise les autorisations de service du périmètre de l'admin appelant sur lesquels l'utilisateur est contributeur", async () => {
@@ -515,6 +555,58 @@ describe("L'adaptateur persistance Postgres", () => {
       const admins = await persistance.utilisateursSupervisesPar(superviseur);
 
       expect(admins.length).to.be(2);
+    });
+
+    it("précise le nombre d'entités distinctes du périmètre du superviseur sur lesquelles l'utilisateur est administrateur", async () => {
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.find((u) => u.id === admin1).nombreEntites).to.be(1);
+      expect(admins.find((u) => u.id === admin2).nombreEntites).to.be(1);
+    });
+
+    it("précise les donnees de l'utilisateur correspondant", async () => {
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.find((u) => u.id === admin1).donnees).to.eql({
+        email: 'unEmail',
+      });
+    });
+
+    it("précise les autorisations de service du périmètre du superviseur sur lesquels l'utilisateur est contributeur", async () => {
+      const idServiceAdministre = await insereService(
+        chiffrement.hacheSha256('siret-1')
+      );
+      const idServicePasAdministre = await insereService(
+        chiffrement.hacheSha256('autre-siret')
+      );
+      await insereAutorisationAdmin(admin1, idServicePasAdministre);
+      const idAutorisation = await insereAutorisationAdmin(
+        admin1,
+        idServiceAdministre
+      );
+
+      const admins = await persistance.utilisateursSupervisesPar(superviseur);
+
+      expect(admins.find((u) => u.id === admin2).autorisations.length).to.be(0);
+      expect(admins.find((u) => u.id === admin1).autorisations.length).to.be(1);
+      const autorisationsAdmin = admins.find(
+        (u) => u.id === admin1
+      ).autorisations;
+      expect(autorisationsAdmin.length).to.be(1);
+      expect(autorisationsAdmin[0]).to.eql({
+        estAdmin: true,
+        estProprietaire: true,
+        id: idAutorisation,
+        idService: idServiceAdministre,
+        idUtilisateur: admin1,
+        droits: {
+          CONTACTS: 2,
+          DECRIRE: 2,
+          HOMOLOGUER: 2,
+          RISQUES: 2,
+          SECURISER: 2,
+        },
+      });
     });
   });
 });

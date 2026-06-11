@@ -39,6 +39,19 @@ const routesConnectePageAdmin = ({
     reponse.render('admin/utilisateurs');
   });
 
+  routes.get('/administrateurs', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+    const superviseurCourant =
+      await depotDonnees.lisSuperviseur(idUtilisateurCourant);
+
+    if (!superviseurCourant) {
+      reponse.status(404).render('404');
+      return;
+    }
+
+    reponse.render('admin/administrateurs');
+  });
+
   return routes;
 };
 

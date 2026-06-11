@@ -1,19 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { api } from './adminUtilisateurs.api';
+  import { api } from '../adminUtilisateurs/adminUtilisateurs.api';
   import { api as apiEntites } from '../adminEntites/adminEntites.api';
-  import Tuiles from './Tuiles.svelte';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirGestionUtilisateurAdministre from './TiroirGestionUtilisateurAdministre/TiroirGestionUtilisateurAdministre.svelte';
-  import BadgeAdmin from './BadgeAdmin.svelte';
-  import TiroirNommerAdmin from './TiroirNommerAdmin/TiroirNommerAdmin.svelte';
-  import type { UtilisateurAdministre } from './adminUtilisateurs.types';
+  import TiroirNommerAdmin from '../adminUtilisateurs/TiroirNommerAdmin/TiroirNommerAdmin.svelte';
+  import type { UtilisateurAdministre } from '../adminUtilisateurs/adminUtilisateurs.types';
   import Toaster from '../ui/Toaster.svelte';
-  import BoutonAjouterPremierService from '../ui/BoutonAjouterPremierService.svelte';
-  import ChampRecherche from '../ui/ChampRecherche.svelte';
+  import Tuiles from './Tuiles.svelte';
   import { chaineNormalisee } from '../outils/string';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
+  import ChampRecherche from '../ui/ChampRecherche.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
@@ -24,15 +21,11 @@
   });
 
   const rafraichis = async () => {
-    mesUtilisateurs = await api.utilisateursDansMonPerimetre();
+    mesUtilisateurs = (await api.utilisateursDansMonPerimetre()).filter(
+      (u) => u.estAdmin
+    );
     mesEntites = await apiEntites.entitesDansMonPerimetre();
   };
-
-  const unAdminExisteAutreQueUtilisateurCourant = $derived(
-    mesEntites.some((e) =>
-      e.administrateurs.some((a) => !a.estUtilisateurCourant)
-    )
-  );
 
   let rechercheNormalisee = $derived(chaineNormalisee(recherche));
 
@@ -49,36 +42,24 @@
 
 <Toaster />
 
-<h1>Utilisateurs</h1>
+<h1>Admins</h1>
 
-<Tuiles nombreUtilisateurs={mesUtilisateurs.length} {mesEntites} />
+<Tuiles nombreAdministrateurs={mesUtilisateurs.length} {mesEntites} />
 
 {#if mesUtilisateurs.length === 0}
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
-    {#if unAdminExisteAutreQueUtilisateurCourant}
-      <h4>Aucun service ou contributeur sur vos entités</h4>
-      <span
-        >Ajoutez des services sur vos entités et invitez des contributeurs.</span
-      >
-      <span class="conteneur-action">
-        <BoutonAjouterPremierService />
-      </span>
-    {:else}
-      <h4>Aucun admin sur vos entités</h4>
-      <span
-        >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
-      >
-      <span class="conteneur-action">
-        <dsfr-button
-          size="md"
-          kind="primary"
-          markup="a"
-          href="/admin/entites"
-          label="Ajouter des admins à mes entités"
-        ></dsfr-button>
-      </span>
-    {/if}
+    <h4>Aucun admin sur vos entités</h4>
+    <span
+      >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
+    >
+    <dsfr-button
+      size="md"
+      kind="primary"
+      markup="a"
+      href="/admin/entites"
+      label="Ajouter des admins à mes entités"
+    ></dsfr-button>
   </div>
 {:else}
   <ChampRecherche bind:valeur={recherche} />
@@ -100,9 +81,6 @@
     >
       {#each mesUtilisateursFiltres as utilisateur, i (utilisateur.id)}
         <div slot="cell:prenomNom:{i}" class="conteneur-nom">
-          {#if utilisateur.estAdmin}
-            <BadgeAdmin />
-          {/if}
           <span><b>{utilisateur.prenomNom}</b></span>
           {#if utilisateur.email !== utilisateur.prenomNom}
             <span>{utilisateur.email}</span>
@@ -135,21 +113,7 @@
           <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <dsfr-button
             kind="secondary"
-            label="Gérer les accès aux services"
-            size="sm"
-            onclick={() => {
-              tiroirStore.afficheContenu(TiroirGestionUtilisateurAdministre, {
-                utilisateur,
-                toutesEntites: mesEntites,
-              });
-            }}
-          ></dsfr-button>
-          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-          <dsfr-button
-            kind="tertiary"
-            label={utilisateur.estAdmin
-              ? 'Gérer le droit admin'
-              : "Nommer en tant qu'admin"}
+            label="Gérer les accès"
             size="sm"
             onclick={() => {
               tiroirStore.afficheContenu(TiroirNommerAdmin, {
@@ -169,7 +133,7 @@
     background: white;
   }
 
-  :global(#conteneur-admin-utilisateurs) {
+  :global(#conteneur-admin-administrateurs) {
     text-align: left;
     background: #fff;
     width: 100%;
@@ -197,8 +161,6 @@
     align-items: center;
     flex-direction: column;
     color: #161616;
-    max-width: 588px;
-    margin: 0 auto;
 
     h4 {
       margin: 0;
@@ -220,7 +182,7 @@
       transform: scaleX(-1);
     }
 
-    .conteneur-action {
+    dsfr-button {
       margin-top: 16px;
     }
   }

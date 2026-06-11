@@ -682,14 +682,29 @@ const nouvelAdaptateur = (
         servicesAdministres.includes(a.idService) &&
         a.idUtilisateur !== idUtilisateur
     );
-    const contributeurs = new Set(
-      autorisationsDesUtilisateurs.map((a) => a.idUtilisateur)
+    const contributeurs = autorisationsDesUtilisateurs.map(
+      (a) => a.idUtilisateur
     );
+
+    const siretsDuPerimetre =
+      donnees.adminsOrganisations.find((s) => s.idAdmin === idUtilisateur)
+        ?.siretHash || [];
+    const idAdminsAdministres = donnees.adminsOrganisations
+      .filter((a) => siretsDuPerimetre.includes(a.siretHash))
+      .map((a) => a.idAdmin)
+      .filter((id) => id !== idUtilisateur);
+
+    const tousIdsUtilisateursAdministres = new Set([
+      ...contributeurs,
+      ...idAdminsAdministres,
+    ]);
+
     const utilisateurs = donnees.utilisateurs.filter((u) =>
-      contributeurs.has(u.id)
+      tousIdsUtilisateursAdministres.has(u.id)
     );
     return utilisateurs.map((u) => ({
       ...u,
+      estAdmin: idAdminsAdministres.includes(u.id),
       autorisations: autorisationsDesUtilisateurs.filter(
         (a) => a.idUtilisateur === u.id
       ),
@@ -697,15 +712,37 @@ const nouvelAdaptateur = (
   };
 
   const utilisateursSupervisesPar = async (idUtilisateur) => {
-    const siretsDuPerimetre = donnees.superviseurs
-      .filter((s) => s.idSuperviseur === idUtilisateur)
-      .map((s) => s.siretHash);
+    const siretsDuPerimetre =
+      donnees.superviseurs.find((s) => s.idSuperviseur === idUtilisateur)
+        ?.siretHash || [];
 
-    const idDesAdmins = donnees.adminsOrganisations
-      .filter((admin) => siretsDuPerimetre.includes(admin.siretHash))
-      .map((admin) => admin.idAdmin);
+    const servicesSupervises = donnees.services
+      .filter((s) => siretsDuPerimetre.includes(s.siretHash))
+      .map((s) => s.id);
 
-    return donnees.utilisateurs.filter((u) => idDesAdmins.includes(u.id));
+    const lignesAdminSupervise = donnees.adminsOrganisations.filter((a) =>
+      siretsDuPerimetre.includes(a.siretHash)
+    );
+    const idAdminsSupervises = lignesAdminSupervise.map((a) => a.idAdmin);
+
+    const autorisationsDesAdmins = donnees.autorisations.filter(
+      (a) =>
+        idAdminsSupervises.includes(a.idUtilisateur) &&
+        servicesSupervises.includes(a.idService)
+    );
+
+    return idAdminsSupervises.map((id) => {
+      const utilisateurAdmin = donnees.utilisateurs.find((u) => u.id === id);
+      return {
+        ...utilisateurAdmin,
+        estAdmin: true,
+        nombreEntites: lignesAdminSupervise.filter((l) => l.idAdmin === id)
+          .length,
+        autorisations: autorisationsDesAdmins.filter(
+          (a) => a.idUtilisateur === id
+        ),
+      };
+    });
   };
 
   return {
