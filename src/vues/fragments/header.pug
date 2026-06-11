@@ -1,22 +1,23 @@
 mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreLienSurLogo, headerAGaucheUniquement, ongletActif)
   -
     const estConnecte = !!utilisateurConnecte;
+
     const contenuSuperviseur = [
-      {id: 'entites', type: 'link', active: false, label: 'Entités', href:'/admin/entites'},
-      {id: 'admins', type: 'link', active: false, label: 'Admins', href:'/admin/administrateurs'},
-      {id: 'services', type: 'link', active: false, label: 'Services', href:'/tableauDeBord'},
-      {id: 'supervision', type: 'link', active: false, label: 'Statistiques', href:'/supervision'},
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href:'/admin/entites'},
+      {id: 'admin-admins', type: 'link', active: ongletActif === 'admin-admins', label: 'Admins', href:'/admin/administrateurs'},
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href:'/tableauDeBord'},
+      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
     ];
     const contenuAdmin = [
-      {id: 'services', type: 'link', active: false, label: 'Services', href: '/tableauDeBord'},
-      {id: 'admins', type: 'link', active: false, label: 'Utilisateurs', href: '/admin/utilisateurs'},
-      {id: 'entites', type: 'link', active: false, label: 'Entités', href: '/admin/entites'},
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
+      {id: 'admin-utilisateurs', type: 'link', active: ongletActif === 'admin-utilisateurs', label: 'Utilisateurs', href: '/admin/utilisateurs'},
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
     ];
     const contenuAdminEtSuperviseur = [
-      {id: 'services', type: 'link', active: false, label: 'Services', href: '/tableauDeBord'},
-      {id: 'admins', type: 'link', active: false, label: 'Utilisateurs', href: '/admin/utilisateurs'},
-      {id: 'entites', type: 'link', active: false, label: 'Entités', href: '/admin/entites'},
-      {id: 'supervision', type: 'link', active: false, label: 'Statistiques', href:'/supervision'},
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
+      {id: 'admin-utilisateurs', type: 'link', active: ongletActif === 'admin-utilisateurs', label: 'Utilisateurs', href: '/admin/utilisateurs'},
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
+      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
     ];
 
     let contenuMenuAdmin = [];
