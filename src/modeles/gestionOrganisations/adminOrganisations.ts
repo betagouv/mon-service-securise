@@ -50,4 +50,10 @@ export class AdminOrganisations {
   estAdminDe(siret: string) {
     return this.entitesAdministrees.some((e) => e.siret === siret);
   }
+
+  estAdminDuPerimetre(sirets: string[]) {
+    return new Set(sirets).isSubsetOf(
+      new Set(this.entitesAdministrees.map((e) => e.siret))
+    );
+  }
 }

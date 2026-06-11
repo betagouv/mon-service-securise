@@ -137,34 +137,16 @@ export class ServiceAdministrationOrganisations {
   }
 
   async retireAdmin(idActeur: UUID, siret: string, idUtilisateur: UUID) {
-    await this.verifieEntiteAdministree(idActeur, siret);
-
-    if (idActeur === idUtilisateur) {
-      throw new EchecAutorisation();
-    }
-
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (!admin) return;
 
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
-      services,
-      idUtilisateur
-    );
-
-    admin.cesseDAdministrer(new Entite({ siret }));
-    await this.depotDonnees.sauvegardeAdminOrganisations(admin!);
-
-    await Promise.all(
-      services.map((service) => this.rattacheLesAdministrateursDe(service))
-    );
-
-    await this.busEvenements.publie(
-      new EvenementAdminRetireDeOrganisation({
-        idActeur,
-        idCible: idUtilisateur,
-        siret,
-      })
+    await this.assignePerimetre(
+      idActeur,
+      idUtilisateur,
+      admin
+        .donnees()
+        .entitesAdministrees.map((e) => e.siret)
+        .filter((s) => s !== siret)
     );
   }
 
@@ -187,71 +169,13 @@ export class ServiceAdministrationOrganisations {
   }
 
   async nommeAdmin(idActeur: UUID, siret: string, idAdmin: UUID) {
-    await this.verifieEntiteAdministree(idActeur, siret);
-
-    if (idActeur === idAdmin) {
-      throw new EchecAutorisation();
-    }
-
-    await this.ajouteSiretAAdmin(siret, idAdmin);
-
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
-    const nouvellesAutorisations = this.fabriqueAutorisationsAdminPourServices(
-      services,
-      idAdmin
-    );
-    await this.sauvegardeAutorisations(
-      await Promise.all(nouvellesAutorisations)
-    );
-
-    const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
-    await this.adaptateurMail.envoieMessageNominationAdmin(nouvelAdmin!.email);
-
-    await this.busEvenements.publie(
-      new EvenementAdminNommeSurOrganisation({
-        idActeur,
-        idCible: idAdmin,
-        siret,
-      })
-    );
-  }
-
-  private async ajouteSiretAAdmin(siret: string, idAdmin: UUID) {
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
-    if (!admin) {
-      admin = AdminOrganisations.nouveau(idAdmin);
-    }
+    if (!admin) admin = AdminOrganisations.nouveau(idAdmin);
 
-    const donneesEntite = await Entite.completeDonnees(
-      { siret },
-      this.adaptateurRechercheEntite
-    );
-
-    admin.administre(new Entite(donneesEntite));
-
-    await this.depotDonnees.sauvegardeAdminOrganisations(admin);
-  }
-
-  private fabriqueAutorisationsAdminPourServices(
-    services: Service[],
-    idAdmin: UUID
-  ) {
-    return services.map(async (s) => {
-      const autorisationsExistantes =
-        await this.depotDonnees.autorisationsDuService(s.id);
-
-      const autorisationExistantePourAdmin = autorisationsExistantes.find(
-        (a: Autorisation) => a.designeUtilisateur(idAdmin)
-      );
-
-      return Autorisation.NouvelleAutorisationAdmin({
-        id: autorisationExistantePourAdmin
-          ? autorisationExistantePourAdmin.id
-          : this.adaptateurUUID.genereUUID(),
-        idService: s.id,
-        idUtilisateur: idAdmin,
-      });
-    });
+    await this.assignePerimetre(idActeur, idAdmin, [
+      ...admin.donnees().entitesAdministrees.map((e) => e.siret),
+      siret,
+    ]);
   }
 
   async entitesDe(
@@ -463,18 +387,18 @@ export class ServiceAdministrationOrganisations {
     }
   }
 
-  private async verifieEntiteAdministree(idActeur: UUID, siret: string) {
+  private async verifieEntitesAdministrees(idActeur: UUID, sirets: string[]) {
     const acteurAdmin = await this.depotDonnees.lisAdminOrganisations(idActeur);
     const acteurSuperviseur = await this.depotDonnees.lisSuperviseur(idActeur);
-    if (!acteurAdmin && !acteurSuperviseur) {
-      throw new ErreurEntiteNonAdministre();
-    }
 
-    if (acteurSuperviseur && !acteurSuperviseur.estSuperviseurDe(siret)) {
-      throw new ErreurEntiteNonAdministre();
-    }
-
-    if (acteurAdmin && !acteurAdmin.estAdminDe(siret)) {
+    if (
+      (!acteurAdmin && !acteurSuperviseur) ||
+      !(
+        (acteurAdmin && acteurAdmin.estAdminDuPerimetre(sirets)) ||
+        (acteurSuperviseur &&
+          acteurSuperviseur.estSuperviseurDuPerimetre(sirets))
+      )
+    ) {
       throw new ErreurEntiteNonAdministre();
     }
   }
@@ -492,35 +416,100 @@ export class ServiceAdministrationOrganisations {
     }
   }
 
+  private async completeEntite(siret: string) {
+    const donneesEntite = await Entite.completeDonnees(
+      { siret },
+      this.adaptateurRechercheEntite
+    );
+
+    return new Entite(donneesEntite);
+  }
+
   async assignePerimetre(idActeur: UUID, idAdmin: UUID, sirets: string[]) {
-    const acteur = await this.depotDonnees.lisAdminOrganisations(idActeur);
+    if (idActeur === idAdmin) throw new EchecAutorisation();
 
-    if (
-      !acteur ||
-      !new Set(sirets).isSubsetOf(
-        new Set(acteur.donnees().entitesAdministrees.map((e) => e.siret))
-      )
-    ) {
-      throw new ErreurEntiteNonAdministre();
+    let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
+    if (!admin) {
+      admin = AdminOrganisations.nouveau(idAdmin);
     }
-
-    const admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
 
     const siretsAAjouter = sirets.filter(
       (siret) => !admin || !admin.estAdminDe(siret)
     );
-    await Promise.all(
-      siretsAAjouter.map((siret) => this.nommeAdmin(idActeur, siret, idAdmin))
-    );
-
-    if (!admin) return;
-
     const siretsARetirer = admin!
       .donnees()
       .entitesAdministrees.filter((e) => !sirets.includes(e.siret))
       .map((e) => e.siret);
-    await Promise.all(
-      siretsARetirer.map((siret) => this.retireAdmin(idActeur, siret, idAdmin))
+
+    const siretsModifies = [...siretsARetirer, ...siretsAAjouter];
+    await this.verifieEntitesAdministrees(idActeur, siretsModifies);
+
+    const tableauDeTableauDeServicesARetirer = await Promise.all(
+      siretsARetirer.map(this.depotDonnees.tousLesServicesAvecSiret)
     );
+    const servicesARetirer = tableauDeTableauDeServicesARetirer.flatMap(
+      (v) => v
+    );
+    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
+      servicesARetirer,
+      idAdmin
+    );
+
+    const entitesAAjouter = await Promise.all(
+      siretsAAjouter.map((siret) => this.completeEntite(siret))
+    );
+    const entitesARetirer = await Promise.all(
+      siretsARetirer.map((siret) => this.completeEntite(siret))
+    );
+    entitesAAjouter.forEach((e) => {
+      admin?.administre(e);
+    });
+    entitesARetirer.forEach((e) => {
+      admin?.cesseDAdministrer(e);
+    });
+    await this.depotDonnees.sauvegardeAdminOrganisations(admin);
+
+    const tableauDeTableauDeServicesARafraichir = await Promise.all(
+      siretsModifies.map(this.depotDonnees.tousLesServicesAvecSiret)
+    );
+    const servicesARafraichir = tableauDeTableauDeServicesARafraichir.flatMap(
+      (v) => v
+    );
+    await Promise.all(
+      servicesARafraichir.map((service) =>
+        this.rattacheLesAdministrateursDe(service)
+      )
+    );
+
+    await Promise.all(
+      siretsARetirer.map((siret) =>
+        this.busEvenements.publie(
+          new EvenementAdminRetireDeOrganisation({
+            idActeur,
+            idCible: idAdmin,
+            siret,
+          })
+        )
+      )
+    );
+
+    await Promise.all(
+      siretsAAjouter.map((siret) =>
+        this.busEvenements.publie(
+          new EvenementAdminNommeSurOrganisation({
+            idActeur,
+            idCible: idAdmin,
+            siret,
+          })
+        )
+      )
+    );
+
+    if (siretsAAjouter.length > 0) {
+      const nouvelAdmin = await this.depotDonnees.utilisateur(idAdmin);
+      await this.adaptateurMail.envoieMessageNominationAdmin(
+        nouvelAdmin!.email
+      );
+    }
   }
 }
