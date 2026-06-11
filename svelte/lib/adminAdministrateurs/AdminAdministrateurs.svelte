@@ -8,9 +8,13 @@
   import type { UtilisateurAdministre } from '../adminUtilisateurs/adminUtilisateurs.types';
   import Toaster from '../ui/Toaster.svelte';
   import Tuiles from './Tuiles.svelte';
+  import { chaineNormalisee } from '../outils/string';
+  import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
+  import ChampRecherche from '../ui/ChampRecherche.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
+  let recherche = $state('');
 
   onMount(async () => {
     await rafraichis();
@@ -22,6 +26,16 @@
     );
     mesEntites = await apiEntites.entitesDansMonPerimetre();
   };
+
+  let rechercheNormalisee = $derived(chaineNormalisee(recherche));
+
+  const mesUtilisateursFiltres = $derived(
+    mesUtilisateurs.filter(
+      (u) =>
+        chaineNormalisee(u.prenomNom).includes(rechercheNormalisee) ||
+        chaineNormalisee(u.email).includes(rechercheNormalisee)
+    )
+  );
 </script>
 
 <svelte:document on:utilisateurs-administres-modifies={rafraichis} />
@@ -48,64 +62,70 @@
     ></dsfr-button>
   </div>
 {:else}
-  <dsfr-table
-    columns={[
-      { key: 'prenomNom', label: 'Nom' },
-      { key: 'postes', label: 'Rôle' },
-      { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
-      { key: 'nombreServices', label: 'Service(s) associé(s)' },
-      { key: 'actions', label: 'Actions' },
-    ]}
-    rows={mesUtilisateurs}
-    rich
-    multiline
-  >
-    {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
-      <div slot="cell:prenomNom:{i}" class="conteneur-nom">
-        <span><b>{utilisateur.prenomNom}</b></span>
-        {#if utilisateur.email !== utilisateur.prenomNom}
-          <span>{utilisateur.email}</span>
-        {/if}
-      </div>
-      <div slot="cell:nombreEntites:{i}">
-        <span>
-          {#if utilisateur.nombreEntites === 0}
-            Aucune entité
-          {:else}
-            {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
-              ? 's'
-              : ''}
+  <ChampRecherche bind:valeur={recherche} />
+
+  {#if recherche.length > 0 && mesUtilisateursFiltres.length === 0}
+    <AucunResultatRecherche onclick={() => (recherche = '')} />
+  {:else}
+    <dsfr-table
+      columns={[
+        { key: 'prenomNom', label: 'Nom' },
+        { key: 'postes', label: 'Rôle' },
+        { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
+        { key: 'nombreServices', label: 'Service(s) associé(s)' },
+        { key: 'actions', label: 'Actions' },
+      ]}
+      rows={mesUtilisateursFiltres}
+      rich
+      multiline
+    >
+      {#each mesUtilisateursFiltres as utilisateur, i (utilisateur.id)}
+        <div slot="cell:prenomNom:{i}" class="conteneur-nom">
+          <span><b>{utilisateur.prenomNom}</b></span>
+          {#if utilisateur.email !== utilisateur.prenomNom}
+            <span>{utilisateur.email}</span>
           {/if}
-        </span>
-      </div>
-      <div slot="cell:nombreServices:{i}">
-        <span>
-          {#if utilisateur.autorisations.length === 0}
-            Aucun service
-          {:else}
-            {utilisateur.autorisations.length} service{utilisateur.autorisations
-              .length > 1
-              ? 's'
-              : ''}
-          {/if}
-        </span>
-      </div>
-      <div slot="cell:actions:{i}">
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          kind="secondary"
-          label="Gérer les accès"
-          size="sm"
-          onclick={() => {
-            tiroirStore.afficheContenu(TiroirNommerAdmin, {
-              utilisateur,
-              toutesEntites: mesEntites,
-            });
-          }}
-        ></dsfr-button>
-      </div>
-    {/each}
-  </dsfr-table>
+        </div>
+        <div slot="cell:nombreEntites:{i}">
+          <span>
+            {#if utilisateur.nombreEntites === 0}
+              Aucune entité
+            {:else}
+              {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
+                ? 's'
+                : ''}
+            {/if}
+          </span>
+        </div>
+        <div slot="cell:nombreServices:{i}">
+          <span>
+            {#if utilisateur.autorisations.length === 0}
+              Aucun service
+            {:else}
+              {utilisateur.autorisations.length} service{utilisateur
+                .autorisations.length > 1
+                ? 's'
+                : ''}
+            {/if}
+          </span>
+        </div>
+        <div slot="cell:actions:{i}">
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            kind="secondary"
+            label="Gérer les accès"
+            size="sm"
+            onclick={() => {
+              tiroirStore.afficheContenu(TiroirNommerAdmin, {
+                utilisateur,
+                toutesEntites: mesEntites,
+              });
+            }}
+          ></dsfr-button>
+        </div>
+      {/each}
+    </dsfr-table>
+  {/if}
 {/if}
 
 <style lang="scss">
