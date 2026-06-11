@@ -682,14 +682,29 @@ const nouvelAdaptateur = (
         servicesAdministres.includes(a.idService) &&
         a.idUtilisateur !== idUtilisateur
     );
-    const contributeurs = new Set(
-      autorisationsDesUtilisateurs.map((a) => a.idUtilisateur)
+    const contributeurs = autorisationsDesUtilisateurs.map(
+      (a) => a.idUtilisateur
     );
+
+    const siretsDuPerimetre =
+      donnees.adminsOrganisations.find((s) => s.idAdmin === idUtilisateur)
+        ?.siretHash || [];
+    const idAdminsAdministres = donnees.adminsOrganisations
+      .filter((a) => siretsDuPerimetre.includes(a.siretHash))
+      .map((a) => a.idAdmin)
+      .filter((id) => id !== idUtilisateur);
+
+    const tousIdsUtilisateursAdministres = new Set([
+      ...contributeurs,
+      ...idAdminsAdministres,
+    ]);
+
     const utilisateurs = donnees.utilisateurs.filter((u) =>
-      contributeurs.has(u.id)
+      tousIdsUtilisateursAdministres.has(u.id)
     );
     return utilisateurs.map((u) => ({
       ...u,
+      estAdmin: idAdminsAdministres.includes(u.id),
       autorisations: autorisationsDesUtilisateurs.filter(
         (a) => a.idUtilisateur === u.id
       ),

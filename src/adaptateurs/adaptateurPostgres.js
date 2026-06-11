@@ -960,6 +960,20 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
         ),
         mes_sirets_haches AS (
           SELECT siret_hash FROM admins_organisations WHERE id_utilisateur = ?
+        ),
+        mes_utilisateurs_administres AS (
+          SELECT u.id, u.donnees, s.siret_hash
+          FROM autorisations AS a
+          JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
+          JOIN services AS s ON s.id = (a.donnees->>'idService')::uuid
+          WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+            AND a.donnees->>'idUtilisateur' != ?
+          UNION ALL
+          SELECT u.id, u.donnees, ao.siret_hash
+          FROM admins_organisations ao
+          JOIN utilisateurs AS u ON u.id = ao.id_utilisateur
+          WHERE ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
+            AND ao.id_utilisateur != ?
         )
         SELECT DISTINCT ON (u.id) u.id, u.donnees,
           EXISTS (
@@ -968,34 +982,21 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
                 AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
           ) AS "estAdmin",
           (
-            SELECT COUNT(DISTINCT siret_hash)
-            FROM (
-              SELECT s.siret_hash
-              FROM autorisations a2
-              JOIN services s ON s.id = (a2.donnees->>'idService')::uuid
-              WHERE (a2.donnees->>'idUtilisateur')::uuid = u.id
-                  AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
-              UNION ALL
-              SELECT ao.siret_hash
-              FROM admins_organisations ao
-              WHERE ao.id_utilisateur = u.id
-                  AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
-            ) combined
+            SELECT COUNT(DISTINCT mua.siret_hash)
+            FROM mes_utilisateurs_administres mua
+            WHERE mua.id = u.id
           ) AS "nombreEntites",
           (
-            SELECT json_agg(
+            SELECT COALESCE(json_agg(
                      to_jsonb(a3.donnees) || jsonb_build_object('id', a3.id)
-                   )
+                   ), '[]'::json)
             FROM autorisations a3
             WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
                 AND a3.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
           ) AS autorisations
-        FROM autorisations AS a
-          JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
-        WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
-          AND a.donnees->>'idUtilisateur' != ?
+        FROM mes_utilisateurs_administres AS u
       `,
-      [idUtilisateur, idUtilisateur, idUtilisateur]
+      [idUtilisateur, idUtilisateur, idUtilisateur, idUtilisateur]
     );
     return contributeurs.rows.map(convertisLigneEnObjetSansMiseAPlatDonnees);
   };
