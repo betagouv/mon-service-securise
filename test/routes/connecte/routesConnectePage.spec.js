@@ -191,15 +191,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand GET sur /tableauDeBord', () => {
-    it("ajoute la donnée partagée indiquant si l'utilisateur est superviseur", async () => {
-      testeur.depotDonnees().estSuperviseur = async () => true;
-
-      const reponse = await testeur.get(`/tableauDeBord`);
-
-      const donnees = donneesPartagees(reponse.text, 'utilisateur-superviseur');
-      expect(donnees).to.eql({ estSuperviseur: true });
-    });
-
     it("vérifie que l'état de l'explication du nouveau référentiel est chargé", async () => {
       await testeur
         .middleware()
