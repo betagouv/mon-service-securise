@@ -1,6 +1,9 @@
 extends mss
 include ./fragments/header
 
+block variables
+  - const ongletActif = "services"
+
 block append styles
   link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
 
@@ -9,7 +12,7 @@ block append scripts
   +composantSvelte('tiroir.js')
 
 block header
-  +header(avertissementMaintenance, featureFlags, true, '/tableauDeBord', "Retour au tableau de bord", false)
+  +header(avertissementMaintenance, featureFlags, true, '/tableauDeBord', "Retour au tableau de bord", false, ongletActif)
 
 block tiroir
   #tiroir
