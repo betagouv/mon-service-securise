@@ -95,6 +95,8 @@ describe('Le middleware MSS', () => {
     depotDonnees.service = async () => {};
     depotDonnees.utilisateur = async () =>
       unUtilisateur().avecId('123').quiSAppelle('Jean Dujardin').construis();
+    depotDonnees.estAdmin = async () => true;
+    depotDonnees.estSuperviseur = async () => false;
     depotDonnees.estJwtRevoque = async () => false;
   });
 
@@ -264,7 +266,7 @@ describe('Le middleware MSS', () => {
       expect(requete.estInvite).to.be('INVITÉ');
     });
 
-    it("ajoute le nom et prénom de l'utilisateur connecté à `reponse.locals`", async () => {
+    it("ajoute l'utilisateur connecté à `reponse.locals`", async () => {
       const middleware = leMiddleware();
 
       await middleware.verificationJWT(requete, reponse, () => {});
@@ -272,6 +274,8 @@ describe('Le middleware MSS', () => {
       expect(reponse.locals.utilisateurConnecte).to.eql({
         prenomNom: 'Jean Dujardin',
         email: 'jean.dujardin@beta.gouv.com',
+        estAdmin: true,
+        estSuperviseur: false,
       });
     });
 

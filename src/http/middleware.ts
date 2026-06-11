@@ -156,11 +156,18 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       utilisateurCourant.timestampConnexion
     );
 
+    const estAdmin = await depotDonnees.estAdmin(utilisateurCourant.id);
+    const estSuperviseur = await depotDonnees.estSuperviseur(
+      utilisateurCourant.id
+    );
+
     requete.idUtilisateurCourant = utilisateurCourant.id;
     requete.sourceAuthentification = utilisateurCourant.source;
     reponse.locals.utilisateurConnecte = {
       prenomNom: utilisateurCourant.prenomNom,
       email: utilisateurCourant.email,
+      estAdmin,
+      estSuperviseur,
     };
     requete.cguAcceptees = requete.session?.cguAcceptees;
     requete.estInvite = requete.session?.estInvite;

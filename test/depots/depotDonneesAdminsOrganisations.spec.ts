@@ -76,4 +76,24 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
       siret: 'siret-C',
     });
   });
+
+  describe("sur demande de vérification qu'un utilisateur est admin", () => {
+    it("retourne vrai si l'admin existe", async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(idAdmin, [{ siret: 'siret-A' }])
+        .construis();
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+      expect(await depot.estAdmin(idAdmin)).toBe(true);
+    });
+
+    it("retourne faux si l'utilisateur n'est pas superviseur", async () => {
+      const persistanceVide = unePersistanceMemoireTS().construis();
+      const depot = new DepotDonneesAdminsOrganisations({
+        persistance: persistanceVide,
+      });
+
+      expect(await depot.estAdmin(unUUID('X'))).toBe(false);
+    });
+  });
 });
