@@ -1,5 +1,8 @@
 extends mssConnecte
 
+block variables
+  - const ongletActif = "admin-supervision"
+
 block append scripts
   +composantSvelte('supervision.js')
   +donneesPartagees('referentiel-options-filtrage-date', referentiel.optionsFiltrageDate())
