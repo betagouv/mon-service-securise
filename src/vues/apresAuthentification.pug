@@ -9,4 +9,6 @@ html(lang = 'fr')
     script(type = 'module', src = '/statique/apresAuthentification.js')
 
     +donneesPartagees('url-redirection', {urlRedirection})
+    +donneesPartagees('utilisateur-admin', utilisateurConnecteEstAdmin)
+    +donneesPartagees('utilisateur-superviseur', utilisateurConnecteEstSuperviseur)
     +donneesPartagees('tokenDonneesInvite', {tokenDonneesInvite})
