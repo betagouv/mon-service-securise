@@ -17,8 +17,10 @@ block append styles
 
 block bandeau-titre
   -
+    const estAdmin = utilisateurConnecte && utilisateurConnecte.estAdmin;
+    const estSuperviseur = utilisateurConnecte && utilisateurConnecte.estSuperviseur;
     const filAriane = [
-      {label: "Mon tableau de bord", href: "/tableauDeBord"},
+      {label: estAdmin || estSuperviseur ? "Services" : "Mon tableau de bord", href: "/tableauDeBord"},
       {label: "Liste de mesures"}
     ]
 
