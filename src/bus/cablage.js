@@ -73,6 +73,8 @@ import {
 } from './abonnements/traceEvenementsAuditAdministrationOrganisations.js';
 import { EvenementAdminNommeSurOrganisation } from './evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from './evenementAdminRetireDeOrganisation.js';
+import { consigneAdminNommeSurOrganisationDansJournal } from './abonnements/consigneAdminNommeSurOrganisationDansJournal.js';
+import { consigneAdminRetireDeOrganisationDansJournal } from './abonnements/consigneAdminRetireDeOrganisationDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -271,21 +273,21 @@ const cableTousLesAbonnes = (
     }),
   ]);
 
-  busEvenements.abonne(
-    EvenementAdminNommeSurOrganisation,
+  busEvenements.abonnePlusieurs(EvenementAdminNommeSurOrganisation, [
+    consigneAdminNommeSurOrganisationDansJournal({ adaptateurJournal }),
     traceNominationAdminSurOrganisationDansAudit({
       depotDonnees,
       adaptateurAuditAdminOrganisations,
-    })
-  );
+    }),
+  ]);
 
-  busEvenements.abonne(
-    EvenementAdminRetireDeOrganisation,
+  busEvenements.abonnePlusieurs(EvenementAdminRetireDeOrganisation, [
+    consigneAdminRetireDeOrganisationDansJournal({ adaptateurJournal }),
     traceRetraitAdminDeOrganisationDansAudit({
       depotDonnees,
       adaptateurAuditAdminOrganisations,
-    })
-  );
+    }),
+  ]);
 };
 
 export { cableTousLesAbonnes };
