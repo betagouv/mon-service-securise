@@ -72,12 +72,10 @@ const routesConnectePage = ({
     middleware.chargeExplicationUtilisationMFA,
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
-      const estSuperviseur =
-        await depotDonnees.estSuperviseur(idUtilisateurCourant);
       await depotDonnees.marqueTableauDeBordVuDansParcoursUtilisateur(
         idUtilisateurCourant
       );
-      reponse.render('tableauDeBord', { estSuperviseur });
+      reponse.render('tableauDeBord');
     }
   );
 
