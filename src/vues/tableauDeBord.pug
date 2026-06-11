@@ -11,6 +11,7 @@ block append scripts
   +composantSvelte('explicationUtilisationMFA.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur: utilisateurConnecte && utilisateurConnecte.estSuperviseur})
   +donneesPartagees('utilisateur-admin', {estAdmin: utilisateurConnecte && utilisateurConnecte.estAdmin})
+  +donneesPartagees('avec-gestion-organisations', featureFlags.avecGestionDesOrganisations)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)
   +donneesPartagees('affiche-explication-utilisation-mfa', afficheExplicationUtilisationMFA)
   script(type = 'module', src = '/statique/tableauDeBord.mjs')
