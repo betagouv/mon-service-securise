@@ -7,6 +7,7 @@
     nombreHomologationsExpirees: number;
     indiceCyberMoyen: IndiceCyberMoyen | undefined;
     estSuperviseur: boolean;
+    avecGestionOrganisations: boolean;
   }
 
   let {
@@ -15,6 +16,7 @@
     nombreHomologationsExpirees,
     indiceCyberMoyen,
     estSuperviseur,
+    avecGestionOrganisations,
   }: Props = $props();
 
   const pluraliseChaine = (chaine: string, nombre: number) =>
@@ -65,7 +67,7 @@
       >
     </span>
   </div>
-  {#if estSuperviseur}
+  {#if estSuperviseur && !avecGestionOrganisations}
     <a class="carte-info" id="carte-superviseur" href="/supervision">
       <span class="contenu-carte">
         <span class="contenu-carte-superviseur">
