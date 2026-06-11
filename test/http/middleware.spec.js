@@ -1119,6 +1119,7 @@ describe('Le middleware MSS', () => {
     let adaptateurEnvironnement;
     const featureFlag = {
       avecRisquesV2: () => false,
+      avecGestionDesOrganisations: () => false,
     };
 
     beforeEach(() => {
@@ -1150,6 +1151,40 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
+        });
+      });
+    });
+
+    describe("concernant l'affichage de la gestion d'orgas", () => {
+      it("n'affiche pas la gestion d'orgas si le feature flag est désactivé", async () => {
+        adaptateurEnvironnement = {
+          featureFlag: () => ({
+            ...featureFlag,
+            avecGestionDesOrganisations: () => false,
+          }),
+        };
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecGestionDesOrganisations).to.be(
+            false
+          );
+        });
+      });
+
+      it('affiche les risques V2 si le feature flag est activé', async () => {
+        adaptateurEnvironnement = {
+          featureFlag: () => ({
+            ...featureFlag,
+            avecGestionDesOrganisations: () => true,
+          }),
+        };
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecGestionDesOrganisations).to.be(
+            true
+          );
         });
       });
     });
