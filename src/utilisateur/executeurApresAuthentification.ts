@@ -42,9 +42,18 @@ const executeurApresAuthentification = async (
       SourceAuthentification.AGENT_CONNECT,
       connexionAvecMFA
     );
+
+    const idUtilisateur = ordre.utilisateurAConnecter.id as UUID;
+    const estAdmin = await depotDonnees.estAdmin(idUtilisateur);
+    const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
+
+    reponse.locals.utilisateurConnecteEstAdmin = estAdmin;
+    reponse.locals.utilisateurConnecteEstSuperviseur = estSuperviseur;
+
     requete.session.AgentConnectIdToken = agentConnectIdToken;
+
     await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-      ordre.utilisateurAConnecter.id as UUID,
+      idUtilisateur,
       SourceAuthentification.AGENT_CONNECT,
       connexionAvecMFA
     );

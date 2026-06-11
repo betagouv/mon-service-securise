@@ -16,6 +16,7 @@ class MockReponse {
   urlRedirection: string | undefined;
   pageRendue: string | undefined;
   donneesDeRenduDePage: Record<string, unknown> | undefined;
+  locals: Record<string, unknown> = {};
 
   redirect(cible: string) {
     this.urlRedirection = cible;
@@ -88,6 +89,8 @@ describe("L'executeur après authentification", () => {
     } as unknown as ServiceGestionnaireSession;
     depotDonnees = {
       enregistreNouvelleConnexionUtilisateur: () => {},
+      estAdmin: async () => true,
+      estSuperviseur: async () => false,
     } as unknown as DepotDonnees;
   });
 
@@ -166,6 +169,13 @@ describe("L'executeur après authentification", () => {
           urlRedirection: 'http://mss/tableau-bord',
           tokenDonneesInvite: 'Jean-jwt',
         });
+      });
+
+      it("ajoute l'info de si l'utilisateur est admin/superviseur aux locals", async () => {
+        await executeurDuTest(ordre, { urlRedirection: '/tableau-bord' });
+
+        expect(reponse.locals.utilisateurConnecteEstAdmin).toEqual(true);
+        expect(reponse.locals.utilisateurConnecteEstSuperviseur).toEqual(false);
       });
     });
     describe("lorsqu'aucune donnée n'est fournie", () => {
