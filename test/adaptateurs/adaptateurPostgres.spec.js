@@ -432,6 +432,20 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(utilisateurs.length).to.be(2);
     });
 
+    it("retourne les admin même si aucun service n'existe sur le siret administré", async () => {
+      await insereAdmin(autreAdmin, 'siret-2');
+      await insereAdmin(autreAdmin, 'siret-3');
+      await insereAdmin(admin, 'siret-1');
+      await insereAdmin(admin, 'siret-2');
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.length).to.be(3);
+      expect(utilisateurs.find((u) => u.id === autreAdmin).nombreEntites).to.be(
+        1
+      );
+    });
+
     it("précise si le contributeur est admin sur une entité du périmètre de l'admin appelant", async () => {
       await insereAdmin(admin, 'siret-1');
       await insereAdmin(u1, 'siret-1');
