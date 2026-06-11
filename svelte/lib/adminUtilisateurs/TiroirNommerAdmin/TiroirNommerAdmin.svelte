@@ -60,8 +60,10 @@
     siretsSelectionnes.size === nombreTotalEntites
   );
   const basculeTouteSelection = () => {
-    if (toutEstSelectionne) siretsSelectionnes.clear();
-    else
+    if (toutEstSelectionne) {
+      siretsSelectionnes.clear();
+      siretsSeulProprietaire.forEach((s) => siretsSelectionnes.add(s));
+    } else
       for (const entite of toutesEntites) {
         siretsSelectionnes.add(entite.siret);
       }
