@@ -968,11 +968,19 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
                 AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
           ) AS "estAdmin",
           (
-            SELECT COUNT(DISTINCT s.siret_hash)
-            FROM autorisations a2
-            JOIN services s ON s.id = (a2.donnees->>'idService')::uuid
-            WHERE (a2.donnees->>'idUtilisateur')::uuid = u.id
-                AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+            SELECT COUNT(DISTINCT siret_hash)
+            FROM (
+              SELECT s.siret_hash
+              FROM autorisations a2
+              JOIN services s ON s.id = (a2.donnees->>'idService')::uuid
+              WHERE (a2.donnees->>'idUtilisateur')::uuid = u.id
+                  AND a2.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+              UNION ALL
+              SELECT ao.siret_hash
+              FROM admins_organisations ao
+              WHERE ao.id_utilisateur = u.id
+                  AND ao.siret_hash IN (SELECT siret_hash FROM mes_sirets_haches)
+            ) combined
           ) AS "nombreEntites",
           (
             SELECT json_agg(
