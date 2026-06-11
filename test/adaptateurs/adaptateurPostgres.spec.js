@@ -394,16 +394,18 @@ describe("L'adaptateur persistance Postgres", () => {
     let u1;
     let u2;
     let admin;
+    let autreAdmin;
     let idService1;
     let idService2;
     let idAutorisationU2;
 
     beforeEach(async () => {
-      idService1 = await insereService('siret-1');
-      idService2 = await insereService('siret-1');
+      idService1 = await insereService(chiffrement.hacheSha256('siret-1'));
+      idService2 = await insereService(chiffrement.hacheSha256('siret-1'));
       u1 = await insereUtilisateur();
       u2 = await insereUtilisateur();
       admin = await insereUtilisateur();
+      autreAdmin = await insereUtilisateur();
       await insereAutorisation(u1, idService1);
       idAutorisationU2 = await insereAutorisation(u2, idService2);
       await insereAutorisation(u1, idService2);
@@ -449,6 +451,24 @@ describe("L'adaptateur persistance Postgres", () => {
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
       expect(utilisateurs.find((u) => u.id === u1).nombreEntites).to.be(1);
+    });
+
+    it("précise le nombre d'entités distinctes du périmètre de l'admin appelant sur lesquelles l'utilisateur a un service ou est admin", async () => {
+      await insereAdmin(autreAdmin, 'siret-1');
+      await insereAdmin(autreAdmin, 'siret-2');
+      await insereAdmin(autreAdmin, 'siret-3');
+      await insereAdmin(admin, 'siret-1');
+      await insereAdmin(admin, 'siret-2');
+      const idServicePasAdministre = await insereService('autre-siret');
+      await insereAutorisation(autreAdmin, idServicePasAdministre);
+      await insereAutorisationAdmin(autreAdmin, idService1);
+      await insereAutorisationAdmin(autreAdmin, idService2);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.find((u) => u.id === autreAdmin).nombreEntites).to.be(
+        2
+      );
     });
 
     it("précise les autorisations de service du périmètre de l'admin appelant sur lesquels l'utilisateur est contributeur", async () => {
