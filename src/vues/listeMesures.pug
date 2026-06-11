@@ -2,6 +2,7 @@ extends mssConnecte
 block variables
   - const meta_description = "Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l'ensemble des mesures de sécurité."
   - const titrePage = 'Liste de mesures'
+  - const ongletActif = "services"
 
 block append scripts
   +composantSvelte('listeMesures.js')
@@ -16,8 +17,10 @@ block append styles
 
 block bandeau-titre
   -
+    const estAdmin = utilisateurConnecte && utilisateurConnecte.estAdmin;
+    const estSuperviseur = utilisateurConnecte && utilisateurConnecte.estSuperviseur;
     const filAriane = [
-      {label: "Mon tableau de bord", href: "/tableauDeBord"},
+      {label: estAdmin || estSuperviseur ? "Services" : "Mon tableau de bord", href: "/tableauDeBord"},
       {label: "Liste de mesures"}
     ]
 

@@ -1,6 +1,37 @@
 mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreLienSurLogo, headerAGaucheUniquement, ongletActif)
   -
-    const itemsMenu = [
+    const estConnecte = !!utilisateurConnecte;
+
+    const contenuSuperviseur = [
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href:'/admin/entites'},
+      {id: 'admin-admins', type: 'link', active: ongletActif === 'admin-admins', label: 'Admins', href:'/admin/administrateurs'},
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href:'/tableauDeBord'},
+      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
+    ];
+    const contenuAdmin = [
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
+      {id: 'admin-utilisateurs', type: 'link', active: ongletActif === 'admin-utilisateurs', label: 'Utilisateurs', href: '/admin/utilisateurs'},
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
+    ];
+    const contenuAdminEtSuperviseur = [
+      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
+      {id: 'admin-utilisateurs', type: 'link', active: ongletActif === 'admin-utilisateurs', label: 'Utilisateurs', href: '/admin/utilisateurs'},
+      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
+      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
+    ];
+
+    let contenuMenuAdmin = [];
+    if (featureFlags.avecGestionDesOrganisations && estConnecte) {
+      if (utilisateurConnecte.estAdmin && utilisateurConnecte.estSuperviseur) {
+        contenuMenuAdmin = contenuAdminEtSuperviseur;
+      } else if (utilisateurConnecte.estSuperviseur) {
+        contenuMenuAdmin = contenuSuperviseur;
+      } else if (utilisateurConnecte.estAdmin) {
+        contenuMenuAdmin = contenuAdmin;
+      }
+    }
+
+    const contenuMenuPagePublique = [
       {
         "id": "nav-accueil",
         "type": "link",
@@ -60,7 +91,8 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
         "href": "/doctrine-homologation-anssi"
       },
     ];
-    const estConnecte = !!utilisateurConnecte;
+    const contenuFluide = estConnecte ? contenuMenuAdmin : [];
+    const itemsMenu = fluide ? contenuFluide : contenuMenuPagePublique;
 
   dsfr-header(
     id="dsfr-header"
@@ -79,7 +111,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     tool-links=!estConnecte && !headerAGaucheUniquement ? JSON.stringify([{label: "S'inscrire",url:'/inscription', markup:"a",},{label: "Se connecter",url:'/connexion', markup:"a",icon: "account-circle-fill"}]) : undefined,
     menu-id='boutonMenu',
     fluid=fluide,
-    navigation-items=JSON.stringify(fluide ? [] : itemsMenu)
+    navigation-items=JSON.stringify(itemsMenu)
   )
     if !headerAGaucheUniquement
       lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé", slot="beforenavbarbuttons")

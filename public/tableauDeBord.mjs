@@ -2,7 +2,11 @@ import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
   const { estSuperviseur } = lisDonneesPartagees('utilisateur-superviseur');
+  const { estAdmin } = lisDonneesPartagees('utilisateur-admin');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
+  const avecGestionOrganisations = lisDonneesPartagees(
+    'avec-gestion-organisations'
+  );
   const visiteGuideeActive =
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
   const modeVisiteGuidee = visiteGuideeActive;
@@ -16,6 +20,8 @@ $(() => {
     new CustomEvent('svelte-recharge-tableau-de-bord', {
       detail: {
         estSuperviseur,
+        estAdmin,
+        avecGestionOrganisations,
         modeVisiteGuidee,
         profilUtilisateurComplet,
         dateInscriptionUtilisateur,

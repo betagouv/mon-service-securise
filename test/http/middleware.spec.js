@@ -95,6 +95,8 @@ describe('Le middleware MSS', () => {
     depotDonnees.service = async () => {};
     depotDonnees.utilisateur = async () =>
       unUtilisateur().avecId('123').quiSAppelle('Jean Dujardin').construis();
+    depotDonnees.estAdmin = async () => true;
+    depotDonnees.estSuperviseur = async () => false;
     depotDonnees.estJwtRevoque = async () => false;
   });
 
@@ -264,7 +266,7 @@ describe('Le middleware MSS', () => {
       expect(requete.estInvite).to.be('INVITÉ');
     });
 
-    it("ajoute le nom et prénom de l'utilisateur connecté à `reponse.locals`", async () => {
+    it("ajoute l'utilisateur connecté à `reponse.locals`", async () => {
       const middleware = leMiddleware();
 
       await middleware.verificationJWT(requete, reponse, () => {});
@@ -272,6 +274,8 @@ describe('Le middleware MSS', () => {
       expect(reponse.locals.utilisateurConnecte).to.eql({
         prenomNom: 'Jean Dujardin',
         email: 'jean.dujardin@beta.gouv.com',
+        estAdmin: true,
+        estSuperviseur: false,
       });
     });
 
@@ -1115,6 +1119,7 @@ describe('Le middleware MSS', () => {
     let adaptateurEnvironnement;
     const featureFlag = {
       avecRisquesV2: () => false,
+      avecGestionDesOrganisations: () => false,
     };
 
     beforeEach(() => {
@@ -1146,6 +1151,40 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
+        });
+      });
+    });
+
+    describe("concernant l'affichage de la gestion d'orgas", () => {
+      it("n'affiche pas la gestion d'orgas si le feature flag est désactivé", async () => {
+        adaptateurEnvironnement = {
+          featureFlag: () => ({
+            ...featureFlag,
+            avecGestionDesOrganisations: () => false,
+          }),
+        };
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecGestionDesOrganisations).to.be(
+            false
+          );
+        });
+      });
+
+      it('affiche les risques V2 si le feature flag est activé', async () => {
+        adaptateurEnvironnement = {
+          featureFlag: () => ({
+            ...featureFlag,
+            avecGestionDesOrganisations: () => true,
+          }),
+        };
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecGestionDesOrganisations).to.be(
+            true
+          );
         });
       });
     });

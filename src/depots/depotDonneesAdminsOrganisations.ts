@@ -27,4 +27,10 @@ export class DepotDonneesAdminsOrganisations {
   async sauvegardeAdminOrganisations(admin: AdminOrganisations) {
     await this.persistance.sauvegardeAdminOrganisations(admin.donnees());
   }
+
+  async estAdmin(idUtilisateur: UUID): Promise<boolean> {
+    const admin = await this.lisAdminOrganisations(idUtilisateur);
+
+    return admin !== undefined;
+  }
 }
