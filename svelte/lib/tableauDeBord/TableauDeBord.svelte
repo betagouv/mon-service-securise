@@ -19,6 +19,7 @@
   interface Props {
     estSuperviseur: boolean;
     estAdmin: boolean;
+    avecGestionOrganisations: boolean;
     modeVisiteGuidee: boolean;
     dateInscriptionUtilisateur: Date;
     profilUtilisateurComplet?: boolean;
@@ -27,6 +28,7 @@
   let {
     estSuperviseur,
     estAdmin,
+    avecGestionOrganisations,
     modeVisiteGuidee,
     dateInscriptionUtilisateur,
     profilUtilisateurComplet = true,
@@ -105,6 +107,7 @@
         {nombreHomologationsExpirees}
         {indiceCyberMoyen}
         {estSuperviseur}
+        {avecGestionOrganisations}
       />
     {/if}
     <BandeauFiltres />
