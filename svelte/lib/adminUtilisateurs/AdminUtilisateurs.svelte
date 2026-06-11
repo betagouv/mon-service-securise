@@ -11,9 +11,13 @@
   import type { UtilisateurAdministre } from './adminUtilisateurs.types';
   import Toaster from '../ui/Toaster.svelte';
   import BoutonAjouterPremierService from '../ui/BoutonAjouterPremierService.svelte';
+  import ChampRecherche from '../ui/ChampRecherche.svelte';
+  import { chaineNormalisee } from '../outils/string';
+  import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
+  let recherche = $state('');
 
   onMount(async () => {
     await rafraichis();
@@ -27,6 +31,16 @@
   const unAdminExisteAutreQueUtilisateurCourant = $derived(
     mesEntites.some((e) =>
       e.administrateurs.some((a) => !a.estUtilisateurCourant)
+    )
+  );
+
+  let rechercheNormalisee = $derived(chaineNormalisee(recherche));
+
+  const mesUtilisateursFiltres = $derived(
+    mesUtilisateurs.filter(
+      (u) =>
+        chaineNormalisee(u.prenomNom).includes(rechercheNormalisee) ||
+        chaineNormalisee(u.email).includes(rechercheNormalisee)
     )
   );
 </script>
@@ -47,97 +61,107 @@
       <span
         >Ajoutez des services sur vos entités et invitez des contributeurs.</span
       >
-      <BoutonAjouterPremierService />
+      <span class="conteneur-action">
+        <BoutonAjouterPremierService />
+      </span>
     {:else}
       <h4>Aucun admin sur vos entités</h4>
       <span
         >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
       >
-      <dsfr-button
-        size="md"
-        kind="primary"
-        markup="a"
-        href="/admin/entites"
-        label="Ajouter des admins à mes entités"
-      ></dsfr-button>
+      <span class="conteneur-action">
+        <dsfr-button
+          size="md"
+          kind="primary"
+          markup="a"
+          href="/admin/entites"
+          label="Ajouter des admins à mes entités"
+        ></dsfr-button>
+      </span>
     {/if}
   </div>
 {:else}
-  <dsfr-table
-    columns={[
-      { key: 'prenomNom', label: 'Nom' },
-      { key: 'postes', label: 'Rôle' },
-      { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
-      { key: 'nombreServices', label: 'Service(s) associé(s)' },
-      { key: 'actions', label: 'Actions' },
-    ]}
-    rows={mesUtilisateurs}
-    rich
-    multiline
-  >
-    {#each mesUtilisateurs as utilisateur, i (utilisateur.id)}
-      <div slot="cell:prenomNom:{i}" class="conteneur-nom">
-        {#if utilisateur.estAdmin}
-          <BadgeAdmin />
-        {/if}
-        <span><b>{utilisateur.prenomNom}</b></span>
-        {#if utilisateur.email !== utilisateur.prenomNom}
-          <span>{utilisateur.email}</span>
-        {/if}
-      </div>
-      <div slot="cell:nombreEntites:{i}">
-        <span>
-          {#if utilisateur.nombreEntites === 0}
-            Aucune entité
-          {:else}
-            {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
-              ? 's'
-              : ''}
+  <ChampRecherche bind:valeur={recherche} />
+
+  {#if recherche.length > 0 && mesUtilisateursFiltres.length === 0}
+    <AucunResultatRecherche onclick={() => (recherche = '')} />
+  {:else}
+    <dsfr-table
+      columns={[
+        { key: 'prenomNom', label: 'Nom' },
+        { key: 'postes', label: 'Rôle' },
+        { key: 'nombreEntites', label: 'Entité(s) associée(s)' },
+        { key: 'nombreServices', label: 'Service(s) associé(s)' },
+        { key: 'actions', label: 'Actions' },
+      ]}
+      rows={mesUtilisateursFiltres}
+      rich
+      multiline
+    >
+      {#each mesUtilisateursFiltres as utilisateur, i (utilisateur.id)}
+        <div slot="cell:prenomNom:{i}" class="conteneur-nom">
+          {#if utilisateur.estAdmin}
+            <BadgeAdmin />
           {/if}
-        </span>
-      </div>
-      <div slot="cell:nombreServices:{i}">
-        <span>
-          {#if utilisateur.autorisations.length === 0}
-            Aucun service
-          {:else}
-            {utilisateur.autorisations.length} service{utilisateur.autorisations
-              .length > 1
-              ? 's'
-              : ''}
+          <span><b>{utilisateur.prenomNom}</b></span>
+          {#if utilisateur.email !== utilisateur.prenomNom}
+            <span>{utilisateur.email}</span>
           {/if}
-        </span>
-      </div>
-      <div slot="cell:actions:{i}">
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          kind="secondary"
-          label="Gérer les accès aux services"
-          size="sm"
-          onclick={() => {
-            tiroirStore.afficheContenu(TiroirGestionUtilisateurAdministre, {
-              utilisateur,
-              toutesEntites: mesEntites,
-            });
-          }}
-        ></dsfr-button>
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          kind="tertiary"
-          label={utilisateur.estAdmin
-            ? 'Gérer le droit admin'
-            : "Nommer en tant qu'admin"}
-          size="sm"
-          onclick={() => {
-            tiroirStore.afficheContenu(TiroirNommerAdmin, {
-              utilisateur,
-              toutesEntites: mesEntites,
-            });
-          }}
-        ></dsfr-button>
-      </div>
-    {/each}
-  </dsfr-table>
+        </div>
+        <div slot="cell:nombreEntites:{i}">
+          <span>
+            {#if utilisateur.nombreEntites === 0}
+              Aucune entité
+            {:else}
+              {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
+                ? 's'
+                : ''}
+            {/if}
+          </span>
+        </div>
+        <div slot="cell:nombreServices:{i}">
+          <span>
+            {#if utilisateur.autorisations.length === 0}
+              Aucun service
+            {:else}
+              {utilisateur.autorisations.length} service{utilisateur
+                .autorisations.length > 1
+                ? 's'
+                : ''}
+            {/if}
+          </span>
+        </div>
+        <div slot="cell:actions:{i}">
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            kind="secondary"
+            label="Gérer les accès aux services"
+            size="sm"
+            onclick={() => {
+              tiroirStore.afficheContenu(TiroirGestionUtilisateurAdministre, {
+                utilisateur,
+                toutesEntites: mesEntites,
+              });
+            }}
+          ></dsfr-button>
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            kind="tertiary"
+            label={utilisateur.estAdmin
+              ? 'Gérer le droit admin'
+              : "Nommer en tant qu'admin"}
+            size="sm"
+            onclick={() => {
+              tiroirStore.afficheContenu(TiroirNommerAdmin, {
+                utilisateur,
+                toutesEntites: mesEntites,
+              });
+            }}
+          ></dsfr-button>
+        </div>
+      {/each}
+    </dsfr-table>
+  {/if}
 {/if}
 
 <style lang="scss">
@@ -173,6 +197,8 @@
     align-items: center;
     flex-direction: column;
     color: #161616;
+    max-width: 588px;
+    margin: 0 auto;
 
     h4 {
       margin: 0;
@@ -194,7 +220,7 @@
       transform: scaleX(-1);
     }
 
-    dsfr-button {
+    .conteneur-action {
       margin-top: 16px;
     }
   }
