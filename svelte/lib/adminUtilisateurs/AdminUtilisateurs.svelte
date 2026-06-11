@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { api } from './adminUtilisateurs.api';
   import { api as apiEntites } from '../adminEntites/adminEntites.api';
   import Tuiles from './Tuiles.svelte';
@@ -12,12 +12,17 @@
   import Toaster from '../ui/Toaster.svelte';
   import BoutonAjouterPremierService from '../ui/BoutonAjouterPremierService.svelte';
   import ChampRecherche from '../ui/ChampRecherche.svelte';
-  import { chaineNormalisee } from '../outils/string';
+  import { chaineNormalisee, singulierPluriel } from '../outils/string';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
+  import ModaleEntitesUtilisateurAdministre from './ModaleEntitesUtilisateurAdministre.svelte';
+  import Bouton from '../ui/Bouton.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let recherche = $state('');
+  let utilisateurSelectionne: UtilisateurAdministre | undefined = $state();
+
+  let modale: ModaleEntitesUtilisateurAdministre | undefined;
 
   onMount(async () => {
     await rafraichis();
@@ -46,6 +51,12 @@
 </script>
 
 <svelte:document on:utilisateurs-administres-modifies={rafraichis} />
+
+<ModaleEntitesUtilisateurAdministre
+  bind:this={modale}
+  utilisateur={utilisateurSelectionne!}
+  toutesEntites={mesEntites}
+/>
 
 <Toaster />
 
@@ -113,9 +124,19 @@
             {#if utilisateur.nombreEntites === 0}
               Aucune entité
             {:else}
-              {utilisateur.nombreEntites} entité{utilisateur.nombreEntites > 1
-                ? 's'
-                : ''}
+              <Bouton
+                type="lien-dsfr"
+                titre="{utilisateur.nombreEntites} {singulierPluriel(
+                  'entité',
+                  'entités',
+                  utilisateur.nombreEntites
+                )}"
+                onclick={async () => {
+                  utilisateurSelectionne = utilisateur;
+                  await tick();
+                  modale?.affiche();
+                }}
+              />
             {/if}
           </span>
         </div>
