@@ -20,12 +20,14 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     ];
 
     let contenuMenuAdmin = [];
-    if (estConnecte && utilisateurConnecte.estAdmin && utilisateurConnecte.estSuperviseur) {
-      contenuMenuAdmin = contenuAdminEtSuperviseur;
-    } else if (estConnecte && utilisateurConnecte.estSuperviseur) {
-      contenuMenuAdmin = contenuSuperviseur;
-    } else if (estConnecte && utilisateurConnecte.estAdmin) {
-      contenuMenuAdmin = contenuAdmin;
+    if (featureFlags.avecGestionDesOrganisations && estConnecte) {
+      if (utilisateurConnecte.estAdmin && utilisateurConnecte.estSuperviseur) {
+        contenuMenuAdmin = contenuAdminEtSuperviseur;
+      } else if (utilisateurConnecte.estSuperviseur) {
+        contenuMenuAdmin = contenuSuperviseur;
+      } else if (utilisateurConnecte.estAdmin) {
+        contenuMenuAdmin = contenuAdmin;
+      }
     }
 
     const contenuMenuPagePublique = [
