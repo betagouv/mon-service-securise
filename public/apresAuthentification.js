@@ -18,5 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     urlParDefaut = '/admin/entites';
   }
 
-  window.location = urlRedirection ?? urlParDefaut;
+  const urlEstValide = (url) => {
+    try {
+      return new URL(url).origin === window.location.origin;
+    } catch {
+      return false;
+    }
+  };
+
+  window.location =
+    urlRedirection && urlEstValide(urlRedirection)
+      ? urlRedirection
+      : urlParDefaut;
 });
