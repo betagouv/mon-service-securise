@@ -1,4 +1,4 @@
-import { ServiceForceMFA } from '../../src/oidc/serviceForceMFA.ts';
+import { ACR, ServiceForceMFA } from '../../src/oidc/serviceForceMFA.ts';
 
 describe('Le service qui force le MFA', () => {
   it("laisse passer, si le fournisseur d'identité ne supporte même pas le MFA", async () => {
@@ -17,22 +17,32 @@ describe('Le service qui force le MFA', () => {
     expect(resultat.raison).toBe('MFA_NON_PRIS_EN_CHARGE');
   });
 
-  it("laisse passer, si ProConnect assure la présence d'un MFA via le claim `acr`", async () => {
-    const s = new ServiceForceMFA({
-      fournisseursAvecMFA: ['F-1'],
-      generationUrlProConnectMFA: vi.fn(),
-    });
+  it.each([
+    'eidas2',
+    'eidas3',
+    'https://proconnect.gouv.fr/assurance/self-asserted-2fa',
+    'https://proconnect.gouv.fr/assurance/consistency-checked-2fa',
+    'eidas0-mfa',
+    'eidas1-mfa',
+  ] as Array<ACR>)(
+    "laisse passer, si ProConnect assure la présence d'un MFA via le claim `acr: %s`",
+    async (acr) => {
+      const s = new ServiceForceMFA({
+        fournisseursAvecMFA: ['F-1'],
+        generationUrlProConnectMFA: vi.fn(),
+      });
 
-    const resultat = await s.execute({
-      idFournisseurIdentite: 'F-1',
-      acr: 'eidas2',
-      email: 'j@mail.fr',
-    });
+      const resultat = await s.execute({
+        idFournisseurIdentite: 'F-1',
+        acr,
+        email: 'j@mail.fr',
+      });
 
-    expect(resultat.action).toBe('LAISSE_PASSER');
-    assert(resultat.action === 'LAISSE_PASSER');
-    expect(resultat.raison).toBe('MFA_DEJA_VALIDE');
-  });
+      expect(resultat.action).toBe('LAISSE_PASSER');
+      assert(resultat.action === 'LAISSE_PASSER');
+      expect(resultat.raison).toBe('MFA_DEJA_VALIDE');
+    }
+  );
 
   it("ordonne de rediriger si le fournisseur d'identité supporte le MFA mais on n'a pas encore d'ACR", async () => {
     const generationUrlProConnectMFA = async (email: string) => ({

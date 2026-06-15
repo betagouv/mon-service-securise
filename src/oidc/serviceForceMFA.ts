@@ -3,6 +3,8 @@ export const ACR_GARANTISSANT_MFA = [
   'eidas3',
   'https://proconnect.gouv.fr/assurance/self-asserted-2fa',
   'https://proconnect.gouv.fr/assurance/consistency-checked-2fa',
+  'eidas0-mfa',
+  'eidas1-mfa',
 ] as const;
 
 export type ACR = (typeof ACR_GARANTISSANT_MFA)[number];
@@ -40,7 +42,8 @@ export class ServiceForceMFA {
     if (!this.config.fournisseursAvecMFA.includes(idFournisseurIdentite))
       return { action: 'LAISSE_PASSER', raison: 'MFA_NON_PRIS_EN_CHARGE' };
 
-    if (acr) return { action: 'LAISSE_PASSER', raison: 'MFA_DEJA_VALIDE' };
+    if (acr && ACR_GARANTISSANT_MFA.includes(acr))
+      return { action: 'LAISSE_PASSER', raison: 'MFA_DEJA_VALIDE' };
 
     const { url, nonce, state } =
       await this.config.generationUrlProConnectMFA(email);
