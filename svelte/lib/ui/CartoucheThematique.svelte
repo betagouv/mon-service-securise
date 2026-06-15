@@ -7,3 +7,9 @@
 </script>
 
 <dsfr-tag label={thematique} size="sm"></dsfr-tag>
+
+<style lang="scss">
+  dsfr-tag {
+    white-space: nowrap;
+  }
+</style>
