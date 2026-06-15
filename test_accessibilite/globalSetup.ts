@@ -27,15 +27,27 @@ export default async (config: FullConfig) => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
+  const connexion = async () => {
+    await page.context().addCookies([
+      {
+        name: 'AgentConnectInfo',
+        domain: 'localhost',
+        path: '/',
+        value: `j:${JSON.stringify({ state: 'FAKE_STATE', nonce: 'FAKE_NONCE', context: 'avantCreerUtilisateur' })}`,
+        expires: Math.floor(Date.now() / 1000) + 5 * 60_000,
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+      },
+    ]);
+    await page.goto(
+      `${urlBase}/oidc/apres-authentification?email=${process.env.EMAIL_CONNEXION!}`
+    );
+  };
+
   const creerUtilisateur = async () => {
     try {
-      await page.goto(`${urlBase}/connexion`);
-      await page.click('a[href^="/oidc/connexion"]');
-      await page.waitForURL(/connect/);
-      await page.fill('input[type="email"]', process.env.EMAIL_CONNEXION!);
-      await page.click('button[type="submit"]');
-      await page.waitForURL(/connect/);
-      await page.click('button[type="submit"]');
+      await connexion();
       await page.waitForURL(/creation-compte/);
       await page.click('text=Suivant');
       await page.click('.declencheur');
@@ -44,7 +56,13 @@ export default async (config: FullConfig) => {
       await page.selectOption('#estimation-nombre-services', '1_10');
       await page.click('text=Suivant');
       await page.click('#cguAcceptees');
-      await page.click('text=Valider');
+      await page.click('text=Valider', { noWaitAfter: true });
+
+      await page.waitForResponse(
+        (r) => r.url().includes('/api/utilisateur') && r.status() === 200
+      );
+
+      await connexion();
     } catch (e) {
       await captureDEcran(page, `globalSetup-creerUtilisateur-failure.png`);
       throw e;
