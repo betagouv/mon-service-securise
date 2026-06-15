@@ -18,14 +18,14 @@ jobs:
 
     steps:
       - name: Cloner le dépôt Git
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Déterminer la version de Node.js à utiliser
         run: |
           echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
 
       - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -51,7 +51,7 @@ jobs:
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
 
       - name: Rapport des tests
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@df6247429542221bc30d46a036ee47af1102c451 # v2.7.0
         if: ${{ !cancelled() }} # On force l'exécution même si l'étape précédente a échoué
         with:
           name: Tests
