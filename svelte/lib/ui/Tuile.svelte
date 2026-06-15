@@ -15,6 +15,7 @@
   horizontal
   action-markup="false"
   no-link
+  no-icon
   size="sm"
 >
   <img
