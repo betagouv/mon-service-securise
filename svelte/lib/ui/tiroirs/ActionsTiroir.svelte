@@ -23,5 +23,6 @@
     flex-grow: 0;
     flex-shrink: 0;
     gap: 10px;
+    z-index: 2;
   }
 </style>
