@@ -14,6 +14,8 @@ export default defineConfig({
     reuseExistingServer: true,
     env: {
       EMAIL_CONNEXION: 'test@fia1.fr',
+      ID_SERVICE: '85b26710-0d8b-404b-bfe4-0d30b7a878c1',
+      SIRET: '13000766900018',
       DOSSIER_RAPPORT: 'test_accessibilite/rapport',
       DOSSIER_SCREENSHOTS: 'test_accessibilite/screenshots',
       CHIFFREMENT_SEL_DE_HASHAGE_1: 'd322524cb14933e9f8ab',

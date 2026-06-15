@@ -115,8 +115,8 @@ class ConstructeurUtilisateur {
     return this;
   }
 
-  quiAccepteCGU() {
-    this.donnees.cguAcceptees = 'v1.0';
+  quiAccepteCGU(version = 'v1.0') {
+    this.donnees.cguAcceptees = version;
     return this;
   }
 
