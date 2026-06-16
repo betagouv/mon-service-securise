@@ -157,7 +157,7 @@
       <dsfr-callout
         has-title
         title="{utilisateur.prenomNom} ne sera plus admin"
-        accent="blue-ecume"
+        accent="blue-cumulus"
       ></dsfr-callout>
     {:else}
       <dsfr-callout
@@ -244,54 +244,52 @@
       </dsfr-table>
     </div>
   {:else}
-    <div>
-      <dsfr-callout
-        has-title
-        title="Récapitulatif"
-        text={messageRecapitulatif(recapitulatif, utilisateur)}
-        accent="blue-ecume"
-      ></dsfr-callout>
-      <dsfr-table
-        columns={[
-          { key: 'nom', label: 'Nom' },
-          { key: 'siret', label: 'SIRET' },
-          { key: 'nombreServices', label: 'Services rattachés' },
-          { key: 'action', label: 'Action' },
-        ]}
-        rows={toutesEntitesModifiees}
-        row-key="siret"
-        rich
-      >
-        {#each toutesEntitesModifiees as entite, i (entite.siret)}
-          <div slot="cell:nom:{i}">
-            {#if recapitulatif.retirees.includes(entite.siret)}
-              <span><s>{entite.nom}</s></span>
-            {:else}
-              <span>{entite.nom}</span>
-            {/if}
-          </div>
-          <div slot="cell:action:{i}">
-            {#if recapitulatif.nouvelles.includes(entite.siret)}
-              <dsfr-badge
-                label="Nouvel admin"
-                type="accent"
-                accent="green-emeraude"
-                size="sm"
-              ></dsfr-badge>
-            {:else if recapitulatif.conservees.includes(entite.siret)}
-              <dsfr-badge label="Admin conservé" size="sm"></dsfr-badge>
-            {:else}
-              <dsfr-badge
-                label="Admin retiré"
-                type="accent"
-                accent="pink-tuile"
-                size="sm"
-              ></dsfr-badge>
-            {/if}
-          </div>
-        {/each}
-      </dsfr-table>
-    </div>
+    <dsfr-callout
+      has-title
+      title="Récapitulatif"
+      text={messageRecapitulatif(recapitulatif, utilisateur)}
+      accent="blue-ecume"
+    ></dsfr-callout>
+    <dsfr-table
+      columns={[
+        { key: 'nom', label: 'Nom' },
+        { key: 'siret', label: 'SIRET' },
+        { key: 'nombreServices', label: 'Services rattachés' },
+        { key: 'action', label: 'Action' },
+      ]}
+      rows={toutesEntitesModifiees}
+      row-key="siret"
+      rich
+    >
+      {#each toutesEntitesModifiees as entite, i (entite.siret)}
+        <div slot="cell:nom:{i}">
+          {#if recapitulatif.retirees.includes(entite.siret)}
+            <span><s>{entite.nom}</s></span>
+          {:else}
+            <span>{entite.nom}</span>
+          {/if}
+        </div>
+        <div slot="cell:action:{i}">
+          {#if recapitulatif.nouvelles.includes(entite.siret)}
+            <dsfr-badge
+              label="Nouvel admin"
+              type="accent"
+              accent="green-emeraude"
+              size="sm"
+            ></dsfr-badge>
+          {:else if recapitulatif.conservees.includes(entite.siret)}
+            <dsfr-badge label="Admin conservé" size="sm"></dsfr-badge>
+          {:else}
+            <dsfr-badge
+              label="Admin retiré"
+              type="accent"
+              accent="pink-tuile"
+              size="sm"
+            ></dsfr-badge>
+          {/if}
+        </div>
+      {/each}
+    </dsfr-table>
   {/if}
 </ContenuTiroir>
 
@@ -344,7 +342,7 @@
     text-align: center;
   }
   .barre-actions {
-    margin-bottom: 12px;
+    padding-bottom: 24px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -365,6 +363,14 @@
   }
 
   dsfr-table {
-    margin-top: -1rem;
+    margin-top: calc(-16px - 1rem);
+  }
+
+  dsfr-stepper {
+    margin-bottom: -2rem;
+  }
+
+  dsfr-callout {
+    margin-bottom: -1.5rem;
   }
 </style>

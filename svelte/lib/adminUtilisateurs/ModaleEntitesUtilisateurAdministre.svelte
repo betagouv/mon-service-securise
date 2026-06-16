@@ -72,6 +72,7 @@
         'entités sont associées',
         entitesDeUtilisateur.length
       )} à {utilisateur?.prenomNom}"
+      accent="blue-cumulus"
     ></dsfr-callout>
     <dsfr-table
       columns={[
@@ -126,5 +127,13 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+  }
+
+  dsfr-table {
+    margin-top: calc(-16px - 1rem);
+  }
+
+  dsfr-callout {
+    margin-bottom: calc(-1.5rem + 24px);
   }
 </style>

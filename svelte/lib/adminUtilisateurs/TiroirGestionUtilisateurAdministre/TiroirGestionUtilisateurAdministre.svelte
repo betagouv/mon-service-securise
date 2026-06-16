@@ -283,3 +283,9 @@
     {/if}
   </ActionsTiroir>
 {/if}
+
+<style>
+  dsfr-callout {
+    margin-bottom: -1.5rem;
+  }
+</style>
