@@ -93,7 +93,7 @@
 </script>
 
 {#if Object.keys(servicesParEntite).length === 0}
-  <dsfr-alert title={messageSiVide} type="info" size="md" has-title
+  <dsfr-alert text={messageSiVide} type="info" size="md" has-description
   ></dsfr-alert>
 {:else}
   <div class="barre-actions">
