@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
 import {
+  captureDEcran,
   messageDErreur,
   navigueSurPageConnectee,
   problemesDAccessibiliteDeLaPage,
@@ -36,6 +37,7 @@ for (const { nom, url } of pages) {
     page,
   }) => {
     await navigueSurPageConnectee(url, page);
+    await captureDEcran(page, `page-service-${nom}.png`);
 
     const problemes = await problemesDAccessibiliteDeLaPage(page);
 

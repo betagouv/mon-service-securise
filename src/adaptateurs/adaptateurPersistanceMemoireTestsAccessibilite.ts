@@ -7,6 +7,8 @@ import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
 import { AdaptateurEnvironnementPourChiffrement } from './adaptateurChiffrement.interface.js';
 import { donneesTestsAccessibilite } from '../../test_accessibilite/donneesTestAccessibilite.js';
 import { unServiceV2 } from '../../test/constructeurs/constructeurService.js';
+import { unDossier } from '../../test/constructeurs/constructeurDossier.js';
+import { creeReferentielV2 } from '../referentielV2.js';
 
 export const nouvelAdaptateur = () => {
   const chiffrement = adaptateurChiffrement({
@@ -15,7 +17,7 @@ export const nouvelAdaptateur = () => {
   });
 
   const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
-  const { utilisateurLambda, siret, utilisateurAdmin, idService } =
+  const { utilisateurLambda, entite, utilisateurAdmin, idService } =
     donneesTestsAccessibilite;
 
   persistance.ajouteUtilisateur(
@@ -33,14 +35,18 @@ export const nouvelAdaptateur = () => {
   const service = unServiceV2()
     .avecId(idService)
     .avecNomService(`Mon service test ${new Date().getTime()}`)
-    .avecOrganisationResponsable({
-      siret,
-    }).donnees;
+    .avecDossiers([
+      unDossier(creeReferentielV2()).avecAutorite(
+        'Autorité',
+        'Fonction autorité'
+      ).donnees,
+    ])
+    .avecOrganisationResponsable(entite.toJSON()).donnees;
   persistance.sauvegardeService(
     service.id,
     service,
     chiffrement.hacheSha256(service.descriptionService.nomService),
-    chiffrement.hacheSha256(siret),
+    chiffrement.hacheSha256(entite.siret),
     VersionService.v2
   );
   persistance.sauvegardeAutorisation(
