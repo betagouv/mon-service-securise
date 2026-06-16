@@ -152,3 +152,17 @@ export class CheckIntermediaire {
     this.etape += 1;
   }
 }
+
+export const clicSurBouton = async (labelBouton: string, page: Page) => {
+  await page.getByRole('button', { name: labelBouton }).first().click();
+};
+
+export const remplirChamp = async (
+  idInput: string,
+  valeur: string,
+  page: Page
+) => {
+  await page.locator(`input#${idInput}`).click();
+  await page.keyboard.type(valeur);
+  await page.keyboard.press('Tab');
+};
