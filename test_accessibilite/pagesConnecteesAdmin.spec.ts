@@ -5,6 +5,7 @@ import {
   navigueSurPageConnectee,
   problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
+import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
 const pages = [
   {
@@ -17,8 +18,11 @@ for (const { nom, url } of pages) {
   test(`La page ${nom} n'a aucune violation grave d'accessibilité`, async ({
     page,
   }) => {
-    const emailAdmin = process.env.ACCESSIBILITE_EMAIL_ADMIN;
-    await navigueSurPageConnectee(url, page, emailAdmin);
+    await navigueSurPageConnectee(
+      url,
+      page,
+      donneesTestsAccessibilite.utilisateurAdmin.email
+    );
 
     const problemes = await problemesDAccessibiliteDeLaPage(page);
 

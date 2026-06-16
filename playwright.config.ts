@@ -7,20 +7,12 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     viewport: { width: 1550, height: 900 },
-    headless: false,
   },
   webServer: {
     command: 'pnpm build:front && pnpm build:back && pnpm start',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
     env: {
-      ACCESSIBILITE_EMAIL_CONNEXION: 'utilisateur@mss.fr',
-      ACCESSIBILITE_EMAIL_SUPERVISEUR: 'superviseur@mss.fr',
-      ACCESSIBILITE_EMAIL_ADMIN: 'admin@mss.fr',
-      ACCESSIBILITE_ID_SUPERVISEUR: '5463b7c3-5b33-41e5-be2b-6d05bb09e93d',
-      ACCESSIBILITE_ID_ADMIN: 'b34d658a-6805-4225-93f0-91c94054ec09',
-      ACCESSIBILITE_ID_SERVICE: '85b26710-0d8b-404b-bfe4-0d30b7a878c1',
-      ACCESSIBILITE_SIRET: '13000766900018',
       ACCESSIBILITE_DOSSIER_RAPPORT: 'test_accessibilite/rapport',
       ACCESSIBILITE_DOSSIER_SCREENSHOTS: 'test_accessibilite/screenshots',
       CHIFFREMENT_SEL_DE_HASHAGE_1: 'd322524cb14933e9f8ab',

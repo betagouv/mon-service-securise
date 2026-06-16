@@ -1,0 +1,46 @@
+import { unUtilisateur } from '../test/constructeurs/constructeurUtilisateur.js';
+import donnees from '../donneesReferentiel.js';
+import { UUID } from '../src/typesBasiques.js';
+import { DonneesUtilisateur } from '../src/modeles/utilisateur.js';
+import { unUUIDRandom } from '../test/constructeurs/UUID.js';
+
+const siret = '13000766900018';
+
+const idAdmin: UUID = 'b34d658a-6805-4225-93f0-91c94054ec09';
+const emailAdmin = 'admin@mss.fr';
+const utilisateurAdmin = unUtilisateur()
+  .avecId(idAdmin)
+  .avecEmail(emailAdmin)
+  .quiAccepteCGU(donnees.versionActuelleCgu)
+  .quiTravaillePourUneEntiteAvecSiret(siret)
+  .quiSAppelle(`Administrateur ${emailAdmin}`)
+  .donnees as unknown as DonneesUtilisateur;
+
+const emailSuperviseur = 'superviseur@mss.fr';
+const idSuperviseur = '5463b7c3-5b33-41e5-be2b-6d05bb09e93d';
+const utilisateurSuperviseur = unUtilisateur()
+  .avecId(idSuperviseur)
+  .avecEmail(emailSuperviseur)
+  .quiAccepteCGU(donnees.versionActuelleCgu)
+  .quiTravaillePourUneEntiteAvecSiret(siret)
+  .quiSAppelle(`Superviseur ${emailSuperviseur}`)
+  .donnees as unknown as DonneesUtilisateur;
+
+const emailUtilisateur = 'utilisateur@mss.fr';
+const idUtilisateur = unUUIDRandom();
+const utilisateurLambda = unUtilisateur()
+  .avecId(idUtilisateur)
+  .avecEmail(emailUtilisateur)
+  .quiAccepteCGU(donnees.versionActuelleCgu)
+  .quiTravaillePourUneEntiteAvecSiret(siret)
+  .quiSAppelle('Utilisateur Lambda').donnees as unknown as DonneesUtilisateur;
+
+const idService = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
+
+export const donneesTestsAccessibilite = {
+  idService,
+  siret,
+  utilisateurAdmin,
+  utilisateurLambda,
+  utilisateurSuperviseur,
+};

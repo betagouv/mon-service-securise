@@ -1,24 +1,23 @@
 import { AdaptateurPersistanceMemoireTS } from './adaptateurPersistanceMemoireTS.js';
 import Superviseur from '../modeles/superviseur.js';
 import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
-import { UUID } from '../typesBasiques.js';
+import { donneesTestsAccessibilite } from '../../test_accessibilite/donneesTestAccessibilite.js';
 
 export const nouvelAdaptateur = () => {
-  const siret = process.env.ACCESSIBILITE_SIRET!;
-  const idSuperviseur = process.env.ACCESSIBILITE_ID_SUPERVISEUR! as UUID;
-  const idAdmin = process.env.ACCESSIBILITE_ID_ADMIN! as UUID;
+  const { utilisateurSuperviseur, utilisateurAdmin, siret } =
+    donneesTestsAccessibilite;
 
   const persistance = new AdaptateurPersistanceMemoireTS();
 
   persistance.sauvegardeSuperviseur(
     Superviseur.hydrate({
-      idUtilisateur: idSuperviseur,
+      idUtilisateur: utilisateurSuperviseur.id,
       entitesSupervisees: [{ siret }],
     }).donnees()
   );
   persistance.sauvegardeAdminOrganisations(
     AdminOrganisations.hydrate({
-      idUtilisateur: idAdmin,
+      idUtilisateur: utilisateurAdmin.id,
       entitesAdministrees: [{ siret }],
     }).donnees()
   );
