@@ -10,10 +10,14 @@ export default async (config: FullConfig) => {
   rmSync('test_accessibilite/rapport/violations.jsonl', { force: true });
 
   const urlBase = config.projects[0].use.baseURL;
-  process.env.EMAIL_CONNEXION = config.webServer!.env!.EMAIL_CONNEXION;
-  process.env.ID_SERVICE = config.webServer!.env!.ID_SERVICE;
-  process.env.DOSSIER_RAPPORT = config.webServer!.env!.DOSSIER_RAPPORT;
-  process.env.DOSSIER_SCREENSHOTS = config.webServer!.env!.DOSSIER_SCREENSHOTS;
+  process.env.ACCESSIBILITE_EMAIL_CONNEXION =
+    config.webServer!.env!.ACCESSIBILITE_EMAIL_CONNEXION;
+  process.env.ACCESSIBILITE_ID_SERVICE =
+    config.webServer!.env!.ACCESSIBILITE_ID_SERVICE;
+  process.env.ACCESSIBILITE_DOSSIER_RAPPORT =
+    config.webServer!.env!.ACCESSIBILITE_DOSSIER_RAPPORT;
+  process.env.ACCESSIBILITE_DOSSIER_SCREENSHOTS =
+    config.webServer!.env!.ACCESSIBILITE_DOSSIER_SCREENSHOTS;
   process.env.SECRET_JWT = config.webServer!.env!.SECRET_JWT;
 
   const browser = await chromium.launch();
@@ -34,7 +38,7 @@ export default async (config: FullConfig) => {
         },
       ]);
       await page.goto(
-        `${urlBase}/oidc/apres-authentification?email=${process.env.EMAIL_CONNEXION!}`
+        `${urlBase}/oidc/apres-authentification?email=${process.env.ACCESSIBILITE_EMAIL_CONNEXION!}`
       );
       await page.waitForURL(/tableauDeBord/);
       await fermeModale2FASiPresente(page);

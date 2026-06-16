@@ -6,9 +6,10 @@ import { TokenMSSPourCreationUtilisateur } from '../src/utilisateur/tokenMSSPour
 import { adaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
 import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 
-export const { ID_SERVICE } = process.env;
-const { EMAIL_CONNEXION, DOSSIER_RAPPORT } = process.env;
-const FICHIER_VIOLATIONS = `${DOSSIER_RAPPORT}/violations.jsonl`;
+export const { ACCESSIBILITE_ID_SERVICE } = process.env;
+const { ACCESSIBILITE_EMAIL_CONNEXION, ACCESSIBILITE_DOSSIER_RAPPORT } =
+  process.env;
+const FICHIER_VIOLATIONS = `${ACCESSIBILITE_DOSSIER_RAPPORT}/violations.jsonl`;
 
 export type ProblemeAccessibilite = {
   id: string;
@@ -18,7 +19,7 @@ export type ProblemeAccessibilite = {
 };
 
 const alimenteRapportFinal = (url: string, analyse: AxeResults) => {
-  mkdirSync(DOSSIER_RAPPORT!, { recursive: true });
+  mkdirSync(ACCESSIBILITE_DOSSIER_RAPPORT!, { recursive: true });
   appendFileSync(
     FICHIER_VIOLATIONS,
     `${JSON.stringify({ url, violations: analyse.violations })}\n`
@@ -36,9 +37,11 @@ const construisResultat = (analyse: AxeResults): ProblemeAccessibilite[] =>
     }));
 
 export const captureDEcran = async (page: Page, nomImage: string) => {
-  mkdirSync(process.env.DOSSIER_SCREENSHOTS!, { recursive: true });
+  mkdirSync(process.env.ACCESSIBILITE_DOSSIER_SCREENSHOTS!, {
+    recursive: true,
+  });
   await page.screenshot({
-    path: `${process.env.DOSSIER_SCREENSHOTS}/${nomImage}`,
+    path: `${process.env.ACCESSIBILITE_DOSSIER_SCREENSHOTS}/${nomImage}`,
   });
 };
 
@@ -78,7 +81,9 @@ export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
     },
   ]);
 
-  await page.goto(`/oidc/apres-authentification?email=${EMAIL_CONNEXION!}`);
+  await page.goto(
+    `/oidc/apres-authentification?email=${ACCESSIBILITE_EMAIL_CONNEXION!}`
+  );
   await page.waitForURL(urlPage);
 };
 
@@ -117,7 +122,7 @@ export const genereTokenPourCreationCompte = () =>
   ).cree({
     nom: 'John',
     prenom: 'Doe',
-    email: EMAIL_CONNEXION!,
+    email: ACCESSIBILITE_EMAIL_CONNEXION!,
     organisation: {
       departement: '75',
       siret: '13000766900018',
