@@ -3,12 +3,12 @@ import {
   AdaptateurHorloge,
   fabriqueAdaptateurHorloge,
 } from '../../src/adaptateurs/adaptateurHorloge.js';
-import { UUID } from '../../src/typesBasiques.ts';
-import { unUUID } from './UUID.ts';
+import { UUID } from '../../src/typesBasiques.js';
+import { unUUID } from './UUID.js';
 import { creeReferentielVide } from '../../src/referentiel.js';
-import { TousReferentiels } from '../../src/referentiel.interface.ts';
-import { DonneesAvis } from '../../src/modeles/avis.ts';
-import { DureeValidite } from '../../src/modeles/etapes/decision.ts';
+import { TousReferentiels } from '../../src/referentiel.interface.js';
+import { DonneesAvis } from '../../src/modeles/avis.js';
+import { DureeValidite } from '../../src/modeles/etapes/decision.js';
 
 class ConstructeurDossierFantaisie {
   readonly donnees: Partial<DonneesDossier>;

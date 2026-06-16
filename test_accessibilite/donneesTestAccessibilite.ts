@@ -3,8 +3,10 @@ import donnees from '../donneesReferentiel.js';
 import { UUID } from '../src/typesBasiques.js';
 import { DonneesUtilisateur } from '../src/modeles/utilisateur.js';
 import { unUUIDRandom } from '../test/constructeurs/UUID.js';
+import Entite from '../src/modeles/entite.js';
 
 const siret = '13000766900018';
+const entite = new Entite({ siret, nom: 'ANSSI', departement: '75' });
 
 const idAdmin: UUID = 'b34d658a-6805-4225-93f0-91c94054ec09';
 const emailAdmin = 'admin@mss.fr';
@@ -40,6 +42,7 @@ const idService = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
 export const donneesTestsAccessibilite = {
   idService,
   siret,
+  entite,
   utilisateurAdmin,
   utilisateurLambda,
   utilisateurSuperviseur,
