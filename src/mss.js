@@ -1,7 +1,6 @@
 import cookieSession from 'cookie-session';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import dotenv from 'dotenv';
 import {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   ENDPOINTS_SANS_CSRF,
@@ -15,8 +14,6 @@ import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js
 import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
 import { ajouteHtmlEntitiesEncode } from './http/encodeEntitesHTML.js';
-
-dotenv.config();
 
 const creeServeur = ({
   depotDonnees,
