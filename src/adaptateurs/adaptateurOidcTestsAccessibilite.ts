@@ -1,5 +1,5 @@
-import { ACR } from '../oidc/serviceForceMFA.js';
 import { Request } from 'express';
+import { ACR } from '../oidc/serviceForceMFA.js';
 
 const FAKE_STATE = 'FAKE_STATE';
 const FAKE_NONCE = 'FAKE_NONCE';
