@@ -23,6 +23,7 @@ export const nouvelAdaptateur = () => {
     utilisateurAdmin,
     idService,
     utilisateurFuturAdmin,
+    utilisateurSuperviseur,
   } = donneesTestsAccessibilite;
 
   persistance.ajouteUtilisateur(
@@ -40,6 +41,12 @@ export const nouvelAdaptateur = () => {
     utilisateurAdmin.id,
     utilisateurAdmin,
     chiffrement.hacheSha256(utilisateurAdmin.email)
+  );
+
+  persistance.ajouteUtilisateur(
+    utilisateurSuperviseur.id,
+    utilisateurSuperviseur,
+    chiffrement.hacheSha256(utilisateurSuperviseur.email)
   );
 
   const service = unServiceV2()
