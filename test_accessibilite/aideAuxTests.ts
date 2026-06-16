@@ -88,7 +88,7 @@ export const navigueSurPageConnectee = async (
   ]);
 
   await page.goto(`/oidc/apres-authentification?email=${emailConnexion!}`);
-  await page.waitForURL(urlPage);
+  await page.waitForURL(urlPage, { waitUntil: 'networkidle' });
 };
 
 export const fermeModale2FASiPresente = async (page: Page) => {
