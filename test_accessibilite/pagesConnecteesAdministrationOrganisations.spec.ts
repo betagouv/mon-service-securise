@@ -7,7 +7,8 @@ import {
 } from './aideAuxTests.js';
 import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
-const { utilisateurAdmin, utilisateurLambda } = donneesTestsAccessibilite;
+const { utilisateurAdmin, utilisateurLambda, utilisateurSuperviseur } =
+  donneesTestsAccessibilite;
 
 test(`La page qui liste les utilisateurs du périmètre d'un admin n'a aucune violation grave d'accessibilité`, async ({
   page,
@@ -126,4 +127,20 @@ test(`La page qui liste les entités du périmètre d'un admin n'a aucune violat
   await page.waitForResponse(
     (r) => r.url().includes('/api/admin/entites') && r.status() === 200
   );
+});
+
+test(`La page qui liste les administrateurs du périmètre d'un superviseur n'a aucune violation grave d'accessibilité`, async ({
+  page,
+}) => {
+  const checkIntermediaire = new CheckIntermediaire(
+    'superviseurs-administrateurs'
+  );
+
+  await navigueSurPageConnectee(
+    '/admin/administrateurs',
+    page,
+    utilisateurSuperviseur.email
+  );
+
+  await checkIntermediaire.valideEtape(page);
 });
