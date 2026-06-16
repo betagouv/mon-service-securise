@@ -9,7 +9,7 @@ export default defineConfig({
     viewport: { width: 1550, height: 900 },
   },
   webServer: {
-    command: 'pnpm build:front && pnpm dev:back',
+    command: 'pnpm build:front && pnpm build:back && pnpm start',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
     env: {
