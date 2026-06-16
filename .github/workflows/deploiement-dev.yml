@@ -10,4 +10,8 @@ jobs:
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
       environment: DEV
-    secrets: inherit
+    secrets:
+      CLEVER_CLOUD_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
+      CLEVER_CLOUD_TOKEN: ${{ secrets.CLEVER_CLOUD_TOKEN }}
+      CLEVER_CLOUD_ID_APP: ${{ secrets.CLEVER_CLOUD_ID_APP }}
+      CLEVER_CLOUD_ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
