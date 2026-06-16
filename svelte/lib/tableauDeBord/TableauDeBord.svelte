@@ -119,7 +119,7 @@
 <style>
   :global(#tableau-de-bord) {
     width: 100%;
-    padding: 32px 48px;
+    padding: 32px 20px;
     text-align: left;
     background: white;
   }
