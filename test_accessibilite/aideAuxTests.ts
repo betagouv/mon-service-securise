@@ -1,5 +1,5 @@
 import { appendFileSync, mkdirSync } from 'fs';
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import { AxeResults } from 'axe-core';
 import { TokenMSSPourCreationUtilisateur } from '../src/utilisateur/tokenMSSPourCreationUtilisateur.js';
@@ -133,3 +133,22 @@ export const genereTokenPourCreationCompte = () =>
       nom: 'ANSSI',
     },
   });
+
+export class CheckIntermediaire {
+  private etape = 1;
+
+  constructor(private readonly nom: string) {}
+
+  async valideEtape(page: Page) {
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
+    await captureDEcran(page, `${this.nom}-${this.etape}.png`);
+
+    expect
+      .soft(
+        problemes.length,
+        `${this.nom}-${this.etape}: \n${messageDErreur(problemes)}`
+      )
+      .toBe(0);
+    this.etape += 1;
+  }
+}

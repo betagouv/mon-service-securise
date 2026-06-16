@@ -1,6 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 import {
   captureDEcran,
+  CheckIntermediaire,
   messageDErreur,
   navigueSurPageConnectee,
   navigueSurTableauDeBordSansConnexion,
@@ -42,21 +43,12 @@ test.afterEach(async ({ page }) => {
 test("Le formulaire de création de service v2 n'a aucune violation grave d'accessibilité", async ({
   page,
 }) => {
-  let etape = 1;
-  const checkIntermediaire = async () => {
-    const problemes = await problemesDAccessibiliteDeLaPage(page);
-    await captureDEcran(page, `creation-service-${etape}.png`);
+  const checkIntermediaire = new CheckIntermediaire('creation-service');
 
-    expect
-      .soft(problemes.length, `${etape}: \n${messageDErreur(problemes)}`)
-      .toBe(0);
-    etape += 1;
-  };
-
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   const siretPrerempli = await page.evaluate(
     () =>
       !!(document.querySelector('input.valeur-cache') as HTMLInputElement)
@@ -70,49 +62,49 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
   }
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="enProjet"]');
   await captureDEcran(page, 'creation-service-debug.png');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="portailInformation"]');
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="onPremise"]');
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="interneRestreint"]');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="limitee"]');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="plusDe24h"]');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="faible"]');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await page.click('label[for="UE"]');
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
   await cliquerSuivant(page);
 
-  await checkIntermediaire();
+  await checkIntermediaire.valideEtape(page);
 });
 
 test("Le formulaire de création de service v2 en mode rapide n'a aucune violation grave d'accessibilité", async ({
