@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
 import {
-  ID_SERVICE,
+  ACCESSIBILITE_ID_SERVICE,
   messageDErreur,
   navigueSurPageConnectee,
   problemesDAccessibiliteDeLaPage,
@@ -10,17 +10,23 @@ import {
 const pages = [
   {
     nom: 'Description du service',
-    url: `/service/${ID_SERVICE}/descriptionService`,
+    url: `/service/${ACCESSIBILITE_ID_SERVICE}/descriptionService`,
   },
-  { nom: 'Mesures du service', url: `/service/${ID_SERVICE}/mesures` },
-  { nom: 'Indice cyber', url: `/service/${ID_SERVICE}/indiceCyber` },
+  {
+    nom: 'Mesures du service',
+    url: `/service/${ACCESSIBILITE_ID_SERVICE}/mesures`,
+  },
+  {
+    nom: 'Indice cyber',
+    url: `/service/${ACCESSIBILITE_ID_SERVICE}/indiceCyber`,
+  },
   {
     nom: 'Rôles et responsabilités',
-    url: `/service/${ID_SERVICE}/rolesResponsabilites`,
+    url: `/service/${ACCESSIBILITE_ID_SERVICE}/rolesResponsabilites`,
   },
-  { nom: 'Risques', url: `/service/${ID_SERVICE}/risques` },
-  { nom: 'Risques v2', url: `/service/${ID_SERVICE}/risques/v2` },
-  { nom: 'Dossiers', url: `/service/${ID_SERVICE}/dossiers` },
+  { nom: 'Risques', url: `/service/${ACCESSIBILITE_ID_SERVICE}/risques` },
+  { nom: 'Risques v2', url: `/service/${ACCESSIBILITE_ID_SERVICE}/risques/v2` },
+  { nom: 'Dossiers', url: `/service/${ACCESSIBILITE_ID_SERVICE}/dossiers` },
 ];
 
 for (const { nom, url } of pages) {

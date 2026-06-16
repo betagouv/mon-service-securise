@@ -7,17 +7,18 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     viewport: { width: 1550, height: 900 },
+    headless: false,
   },
   webServer: {
     command: 'pnpm build:front && pnpm build:back && pnpm start',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
     env: {
-      EMAIL_CONNEXION: 'test@fia1.fr',
-      ID_SERVICE: '85b26710-0d8b-404b-bfe4-0d30b7a878c1',
-      SIRET: '13000766900018',
-      DOSSIER_RAPPORT: 'test_accessibilite/rapport',
-      DOSSIER_SCREENSHOTS: 'test_accessibilite/screenshots',
+      ACCESSIBILITE_EMAIL_CONNEXION: 'utilisateur@mss.fr',
+      ACCESSIBILITE_ID_SERVICE: '85b26710-0d8b-404b-bfe4-0d30b7a878c1',
+      ACCESSIBILITE_SIRET: '13000766900018',
+      ACCESSIBILITE_DOSSIER_RAPPORT: 'test_accessibilite/rapport',
+      ACCESSIBILITE_DOSSIER_SCREENSHOTS: 'test_accessibilite/screenshots',
       CHIFFREMENT_SEL_DE_HASHAGE_1: 'd322524cb14933e9f8ab',
       NODE_ENV: 'test_accessibilite',
       NB_REQUETES_TRUST_PROXY: '0',

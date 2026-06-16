@@ -15,8 +15,9 @@ export const nouvelAdaptateur = () => {
       adaptateurEnvironnement as AdaptateurEnvironnementPourChiffrement,
   });
 
-  const siret = process.env.SIRET!;
-  const emailUtilisateur = process.env.EMAIL_CONNEXION!;
+  const siret = process.env.ACCESSIBILITE_SIRET!;
+  const emailUtilisateur = process.env.ACCESSIBILITE_EMAIL_CONNEXION!;
+  const idService = process.env.ACCESSIBILITE_ID_SERVICE!;
   const idUtilisateur = unUUIDRandom();
 
   const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
@@ -30,7 +31,6 @@ export const nouvelAdaptateur = () => {
     chiffrement.hacheSha256(emailUtilisateur)
   );
 
-  const idService = process.env.ID_SERVICE!;
   const nomService = `Mon service test ${new Date().getTime()}`;
   persistance.sauvegardeService(
     idService,
