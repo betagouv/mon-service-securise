@@ -5,19 +5,12 @@ import {
   fermeModale2FASiPresente,
   fermeModaleVisiteGuideeSiPresente,
 } from './aideAuxTests.js';
+import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
 export default async (config: FullConfig) => {
   rmSync('test_accessibilite/rapport/violations.jsonl', { force: true });
 
   const urlBase = config.projects[0].use.baseURL;
-  process.env.ACCESSIBILITE_EMAIL_CONNEXION =
-    config.webServer!.env!.ACCESSIBILITE_EMAIL_CONNEXION;
-  process.env.ACCESSIBILITE_EMAIL_ADMIN =
-    config.webServer!.env!.ACCESSIBILITE_EMAIL_ADMIN;
-  process.env.ACCESSIBILITE_ID_ADMIN =
-    config.webServer!.env!.ACCESSIBILITE_ID_ADMIN;
-  process.env.ACCESSIBILITE_ID_SERVICE =
-    config.webServer!.env!.ACCESSIBILITE_ID_SERVICE;
   process.env.ACCESSIBILITE_DOSSIER_RAPPORT =
     config.webServer!.env!.ACCESSIBILITE_DOSSIER_RAPPORT;
   process.env.ACCESSIBILITE_DOSSIER_SCREENSHOTS =
@@ -42,7 +35,7 @@ export default async (config: FullConfig) => {
         },
       ]);
       await page.goto(
-        `${urlBase}/oidc/apres-authentification?email=${process.env.ACCESSIBILITE_EMAIL_CONNEXION!}`
+        `${urlBase}/oidc/apres-authentification?email=${donneesTestsAccessibilite.utilisateurLambda.email}`
       );
       await page.waitForURL(/tableauDeBord/);
       await fermeModale2FASiPresente(page);

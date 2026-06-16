@@ -5,10 +5,9 @@ import { AxeResults } from 'axe-core';
 import { TokenMSSPourCreationUtilisateur } from '../src/utilisateur/tokenMSSPourCreationUtilisateur.js';
 import { adaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
 import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
+import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
-export const { ACCESSIBILITE_ID_SERVICE } = process.env;
-const { ACCESSIBILITE_EMAIL_CONNEXION, ACCESSIBILITE_DOSSIER_RAPPORT } =
-  process.env;
+const { ACCESSIBILITE_DOSSIER_RAPPORT } = process.env;
 const FICHIER_VIOLATIONS = `${ACCESSIBILITE_DOSSIER_RAPPORT}/violations.jsonl`;
 
 export type ProblemeAccessibilite = {
@@ -64,7 +63,7 @@ export const problemesDAccessibiliteDeLaPage = async (
 export const navigueSurPageConnectee = async (
   urlPage: string,
   page: Page,
-  emailConnexion: string = ACCESSIBILITE_EMAIL_CONNEXION!
+  emailConnexion: string = donneesTestsAccessibilite.utilisateurLambda.email
 ) => {
   // Déconnecte l'utilisateur courant, pour éviter les conflits entre les exécutions.
   await page.goto('/connexion');
@@ -127,7 +126,7 @@ export const genereTokenPourCreationCompte = () =>
   ).cree({
     nom: 'John',
     prenom: 'Doe',
-    email: ACCESSIBILITE_EMAIL_CONNEXION!,
+    email: 'compte-a-creer@mss.fr',
     organisation: {
       departement: '75',
       siret: '13000766900018',

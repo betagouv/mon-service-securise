@@ -1,14 +1,12 @@
 import { unUUIDRandom } from '../../test/constructeurs/UUID.js';
 import * as AdaptateurPersistanceMemoire from './adaptateurPersistanceMemoire.js';
-import { unUtilisateur } from '../../test/constructeurs/constructeurUtilisateur.js';
-import donnees from '../../donneesReferentiel.js';
-import { unServiceV2 } from '../../test/constructeurs/constructeurService.js';
 import { VersionService } from '../modeles/versionService.js';
 import { uneAutorisation } from '../../test/constructeurs/constructeurAutorisation.js';
 import { adaptateurChiffrement } from './adaptateurChiffrement.js';
 import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
 import { AdaptateurEnvironnementPourChiffrement } from './adaptateurChiffrement.interface.js';
-import { UUID } from '../typesBasiques.js';
+import { donneesTestsAccessibilite } from '../../test_accessibilite/donneesTestAccessibilite.js';
+import { unServiceV2 } from '../../test/constructeurs/constructeurService.js';
 
 export const nouvelAdaptateur = () => {
   const chiffrement = adaptateurChiffrement({
@@ -16,52 +14,42 @@ export const nouvelAdaptateur = () => {
       adaptateurEnvironnement as AdaptateurEnvironnementPourChiffrement,
   });
 
-  const siret = process.env.ACCESSIBILITE_SIRET!;
-  const emailUtilisateur = process.env.ACCESSIBILITE_EMAIL_CONNEXION!;
-  const idService = process.env.ACCESSIBILITE_ID_SERVICE!;
-  const idUtilisateur = unUUIDRandom();
-
   const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
+  const { utilisateurLambda, siret, utilisateurAdmin, idService } =
+    donneesTestsAccessibilite;
+
   persistance.ajouteUtilisateur(
-    idUtilisateur,
-    unUtilisateur()
-      .avecEmail(emailUtilisateur)
-      .quiAccepteCGU(donnees.versionActuelleCgu)
-      .quiTravaillePourUneEntiteAvecSiret(siret)
-      .quiSAppelle('Utilisateur Lambda').donnees,
-    chiffrement.hacheSha256(emailUtilisateur)
+    utilisateurLambda.id,
+    utilisateurLambda,
+    chiffrement.hacheSha256(utilisateurLambda.email)
   );
 
-  const idAdmin = process.env.ACCESSIBILITE_ID_ADMIN! as UUID;
-  const emailAdmin = process.env.ACCESSIBILITE_EMAIL_ADMIN!;
   persistance.ajouteUtilisateur(
-    idAdmin,
-    unUtilisateur()
-      .avecEmail(emailAdmin)
-      .quiAccepteCGU(donnees.versionActuelleCgu)
-      .quiTravaillePourUneEntiteAvecSiret(siret)
-      .quiSAppelle(`Administrateur ${emailAdmin}`).donnees,
-    chiffrement.hacheSha256(emailAdmin)
+    utilisateurAdmin.id,
+    utilisateurAdmin,
+    chiffrement.hacheSha256(utilisateurAdmin.email)
   );
 
-  const nomService = `Mon service test ${new Date().getTime()}`;
+  const service = unServiceV2()
+    .avecId(idService)
+    .avecNomService(`Mon service test ${new Date().getTime()}`)
+    .avecOrganisationResponsable({
+      siret,
+    }).donnees;
   persistance.sauvegardeService(
-    idService,
-    unServiceV2()
-      .avecId(idService)
-      .avecNomService(nomService)
-      .avecOrganisationResponsable({ siret }).donnees,
-    chiffrement.hacheSha256(nomService),
+    service.id,
+    service,
+    chiffrement.hacheSha256(service.descriptionService.nomService),
     chiffrement.hacheSha256(siret),
     VersionService.v2
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
-    uneAutorisation().deProprietaire(idUtilisateur, idService).donnees
+    uneAutorisation().deProprietaire(utilisateurLambda.id, service.id).donnees
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
-    uneAutorisation().dAdmin(idAdmin, idService).donnees
+    uneAutorisation().dAdmin(utilisateurAdmin.id, service.id).donnees
   );
 
   return persistance;

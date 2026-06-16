@@ -1,32 +1,34 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
 import {
-  ACCESSIBILITE_ID_SERVICE,
   messageDErreur,
   navigueSurPageConnectee,
   problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
+import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
+
+const { idService } = donneesTestsAccessibilite;
 
 const pages = [
   {
     nom: 'Description du service',
-    url: `/service/${ACCESSIBILITE_ID_SERVICE}/descriptionService`,
+    url: `/service/${idService}/descriptionService`,
   },
   {
     nom: 'Mesures du service',
-    url: `/service/${ACCESSIBILITE_ID_SERVICE}/mesures`,
+    url: `/service/${idService}/mesures`,
   },
   {
     nom: 'Indice cyber',
-    url: `/service/${ACCESSIBILITE_ID_SERVICE}/indiceCyber`,
+    url: `/service/${idService}/indiceCyber`,
   },
   {
     nom: 'Rôles et responsabilités',
-    url: `/service/${ACCESSIBILITE_ID_SERVICE}/rolesResponsabilites`,
+    url: `/service/${idService}/rolesResponsabilites`,
   },
-  { nom: 'Risques', url: `/service/${ACCESSIBILITE_ID_SERVICE}/risques` },
-  { nom: 'Risques v2', url: `/service/${ACCESSIBILITE_ID_SERVICE}/risques/v2` },
-  { nom: 'Dossiers', url: `/service/${ACCESSIBILITE_ID_SERVICE}/dossiers` },
+  { nom: 'Risques', url: `/service/${idService}/risques` },
+  { nom: 'Risques v2', url: `/service/${idService}/risques/v2` },
+  { nom: 'Dossiers', url: `/service/${idService}/dossiers` },
 ];
 
 for (const { nom, url } of pages) {
