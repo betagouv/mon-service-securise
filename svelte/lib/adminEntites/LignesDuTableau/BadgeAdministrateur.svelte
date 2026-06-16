@@ -6,5 +6,4 @@
   let { prenomNom }: Props = $props();
 </script>
 
-<dsfr-badge label={prenomNom} type="accent" accent="blue-ecume" size="sm"
-></dsfr-badge>
+<dsfr-tag label={prenomNom} size="sm"></dsfr-tag>
