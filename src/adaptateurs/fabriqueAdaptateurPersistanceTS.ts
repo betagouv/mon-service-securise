@@ -2,6 +2,7 @@ import { AdaptateurPersistanceMemoireTS } from './adaptateurPersistanceMemoireTS
 import { AdaptateurPostgresTS } from './adaptateurPostgresTS.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { knexMSS } from '../bdd/knex.js';
+import * as AdaptateurPersistanceMemoireTestsAccessibiliteTS from './adaptateurPersistanceMemoireTestsAccessibiliteTS.js';
 
 export const fabriqueAdaptateurPersistanceTS = (
   env: string,
@@ -11,6 +12,8 @@ export const fabriqueAdaptateurPersistanceTS = (
   if (veutDuPostgres) {
     return new AdaptateurPostgresTS({ knex: knexMSS, chiffrement });
   }
+  if (env === 'test_accessibilite')
+    return AdaptateurPersistanceMemoireTestsAccessibiliteTS.nouvelAdaptateur();
 
   return new AdaptateurPersistanceMemoireTS();
 };
