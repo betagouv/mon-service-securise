@@ -1,6 +1,7 @@
 # Vérification des recommandations CIS et autres sur les configurations GitHub
 # https://www.checkov.io/1.Welcome/What%20is%20Checkov.html
 # https://github.com/bridgecrewio/checkov-action
+# https://docs.zizmor.sh/
 ---
 name: Sécurité de la CI
 permissions: {}
@@ -38,3 +39,19 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: results.sarif
+
+  zizmor:
+    name: zizmor 🌈
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - name: zizmor GitHub Action
+        uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
+        with:
+          advanced-security: true
