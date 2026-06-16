@@ -15,6 +15,10 @@ export default defineConfig({
     reuseExistingServer: true,
     env: {
       ACCESSIBILITE_EMAIL_CONNEXION: 'utilisateur@mss.fr',
+      ACCESSIBILITE_EMAIL_SUPERVISEUR: 'superviseur@mss.fr',
+      ACCESSIBILITE_EMAIL_ADMIN: 'admin@mss.fr',
+      ACCESSIBILITE_ID_SUPERVISEUR: '5463b7c3-5b33-41e5-be2b-6d05bb09e93d',
+      ACCESSIBILITE_ID_ADMIN: 'b34d658a-6805-4225-93f0-91c94054ec09',
       ACCESSIBILITE_ID_SERVICE: '85b26710-0d8b-404b-bfe4-0d30b7a878c1',
       ACCESSIBILITE_SIRET: '13000766900018',
       ACCESSIBILITE_DOSSIER_RAPPORT: 'test_accessibilite/rapport',
@@ -42,6 +46,7 @@ export default defineConfig({
       CRISP_ID_ARTICLE_ROADMAP: '107f8554-ccea-4fe3-950c-2c07a106811a',
       CRISP_ID_CATEGORIE_BLOG: '8424d4d8-aa79-46fc-bef9-afd0287df0aa',
       FEATURE_FLAG_AVEC_RISQUES_V2: 'true',
+      FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS: 'true',
     },
     stdout: 'pipe',
     stderr: 'pipe',
