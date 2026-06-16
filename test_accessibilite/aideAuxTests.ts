@@ -61,7 +61,14 @@ export const problemesDAccessibiliteDeLaPage = async (
   return construisResultat(analyse);
 };
 
-export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
+export const navigueSurPageConnectee = async (
+  urlPage: string,
+  page: Page,
+  emailConnexion: string = ACCESSIBILITE_EMAIL_CONNEXION!
+) => {
+  // Déconnecte l'utilisateur courant, pour éviter les conflits entre les exécutions.
+  await page.goto('/connexion');
+
   const redirect = urlPage.replaceAll('/', '%2F');
 
   await page.context().addCookies([
@@ -81,9 +88,7 @@ export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
     },
   ]);
 
-  await page.goto(
-    `/oidc/apres-authentification?email=${ACCESSIBILITE_EMAIL_CONNEXION!}`
-  );
+  await page.goto(`/oidc/apres-authentification?email=${emailConnexion!}`);
   await page.waitForURL(urlPage);
 };
 

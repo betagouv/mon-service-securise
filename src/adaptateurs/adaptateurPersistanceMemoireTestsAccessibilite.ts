@@ -8,6 +8,7 @@ import { uneAutorisation } from '../../test/constructeurs/constructeurAutorisati
 import { adaptateurChiffrement } from './adaptateurChiffrement.js';
 import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
 import { AdaptateurEnvironnementPourChiffrement } from './adaptateurChiffrement.interface.js';
+import { UUID } from '../typesBasiques.js';
 
 export const nouvelAdaptateur = () => {
   const chiffrement = adaptateurChiffrement({
@@ -31,6 +32,18 @@ export const nouvelAdaptateur = () => {
     chiffrement.hacheSha256(emailUtilisateur)
   );
 
+  const idAdmin = process.env.ACCESSIBILITE_ID_ADMIN! as UUID;
+  const emailAdmin = process.env.ACCESSIBILITE_EMAIL_ADMIN!;
+  persistance.ajouteUtilisateur(
+    idAdmin,
+    unUtilisateur()
+      .avecEmail(emailAdmin)
+      .quiAccepteCGU(donnees.versionActuelleCgu)
+      .quiTravaillePourUneEntiteAvecSiret(siret)
+      .quiSAppelle(`Administrateur ${emailAdmin}`).donnees,
+    chiffrement.hacheSha256(emailAdmin)
+  );
+
   const nomService = `Mon service test ${new Date().getTime()}`;
   persistance.sauvegardeService(
     idService,
@@ -45,6 +58,10 @@ export const nouvelAdaptateur = () => {
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
     uneAutorisation().deProprietaire(idUtilisateur, idService).donnees
+  );
+  persistance.sauvegardeAutorisation(
+    unUUIDRandom(),
+    uneAutorisation().dAdmin(idAdmin, idService).donnees
   );
 
   return persistance;

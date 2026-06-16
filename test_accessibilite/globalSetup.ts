@@ -12,6 +12,10 @@ export default async (config: FullConfig) => {
   const urlBase = config.projects[0].use.baseURL;
   process.env.ACCESSIBILITE_EMAIL_CONNEXION =
     config.webServer!.env!.ACCESSIBILITE_EMAIL_CONNEXION;
+  process.env.ACCESSIBILITE_EMAIL_ADMIN =
+    config.webServer!.env!.ACCESSIBILITE_EMAIL_ADMIN;
+  process.env.ACCESSIBILITE_ID_ADMIN =
+    config.webServer!.env!.ACCESSIBILITE_ID_ADMIN;
   process.env.ACCESSIBILITE_ID_SERVICE =
     config.webServer!.env!.ACCESSIBILITE_ID_SERVICE;
   process.env.ACCESSIBILITE_DOSSIER_RAPPORT =
