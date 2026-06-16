@@ -4,7 +4,7 @@ import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganis
 import { donneesTestsAccessibilite } from '../../test_accessibilite/donneesTestAccessibilite.js';
 
 export const nouvelAdaptateur = () => {
-  const { utilisateurSuperviseur, utilisateurAdmin, siret } =
+  const { utilisateurSuperviseur, utilisateurAdmin, entite } =
     donneesTestsAccessibilite;
 
   const persistance = new AdaptateurPersistanceMemoireTS();
@@ -12,13 +12,13 @@ export const nouvelAdaptateur = () => {
   persistance.sauvegardeSuperviseur(
     Superviseur.hydrate({
       idUtilisateur: utilisateurSuperviseur.id,
-      entitesSupervisees: [{ siret }],
+      entitesSupervisees: [entite],
     }).donnees()
   );
   persistance.sauvegardeAdminOrganisations(
     AdminOrganisations.hydrate({
       idUtilisateur: utilisateurAdmin.id,
-      entitesAdministrees: [{ siret }],
+      entitesAdministrees: [entite],
     }).donnees()
   );
 
