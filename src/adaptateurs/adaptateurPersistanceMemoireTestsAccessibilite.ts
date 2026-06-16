@@ -17,13 +17,23 @@ export const nouvelAdaptateur = () => {
   });
 
   const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
-  const { utilisateurLambda, entite, utilisateurAdmin, idService } =
-    donneesTestsAccessibilite;
+  const {
+    utilisateurLambda,
+    entite,
+    utilisateurAdmin,
+    idService,
+    utilisateurFuturAdmin,
+  } = donneesTestsAccessibilite;
 
   persistance.ajouteUtilisateur(
     utilisateurLambda.id,
     utilisateurLambda,
     chiffrement.hacheSha256(utilisateurLambda.email)
+  );
+  persistance.ajouteUtilisateur(
+    utilisateurFuturAdmin.id,
+    utilisateurFuturAdmin,
+    chiffrement.hacheSha256(utilisateurFuturAdmin.email)
   );
 
   persistance.ajouteUtilisateur(
@@ -52,6 +62,11 @@ export const nouvelAdaptateur = () => {
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
     uneAutorisation().deProprietaire(utilisateurLambda.id, service.id).donnees
+  );
+  persistance.sauvegardeAutorisation(
+    unUUIDRandom(),
+    uneAutorisation().deContributeur(utilisateurFuturAdmin.id, service.id)
+      .donnees
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),

@@ -37,13 +37,21 @@ const utilisateurLambda = unUtilisateur()
   .quiTravaillePourUneEntiteAvecSiret(siret)
   .quiSAppelle('Utilisateur Lambda').donnees as unknown as DonneesUtilisateur;
 
+const utilisateurFuturAdmin = unUtilisateur()
+  .avecId(unUUIDRandom())
+  .avecEmail('futur-admin@mss.fr')
+  .quiAccepteCGU(donnees.versionActuelleCgu)
+  .quiTravaillePourUneEntiteAvecSiret(siret)
+  .quiSAppelle('Utilisateur FuturAdmin')
+  .donnees as unknown as DonneesUtilisateur;
+
 const idService = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
 
 export const donneesTestsAccessibilite = {
   idService,
-  siret,
   entite,
   utilisateurAdmin,
   utilisateurLambda,
   utilisateurSuperviseur,
+  utilisateurFuturAdmin,
 };

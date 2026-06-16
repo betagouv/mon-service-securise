@@ -72,6 +72,27 @@ test(`La page qui liste les utilisateurs du périmètre d'un admin n'a aucune vi
     );
   }
 
+  async function verifieTiroirNommeAdmin() {
+    await clicSurBouton("Nommer en tant qu'admin");
+
+    await page.waitForSelector('#tiroir.ouvert');
+    await page.waitForLoadState('networkidle');
+
+    await checkIntermediaire.valideEtape(page);
+
+    await clicSurBouton('Tout sélectionner');
+    await clicSurBouton('Récapitulatif');
+
+    await checkIntermediaire.valideEtape(page);
+
+    await clicSurBouton('Enregistrer les modifications');
+
+    await page.waitForResponse(
+      (r) => r.url().includes('/api/admin/utilisateurs') && r.status() === 200
+    );
+  }
+
   await verifieTiroirAttributionRole();
   await verifieTiroirRetraitRole();
+  await verifieTiroirNommeAdmin();
 });
