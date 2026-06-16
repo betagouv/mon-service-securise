@@ -11,7 +11,6 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { api } from '../adminEntites.api';
   import { SvelteSet } from 'svelte/reactivity';
-  import AucunAdmin from './AucunAdmin.svelte';
   import ConfirmationSuppression from './ConfirmationSuppression.svelte';
   import type { AxiosError } from 'axios';
 
@@ -92,20 +91,16 @@
     <SaisieEmailAdmin onemailvalide={invitation.ajouter} />
 
     <div class="conteneur-admins">
-      {#if etatAffichage === 'LISTE'}
+      {#if etatAffichage === 'LISTE' && entite.administrateurs.length > 0}
         <hr />
         <h3>Administrateurs de l’entité</h3>
         <span class="sous-titre">
           Consultez la liste des utilisateurs disposant des droits admins.
         </span>
-        {#if entite.administrateurs.length === 0}
-          <AucunAdmin />
-        {:else}
-          <ListeAdmins
-            administrateurs={entite.administrateurs}
-            onsupprimer={suppression.demanderConfirmation}
-          />
-        {/if}
+        <ListeAdmins
+          administrateurs={entite.administrateurs}
+          onsupprimer={suppression.demanderConfirmation}
+        />
       {/if}
 
       {#if etatAffichage === 'INVITATION'}
