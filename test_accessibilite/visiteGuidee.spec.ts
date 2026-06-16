@@ -1,72 +1,63 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import {
-  captureDEcran,
-  messageDErreur,
+  CheckIntermediaire,
   navigueSurTableauDeBordAvecConnexion,
-  problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
 
 test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   page,
 }) => {
-  const checkDEtape = async (nomEtape: string) => {
-    const problemes = await problemesDAccessibiliteDeLaPage(page);
-    await captureDEcran(page, `visite-guidee-${nomEtape}.png`);
-
-    expect
-      .soft(problemes.length, `${nomEtape}: \n${messageDErreur(problemes)}`)
-      .toBe(0);
-  };
+  const checkIntermediaire = new CheckIntermediaire('visite-guidee');
 
   await navigueSurTableauDeBordAvecConnexion(page);
   await page.click("text= Centre d'aide");
   await page.click('text=🔎 Parcourir la visite guidée');
   await page.waitForEvent('load');
-  await checkDEtape('popin-accueil');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Démarrer la visite guidée');
-  await checkDEtape('menu-accueil');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click("text=C'est parti !");
   await page.waitForURL('/visiteGuidee/decrire');
-  await checkDEtape('decrire-1');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('decrire-2');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
   await page.waitForURL('/visiteGuidee/mesures');
-  await checkDEtape('mesures-1');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('mesures-2');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('mesures-3');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('mesures-4');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('mesures-5');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('mesures-6');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
   await page.waitForURL('/visiteGuidee/dossiers');
-  await checkDEtape('dossiers-1');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('dossiers-2');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
   await page.waitForURL('/visiteGuidee/piloter');
-  await checkDEtape('piloter-1');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('piloter-2');
+  await checkIntermediaire.valideEtape(page);
 
   await page.click('text=Suivant ');
-  await checkDEtape('piloter-3');
+  await checkIntermediaire.valideEtape(page);
 });

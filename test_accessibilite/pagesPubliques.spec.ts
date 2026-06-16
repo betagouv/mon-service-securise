@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
 import {
+  CheckIntermediaire,
   genereTokenPourCreationCompte,
   messageDErreur,
   problemesDAccessibiliteDeLaPage,
@@ -46,23 +47,23 @@ for (const { nom, url } of pages) {
 test("La page creation-compte n'a aucune violation grave d'accessibilité", async ({
   page,
 }) => {
-  const checkEtape = async () => {
-    const problemes = await problemesDAccessibiliteDeLaPage(page);
-    expect.soft(problemes.length, messageDErreur(problemes)).toBe(0);
-  };
+  const checkIntermediaire = new CheckIntermediaire('creation-compte');
 
   const token = genereTokenPourCreationCompte();
   await page.goto(`/creation-compte?token=${token}`);
   await page.waitForURL(/creation-compte/);
-  await checkEtape();
+  await checkIntermediaire.valideEtape(page);
+
   await page.click('text=Suivant');
-  await checkEtape();
+  await checkIntermediaire.valideEtape(page);
+
   await page.click('.declencheur');
   await page.click('#RSSI');
   await page.click('body');
   await page.selectOption('#estimation-nombre-services', '1_10');
   await page.click('text=Suivant');
-  await checkEtape();
+  await checkIntermediaire.valideEtape(page);
+
   await page.click('#cguAcceptees');
   await page.click('text=Valider');
 });
