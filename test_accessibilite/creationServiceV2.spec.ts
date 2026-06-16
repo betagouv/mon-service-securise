@@ -6,16 +6,11 @@ import {
   navigueSurPageConnectee,
   navigueSurTableauDeBordSansConnexion,
   problemesDAccessibiliteDeLaPage,
+  remplirChamp,
 } from './aideAuxTests.js';
 
 const cliquerSuivant = (page: Page) =>
   page.getByRole('button', { name: 'Suivant' }).click();
-
-const remplirChamp = async (idInput: string, valeur: string, page: Page) => {
-  await page.locator(`input#${idInput}`).click();
-  await page.keyboard.type(valeur);
-  await page.keyboard.press('Tab');
-};
 
 let idService: string;
 let nomService: string;

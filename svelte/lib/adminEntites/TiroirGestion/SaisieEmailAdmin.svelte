@@ -26,6 +26,7 @@
 
 <div class="conteneur-saisie">
   <dsfr-input
+    id="ajout-email-admin"
     value={nouvelAdmin}
     onvaluechanged={(e: CustomEvent<string>) => metAJourEmail(e.detail)}
     type="email"
