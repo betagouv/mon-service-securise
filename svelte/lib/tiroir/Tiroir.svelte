@@ -86,6 +86,7 @@
     gap: 10px;
 
     dsfr-button {
+      --text-action-high-blue-france: #0671c8;
       align-self: flex-start;
     }
   }
