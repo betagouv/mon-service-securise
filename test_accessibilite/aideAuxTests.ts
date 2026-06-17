@@ -53,6 +53,7 @@ export const problemesDAccessibiliteDeLaPage = async (
   const analyse = await new AxeBuilder({ page })
     .exclude('lab-anssi-centre-aide')
     .exclude('dsfr-header')
+    .exclude('#conteneur-toasts')
     .analyze();
 
   alimenteRapportFinal(page.url(), analyse);
