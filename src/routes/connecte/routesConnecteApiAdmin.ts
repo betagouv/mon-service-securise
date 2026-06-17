@@ -153,17 +153,22 @@ const routesConnecteApiAdmin = ({
       const { idUtilisateurCourant: idActeur } =
         requete as unknown as RequestRouteConnecte;
       const { idUtilisateur: idAdmin } = requete.params;
-      const { sirets } = requete.body;
+      const { siretsAAjouter, siretsARetirer } = requete.body;
 
       try {
         await serviceAdministrationOrganisations.assignePerimetre(
           idActeur,
           idAdmin as UUID,
-          sirets
+          siretsAAjouter,
+          siretsARetirer
         );
       } catch (e) {
         if (e instanceof ErreurEntiteNonAdministre) {
           reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof ErreurSuppressionImpossible) {
+          reponse.sendStatus(422);
           return;
         }
         suite(e);

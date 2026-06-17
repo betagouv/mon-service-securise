@@ -25,9 +25,11 @@ export const api = {
     }),
   enregistreNouveauPerimetreAdmin: async (
     idUtilisateur: string,
-    sirets: string[]
+    siretsAAjouter: string[],
+    siretsARetirer: string[]
   ) =>
     await axios.put(`/api/admin/utilisateurs/${idUtilisateur}/perimetre`, {
-      sirets,
+      siretsAAjouter,
+      siretsARetirer,
     }),
 };

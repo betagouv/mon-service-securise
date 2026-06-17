@@ -26,5 +26,6 @@ export const schemaRetraitAccesServices = z.strictObject({
 });
 
 export const schemaPutPerimetreAdmin = z.strictObject({
-  sirets: z.array(schemaSiret.siret()),
+  siretsAAjouter: z.array(schemaSiret.siret()),
+  siretsARetirer: z.array(schemaSiret.siret()),
 });

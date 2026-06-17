@@ -20,6 +20,7 @@
   import BadgeAdmin from '../BadgeAdmin.svelte';
   import { api } from '../adminUtilisateurs.api';
   import { toasterStore } from '../../ui/stores/toaster.store';
+  import type { AxiosError } from 'axios';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -91,28 +92,44 @@
   ]);
 
   const enregistreModifications = async () => {
-    await api.enregistreNouveauPerimetreAdmin(utilisateur.id, [
-      ...recapitulatif.nouvelles,
-      ...recapitulatif.conservees,
-    ]);
-    if (
-      recapitulatif.nouvelles.length > 0 ||
-      recapitulatif.conservees.length > 0
-    ) {
-      toasterStore.succes(
-        'Administrateur modifié',
-        messageSucces(recapitulatif, utilisateur)
+    try {
+      await api.enregistreNouveauPerimetreAdmin(
+        utilisateur.id,
+        recapitulatif.nouvelles,
+        recapitulatif.retirees
       );
-    } else {
-      toasterStore.succes(
-        'Administrateur supprimé',
-        `${utilisateur.prenomNom} n'est plus administrateur`
+      if (
+        recapitulatif.nouvelles.length > 0 ||
+        recapitulatif.conservees.length > 0
+      ) {
+        toasterStore.succes(
+          'Administrateur modifié',
+          messageSucces(recapitulatif, utilisateur)
+        );
+      } else {
+        toasterStore.succes(
+          'Administrateur supprimé',
+          `${utilisateur.prenomNom} n'est plus administrateur`
+        );
+      }
+      document.dispatchEvent(
+        new CustomEvent('utilisateurs-administres-modifies')
       );
+      tiroirStore.ferme();
+    } catch (e) {
+      const erreurAxios = e as AxiosError;
+      if (erreurAxios?.response?.status === 422) {
+        toasterStore.erreur(
+          "Impossible de supprimer l'admin",
+          `L'administrateur est seul contributeur d'un des services concernés : il ne peut pas être supprimé.`
+        );
+      } else {
+        toasterStore.erreur(
+          'Une erreur est survenue',
+          "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+        );
+      }
     }
-    document.dispatchEvent(
-      new CustomEvent('utilisateurs-administres-modifies')
-    );
-    tiroirStore.ferme();
   };
 
   let tousServices: ServiceAdministre[] = $state([]);
