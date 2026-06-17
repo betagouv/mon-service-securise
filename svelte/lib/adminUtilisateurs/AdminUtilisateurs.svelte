@@ -195,6 +195,7 @@
     background: #fff;
     width: 100%;
     padding: 32px 20px;
+    overflow: auto;
   }
 
   h1 {
