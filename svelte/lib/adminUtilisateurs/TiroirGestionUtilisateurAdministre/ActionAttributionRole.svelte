@@ -117,7 +117,7 @@
 
     .ancien-role {
       text-decoration: line-through;
-      color: #929292;
+      color: #666666;
     }
 
     .nouveau-role {

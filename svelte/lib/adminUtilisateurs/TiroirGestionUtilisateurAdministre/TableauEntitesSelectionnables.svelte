@@ -333,7 +333,7 @@
   .sous-texte {
     font-size: 0.875rem;
     line-height: 1.5rem;
-    color: #929292;
+    color: #666666;
     white-space: nowrap;
   }
 </style>
