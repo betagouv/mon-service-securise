@@ -23,14 +23,14 @@
 
 <AlerteSeulProprietaire {servicesSeulProprietaire} />
 
-<h5>
+<h4>
   {servicesSelectionnes.length}
   {singulierPluriel(
     'service concerné',
     'services concernés',
     servicesSelectionnes.length
   )}
-</h5>
+</h4>
 <dsfr-table
   columns={[
     { key: 'entiteService', label: 'Entité / service' },
@@ -62,7 +62,7 @@
 </dsfr-table>
 
 <style lang="scss">
-  h5 {
+  h4 {
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 700;

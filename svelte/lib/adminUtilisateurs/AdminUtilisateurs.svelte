@@ -68,7 +68,7 @@
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
     {#if unAdminExisteAutreQueUtilisateurCourant}
-      <h4>Aucun service ou contributeur sur vos entités</h4>
+      <h2>Aucun service ou contributeur sur vos entités</h2>
       <span
         >Ajoutez des services sur vos entités et invitez des contributeurs.</span
       >
@@ -76,7 +76,7 @@
         <BoutonAjouterPremierService />
       </span>
     {:else}
-      <h4>Aucun admin sur vos entités</h4>
+      <h2>Aucun admin sur vos entités</h2>
       <span
         >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
       >
@@ -222,7 +222,7 @@
     max-width: 588px;
     margin: 0 auto;
 
-    h4 {
+    h2 {
       margin: 0;
       font-size: 1.5rem;
       line-height: 2rem;
