@@ -50,6 +50,10 @@ export const messageDErreur = (problemes: ProblemeAccessibilite[]) =>
 export const problemesDAccessibiliteDeLaPage = async (
   page: Page
 ): Promise<ProblemeAccessibilite[]> => {
+  await page.waitForFunction(() =>
+    document.getAnimations().every((a) => a.playState !== 'running')
+  );
+
   const analyse = await new AxeBuilder({ page })
     .exclude('lab-anssi-centre-aide')
     .exclude('dsfr-header')
