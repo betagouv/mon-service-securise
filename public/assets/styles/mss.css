@@ -369,3 +369,7 @@ section:last-of-type {
 .center {
   align-items: center;
 }
+
+dsfr-button[data-themeable='true'] {
+  --background-action-high-blue-france: #0671c8;
+}
