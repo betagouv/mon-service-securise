@@ -84,6 +84,7 @@
     flex-direction: row-reverse;
     justify-content: space-between;
     gap: 10px;
+    flex-shrink: 0;
 
     dsfr-button {
       --text-action-high-blue-france: #0671c8;
