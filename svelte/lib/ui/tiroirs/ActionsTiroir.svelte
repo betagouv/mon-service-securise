@@ -18,7 +18,7 @@
     position: sticky;
     bottom: 0;
     border-top: 1px solid #cbd5e1;
-    padding: 19px 32px;
+    padding: 19px 24px;
     background: white;
     flex-grow: 0;
     flex-shrink: 0;

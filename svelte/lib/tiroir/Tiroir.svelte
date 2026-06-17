@@ -19,15 +19,21 @@
   {#key $tiroirStore}
     {#if $tiroirStore.contenu}
       <div class="entete-tiroir">
-        <button class="fermeture-tiroir" onclick={() => tiroirStore.ferme()}>
-          Fermer
-        </button>
-        <h2 class="titre-tiroir">{configuration?.titre}</h2>
-        {#if configuration?.sousTitre}
-          <p class="texte-tiroir">
-            {configuration.sousTitre}
-          </p>
-        {/if}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          preset="close"
+          onclick={() => tiroirStore.ferme()}
+          label="Fermer"
+        >
+        </dsfr-button>
+        <div class="titre-tiroir">
+          <h3>{configuration?.titre}</h3>
+          {#if configuration?.sousTitre}
+            <p>
+              {configuration.sousTitre}
+            </p>
+          {/if}
+        </div>
         {#if configuration?.composantEntete}
           {@const ComposantEntete = configuration.composantEntete}
           <ComposantEntete {...configuration.propsComposantEntete} />
@@ -70,48 +76,41 @@
   }
 
   .entete-tiroir {
-    position: relative;
-    background: #dbecf1;
+    background: #eaf5ff;
     text-align: left;
-    padding: 32px;
+    padding: 36px;
     overflow: hidden;
-    flex-grow: 0;
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: 10px;
+
+    dsfr-button {
+      align-self: flex-start;
+    }
   }
 
   .titre-tiroir {
-    font-size: 1.6em;
-    margin: 0 100px 0 0;
-  }
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-  .texte-tiroir {
-    margin: 0;
-    padding-top: 0.8em;
-    font-weight: 500;
-    padding-bottom: 0;
-    max-width: 650px;
-  }
+    h3 {
+      font-size: 1.75rem;
+      line-height: 2.25rem;
+      font-weight: 700;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
 
-  .fermeture-tiroir {
-    position: absolute;
-    top: 32px;
-    right: 32px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--bleu-mise-en-avant);
-    border-radius: 4px;
-    padding: 4px 8px 4px 12px;
-    font-size: 0.875em;
-  }
-
-  .fermeture-tiroir::after {
-    content: '✕';
-    display: inline-flex;
-    margin-left: 8px;
-  }
-
-  .fermeture-tiroir:hover {
-    background-color: #f5f5f5;
+    p {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5rem;
+      color: #3a3a3a;
+      margin: 0;
+      padding: 0;
+    }
   }
 </style>
