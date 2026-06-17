@@ -81,10 +81,6 @@
     max-width: 1400px;
     max-height: 800px;
     width: calc(100% - 48px);
-
-    :global(.contenu-modale) {
-      margin-top: 0;
-    }
   }
 
   h4 {

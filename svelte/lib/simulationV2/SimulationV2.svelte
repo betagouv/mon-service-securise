@@ -132,7 +132,6 @@
       flex-direction: column;
       gap: 24px;
       padding-bottom: 24px;
-      margin-top: 0;
     }
 
     :global(.conteneur-actions) {

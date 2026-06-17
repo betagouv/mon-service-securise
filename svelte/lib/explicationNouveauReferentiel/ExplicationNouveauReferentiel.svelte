@@ -327,19 +327,11 @@
   :global(#modale-explication-nouveau-referentiel) {
     max-width: 792px;
     max-height: 740px;
-
-    :global(.contenu-modale) {
-      margin-top: 0;
-    }
   }
 
   :global(#modale-confirmation-fermeture) {
     max-width: calc(556px + 64px);
     max-height: calc(336px + 32px);
-
-    :global(.contenu-modale) {
-      margin-top: 0;
-    }
 
     :global(.conteneur-actions) {
       border: none;

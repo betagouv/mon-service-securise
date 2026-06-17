@@ -67,10 +67,6 @@
     text-align: left;
   }
 
-  :global(#modale-encart-homologation .contenu-modale) {
-    margin-top: 0;
-  }
-
   h1 {
     margin: 0 0 24px;
     align-self: start;
