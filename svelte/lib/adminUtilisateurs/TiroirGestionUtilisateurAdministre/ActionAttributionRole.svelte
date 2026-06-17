@@ -48,14 +48,14 @@
 {#if doitAfficherAlerteSeuleProprietaire}
   <AlerteSeulProprietaire {servicesSeulProprietaire} modeAttribution />
 {/if}
-<h5>
+<h4>
   {servicesSelectionnes.length}
   {singulierPluriel(
     'service concerné',
     'services concernés',
     servicesSelectionnes.length
   )}
-</h5>
+</h4>
 <dsfr-table
   columns={[
     { key: 'entiteService', label: 'Entité / service' },
@@ -99,7 +99,7 @@
     margin: 24px 0;
   }
 
-  h5 {
+  h4 {
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 700;

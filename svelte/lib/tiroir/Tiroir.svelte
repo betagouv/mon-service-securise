@@ -11,7 +11,7 @@
   );
 </script>
 
-<div
+<aside
   id="tiroir"
   class={configuration?.taille || 'normal'}
   class:ouvert={$tiroirStore.ouvert}
@@ -27,7 +27,7 @@
         >
         </dsfr-button>
         <div class="titre-tiroir">
-          <h3>{configuration?.titre}</h3>
+          <h2>{configuration?.titre}</h2>
           {#if configuration?.sousTitre}
             <p>
               {configuration.sousTitre}
@@ -43,7 +43,7 @@
       <Composant bind:this={composant} {...$tiroirStore.contenu.props} />
     {/if}
   {/key}
-</div>
+</aside>
 
 <style>
   #tiroir {
@@ -97,7 +97,7 @@
     flex-direction: column;
     gap: 8px;
 
-    h3 {
+    h2 {
       font-size: 1.75rem;
       line-height: 2.25rem;
       font-weight: 700;

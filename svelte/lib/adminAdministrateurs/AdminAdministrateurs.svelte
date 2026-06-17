@@ -60,7 +60,7 @@
 {#if mesUtilisateurs.length === 0}
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
-    <h4>Aucun admin sur vos entités</h4>
+    <h2>Aucun admin sur vos entités</h2>
     <span
       >Ajoutez des admins pour déléguer la gestion et le suivi de vos entités.</span
     >
@@ -183,7 +183,7 @@
     flex-direction: column;
     color: #161616;
 
-    h4 {
+    h2 {
       margin: 0;
       font-size: 1.5rem;
       line-height: 2rem;

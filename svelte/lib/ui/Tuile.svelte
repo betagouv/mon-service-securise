@@ -17,6 +17,7 @@
   no-link
   no-icon
   size="sm"
+  markup-level="2"
 >
   <img
     slot="pictogram"
