@@ -4,7 +4,7 @@
 </script>
 
 {#if $toasterStore.queue.length}
-  <aside>
+  <aside id="conteneur-toasts">
     {#each $toasterStore.queue as { niveau, contenu, titre, id, avecInterpolationHTMLDangereuse = false, boutonAction } (id)}
       <Toast
         {niveau}
