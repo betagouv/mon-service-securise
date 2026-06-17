@@ -59,6 +59,17 @@
   let toutEstSelectionne = $derived(
     siretsSelectionnes.size === nombreTotalEntites
   );
+
+  let recapitulatif = $derived(
+    resumeDesModifications(siretsSelectionnesInitialement, [
+      ...siretsSelectionnes,
+    ])
+  );
+
+  let aDesModifications = $derived(
+    recapitulatif.nouvelles.length !== 0 || recapitulatif.retirees.length !== 0
+  );
+
   const basculeTouteSelection = () => {
     if (toutEstSelectionne) {
       siretsSelectionnes.clear();
@@ -68,12 +79,6 @@
         siretsSelectionnes.add(entite.siret);
       }
   };
-
-  let recapitulatif = $derived(
-    resumeDesModifications(siretsSelectionnesInitialement, [
-      ...siretsSelectionnes,
-    ])
-  );
 
   const enEntite = (siret: string): EntiteSupervisee => {
     return toutesEntites.find((e) => e.siret === siret)!;
@@ -156,13 +161,17 @@
     {#if siretsSelectionnes.size === 0}
       <dsfr-callout
         has-title
-        title="{utilisateur.prenomNom} ne sera plus admin"
+        title="{utilisateur.prenomNom} {aDesModifications
+          ? 'ne sera plus admin'
+          : "n'est pas admin actuellement"}"
         accent="blue-cumulus"
       ></dsfr-callout>
     {:else}
       <dsfr-callout
         has-title
-        title="{utilisateur.prenomNom} sera admin de {siretsSelectionnes.size} {singulierPluriel(
+        title="{utilisateur.prenomNom} {aDesModifications
+          ? 'sera admin'
+          : 'est admin'} de {siretsSelectionnes.size} {singulierPluriel(
           'entité',
           'entités',
           siretsSelectionnes.size
@@ -307,8 +316,7 @@
       onclick={() => {
         etape = 'RECAPITULATIF';
       }}
-      disabled={recapitulatif.nouvelles.length === 0 &&
-        recapitulatif.retirees.length === 0}
+      disabled={!aDesModifications}
       kind="primary"
       hasIcon
       icon-place="right"
