@@ -53,7 +53,9 @@
   }}
 >
   <div class="conteneur-fermeture">
-    <button onclick={() => ferme()}>Fermer</button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button label="Fermer" preset="close" onclick={() => ferme()}
+    ></dsfr-button>
   </div>
   <div class="conteneur-modale">
     <div class="entete-modale">
@@ -96,7 +98,6 @@
 
   .contenu-modale {
     flex-grow: 1;
-    margin-top: 24px;
     overflow-y: auto;
   }
 
@@ -119,39 +120,6 @@
     position: absolute;
     top: 16px;
     right: 35px;
-
-    button {
-      border: none;
-      background: none;
-      padding: 4px 8px 4px 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      color: var(--bleu-mise-en-avant);
-      text-align: center;
-      font-size: 0.875rem;
-      font-weight: 500;
-      line-height: 1.5rem;
-      border-radius: 4px;
-
-      &:hover {
-        background: #f5f5f5;
-      }
-
-      &:after {
-        content: '';
-        background-image: url(/statique/assets/images/icone_fermeture_modale.svg);
-        width: 16px;
-        height: 16px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        display: inline-block;
-        filter: brightness(0) invert(28%) sepia(70%) saturate(1723%)
-          hue-rotate(184deg) brightness(107%) contrast(101%);
-        transform: translateY(2px);
-      }
-    }
   }
 
   .conteneur-actions {

@@ -135,4 +135,8 @@
     margin: 0;
     text-align: left;
   }
+
+  :global(.contenu-modale) {
+    margin-top: 24px;
+  }
 </style>

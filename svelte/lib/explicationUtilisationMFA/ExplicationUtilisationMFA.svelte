@@ -77,10 +77,6 @@
   :global(#modale-explication-utilisation-mfa) {
     max-width: 792px;
     max-height: 740px;
-
-    :global(.contenu-modale) {
-      margin-top: 0;
-    }
   }
 
   h4 {
