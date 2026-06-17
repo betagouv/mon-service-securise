@@ -302,7 +302,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it('jette une erreur si la payload est invalide', async () => {
       const reponse = await testeur.put(
         `/api/admin/utilisateurs/${idAdminModifie}/perimetre`,
-        { sirets: false }
+        { siretsAAjouter: false, siretsARetirer: 'hello' }
       );
 
       expect(reponse.status).toBe(400);
@@ -311,7 +311,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it("jette une erreur si l'id utilisateur est invalide", async () => {
       const reponse = await testeur.put(
         `/api/admin/utilisateurs/pas-un-uuid/perimetre`,
-        { sirets: [] }
+        { siretsAAjouter: [], siretsARetirer: [] }
       );
 
       expect(reponse.status).toBe(400);
@@ -325,22 +325,42 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
       const reponse = await testeur.put(
         `/api/admin/utilisateurs/${idAdminModifie}/perimetre`,
-        { sirets: ['13000766900999'] }
+        { siretsAAjouter: ['13000766900999'], siretsARetirer: [] }
       );
 
       expect(reponse.status).toBe(403);
+    });
+
+    it('jette une erreur si la suppression est impossible', async () => {
+      testeur.serviceAdministrationOrganisations().assignePerimetre =
+        async () => {
+          throw new ErreurSuppressionImpossible();
+        };
+
+      const reponse = await testeur.put(
+        `/api/admin/utilisateurs/${idAdminModifie}/perimetre`,
+        { siretsAAjouter: [], siretsARetirer: ['13000766900999'] }
+      );
+
+      expect(reponse.status).toBe(422);
     });
 
     it("délègue au service l'assignation du périmètre", async () => {
       testeur.serviceAdministrationOrganisations().assignePerimetre = vi.fn();
 
       await testeur.put(`/api/admin/utilisateurs/${idAdminModifie}/perimetre`, {
-        sirets: ['13000766900999'],
+        siretsAAjouter: ['13000766900999'],
+        siretsARetirer: ['13000766900998'],
       });
 
       expect(
         testeur.serviceAdministrationOrganisations().assignePerimetre
-      ).toHaveBeenCalledWith(idActeurAdmin, idAdminModifie, ['13000766900999']);
+      ).toHaveBeenCalledWith(
+        idActeurAdmin,
+        idAdminModifie,
+        ['13000766900999'],
+        ['13000766900998']
+      );
     });
   });
 

@@ -927,60 +927,70 @@ describe("Le service de gestion des admins d'organisation", () => {
 
     it("jette une erreur s'il essaie de se nommer admin lui-même", async () => {
       await expect(() =>
-        service.assignePerimetre(idActeur, idActeur, ['SIRET-1'])
+        service.assignePerimetre(idActeur, idActeur, ['SIRET-1'], [])
       ).rejects.toThrow(EchecAutorisation);
     });
 
     it("jette une erreur si l'admin acteur n'administre pas le périmètre complet demandé", async () => {
       await expect(() =>
-        service.assignePerimetre(idActeur, idAdmin, ['UN-AUTRE-SIRET'])
+        service.assignePerimetre(idActeur, idAdmin, ['UN-AUTRE-SIRET'], [])
       ).rejects.toThrow(ErreurEntiteNonAdministre);
     });
 
     it("jette une erreur si l'acteur n'est pas admin", async () => {
       const idPasAdmin = unUUIDRandom();
       await expect(() =>
-        service.assignePerimetre(idPasAdmin, idAdmin, ['UN-AUTRE-SIRET'])
+        service.assignePerimetre(idPasAdmin, idAdmin, ['UN-AUTRE-SIRET'], [])
       ).rejects.toThrow(ErreurEntiteNonAdministre);
     });
 
     it("crée l'administrateur s'il n'existe pas", async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, ['SIRET-1']);
+      await service.assignePerimetre(idActeur, idNouvelAdmin, ['SIRET-1'], []);
 
       const admin = await depotComplet.lisAdminOrganisations(idNouvelAdmin);
       expect(admin!.estAdminDe('SIRET-1')).toBeTruthy();
     });
 
     it('ajoute les nouvelles entités', async () => {
-      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-1']);
+      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-1'], []);
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin!.estAdminDe('SIRET-1')).toBeTruthy();
     });
 
     it('retire les entités qui ne sont plus adminisitrées', async () => {
-      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-1']);
+      await service.assignePerimetre(idActeur, idAdmin, [], ['SIRET-2']);
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin!.estAdminDe('SIRET-2')).toBeFalsy();
     });
 
     it('conserve les entités encore administrées', async () => {
-      await service.assignePerimetre(idActeur, idAdmin, ['SIRET-2']);
+      await service.assignePerimetre(idActeur, idAdmin, [], ['SIRET-1']);
 
       const admin = await depotComplet.lisAdminOrganisations(idAdmin);
       expect(admin!.estAdminDe('SIRET-2')).toBeTruthy();
     });
 
     it('supprime les autorisations admin sur les services des sirets retirés', async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, [entite2.siret]);
+      await service.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [],
+        [entite.siret]
+      );
 
       const autorisations = await depotComplet.autorisations(idAdmin);
       expect(autorisations).toHaveLength(0);
     });
 
     it("publie un évènement d'admin retiré sur le bus", async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, [entite2.siret]);
+      await service.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [],
+        [entite.siret]
+      );
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementAdminRetireDeOrganisation)
@@ -993,10 +1003,12 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it('ajoute les autorisations correspondantes', async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, [
-        entite.siret,
-        entite2.siret,
-      ]);
+      await service.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [entite2.siret],
+        []
+      );
 
       const autorisationsAdmin: Autorisation[] =
         await depotComplet.autorisations(idNouvelAdmin);
@@ -1014,10 +1026,12 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, [
-        entite.siret,
-        entite2.siret,
-      ]);
+      await service.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [entite2.siret],
+        []
+      );
 
       const autorisationsAdmin: Autorisation[] =
         await depotComplet.autorisations(idNouvelAdmin);
@@ -1035,10 +1049,12 @@ describe("Le service de gestion des admins d'organisation", () => {
         envoieMessageNominationAdmin;
       const leService = leServiceDAdministrationDesOrgas({ adaptateurMail });
 
-      await leService.assignePerimetre(idActeur, idNouvelAdmin, [
-        entite.siret,
-        entite2.siret,
-      ]);
+      await leService.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [entite2.siret],
+        []
+      );
 
       expect(envoieMessageNominationAdmin).toHaveBeenCalledWith(
         'nouvel-admin@mail.fr'
@@ -1046,10 +1062,12 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("publie un évènement d'admin nommé sur le bus", async () => {
-      await service.assignePerimetre(idActeur, idNouvelAdmin, [
-        entite.siret,
-        entite2.siret,
-      ]);
+      await service.assignePerimetre(
+        idActeur,
+        idNouvelAdmin,
+        [entite2.siret],
+        []
+      );
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementAdminNommeSurOrganisation)

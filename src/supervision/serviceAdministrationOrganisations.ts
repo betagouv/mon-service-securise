@@ -140,14 +140,7 @@ export class ServiceAdministrationOrganisations {
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (!admin) return;
 
-    await this.assignePerimetre(
-      idActeur,
-      idUtilisateur,
-      admin
-        .donnees()
-        .entitesAdministrees.map((e) => e.siret)
-        .filter((s) => s !== siret)
-    );
+    await this.assignePerimetre(idActeur, idUtilisateur, [], [siret]);
   }
 
   private static verifieNEstPasSeulProprietaireDesServices(
@@ -172,10 +165,7 @@ export class ServiceAdministrationOrganisations {
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
     if (!admin) admin = AdminOrganisations.nouveau(idAdmin);
 
-    await this.assignePerimetre(idActeur, idAdmin, [
-      ...admin.donnees().entitesAdministrees.map((e) => e.siret),
-      siret,
-    ]);
+    await this.assignePerimetre(idActeur, idAdmin, [siret], []);
   }
 
   async entitesDe(
@@ -429,21 +419,18 @@ export class ServiceAdministrationOrganisations {
     return new Entite(donneesEntite);
   }
 
-  async assignePerimetre(idActeur: UUID, idAdmin: UUID, sirets: string[]) {
+  async assignePerimetre(
+    idActeur: UUID,
+    idAdmin: UUID,
+    siretsAAjouter: string[],
+    siretsARetirer: string[]
+  ) {
     if (idActeur === idAdmin) throw new EchecAutorisation();
 
     let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
     if (!admin) {
       admin = AdminOrganisations.nouveau(idAdmin);
     }
-
-    const siretsAAjouter = sirets.filter(
-      (siret) => !admin || !admin.estAdminDe(siret)
-    );
-    const siretsARetirer = admin!
-      .donnees()
-      .entitesAdministrees.filter((e) => !sirets.includes(e.siret))
-      .map((e) => e.siret);
 
     const siretsModifies = [...siretsARetirer, ...siretsAAjouter];
     await this.verifieEntitesAdministrees(idActeur, siretsModifies);
