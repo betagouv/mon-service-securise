@@ -16,7 +16,7 @@
     flex-direction: column;
     flex: 1;
     text-align: left;
-    padding: 32px;
+    padding: 32px 36px;
     gap: 30px;
   }
 </style>
