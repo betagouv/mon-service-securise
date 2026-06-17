@@ -122,6 +122,7 @@
     padding: 32px 20px;
     text-align: left;
     background: white;
+    overflow: auto;
   }
 
   .conteneur-loader {
