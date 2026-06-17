@@ -164,26 +164,22 @@
                 <lab-anssi-icone nom="arrow-down-s-line" taille="sm"
                 ></lab-anssi-icone>
               </div>
-              {#if !estAdmin}
-                <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-                <dsfr-checkbox
-                  id="checkbox-{siretEntite}"
-                  label={nomEntite}
-                  size="sm"
-                  name="checkbox-{siretEntite}"
-                  onclick={(e: MouseEvent) => {
-                    e.stopPropagation();
-                  }}
-                  onvaluechanged={() => {
-                    basculeSelectionEntite(siretEntite);
-                  }}
-                  checked={entitesSelectionnes[siretEntite] === 'Tout'}
-                  indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
-                ></dsfr-checkbox>
-              {/if}
-              {#if estAdmin}
-                <BadgeAdmin />
-              {/if}
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+              <dsfr-checkbox
+                id="checkbox-{siretEntite}"
+                label={nomEntite}
+                size="sm"
+                name="checkbox-{siretEntite}"
+                disabled={estAdmin}
+                onclick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                }}
+                onvaluechanged={() => {
+                  basculeSelectionEntite(siretEntite);
+                }}
+                checked={entitesSelectionnes[siretEntite] === 'Tout'}
+                indeterminate={entitesSelectionnes[siretEntite] === 'Partiel'}
+              ></dsfr-checkbox>
               <dsfr-tag
                 label={`${services.length} service${services.length > 1 ? 's' : ''}`}
                 type="default"
@@ -213,18 +209,17 @@
             <tr>
               <td>
                 <div class="conteneur-ligne-service" class:estAdmin>
-                  {#if !estAdmin}
-                    <dsfr-checkbox
-                      id="checkbox-{service.id}"
-                      label={service.nomService}
-                      size="sm"
-                      name="checkbox-{service.id}"
-                      checked={servicesSelectionnes.has(service.id)}
-                      onvaluechanged={(e: CustomEvent<boolean>) => {
-                        selectionneService(service.id, e.detail);
-                      }}
-                    ></dsfr-checkbox>
-                  {/if}
+                  <dsfr-checkbox
+                    id="checkbox-{service.id}"
+                    label={service.nomService}
+                    size="sm"
+                    name="checkbox-{service.id}"
+                    disabled={estAdmin}
+                    checked={servicesSelectionnes.has(service.id)}
+                    onvaluechanged={(e: CustomEvent<boolean>) => {
+                      selectionneService(service.id, e.detail);
+                    }}
+                  ></dsfr-checkbox>
                 </div>
               </td>
               <td>

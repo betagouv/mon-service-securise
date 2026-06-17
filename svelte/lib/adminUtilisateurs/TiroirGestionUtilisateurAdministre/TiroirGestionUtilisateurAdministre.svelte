@@ -171,7 +171,7 @@
       {#if etapeActuelle === 'LISTE'}
         <TitreContenuOnglet
           titre="Entités et services auxquels {utilisateur.prenomNom} a accès"
-          description="Vous pouvez lui attribuer un rôle commun ou le retirer sur un ou plusieurs services."
+          description="Vous pouvez lui attribuer un rôle commun ou le/la retirer sur un ou plusieurs services."
         />
         <TableauEntitesSelectionnables
           {toutesEntites}
