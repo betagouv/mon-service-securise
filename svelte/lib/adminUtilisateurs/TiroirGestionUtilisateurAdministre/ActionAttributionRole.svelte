@@ -35,6 +35,7 @@
 
 <dsfr-select
   label="Rôle attribué à tous les services sélectionnés"
+  id="selection-role"
   options={Object.entries(rolesAssignables).map(([role, libelle]) => ({
     label: libelle,
     value: role,
