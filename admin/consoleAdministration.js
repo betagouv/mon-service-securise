@@ -888,6 +888,44 @@ class ConsoleAdministration {
       rattrapeUtilisateur
     );
   }
+
+  async ajouteServiceV1PourUtilisateur(email, nomService) {
+    const utilisateur = await this.depotDonnees.utilisateurAvecEmail(email);
+
+    const donneesService = {
+      descriptionService: {
+        delaiAvantImpactCritique: 'moinsUneHeure',
+        localisationDonnees: 'france',
+        nomService,
+        provenanceService: 'developpement',
+        statutDeploiement: 'enProjet',
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        niveauSecurite: 'niveau3',
+        presentation: 'Une présentation',
+        donneesCaracterePersonnel: [],
+        fonctionnalites: [],
+        typeService: 'siteInternet',
+        donneesSensiblesSpecifiques: [],
+        fonctionnalitesSpecifiques: [],
+        pointsAcces: [],
+        organisationResponsable: {
+          siret: '13000766900018',
+          nom: 'ANSSI',
+          departement: '75',
+        },
+      },
+      dossiers: [],
+      mesuresGenerales: [],
+      mesuresSpecifiques: [],
+      risquesGeneraux: [],
+      risquesSpecifiques: [],
+      rolesResponsabilites: { acteursHomologation: [], partiesPrenantes: [] },
+      prochainIdNumeriqueDeRisqueSpecifique: 1,
+      versionService: 'v1',
+    };
+
+    await this.depotDonnees.nouveauService(utilisateur.id, donneesService);
+  }
 }
 
 export default ConsoleAdministration;
