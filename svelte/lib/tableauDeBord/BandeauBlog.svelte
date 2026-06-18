@@ -20,55 +20,30 @@
     <CarteDePromotion
       titre="🚀 Promouvoir MonServiceSécurisé"
       href="/faire-connaitre-et-recommander-monservicesecurise"
-    >
-      Vous appréciez MonServiceSécurisé ? N'hésitez pas à en parler autour de
-      vous !
-    </CarteDePromotion>
+      description="Vous appréciez MonServiceSécurisé ? N'hésitez pas à en parler autour de vous !"
+    />
   {:else}
     <CarteDePromotion
       titre="Notre équipe est à votre écoute"
       href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique?s=fd6032fa-4833-4403-8087-3945d168752e"
-    >
-      {#snippet illustration()}
-        <img
-          alt=""
-          src="/statique/assets/images/tableauDeBord/image_equipe_webinaire.png"
-          width="78"
-        />
-      {/snippet}
-      Nous vous guiderons dans la découverte et prise en main de MonServiceSécurisé
-      au sein de votre organisation.
-    </CarteDePromotion>
+      illustration="/statique/assets/images/tableauDeBord/image_equipe_webinaire.png"
+      description="Nous vous guiderons dans la découverte et prise en main de MonServiceSécurisé au sein de votre organisation."
+    />
   {/if}
 
   <CarteDePromotion
     titre="Rejoignez la communauté"
     href="https://tally.so/r/wa6o22"
-  >
-    {#snippet illustration()}
-      <img
-        src="/statique/assets/images/tableauDeBord/image_rejoignez_communaute.svg"
-        alt=""
-      />
-    {/snippet}
-    <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
-  </CarteDePromotion>
+    illustration="/statique/assets/images/tableauDeBord/image_rejoignez_communaute.png"
+    description="Échangez directement avec vos pairs pour une collaboration facilitée."
+  />
 
   <CarteDePromotion
-    titre="Découvrez MesServicesCyber !"
+    titre="Découvrez MesServicesCyber&nbsp;!"
     href="https://messervices.cyber.gouv.fr/"
-    fondIllustration="jaune"
-  >
-    {#snippet illustration()}
-      <img
-        src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
-        width="135"
-        alt=""
-      />
-    {/snippet}
-    MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services et
-    ressources de l'ANSSI et de ses partenaires.
-  </CarteDePromotion>
+    illustration="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
+    description="MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services et ressources de l'ANSSI et de ses partenaires."
+  />
 </div>
 
 <style>
@@ -78,9 +53,9 @@
   }
 
   h2 {
-    font-size: 1.375rem;
-    line-height: 1.75rem;
-    font-weight: bold;
-    margin-top: 32px;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+    margin: 24px 0;
   }
 </style>
