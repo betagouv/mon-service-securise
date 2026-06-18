@@ -44,14 +44,6 @@
 </script>
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
-  {#if actionsDisponibles}
-    {@const pluriel = selection.length > 1 ? 's' : ''}
-    <span class="nombre-selection">
-      {selection.length}
-      ligne{pluriel}
-      sélectionnée{pluriel}
-    </span>
-  {/if}
   <div class="boutons-actions">
     <Bouton
       titre="Gérer les contributeurs"
@@ -118,7 +110,6 @@
 
 <style>
   .conteneur-actions {
-    padding: 12px 24px;
     display: flex;
     align-items: center;
     justify-content: end;

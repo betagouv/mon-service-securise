@@ -19,6 +19,7 @@
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
+  import { singulierPluriel } from '../outils/string';
 
   let selection = $derived([
     ...$resultatsDeRecherche
@@ -28,19 +29,6 @@
       .filter((brouillon) => $selectionIdsServices.includes(brouillon.id))
       .map((b) => ({ ...b, type: 'Brouillon' as TypeSelection })),
   ]);
-
-  let toutEstCoche = $derived(
-    selection.length ===
-      $resultatsDeRecherche.length + $resultatsDeRechercheBrouillons.length
-  );
-  const basculeSelectionTousServices = () => {
-    if (toutEstCoche) $selectionIdsServices = [];
-    else
-      $selectionIdsServices = [
-        ...$resultatsDeRecherche.map((service) => service.id),
-        ...$resultatsDeRechercheBrouillons.map((brouillon) => brouillon.id),
-      ];
-  };
 
   $effect(() => {
     if ($resultatsDeRecherche) selectionIdsServices.vide();
@@ -57,408 +45,186 @@
   let { indicesCyberCharges = false }: Props = $props();
 </script>
 
-<table>
-  {#if !$affichageTableauVide.doitAfficher}
-    <colgroup>
-      <col class="selection-service" />
-      <col class="nom-service" />
-      <col class="contributeurs" />
-      <col class="besoins-securite" />
-      <col class="completion" />
-      <col class="indice-cyber" />
-      <col class="homologation" />
-      <col class="actions-recommandees" />
-    </colgroup>
-  {/if}
-  <thead>
-    {#if !$affichageTableauVide.doitAfficher}
-      <tr id="ligne-entete-action">
-        <td colspan="8" class="case-conteneur-action">
-          <ActionsDesServices {selection} />
-        </td>
-      </tr>
-      <tr id="ligne-entete-tableau">
-        <th class="cellule-selection" id="selection-toutes-lignes" scope="row">
-          <input
-            type="checkbox"
-            onchange={basculeSelectionTousServices}
-            checked={toutEstCoche}
-            indeterminate={!toutEstCoche && selection.length > 0}
-            aria-label="Sélection de tous les services"
+{#if $affichageTableauVide.doitAfficher}
+  <TableauVide />
+{:else}
+  <div class="barre-actions">
+    <span class="sous-texte">
+      {#if $selectionIdsServices.length > 0}
+        {$selectionIdsServices.length}
+        {singulierPluriel(
+          'ligne sélectionnée',
+          'lignes sélectionnées',
+          $selectionIdsServices.length
+        )}
+      {/if}
+    </span>
+    <ActionsDesServices {selection} />
+  </div>
+  <dsfr-table
+    columns={[
+      { key: 'nom', label: 'Nom du service' },
+      { key: 'contributeurs', label: 'Contributeurs' },
+      { key: 'besoinsSecurite', label: 'Besoins de sécurité' },
+      { key: 'completion', label: 'Complétion' },
+      { key: 'indiceCyber', label: 'Indice cyber' },
+      { key: 'homologation', label: 'Homologation' },
+      { key: 'actionsRecommandees', label: 'Actions recommandées' },
+    ]}
+    rows={[
+      ...$resultatsDeRechercheBrouillons,
+      ...$resultatsDeRechercheDuStatutHomologationSelectionne,
+    ]}
+    row-key="id"
+    selectable
+    rich
+    select-all
+    selected-row-keys={JSON.stringify($selectionIdsServices)}
+    onselectionchanged={(
+      e: CustomEvent<{ keys: string[]; rows: Record<string, unknown>[] }>
+    ) => {
+      $selectionIdsServices = e.detail.keys;
+    }}
+  >
+    {#each $resultatsDeRechercheBrouillons as brouillon, i (brouillon.id)}
+      <div slot="cell:nom:{i}" class="cellule-noms">
+        <a
+          class="lien-service"
+          href="/service/v2/creation?id={brouillon.id}"
+          title="Ouvrir le brouillon"
+        >
+          <span class="denomination-service">
+            <span class="indicateur-brouillon">Brouillon en cours</span>
+            <span class="nom-service">{brouillon.nomService}</span>
+          </span>
+          <div class="icone-voir-service">
+            <img
+              src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
+              alt="Ouvrir la page du service"
+            />
+            <span>Ouvrir</span>
+          </div>
+        </a>
+      </div>
+      <div slot="cell:contributeurs:{i}">-</div>
+      <div slot="cell:besoinsSecurite:{i}">-</div>
+      <div slot="cell:completion:{i}">-</div>
+      <div slot="cell:indiceCyber:{i}">-</div>
+      <div slot="cell:homologation:{i}">-</div>
+      <div slot="cell:actionsRecommandees:{i}">
+        <Lien
+          titre="Continuer la création"
+          type="bouton-secondaire"
+          href="/service/v2/creation?id={brouillon.id}"
+          taille="petit"
+          icone="brouillon"
+          classe="continuerCreationV2"
+        />
+      </div>
+    {/each}
+    {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service, i (service.id)}
+      {@const idService = service.id}
+      {@const indiceCyberDuService = service.indiceCyber}
+      {@const index = i + $resultatsDeRechercheBrouillons.length}
+      <div slot="cell:nom:{index}" class="cellule-noms">
+        <a
+          class="lien-service"
+          href="/service/{idService}"
+          title="Ouvrir la page du service"
+        >
+          <span class="denomination-service">
+            {#if service.estAdmin}
+              <dsfr-badge
+                label="Admin"
+                type="accent"
+                accent="blue-cumulus"
+                size="sm"
+              ></dsfr-badge>
+            {:else if service.estProprietaire}
+              <EtiquetteProprietaire />
+            {/if}
+            <span class="nom-service">{service.nomService}</span>
+            <span class="nom-organisation">
+              {service.organisationResponsable}
+            </span>
+          </span>
+          <div class="icone-voir-service">
+            <img
+              src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
+              alt="Ouvrir la page du service"
+            />
+            <span>Ouvrir</span>
+          </div>
+        </a>
+      </div>
+      <div slot="cell:contributeurs:{index}">
+        <EtiquetteContributeurs
+          nombreContributeurs={service.nombreContributeurs}
+          onclick={() =>
+            tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+              services: [service],
+            })}
+        />
+      </div>
+      <div slot="cell:besoinsSecurite:{index}">
+        {#if service.niveauSecurite}
+          <Lien
+            classe="lien-niveau-securite"
+            titre={referentielNiveauxSecurite[service.niveauSecurite]}
+            href="/service/{idService}/descriptionService?etape=3"
+            type="lien"
+            taille="petit"
           />
-        </th>
-        <th>Nom du service</th>
-        <th>Contributeurs</th>
-        <th>Besoins de sécurité</th>
-        <th>Complétion</th>
-        <th>Indice&nbsp;cyber</th>
-        <th>Homologation</th>
-        <th>Actions recommandées</th>
-      </tr>
-    {/if}
-  </thead>
-  {#if $affichageTableauVide.doitAfficher}
-    <TableauVide />
-  {:else}
-    <tbody class="contenu-tableau-services">
-      {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
-        <tr
-          class="ligne-service brouillon"
-          data-id-brouillon={brouillon.id}
-          class:selectionnee={$selectionIdsServices.includes(brouillon.id)}
-        >
-          <th class="cellule-selection" scope="row">
-            <input
-              class="selection-service"
-              type="checkbox"
-              bind:group={$selectionIdsServices}
-              value={brouillon.id}
-              aria-label="Sélection du brouillon {brouillon.nomService}"
-            />
-          </th>
-          <td class="cellule-noms">
-            <a
-              class="lien-service"
-              href="/service/v2/creation?id={brouillon.id}"
-              title="Ouvrir le brouillon"
-            >
-              <span class="denomination-service">
-                <span class="indicateur-brouillon">Brouillon en cours</span>
-                <span class="nom-service">{brouillon.nomService}</span>
-              </span>
-              <div class="icone-voir-service">
-                <img
-                  src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
-                  alt="Ouvrir la page du service"
-                />
-                <span>Ouvrir</span>
-              </div>
-            </a>
-          </td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>
-            <Lien
-              titre="Continuer la création"
-              type="bouton-secondaire"
-              href="/service/v2/creation?id={brouillon.id}"
-              taille="petit"
-              icone="brouillon"
-              classe="continuerCreationV2"
-            />
-          </td>
-        </tr>
-      {/each}
-      {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service (service.id)}
-        {@const idService = service.id}
-        {@const indiceCyberDuService = service.indiceCyber}
-        <tr
-          class="ligne-service"
-          data-id-service={idService}
-          class:selectionnee={$selectionIdsServices.includes(idService)}
-        >
-          <th class="cellule-selection" scope="row">
-            <input
-              class="selection-service"
-              type="checkbox"
-              bind:group={$selectionIdsServices}
-              value={idService}
-              aria-label="Sélection du service {service.nomService}"
-            />
-          </th>
-          <td class="cellule-noms">
-            <a
-              class="lien-service"
-              href="/service/{idService}"
-              title="Ouvrir la page du service"
-            >
-              <span class="denomination-service">
-                {#if service.estAdmin}
-                  <dsfr-badge
-                    label="Admin"
-                    type="accent"
-                    accent="blue-cumulus"
-                    size="sm"
-                  ></dsfr-badge>
-                {:else if service.estProprietaire}
-                  <EtiquetteProprietaire />
-                {/if}
-                <span class="nom-service">{service.nomService}</span>
-                <span class="nom-organisation">
-                  {service.organisationResponsable}
-                </span>
-              </span>
-              <div class="icone-voir-service">
-                <img
-                  src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
-                  alt="Ouvrir la page du service"
-                />
-                <span>Ouvrir</span>
-              </div>
-            </a>
-          </td>
-          <td>
-            <EtiquetteContributeurs
-              nombreContributeurs={service.nombreContributeurs}
-              onclick={() =>
-                tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-                  services: [service],
-                })}
-            />
-          </td>
-          <td>
-            {#if service.niveauSecurite}
-              <Lien
-                classe="lien-niveau-securite"
-                titre={referentielNiveauxSecurite[service.niveauSecurite]}
-                href="/service/{idService}/descriptionService?etape=3"
-                type="lien"
-                taille="petit"
-              />
-            {/if}
-          </td>
-          <td>
-            {#if service.pourcentageCompletude !== undefined}
-              <EtiquetteCompletude
-                {idService}
-                pourcentageCompletude={service.pourcentageCompletude}
-              />
-            {/if}
-          </td>
-          <td>
-            {#if indiceCyberDuService !== undefined}
-              <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
-            {:else if !indicesCyberCharges}
-              <IconeChargementEnCours />
-            {/if}
-          </td>
-          <td>
-            {#if service.statutHomologation}
-              <EtiquetteHomologation
-                statutHomologation={service.statutHomologation.id}
-                label={service.statutHomologation.libelle}
-                dateExpiration={service.statutHomologation.dateExpiration}
-                {idService}
-              />
-            {/if}
-          </td>
-          <td>
-            {#if service.actionRecommandee}
-              <ActionRecommandee action={service.actionRecommandee} {service} />
-            {/if}
-          </td>
-        </tr>
-      {/each}
-    </tbody>
-  {/if}
-</table>
+        {/if}
+      </div>
+      <div slot="cell:completion:{index}">
+        {#if service.pourcentageCompletude !== undefined}
+          <EtiquetteCompletude
+            {idService}
+            pourcentageCompletude={service.pourcentageCompletude}
+          />
+        {/if}
+      </div>
+      <div slot="cell:indiceCyber:{index}">
+        {#if indiceCyberDuService !== undefined}
+          <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
+        {:else if !indicesCyberCharges}
+          <IconeChargementEnCours />
+        {/if}
+      </div>
+      <div slot="cell:homologation:{index}">
+        {#if service.statutHomologation}
+          <EtiquetteHomologation
+            statutHomologation={service.statutHomologation.id}
+            label={service.statutHomologation.libelle}
+            dateExpiration={service.statutHomologation.dateExpiration}
+            {idService}
+          />
+        {/if}
+      </div>
+      <div slot="cell:actionsRecommandees:{index}">
+        {#if service.actionRecommandee}
+          <ActionRecommandee action={service.actionRecommandee} {service} />
+        {/if}
+      </div>
+    {/each}
+  </dsfr-table>
+{/if}
 
 <style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
+  .barre-actions {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  thead {
-    position: sticky;
-    top: 83px;
-    background-color: white;
-    z-index: 3;
-    -webkit-box-shadow: 5px 0 0 0 #ffffff;
-    box-shadow: 5px 0 0 0 #ffffff;
-  }
-
-  #ligne-entete-tableau,
-  #ligne-entete-action {
-    position: relative;
-  }
-
-  #ligne-entete-tableau:after,
-  #ligne-entete-action:after {
-    content: '';
-    background-image:
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
-    background-position:
-      0 0,
-      100% 0,
-      0 0,
-      0 100%;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size:
-      1px 100%,
-      1px 100%,
-      100% 1px,
-      0 0;
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    width: 100%;
-    z-index: 2;
-  }
-
-  #ligne-entete-tableau::after {
-    background-size:
-      1px 100%,
-      1px 100%,
-      100% 1px,
-      100% 1px;
-  }
-
-  table td,
-  table th {
-    padding: 8px 16px;
-  }
-
-  table th {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 24px;
+  .sous-texte {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #666666;
     white-space: nowrap;
-  }
-
-  .ligne-service td {
-    background-image:
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
-    background-position: 100% 100%;
-    background-repeat: no-repeat;
-    background-size: 100% 1px;
-  }
-
-  .ligne-service th,
-  #ligne-entete-tableau th:first-of-type {
-    background-image:
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
-    background-position:
-      0 100%,
-      100% 0;
-    background-repeat: no-repeat, no-repeat;
-    background-size:
-      100% 1px,
-      1px 100%;
-  }
-
-  table:after {
-    background-position:
-      0 0,
-      0 0,
-      100% 100%,
-      0 100%;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size:
-      100% 1px,
-      1px 100%,
-      1px 100%,
-      100% 1px;
-    content: '';
-    display: block;
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 1;
-    background-image:
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
-  }
-
-  table {
-    position: relative;
-  }
-
-  .ligne-service:hover {
-    background-color: #fafbfc;
-  }
-
-  .ligne-service:has(:global(a:active)) {
-    background-color: #eee;
-  }
-
-  table tr.ligne-service {
-    position: relative;
-  }
-
-  table tr.ligne-service::after {
-    background-image:
-      linear-gradient(
-        0deg,
-        var(--bleu-mise-en-avant),
-        var(--bleu-mise-en-avant)
-      ),
-      linear-gradient(
-        0deg,
-        var(--bleu-mise-en-avant),
-        var(--bleu-mise-en-avant)
-      ),
-      linear-gradient(
-        0deg,
-        var(--bleu-mise-en-avant),
-        var(--bleu-mise-en-avant)
-      ),
-      linear-gradient(
-        0deg,
-        var(--bleu-mise-en-avant),
-        var(--bleu-mise-en-avant)
-      );
-    background-position:
-      0 0,
-      100% 0,
-      0 0,
-      0 100%;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size:
-      2px 100%,
-      2px 100%,
-      100% 2px,
-      0 0;
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    transform: translateY(-2px);
-    width: 100%;
-    z-index: 2;
-  }
-
-  table tr.ligne-service.selectionnee + tr.ligne-service.selectionnee::after {
-    background-size:
-      2px 100%,
-      2px 100%,
-      0 0,
-      0 0;
-  }
-
-  table tr.ligne-service.selectionnee + tr::after,
-  table tr.ligne-service.selectionnee::after {
-    content: '';
-  }
-
-  table
-    tr.ligne-service.selectionnee
-    + tr.ligne-service:not(.selectionnee)::after {
-    background-size:
-      0 0,
-      0 0,
-      100% 2px,
-      0 0;
-  }
-
-  table tr.ligne-service:first-of-type.selectionnee::after {
-    background-size:
-      2px 100%,
-      2px 100%,
-      100% 4px,
-      0 0;
-  }
-
-  table tr.ligne-service:last-of-type.selectionnee::after {
-    border-bottom: 2px solid var(--bleu-mise-en-avant);
   }
 
   .lien-service {
@@ -542,99 +308,5 @@
 
   .lien-service:hover .nom-service {
     color: var(--bleu-mise-en-avant);
-  }
-
-  input[type='checkbox'] {
-    appearance: none;
-    border-radius: 4px;
-    border: 1px solid #042794;
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    cursor: pointer;
-    transform: none;
-  }
-
-  input[type='checkbox']:checked,
-  input[type='checkbox']:indeterminate {
-    background: var(--bleu-mise-en-avant);
-    border-color: var(--bleu-mise-en-avant);
-  }
-
-  input[type='checkbox']:checked::before {
-    content: '';
-    width: 4px;
-    height: 8px;
-    border-right: 1.5px solid white;
-    border-bottom: 1.5px solid white;
-    display: block;
-    transform: translate(4px, 1px) rotate(45deg);
-    margin: 0;
-  }
-
-  input[type='checkbox']:focus-visible {
-    outline: 2px solid var(--bleu-mise-en-avant);
-    outline-offset: 2px;
-  }
-
-  input[type='checkbox']:indeterminate::before {
-    content: '';
-    height: 8px;
-    border-bottom: 1.5px solid white;
-    display: block;
-    transform: translate(4px, -1.5px) rotate(0);
-    border-right: 0;
-    width: 6px;
-  }
-
-  .case-conteneur-action {
-    padding: 0;
-  }
-
-  .cellule-selection {
-    text-align: center;
-  }
-
-  col.selection-service {
-    width: 3.8%;
-  }
-
-  col.nom-service {
-    width: 23.8%;
-  }
-
-  col.contributeurs {
-    width: 10.3%;
-  }
-
-  col.besoins-securite {
-    width: 13%;
-  }
-
-  col.completion {
-    width: 9.1%;
-  }
-
-  col.indice-cyber {
-    width: 8.3%;
-  }
-
-  col.homologation {
-    width: 13%;
-  }
-
-  col.actions-recommandees {
-    width: 18.7%;
-  }
-
-  @media screen and (max-width: 1280px) {
-    table thead th {
-      padding: 8px;
-    }
-
-    .cellule-noms {
-      max-width: 280px;
-      min-width: 280px;
-    }
   }
 </style>
