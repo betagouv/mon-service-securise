@@ -9,7 +9,6 @@
       | 'telecharger'
       | 'telecharger-blanc'
       | 'medaille'
-      | 'ajout-liste'
       | 'brouillon'
       | 'redemarrer'
       | 'rafraichir'
@@ -108,10 +107,6 @@
 
   .medaille:before {
     background-image: url('/statique/assets/images/icone_medaille.svg');
-  }
-
-  .ajout-liste:before {
-    background-image: url('/statique/assets/images/icone_ajout_liste.svg');
   }
 
   .brouillon:before {
