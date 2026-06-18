@@ -15,6 +15,12 @@
   import Toaster from '../ui/Toaster.svelte';
   import { brouillonsService } from './stores/brouillonsService.store';
   import Tuiles from './Tuiles.svelte';
+  import TitreOngletDSFR from '../ui/TitreOngletDSFR.svelte';
+  import {
+    affichageParStatutHomologation,
+    affichageParStatutHomologationSelectionne,
+    type StatutHomologation,
+  } from './stores/affichageParStatutHomologation';
 
   interface Props {
     estSuperviseur: boolean;
@@ -83,6 +89,33 @@
       new CustomEvent('svelte-tableau-des-services-rafraichi')
     );
   };
+
+  const configurationsTabs: { id: StatutHomologation; label: string }[] = [
+    {
+      id: 'tous',
+      label: 'Tous les services',
+    },
+    {
+      id: 'enCoursEdition',
+      label: 'Homologation en cours',
+    },
+    {
+      id: 'bientotExpiree',
+      label: 'Homologation bientôt expirée',
+    },
+    {
+      id: 'expiree',
+      label: 'Homologation expirée',
+    },
+  ];
+
+  let idTabActive: number = $state(0);
+
+  const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
+    idTabActive = e.detail.index;
+    $affichageParStatutHomologationSelectionne =
+      configurationsTabs[idTabActive].id;
+  };
 </script>
 
 <svelte:body
@@ -111,7 +144,30 @@
       />
     {/if}
     <BandeauFiltres />
-    <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
+
+    <dsfr-tabs
+      tabs={configurationsTabs}
+      active-tab-index={idTabActive}
+      ontabchanged={gereChangementTab}
+    >
+      {#each configurationsTabs as tab, index (index)}
+        <div slot="tab-{index + 1}">
+          <TitreOngletDSFR
+            active={idTabActive === index}
+            libelle={configurationsTabs[index].label}
+            libellePastille={$affichageParStatutHomologation[
+              tab.id
+            ].length.toString()}
+          />
+        </div>
+        <div slot="panel-{index + 1}">
+          <TableauDesServices
+            indicesCyberCharges={indiceCyberMoyen !== undefined}
+          />
+        </div>
+      {/each}
+    </dsfr-tabs>
+
     <BandeauBlog {dateInscriptionUtilisateur} />
   {/if}
 </div>

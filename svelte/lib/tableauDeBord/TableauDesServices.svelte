@@ -11,14 +11,9 @@
   } from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
-  import {
-    affichageParStatutHomologation,
-    affichageParStatutHomologationSelectionne,
-    resultatsDeRechercheDuStatutHomologationSelectionne,
-  } from './stores/affichageParStatutHomologation';
+  import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
   import { selectionIdsServices } from './stores/selectionService.store';
   import { affichageTableauVide } from './stores/affichageTableauVide';
-  import Onglet from '../ui/Onglet.svelte';
   import TableauVide from './TableauVide.svelte';
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
   import Lien from '../ui/Lien.svelte';
@@ -76,36 +71,6 @@
     </colgroup>
   {/if}
   <thead>
-    <tr class="ligne-onglet">
-      <th colspan="8">
-        <div class="conteneur-onglet">
-          <Onglet
-            bind:ongletActif={$affichageParStatutHomologationSelectionne}
-            cetOnglet="tous"
-            labelOnglet="Tous les services"
-            badge={$affichageParStatutHomologation.tous.length}
-          />
-          <Onglet
-            bind:ongletActif={$affichageParStatutHomologationSelectionne}
-            cetOnglet="enCoursEdition"
-            labelOnglet="Homologation en cours"
-            badge={$affichageParStatutHomologation.enCoursEdition.length}
-          />
-          <Onglet
-            bind:ongletActif={$affichageParStatutHomologationSelectionne}
-            cetOnglet="bientotExpiree"
-            labelOnglet="Homologation bientôt expirée"
-            badge={$affichageParStatutHomologation.bientotExpiree.length}
-          />
-          <Onglet
-            bind:ongletActif={$affichageParStatutHomologationSelectionne}
-            cetOnglet="expiree"
-            labelOnglet="Homologation expirée"
-            badge={$affichageParStatutHomologation.expiree.length}
-          />
-        </div>
-      </th>
-    </tr>
     {#if !$affichageTableauVide.doitAfficher}
       <tr id="ligne-entete-action">
         <td colspan="8" class="case-conteneur-action">
@@ -628,48 +593,6 @@
 
   .cellule-selection {
     text-align: center;
-  }
-
-  .ligne-onglet {
-    position: relative;
-    transform: translateY(1px);
-    z-index: 3;
-  }
-
-  .ligne-onglet:after {
-    background-image:
-      linear-gradient(0deg, white, white), linear-gradient(0deg, white, white),
-      linear-gradient(0deg, white, white), linear-gradient(0deg, white, white);
-    background-position:
-      0 0,
-      100% 0,
-      0 0,
-      0 100%;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size:
-      0 0,
-      2px 100%,
-      0 0,
-      0 0;
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    transform: translateY(-2px);
-    width: 100%;
-    z-index: 2;
-    content: '';
-  }
-
-  .ligne-onglet th {
-    padding: 0;
-  }
-
-  .conteneur-onglet {
-    margin: 0 0 0 -0.5px;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
   }
 
   col.selection-service {
