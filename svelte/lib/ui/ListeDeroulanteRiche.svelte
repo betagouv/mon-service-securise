@@ -23,6 +23,22 @@
   let nbFiltresActifs = $derived(
     Object.values(valeursSelectionnees).flat().length
   );
+
+  const metsAJourSelection = (
+    categorie: string,
+    id: string,
+    valeur: boolean
+  ) => {
+    if (valeur) {
+      valeursSelectionnees[categorie] = [
+        ...new Set([...valeursSelectionnees[categorie], id]),
+      ];
+    } else {
+      valeursSelectionnees[categorie] = valeursSelectionnees[categorie].filter(
+        (v) => v !== id
+      );
+    }
+  };
 </script>
 
 <FermetureSurClicEnDehors
@@ -51,13 +67,14 @@
       <p class="categorie">{categorie.libelle}</p>
       {#each options.items.filter((item) => item.idCategorie === categorie.id) as item, index (index)}
         <div class="option-liste-deroulante">
-          <input
+          <dsfr-checkbox
             id={item.valeur}
+            label={item.libelle}
             value={item.valeur}
-            type="checkbox"
-            bind:group={valeursSelectionnees[categorie.id]}
-          />
-          <label for={item.valeur}>{item.libelle}</label>
+            size="sm"
+            onvaluechanged={(e: CustomEvent<boolean>) =>
+              metsAJourSelection(categorie.id, item.valeur, e.detail)}
+          ></dsfr-checkbox>
         </div>
       {/each}
       <hr />
@@ -89,10 +106,6 @@
     flex-direction: row;
     gap: 8px;
     align-items: center;
-  }
-  .option-liste-deroulante label {
-    cursor: pointer;
-    margin: 0;
   }
 
   .contenu-menu-deroulant {
@@ -157,48 +170,5 @@
   .conteneur-select:focus-visible {
     outline: 2px solid var(--bleu-mise-en-avant);
     outline-offset: 2px;
-  }
-
-  input[type='checkbox'] {
-    appearance: none;
-    border-radius: 4px;
-    border: 1px solid #042794;
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    cursor: pointer;
-    transform: none;
-  }
-
-  input[type='checkbox']:checked,
-  input[type='checkbox']:indeterminate {
-    background: var(--bleu-mise-en-avant);
-    border-color: var(--bleu-mise-en-avant);
-  }
-
-  input[type='checkbox']:checked::before {
-    content: '';
-    width: 4px;
-    height: 8px;
-    border-right: 1.5px solid white;
-    border-bottom: 1.5px solid white;
-    display: block;
-    transform: translate(4px, 1px) rotate(45deg);
-    margin: 0;
-  }
-
-  input[type='checkbox']:focus-visible {
-    outline: 2px solid var(--bleu-mise-en-avant);
-    outline-offset: 2px;
-  }
-
-  input[type='checkbox']:indeterminate::before {
-    content: '';
-    height: 8px;
-    border-bottom: 1.5px solid white;
-    display: block;
-    transform: translate(4px, -1.5px) rotate(0);
-    border-right: 0;
-    width: 6px;
   }
 </style>
