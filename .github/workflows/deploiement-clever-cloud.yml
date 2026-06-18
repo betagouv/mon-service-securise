@@ -7,6 +7,15 @@ on:
       environment:
         required: true
         type: string
+    secrets:
+      CLEVER_SECRET:
+        required: true
+      CLEVER_TOKEN:
+        required: true
+      ID_APP:
+        required: true
+      ID_ORGANISATION:
+        required: true
 
 jobs:
   deploiement:
