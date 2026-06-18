@@ -1,16 +1,13 @@
 <script lang="ts" module>
   export type OptionBoutonListeDeroulante = {
     label: string;
-    icone: 'plus' | 'televerser';
+    icone: string;
     href?: string;
     action?: () => void;
   };
 </script>
 
 <script lang="ts">
-  import Bouton from './Bouton.svelte';
-  import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
-
   interface Props {
     titre: string;
     options: OptionBoutonListeDeroulante[];
@@ -19,120 +16,41 @@
 
   let { titre, options, disabled = false }: Props = $props();
 
-  let ouvert = $state(false);
-  let elementBoutonDeroulant: HTMLDivElement | undefined = $state();
+  let optionsPourDropdown = $derived(
+    options.map((o) => ({ ...o, icon: o.icone }))
+  );
+
+  const executeAction = (
+    e: CustomEvent<{ item: OptionBoutonListeDeroulante; index: number }>
+  ) => {
+    if (e.detail.item.href) {
+      window.location.href = e.detail.item.href;
+    } else {
+      e.detail.item.action?.();
+    }
+  };
 </script>
 
-<FermetureSurClicEnDehors
-  bind:doitEtreOuvert={ouvert}
-  elements={elementBoutonDeroulant ? [elementBoutonDeroulant] : []}
-/>
-<div
-  class="conteneur-bouton nouveau-service"
-  bind:this={elementBoutonDeroulant}
->
-  <Bouton
-    {titre}
-    type="primaire"
-    icone="plus"
-    taille="moyen"
-    actif={!disabled}
-    onclick={() => (ouvert = !ouvert)}
-  />
-  {#if ouvert}
-    <ul class="contenu-deroulant">
-      {#each options as option, idx (idx)}
-        {@const tag = option.href ? 'a' : 'button'}
-        <li>
-          <svelte:element
-            this={tag}
-            tabindex="0"
-            role="button"
-            href={option.href}
-            onclick={() => {
-              option.action?.();
-              ouvert = false;
-            }}
-          >
-            <span class={option.icone}>{option.label}</span>
-          </svelte:element>
-        </li>
-      {/each}
-    </ul>
-  {/if}
-</div>
-
-<style lang="scss">
-  .conteneur-bouton {
-    position: relative;
-    font-size: 1rem;
-    z-index: 3;
-
-    .contenu-deroulant {
-      position: absolute;
-      left: 0;
-      margin: 0;
-      width: 100%;
-      padding-left: 0;
-      list-style: none;
-      border-radius: 4px;
-      box-shadow: var(--ombre-sm);
-      background: white;
-
-      li {
-        border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
-
-        &:last-of-type {
-          border-bottom: none;
-        }
-
-        &:hover {
-          background: rgba(0, 0, 0, 0.04);
-        }
-
-        a,
-        button {
-          color: var(--texte-fonce);
-          padding: 12px 16px;
-          cursor: pointer;
-          border: none;
-          background: none;
-          outline: none;
-          margin: 0;
-          display: flex;
-          font-size: 0.875rem;
-          font-weight: 500;
-          line-height: 1.5rem;
-        }
-
-        span {
-          display: flex;
-          flex-direction: row;
-          gap: 8px;
-          align-items: center;
-
-          &:before {
-            content: '';
-            display: inline-block;
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 16px;
-            height: 16px;
-            filter: brightness(0) invert(12%) sepia(3%) saturate(0%)
-              hue-rotate(230deg) brightness(91%) contrast(88%);
-          }
-
-          &.plus:before {
-            background-image: url('/statique/assets/images/icone_plus_dsfr.svg');
-            transform: translateY(1px);
-          }
-
-          &.televerser:before {
-            background-image: url('/statique/assets/images/icone_ordinateur_dsfr.svg');
-            transform: translateY(1px);
-          }
-        }
-      }
-    }
-  }
-</style>
+{#if disabled}
+  <dsfr-button
+    id="bouton-liste-deroulante"
+    label={titre}
+    icon="add-line"
+    has-icon
+    disabled
+  ></dsfr-button>
+{:else}
+  <dsfr-dropdown
+    id="bouton-liste-deroulante"
+    collapse-id="bouton-liste-deroulante-collapse"
+    button-title={titre}
+    button-kind="primary"
+    button-size="md"
+    button-icon="add-line"
+    content-type="buttons"
+    align="left"
+    items={optionsPourDropdown}
+    onitemclicked={executeAction}
+  >
+  </dsfr-dropdown>
+{/if}
