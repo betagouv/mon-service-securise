@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type {
-    ReponseApiServices,
-    ReponseApiIndicesCyber,
     IndiceCyberMoyen,
+    ReponseApiIndicesCyber,
+    ReponseApiServices,
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import TableauDesServices from './TableauDesServices.svelte';
-  import BandeauInfo from './BandeauInfo.svelte';
   import { donneesVisiteGuidee } from './tableauDeBord';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
@@ -15,6 +14,7 @@
   import { selectionIdsServices } from './stores/selectionService.store';
   import Toaster from '../ui/Toaster.svelte';
   import { brouillonsService } from './stores/brouillonsService.store';
+  import Tuiles from './Tuiles.svelte';
 
   interface Props {
     estSuperviseur: boolean;
@@ -101,7 +101,7 @@
     </div>
   {:else}
     {#if nombreServices !== undefined && nombreServicesHomologues !== undefined && nombreHomologationsExpirees !== undefined}
-      <BandeauInfo
+      <Tuiles
         {nombreServices}
         {nombreServicesHomologues}
         {nombreHomologationsExpirees}
