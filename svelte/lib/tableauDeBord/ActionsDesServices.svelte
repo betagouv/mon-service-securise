@@ -7,7 +7,6 @@
 </script>
 
 <script lang="ts">
-  import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
@@ -45,66 +44,75 @@
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
   <div class="boutons-actions">
-    <Bouton
-      titre="Gérer les contributeurs"
-      icone="contributeurs"
-      taille="moyen"
-      type="lien"
-      actif={actionsDisponibles &&
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Gérer les contributeurs"
+      icon="group-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!(
+        actionsDisponibles &&
         estProprietaireDesServicesSelectionnes &&
-        !selectionPossedeDesBrouillons}
+        !selectionPossedeDesBrouillons
+      )}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
           services: seulementLesServices(selection),
         })}
-    />
-    <Bouton
-      titre="Télécharger PDFs"
-      icone="telechargement"
-      taille="moyen"
-      type="lien"
-      actif={actionsDisponibles && selectionUnique && ontDesDocuments}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Télécharger PDFs"
+      icon="file-download-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!(actionsDisponibles && selectionUnique && ontDesDocuments)}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
           service: seulementLesServices(selection)[0],
         })}
-    />
-    <Bouton
-      titre="Exporter la sélection"
-      icone="export"
-      taille="moyen"
-      type="lien"
-      actif={actionsDisponibles && !selectionPossedeDesBrouillons}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Exporter la sélection"
+      icon="inbox-archive-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!(actionsDisponibles && !selectionPossedeDesBrouillons)}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirExportServices, {
           services: seulementLesServices(selection),
         })}
-    />
-    <Bouton
-      titre="Dupliquer"
-      icone="copie"
-      taille="moyen"
-      type="lien"
-      actif={actionsDisponibles &&
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Dupliquer"
+      icon="file-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!(
+        actionsDisponibles &&
         selectionUnique &&
         estProprietaireDesServicesSelectionnes &&
-        !selectionPossedeDesBrouillons}
+        !selectionPossedeDesBrouillons
+      )}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
           service: seulementLesServices(selection)[0],
         })}
-    />
-    <Bouton
-      titre="Supprimer"
-      icone="suppression"
-      taille="moyen"
-      type="lien"
-      actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Supprimer"
+      icon="delete-bin-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!(actionsDisponibles && estProprietaireDesServicesSelectionnes)}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirSuppression, {
           servicesEtBrouillon: selection,
         })}
-    />
+    ></dsfr-button>
   </div>
 </div>
 
@@ -117,14 +125,6 @@
 
   .conteneur-actions.avec-nombre-lignes {
     justify-content: space-between;
-  }
-
-  .nombre-selection {
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1.5rem;
-    color: var(--gris-texte-additionnel);
   }
 
   .boutons-actions {
