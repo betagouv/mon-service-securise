@@ -84,13 +84,14 @@
     />
   </div>
   <div class="actions">
-    <Lien
-      type="bouton-tertiaire"
+    <dsfr-button
+      kind="tertiary"
+      markup="a"
       href="/mesures"
-      titre="Liste de mesures"
-      taille="moyen"
-      icone="ajout-liste"
-    />
+      label="Liste de mesures"
+      has-icon
+      icon="list-check"
+    ></dsfr-button>
     {#if $services.length > 0 || $brouillonsService.length > 0}
       <BoutonAvecListeDeroulante
         titre="Ajouter un / des services"
