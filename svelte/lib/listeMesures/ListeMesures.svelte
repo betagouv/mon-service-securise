@@ -324,12 +324,12 @@
           options={[
             {
               label: 'Ajouter une mesure',
-              icone: 'plus',
+              icone: 'add-line',
               action: afficheTiroirAjout,
             },
             {
               label: 'Téléverser des mesures',
-              icone: 'televerser',
+              icone: 'upload-2-line',
               action: afficheTiroirTeleversement,
             },
           ]}

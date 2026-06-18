@@ -9,12 +9,12 @@
   options={[
     {
       label: 'Ajouter un service',
-      icone: 'plus',
+      icone: 'add-line',
       href: '/service/v2/creation',
     },
     {
       label: 'Téléverser des services',
-      icone: 'televerser',
+      icone: 'upload-2-line',
       action: () =>
         tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {}),
     },

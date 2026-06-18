@@ -6,7 +6,6 @@
   import { filtrageServices } from './stores/filtrageServices.store';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { brouillonsService } from './stores/brouillonsService.store';
   import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
@@ -98,12 +97,12 @@
         options={[
           {
             label: 'Ajouter un service',
-            icone: 'plus',
+            icone: 'add-line',
             href: '/service/v2/creation',
           },
           {
             label: 'Téléverser des services',
-            icone: 'televerser',
+            icone: 'upload-2-line',
             action: () =>
               tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {}),
           },
