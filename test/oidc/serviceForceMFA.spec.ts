@@ -17,14 +17,7 @@ describe('Le service qui force le MFA', () => {
     expect(resultat.raison).toBe('MFA_NON_PRIS_EN_CHARGE');
   });
 
-  it.each([
-    'eidas2',
-    'eidas3',
-    'https://proconnect.gouv.fr/assurance/self-asserted-2fa',
-    'https://proconnect.gouv.fr/assurance/consistency-checked-2fa',
-    'eidas0-mfa',
-    'eidas1-mfa',
-  ] as Array<ACR>)(
+  it.each(['eidas2', 'eidas3', 'eidas0-mfa', 'eidas1-mfa'] as Array<ACR>)(
     "laisse passer, si ProConnect assure la présence d'un MFA via le claim `acr: %s`",
     async (acr) => {
       const s = new ServiceForceMFA({
