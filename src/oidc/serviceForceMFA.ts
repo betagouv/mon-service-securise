@@ -1,8 +1,6 @@
 export const ACR_GARANTISSANT_MFA = [
   'eidas2',
   'eidas3',
-  'https://proconnect.gouv.fr/assurance/self-asserted-2fa',
-  'https://proconnect.gouv.fr/assurance/consistency-checked-2fa',
   'eidas0-mfa',
   'eidas1-mfa',
 ] as const;
