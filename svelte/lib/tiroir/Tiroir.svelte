@@ -26,18 +26,20 @@
           label="Fermer"
         >
         </dsfr-button>
-        <div class="titre-tiroir">
-          <h2>{configuration?.titre}</h2>
-          {#if configuration?.sousTitre}
-            <p>
-              {configuration.sousTitre}
-            </p>
+        <div class="contenu-entete">
+          <div class="titre-tiroir">
+            <h2>{configuration?.titre}</h2>
+            {#if configuration?.sousTitre}
+              <p>
+                {configuration.sousTitre}
+              </p>
+            {/if}
+          </div>
+          {#if configuration?.composantEntete}
+            {@const ComposantEntete = configuration.composantEntete}
+            <ComposantEntete {...configuration.propsComposantEntete} />
           {/if}
         </div>
-        {#if configuration?.composantEntete}
-          {@const ComposantEntete = configuration.composantEntete}
-          <ComposantEntete {...configuration.propsComposantEntete} />
-        {/if}
       </div>
       {@const Composant = $tiroirStore.contenu.composant}
       <Composant bind:this={composant} {...$tiroirStore.contenu.props} />
