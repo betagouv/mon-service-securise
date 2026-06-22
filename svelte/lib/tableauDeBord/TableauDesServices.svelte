@@ -87,23 +87,16 @@
   >
     {#each $resultatsDeRechercheBrouillons as brouillon, i (brouillon.id)}
       <div slot="cell:nom:{i}" class="cellule-noms">
-        <a
-          class="lien-service"
-          href="/service/v2/creation?id={brouillon.id}"
-          title="Ouvrir le brouillon"
-        >
-          <span class="denomination-service">
-            <span class="indicateur-brouillon">Brouillon en cours</span>
-            <span class="nom-service">{brouillon.nomService}</span>
-          </span>
-          <div class="icone-voir-service">
-            <img
-              src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
-              alt="Ouvrir la page du service"
-            />
-            <span>Ouvrir</span>
-          </div>
-        </a>
+        <span class="denomination-service">
+          <span class="indicateur-brouillon">Brouillon en cours</span>
+          <dsfr-link
+            class="nom-service"
+            label={brouillon.nomService}
+            href="/service/v2/creation?id={brouillon.id}"
+            title="Ouvrir le brouillon"
+            size="sm"
+          ></dsfr-link>
+        </span>
       </div>
       <div slot="cell:contributeurs:{i}">-</div>
       <div slot="cell:besoinsSecurite:{i}">-</div>
@@ -127,35 +120,28 @@
       {@const indiceCyberDuService = service.indiceCyber}
       {@const index = i + $resultatsDeRechercheBrouillons.length}
       <div slot="cell:nom:{index}" class="cellule-noms">
-        <a
-          class="lien-service"
-          href="/service/{idService}"
-          title="Ouvrir la page du service"
-        >
-          <span class="denomination-service">
-            {#if service.estAdmin}
-              <dsfr-badge
-                label="Admin"
-                type="accent"
-                accent="blue-cumulus"
-                size="sm"
-              ></dsfr-badge>
-            {:else if service.estProprietaire}
-              <EtiquetteProprietaire />
-            {/if}
-            <span class="nom-service">{service.nomService}</span>
-            <span class="nom-organisation">
-              {service.organisationResponsable}
-            </span>
+        <span class="denomination-service">
+          {#if service.estAdmin}
+            <dsfr-badge
+              label="Admin"
+              type="accent"
+              accent="blue-cumulus"
+              size="sm"
+            ></dsfr-badge>
+          {:else if service.estProprietaire}
+            <EtiquetteProprietaire />
+          {/if}
+          <dsfr-link
+            label={service.nomService}
+            class="nom-service lien-service"
+            href="/service/{idService}"
+            title="Ouvrir la page du service"
+            size="sm"
+          ></dsfr-link>
+          <span class="nom-organisation">
+            {service.organisationResponsable}
           </span>
-          <div class="icone-voir-service">
-            <img
-              src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
-              alt="Ouvrir la page du service"
-            />
-            <span>Ouvrir</span>
-          </div>
-        </a>
+        </span>
       </div>
       <div slot="cell:contributeurs:{index}">
         <EtiquetteContributeurs
@@ -224,36 +210,9 @@
     white-space: nowrap;
   }
 
-  .lien-service {
-    display: flex;
-    gap: 4px;
-    justify-content: space-between;
-  }
-
-  .icone-voir-service img {
-    width: 16px;
-  }
-
-  .icone-voir-service {
-    color: var(--bleu-mise-en-avant);
-    font-weight: 500;
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    pointer-events: none;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
-  }
-
   .cellule-noms {
-    max-width: 340px;
-    min-width: 340px;
-  }
-
-  .cellule-noms:not(:hover) .icone-voir-service {
-    display: none;
+    max-width: 280px;
+    min-width: 280px;
   }
 
   .denomination-service {
@@ -301,9 +260,5 @@
     font-style: normal;
     font-weight: 400;
     line-height: 18px;
-  }
-
-  .lien-service:hover .nom-service {
-    color: var(--bleu-mise-en-avant);
   }
 </style>
