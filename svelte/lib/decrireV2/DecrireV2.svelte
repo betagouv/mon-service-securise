@@ -95,6 +95,11 @@
 
   onMount(async () => {
     await rafraichisNiveauSecuriteMinimal();
+    const requete = new URLSearchParams(window.location.search);
+    const etape = requete.get('etape');
+    if (etape === '3') {
+      ongletActif = 'besoinsSecurite';
+    }
   });
 
   const metsAJourDescriptionEditable = async (miseAJour: MiseAJour) => {
