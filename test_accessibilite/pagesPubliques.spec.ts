@@ -18,7 +18,6 @@ const pages = [
   { nom: 'Mentions légales', url: '/mentionsLegales' },
   { nom: 'Statistiques', url: '/statistiques' },
   { nom: 'Inscription', url: '/inscription' },
-  { nom: 'Activation', url: '/activation' },
   { nom: 'Connexion', url: '/connexion' },
   {
     nom: 'Devenir ambassadeur·rice',

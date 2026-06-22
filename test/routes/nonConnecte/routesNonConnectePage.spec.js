@@ -19,7 +19,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/mentionsLegales',
     '/inscription',
     '/creation-compte?token=unToken',
-    '/activation',
     '/connexion',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
