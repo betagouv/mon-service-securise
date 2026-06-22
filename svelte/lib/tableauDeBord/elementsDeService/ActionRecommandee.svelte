@@ -1,7 +1,5 @@
 <script lang="ts">
   import type { ActionRecommandee } from '../tableauDeBord.d';
-  import Lien from '../../ui/Lien.svelte';
-  import Bouton from '../../ui/Bouton.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { Service } from '../tableauDeBord.d';
@@ -17,96 +15,111 @@
 </script>
 
 {#if action.id === 'mettreAJour'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Finaliser la description"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Finaliser la description"
     href="/service/{idService}"
-    taille="petit"
-    icone="editer"
-    classe="mettreAJour"
-  />
+    has-icon
+    icon="edit-line"
+    size="sm"
+  ></dsfr-button>
 {:else if action.id === 'continuerHomologation'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Continuer l'homologation"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Continuer l'homologation"
     href="/service/{idService}/homologation/edition/etape/recapitulatif"
-    taille="petit"
-    icone="homologation"
-    classe="continuerHomologation"
-  />
+    size="sm"
+    has-icon
+    icon="edit-box-line"
+  ></dsfr-button>
 {:else if action.id === 'augmenterIndiceCyber'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Augmenter l’indice cyber"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Augmenter l’indice cyber"
     href="/service/{idService}/mesures"
-    taille="petit"
-    icone="indiceCyber"
-    classe="augmenterIndiceCyber"
-  />
+    size="sm"
+    has-icon
+    icon="donut-chart-line"
+  ></dsfr-button>
 {:else if action.id === 'telechargerEncartHomologation'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Télécharger l'encart"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Télécharger l'encart"
     href="/service/{idService}/dossiers?succesHomologation=true"
-    taille="petit"
-    icone="telecharger"
-    classe="telechargerEncartHomologation"
-  />
+    size="sm"
+    has-icon
+    icon="download-line"
+  ></dsfr-button>
 {:else if action.id === 'homologuerANouveau'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Homologuer à nouveau"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Homologuer à nouveau"
     href="/service/{idService}/dossiers"
-    taille="petit"
-    icone="medaille"
-    classe="homologuerANouveau"
-  />
+    size="sm"
+    has-icon
+    icon="award-line"
+  ></dsfr-button>
 {:else if action.id === 'homologuerService'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Homologuer le service"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Homologuer le service"
     href="/service/{idService}/dossiers"
-    taille="petit"
-    icone="medaille"
-    classe="homologuerService"
-  />
+    size="sm"
+    has-icon
+    icon="award-line"
+  ></dsfr-button>
 {:else if action.id === 'inviterContributeur'}
-  <Bouton
-    actif={action.autorisee}
-    titre="Inviter un contributeur"
-    type="secondaire"
-    taille="petit"
-    icone="inviter"
-    classe="inviterContributeur"
+  <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+  <dsfr-button
+    disabled={!action.autorisee}
+    label="Inviter un contributeur"
+    kind="secondary"
+    size="sm"
+    has-icon
+    icon="user-add-line"
     onclick={() =>
       tiroirStore.afficheContenu(TiroirGestionContributeurs, {
         services: [service],
       })}
-  />
+  ></dsfr-button>
 {:else if action.id === 'simulerReferentielV2'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Simuler le référentiel 2025"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Simuler le référentiel 2025"
     href="/service/{idService}/simulation-referentiel-v2"
-    taille="petit"
-    icone="redemarrer"
-    classe="simulerReferentielV2"
-  />
+    size="sm"
+    has-icon
+    icon="restart-line"
+  ></dsfr-button>
 {:else if action.id === 'continuerSimulationReferentielV2'}
-  <Lien
-    inactif={!action.autorisee}
-    titre="Continuer les modifications"
-    type="bouton-secondaire"
+  <dsfr-button
+    kind="secondary"
+    markup="a"
+    disabled={!action.autorisee}
+    label="Continuer les modifications"
     href="/service/{idService}/simulation-referentiel-v2"
-    taille="petit"
-    icone="rafraichir"
-    classe="simulerReferentielV2"
-  />
+    size="sm"
+    has-icon
+    icon="refresh-line"
+  ></dsfr-button>
 {/if}
+
+<style>
+  dsfr-button {
+    white-space: nowrap;
+  }
+</style>

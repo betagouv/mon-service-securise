@@ -16,7 +16,6 @@
   import { affichageTableauVide } from './stores/affichageTableauVide';
   import TableauVide from './TableauVide.svelte';
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
-  import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
   import { singulierPluriel } from '../outils/string';
@@ -112,14 +111,15 @@
       <div slot="cell:indiceCyber:{i}">-</div>
       <div slot="cell:homologation:{i}">-</div>
       <div slot="cell:actionsRecommandees:{i}">
-        <Lien
-          titre="Continuer la création"
-          type="bouton-secondaire"
+        <dsfr-button
+          label="Continuer la création"
+          kind="secondary"
+          markup="a"
           href="/service/v2/creation?id={brouillon.id}"
-          taille="petit"
-          icone="brouillon"
-          classe="continuerCreationV2"
-        />
+          size="sm"
+          has-icon
+          icon="edit-box-line"
+        ></dsfr-button>
       </div>
     {/each}
     {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service, i (service.id)}
