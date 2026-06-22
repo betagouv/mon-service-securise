@@ -31,26 +31,17 @@
   };
 </script>
 
-{#if disabled}
-  <dsfr-button
-    id="bouton-liste-deroulante"
-    label={titre}
-    icon="add-line"
-    has-icon
-    disabled
-  ></dsfr-button>
-{:else}
-  <dsfr-dropdown
-    id="bouton-liste-deroulante"
-    collapse-id="bouton-liste-deroulante-collapse"
-    button-title={titre}
-    button-kind="primary"
-    button-size="md"
-    button-icon="add-line"
-    content-type="buttons"
-    align="left"
-    items={optionsPourDropdown}
-    onitemclicked={executeAction}
-  >
-  </dsfr-dropdown>
-{/if}
+<dsfr-dropdown
+  id="bouton-liste-deroulante"
+  collapse-id="bouton-liste-deroulante-collapse"
+  button-title={titre}
+  button-kind="primary"
+  button-size="md"
+  button-icon="add-line"
+  content-type="buttons"
+  align="left"
+  items={optionsPourDropdown}
+  onitemclicked={executeAction}
+  {disabled}
+>
+</dsfr-dropdown>
