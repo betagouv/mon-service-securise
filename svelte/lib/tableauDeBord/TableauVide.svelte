@@ -14,79 +14,44 @@
   };
 </script>
 
-<div class="conteneur-tableau-vide">
-  {#if $affichageTableauVide.etat === 'aucunService'}
-    <div class="aucun-service">
-      <h4>Laissez vous guider !</h4>
-      <p>
-        Nous vous accompagnons sur toutes les étapes de sécurisation de votre
-        service numérique.
-      </p>
-      <BoutonAjouterPremierService />
-    </div>
-  {:else if $affichageTableauVide.etat === 'aucunResultatDeRecherche'}
-    <div class="aucun-resultat">
-      <img
-        src="/statique/assets/images/illustration_recherche_vide.svg"
-        alt=""
-      />
-      Aucun service ne correspond à la recherche.
-      <Bouton
-        titre="Effacer la recherche"
-        type="secondaire"
-        icone="rafraichir"
-        onclick={supprimeRechercheEtFiltres}
-      />
-    </div>
-  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationEnCours'}
-    <div class="aucun-dossier-en-cours">
-      <img src="/statique/assets/images/dossiers.png" alt="" />
-      Aucune homologation en cours
-    </div>
-  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationBientotExpiree'}
-    <div class="aucun-dossier-en-cours">
-      <img src="/statique/assets/images/dossiers.png" alt="" />
-      Aucune homologation bientôt expirée
-    </div>
-  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationExpiree'}
-    <div class="aucun-dossier-en-cours">
-      <img src="/statique/assets/images/dossiers.png" alt="" />
-      Aucune homologation expirée
-    </div>
-  {/if}
-</div>
+{#if $affichageTableauVide.etat === 'aucunService'}
+  <div class="aucun-service">
+    <h4>Laissez vous guider !</h4>
+    <p>
+      Nous vous accompagnons sur toutes les étapes de sécurisation de votre
+      service numérique.
+    </p>
+    <BoutonAjouterPremierService />
+  </div>
+{:else if $affichageTableauVide.etat === 'aucunResultatDeRecherche'}
+  <div class="aucun-resultat">
+    <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
+    Aucun service ne correspond à la recherche.
+    <Bouton
+      titre="Effacer la recherche"
+      type="secondaire"
+      icone="rafraichir"
+      onclick={supprimeRechercheEtFiltres}
+    />
+  </div>
+{:else if $affichageTableauVide.etat === 'aucunDossierHomologationEnCours'}
+  <div class="aucun-dossier-en-cours">
+    <img src="/statique/assets/images/dossiers.png" alt="" />
+    Aucune homologation en cours
+  </div>
+{:else if $affichageTableauVide.etat === 'aucunDossierHomologationBientotExpiree'}
+  <div class="aucun-dossier-en-cours">
+    <img src="/statique/assets/images/dossiers.png" alt="" />
+    Aucune homologation bientôt expirée
+  </div>
+{:else if $affichageTableauVide.etat === 'aucunDossierHomologationExpiree'}
+  <div class="aucun-dossier-en-cours">
+    <img src="/statique/assets/images/dossiers.png" alt="" />
+    Aucune homologation expirée
+  </div>
+{/if}
 
 <style>
-  .conteneur-tableau-vide {
-    position: relative;
-    z-index: 2;
-  }
-
-  .conteneur-tableau-vide:after {
-    background-image:
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
-    background-position:
-      0 0,
-      100% 0,
-      0 0,
-      0 100%;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size:
-      1px 100%,
-      1px 100%,
-      100% 1px,
-      100% 1px;
-    height: 100%;
-    left: 0;
-    top: 0;
-    pointer-events: none;
-    position: absolute;
-    width: 100%;
-    z-index: 2;
-    content: '';
-  }
-
   .aucun-resultat,
   .aucun-dossier-en-cours {
     padding: 36px 0;
