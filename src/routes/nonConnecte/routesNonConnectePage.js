@@ -99,10 +99,6 @@ const routesNonConnectePage = ({
     }
   );
 
-  routes.get('/activation', (_requete, reponse) => {
-    reponse.render('activation');
-  });
-
   routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     const { urlRedirection } = requete.query;
     if (!urlRedirection) {
