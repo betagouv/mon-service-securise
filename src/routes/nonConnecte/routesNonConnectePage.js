@@ -1,4 +1,5 @@
 import express from 'express';
+import { readFileSync } from 'node:fs';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 
@@ -173,12 +174,15 @@ const routesNonConnectePage = ({
     reponse.render('conseilsCyber', { sections, articles });
   });
 
+  const sitemap = readFileSync('./public/assets/fichiers/sitemap.xml', 'utf8');
+  const robots = readFileSync('./public/assets/fichiers/robots.txt', 'utf8');
+
   routes.get('/sitemap.xml', async (_requete, reponse) => {
-    reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
+    reponse.type('application/xml').send(sitemap);
   });
 
   routes.get('/robots.txt', async (_requete, reponse) => {
-    reponse.sendFile('/public/assets/fichiers/robots.txt', { root: '.' });
+    reponse.type('text/plain').send(robots);
   });
 
   return routes;
