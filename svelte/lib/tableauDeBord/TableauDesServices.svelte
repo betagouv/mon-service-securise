@@ -180,7 +180,6 @@
       <div slot="cell:completion:{index}">
         {#if service.pourcentageCompletude !== undefined}
           <EtiquetteCompletude
-            {idService}
             pourcentageCompletude={service.pourcentageCompletude}
           />
         {/if}
