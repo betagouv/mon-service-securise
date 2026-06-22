@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /connexion
+Disallow: /oidc/
+Sitemap: https://monservicesecurise.cyber.gouv.fr/sitemap.xml
