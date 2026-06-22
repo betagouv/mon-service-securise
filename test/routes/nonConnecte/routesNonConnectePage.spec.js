@@ -109,6 +109,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
+  describe('quand requête GET sur `/robots.txt`', () => {
+    it('sert le contenu du fichier', async () => {
+      const reponse = await testeur.get('/robots.txt');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/plain');
+    });
+  });
+
   describe('quand requete GET sur `/creation-compte`', () => {
     beforeEach(() => {
       testeur.adaptateurJWT().decode = () => ({});

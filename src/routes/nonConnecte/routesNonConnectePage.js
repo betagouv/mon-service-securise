@@ -181,6 +181,10 @@ const routesNonConnectePage = ({
     reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
   });
 
+  routes.get('/robots.txt', async (_requete, reponse) => {
+    reponse.sendFile('/public/assets/fichiers/robots.txt', { root: '.' });
+  });
+
   return routes;
 };
 
