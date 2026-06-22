@@ -168,13 +168,11 @@
       </div>
       <div slot="cell:besoinsSecurite:{index}">
         {#if service.niveauSecurite}
-          <Lien
-            classe="lien-niveau-securite"
-            titre={referentielNiveauxSecurite[service.niveauSecurite]}
+          <dsfr-link
+            label={referentielNiveauxSecurite[service.niveauSecurite]}
             href="/service/{idService}/descriptionService?etape=3"
-            type="lien"
-            taille="petit"
-          />
+            size="sm"
+          ></dsfr-link>
         {/if}
       </div>
       <div slot="cell:completion:{index}">
