@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { singulierPluriel } from '../../outils/string';
+
   interface Props {
     nombreContributeurs: number;
     onclick: (e: MouseEvent) => void;
@@ -7,41 +9,22 @@
   let { nombreContributeurs, onclick }: Props = $props();
 </script>
 
-<button class="contributeurs-service" {onclick}>
-  <img
-    src="/statique/assets/images/icone_contributeurs.svg"
-    alt="Icône du nombre de contributeurs"
-  />
-  {nombreContributeurs}
-</button>
-
-<style>
-  button {
-    padding: 0 6px;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 20px;
-    color: var(--bleu-mise-en-avant);
-    background: var(--cyan-clair);
-    width: fit-content;
-    border: none;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #b6cffb;
-  }
-
-  button:active {
-    background: #7badef;
-  }
-
-  img {
-    height: 12px;
-  }
-</style>
+<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+<dsfr-button
+  {onclick}
+  label={nombreContributeurs}
+  aria-label="{nombreContributeurs} {singulierPluriel(
+    'contributeur',
+    'contributeurs',
+    nombreContributeurs
+  )}"
+  kind="tertiary"
+  size="sm"
+  icon="user-line"
+  icon-place="left"
+  markup="button"
+  type="button"
+  target="self"
+  has-icon
+>
+</dsfr-button>
