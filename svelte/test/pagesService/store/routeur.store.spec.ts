@@ -92,6 +92,31 @@ describe('Le routeur des pages service', () => {
 
       expect(document.title).toBe('Sécuriser | MonServiceSécurisé');
     });
+
+    it('track la navigation de la SPA dans Matomo', async () => {
+      const routeurStore = await leRouteur();
+      window._paq = [];
+      chargeInformationsService(routeurStore);
+      const idService = '701e5c08-1759-4a5b-885c-17c695f967eb';
+      routeurStore.navigue(`/service/${idService}/mesures`);
+      window._paq = [];
+
+      routeurStore.navigue(`/service/${idService}/risques`);
+
+      expect(window._paq.find((p) => p[0] === 'setReferrerUrl')?.[1]).toMatch(
+        '/service/{ID}/mesures'
+      );
+      expect(window._paq.find((p) => p[0] === 'setCustomUrl')?.[1]).toMatch(
+        '/service/{ID}/risques'
+      );
+      expect(window._paq).toContainEqual([
+        'setDocumentTitle',
+        'Risques | MonServiceSécurisé',
+      ]);
+      expect(window._paq).toContainEqual(['setGenerationTimeMs', 0]);
+      expect(window._paq).toContainEqual(['trackPageView']);
+      expect(window._paq).toContainEqual(['enableLinkTracking']);
+    });
   });
 
   describe('concernant les contraintes de navigation', () => {
