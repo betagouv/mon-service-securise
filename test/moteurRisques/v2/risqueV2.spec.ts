@@ -207,5 +207,75 @@ describe('Un risque V2', () => {
 
       expect(risque.toJSON().commentaire).toBe('intelligent');
     });
+
+    it('peut surcharger sa gravité', () => {
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        [],
+        { graviteSurchargee: 4 },
+        configurationRisque()
+      );
+
+      expect(risque.toJSON().gravite).toBe(4);
+    });
+  });
+
+  describe('concernant ses données sérialisées', () => {
+    it("sérialise le commentaire et l'état 'désactivé'", () => {
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        [],
+        { desactive: true, commentaire: 'un commentaire' },
+        configurationRisque()
+      );
+
+      expect(risque.donneesSerialisees()).toEqual({
+        desactive: true,
+        commentaire: 'un commentaire',
+      });
+    });
+
+    it('sérialise la gravité si elle a été surchargée', () => {
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        [],
+        { graviteSurchargee: 4 },
+        configurationRisque()
+      );
+
+      expect(risque.donneesSerialisees()).toEqual({
+        graviteSurchargee: 4,
+      });
+    });
+  });
+
+  it('peut mettre à jour ses données', () => {
+    const risque = new RisqueV2(
+      'V1',
+      { OV1: 3 },
+      1,
+      [],
+      {},
+      configurationRisque()
+    );
+
+    risque.metsAJour({
+      commentaire: 'un commentaire',
+      desactive: true,
+      graviteSurchargee: 4,
+    });
+
+    expect(risque.donneesSerialisees()).toEqual({
+      commentaire: 'un commentaire',
+      desactive: true,
+      graviteSurchargee: 4,
+    });
+    expect(risque.gravite).toBe(4);
   });
 });

@@ -20,11 +20,12 @@ const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
 
 export class RisqueV2 {
   readonly id: IdRisqueV2;
-  readonly gravite: Gravite;
   readonly intitule: string;
   readonly categories: Array<CategorieRisque>;
   private desactive?: boolean;
   private commentaire?: string;
+  private readonly graviteCalculee: Gravite;
+  private graviteSurchargee?: Gravite;
 
   constructor(
     private readonly idVecteur: IdVecteurRisque,
@@ -35,11 +36,18 @@ export class RisqueV2 {
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.id = RisqueV2.idPourVecteur(idVecteur);
-    this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
+    this.graviteCalculee = Math.max(
+      ...Object.values(objectifsVises)
+    ) as Gravite;
     this.intitule = this.genereIntitule();
     this.categories = this.getCategories();
     this.desactive = donnees.desactive;
     this.commentaire = donnees.commentaire;
+    this.graviteSurchargee = donnees.graviteSurchargee;
+  }
+
+  public get gravite(): Gravite {
+    return this.graviteSurchargee ?? this.graviteCalculee;
   }
 
   toJSON() {
@@ -89,11 +97,13 @@ export class RisqueV2 {
     return {
       desactive: this.desactive,
       commentaire: this.commentaire,
+      graviteSurchargee: this.graviteSurchargee,
     };
   }
 
   metsAJour(donnees: DonneesRisqueV2) {
     this.desactive = donnees.desactive;
     this.commentaire = donnees.commentaire;
+    this.graviteSurchargee = donnees.graviteSurchargee;
   }
 }
