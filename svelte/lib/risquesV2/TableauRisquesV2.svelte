@@ -99,6 +99,9 @@
             disabled={donnee.desactive}
             onclick={() => {
               if (!idService || !risqueBrut) return;
+              const url = new URL(window.location.href);
+              url.searchParams.set('id', donnee.id);
+              history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
               tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
                 idService,
                 risque: donnee,

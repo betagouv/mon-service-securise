@@ -18,6 +18,7 @@
   import TableauRisquesV2 from './TableauRisquesV2.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
   import { couleur, mappingCouleursNiveau } from './kit/kit';
+  import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
 
   interface Props {
     idService: string;
@@ -49,6 +50,23 @@
 
   onMount(async () => {
     risques = await api.recupereRisques(idService);
+
+    const url = new URL(window.location.href);
+    const idRisque = url.searchParams.get('id');
+    if (idRisque) {
+      url.searchParams.delete('id');
+      history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+
+      const risque = risques.risques.find((r) => r.id === idRisque);
+      if (risque) {
+        tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+          idService,
+          risque,
+          statuts,
+          niveauxGravite,
+        });
+      }
+    }
   });
 
   let opacite = $state(2);
