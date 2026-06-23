@@ -1,12 +1,14 @@
 <script lang="ts">
-  import Tableau from '../ui/Tableau.svelte';
   import Niveau from './kit/Niveau.svelte';
-  import Switch from '../ui/Switch.svelte';
   import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
   import CartoucheIdentifiantRisque from './kit/CartoucheIdentifiantRisque.svelte';
   import CartouchesRisqueV2 from './kit/CartouchesRisqueV2.svelte';
-  import type { Risque, TousRisques } from './risquesV2.d';
-  import type { DonneesRisqueSpecifiqueV2 } from './risquesV2.d';
+  import type {
+    DonneesRisqueSpecifiqueV2,
+    Risque,
+    RisqueSpecifiqueV2,
+    TousRisques,
+  } from './risquesV2.d';
   import { metsAJourRisque } from './risquesV2.api';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import type { ReferentielStatut } from '../ui/types';
@@ -63,111 +65,110 @@
   };
 </script>
 
-<Tableau
-  colonnes={[
-    { cle: 'id', libelle: 'Identifiant' },
-    { cle: 'intitule', libelle: 'Intitulé du risque' },
-    { cle: 'gravite', libelle: 'Gravité' },
-    { cle: 'vraisemblance', libelle: 'Vraisemblance' },
-    { cle: 'actions', libelle: 'Actions' },
+<dsfr-table
+  columns={[
+    { key: 'id', label: 'Identifiant' },
+    { key: 'intitule', label: 'Intitulé du risque' },
+    { key: 'gravite', label: 'Gravité' },
+    { key: 'vraisemblance', label: 'Vraisemblance' },
+    { key: 'actions', label: 'Actions' },
   ]}
-  donnees={tousLesRisques}
+  rows={tousLesRisques}
+  rich
+  multiline
 >
-  {#snippet cellule({ donnee, colonne })}
-    {#if colonne.cle === 'id'}
-      <div
-        class="colonne-identifiant colonne"
-        class:inactif={donnee.desactive || estLectureSeule}
-      >
-        {#if estRisqueGeneral(donnee)}
-          <CartoucheIdentifiantRisque risque={donnee} />
-        {:else}
-          <dsfr-badge label="Risque spécifique" type="statut"></dsfr-badge>
-        {/if}
-      </div>
-    {:else if colonne.cle === 'intitule'}
+  {#each tousLesRisques as donnee, i (donnee.id)}
+    {@const { type: _type, desactive: _desactive, ...donneeRisque } = donnee}
+    {@const risqueBrut = risques.risquesBruts.find((r) => r.id === donnee.id)}
+    <div slot="cell:id:{i}" class="colonne-identifiant colonne">
       {#if estRisqueGeneral(donnee)}
-        {@const risqueBrut = risques.risquesBruts.find(
-          (r) => r.id === donnee.id
-        )}
-        <div
-          class="colonne-intitule colonne"
-          class:inactif={donnee.desactive || estLectureSeule}
-        >
-          <button
-            class="lien-intitule-risque"
-            disabled={donnee.desactive}
-            onclick={() => {
-              if (!idService || !risqueBrut) return;
-              const url = new URL(window.location.href);
-              url.searchParams.set('id', donnee.id);
-              history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
-              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-                idService,
-                risque: donnee,
-                statuts,
-                niveauxGravite,
-              });
-            }}
-          >
-            <span>{donnee.intitule}</span>
-            <CartouchesRisqueV2 risque={donnee} />
-          </button>
-        </div>
+        <CartoucheIdentifiantRisque risque={donnee} />
       {:else}
-        {@const {
-          type: _type,
-          desactive: _desactive,
-          ...donneeRisque
-        } = donnee}
-        <div class="colonne-intitule colonne" class:inactif={estLectureSeule}>
-          <button
-            class="lien-intitule-risque"
-            onclick={() => {
-              if (!idService) return;
-              tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
-                idService,
-                niveauxGravite,
-                niveauxVraisemblance,
-                risque: donneeRisque,
-              });
-            }}
-          >
-            <span>{donnee.intitule}</span>
-            <CartouchesRisqueV2 risque={donnee} risqueAjoute />
-          </button>
-        </div>
+        <dsfr-badge label="Risque spécifique" type="statut"></dsfr-badge>
       {/if}
-    {:else if colonne.cle === 'gravite'}
+    </div>
+    {#if estRisqueGeneral(donnee)}
       <div
-        class="colonne-gravite colonne"
+        slot="cell:intitule:{i}"
+        class="colonne-intitule colonne"
         class:inactif={donnee.desactive || estLectureSeule}
       >
-        <Niveau niveau={donnee.gravite} />
+        <span>{donnee.intitule}</span>
+        <CartouchesRisqueV2 risque={donnee} />
       </div>
-    {:else if colonne.cle === 'vraisemblance'}
+    {:else}
       <div
-        class="colonne-vraisemblance colonne"
-        class:inactif={donnee.desactive || estLectureSeule}
+        slot="cell:intitule:{i}"
+        class="colonne-intitule colonne"
+        class:inactif={estLectureSeule}
       >
-        <Niveau niveau={donnee.vraisemblance} />
+        <span>{donnee.intitule}</span>
+        <CartouchesRisqueV2 risque={donnee} risqueAjoute />
       </div>
-    {:else if colonne.cle === 'actions'}
-      {#if estRisqueGeneral(donnee)}
-        <div class="colonne colonne-actions" class:inactif={estLectureSeule}>
-          <Switch
-            bind:actif={
-              () => !donnee.desactive, (valeur) => (donnee.desactive = !valeur)
-            }
-            id="risque-{donnee.id}-actif"
-            onChange={async (actif) =>
-              await metsAJourDesactivationRisque(donnee, !actif)}
-          />
-        </div>
-      {/if}
     {/if}
-  {/snippet}
-</Tableau>
+    <div
+      slot="cell:gravite:{i}"
+      class="colonne-gravite colonne"
+      class:inactif={donnee.desactive || estLectureSeule}
+    >
+      <Niveau niveau={donnee.gravite} />
+    </div>
+    <div
+      slot="cell:vraisemblance:{i}"
+      class="colonne-vraisemblance colonne"
+      class:inactif={donnee.desactive || estLectureSeule}
+    >
+      <Niveau niveau={donnee.vraisemblance} />
+    </div>
+    <div
+      slot="cell:actions:{i}"
+      class="colonne colonne-actions"
+      class:inactif={estLectureSeule}
+    >
+      {#if estRisqueGeneral(donnee)}
+        <dsfr-toggle
+          state
+          label={donnee.desactive ? 'Désactivé' : 'Activé'}
+          hide-label
+          id="risque-{donnee.id}-actif"
+          checked={!donnee.desactive}
+          onvaluechanged={async (e: CustomEvent<boolean>) =>
+            await metsAJourDesactivationRisque(donnee, !e.detail)}
+        ></dsfr-toggle>
+      {/if}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Modifier"
+        has-icon
+        icon="edit-line"
+        size="sm"
+        kind="tertiary"
+        onclick={() => {
+          if (!idService) return;
+          if (estRisqueGeneral(donnee)) {
+            if (!risqueBrut) return;
+            const url = new URL(window.location.href);
+            url.searchParams.set('id', donnee.id);
+            history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+            tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+              idService,
+              risque: donnee,
+              niveauxGravite,
+              statuts,
+            });
+          } else {
+            tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+              idService,
+              niveauxGravite,
+              niveauxVraisemblance,
+              risque: donneeRisque as RisqueSpecifiqueV2,
+            });
+          }
+        }}
+      ></dsfr-button>
+    </div>
+  {/each}
+</dsfr-table>
 
 <style lang="scss">
   .colonne.inactif {
@@ -204,5 +205,9 @@
 
   .colonne-actions {
     min-width: 132px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 </style>
