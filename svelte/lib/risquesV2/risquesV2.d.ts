@@ -72,6 +72,7 @@ export type MesureGeneraleAssocieeARisque = {
   referentiel: Referentiel;
   categorie: CategorieMesure;
   indispensable: boolean;
+  thematique: string;
 };
 
 export type MesuresAssocieesARisque = {
