@@ -48,9 +48,12 @@ export const schemaPutRisqueGeneral = (referentielV2: ReferentielV2) => ({
   desactive: z.boolean().optional(),
 });
 
-export const schemaPutRisqueGeneralV2 = () => ({
+export const schemaPutRisqueGeneralV2 = (referentielV2: ReferentielV2) => ({
   commentaire: z.string().max(1000).optional(),
   desactive: z.boolean().optional(),
+  graviteSurchargee: schemaRisqueSpecifiqueV2
+    .niveauGravite(referentielV2)
+    .optional(),
 });
 
 export const schemaPostRisqueSpecifiqueV2 = (referentielV2: ReferentielV2) => ({

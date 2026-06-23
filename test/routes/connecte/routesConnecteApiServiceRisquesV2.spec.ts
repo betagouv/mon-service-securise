@@ -121,6 +121,14 @@ describe('Les routes /service/:id/risques/v2', () => {
       expect(status).toBe(400);
     });
 
+    it('jette une erreur si `graviteSurchargee` est invalide', async () => {
+      const { status } = await testeur.put('/api/service/456/risques/v2/R3', {
+        graviteSurchargee: -1,
+      });
+
+      expect(status).toBe(400);
+    });
+
     it('mets à jour les données du risque dans le service', async () => {
       let idServiceRecu;
       let idRisqueRecues;
@@ -138,6 +146,7 @@ describe('Les routes /service/:id/risques/v2', () => {
       const { status } = await testeur.put('/api/service/456/risques/v2/R3', {
         desactive: true,
         commentaire: 'un commentaire',
+        graviteSurchargee: 4,
       });
 
       expect(status).toBe(204);
@@ -145,6 +154,7 @@ describe('Les routes /service/:id/risques/v2', () => {
       expect(idRisqueRecues).toBe('R3');
       expect(donneesRisqueRecues!.desactive).toBe(true);
       expect(donneesRisqueRecues!.commentaire).toBe('un commentaire');
+      expect(donneesRisqueRecues!.graviteSurchargee).toBe(4);
     });
   });
 

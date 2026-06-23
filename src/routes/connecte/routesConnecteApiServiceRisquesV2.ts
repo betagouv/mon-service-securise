@@ -54,7 +54,7 @@ const routesConnecteApiServiceRisquesV2 = ({
     valideParams(
       z.looseObject({ idRisque: z.enum(referentielV2.identifiantsRisquesV2()) })
     ),
-    valideBody(z.strictObject(schemaPutRisqueGeneralV2())),
+    valideBody(z.strictObject(schemaPutRisqueGeneralV2(referentielV2))),
     async (requete, reponse) => {
       const { service } = requete as unknown as RequestRouteConnecteService;
       const { idRisque } = requete.params;
