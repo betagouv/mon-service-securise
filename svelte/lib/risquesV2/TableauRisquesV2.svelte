@@ -111,14 +111,14 @@
       class="colonne-gravite colonne"
       class:inactif={donnee.desactive || estLectureSeule}
     >
-      <Niveau niveau={donnee.gravite} />
+      <Niveau niveau={donnee.gravite} desactive={donnee.desactive} />
     </div>
     <div
       slot="cell:vraisemblance:{i}"
       class="colonne-vraisemblance colonne"
       class:inactif={donnee.desactive || estLectureSeule}
     >
-      <Niveau niveau={donnee.vraisemblance} />
+      <Niveau niveau={donnee.vraisemblance} desactive={donnee.desactive} />
     </div>
     <div
       slot="cell:actions:{i}"
