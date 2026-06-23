@@ -87,16 +87,16 @@
           <span><i>Temporaire: Lorem Ipsum</i></span>
         </p>
         <p>
-          <b>Exemple de service numérique</b>
+          <b>Exemple d'attaque</b>
           <span><i>Temporaire: Lorem Ipsum</i></span>
         </p>
         <div class="niveaux-risque">
           <div class="ligne-niveau-risque">
-            <span><b>Gravité potentielle :</b></span>
+            <span><b>Gravité :</b></span>
             <span>{mappingNiveauGravite[risque.gravite]}</span>
           </div>
           <div class="ligne-niveau-risque">
-            <span><b>Vraisemblance au départ :</b></span>
+            <span><b>Vraisemblance brute :</b></span>
             <span>{mappingNiveauVraisemblance[risqueBrut.vraisemblance]}</span>
           </div>
         </div>
@@ -114,8 +114,8 @@
       </div>
     {:else if ongletActif === 'mesuresAssociees'}
       <p class="intitule-mesures-associees">
-        Vous trouverez ci-dessous la liste des mesures pouvant avoir un impact
-        sur la vraisemblance des risques identifiés.
+        Vous trouverez ci-dessous la liste des mesures permettant de réduire la
+        vraisemblance de ce risque.
       </p>
       <Tableau
         colonnes={[

@@ -72,8 +72,8 @@
         appliquées à votre service. Ces mesures permettront de réduire la
         vraisemblance de certains risques et d’obtenir une cartographie des
         risques résiduels actuels. Vous pourrez également visualiser la
-        cartographie des risques résiduels cible (si 100% des mesures sauf
-        celles non prises en compte sont faites).</span
+        cartographie des risques résiduels cible (représentant l’état des
+        risques après le traitement de 100% des mesures).</span
       >
       <div>
         <h5>Cartographies des risques</h5>
@@ -92,11 +92,11 @@
             },
             {
               id: 'residuels',
-              label: 'Risques résiduels',
+              label: 'Risques actuels',
             },
             {
               id: 'cibles',
-              label: 'Risques cibles',
+              label: 'Risques résiduels cibles',
             },
           ]}
         />
@@ -124,7 +124,7 @@
         {/if}
       </div>
       {#if risquesBrutsDeGraviteHaute.length > 0}
-        <h5>Risques bruts de gravité haute</h5>
+        <h5>Risques bruts initialement identifiés comme élevés</h5>
         <Tableau
           colonnes={[
             { cle: 'id', libelle: 'Identifiant' },
