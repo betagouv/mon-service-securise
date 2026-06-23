@@ -103,7 +103,7 @@
       </div>
       <div class="conteneur-slider">
         <dsfr-range
-          label="Sélection des risques bruts/résiduels/cibles"
+          label="Sélection des risques bruts/actuels/résiduels cibles"
           hideLabel
           id="matrice-visible"
           size="md"
@@ -125,16 +125,16 @@
             />
           </div>
           <div class="legende-avec-infobulle">
-            <span>Risques résiduels</span>
+            <span>Risques actuels</span>
             <Infobulle
-              contenu="Les risques résiduels actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
+              contenu="Les risques actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
               enfantDirect
             />
           </div>
           <div class="legende-avec-infobulle">
-            <span>Risques cibles</span>
+            <span>Risques résiduels cibles</span>
             <Infobulle
-              contenu="Les risques cibles sont les risques évalués en considérant toutes les mesures mises en place."
+              contenu="Les risques résiduels cibles sont les risques évalués en considérant toutes les mesures mises en place."
               enfantDirect
             />
           </div>
@@ -149,7 +149,7 @@
       fullscreen="Agrandir"
       fullscreen-aria-label="Agrandir la transcription"
     >
-      {#each [{ risquesAAfficher: risques.risquesBruts, titre: 'Risques bruts' }, { risquesAAfficher: risques.risques, titre: 'Risques résiduels' }, { risquesAAfficher: risques.risquesCibles, titre: 'Risques cibles' }] as { risquesAAfficher, titre } (titre)}
+      {#each [{ risquesAAfficher: risques.risquesBruts, titre: 'Risques bruts' }, { risquesAAfficher: risques.risques, titre: 'Risques actuels' }, { risquesAAfficher: risques.risquesCibles, titre: 'Risques résiduels cibles' }] as { risquesAAfficher, titre } (titre)}
         <p>{titre}</p>
         <dl>
           {#each risquesAAfficher as risque (risque.id)}
