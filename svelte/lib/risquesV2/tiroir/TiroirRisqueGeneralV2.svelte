@@ -10,7 +10,6 @@
   import { metsAJourRisque } from '../risquesV2.api';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
-  import Tableau from '../../ui/Tableau.svelte';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import type { ReferentielStatut } from '../../ui/types';
   import type { ReferentielGravites } from '../../risques/risques.d';
@@ -74,9 +73,13 @@
     mesures = resultat.data?.mesuresGenerales;
   });
 
-  let mesuresAssociees = $derived.by(() => {
-    if (!mesures) return [];
-    return risque.mesuresAssociees.map((id) => ({ ...mesures![id], id }));
+  let mesuresAssociesParThematique = $derived.by(() => {
+    if (!mesures) return {};
+    const mesuresAssocies = risque.mesuresAssociees.map((id) => ({
+      ...mesures![id],
+      id,
+    }));
+    return Object.groupBy(mesuresAssocies, (m) => m.thematique);
   });
 </script>
 
@@ -146,38 +149,49 @@
         </div>
       </div>
     {:else if ongletActif === 'mesuresAssociees'}
-      <p class="intitule-mesures-associees">
-        Vous trouverez ci-dessous la liste des mesures permettant de réduire la
-        vraisemblance de ce risque.
-      </p>
-      <Tableau
-        colonnes={[
-          { cle: 'description', libelle: 'Intitulé de la mesure' },
-          { cle: 'statut', libelle: 'Statut' },
-        ]}
-        donnees={mesuresAssociees}
-      >
-        {#snippet cellule({ donnee, colonne })}
-          {#if colonne.cle === 'description'}
-            <div class="description">
-              <a
-                href="/service/{idService}/mesures?idMesure={donnee.id}"
-                target="_blank"
-                class="mesure-cliquable"
+      <div class="contenu-mesures-associees">
+        <p class="intitule-mesures-associees">
+          Vous trouverez ci-dessous la liste des mesures permettant de réduire
+          la vraisemblance de ce risque.
+        </p>
+        {#each Object.keys(mesuresAssociesParThematique) as thematique, i (i)}
+          {@const mesuresDeLaThematique =
+            mesuresAssociesParThematique[thematique]}
+          {#if mesuresDeLaThematique}
+            <div>
+              <h3>{thematique}</h3>
+              <dsfr-table
+                columns={[
+                  { key: 'description', label: 'Intitulé de la mesure' },
+                  { key: 'statut', label: 'Statut' },
+                ]}
+                rows={mesuresDeLaThematique}
+                rich
               >
-                <span>{donnee.description}</span>
-              </a>
-            </div>
-          {:else if colonne.cle === 'statut'}
-            <div class="statut">
-              <TagStatutMesure
-                referentielStatuts={statuts}
-                statut={donnee.statut}
-              />
+                {#each mesuresDeLaThematique as mesureDeLaThematique, index (index)}
+                  <div
+                    slot="cell:description:{index}"
+                    class="description-mesure"
+                  >
+                    <span>{mesureDeLaThematique.description}</span>
+                    <dsfr-link
+                      size="sm"
+                      label="Voir la mesure"
+                      href="/service/{idService}/mesures?idMesure={mesureDeLaThematique.id}"
+                    ></dsfr-link>
+                  </div>
+                  <div slot="cell:statut:{index}">
+                    <TagStatutMesure
+                      referentielStatuts={statuts}
+                      statut={mesureDeLaThematique.statut}
+                    />
+                  </div>
+                {/each}
+              </dsfr-table>
             </div>
           {/if}
-        {/snippet}
-      </Tableau>
+        {/each}
+      </div>
     {/if}
   </div>
 </ContenuTiroir>
@@ -198,6 +212,30 @@
 </ActionsTiroir>
 
 <style lang="scss">
+  .description-mesure {
+    white-space: wrap;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contenu-mesures-associees {
+    display: flex;
+    gap: 32px;
+  }
+
+  h3 {
+    color: #282828;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    margin: 0;
+  }
+
+  dsfr-table {
+    margin-bottom: -2.5rem;
+    margin-top: -1rem;
+  }
+
   .actions {
     display: flex;
     gap: 24px;
@@ -226,23 +264,6 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-    }
-
-    .intitule-mesures-associees {
-      margin-bottom: 32px;
-    }
-
-    .statut {
-      min-width: 80px;
-    }
-
-    .mesure-cliquable {
-      text-decoration: none;
-      color: #3a3a3a;
-
-      &:hover {
-        color: var(--bleu-mise-en-avant);
-      }
     }
 
     .niveaux-risque {
