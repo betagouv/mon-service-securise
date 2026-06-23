@@ -1,6 +1,18 @@
 extends ../mssConnecte
 include ../tiroirs/tiroir.pug
 
+block title
+  -
+    const titresPages = {
+      mesures: 'Sécuriser',
+      indiceCyber: 'Indice Cyber',
+      risques: 'Risques',
+      descriptionService: 'Récapitulatif',
+      rolesResponsabilites: 'Contacts utiles',
+      dossiers: 'Homologuer'
+    }
+  title #{titresPages[etapeActive]} | MonServiceSécurisé
+
 block append styles
   link(href = '/statique/assets/styles/pagesService.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')

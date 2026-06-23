@@ -4,6 +4,7 @@ import type { VersionService } from '../../../../src/modeles/versionService';
 import { pagesServiceGerees } from '../pagesServiceGerees';
 import { tiroirStore } from '../../ui/stores/tiroir.store';
 import { pageDepuisURL } from './pageDepuisURL';
+import { titresPages } from '../titresPages.donnees';
 
 export type InformationsService = {
   visible: Record<EtapeService, boolean>;
@@ -53,6 +54,7 @@ const navigue = (
     !descriptionServicePourV1
   ) {
     history.pushState({}, '', url);
+    document.title = `${titresPages[pageDemandee]} | MonServiceSécurisé`;
     update((etat) => {
       etat.location = url;
       return etat;
