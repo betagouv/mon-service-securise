@@ -3,17 +3,19 @@
 
   interface Props {
     niveau: Niveau;
+    desactive?: boolean;
   }
 
-  let { niveau }: Props = $props();
+  let { niveau, desactive = false }: Props = $props();
 
   const couleurs = [
-    'yellow-tournesol',
+    'green-emeraude',
     'green-menthe',
     'blue-cumulus',
-    'pink-macaron',
+    'brown-caramel',
+    'pink-tuile',
   ];
-  let accentDuNiveau = $derived(couleurs[niveau - 1]);
+  let accentDuNiveau = $derived(desactive ? '' : couleurs[niveau]);
 </script>
 
 <dsfr-badge label={niveau} type="accent" accent={accentDuNiveau}> </dsfr-badge>
