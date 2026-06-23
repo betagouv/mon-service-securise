@@ -74,13 +74,24 @@ describe('Le routeur des pages service', () => {
     expect(get(routeurStore).location).toBe('/service/5678');
   });
 
-  it('peut naviguer vers une url', async () => {
-    const routeurStore = await leRouteur();
-    chargeInformationsService(routeurStore);
+  describe('concernant la navigation', () => {
+    it('peut naviguer vers une url', async () => {
+      const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore);
 
-    routeurStore.navigue('/service/1234/mesures');
+      routeurStore.navigue('/service/1234/mesures');
 
-    expect(get(routeurStore).location).toBe('/service/1234/mesures');
+      expect(get(routeurStore).location).toBe('/service/1234/mesures');
+    });
+
+    it('modifie le titre de la page en fonction de la page demandée', async () => {
+      const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore);
+
+      routeurStore.navigue('/service/1234/mesures');
+
+      expect(document.title).toBe('Sécuriser | MonServiceSécurisé');
+    });
   });
 
   describe('concernant les contraintes de navigation', () => {
