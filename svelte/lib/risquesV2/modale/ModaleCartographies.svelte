@@ -38,9 +38,9 @@
         </div>
         <div class="conteneur-matrice">
           <div class="conteneur-titre">
-            <h5>Risques résiduels actuels</h5>
+            <h5>Risques actuels</h5>
             <Infobulle
-              contenu="Les risques résiduels actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
+              contenu="Les risques actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
               enfantDirect
             />
           </div>
@@ -48,9 +48,9 @@
         </div>
         <div class="conteneur-matrice">
           <div class="conteneur-titre">
-            <h5>Risques cibles</h5>
+            <h5>Risques résiduels cible</h5>
             <Infobulle
-              contenu="Les risques cibles sont les risques évalués en considérant toutes les mesures mises en place."
+              contenu="Les risques résiduels cible sont les risques évalués en considérant toutes les mesures mises en place."
               enfantDirect
             />
           </div>
