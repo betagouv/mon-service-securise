@@ -2,7 +2,6 @@
   import type { EntiteSupervisee } from './supervision.d';
   import { onMount } from 'svelte';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
-  import FilAriane from '../ui/FilAriane.svelte';
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
 
   interface Props {
@@ -40,14 +39,6 @@
   };
 </script>
 
-<div class="conteneur-fil-ariane">
-  <FilAriane
-    items={[
-      { label: 'Tableau de bord', lien: '/tableauDeBord' },
-      { label: 'Statistiques' },
-    ]}
-  />
-</div>
 <h1>Statistiques</h1>
 <div class="conteneur-filtres">
   <ListeDeroulante
@@ -136,12 +127,8 @@
     left: 50%;
   }
 
-  .conteneur-fil-ariane {
-    padding: 48px 0 32px 0;
-  }
-
   h1 {
-    margin: 0 0 24px;
+    margin: 48px 0 24px;
     text-align: left;
   }
 
