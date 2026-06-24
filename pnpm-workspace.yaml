@@ -16,3 +16,5 @@ minimumReleaseAgeExclude:
   - uuid@14.0.0
   # Renovate security update: svelte@5.55.7
   - svelte@5.55.7
+  # Renovate security update: multer@2.2.0
+  - multer@2.2.0
