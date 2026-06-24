@@ -18,13 +18,11 @@
   interface Props {
     idService: string;
     risque: Risque;
-    risqueBrut: Risque;
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
   }
 
-  let { idService, risque, risqueBrut, statuts, niveauxGravite }: Props =
-    $props();
+  let { idService, risque, statuts, niveauxGravite }: Props = $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
@@ -111,16 +109,16 @@
         </p>
 
         <div class="niveaux-risque">
-          <span><b>Risque brut</b></span>
+          <span><b>Risque actuel</b></span>
           <div class="ligne-niveau-risque">
             <dsfr-select
               label="Vraisemblance"
               id="vraisemblance"
-              value={risqueBrut.vraisemblance}
+              value={risque.vraisemblance}
               options={[
                 {
-                  value: risqueBrut.vraisemblance,
-                  label: mappingNiveauVraisemblance[risqueBrut.vraisemblance],
+                  value: risque.vraisemblance,
+                  label: mappingNiveauVraisemblance[risque.vraisemblance],
                 },
               ]}
               required
