@@ -102,7 +102,6 @@
               tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
                 idService,
                 risque: donnee,
-                risqueBrut,
                 statuts,
                 niveauxGravite,
               });
