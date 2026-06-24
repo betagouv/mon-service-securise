@@ -14,6 +14,11 @@ FICHIER_CSV="$1"
 FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/graviteVecteurs.configuration.ts"
 
 {
+  echo "/* "
+  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourMatriceVecteurOV.sh"
+  echo "  Ne pas modifier directement"
+  echo "*/"
+  echo ""
   echo "import { MatriceVecteurOV } from './graviteVecteurs.js';"
   echo ""
   echo "export const matriceVecteurOV: MatriceVecteurOV ="
