@@ -14,6 +14,11 @@ FICHIER_CSV="$1"
 FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/selectionVecteurs.configuration.ts"
 
 {
+  echo "/* "
+  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourSelectionVecteurs.sh"
+  echo "  Ne pas modifier directement"
+  echo "*/"
+  echo ""
   echo "import type { ConfigurationSelectionVecteurs } from './selectionVecteurs.types.js';"
   echo ""
   echo "export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs ="
@@ -92,7 +97,8 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/selectionVecteurs
       )
 
     | del(
-        .["Effet : Site vitrine"],
+        .["Point d'\''entrée"],
+        .["Effet : Portail d'\''information"],
         .["Effet : Service en ligne"],
         .["Effet : Annuaire"],
         .["Effet : API"],

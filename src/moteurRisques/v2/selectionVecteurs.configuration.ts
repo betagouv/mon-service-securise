@@ -1,3 +1,8 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourSelectionVecteurs.sh
+  Ne pas modifier directement
+*/
+
 import type { ConfigurationSelectionVecteurs } from './selectionVecteurs.types.js';
 
 export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs = {
@@ -10,7 +15,7 @@ export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs = {
     },
   },
   V2: {
-    presentInitialement: false,
+    presentInitialement: true,
     regles: {
       niveauSecurite: {
         niveau1: 'Retirer',
@@ -18,9 +23,6 @@ export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs = {
       },
       activitesExternalisees: {
         administrationTechnique: 'Retirer',
-      },
-      specificitesProjet: {
-        postesDeTravail: 'Ajouter',
       },
       typeHebergement: {
         saas: 'Retirer',
@@ -55,9 +57,6 @@ export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs = {
   V6: {
     presentInitialement: true,
     regles: {
-      activitesExternalisees: {
-        administrationTechnique: 'Retirer',
-      },
       typeHebergement: {
         saas: 'Retirer',
       },
@@ -122,9 +121,9 @@ export const configurationSelectionVecteurs: ConfigurationSelectionVecteurs = {
       niveauSecurite: {
         niveau1: 'Retirer',
       },
-      dureeDysfonctionnementAcceptable: {
-        moinsDe4h: 'Ajouter',
-        moinsDe12h: 'Ajouter',
+      ouvertureSysteme: {
+        internePlusTiers: 'Ajouter',
+        accessibleSurInternet: 'Ajouter',
       },
     },
   },
