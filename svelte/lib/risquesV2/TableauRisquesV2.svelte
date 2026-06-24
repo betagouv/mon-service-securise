@@ -71,7 +71,7 @@
     { key: 'intitule', label: 'Intitulé du risque' },
     { key: 'gravite', label: 'Gravité' },
     { key: 'vraisemblance', label: 'Vraisemblance' },
-    { key: 'actions', label: 'Actions' },
+    { key: 'actions', label: estLectureSeule ? 'État' : 'Actions' },
   ]}
   rows={tousLesRisques}
   rich
@@ -125,47 +125,51 @@
       class="colonne colonne-actions"
       class:inactif={estLectureSeule}
     >
-      {#if estRisqueGeneral(donnee)}
-        <dsfr-toggle
-          state
-          label={donnee.desactive ? 'Désactivé' : 'Activé'}
-          hide-label
-          id="risque-{donnee.id}-actif"
-          checked={!donnee.desactive}
-          onvaluechanged={async (e: CustomEvent<boolean>) =>
-            await metsAJourDesactivationRisque(donnee, !e.detail)}
-        ></dsfr-toggle>
+      {#if !estLectureSeule}
+        {#if estRisqueGeneral(donnee)}
+          <dsfr-toggle
+            state
+            label={donnee.desactive ? 'Désactivé' : 'Activé'}
+            hide-label
+            id="risque-{donnee.id}-actif"
+            checked={!donnee.desactive}
+            onvaluechanged={async (e: CustomEvent<boolean>) =>
+              await metsAJourDesactivationRisque(donnee, !e.detail)}
+          ></dsfr-toggle>
+        {/if}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Modifier"
+          has-icon
+          icon="edit-line"
+          size="sm"
+          kind="tertiary"
+          onclick={() => {
+            if (!idService) return;
+            if (estRisqueGeneral(donnee)) {
+              if (!risqueBrut) return;
+              const url = new URL(window.location.href);
+              url.searchParams.set('id', donnee.id);
+              history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                idService,
+                risque: donnee,
+                niveauxGravite,
+                statuts,
+              });
+            } else {
+              tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+                idService,
+                niveauxGravite,
+                niveauxVraisemblance,
+                risque: donneeRisque as RisqueSpecifiqueV2,
+              });
+            }
+          }}
+        ></dsfr-button>
+      {:else}
+        <span>{donnee.desactive ? 'Désactivé' : 'Activé'}</span>
       {/if}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Modifier"
-        has-icon
-        icon="edit-line"
-        size="sm"
-        kind="tertiary"
-        onclick={() => {
-          if (!idService) return;
-          if (estRisqueGeneral(donnee)) {
-            if (!risqueBrut) return;
-            const url = new URL(window.location.href);
-            url.searchParams.set('id', donnee.id);
-            history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
-            tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-              idService,
-              risque: donnee,
-              niveauxGravite,
-              statuts,
-            });
-          } else {
-            tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
-              idService,
-              niveauxGravite,
-              niveauxVraisemblance,
-              risque: donneeRisque as RisqueSpecifiqueV2,
-            });
-          }
-        }}
-      ></dsfr-button>
     </div>
   {/each}
 </dsfr-table>
