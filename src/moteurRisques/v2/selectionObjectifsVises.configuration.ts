@@ -1,3 +1,8 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourSelectionObjectifsVises.sh
+  Ne pas modifier directement
+*/
+
 import type { ConfigurationSelectionObjectifsVises } from './selectionObjectifsVises.types.js';
 
 export const configurationSelectionObjectifsVises: ConfigurationSelectionObjectifsVises =
