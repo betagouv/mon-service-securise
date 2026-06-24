@@ -57,7 +57,7 @@
     await metsAJourRisque(idService, risque.id, {
       desactive: !actif,
       commentaire,
-      gravite,
+      ...(gravite !== risque.graviteCalculee ? { gravite } : {}),
     });
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
     toasterStore.succes('Succès', `Le risque ${risque.id} a été mis à jour.`);

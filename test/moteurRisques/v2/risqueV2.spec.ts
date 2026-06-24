@@ -176,6 +176,7 @@ describe('Un risque V2', () => {
       intitule: 'V1 avec OV1',
       categories: ['integrite'],
       gravite: 3,
+      graviteCalculee: 3,
       vraisemblance: 1,
       mesuresAssociees: ['RECENSEMENT.1'],
     });
