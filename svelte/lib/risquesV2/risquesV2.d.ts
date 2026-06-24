@@ -25,6 +25,7 @@ export type Risque = {
   intitule: string;
   categories: string[];
   gravite: Niveau;
+  graviteCalculee: Niveau;
   vraisemblance: Niveau;
   desactive?: boolean;
   commentaire?: string;

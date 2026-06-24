@@ -55,6 +55,7 @@ export class RisqueV2 {
       id: this.id,
       intitule: this.intitule,
       gravite: this.gravite,
+      graviteCalculee: this.graviteCalculee,
       vraisemblance: this.vraisemblance,
       categories: this.categories,
       desactive: this.desactive,
