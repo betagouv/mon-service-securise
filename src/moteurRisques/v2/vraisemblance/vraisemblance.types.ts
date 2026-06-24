@@ -10,7 +10,9 @@ export type IdentifiantGroupeMesureVraisemblance =
   | 'd'
   | 'e'
   | 'f'
-  | 'g';
+  | 'g'
+  | 'h'
+  | 'z';
 
 export type PoidsGroupeMesure = {
   [K in Capitalize<IdentifiantGroupeMesureVraisemblance> as `poids${K}`]: number;
