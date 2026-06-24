@@ -18,9 +18,14 @@ if [ -z "$FICHIER_CSV" ] || [ -z "$IDENTIFIANT_RISQUE" ]; then
   exit 1
 fi
 
-FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$IDENTIFIANT_RISQUE.configuration.ts"
+FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance/vraisemblance.$IDENTIFIANT_RISQUE.configuration.ts"
 
 {
+  echo "/* "
+  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh"
+  echo "  Ne pas modifier directement"
+  echo "*/"
+  echo ""
   echo "import { ConfigurationVraisemblancePourUnVecteur, ConfigurationPredicatVraisemblance } from './vraisemblance.types.js';"
   echo "import { siTout, siAucune, siPasTout } from './vraisemblance.predicats.js';"
   echo ""
