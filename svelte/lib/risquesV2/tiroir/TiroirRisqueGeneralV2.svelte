@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { MesuresAssocieesARisque, Risque } from '../risquesV2.d';
+  import type { MesuresAssocieesARisque, Niveau, Risque } from '../risquesV2.d';
   import BadgesTiroirRisqueV2 from './BadgesTiroirRisqueV2.svelte';
   import { onMount, untrack } from 'svelte';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import Onglets from '../../ui/Onglets.svelte';
-  import { mappingNiveauGravite, mappingNiveauVraisemblance } from '../kit/kit';
+  import { mappingNiveauVraisemblance } from '../kit/kit';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
   import Switch from '../../ui/Switch.svelte';
   import { metsAJourRisque } from '../risquesV2.api';
@@ -13,15 +13,18 @@
   import Tableau from '../../ui/Tableau.svelte';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import type { ReferentielStatut } from '../../ui/types';
+  import type { ReferentielGravites } from '../../risques/risques.d';
 
   interface Props {
     idService: string;
     risque: Risque;
     risqueBrut: Risque;
     statuts: ReferentielStatut;
+    niveauxGravite: ReferentielGravites;
   }
 
-  let { idService, risque, risqueBrut, statuts }: Props = $props();
+  let { idService, risque, risqueBrut, statuts, niveauxGravite }: Props =
+    $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
@@ -31,8 +34,23 @@
   let ongletActif: 'infos' | 'mesuresAssociees' = $state('infos');
 
   let commentaire = $state(untrack(() => risque.commentaire));
+  let gravite = $state(untrack(() => risque.gravite));
+
+  let niveauxGraviteSelectionnables = $derived(
+    Object.entries(niveauxGravite)
+      .map(([, { description, position }]) => ({
+        value: position,
+        label: description,
+      }))
+      .filter(({ value }) => value > 0)
+  );
+
   const metsAJourCommentaire = (e: CustomEvent<string>) => {
     commentaire = e.detail;
+  };
+
+  const metsAJourGravite = (e: CustomEvent<string>) => {
+    gravite = parseInt(e.detail) as Niveau;
   };
 
   let actif = $state(untrack(() => !risque.desactive));
@@ -41,6 +59,7 @@
     await metsAJourRisque(idService, risque.id, {
       desactive: !actif,
       commentaire,
+      gravite,
     });
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
     toasterStore.succes('Succès', `Le risque ${risque.id} a été mis à jour.`);
@@ -90,22 +109,38 @@
           <b>Exemple d'attaque</b>
           <span><i>Temporaire: Lorem Ipsum</i></span>
         </p>
+
         <div class="niveaux-risque">
+          <span><b>Risque brut</b></span>
           <div class="ligne-niveau-risque">
-            <span><b>Gravité :</b></span>
-            <span>{mappingNiveauGravite[risque.gravite]}</span>
-          </div>
-          <div class="ligne-niveau-risque">
-            <span><b>Vraisemblance brute :</b></span>
-            <span>{mappingNiveauVraisemblance[risqueBrut.vraisemblance]}</span>
+            <dsfr-select
+              label="Vraisemblance"
+              id="vraisemblance"
+              value={risqueBrut.vraisemblance}
+              options={[
+                {
+                  value: risqueBrut.vraisemblance,
+                  label: mappingNiveauVraisemblance[risqueBrut.vraisemblance],
+                },
+              ]}
+              required
+              disabled
+            ></dsfr-select>
+            <dsfr-select
+              label="Gravite"
+              id="gravite"
+              value={gravite}
+              options={niveauxGraviteSelectionnables}
+              required
+              onvaluechanged={metsAJourGravite}
+            ></dsfr-select>
           </div>
         </div>
         <div>
-          <label for="commentaire"><b>Commentaire</b></label>
           <dsfr-input
             type="text"
             id="commentaire"
-            nom="commentaire"
+            label="Commentaire"
             value={commentaire}
             placeholder="Apportez des précisions sur le risque"
             onvaluechanged={metsAJourCommentaire}
@@ -219,7 +254,7 @@
 
       .ligne-niveau-risque {
         display: flex;
-
+        gap: 24px;
         & > * {
           flex: 1;
         }

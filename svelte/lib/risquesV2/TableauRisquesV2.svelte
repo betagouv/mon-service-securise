@@ -104,6 +104,7 @@
                 risque: donnee,
                 risqueBrut,
                 statuts,
+                niveauxGravite,
               });
             }}
           >
