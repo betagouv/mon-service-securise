@@ -46,7 +46,7 @@ describe('Le moteur de risques V2', () => {
       [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
     });
     const mesureNonFaite = (id: IdMesureV2) => ({
-      [id]: new MesureGenerale({ statut: '', id }, referentiel),
+      [id]: new MesureGenerale({ id }, referentiel),
     });
 
     beforeEach(() => {
@@ -72,14 +72,14 @@ describe('Le moteur de risques V2', () => {
       const residuels = moteurAvecMesuresFaites.risques();
 
       expect(residuels).toBeInstanceOf(Array<RisqueV2>);
-      expect(residuels[0].vraisemblance).toBe(3);
+      expect(residuels[0].vraisemblance).toBe(2);
     });
 
     it("sait donner les risques bruts : comme si le service n'avait fait aucune mesure", () => {
       const bruts = moteurAvecMesuresFaites.risquesBruts();
 
       expect(bruts).toBeInstanceOf(Array<RisqueV2>);
-      expect(bruts[0].vraisemblance).toBe(4);
+      expect(bruts[0].vraisemblance).toBe(3);
     });
 
     it('sait donner les risques cibles : comme si le service avait fait toutes ses mesures', () => {
@@ -94,21 +94,22 @@ describe('Le moteur de risques V2', () => {
       const cibles = moteurAvecMesuresFaites.risquesCibles();
       const residuels = moteurAvecMesuresFaites.risques();
 
-      expect(bruts[0].vraisemblance).toBe(4);
+      expect(bruts[0].vraisemblance).toBe(3);
       expect(cibles[0].vraisemblance).toBe(1);
-      expect(residuels[0].vraisemblance).toBe(3);
+      expect(residuels[0].vraisemblance).toBe(2);
     });
 
     it('hydrate les risques avec les données passées en argument', () => {
       const moteur = new MoteurRisquesV2(
         uneAPISimple(),
         {},
-        { R3: { desactive: true, commentaire: 'un commentaire' } }
+        { R2: { desactive: true, commentaire: 'un commentaire' } }
       );
 
-      const risqueR3 = moteur.risques()[0].toJSON();
-      expect(risqueR3.commentaire).toBe('un commentaire');
-      expect(risqueR3.desactive).toBe(true);
+      const risqueR2 = moteur.risques()[0].toJSON();
+      expect(risqueR2.id).toBe('R2');
+      expect(risqueR2.commentaire).toBe('un commentaire');
+      expect(risqueR2.desactive).toBe(true);
     });
 
     describe('concernant les mesures associées au risque', () => {
