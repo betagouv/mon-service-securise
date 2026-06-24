@@ -1,3 +1,8 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh
+  Ne pas modifier directement
+*/
+
 import {
   ConfigurationVraisemblancePourUnVecteur,
   ConfigurationPredicatVraisemblance,
@@ -8,7 +13,7 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
   niveau1: {
     groupes: {
       a: {
-        poids: 2,
+        poids: 1,
         idsMesures: [
           'MALWARE.5',
           'MALWARE.6',
@@ -19,19 +24,26 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
           'MCO_MCS.6',
         ],
       },
+      b: { poids: 1, idsMesures: ['DEV.1'] },
       c: { poids: 1, idsMesures: ['MCO_MCS.16'] },
       d: { poids: 1, idsMesures: ['CONTRAT.1'] },
     },
     formules: [
       ({
         a,
+        b,
         c,
         d,
         poidsA,
+        poidsB,
         poidsC,
         poidsD,
       }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsA * siTout(a) - poidsC * siTout(c) + poidsD * siAucune(d),
+        4 -
+        poidsA * siTout(a) -
+        poidsC * siTout(c) -
+        poidsB * siTout(b) +
+        poidsD * siAucune(d),
     ],
   },
   niveau2: {
@@ -55,13 +67,17 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
           'CONFIG.5',
           'CONFIG.6',
           'CONFIG.8',
+          'DEV.1',
         ],
       },
       c: {
         poids: 1,
         idsMesures: ['CLOISON.1', 'CLOISON.5', 'FILTRE.1', 'FILTRE.3'],
       },
-      d: { poids: 1, idsMesures: ['CONTRAT.1', 'CONTRAT.2'] },
+      d: {
+        poids: 1,
+        idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1', 'ECOSYSTEME.2'],
+      },
       f: { poids: 1, idsMesures: ['DISTANCE.1', 'DISTANCE.2', 'DISTANCE.3'] },
     },
     formules: [
@@ -109,6 +125,7 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
           'CONFIG.5',
           'CONFIG.6',
           'CONFIG.8',
+          'DEV.1',
         ],
       },
       c: {
@@ -123,9 +140,22 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
           'FILTRE.3',
         ],
       },
-      d: { poids: 1, idsMesures: ['CONTRAT.1', 'CONTRAT.2'] },
+      d: {
+        poids: 1,
+        idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1', 'ECOSYSTEME.2'],
+      },
       e: { poids: 1, idsMesures: ['CONFIG.3'] },
       f: { poids: 1, idsMesures: ['DISTANCE.1', 'DISTANCE.2', 'DISTANCE.3'] },
+      g: { poids: 1, idsMesures: ['AUDIT.7'] },
+      z: {
+        poids: 1,
+        idsMesures: [
+          'SUPERVISION.4',
+          'SUPERVISION.5',
+          'SUPERVISION.6',
+          'SUPERVISION.7',
+        ],
+      },
     },
     formules: [
       ({
@@ -135,12 +165,16 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
         d,
         e,
         f,
+        g,
+        z,
         poidsA,
         poidsB,
         poidsC,
         poidsD,
         poidsE,
         poidsF,
+        poidsG,
+        poidsZ,
       }: ConfigurationPredicatVraisemblance) =>
         4 -
         poidsA * siTout(a) -
@@ -148,7 +182,9 @@ export const V9: ConfigurationVraisemblancePourUnVecteur = {
         poidsC * siTout(c) +
         poidsD * siPasTout(d) +
         poidsE * siAucune(e) -
-        poidsF * siTout(f),
+        poidsF * siTout(f) +
+        poidsG * siAucune(g) +
+        poidsZ * siPasTout(z),
     ],
   },
 };

@@ -1,21 +1,26 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh
+  Ne pas modifier directement
+*/
+
 import {
   ConfigurationVraisemblancePourUnVecteur,
   ConfigurationPredicatVraisemblance,
 } from './vraisemblance.types.js';
-import { siTout, siAucune } from './vraisemblance.predicats.js';
+import { siTout, siAucune, siPasTout } from './vraisemblance.predicats.js';
 
 export const V4: ConfigurationVraisemblancePourUnVecteur = {
   niveau1: {
     groupes: {
       a: {
         poids: 2,
-        idsMesures: ['MCO_MCS.15', 'MCO_MCS.5', 'MCO_MCS.6', 'AUTH.9'],
+        idsMesures: ['MCO_MCS.15', 'MCO_MCS.5', 'MCO_MCS.6', 'DEV.1'],
       },
       c: { poids: 1, idsMesures: ['AUDIT.6'] },
     },
     formules: [
       ({ a, c, poidsA, poidsC }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsA * siTout(a) - poidsC * siTout(c),
+        4 - poidsA * siTout(a) + poidsC * siAucune(c),
     ],
   },
   niveau2: {
@@ -29,7 +34,7 @@ export const V4: ConfigurationVraisemblancePourUnVecteur = {
           'MCO_MCS.6',
           'MCO_MCS.7',
           'FILTRE.7',
-          'AUTH.9',
+          'DEV.1',
           'CONFIG.1',
           'CONFIG.6',
         ],
@@ -71,13 +76,16 @@ export const V4: ConfigurationVraisemblancePourUnVecteur = {
           'MCO_MCS.6',
           'MCO_MCS.7',
           'FILTRE.7',
-          'AUTH.9',
+          'DEV.1',
           'CONFIG.1',
           'CONFIG.2',
           'CONFIG.6',
         ],
       },
-      b: { poids: 1, idsMesures: ['AUDIT.2', 'AUDIT.3', 'AUDIT.4', 'AUDIT.5'] },
+      b: {
+        poids: 1,
+        idsMesures: ['AUDIT.2', 'AUDIT.3', 'AUDIT.4', 'AUDIT.5', 'AUDIT.7'],
+      },
       c: { poids: 1, idsMesures: ['AUDIT.6', 'CONFIG.3'] },
       d: {
         poids: 1,
@@ -94,6 +102,15 @@ export const V4: ConfigurationVraisemblancePourUnVecteur = {
           'FILTRE.5',
         ],
       },
+      z: {
+        poids: 1,
+        idsMesures: [
+          'SUPERVISION.4',
+          'SUPERVISION.5',
+          'SUPERVISION.6',
+          'SUPERVISION.7',
+        ],
+      },
     },
     formules: [
       ({
@@ -101,16 +118,19 @@ export const V4: ConfigurationVraisemblancePourUnVecteur = {
         b,
         c,
         d,
+        z,
         poidsA,
         poidsB,
         poidsC,
         poidsD,
+        poidsZ,
       }: ConfigurationPredicatVraisemblance) =>
         4 -
         poidsA * siTout(a) -
         poidsD * siTout(d) +
         poidsC * siAucune(c) +
-        poidsB * siAucune(b),
+        poidsB * siAucune(b) +
+        poidsZ * siPasTout(z),
     ],
   },
 };
