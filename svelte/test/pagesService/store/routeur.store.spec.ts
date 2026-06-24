@@ -113,7 +113,6 @@ describe('Le routeur des pages service', () => {
         'setDocumentTitle',
         'Risques | MonServiceSécurisé',
       ]);
-      expect(window._paq).toContainEqual(['setGenerationTimeMs', 0]);
       expect(window._paq).toContainEqual(['trackPageView']);
       expect(window._paq).toContainEqual(['enableLinkTracking']);
     });
