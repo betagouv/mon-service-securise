@@ -10,8 +10,8 @@ minimumReleaseAgeExclude:
   - '@lab-anssi/lib@2.1.6'
   - '@lab-anssi/ui-kit'
   - axios@1.15.0
-  # Renovate security update: vite@8.0.5
-  - vite@8.0.5
+  # Renovate security update: vite@8.0.5 || 8.0.16
+  - vite@8.0.5 || 8.0.16
   # Renovate security update: uuid@14.0.0
   - uuid@14.0.0
   # Renovate security update: svelte@5.55.7
