@@ -23,6 +23,8 @@ type Niveau = 1 | 2 | 3 | 4;
 export type Risque = {
   id: string;
   intitule: string;
+  description: string;
+  exemple: string;
   categories: string[];
   gravite: Niveau;
   graviteCalculee: Niveau;

@@ -41,6 +41,8 @@
   let tousLesRisques: TousRisques = $derived.by(() => {
     const risques = risquesV1.risquesGeneraux.map((r) => ({
       ...r,
+      description: r.description,
+      exemple: '',
       gravite: graviteDepuisIdentifiant(r.niveauGravite),
       graviteCalculee: graviteDepuisIdentifiant(r.niveauGravite),
       vraisemblance: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
@@ -49,6 +51,8 @@
     }));
     const risquesSpecifiques = risquesV1.risquesSpecifiques.map((r) => ({
       ...r,
+      description: r.description,
+      exemple: '',
       gravite: graviteDepuisIdentifiant(r.niveauGravite),
       graviteBrute: graviteDepuisIdentifiant(r.niveauGravite),
       vraisemblance: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
