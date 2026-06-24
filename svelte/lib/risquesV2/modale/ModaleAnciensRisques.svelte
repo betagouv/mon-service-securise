@@ -42,6 +42,7 @@
     const risques = risquesV1.risquesGeneraux.map((r) => ({
       ...r,
       gravite: graviteDepuisIdentifiant(r.niveauGravite),
+      graviteCalculee: graviteDepuisIdentifiant(r.niveauGravite),
       vraisemblance: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
       mesuresAssociees: [],
       id: r.identifiantNumerique,
