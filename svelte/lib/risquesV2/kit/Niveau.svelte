@@ -18,4 +18,9 @@
   let accentDuNiveau = $derived(desactive ? '' : couleurs[niveau]);
 </script>
 
-<dsfr-badge label={niveau} type="accent" accent={accentDuNiveau}> </dsfr-badge>
+<dsfr-badge
+  label={niveau === undefined ? '-' : niveau}
+  type="accent"
+  accent={accentDuNiveau}
+>
+</dsfr-badge>
