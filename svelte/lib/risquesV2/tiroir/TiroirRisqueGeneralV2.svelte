@@ -38,7 +38,7 @@
     Object.entries(niveauxGravite)
       .map(([, { description, position }]) => ({
         value: position,
-        label: description,
+        label: `${position} - ${description}`,
       }))
       .filter(({ value }) => value > 0)
   );
@@ -118,7 +118,7 @@
               options={[
                 {
                   value: risque.vraisemblance,
-                  label: mappingNiveauVraisemblance[risque.vraisemblance],
+                  label: `${risque.vraisemblance} - ${mappingNiveauVraisemblance[risque.vraisemblance]}`,
                 },
               ]}
               required
