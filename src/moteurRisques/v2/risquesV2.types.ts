@@ -7,6 +7,8 @@ export type ConfigurationRisqueV2 = Record<
   IdVecteurRisque,
   {
     intitule: string;
+    description: string;
+    exemple: string;
     intitulesObjectifsVises: Partial<Record<IdObjectifVise, string>>;
   }
 >;

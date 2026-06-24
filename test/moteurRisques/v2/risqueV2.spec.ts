@@ -9,23 +9,30 @@ describe('Un risque V2', () => {
     OV4: 'avec OV4',
   });
 
+  const detailsVecteur = (intitule: string) => ({
+    intitule,
+    description: `Description ${intitule}`,
+    exemple: `Exemple ${intitule}`,
+    intitulesObjectifsVises: intitulesOVs(),
+  });
+
   const configurationRisque = (
     surchargeVecteur?: Partial<ConfigurationRisqueV2>
   ): ConfigurationRisqueV2 => ({
-    V1: { intitule: 'V1', intitulesObjectifsVises: intitulesOVs() },
-    V2: { intitule: 'V2', intitulesObjectifsVises: intitulesOVs() },
-    V3: { intitule: 'V3', intitulesObjectifsVises: intitulesOVs() },
-    V4: { intitule: 'V4', intitulesObjectifsVises: intitulesOVs() },
-    V5: { intitule: 'V5', intitulesObjectifsVises: intitulesOVs() },
-    V6: { intitule: 'V6', intitulesObjectifsVises: intitulesOVs() },
-    V7: { intitule: 'V7', intitulesObjectifsVises: intitulesOVs() },
-    V8: { intitule: 'V8', intitulesObjectifsVises: intitulesOVs() },
-    V9: { intitule: 'V9', intitulesObjectifsVises: intitulesOVs() },
-    V10: { intitule: 'V10', intitulesObjectifsVises: intitulesOVs() },
-    V11: { intitule: 'V11', intitulesObjectifsVises: intitulesOVs() },
-    V12: { intitule: 'V12', intitulesObjectifsVises: intitulesOVs() },
-    V13: { intitule: 'V13', intitulesObjectifsVises: intitulesOVs() },
-    V14: { intitule: 'V14', intitulesObjectifsVises: intitulesOVs() },
+    V1: detailsVecteur('V1'),
+    V2: detailsVecteur('V2'),
+    V3: detailsVecteur('V3'),
+    V4: detailsVecteur('V4'),
+    V5: detailsVecteur('V5'),
+    V6: detailsVecteur('V6'),
+    V7: detailsVecteur('V7'),
+    V8: detailsVecteur('V8'),
+    V9: detailsVecteur('V9'),
+    V10: detailsVecteur('V10'),
+    V11: detailsVecteur('V11'),
+    V12: detailsVecteur('V12'),
+    V13: detailsVecteur('V13'),
+    V14: detailsVecteur('V14'),
     ...surchargeVecteur,
   });
 
@@ -83,6 +90,8 @@ describe('Un risque V2', () => {
         V1: {
           intitule: 'Intitulé du risque V1',
           intitulesObjectifsVises: { OV1: "avec l'OV1" },
+          description: 'Description V1',
+          exemple: 'Exemple V1',
         },
       };
 
@@ -107,6 +116,8 @@ describe('Un risque V2', () => {
             OV2: "avec l'OV2",
             OV3: "avec l'OV3",
           },
+          description: 'Description V1',
+          exemple: 'Exemple V1',
         },
       };
 
