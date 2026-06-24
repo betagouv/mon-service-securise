@@ -1,3 +1,8 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh
+  Ne pas modifier directement
+*/
+
 import {
   ConfigurationVraisemblancePourUnVecteur,
   ConfigurationPredicatVraisemblance,
@@ -9,7 +14,12 @@ export const V5: ConfigurationVraisemblancePourUnVecteur = {
     groupes: {
       a: { poids: 1, idsMesures: ['RH.2'] },
       b: { poids: 1, idsMesures: ['DISTANCE.2', 'DISTANCE.4'] },
-      c: { poids: 1, idsMesures: ['DROITS.1', 'DROITS.3'] },
+      c: {
+        poids: 1,
+        idsMesures: ['AUTH.10', 'ID.1', 'ID.2', 'ID.4', 'DROITS.1', 'DROITS.3'],
+      },
+      d: { poids: 1, idsMesures: ['AUTH.11', 'AUTH.7'] },
+      e: { poids: 1, idsMesures: ['AUTH.9'] },
     },
     formules: [
       ({
@@ -20,7 +30,16 @@ export const V5: ConfigurationVraisemblancePourUnVecteur = {
         poidsB,
         poidsC,
       }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsA * siTout(a) - poidsB * siTout(b) + poidsC * siPasTout(c),
+        4 - poidsA * siTout(a) - poidsB * siTout(b) - poidsC * siTout(c),
+      ({
+        b,
+        d,
+        e,
+        poidsB,
+        poidsD,
+        poidsE,
+      }: ConfigurationPredicatVraisemblance) =>
+        4 - poidsB * siTout(b) - poidsD * siTout(d) - poidsE * siTout(e),
     ],
   },
   niveau2: {
@@ -31,13 +50,19 @@ export const V5: ConfigurationVraisemblancePourUnVecteur = {
         poids: 1,
         idsMesures: [
           'RH.4',
-          'AUTH.2',
-          'AUTH.3',
-          'AUTH.8',
+          'AUTH.10',
+          'ID.1',
+          'ID.2',
+          'ID.4',
           'DROITS.1',
           'DROITS.3',
         ],
       },
+      d: {
+        poids: 1,
+        idsMesures: ['AUTH.11', 'AUTH.12', 'AUTH.4', 'AUTH.2', 'AUTH.3'],
+      },
+      e: { poids: 1, idsMesures: ['AUTH.9', 'AUTH.8'] },
     },
     formules: [
       ({
@@ -48,23 +73,42 @@ export const V5: ConfigurationVraisemblancePourUnVecteur = {
         poidsB,
         poidsC,
       }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsA * siTout(a) - poidsB * siTout(b) + poidsC * siPasTout(c),
+        4 - poidsA * siTout(a) - poidsB * siTout(b) - poidsC * siTout(c),
+      ({
+        b,
+        d,
+        e,
+        poidsB,
+        poidsD,
+        poidsE,
+      }: ConfigurationPredicatVraisemblance) =>
+        4 - poidsB * siTout(b) - poidsD * siTout(d) - poidsE * siTout(e),
     ],
   },
   niveau3: {
     groupes: {
-      a: { poids: 1, idsMesures: ['RH.2', 'MAIL.1'] },
+      a: { poids: 1, idsMesures: ['RH.2', 'MAIL.1', 'MAIL.2'] },
       b: { poids: 1, idsMesures: ['DISTANCE.2', 'DISTANCE.4'] },
       c: {
         poids: 1,
         idsMesures: [
           'RH.4',
-          'AUTH.2',
-          'AUTH.3',
-          'AUTH.8',
+          'AUTH.10',
+          'ID.1',
+          'ID.2',
+          'ID.4',
           'DROITS.1',
           'DROITS.3',
         ],
+      },
+      d: {
+        poids: 1,
+        idsMesures: ['AUTH.11', 'AUTH.12', 'AUTH.4', 'AUTH.2', 'AUTH.3'],
+      },
+      e: { poids: 1, idsMesures: ['AUTH.9', 'AUTH.8'] },
+      z: {
+        poids: 1,
+        idsMesures: ['SUPERVISION.4', 'SUPERVISION.5', 'SUPERVISION.7'],
       },
     },
     formules: [
@@ -72,11 +116,32 @@ export const V5: ConfigurationVraisemblancePourUnVecteur = {
         a,
         b,
         c,
+        z,
         poidsA,
         poidsB,
         poidsC,
+        poidsZ,
       }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsA * siTout(a) - poidsB * siTout(b) + poidsC * siPasTout(c),
+        4 -
+        poidsA * siTout(a) -
+        poidsB * siTout(b) -
+        poidsC * siTout(c) +
+        poidsZ * siPasTout(z),
+      ({
+        b,
+        d,
+        e,
+        z,
+        poidsB,
+        poidsD,
+        poidsE,
+        poidsZ,
+      }: ConfigurationPredicatVraisemblance) =>
+        4 -
+        poidsB * siTout(b) -
+        poidsD * siTout(d) -
+        poidsE * siTout(e) +
+        poidsZ * siPasTout(z),
     ],
   },
 };
