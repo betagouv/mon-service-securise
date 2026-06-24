@@ -108,6 +108,20 @@
     tiroirStore.ferme();
   };
 
+  const optionsNiveauxGravite = $derived(
+    Object.entries(niveauxGravite).map(([, { description, position }]) => ({
+      value: position,
+      label: `${position} - ${description}`,
+    }))
+  );
+
+  const optionsNiveauxVraisemblance = $derived(
+    Object.entries(niveauxVraisemblance).map(([, { libelle, position }]) => ({
+      value: position,
+      label: `${position} - ${libelle}`,
+    }))
+  );
+
   const ajouteOuModifieRisque = async () => {
     if (estModification) {
       await metsAJourRisqueSpecifiqueV2(idService, risque!.id, donneesRisque);
@@ -203,12 +217,7 @@
             <dsfr-select
               label="Gravité potentielle"
               placeholder="Sélectionnez une valeur"
-              options={Object.entries(niveauxGravite).map(
-                ([, { description, position }]) => ({
-                  value: position,
-                  label: description,
-                })
-              )}
+              options={optionsNiveauxGravite}
               value={donneesRisque.graviteBrute}
               onvaluechanged={metsAJourGraviteBrute}
               required
@@ -216,12 +225,7 @@
             <dsfr-select
               label="Vraisemblance au départ"
               placeholder="Sélectionnez une valeur"
-              options={Object.entries(niveauxVraisemblance).map(
-                ([, { libelle, position }]) => ({
-                  value: position,
-                  label: libelle,
-                })
-              )}
+              options={optionsNiveauxVraisemblance}
               value={donneesRisque.vraisemblanceBrute}
               onvaluechanged={metsAJourVraisemblanceBrute}
               required
@@ -238,12 +242,7 @@
             <dsfr-select
               label="Gravité résiduelle"
               placeholder="Sélectionnez une valeur"
-              options={Object.entries(niveauxGravite).map(
-                ([, { description, position }]) => ({
-                  value: position,
-                  label: description,
-                })
-              )}
+              options={optionsNiveauxGravite}
               value={donneesRisque.gravite}
               onvaluechanged={metsAJourGravite}
               required
@@ -251,12 +250,7 @@
             <dsfr-select
               label="Vraisemblance résiduelle"
               placeholder="Sélectionnez une valeur"
-              options={Object.entries(niveauxVraisemblance).map(
-                ([, { libelle, position }]) => ({
-                  value: position,
-                  label: libelle,
-                })
-              )}
+              options={optionsNiveauxVraisemblance}
               value={donneesRisque.vraisemblance}
               onvaluechanged={metsAJourVraisemblance}
               required
