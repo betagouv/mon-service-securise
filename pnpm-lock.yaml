@@ -130,8 +130,8 @@ importers:
         specifier: ^4.11.1
         version: 4.11.3(playwright-core@1.59.1)
       '@electric-sql/pglite':
-        specifier: ^0.4.0
-        version: 0.4.5
+        specifier: ^0.5.0
+        version: 0.5.3
       '@eslint/eslintrc':
         specifier: ^3.3.5
         version: 3.3.5
@@ -227,7 +227,7 @@ importers:
         version: 29.0.2(@noble/hashes@1.8.0)
       knex-pglite:
         specifier: ^0.14.0
-        version: 0.14.0(@electric-sql/pglite@0.4.5)(knex@3.2.10(pg@8.20.0))
+        version: 0.14.0(@electric-sql/pglite@0.5.3)(knex@3.2.10(pg@8.20.0))
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
@@ -396,8 +396,8 @@ packages:
     resolution: {integrity: sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA==}
     engines: {node: '>=20.19.0'}
 
-  '@electric-sql/pglite@0.4.5':
-    resolution: {integrity: sha512-aGG2zGEyZzGWKy8P+9ZoNUV0jxt1+hgbeTf+bVAYyxVZZLXg3/9aFlfLxb08AYZVAfAkQlQIysmWjhc5hwDG8g==}
+  '@electric-sql/pglite@0.5.3':
+    resolution: {integrity: sha512-iTTYbA5Uesrl+N7zss0J5LopT7KE4j9aymYo+EZZh+rZbARQCUQOs+n2pay64JRUpc3fCkpfrniTNJnvYzOE+g==}
 
   '@emnapi/core@1.10.0':
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
@@ -4655,7 +4655,7 @@ snapshots:
 
   '@csstools/css-tokenizer@4.0.0': {}
 
-  '@electric-sql/pglite@0.4.5': {}
+  '@electric-sql/pglite@0.5.3': {}
 
   '@emnapi/core@1.10.0':
     dependencies:
@@ -7276,9 +7276,9 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  knex-pglite@0.14.0(@electric-sql/pglite@0.4.5)(knex@3.2.10(pg@8.20.0)):
+  knex-pglite@0.14.0(@electric-sql/pglite@0.5.3)(knex@3.2.10(pg@8.20.0)):
     dependencies:
-      '@electric-sql/pglite': 0.4.5
+      '@electric-sql/pglite': 0.5.3
       knex: 3.2.10(pg@8.20.0)
 
   knex@3.2.10(pg@8.20.0):
