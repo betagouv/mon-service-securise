@@ -1,5 +1,10 @@
 extends mssConnecte
 
+block title
+  -
+    const estAdminOuSuperviseur = utilisateurConnecte && (utilisateurConnecte.estSuperviseur || utilisateurConnecte.estAdmin)
+  title #{estAdminOuSuperviseur ? 'Services' : 'Tableau de bord'} | MonServiceSécurisé
+
 block append styles
   link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
