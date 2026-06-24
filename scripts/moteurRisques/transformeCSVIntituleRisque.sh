@@ -14,15 +14,20 @@ FICHIER_CSV="$1"
 FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/risqueV2.configuration.ts"
 
 {
-  echo "import { ConfigurationRisqueV2 } from './risqueV2.js';"
+  echo "/* "
+  echo "Fichier généré par scripts/moteurRisques/transformeCSVIntituleRisque.sh"
+  echo "Ne pas modifier directement"
+  echo "*/"
+  echo ""
+  echo "import { ConfigurationRisqueV2 } from './risquesV2.types.js';"
   echo ""
   echo "export const configurationRisqueV2: ConfigurationRisqueV2 ="
 
   mlr --icsv --ojson cat "$FICHIER_CSV" | jq '
 
   map(
-    .intitule = .Vecteur
-    | del(.Vecteur)
+    .intitule = .["Nom short"]
+    | del(.["Nom short"])
 
     | .intitulesObjectifsVises = (
         {
@@ -38,7 +43,8 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/risqueV2.configur
           ."Défacement (si présent)",
           ."Fuite ou falsification des informations",
           ."Indisponibilité d'\''un ou plusieurs services du SI (si présent)",
-          ."Envoi de mails altérés (si présent)"
+          ."Envoi de mails altérés (si présent)",
+          .["SR + Point d'\''entrée"]
         )
 
     | {(.Ref): (del(.Ref))}
