@@ -14,6 +14,11 @@ FICHIER_CSV="$1"
 FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/selectionObjectifsVises.configuration.ts"
 
 {
+  echo "/* "
+  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourSelectionObjectifsVises.sh"
+  echo "  Ne pas modifier directement"
+  echo "*/"
+  echo ""
   echo "import type { ConfigurationSelectionObjectifsVises } from './selectionObjectifsVises.types.js';"
   echo ""
   echo "export const configurationSelectionObjectifsVises: ConfigurationSelectionObjectifsVises ="
