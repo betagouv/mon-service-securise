@@ -136,6 +136,40 @@ describe('Un risque V2', () => {
     });
   });
 
+  it('connaît sa description', () => {
+    const configurationV1 = {
+      V1: detailsVecteur('V1'),
+    };
+
+    const risque = new RisqueV2(
+      'V1',
+      { OV1: 3 },
+      1,
+      [],
+      {},
+      configurationRisque(configurationV1)
+    );
+
+    expect(risque.description).toBe('Description V1');
+  });
+
+  it('connaît son exemple', () => {
+    const configurationV1 = {
+      V1: detailsVecteur('V1'),
+    };
+
+    const risque = new RisqueV2(
+      'V1',
+      { OV1: 3 },
+      1,
+      [],
+      {},
+      configurationRisque(configurationV1)
+    );
+
+    expect(risque.exemple).toBe('Exemple V1');
+  });
+
   describe('concernant ses catégories', () => {
     it.each([
       { ov: 'OV1', categories: ['integrite'] },
@@ -185,6 +219,8 @@ describe('Un risque V2', () => {
     expect(r1.toJSON()).toEqual({
       id: 'R1',
       intitule: 'V1 avec OV1',
+      description: 'Description V1',
+      exemple: 'Exemple V1',
       categories: ['integrite'],
       gravite: 3,
       graviteCalculee: 3,

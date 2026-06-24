@@ -21,6 +21,8 @@ const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
 export class RisqueV2 {
   readonly id: IdRisqueV2;
   readonly intitule: string;
+  readonly description: string;
+  readonly exemple: string;
   readonly categories: Array<CategorieRisque>;
   private desactive?: boolean;
   private commentaire?: string;
@@ -40,6 +42,8 @@ export class RisqueV2 {
       ...Object.values(objectifsVises)
     ) as Gravite;
     this.intitule = this.genereIntitule();
+    this.description = this.configuration[idVecteur].description;
+    this.exemple = this.configuration[idVecteur].exemple;
     this.categories = this.getCategories();
     this.desactive = donnees.desactive;
     this.commentaire = donnees.commentaire;
@@ -54,6 +58,8 @@ export class RisqueV2 {
     return {
       id: this.id,
       intitule: this.intitule,
+      description: this.description,
+      exemple: this.exemple,
       gravite: this.gravite,
       graviteCalculee: this.graviteCalculee,
       vraisemblance: this.vraisemblance,
