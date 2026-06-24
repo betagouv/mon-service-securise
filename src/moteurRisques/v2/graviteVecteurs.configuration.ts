@@ -1,3 +1,8 @@
+/* 
+  Fichier généré par scripts/moteurRisques/transformeCSVPourMatriceVecteurOV.sh
+  Ne pas modifier directement
+*/
+
 import { MatriceVecteurOV } from './graviteVecteurs.js';
 
 export const matriceVecteurOV: MatriceVecteurOV = {
