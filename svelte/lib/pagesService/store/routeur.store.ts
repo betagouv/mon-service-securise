@@ -52,7 +52,6 @@ const trackMatomo = (url: string, titrePage: string) => {
 
   _paq.push(['setReferrerUrl', urlCompleteSansId(get(routeurStore).location)]);
   _paq.push(['setCustomUrl', urlCompleteSansId(url)]);
-  _paq.push(['setGenerationTimeMs', 0]);
   _paq.push(['setDocumentTitle', titrePage]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
