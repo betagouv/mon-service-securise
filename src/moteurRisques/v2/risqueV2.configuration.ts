@@ -1,127 +1,121 @@
+/* 
+Fichier généré par scripts/moteurRisques/transformeCSVIntituleRisque.sh
+Ne pas modifier directement
+*/
+
 import { ConfigurationRisqueV2 } from './risquesV2.types.js';
 
 export const configurationRisqueV2: ConfigurationRisqueV2 = {
   V1: {
-    intitule: 'Un attaquant externe compromet un poste de travail utilisateur',
+    intitule: "Compromission d'un poste de travail utilisateur",
     intitulesObjectifsVises: {
       OV2: 'pour récupérer ou falsifier des informations',
     },
   },
   V2: {
-    intitule:
-      "Un attaquant externe compromet des ressources d'administration technique interne (poste de travail, réseau, etc.)",
+    intitule: "Compromission de ressources d'administration internes",
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: "pour rendre indisponible un ou plusieurs services du système d'information",
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V3: {
-    intitule:
-      "Un attaquant externe compromet des ressources d'administration technique externe (poste de travail, réseau, etc.)",
+    intitule: "Compromission de ressources d'administration externes",
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: "pour rendre indisponible un ou plusieurs services du système d'information",
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V4: {
-    intitule:
-      'Un attaquant externe exploite une vulnérabilité applicative ou technique',
+    intitule: "Compromission d'un service ou d'un serveur exposé",
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: "pour rendre indisponible un ou plusieurs services du système d'information",
-      OV4: "pour accéder et compromettre les ressources d'envoi de mail afin d'envoyer des mails altérés",
+      OV3: "pour rendre indisponible l'activité du service",
+      OV4: 'pour envoyer des mails altérés',
     },
   },
   V5: {
-    intitule:
-      "Un attaquant externe réalise de l'ingénierie sociale pour récupérer le compte d'un utilisateur",
+    intitule: "Compromission d'un compte utilisateur",
     intitulesObjectifsVises: {
       OV2: 'pour récupérer ou falsifier des informations',
     },
   },
   V6: {
-    intitule:
-      "Un attaquant externe réalise de l'ingénierie sociale pour récupérer le compte d'un acteur interne (utilisateur, admin. tech., hébergeur, etc.) ayant accès aux serveurs ou au code",
+    intitule: "Compromission d'un compte d'un acteur technique interne",
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V7: {
-    intitule:
-      "Un attaquant externe réalise de l'ingénierie sociale pour récupérer le compte d'un acteur externe (utilisateur, admin. tech., hébergeur, etc.) ayant accès aux serveurs ou au code",
+    intitule: "Compromission d'un compte d'un acteur technique externe",
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V8: {
-    intitule: 'Un attaquant externe compromet le SI du fournisseur PaaS',
+    intitule: 'Compromission du SI du fournisseur PaaS',
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V9: {
-    intitule: 'Un attaquant externe compromet le SI du fournisseur SaaS',
+    intitule: 'Compromission du SI du fournisseur SaaS',
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V10: {
-    intitule:
-      "Un attaquant externe s'introduit physiquement jusqu'aux serveurs hébergés en interne et utilise cet accès physique",
+    intitule: 'Intrusion physique dans un local interne',
     intitulesObjectifsVises: {
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
     },
   },
   V11: {
-    intitule:
-      "Un attaquant externe s'introduit physiquement jusqu'aux serveurs hébergés par un fournisseur et utilise cet accès physique",
+    intitule: 'Intrusion physique dans un local externe',
     intitulesObjectifsVises: {
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
     },
   },
   V12: {
-    intitule:
-      'Un attaquant externe réalise une attaque par DDoS sur les services exposés',
+    intitule: 'Attaque DDoS sur un service exposé',
     intitulesObjectifsVises: {
-      OV3: 'pour rendre indisponible un ou plusieurs services',
+      OV3: "pour rendre indisponible l'activité du service",
     },
   },
   V13: {
-    intitule:
-      'Un attaquant externe compromet des ressources de développement interne',
+    intitule: 'Compromission de ressources de développement internes',
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: "pour rendre indisponible un ou plusieurs services du système d'information",
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
   V14: {
-    intitule:
-      'Un attaquant externe compromet des ressources de développement externe',
+    intitule: 'Compromission de ressources de développement externes',
     intitulesObjectifsVises: {
-      OV1: "pour défigurer le système d'information",
+      OV1: 'pour défigurer le service',
       OV2: 'pour récupérer ou falsifier des informations',
-      OV3: "pour rendre indisponible un ou plusieurs services du système d'information",
+      OV3: "pour rendre indisponible l'activité du service",
       OV4: 'pour envoyer des mails altérés',
     },
   },
