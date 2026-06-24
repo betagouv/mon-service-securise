@@ -104,11 +104,11 @@
       <div>
         <p>
           <b>Description du risque</b>
-          <span><i>Temporaire: Lorem Ipsum</i></span>
+          <span>{@html risque.description}</span>
         </p>
         <p>
           <b>Exemple d'attaque</b>
-          <span><i>Temporaire: Lorem Ipsum</i></span>
+          <span>{@html risque.exemple}</span>
         </p>
 
         <div class="niveaux-risque">
