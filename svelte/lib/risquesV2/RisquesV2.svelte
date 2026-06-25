@@ -196,7 +196,10 @@
         <span>
           Le tableau ci-dessous présente le détail des risques, accompagné de
           leur gravité et de leur vraisemblance résiduelle actuelles. Pour les
-          risques ANSSI, la gravité et la vraisemblance sont non modifiables.
+          risques ANSSI, le niveau de vraisemblance est déterminé
+          automatiquement à partir des mesures traitées. Le niveau de gravité
+          est proposé à titre indicatif et peut être ajusté selon votre
+          appréciation.
         </span>
         {#if aDesRisquesV1}
           <br />
