@@ -1,19 +1,27 @@
-import expect from 'expect.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import EvenementRisquesServiceModifies from '../../../src/modeles/journalMSS/evenementRisquesServiceModifies.js';
 import { ErreurServiceManquant } from '../../../src/modeles/journalMSS/erreurs.js';
 import Risques from '../../../src/modeles/risques.js';
-import * as Referentiel from '../../../src/referentiel.js';
+import { Referentiel } from '../../../src/referentiel.interface.ts';
+import { creeReferentiel } from '../../../src/referentiel.ts';
+import { DonneesRisqueSpecifique } from '../../../src/modeles/risqueSpecifique.ts';
+import { unUUID } from '../../constructeurs/UUID.ts';
+import { DonneesRisqueGeneral } from '../../../src/modeles/risqueGeneral.ts';
 
 describe('Un événement de risques modifiés', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-  let referentiel;
+  const hacheEnMajuscules = {
+    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
+  };
+  let referentiel: Referentiel;
 
   beforeEach(() => {
-    referentiel = Referentiel.creeReferentiel({
+    referentiel = creeReferentiel({
+      // @ts-expect-error on recharge partiellement le référentiel
       risques: { R1: {} },
+      // @ts-expect-error on recharge partiellement le référentiel
       niveauxGravite: { moyen: {}, minime: {} },
-      vraisemblancesRisques: { probable: {}, improbable: {} },
+      // @ts-expect-error on recharge partiellement le référentiel
+      vraisemblancesRisques: { invraisemblable: {}, quasiCertain: {} },
     });
   });
 
@@ -25,19 +33,21 @@ describe('Un événement de risques modifiés', () => {
 
     const json = evenement.toJSON();
 
-    expect(json.donnees.idService).to.be('ABC');
+    expect(json.donnees.idService).toBe('ABC');
   });
 
   it('sait se convertir en JSON', () => {
-    const risquesGeneraux = [
-      { id: 'R1', niveauGravite: 'moyen', niveauVraisemblance: 'probable' },
+    const risquesGeneraux: DonneesRisqueGeneral[] = [
+      { id: 'R1', niveauGravite: 'moyen', niveauVraisemblance: 'quasiCertain' },
     ];
-    const risquesSpecifiques = [
+    const risquesSpecifiques: DonneesRisqueSpecifique[] = [
       {
-        id: 'RS1',
+        id: unUUID('R'),
+        intitule: '',
+        identifiantNumerique: '1',
         niveauGravite: 'minime',
-        niveauVraisemblance: 'improbable',
-        categories: ['disponibilité'],
+        niveauVraisemblance: 'invraisemblable',
+        categories: ['confidentialite'],
       },
     ];
     const service = unService(referentiel)
@@ -52,19 +62,23 @@ describe('Un événement de risques modifiés', () => {
       { date: '30/10/2024', adaptateurChiffrement: hacheEnMajuscules }
     );
 
-    expect(evenement.toJSON()).to.eql({
+    expect(evenement.toJSON()).toEqual({
       type: 'RISQUES_SERVICE_MODIFIES',
       donnees: {
         idService: 'ABC',
         risquesGeneraux: [
-          { id: 'R1', niveauGravite: 'moyen', niveauVraisemblance: 'probable' },
+          {
+            id: 'R1',
+            niveauGravite: 'moyen',
+            niveauVraisemblance: 'quasiCertain',
+          },
         ],
         risquesSpecifiques: [
           {
-            id: 'RS1',
+            id: unUUID('R'),
             niveauGravite: 'minime',
-            niveauVraisemblance: 'improbable',
-            categories: ['disponibilité'],
+            niveauVraisemblance: 'invraisemblable',
+            categories: ['confidentialite'],
           },
         ],
       },
@@ -76,15 +90,15 @@ describe('Un événement de risques modifiés', () => {
     expect(
       () =>
         new EvenementRisquesServiceModifies({
+          // @ts-expect-error on veut justement tester ça
           service: undefined,
         })
-    ).to.throwException((e) => {
-      expect(e).to.be.an(ErreurServiceManquant);
-    });
+    ).toThrow(ErreurServiceManquant);
   });
 
   it("n'envoie que les données pertinentes du risque général", () => {
-    const risquesGeneraux = [
+    const risquesGeneraux: DonneesRisqueGeneral[] = [
+      // @ts-expect-error on omet volontairement la gravité et la vraisemblance
       { id: 'R1', commentaire: 'des données hyper sensibles' },
     ];
     const service = unService(referentiel)
@@ -93,7 +107,7 @@ describe('Un événement de risques modifiés', () => {
 
     const evenement = new EvenementRisquesServiceModifies({ service });
 
-    expect(evenement.toJSON().donnees.risquesGeneraux).to.eql([
+    expect(evenement.toJSON().donnees.risquesGeneraux).toEqual([
       {
         id: 'R1',
         niveauGravite: undefined,
@@ -103,9 +117,10 @@ describe('Un événement de risques modifiés', () => {
   });
 
   it("n'envoie que les données pertinentes du risque spécifique", () => {
-    const risquesSpecifiques = [
+    const risquesSpecifiques: DonneesRisqueSpecifique[] = [
+      // @ts-expect-error on omet volontairement la gravité et la vraisemblance
       {
-        id: 'RS1',
+        id: unUUID('R'),
         intitule: 'mon titre',
         description: 'des données sensibles',
         commentaire: 'des données hyper sensibles',
@@ -117,9 +132,9 @@ describe('Un événement de risques modifiés', () => {
 
     const evenement = new EvenementRisquesServiceModifies({ service });
 
-    expect(evenement.toJSON().donnees.risquesSpecifiques).to.eql([
+    expect(evenement.toJSON().donnees.risquesSpecifiques).toEqual([
       {
-        id: 'RS1',
+        id: unUUID('R'),
         niveauGravite: undefined,
         niveauVraisemblance: undefined,
         categories: [],
