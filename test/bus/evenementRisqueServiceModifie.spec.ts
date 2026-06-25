@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceModifie.js';
 
 describe("L'événement `risqueServiceModifie", () => {
@@ -6,8 +5,9 @@ describe("L'événement `risqueServiceModifie", () => {
     expect(
       () =>
         new EvenementRisqueServiceModifie({
+          // @ts-expect-error on teste justement qu'une erreur est lancée si vide
           service: null,
         })
-    ).to.throwError();
+    ).toThrow(Error);
   });
 });
