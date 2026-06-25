@@ -21,7 +21,7 @@ class RisqueSpecifique extends Risque {
   declare readonly id: UUID;
   readonly intitule!: string;
   identifiantNumerique!: string;
-  private readonly categories!: IdCategorieRisque[];
+  readonly categories!: IdCategorieRisque[];
   readonly description?: string;
 
   constructor(
