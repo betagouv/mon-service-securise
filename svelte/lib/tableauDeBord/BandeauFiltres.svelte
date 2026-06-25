@@ -94,6 +94,7 @@
     {#if $services.length > 0 || $brouillonsService.length > 0}
       <BoutonAvecListeDeroulante
         titre="Ajouter un / des services"
+        aligneADroite
         options={[
           {
             label: 'Ajouter un service',
