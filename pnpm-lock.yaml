@@ -12,8 +12,8 @@ importers:
         specifier: ^2.1.6
         version: 2.1.7(express@5.2.1)
       '@lab-anssi/ui-kit':
-        specifier: 1.53.4
-        version: 1.53.4(svelte@5.55.7(@typescript-eslint/types@8.61.1))
+        specifier: 1.54.2
+        version: 1.54.2(svelte@5.55.7(@typescript-eslint/types@8.61.1))
       '@sentry/node':
         specifier: ^7.102.1
         version: 7.120.4
@@ -674,8 +674,8 @@ packages:
     peerDependencies:
       express: ~5.2.1
 
-  '@lab-anssi/ui-kit@1.53.4':
-    resolution: {integrity: sha512-Fke4LQJGPi+huXIpbHlThnkz/dQT9OOa3ZISsWJz1ev/pwoSJzTt/BhRo7GoEMHJT33HPdQ6/iSZbwpFwPtFBw==}
+  '@lab-anssi/ui-kit@1.54.2':
+    resolution: {integrity: sha512-rNcc0Y/KauCkQLecTf1XWteR/TpW/cBD4Nwaye6lQrygAqS7M106TOS1LDzkE3zSpkG9PjHGJMRnhy++hED4og==}
     peerDependencies:
       svelte: ~5.55.10
 
@@ -4877,7 +4877,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@lab-anssi/ui-kit@1.53.4(svelte@5.55.7(@typescript-eslint/types@8.61.1))':
+  '@lab-anssi/ui-kit@1.54.2(svelte@5.55.7(@typescript-eslint/types@8.61.1))':
     dependencies:
       svelte: 5.55.7(@typescript-eslint/types@8.61.1)
 
