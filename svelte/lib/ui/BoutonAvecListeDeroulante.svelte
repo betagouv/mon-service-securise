@@ -12,9 +12,15 @@
     titre: string;
     options: OptionBoutonListeDeroulante[];
     disabled?: boolean;
+    aligneADroite?: boolean;
   }
 
-  let { titre, options, disabled = false }: Props = $props();
+  let {
+    titre,
+    options,
+    disabled = false,
+    aligneADroite = false,
+  }: Props = $props();
 
   let optionsPourDropdown = $derived(
     options.map((o) => ({ ...o, icon: o.icone }))
@@ -39,7 +45,7 @@
   button-size="md"
   button-icon="add-line"
   content-type="buttons"
-  align="left"
+  align={aligneADroite ? 'right' : 'left'}
   items={optionsPourDropdown}
   onitemclicked={executeAction}
   {disabled}
