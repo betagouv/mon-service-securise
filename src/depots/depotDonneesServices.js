@@ -761,7 +761,9 @@ const creeDepot = (config = {}) => {
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 
-    busEvenements.publie(new EvenementRisquesV2ServiceModifies());
+    busEvenements.publie(
+      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+    );
   };
 
   const ajouteRisqueSpecifiqueV2 = async (idService, donneesRisque) => {
