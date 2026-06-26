@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploiement:
-    name: Déploiement en ${{ inputs.environment }}
+    name: Déploiement
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
