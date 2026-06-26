@@ -20,6 +20,7 @@ import EvenementMesureModifieeEnMasse from '../bus/evenementMesureModifieeEnMass
 import MesureSpecifique from '../modeles/mesureSpecifique.js';
 import { VersionService } from '../modeles/versionService.js';
 import EvenementServiceV1MigreEnV2 from '../bus/evenementServiceV1MigreEnV2.js';
+import { EvenementRisquesV2ServiceModifies } from '../bus/evenementRisquesV2ServiceModifies.js';
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -759,6 +760,8 @@ const creeDepot = (config = {}) => {
     s.risquesV2.metsAJour(idRisqueV2, donneesRisque);
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
+
+    busEvenements.publie(new EvenementRisquesV2ServiceModifies());
   };
 
   const ajouteRisqueSpecifiqueV2 = async (idService, donneesRisque) => {
