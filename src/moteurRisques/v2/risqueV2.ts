@@ -23,6 +23,20 @@ export type ModificationManuelleRisqueV2 = {
   graviteSurchargee?: Gravite;
 };
 
+export type JSONRisqueV2 = {
+  id: IdRisqueV2;
+  intitule: string;
+  description: string;
+  exemple: string;
+  gravite: Gravite;
+  graviteCalculee: Gravite;
+  vraisemblance: Vraisemblance;
+  categories: Array<CategorieRisque>;
+  desactive?: boolean;
+  commentaire?: string;
+  mesuresAssociees: Array<IdMesureV2>;
+};
+
 export class RisqueV2 {
   readonly id: IdRisqueV2;
   readonly intitule: string;
@@ -59,7 +73,7 @@ export class RisqueV2 {
     return this.graviteSurchargee ?? this.graviteCalculee;
   }
 
-  toJSON() {
+  toJSON(): JSONRisqueV2 {
     return {
       id: this.id,
       intitule: this.intitule,
@@ -75,7 +89,7 @@ export class RisqueV2 {
     };
   }
 
-  private genereIntitule() {
+  private genereIntitule(): string {
     const formatteurListe = new Intl.ListFormat('fr', {
       style: 'long',
       type: 'conjunction',
@@ -90,7 +104,7 @@ export class RisqueV2 {
     return `${vecteur.intitule} ${intitulesOv}`;
   }
 
-  private getCategories() {
+  private getCategories(): CategorieRisque[] {
     return [
       ...new Set(
         Object.keys(this.objectifsVises).flatMap(
@@ -105,7 +119,7 @@ export class RisqueV2 {
     return idVecteur.replace('V', 'R') as IdRisqueV2;
   }
 
-  donneesSerialisees() {
+  donneesSerialisees(): ModificationManuelleRisqueV2 {
     return {
       desactive: this.desactive,
       commentaire: this.commentaire,
