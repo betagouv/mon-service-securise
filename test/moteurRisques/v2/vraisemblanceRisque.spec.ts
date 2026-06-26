@@ -34,7 +34,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
     expect(vraisemblance).toBe(3);
   });
 
-  it('ne dépasse jamais 4, qui est la vraisemblance maximale', () => {
+  it('ne dépasse jamais 4, qui est la vraisemblance métier maximale', () => {
     const v = new VraisemblanceRisque(
       configurationVraisemblance({
         niveau1: { formules: [() => 6], groupes: {} },
@@ -44,6 +44,19 @@ describe('Le calcul de vraisemblance pour un risque', () => {
     const vraisemblance = v.calculePourService('niveau1', {});
 
     expect(vraisemblance).toBe(4);
+  });
+
+  it('ne descend jamais sous 1, qui est la vraisemblance métier minimale', () => {
+    const v = new VraisemblanceRisque(
+      configurationVraisemblance({
+        // On simule une réduction qui ferait tomber la vraisemblance *calculée* à zéro.
+        niveau1: { formules: [() => 0], groupes: {} },
+      })
+    );
+
+    const vraisemblance = v.calculePourService('niveau1', {});
+
+    expect(vraisemblance).toBe(1);
   });
 
   it('retourne la vraisemblance maximale entre toutes les formules calculées', () => {
