@@ -110,12 +110,18 @@ export const V1: ConfigurationVraisemblancePourUnVecteur = {
       ({
         d,
         e,
+        f,
         z,
         poidsD,
         poidsE,
+        poidsF,
         poidsZ,
       }: ConfigurationPredicatVraisemblance) =>
-        4 - poidsD * siTout(d) - poidsE * siTout(e) + poidsZ * siPasTout(z),
+        4 -
+        poidsD * siTout(d) -
+        poidsE * siTout(e) -
+        poidsF * siTout(f) +
+        poidsZ * siPasTout(z),
       ({ d, g, poidsD, poidsG }: ConfigurationPredicatVraisemblance) =>
         4 - poidsG * siTout(g) - poidsD * siTout(d),
     ],
