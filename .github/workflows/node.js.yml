@@ -49,6 +49,9 @@ jobs:
       - name: Contrôler la cohérence de Svelte avec `svelte-check`
         run: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
 
+      - name: Installer Miller (mlr) pour les tests des scripts du moteur de risques v2
+        run: sudo apt-get update && sudo apt-get install -y miller
+
       - name: Exécuter les tests
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
 

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Les règles de calcul de réduction de vraisemblance sont dans des Grist.
 # Notre code attend un objet Typescript pour alimenter `new VraisemblanceRisque()`.
 # Ce script transforme le CSV du Grist en JSON à placer dans le code source de MSS.
@@ -9,9 +11,9 @@
 # Utilisation : `./transformeCSVPourVraisemblance.sh <chemin vers .csv> <identifiant du risque>`
 
 
-FICHIER_CSV="$1"
+FICHIER_CSV="${1:-}"
 
-IDENTIFIANT_RISQUE="$2"
+IDENTIFIANT_RISQUE="${2:-}"
 
 if [ -z "$FICHIER_CSV" ] || [ -z "$IDENTIFIANT_RISQUE" ]; then
   echo "Usage : $0 <chemin vers .csv> <identifiant du risque>"
@@ -20,18 +22,10 @@ fi
 
 FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance/vraisemblance.$IDENTIFIANT_RISQUE.configuration.ts"
 
-{
-  echo "/* "
-  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh"
-  echo "  Ne pas modifier directement"
-  echo "*/"
-  echo ""
-  echo "import { ConfigurationVraisemblancePourUnVecteur, ConfigurationPredicatVraisemblance } from './vraisemblance.types.js';"
-  echo "import { siTout, siAucune, siPasTout } from './vraisemblance.predicats.js';"
-  echo ""
-  echo "export const ${IDENTIFIANT_RISQUE}: ConfigurationVraisemblancePourUnVecteur ="
-
-  mlr --icsv --ojson cat "$FICHIER_CSV" | jq -r '
+# On capture d'abord la sortie de jq. Grâce à `set -euo pipefail`, si une formule
+# est mal formée (jq lève une `error`), le script s'arrête ici : le fichier
+# Typescript n'est ni créé ni écrasé, on ne génère donc jamais de code faux.
+CONFIGURATION_TYPESCRIPT="$(mlr --icsv --ojson cat "$FICHIER_CSV" | jq -r '
 
   # Construction des colonnes par niveau
   def niveaux:
@@ -73,11 +67,19 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance/vra
       end;
 
   # Conversion des formules vers fonction Typescript (support + et -)
-  def formule_vers_typescript:
-    sub("^V\\s*=\\s*"; "")
+  def formule_vers_typescript(niveau):
+    . as $formuleOriginale
+    | sub("^V\\s*=\\s*"; "")
     | capture("(?<base>[0-9]+)\\s*(?<rest>.*)")
     | .base as $base
-    | .rest
+    | .rest as $rest
+    # Garde-fou : la suite du calcul doit être entièrement composée de termes
+    # reconnus de la forme `+ a(SI TOUT)`. Un espace avant la parenthèse
+    # (`a (SI TOUT)`) ferait silencieusement disparaître le terme : on échoue.
+    | (if ($rest | test("^(\\s*[+-]\\s*[a-zA-Z]\\(SI [^)]+\\))*\\s*$")) then .
+       else error("Formule mal formée (niveau \(niveau)) : « \($formuleOriginale) ». Un terme du calcul n a pas été reconnu (espace avant la parenthèse ?). Format attendu : a(SI TOUT), et non a (SI TOUT).")
+       end)
+    | $rest
     # trouve tous les termes avec leur opérateur
     | [ match("([+-])\\s*([a-zA-Z])\\(SI ([^)]+)\\)"; "g") ]
     | map({
@@ -105,19 +107,19 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance/vra
 
 
   # Split les formules et convertit en typescript
-  def decoupe_formules:
+  def decoupe_formules(niveau):
     split("//")
     | map(gsub("^\\s+|\\s+$"; ""))
     | map(select(length > 0))
-    | map(formule_vers_typescript);
+    | map(formule_vers_typescript(niveau));
 
   # Extrait les formules de la ligne CALCUL
   def formules:
    map(select(.REF == "CALCUL"))[0] as $calc
    | {
-     niveau1: ($calc[niveaux.niveau1] | decoupe_formules),
-     niveau2: ($calc[niveaux.niveau2] | decoupe_formules),
-     niveau3: ($calc[niveaux.niveau3] | decoupe_formules)
+     niveau1: ($calc[niveaux.niveau1] | decoupe_formules("Basique")),
+     niveau2: ($calc[niveaux.niveau2] | decoupe_formules("Modéré")),
+     niveau3: ($calc[niveaux.niveau3] | decoupe_formules("Avancé"))
    };
 
   # Construit la sortie Typescript
@@ -147,5 +149,18 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance/vra
       + "  },"
     ),
     "}"
-  '
+  ')"
+
+{
+  echo "/* "
+  echo "  Fichier généré par scripts/moteurRisques/transformeCSVPourVraisemblance.sh"
+  echo "  Ne pas modifier directement"
+  echo "*/"
+  echo ""
+  echo "import { ConfigurationVraisemblancePourUnVecteur, ConfigurationPredicatVraisemblance } from './vraisemblance.types.js';"
+  echo "import { siTout, siAucune, siPasTout } from './vraisemblance.predicats.js';"
+  echo ""
+  echo "export const ${IDENTIFIANT_RISQUE}: ConfigurationVraisemblancePourUnVecteur ="
+  printf '%s\n' "$CONFIGURATION_TYPESCRIPT"
+
 } > "$FICHIER_TYPESCRIPT"
