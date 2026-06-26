@@ -30,6 +30,7 @@ export type JSONRisqueV2 = {
   exemple: string;
   gravite: Gravite;
   graviteCalculee: Gravite;
+  graviteeSurchargee?: Gravite;
   vraisemblance: Vraisemblance;
   categories: Array<CategorieRisque>;
   desactive?: boolean;
@@ -81,6 +82,7 @@ export class RisqueV2 {
       exemple: this.exemple,
       gravite: this.gravite,
       graviteCalculee: this.graviteCalculee,
+      graviteeSurchargee: this.graviteSurchargee,
       vraisemblance: this.vraisemblance,
       categories: this.categories,
       desactive: this.desactive,

@@ -152,7 +152,7 @@ const cableTousLesAbonnes = (
 
   busEvenements.abonne(
     EvenementRisquesV2ServiceModifies,
-    consigneRisquesV2DansJournal()
+    consigneRisquesV2DansJournal({ adaptateurJournal })
   );
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [
