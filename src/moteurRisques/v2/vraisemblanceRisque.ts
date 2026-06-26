@@ -49,7 +49,7 @@ export class VraisemblanceRisque {
     );
 
     const maxCalcule = Math.max(...toutesVraisemblance);
-    const maxBorne = Math.min(maxCalcule, 4);
+    const maxBorne = Math.max(1, Math.min(maxCalcule, 4));
 
     return maxBorne as Vraisemblance;
   }
