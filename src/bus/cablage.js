@@ -75,6 +75,8 @@ import { EvenementAdminNommeSurOrganisation } from './evenementAdminNommeSurOrga
 import { EvenementAdminRetireDeOrganisation } from './evenementAdminRetireDeOrganisation.js';
 import { consigneAdminNommeSurOrganisationDansJournal } from './abonnements/consigneAdminNommeSurOrganisationDansJournal.js';
 import { consigneAdminRetireDeOrganisationDansJournal } from './abonnements/consigneAdminRetireDeOrganisationDansJournal.js';
+import { EvenementRisquesV2ServiceModifies } from './evenementRisquesV2ServiceModifies.js';
+import { consigneRisquesV2DansJournal } from './abonnements/consigneRisquesV2DansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -146,6 +148,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementRisqueServiceModifie,
     consigneRisquesDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementRisquesV2ServiceModifies,
+    consigneRisquesV2DansJournal()
   );
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [

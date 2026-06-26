@@ -1,6 +1,5 @@
 import expect from 'expect.js';
 import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
-
 import {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurDonneesObligatoiresManquantes,
@@ -10,7 +9,6 @@ import {
   ErreurStatutMesureManquant,
   ErreurVersionServiceIncompatible,
 } from '../../src/erreurs.js';
-
 import * as Referentiel from '../../src/referentiel.js';
 import { creeReferentielVide } from '../../src/referentiel.js';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
@@ -62,6 +60,7 @@ import { VersionService } from '../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 import EvenementServiceV1MigreEnV2 from '../../src/bus/evenementServiceV1MigreEnV2.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
+import { EvenementRisquesV2ServiceModifies } from '../../src/bus/evenementRisquesV2ServiceModifies.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -3098,6 +3097,7 @@ describe('Le dépôt de données des services', () => {
 
       depot = unDepotDeDonneesServices()
         .avecAdaptateurPersistance(persistance)
+        .avecBusEvenements(busEvenements)
         .construis();
     });
 
@@ -3113,6 +3113,14 @@ describe('Le dépôt de données des services', () => {
       const risqueR3 = risquesAJour.find((r) => r.id === 'R3');
       expect(risqueR3.commentaire).to.be('Un commentaire');
       expect(risqueR3.desactive).to.be(true);
+    });
+
+    it("publie un événement de 'Risques v2 modifiés'", async () => {
+      await depot.metsAJourRisqueV2('S1', 'R3', { commentaire: 'ABC' });
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementRisquesV2ServiceModifies)
+      ).to.be(true);
     });
   });
 
