@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploiement-demo:
-    name: Déploiement en DÉMO
+    name: Déploiement
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
       environment: DEMO
@@ -21,7 +21,7 @@ jobs:
 
   deploiement-prod:
     needs: [deploiement-demo]
-    name: Déploiement en PROD
+    name: Déploiement
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
       environment: PROD
