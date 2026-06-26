@@ -6,7 +6,6 @@ import { Vraisemblance } from './vraisemblance/vraisemblance.types.js';
 import {
   CategorieRisque,
   ConfigurationRisqueV2,
-  DonneesRisqueV2,
   IdRisqueV2,
 } from './risquesV2.types.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
@@ -17,6 +16,12 @@ const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
   ['OV3', ['disponibilite']],
   ['OV4', ['integrite']],
 ]);
+
+export type ModificationManuelleRisqueV2 = {
+  desactive?: boolean;
+  commentaire?: string;
+  graviteSurchargee?: Gravite;
+};
 
 export class RisqueV2 {
   readonly id: IdRisqueV2;
@@ -34,7 +39,7 @@ export class RisqueV2 {
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
     public readonly vraisemblance: Vraisemblance,
     private readonly idsMesuresAssociees: Array<IdMesureV2>,
-    donnees: DonneesRisqueV2 = {},
+    donnees: ModificationManuelleRisqueV2 = {},
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.id = RisqueV2.idPourVecteur(idVecteur);
@@ -108,7 +113,7 @@ export class RisqueV2 {
     };
   }
 
-  metsAJour(donnees: DonneesRisqueV2) {
+  metsAJour(donnees: ModificationManuelleRisqueV2) {
     this.desactive = donnees.desactive;
     this.commentaire = donnees.commentaire;
     this.graviteSurchargee = donnees.graviteSurchargee;

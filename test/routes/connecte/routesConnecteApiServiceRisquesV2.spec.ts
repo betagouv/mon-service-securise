@@ -7,13 +7,11 @@ import {
   Permissions,
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
-import {
-  DonneesRisqueV2,
-  IdRisqueV2,
-} from '../../../src/moteurRisques/v2/risquesV2.types.ts';
+import { IdRisqueV2 } from '../../../src/moteurRisques/v2/risquesV2.types.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { DonneesMiseAJourRisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { ModificationManuelleRisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -136,7 +134,7 @@ describe('Les routes /service/:id/risques/v2', () => {
       testeur.depotDonnees().metsAJourRisqueV2 = (
         idService: UUID,
         idRisque: IdRisqueV2,
-        donneesRisque: DonneesRisqueV2
+        donneesRisque: ModificationManuelleRisqueV2
       ) => {
         idServiceRecu = idService;
         donneesRisqueRecues = donneesRisque;
