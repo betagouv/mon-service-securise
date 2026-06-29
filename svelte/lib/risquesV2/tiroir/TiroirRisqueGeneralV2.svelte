@@ -146,7 +146,7 @@
             label="Commentaire"
             value={commentaire}
             disabled={estLectureSeule}
-            placeholder="Apportez des précisions sur le risque"
+            hint="Apportez des précisions sur le risque"
             onvaluechanged={metsAJourCommentaire}
           ></dsfr-input>
         </div>

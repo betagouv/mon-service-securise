@@ -305,7 +305,7 @@
               label="Commentaire"
               type="text"
               value={donneesRisque.commentaire}
-              placeholder="Apportez des précisions sur le risque"
+              hint="Apportez des précisions sur le risque"
               onvaluechanged={metsAJourCommentaire}
               disabled={estLectureSeule}
             ></dsfr-input>
