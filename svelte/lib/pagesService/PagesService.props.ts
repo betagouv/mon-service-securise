@@ -3,18 +3,18 @@ import type {
   ServicePourPagesService,
 } from './pagesService.d';
 import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
-import { tousRisques } from '../risques/risques';
 import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
 import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
 import type { DossiersHomologation } from './pages/homologuer/homologuer.types';
 import type { PageServiceGeree } from './pagesServiceGerees';
+import type { RisquesV1 } from '../risquesV2/risquesV2.d';
 
 export const propsPourPage = (
   page: PageServiceGeree,
   props: PagesServiceProps,
   service: ServicePourPagesService | undefined,
   descriptionService: DescriptionServiceV2API | undefined,
-  risques: ReturnType<typeof tousRisques> | undefined,
+  risquesV1: RisquesV1 | undefined,
   contactsUtiles: ContactsUtiles | undefined,
   indicesCyber: IndicesCyber | undefined,
   dossiers: DossiersHomologation | undefined
@@ -47,7 +47,10 @@ export const propsPourPage = (
         referentielRisques: props.referentiel.risques.descriptions,
         matriceNiveauxRisque: props.referentiel.risques.matrice,
         niveauxRisque: props.referentiel.risques.niveaux,
-        risques,
+        risquesV1,
+        statuts: props.referentiel.mesures.statuts,
+        avecRisquesV2: props.featureFlags.avecRisquesV2,
+        versionService: service?.version,
       };
     case 'rolesResponsabilites':
       return {

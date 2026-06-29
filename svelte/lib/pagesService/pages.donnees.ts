@@ -1,12 +1,12 @@
 import TableauDesMesures from '../tableauDesMesures/TableauDesMesures.svelte';
 import type { Component } from 'svelte';
 import DecrireV2 from '../decrireV2/DecrireV2.svelte';
-import Risques from '../risques/Risques.svelte';
 import { type PageServiceGeree } from './pagesServiceGerees';
 import ContactsUtiles from './pages/contactsUtiles/ContactsUtiles.svelte';
 import IndiceCyber from './pages/indiceCyber/IndiceCyber.svelte';
 import Homologuer from './pages/homologuer/Homologuer.svelte';
 import ParcoursHomologation from './pages/parcoursHomologation/ParcoursHomologation.svelte';
+import PageRisques from '../risques/PageRisques.svelte';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DonneesPage = {
@@ -32,7 +32,7 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
     titre: 'Sécuriser',
     sousTitre:
       "Réalisez les mesures de securité, évaluez vos risques et suivez la progression de l'indice cyber",
-    composant: Risques,
+    composant: PageRisques,
   },
   descriptionService: {
     titre: 'Récapitulatif',

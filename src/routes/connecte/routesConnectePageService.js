@@ -20,7 +20,6 @@ const routesConnectePageService = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
-  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
   const departements = referentiel.departements();
@@ -214,32 +213,6 @@ const routesConnectePageService = ({
         referentiel,
         service,
         etapeActive: 'risques',
-      });
-    }
-  );
-
-  routes.get(
-    '/:id/risques/v2',
-    middleware.trouveService({ [RISQUES]: LECTURE }),
-    middleware.chargeAutorisationsService,
-    (requete, reponse) => {
-      if (!adaptateurEnvironnement.featureFlag().avecRisquesV2()) {
-        reponse.sendStatus(404);
-        return;
-      }
-
-      const { service } = requete;
-
-      if (service.version() === VersionService.v1) {
-        reponse.redirect(301, `/service/${service.id}/risques`);
-        return;
-      }
-
-      reponse.render('service/risquesV2', {
-        referentiel,
-        service,
-        etapeActive: 'risques',
-        risquesV1: service.risques.toJSON(),
       });
     }
   );

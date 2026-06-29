@@ -19,6 +19,8 @@
   import Infobulle from '../ui/Infobulle.svelte';
   import { couleur, mappingCouleursNiveau } from './kit/kit';
   import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
+  import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
+  import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
 
   interface Props {
     idService: string;
@@ -26,6 +28,7 @@
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
+    visible: Record<EtapeService, boolean>;
   }
 
   let {
@@ -34,6 +37,7 @@
     statuts,
     niveauxGravite,
     niveauxVraisemblance,
+    visible,
   }: Props = $props();
 
   let risques: TousRisques = $state({
@@ -86,6 +90,28 @@
 </script>
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
+
+<NavigationSecuriser {idService} {visible} />
+
+<div class="explications">
+  <span>
+    Réalisez une première étude de vos risques grâce à l'outil d'études des
+    risques usuels proposé ci-dessous par l'ANSSI et/ou recensez les risques
+    identifiés dans le cadre d'une analyse de risque plus approfondie.
+  </span>
+  <br />
+  <br />
+  <span>
+    Ces risques sont créés et caractérisés automatiquement et doivent être revus
+    avant présentation en commission. Découvrez&nbsp;
+    <dsfr-link
+      label="comment fonctionne le moteur de risques"
+      href="https://app.crisp.chat/website/83715488-f261-43fe-806b-519f8611e146/helpdesk/articles/fr/1bead123-e8fc-42ef-83c8-21b5ce75807c/"
+      blank
+      neutral
+    ></dsfr-link>
+  </span>
+</div>
 
 <div class="conteneur">
   <div class="entete">
@@ -203,6 +229,7 @@
         </span>
         {#if aDesRisquesV1}
           <br />
+          <br />
           <span
             >Seuls les risques de la dernière version sont pris en compte ;
             l'ancienne version reste consultable en lecture seule.</span
@@ -267,6 +294,11 @@
 
   :global(tr:has(.colonne:not(.inactif) .lien-intitule-risque:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
+  }
+
+  .explications {
+    max-width: 750px;
+    margin-bottom: 24px;
   }
 
   .conteneur {

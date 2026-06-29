@@ -11,7 +11,6 @@
   import { metadonneesPages } from './pages.donnees';
   import { routeurStore } from './store/routeur.store';
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
-  import { tousRisques } from '../risques/risques';
   import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
   import Toaster from '../ui/Toaster.svelte';
   import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
@@ -21,12 +20,13 @@
   import { propsPourPage } from './PagesService.props';
   import { afficheTitrePageServiceStore } from './store/afficheTitrePageService.store';
   import { donneesVisiteGuidee } from './donneesVisiteGuidees';
+  import type { RisquesV1 } from '../risquesV2/risquesV2.d';
 
   let props: PagesServiceProps = $props();
 
   let service: ServicePourPagesService | undefined = $state();
   let descriptionService: DescriptionServiceV2API | undefined = $state();
-  let risques: ReturnType<typeof tousRisques> | undefined = $state();
+  let risquesV1: RisquesV1 | undefined = $state();
   let contactsUtiles: ContactsUtiles | undefined = $state();
   let indicesCyber: IndicesCyber | undefined = $state();
   let dossiers: DossiersHomologation | undefined = $state();
@@ -79,9 +79,7 @@
     }
 
     descriptionService = serviceComplet.descriptionService;
-    risques = serviceComplet.risques
-      ? tousRisques(serviceComplet.risques)
-      : undefined;
+    risquesV1 = serviceComplet.risques;
     contactsUtiles = serviceComplet.contactsUtiles;
     indicesCyber = serviceComplet.indicesCyber;
     dossiers = serviceComplet.dossiers;
@@ -104,7 +102,7 @@
       props,
       service,
       descriptionService,
-      risques,
+      risquesV1,
       contactsUtiles,
       indicesCyber,
       dossiers
