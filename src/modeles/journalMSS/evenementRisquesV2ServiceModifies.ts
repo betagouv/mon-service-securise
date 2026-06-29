@@ -17,6 +17,16 @@ export class EvenementRisquesV2ServiceModifies extends Evenement {
           valeurGraviteCalculee: r.graviteCalculee,
           valeurGraviteSurchargee: r.graviteeSurchargee ?? null,
         })),
+        risquesSpecifiques: risques
+          .toJSON()
+          .risquesSpecifiques.map((risque) => ({
+            id: risque.id,
+            valeurVraisemblance: risque.vraisemblance,
+            valeurGravite: risque.gravite,
+            valeurVraisemblanceBrute: risque.vraisemblanceBrute,
+            valeurGraviteBrute: risque.graviteBrute,
+            categories: risque.categories,
+          })),
       },
       date
     );
