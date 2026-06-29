@@ -12,12 +12,6 @@ import {
 } from '../risques/risques.d';
 import type { UUID } from '../typesBasiquesSvelte';
 
-declare global {
-  interface HTMLElementEventMap {
-    'svelte-recharge-risques-v2': CustomEvent;
-  }
-}
-
 type Niveau = 1 | 2 | 3 | 4;
 
 export type Risque = {
