@@ -3139,6 +3139,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
 
       depot = unDepotDeDonneesServices()
+        .avecBusEvenements(busEvenements)
         .avecAdaptateurPersistance(persistance)
         .construis();
     });
@@ -3162,6 +3163,25 @@ describe('Le dépôt de données des services', () => {
       const risquesAJour = serviceAJour.risquesV2.toJSON().risquesSpecifiques;
       expect(risquesAJour[0].intitule).to.be('Initulé du risque');
       expect(risquesAJour[0].id).not.to.be(undefined);
+    });
+
+    it("publie un événement de 'Risques v2 modifiés'", async () => {
+      await depot.ajouteRisqueSpecifiqueV2('S1', {
+        intitule: 'Initulé du risque',
+        description: 'une description',
+        categories: ['disponibilite'],
+        risqueBrut: {
+          vraisemblance: 'peuVraisemblable',
+          gravite: 'nonConcerne',
+        },
+        vraisemblance: 'peuVraisemblable',
+        gravite: 'nonConcerne',
+        commentaire: 'un commentaire',
+      });
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementRisquesV2ServiceModifies)
+      ).to.be(true);
     });
   });
 
@@ -3192,10 +3212,12 @@ describe('Le dépôt de données des services', () => {
         .construis();
 
       depot = unDepotDeDonneesServices()
+        .avecBusEvenements(busEvenements)
         .avecAdaptateurPersistance(persistance)
         .construis();
 
       await depot.ajouteRisqueSpecifiqueV2('S1', donneesRisque);
+      busEvenements.videEvenements();
     });
 
     it('mets à jour le risque', async () => {
@@ -3211,6 +3233,20 @@ describe('Le dépôt de données des services', () => {
       const risquesAJour = serviceAJour.risquesV2.toJSON().risquesSpecifiques;
       expect(risquesAJour[0].id).to.be(idRisque);
       expect(risquesAJour[0].intitule).to.be('Un autre intitulé');
+    });
+
+    it("publie un événement de 'Risques v2 modifiés'", async () => {
+      const service = await depot.service('S1');
+      const idRisque = service.risquesV2.toJSON().risquesSpecifiques[0].id;
+
+      await depot.metsAJourRisqueSpecifiqueV2('S1', idRisque, {
+        ...donneesRisque,
+        intitule: 'Un autre intitulé',
+      });
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementRisquesV2ServiceModifies)
+      ).to.be(true);
     });
   });
 

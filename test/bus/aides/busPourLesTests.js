@@ -25,6 +25,9 @@ const fabriqueBusPourLesTests = () => {
       evenementsRecus.find((e) => e instanceof typeAttendu),
     recupereEvenements: (typeAttendu) =>
       evenementsRecus.filter((e) => e instanceof typeAttendu),
+    videEvenements: () => {
+      evenementsRecus.splice(0);
+    },
   };
 };
 

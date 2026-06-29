@@ -773,6 +773,10 @@ const creeDepot = (config = {}) => {
     s.risquesV2.ajouteRisqueSpecifique({ ...donneesRisque, id: idRisqueV2 });
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
+
+    busEvenements.publie(
+      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+    );
   };
 
   const metsAJourRisqueSpecifiqueV2 = async (
@@ -785,6 +789,10 @@ const creeDepot = (config = {}) => {
     s.risquesV2.metsAJourRisqueSpecifique(idRisque, donneesRisque);
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
+
+    busEvenements.publie(
+      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+    );
   };
 
   const supprimeRisqueSpecifiqueV2 = async (idService, idRisque) => {
