@@ -1,9 +1,12 @@
-import { unUUID } from '../../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { EvenementRisquesV2ServiceModifies } from '../../../src/modeles/journalMSS/evenementRisquesV2ServiceModifies.ts';
 import { RisquesV2 } from '../../../src/moteurRisques/v2/risquesV2.ts';
 import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
+import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
 
 describe('Un événement de risques V2 modifiés', () => {
+  const idRisqueSpecifique = unUUIDRandom();
+
   const hacheEnMajuscules = {
     hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
@@ -20,7 +23,18 @@ describe('Un événement de risques V2 modifiés', () => {
       ],
       risquesBruts: [],
       risquesCibles: [],
-      risquesSpecifiques: [],
+      risquesSpecifiques: [
+        new RisqueSpecifiqueV2({
+          categories: ['integrite'],
+          commentaire: 'un comm',
+          description: 'une description',
+          intitule: 'un intitule',
+          id: idRisqueSpecifique,
+          vraisemblance: 1,
+          gravite: 2,
+          risqueBrut: { gravite: 3, vraisemblance: 4 },
+        }),
+      ],
     });
 
   it("hache l'identifiant du service qui lui est donné", () => {
@@ -63,6 +77,16 @@ describe('Un événement de risques V2 modifiés', () => {
             avecCommentaire: true,
             valeurGraviteCalculee: 3,
             valeurGraviteSurchargee: 1,
+          },
+        ],
+        risquesSpecifiques: [
+          {
+            id: idRisqueSpecifique,
+            valeurVraisemblance: 1,
+            valeurGravite: 2,
+            valeurVraisemblanceBrute: 4,
+            valeurGraviteBrute: 3,
+            categories: ['integrite'],
           },
         ],
       },
