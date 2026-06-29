@@ -17,7 +17,7 @@ const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
   ['OV4', ['integrite']],
 ]);
 
-export type ModificationManuelleRisqueV2 = {
+export type DonneesRisqueV2 = {
   desactive?: boolean;
   commentaire?: string;
   graviteSurchargee?: Gravite;
@@ -54,7 +54,7 @@ export class RisqueV2 {
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
     public readonly vraisemblance: Vraisemblance,
     private readonly idsMesuresAssociees: Array<IdMesureV2>,
-    donnees: ModificationManuelleRisqueV2 = {},
+    donnees: DonneesRisqueV2 = {},
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.id = RisqueV2.idPourVecteur(idVecteur);
@@ -121,7 +121,7 @@ export class RisqueV2 {
     return idVecteur.replace('V', 'R') as IdRisqueV2;
   }
 
-  donneesSerialisees(): ModificationManuelleRisqueV2 {
+  donneesSerialisees(): DonneesRisqueV2 {
     return {
       desactive: this.desactive,
       commentaire: this.commentaire,
@@ -129,7 +129,7 @@ export class RisqueV2 {
     };
   }
 
-  metsAJour(donnees: ModificationManuelleRisqueV2) {
+  metsAJour(donnees: DonneesRisqueV2) {
     this.desactive = donnees.desactive;
     this.commentaire = donnees.commentaire;
     this.graviteSurchargee = donnees.graviteSurchargee;
