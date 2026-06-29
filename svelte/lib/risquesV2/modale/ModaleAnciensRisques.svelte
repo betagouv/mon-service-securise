@@ -90,7 +90,7 @@
         {statuts}
         {niveauxGravite}
         {niveauxVraisemblance}
-        estLectureSeule
+        versionInactive
       />
     </div>
   {/snippet}

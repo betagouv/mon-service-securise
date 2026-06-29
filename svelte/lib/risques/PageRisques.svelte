@@ -56,6 +56,7 @@
     {niveauxGravite}
     {niveauxVraisemblance}
     {visible}
+    {estLectureSeule}
   />
 {:else}
   <RisquesV1

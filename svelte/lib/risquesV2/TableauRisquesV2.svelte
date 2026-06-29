@@ -24,6 +24,7 @@
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
+    versionInactive?: boolean;
     estLectureSeule?: boolean;
   }
 
@@ -34,6 +35,7 @@
     niveauxGravite,
     niveauxVraisemblance,
     estLectureSeule = false,
+    versionInactive = false,
   }: Props = $props();
 
   type TypeRisque = 'general' | 'specifique';
@@ -71,7 +73,7 @@
     { key: 'intitule', label: 'Intitulé du risque' },
     { key: 'gravite', label: 'Gravité' },
     { key: 'vraisemblance', label: 'Vraisemblance' },
-    { key: 'actions', label: estLectureSeule ? 'État' : 'Actions' },
+    { key: 'actions', label: versionInactive ? 'État' : 'Actions' },
   ]}
   rows={tousLesRisques}
   rich
@@ -80,7 +82,11 @@
   {#each tousLesRisques as donnee, i (donnee.id)}
     {@const { type: _type, desactive: _desactive, ...donneeRisque } = donnee}
     {@const risqueBrut = risques.risquesBruts.find((r) => r.id === donnee.id)}
-    <div slot="cell:id:{i}" class="colonne-identifiant colonne">
+    <div
+      slot="cell:id:{i}"
+      class="colonne-identifiant colonne"
+      class:inactif={versionInactive}
+    >
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
       {:else}
@@ -91,7 +97,7 @@
       <div
         slot="cell:intitule:{i}"
         class="colonne-intitule colonne"
-        class:inactif={donnee.desactive || estLectureSeule}
+        class:inactif={donnee.desactive || versionInactive}
       >
         <span>{donnee.intitule}</span>
         <CartouchesRisqueV2 risque={donnee} />
@@ -100,7 +106,7 @@
       <div
         slot="cell:intitule:{i}"
         class="colonne-intitule colonne"
-        class:inactif={estLectureSeule}
+        class:inactif={versionInactive}
       >
         <span>{donnee.intitule}</span>
         <CartouchesRisqueV2 risque={donnee} risqueAjoute />
@@ -109,37 +115,38 @@
     <div
       slot="cell:gravite:{i}"
       class="colonne-gravite colonne"
-      class:inactif={donnee.desactive || estLectureSeule}
+      class:inactif={donnee.desactive || versionInactive}
     >
       <Niveau niveau={donnee.gravite} desactive={donnee.desactive} />
     </div>
     <div
       slot="cell:vraisemblance:{i}"
       class="colonne-vraisemblance colonne"
-      class:inactif={donnee.desactive || estLectureSeule}
+      class:inactif={donnee.desactive || versionInactive}
     >
       <Niveau niveau={donnee.vraisemblance} desactive={donnee.desactive} />
     </div>
     <div
       slot="cell:actions:{i}"
       class="colonne colonne-actions"
-      class:inactif={estLectureSeule}
+      class:inactif={versionInactive}
     >
-      {#if !estLectureSeule}
-        {#if estRisqueGeneral(donnee)}
-          <dsfr-toggle
-            state
-            label={donnee.desactive ? 'Désactivé' : 'Activé'}
-            hide-label
-            id="risque-{donnee.id}-actif"
-            checked={!donnee.desactive}
-            onvaluechanged={async (e: CustomEvent<boolean>) =>
-              await metsAJourDesactivationRisque(donnee, !e.detail)}
-          ></dsfr-toggle>
-        {/if}
+      {#if estRisqueGeneral(donnee)}
+        <dsfr-toggle
+          state
+          label={donnee.desactive ? 'Désactivé' : 'Activé'}
+          hide-label
+          id="risque-{donnee.id}-actif"
+          disabled={estLectureSeule || versionInactive}
+          checked={!donnee.desactive}
+          onvaluechanged={async (e: CustomEvent<boolean>) =>
+            await metsAJourDesactivationRisque(donnee, !e.detail)}
+        ></dsfr-toggle>
+      {/if}
+      {#if !versionInactive}
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-button
-          label="Modifier"
+          label={estLectureSeule ? 'Voir le risque' : 'Modifier'}
           has-icon
           icon="edit-line"
           size="sm"
@@ -156,6 +163,7 @@
                 risque: donnee,
                 niveauxGravite,
                 statuts,
+                estLectureSeule,
               });
             } else {
               tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
@@ -163,12 +171,11 @@
                 niveauxGravite,
                 niveauxVraisemblance,
                 risque: donneeRisque as RisqueSpecifiqueV2,
+                estLectureSeule,
               });
             }
           }}
         ></dsfr-button>
-      {:else}
-        <span>{donnee.desactive ? 'Désactivé' : 'Activé'}</span>
       {/if}
     </div>
   {/each}
@@ -176,7 +183,7 @@
 
 <style lang="scss">
   .colonne.inactif {
-    opacity: 0.5;
+    opacity: 0.65;
   }
 
   .colonne-identifiant {
@@ -213,5 +220,9 @@
     flex-direction: row;
     gap: 8px;
     align-items: center;
+  }
+
+  dsfr-button {
+    white-space: nowrap;
   }
 </style>

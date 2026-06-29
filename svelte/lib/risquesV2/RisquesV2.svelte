@@ -29,6 +29,7 @@
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
     visible: Record<EtapeService, boolean>;
+    estLectureSeule: boolean;
   }
 
   let {
@@ -38,6 +39,7 @@
     niveauxGravite,
     niveauxVraisemblance,
     visible,
+    estLectureSeule,
   }: Props = $props();
 
   let risques: TousRisques = $state({
@@ -68,6 +70,7 @@
           risque,
           statuts,
           niveauxGravite,
+          estLectureSeule,
         });
       }
     }
@@ -251,11 +254,13 @@
         has-icon
         icon="add-line"
         icon-place="left"
+        disabled={estLectureSeule}
         onclick={() =>
           tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
             idService,
             niveauxGravite,
             niveauxVraisemblance,
+            estLectureSeule,
           })}
       ></dsfr-button>
     </div>
@@ -267,6 +272,7 @@
     {statuts}
     {niveauxGravite}
     {niveauxVraisemblance}
+    {estLectureSeule}
   />
 </div>
 
