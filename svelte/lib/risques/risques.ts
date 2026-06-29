@@ -1,4 +1,4 @@
-import Risques from './Risques.svelte';
+import Risques from './RisquesV1.svelte';
 import type {
   DonneesRisque,
   Risque,

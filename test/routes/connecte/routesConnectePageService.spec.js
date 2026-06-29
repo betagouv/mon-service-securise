@@ -32,8 +32,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     { url: '/ID-SERVICE/mesures', service: serviceV1 },
     { url: '/ID-SERVICE/indiceCyber', service: serviceV1 },
     { url: '/ID-SERVICE/rolesResponsabilites', service: serviceV1 },
-    { url: '/ID-SERVICE/risques', service: serviceV1 },
-    { url: '/ID-SERVICE/risques/v2', service: serviceV2 },
+    { url: '/ID-SERVICE/risques', service: serviceV2 },
     { url: '/ID-SERVICE/dossiers', service: serviceV1 },
     { url: '/ID-SERVICE/simulation-referentiel-v2', service: serviceV1 },
   ].forEach(({ url, service }) => {
@@ -694,41 +693,6 @@ describe('Le serveur MSS des routes /service/*', () => {
         '/service/456/simulation-referentiel-v2'
       );
       expect(reponse.status).to.be(400);
-    });
-  });
-
-  describe('quand requête GET sur `/service/:id/risques/v2`', () => {
-    it('renvoi une 404 si le feature flag est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecRisquesV2: () => false,
-      });
-      const { status } = await testeur.get('/service/456/risques/v2');
-
-      expect(status).to.be(404);
-    });
-
-    it('redirige vers la page des risques v1 si le service est v1', async () => {
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: unService().avecId('456').construis(),
-      });
-
-      const { status, header } = await testeur.get('/service/456/risques/v2');
-
-      expect(status).to.be(301);
-      expect(header.location).to.contain('/service/456/risques');
-    });
-
-    it('ajoute les risques V1 aux données partagées', async () => {
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: unServiceV2().avecId('456').construis(),
-      });
-
-      const { text } = await testeur.get('/service/456/risques/v2');
-
-      expect(donneesPartagees(text, 'donnees-risques-v1')).to.eql({
-        risquesGeneraux: [],
-        risquesSpecifiques: [],
-      });
     });
   });
 });

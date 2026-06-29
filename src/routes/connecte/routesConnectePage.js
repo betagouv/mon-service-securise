@@ -215,7 +215,6 @@ const routesConnectePage = ({
       adaptateurCsv,
       adaptateurGestionErreur,
       adaptateurHorloge,
-      adaptateurEnvironnement,
     })
   );
 
