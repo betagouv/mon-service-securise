@@ -27,6 +27,7 @@
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
     risque?: RisqueSpecifiqueV2;
+    estLectureSeule: boolean;
   }
 
   let {
@@ -34,6 +35,7 @@
     niveauxGravite,
     niveauxVraisemblance,
     risque = undefined,
+    estLectureSeule,
   }: Props = $props();
 
   let formElement: HTMLFormElement;
@@ -201,6 +203,7 @@
               value={donneesRisque.intitule}
               onvaluechanged={metsAJourIntitule}
               required
+              disabled={estLectureSeule}
             ></dsfr-input>
           </p>
           <p>
@@ -210,11 +213,13 @@
               rows="5"
               value={donneesRisque.description}
               onvaluechanged={metsAJourDescription}
+              disabled={estLectureSeule}
             ></dsfr-textarea>
           </p>
           <p>
             <lab-anssi-multi-select
               label="Catégories"
+              disabled={estLectureSeule}
               options={[
                 {
                   id: 'disponibilite',
@@ -254,6 +259,7 @@
                 options={optionsNiveauxGravite}
                 value={donneesRisque.graviteBrute}
                 onvaluechanged={metsAJourGraviteBrute}
+                disabled={estLectureSeule}
                 required
               ></dsfr-select>
               <dsfr-select
@@ -262,6 +268,7 @@
                 options={optionsNiveauxVraisemblance}
                 value={donneesRisque.vraisemblanceBrute}
                 onvaluechanged={metsAJourVraisemblanceBrute}
+                disabled={estLectureSeule}
                 required
               ></dsfr-select>
             </div>
@@ -279,6 +286,7 @@
                 options={optionsNiveauxGravite}
                 value={donneesRisque.gravite}
                 onvaluechanged={metsAJourGravite}
+                disabled={estLectureSeule}
                 required
               ></dsfr-select>
               <dsfr-select
@@ -287,6 +295,7 @@
                 options={optionsNiveauxVraisemblance}
                 value={donneesRisque.vraisemblance}
                 onvaluechanged={metsAJourVraisemblance}
+                disabled={estLectureSeule}
                 required
               ></dsfr-select>
             </div>
@@ -298,6 +307,7 @@
               value={donneesRisque.commentaire}
               placeholder="Apportez des précisions sur le risque"
               onvaluechanged={metsAJourCommentaire}
+              disabled={estLectureSeule}
             ></dsfr-input>
           </div>
         </div>
@@ -310,6 +320,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
         <dsfr-button
           label="Annuler"
+          disabled={estLectureSeule}
           kind="tertiary-no-outline"
           size="md"
           onclick={() => (modeConfirmationSuppression = false)}
@@ -317,6 +328,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
         <dsfr-button
           label="Confirmer la suppression"
+          disabled={estLectureSeule}
           kind="primary"
           size="md"
           has-icon
@@ -329,6 +341,7 @@
           <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
           <dsfr-button
             label="Supprimer le risque"
+            disabled={estLectureSeule}
             kind="tertiary-no-outline"
             size="md"
             has-icon
@@ -341,6 +354,7 @@
           label={estModification
             ? 'Enregistrer les modifications'
             : 'Ajouter le risque'}
+          disabled={estLectureSeule}
           kind="primary"
           size="md"
           has-icon

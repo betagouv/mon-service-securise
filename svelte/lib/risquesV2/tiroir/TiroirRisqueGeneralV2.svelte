@@ -6,7 +6,6 @@
   import Onglets from '../../ui/Onglets.svelte';
   import { mappingNiveauVraisemblance } from '../kit/kit';
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
-  import Switch from '../../ui/Switch.svelte';
   import { metsAJourRisque } from '../risquesV2.api';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
@@ -19,9 +18,11 @@
     risque: Risque;
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
+    estLectureSeule: boolean;
   }
 
-  let { idService, risque, statuts, niveauxGravite }: Props = $props();
+  let { idService, risque, statuts, niveauxGravite, estLectureSeule }: Props =
+    $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
@@ -133,6 +134,7 @@
               value={gravite}
               options={niveauxGraviteSelectionnables}
               required
+              disabled={estLectureSeule}
               onvaluechanged={metsAJourGravite}
             ></dsfr-select>
           </div>
@@ -143,6 +145,7 @@
             id="commentaire"
             label="Commentaire"
             value={commentaire}
+            disabled={estLectureSeule}
             placeholder="Apportez des précisions sur le risque"
             onvaluechanged={metsAJourCommentaire}
           ></dsfr-input>
@@ -197,10 +200,20 @@
 </ContenuTiroir>
 <ActionsTiroir>
   <div class="actions">
-    <Switch bind:actif id="risque-tiroir-{risque.id}-actif" />
+    <dsfr-toggle
+      label={actif ? 'Activé' : 'Désactivé'}
+      left
+      id="risque-{risque.id}-actif"
+      disabled={estLectureSeule}
+      checked={actif}
+      onvaluechanged={async (e: CustomEvent<boolean>) => {
+        actif = e.detail;
+      }}
+    ></dsfr-toggle>
     <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
     <dsfr-button
       label="Enregistrer les modifications"
+      disabled={estLectureSeule}
       kind="primary"
       size="md"
       has-icon
