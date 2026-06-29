@@ -74,15 +74,18 @@ export class ServiceAdministrationOrganisations {
       new ProcedureSuppressionContributeurAdmin({ depotDonnees });
   }
 
-  async rattacheLesAdministrateursDe(service: Service) {
+  async rattacheLesAdministrateursDe(idActeur: UUID, service: Service) {
     const nouvellesAutorisations =
       await this.fabriqueAutorisationsAdminPourService(service);
 
     await this.sauvegardeAutorisations(nouvellesAutorisations);
-    await this.supprimeAutorisationsAdminObsoletes(service);
+    await this.supprimeAutorisationsAdminObsoletes(idActeur, service);
   }
 
-  private async supprimeAutorisationsAdminObsoletes(service: Service) {
+  private async supprimeAutorisationsAdminObsoletes(
+    idActeur: UUID,
+    service: Service
+  ) {
     const adminsActuels = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
@@ -95,7 +98,8 @@ export class ServiceAdministrationOrganisations {
 
     const autorisationsASupprimer = autorisationsDuService
       .filter((a) => a.estAdmin)
-      .filter((a) => !idAdminsActuels.includes(a.idUtilisateur));
+      .filter((a) => !idAdminsActuels.includes(a.idUtilisateur))
+      .filter((a) => a.idUtilisateur !== idActeur);
 
     await Promise.all(
       autorisationsASupprimer.map((a) =>
@@ -105,6 +109,19 @@ export class ServiceAdministrationOrganisations {
         )
       )
     );
+
+    const autorisationDeActeur = autorisationsDuService.find(
+      (a) => a.idUtilisateur === idActeur
+    );
+    if (autorisationDeActeur && autorisationDeActeur.estAdmin) {
+      const autorisationDiminuee =
+        Autorisation.NouvelleAutorisationProprietaire({
+          id: autorisationDeActeur.id,
+          idService: autorisationDeActeur.idService,
+          idUtilisateur: idActeur,
+        });
+      await this.sauvegardeAutorisations([autorisationDiminuee]);
+    }
   }
 
   private async fabriqueAutorisationsAdminPourService(service: Service) {
@@ -468,7 +485,7 @@ export class ServiceAdministrationOrganisations {
     );
     await Promise.all(
       servicesARafraichir.map((service) =>
-        this.rattacheLesAdministrateursDe(service)
+        this.rattacheLesAdministrateursDe(idActeur, service)
       )
     );
 

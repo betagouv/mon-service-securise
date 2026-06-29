@@ -45,6 +45,7 @@ describe("Le service de gestion des admins d'organisation", () => {
   const idService3 = unUUID('s3');
   const idAdmin = unUUID('u1');
   const idAncienAdmin = unUUIDRandom();
+  const idActeur = unUUID('A1');
   const entite = { siret: '1234', nom: 'Un nom', departement: '75' };
   const entite2 = { siret: '4567', nom: 'Un nom 2', departement: '75' };
   const unService = unServiceV2()
@@ -103,7 +104,10 @@ describe("Le service de gestion des admins d'organisation", () => {
     it('crée les autorisations admins correspondantes', async () => {
       const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
-      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+      await administrationOrganisations.rattacheLesAdministrateursDe(
+        idActeur,
+        unService
+      );
 
       const autorisationsDuService =
         await depotComplet.autorisationsDuService(idService);
@@ -117,7 +121,10 @@ describe("Le service de gestion des admins d'organisation", () => {
       );
       const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
-      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+      await administrationOrganisations.rattacheLesAdministrateursDe(
+        idActeur,
+        unService
+      );
 
       const autorisationsDuService =
         await depotComplet.autorisationsDuService(idService);
@@ -128,13 +135,29 @@ describe("Le service de gestion des admins d'organisation", () => {
     it('supprime les autorisations des anciens admins', async () => {
       const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
-      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+      await administrationOrganisations.rattacheLesAdministrateursDe(
+        idActeur,
+        unService
+      );
 
       const autorisationSupprimee = await depotComplet.autorisationPour(
         idAncienAdmin,
         idService
       );
       expect(autorisationSupprimee).toBeUndefined();
+    });
+
+    it("diminue les droits au rôle de propriétaire si l'admin acteur devrait être retiré", async () => {
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      await administrationOrganisations.rattacheLesAdministrateursDe(
+        idAncienAdmin,
+        unService
+      );
+
+      const autorisationDiminuee: Autorisation =
+        await depotComplet.autorisationPour(idAncienAdmin, idService);
+      expect(autorisationDiminuee.resumeNiveauDroit()).toBe('PROPRIETAIRE');
     });
   });
 
@@ -191,7 +214,6 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("jette une erreur si l'acteur n'est ni superviseur ni admin", async () => {
-      const idActeur = unUUIDRandom();
       await expect(
         administrationOrganisations.nommeAdmin(
           idActeur,
@@ -565,7 +587,6 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
 
     it("jette une erreur si l'acteur n'est ni superviseur ni admin", async () => {
-      const idActeur = unUUIDRandom();
       await expect(
         service.retireAdmin(idActeur, siret, idAdmin)
       ).rejects.toThrow(ErreurEntiteNonAdministre);
@@ -866,7 +887,6 @@ describe("Le service de gestion des admins d'organisation", () => {
 
   describe("sur demande d'assignation d'un périmètre à un admin", () => {
     let service: ServiceAdministrationOrganisations;
-    const idActeur = unUUID('A1');
     const idNouvelAdmin = unUUIDRandom();
 
     beforeEach(() => {
