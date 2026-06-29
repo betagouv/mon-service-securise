@@ -2,9 +2,11 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { ServiceAdministrationOrganisations } from '../../../src/supervision/serviceAdministrationOrganisations.ts';
 import { modifieRattachementServiceEtAdmins } from '../../../src/bus/abonnements/modifieRattachementServiceEtAdmins.ts';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe("L'abonné en charge de modifier le rattachement entre un service modifié et ses admins", () => {
   let serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
+  const utilisateur = unUtilisateur().avecId('U1').construis();
 
   beforeEach(() => {
     serviceAdministrationOrganisations = {
@@ -27,6 +29,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     })({
       service,
       ancienneDescription,
+      utilisateur,
     });
 
     expect(
@@ -50,10 +53,11 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     })({
       service,
       ancienneDescription,
+      utilisateur,
     });
 
     expect(
       serviceAdministrationOrganisations.rattacheLesAdministrateursDe
-    ).toHaveBeenCalledWith(service);
+    ).toHaveBeenCalledWith(utilisateur.id, service);
   });
 });

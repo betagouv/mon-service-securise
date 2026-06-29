@@ -2,6 +2,7 @@ import Service from '../../modeles/service.js';
 import DescriptionService from '../../modeles/descriptionService.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
+import Utilisateur from '../../modeles/utilisateur.js';
 
 function modifieRattachementServiceEtAdmins({
   serviceAdministrationOrganisations,
@@ -11,9 +12,11 @@ function modifieRattachementServiceEtAdmins({
   return async ({
     service,
     ancienneDescription,
+    utilisateur,
   }: {
     service: Service;
     ancienneDescription: DescriptionService | DescriptionServiceV2;
+    utilisateur: Utilisateur;
   }) => {
     if (
       service.siretDeOrganisation() ===
@@ -21,6 +24,7 @@ function modifieRattachementServiceEtAdmins({
     )
       return;
     await serviceAdministrationOrganisations.rattacheLesAdministrateursDe(
+      utilisateur.id,
       service
     );
   };
