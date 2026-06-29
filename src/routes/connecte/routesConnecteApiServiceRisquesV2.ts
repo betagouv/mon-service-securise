@@ -16,7 +16,7 @@ import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { DonneesMiseAJourRisqueSpecifiqueV2 } from '../../moteurRisques/v2/risqueSpecifiqueV2.js';
 import { VersionService } from '../../modeles/versionService.js';
 
-import { ModificationManuelleRisqueV2 } from '../../moteurRisques/v2/risqueV2.js';
+import { DonneesRisqueV2 } from '../../moteurRisques/v2/risqueV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -61,7 +61,7 @@ const routesConnecteApiServiceRisquesV2 = ({
       const { service } = requete as unknown as RequestRouteConnecteService;
       const { idRisque } = requete.params;
 
-      const miseAJour = requete.body as ModificationManuelleRisqueV2;
+      const miseAJour = requete.body as DonneesRisqueV2;
       await depotDonnees.metsAJourRisqueV2(service.id, idRisque, miseAJour);
 
       reponse.sendStatus(204);

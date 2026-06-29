@@ -1,4 +1,4 @@
-import { ModificationManuelleRisqueV2, RisqueV2 } from './risqueV2.js';
+import { DonneesRisqueV2, RisqueV2 } from './risqueV2.js';
 import { IdRisqueV2 } from './risquesV2.types.js';
 import {
   DonneesMiseAJourRisqueSpecifiqueV2,
@@ -46,7 +46,7 @@ export class RisquesV2 {
     };
   }
 
-  metsAJour(idRisque: IdRisqueV2, donnees: ModificationManuelleRisqueV2) {
+  metsAJour(idRisque: IdRisqueV2, donnees: DonneesRisqueV2) {
     this.risques.find((r) => r.id === idRisque)?.metsAJour(donnees);
   }
 
