@@ -124,12 +124,6 @@ function afficheToast(
     avecInterpolationHTMLDangereuse,
     boutonAction
   );
-  setTimeout(() => {
-    update((etatActuel) => {
-      etatActuel.queue.shift();
-      return etatActuel;
-    });
-  }, message.timeout);
   update((etatActuel) => {
     etatActuel.queue = [...etatActuel.queue, message];
     return etatActuel;

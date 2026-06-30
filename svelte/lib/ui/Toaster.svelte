@@ -5,11 +5,12 @@
 
 {#if $toasterStore.queue.length}
   <aside id="conteneur-toasts">
-    {#each $toasterStore.queue as { niveau, contenu, titre, id, avecInterpolationHTMLDangereuse = false, boutonAction } (id)}
+    {#each $toasterStore.queue as { niveau, contenu, titre, id, timeout, avecInterpolationHTMLDangereuse = false, boutonAction } (id)}
       <Toast
         {niveau}
         {titre}
         {contenu}
+        {timeout}
         {avecInterpolationHTMLDangereuse}
         avecBoutonAction={boutonAction}
         avecFermeture

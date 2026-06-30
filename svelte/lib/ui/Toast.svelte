@@ -11,6 +11,7 @@
     avecAnimation?: boolean;
     avecFermeture?: boolean;
     avecInterpolationHTMLDangereuse?: boolean;
+    timeout?: number;
     onClose?: () => void;
   }
 
@@ -23,8 +24,22 @@
     avecAnimation = true,
     avecFermeture = false,
     avecInterpolationHTMLDangereuse = false,
+    timeout = undefined,
     onClose,
   }: Props = $props();
+
+  let minuteur: ReturnType<typeof setTimeout>;
+
+  const armeFermeture = () => {
+    if (!timeout) return;
+    minuteur = setTimeout(() => onClose?.(), timeout);
+  };
+  const stoppeFermeture = () => clearTimeout(minuteur);
+
+  $effect(() => {
+    armeFermeture();
+    return stoppeFermeture;
+  });
 
   const icones = {
     info: 'icone_info',
@@ -45,6 +60,8 @@
 <article
   class={niveau}
   class:avecOmbre
+  onmouseenter={stoppeFermeture}
+  onmouseleave={armeFermeture}
   transition:transitionConditionnelle|global={{
     fonction: glisse,
     depuis: 'right',
