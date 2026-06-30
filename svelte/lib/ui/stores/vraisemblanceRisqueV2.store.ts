@@ -57,7 +57,7 @@ export const storeVraisemblanceRisqueV2 = {
           {
             label: 'Voir la cartographie',
             icone: 'eye-line',
-            href: `/service/${idService}/risques/v2`,
+            href: `/service/${idService}/risques`,
           }
         );
       }
