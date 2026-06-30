@@ -18,6 +18,7 @@
 <style lang="scss">
   div {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-top: 16px;
