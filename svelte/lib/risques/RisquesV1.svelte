@@ -24,6 +24,7 @@
   import BoutonIcone from '../ui/BoutonIcone.svelte';
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
+  import { VersionService } from '../../../src/modeles/versionService';
 
   interface Props {
     idService: string;
@@ -36,6 +37,8 @@
     matriceNiveauxRisque: MatriceNiveauxRisque;
     niveauxRisque: ReferentielNiveauxRisque;
     visible: Record<EtapeService, boolean>;
+    avecRisquesV2: boolean;
+    versionService: VersionService | undefined;
   }
 
   let {
@@ -49,6 +52,8 @@
     matriceNiveauxRisque,
     niveauxRisque,
     visible,
+    avecRisquesV2,
+    versionService,
   }: Props = $props();
 
   let tiroirRisqueOuvert = $state(false);
@@ -164,7 +169,7 @@
   });
 </script>
 
-<NavigationSecuriser {idService} {visible} />
+<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
 <div class="au-dessus-tableau">
   <div class="section cartographie">
     <h2>Cartographie des risques</h2>

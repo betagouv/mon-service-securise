@@ -57,6 +57,8 @@
     {niveauxVraisemblance}
     {visible}
     {estLectureSeule}
+    {avecRisquesV2}
+    {versionService}
   />
 {:else}
   <RisquesV1
@@ -70,5 +72,7 @@
     {niveauxRisque}
     {estLectureSeule}
     {categoriesRisque}
+    {avecRisquesV2}
+    {versionService}
   />
 {/if}

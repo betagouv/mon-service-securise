@@ -21,6 +21,7 @@
   import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
+  import { VersionService } from '../../../src/modeles/versionService';
 
   interface Props {
     idService: string;
@@ -30,6 +31,8 @@
     niveauxVraisemblance: ReferentielVraisemblances;
     visible: Record<EtapeService, boolean>;
     estLectureSeule: boolean;
+    avecRisquesV2: boolean;
+    versionService: VersionService | undefined;
   }
 
   let {
@@ -40,6 +43,8 @@
     niveauxVraisemblance,
     visible,
     estLectureSeule,
+    avecRisquesV2,
+    versionService,
   }: Props = $props();
 
   let risques: TousRisques = $state({
@@ -94,7 +99,7 @@
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
 
-<NavigationSecuriser {idService} {visible} />
+<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
 
 <div class="explications">
   <span>
