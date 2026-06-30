@@ -183,6 +183,16 @@ const donnees = {
       image: 'televersementMesures.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'risquesV2',
+      dateDeDeploiement: '2026-07-01 07:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/le-moteur-de-risques-comment-ca-fonctionne-1q6lnhb/',
+      titre: 'Le moteur de risques a été complètement repensé !',
+      sousTitre:
+        "Des risques adaptés à votre service, une vraisemblance qui se met à jour avec l'avancement de votre plan d'action et 3 cartographies pour suivre votre progression !",
+      image: 'risquesV2.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
