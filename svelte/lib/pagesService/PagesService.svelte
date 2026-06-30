@@ -114,7 +114,10 @@
 <svelte:body on:mesure-modifiee={rafraichisServiceComplet} />
 <svelte:document
   onclick={interecepteNavigation}
-  on:description-service-modifiee={rafraichisResumeService}
+  on:description-service-modifiee={() => {
+    rafraichisResumeService();
+    rafraichisServiceComplet();
+  }}
   on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
   on:homologation-supprimee={rafraichisServiceComplet}
   on:homologation-modifiee={rafraichisServiceComplet}
