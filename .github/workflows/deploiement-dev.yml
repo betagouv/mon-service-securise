@@ -9,6 +9,7 @@ jobs:
     name: Déploiement
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
+      nom: Déploiement de branche de DEV
       environment: DEV
     secrets:
       CLEVER_CLOUD_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}

@@ -12,6 +12,7 @@ jobs:
     name: Déploiement
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
+      nom: Déploiement en DÉMO
       environment: DEMO
     secrets:
       CLEVER_CLOUD_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
@@ -24,6 +25,7 @@ jobs:
     name: Déploiement
     uses: ./.github/workflows/deploiement-clever-cloud.yml
     with:
+      nom: Déploiement en PRODUCTION
       environment: PROD
     secrets:
       CLEVER_CLOUD_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
