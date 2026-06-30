@@ -4,6 +4,9 @@ permissions: {}
 on:
   workflow_call:
     inputs:
+      nom:
+        required: true
+        type: string
       environment:
         required: true
         type: string
@@ -19,7 +22,7 @@ on:
 
 jobs:
   deploiement:
-    name: Déploiement
+    name: ${{ inputs.nom }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
