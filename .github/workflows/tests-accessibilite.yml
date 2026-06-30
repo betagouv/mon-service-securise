@@ -35,8 +35,6 @@ jobs:
 
       - name: Exécuter les tests d'accessibilité
         env:
-          METABASE_API_KEY: ${{ secrets.ACCESSIBILITE_METABASE_API_KEY }}
-          STATISTIQUES_DOMAINE_METABASE_MSS: ${{ secrets.ACCESSIBILITE_STATISTIQUES_DOMAINE_METABASE_MSS }}
           CRISP_ID_SITE: ${{ secrets.ACCESSIBILITE_CRISP_ID_SITE }}
           CRISP_CLE_API: ${{ secrets.ACCESSIBILITE_CRISP_CLE_API }}
         run: pnpm test:a11y
