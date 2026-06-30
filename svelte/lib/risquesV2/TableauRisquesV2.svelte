@@ -80,7 +80,11 @@
   {#each tousLesRisques as donnee, i (donnee.id)}
     {@const { type: _type, desactive: _desactive, ...donneeRisque } = donnee}
     {@const risqueBrut = risques.risquesBruts.find((r) => r.id === donnee.id)}
-    <div slot="cell:id:{i}" class="colonne-identifiant colonne">
+    <div
+      slot="cell:id:{i}"
+      class="colonne-identifiant colonne"
+      class:inactif={donnee.desactive}
+    >
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
       {:else}
