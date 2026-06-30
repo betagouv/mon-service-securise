@@ -86,18 +86,17 @@
     }}
   >
     {#each $resultatsDeRechercheBrouillons as brouillon, i (brouillon.id)}
-      <div slot="cell:nom:{i}" class="cellule-noms">
+      <a
+        slot="cell:nom:{i}"
+        class="cellule-noms"
+        href="/service/v2/creation?id={brouillon.id}"
+      >
         <span class="denomination-service">
           <span class="indicateur-brouillon">Brouillon en cours</span>
-          <dsfr-link
-            class="nom-service"
-            label={brouillon.nomService}
-            href="/service/v2/creation?id={brouillon.id}"
-            title="Ouvrir le brouillon"
-            size="sm"
-          ></dsfr-link>
+          <span class="nom-service">{brouillon.nomService}</span>
         </span>
-      </div>
+        <lab-anssi-icone nom="arrow-right-line" taille="sm"></lab-anssi-icone>
+      </a>
       <div slot="cell:contributeurs:{i}">-</div>
       <div slot="cell:besoinsSecurite:{i}">-</div>
       <div slot="cell:completion:{i}">-</div>
@@ -119,7 +118,11 @@
       {@const idService = service.id}
       {@const indiceCyberDuService = service.indiceCyber}
       {@const index = i + $resultatsDeRechercheBrouillons.length}
-      <div slot="cell:nom:{index}" class="cellule-noms">
+      <a
+        slot="cell:nom:{index}"
+        class="cellule-noms"
+        href="/service/{idService}"
+      >
         <span class="denomination-service">
           {#if service.estAdmin}
             <dsfr-badge
@@ -131,18 +134,13 @@
           {:else if service.estProprietaire}
             <EtiquetteProprietaire />
           {/if}
-          <dsfr-link
-            label={service.nomService}
-            class="nom-service lien-service"
-            href="/service/{idService}"
-            title="Ouvrir la page du service"
-            size="sm"
-          ></dsfr-link>
+          <span class="nom-service">{service.nomService}</span>
           <span class="nom-organisation">
             {service.organisationResponsable}
           </span>
         </span>
-      </div>
+        <lab-anssi-icone nom="arrow-right-line" taille="sm"></lab-anssi-icone>
+      </a>
       <div slot="cell:contributeurs:{index}">
         <EtiquetteContributeurs
           nombreContributeurs={service.nombreContributeurs}
@@ -194,7 +192,7 @@
   </dsfr-table>
 {/if}
 
-<style>
+<style lang="scss">
   .barre-actions {
     margin-bottom: 8px;
     display: flex;
@@ -213,6 +211,21 @@
   .cellule-noms {
     max-width: 280px;
     min-width: 280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      .nom-service {
+        text-decoration: underline;
+      }
+    }
+
+    .nom-service {
+      color: var(--bleu-mise-en-avant);
+      text-underline-offset: 2px;
+    }
   }
 
   .denomination-service {
