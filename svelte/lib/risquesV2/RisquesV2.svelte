@@ -109,7 +109,7 @@
     avant présentation en commission. Découvrez&nbsp;
     <dsfr-link
       label="comment fonctionne le moteur de risques"
-      href="https://app.crisp.chat/website/83715488-f261-43fe-806b-519f8611e146/helpdesk/articles/fr/1bead123-e8fc-42ef-83c8-21b5ce75807c/"
+      href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/le-moteur-de-risques-comment-ca-fonctionne-1q6lnhb/"
       blank
       neutral
     ></dsfr-link>
