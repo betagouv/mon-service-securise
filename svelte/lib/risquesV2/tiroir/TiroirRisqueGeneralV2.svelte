@@ -129,7 +129,7 @@
               disabled
             ></dsfr-select>
             <dsfr-select
-              label="Gravite"
+              label="Gravité"
               id="gravite"
               value={gravite}
               options={niveauxGraviteSelectionnables}
