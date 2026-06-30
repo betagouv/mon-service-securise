@@ -7,8 +7,8 @@ import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiq
 describe('Un événement de risques V2 modifiés', () => {
   const idRisqueSpecifique = unUUIDRandom();
 
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
+  const hacheSimple = {
+    hacheSha256: (valeur: string) => `${valeur}-haché`,
   };
 
   const desRisques = () =>
@@ -41,12 +41,12 @@ describe('Un événement de risques V2 modifiés', () => {
     const evenement = new EvenementRisquesV2ServiceModifies(
       unUUID('s'),
       desRisques(),
-      { adaptateurChiffrement: hacheEnMajuscules }
+      { adaptateurChiffrement: hacheSimple }
     );
 
     const json = evenement.toJSON();
 
-    expect(json.donnees.idService).toBe(unUUID('S'));
+    expect(json.donnees.idService).toBe(`${unUUID('s')}-haché`);
   });
 
   it('sait se convertir en JSON', () => {
@@ -55,14 +55,14 @@ describe('Un événement de risques V2 modifiés', () => {
       desRisques(),
       {
         date: '26/06/2026',
-        adaptateurChiffrement: hacheEnMajuscules,
+        adaptateurChiffrement: hacheSimple,
       }
     );
 
     expect(evenement.toJSON()).toEqual({
       type: 'RISQUES_V2_SERVICE_MODIFIES',
       donnees: {
-        idService: unUUID('S'),
+        idService: `${unUUID('s')}-haché`,
         risquesGeneraux: [
           {
             id: 'R3',
@@ -81,7 +81,7 @@ describe('Un événement de risques V2 modifiés', () => {
         ],
         risquesSpecifiques: [
           {
-            id: idRisqueSpecifique,
+            id: `${idRisqueSpecifique}-haché`,
             valeurVraisemblance: 1,
             valeurGravite: 2,
             valeurVraisemblanceBrute: 4,
