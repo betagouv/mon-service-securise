@@ -26,6 +26,7 @@ export class EvenementRisquesV2ServiceModifies extends Evenement {
           valeurVraisemblanceBrute: risque.vraisemblanceBrute,
           valeurGraviteBrute: risque.graviteBrute,
           categories: risque.categories,
+          avecCommentaire: !!risque.commentaire,
         })),
       },
       date

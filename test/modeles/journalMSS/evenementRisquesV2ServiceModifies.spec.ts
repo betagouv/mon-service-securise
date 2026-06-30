@@ -87,6 +87,7 @@ describe('Un événement de risques V2 modifiés', () => {
             valeurVraisemblanceBrute: 4,
             valeurGraviteBrute: 3,
             categories: ['integrite'],
+            avecCommentaire: true,
           },
         ],
       },
