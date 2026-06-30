@@ -20,7 +20,10 @@
     DonneesServicePourTiroirContributeurs;
 
   let service: ServicePourMenuNavigation | undefined = $state();
-  onMount(async () => {
+
+  onMount(() => rafraichis());
+
+  export const rafraichis = async () => {
     if (modeVisiteGuidee) {
       service = donneesServiceVisiteGuidee;
       return;
@@ -29,7 +32,7 @@
       `/api/service/${idService}`
     );
     service = reponse.data;
-  });
+  };
 </script>
 
 {#if service}
