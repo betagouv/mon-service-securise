@@ -32,6 +32,7 @@
   let indicesCyber: IndicesCyber | undefined = $state();
   let dossiers: DossiersHomologation | undefined = $state();
   let serviceCompletCharge = $state(false);
+  let composantMenu: MenuNavigationService | undefined = $state();
 
   const interecepteNavigation = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a');
@@ -109,9 +110,16 @@
       dossiers
     )
   );
+
+  const rafraichisMenu = async () => {
+    await composantMenu?.rafraichis();
+  };
 </script>
 
-<svelte:body on:mesure-modifiee={rafraichisServiceComplet} />
+<svelte:body
+  on:mesure-modifiee={rafraichisServiceComplet}
+  on:collaboratif-service-modifie={rafraichisMenu}
+/>
 <svelte:document
   onclick={interecepteNavigation}
   on:description-service-modifiee={() => {
@@ -143,6 +151,7 @@
     />
     <div class="contenu-page">
       <MenuNavigationService
+        bind:this={composantMenu}
         idService={props.idService}
         visible={props.visible}
         modeVisiteGuidee={props.modeVisiteGuidee}
