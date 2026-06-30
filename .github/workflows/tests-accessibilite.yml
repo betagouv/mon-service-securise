@@ -35,9 +35,6 @@ jobs:
 
       - name: Exécuter les tests d'accessibilité
         env:
-          OIDC_URL_BASE: ${{ secrets.ACCESSIBILITE_OIDC_URL_BASE }}
-          OIDC_CLIENT_ID: ${{ secrets.ACCESSIBILITE_OIDC_CLIENT_ID }}
-          OIDC_CLIENT_SECRET: ${{ secrets.ACCESSIBILITE_OIDC_CLIENT_SECRET }}
           METABASE_API_KEY: ${{ secrets.ACCESSIBILITE_METABASE_API_KEY }}
           STATISTIQUES_DOMAINE_METABASE_MSS: ${{ secrets.ACCESSIBILITE_STATISTIQUES_DOMAINE_METABASE_MSS }}
           CRISP_ID_SITE: ${{ secrets.ACCESSIBILITE_CRISP_ID_SITE }}
