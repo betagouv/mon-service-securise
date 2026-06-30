@@ -25,7 +25,7 @@ import * as adaptateurRechercheEntrepriseAPI from './src/adaptateurs/adaptateurR
 import { fabriqueAdaptateurOidc } from './src/adaptateurs/fabriqueAdaptateurOidc.js';
 import { fabriqueInscriptionUtilisateur } from './src/modeles/inscriptionUtilisateur.js';
 import fabriqueAdaptateurSupervision from './src/adaptateurs/fabriqueAdaptateurSupervision.js';
-import * as adaptateurStatistiques from './src/adaptateurs/adaptateurStatistiquesMetabase.js';
+import fabriqueAdaptateurStatistiques from './src/adaptateurs/fabriqueAdaptateurStatistiques.js';
 import { fabriqueServiceCgu } from './src/serviceCgu.js';
 import ServiceSupervision from './src/supervision/serviceSupervision.js';
 import { fabriqueServiceGestionnaireSession } from './src/session/serviceGestionnaireSession.js';
@@ -84,6 +84,8 @@ const adaptateurAuditAdminOrganisations =
     process.env.NODE_ENV!,
     adaptateurChiffrement
   );
+
+const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
 
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
