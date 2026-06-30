@@ -24,7 +24,6 @@
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
-    versionInactive?: boolean;
     estLectureSeule?: boolean;
   }
 
@@ -35,7 +34,6 @@
     niveauxGravite,
     niveauxVraisemblance,
     estLectureSeule = false,
-    versionInactive = false,
   }: Props = $props();
 
   type TypeRisque = 'general' | 'specifique';
@@ -73,7 +71,7 @@
     { key: 'intitule', label: 'Intitulé du risque' },
     { key: 'gravite', label: 'Gravité' },
     { key: 'vraisemblance', label: 'Vraisemblance' },
-    { key: 'actions', label: versionInactive ? 'État' : 'Actions' },
+    { key: 'actions', label: 'Actions' },
   ]}
   rows={tousLesRisques}
   rich
@@ -82,11 +80,7 @@
   {#each tousLesRisques as donnee, i (donnee.id)}
     {@const { type: _type, desactive: _desactive, ...donneeRisque } = donnee}
     {@const risqueBrut = risques.risquesBruts.find((r) => r.id === donnee.id)}
-    <div
-      slot="cell:id:{i}"
-      class="colonne-identifiant colonne"
-      class:inactif={versionInactive}
-    >
+    <div slot="cell:id:{i}" class="colonne-identifiant colonne">
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
       {:else}
@@ -97,17 +91,13 @@
       <div
         slot="cell:intitule:{i}"
         class="colonne-intitule colonne"
-        class:inactif={donnee.desactive || versionInactive}
+        class:inactif={donnee.desactive}
       >
         <span>{donnee.intitule}</span>
         <CartouchesRisqueV2 risque={donnee} />
       </div>
     {:else}
-      <div
-        slot="cell:intitule:{i}"
-        class="colonne-intitule colonne"
-        class:inactif={versionInactive}
-      >
+      <div slot="cell:intitule:{i}" class="colonne-intitule colonne">
         <span>{donnee.intitule}</span>
         <CartouchesRisqueV2 risque={donnee} risqueAjoute />
       </div>
@@ -115,68 +105,62 @@
     <div
       slot="cell:gravite:{i}"
       class="colonne-gravite colonne"
-      class:inactif={donnee.desactive || versionInactive}
+      class:inactif={donnee.desactive}
     >
       <Niveau niveau={donnee.gravite} desactive={donnee.desactive} />
     </div>
     <div
       slot="cell:vraisemblance:{i}"
       class="colonne-vraisemblance colonne"
-      class:inactif={donnee.desactive || versionInactive}
+      class:inactif={donnee.desactive}
     >
       <Niveau niveau={donnee.vraisemblance} desactive={donnee.desactive} />
     </div>
-    <div
-      slot="cell:actions:{i}"
-      class="colonne colonne-actions"
-      class:inactif={versionInactive}
-    >
+    <div slot="cell:actions:{i}" class="colonne colonne-actions">
       {#if estRisqueGeneral(donnee)}
         <dsfr-toggle
           state
           label={donnee.desactive ? 'Désactivé' : 'Activé'}
           hide-label
           id="risque-{donnee.id}-actif"
-          disabled={estLectureSeule || versionInactive}
+          disabled={estLectureSeule}
           checked={!donnee.desactive}
           onvaluechanged={async (e: CustomEvent<boolean>) =>
             await metsAJourDesactivationRisque(donnee, !e.detail)}
         ></dsfr-toggle>
       {/if}
-      {#if !versionInactive}
-        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-        <dsfr-button
-          label={estLectureSeule ? 'Voir le risque' : 'Modifier'}
-          has-icon
-          icon="edit-line"
-          size="sm"
-          kind="tertiary"
-          onclick={() => {
-            if (!idService) return;
-            if (estRisqueGeneral(donnee)) {
-              if (!risqueBrut) return;
-              const url = new URL(window.location.href);
-              url.searchParams.set('id', donnee.id);
-              history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
-              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-                idService,
-                risque: donnee,
-                niveauxGravite,
-                statuts,
-                estLectureSeule,
-              });
-            } else {
-              tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
-                idService,
-                niveauxGravite,
-                niveauxVraisemblance,
-                risque: donneeRisque as RisqueSpecifiqueV2,
-                estLectureSeule,
-              });
-            }
-          }}
-        ></dsfr-button>
-      {/if}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label={estLectureSeule ? 'Voir le risque' : 'Modifier'}
+        has-icon
+        icon="edit-line"
+        size="sm"
+        kind="tertiary"
+        onclick={() => {
+          if (!idService) return;
+          if (estRisqueGeneral(donnee)) {
+            if (!risqueBrut) return;
+            const url = new URL(window.location.href);
+            url.searchParams.set('id', donnee.id);
+            history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+            tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+              idService,
+              risque: donnee,
+              niveauxGravite,
+              statuts,
+              estLectureSeule,
+            });
+          } else {
+            tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+              idService,
+              niveauxGravite,
+              niveauxVraisemblance,
+              risque: donneeRisque as RisqueSpecifiqueV2,
+              estLectureSeule,
+            });
+          }
+        }}
+      ></dsfr-button>
     </div>
   {/each}
 </dsfr-table>

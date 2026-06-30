@@ -287,7 +287,6 @@
   bind:this={modaleAnciensRisques}
   {idService}
   {risquesV1}
-  {statuts}
   {niveauxGravite}
   {niveauxVraisemblance}
 />
