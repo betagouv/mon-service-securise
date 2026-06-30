@@ -28,7 +28,6 @@ const pages = [
     url: `/service/${idService}/rolesResponsabilites`,
   },
   { nom: 'Risques', url: `/service/${idService}/risques` },
-  { nom: 'Risques v2', url: `/service/${idService}/risques/v2` },
   { nom: 'Dossiers', url: `/service/${idService}/dossiers` },
 ];
 
