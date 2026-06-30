@@ -88,6 +88,7 @@ block page
           div(class=`identifiant-numerique ${niveauDuRisque}`)= risque.id
           .contenu-risque
             p.description= risque.intitule
+            p.definition= risque.description
             if risque.commentaire
               p.commentaire #[strong Commentaire :] #{risque.commentaire}
 
@@ -97,5 +98,6 @@ block page
           div(class=`identifiant-numerique ${niveauDuRisque}`) RS
           .contenu-risque
             p.description= risque.intitule
+            p.definition= risque.description
             if risque.commentaire
               p.commentaire #[strong Commentaire :] #{risque.commentaire}
