@@ -165,21 +165,21 @@
         ></dsfr-range>
         <div class="conteneur-legende-slider">
           <div class="legende-avec-infobulle">
-            <span>Risques bruts</span>
+            <span>Bruts</span>
             <Infobulle
               contenu="Les risques bruts sont les risques évalués sans prendre en compte la mise en place des mesures de sécurité."
               enfantDirect
             />
           </div>
           <div class="legende-avec-infobulle">
-            <span>Risques actuels</span>
+            <span>Actuels</span>
             <Infobulle
               contenu="Les risques actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
               enfantDirect
             />
           </div>
           <div class="legende-avec-infobulle">
-            <span>Risques résiduels cibles</span>
+            <span>Résiduels cibles</span>
             <Infobulle
               contenu="Les risques résiduels cibles sont les risques évalués en considérant toutes les mesures mises en place."
               enfantDirect
@@ -355,8 +355,18 @@
       padding: 0 64px;
 
       .conteneur-legende-slider {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-items: center;
+
+        :first-child {
+          justify-self: start;
+        }
+
+        :last-child {
+          justify-self: end;
+          margin-right: -8px;
+        }
 
         .legende-avec-infobulle {
           display: flex;
