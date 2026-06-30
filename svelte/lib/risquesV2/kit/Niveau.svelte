@@ -2,7 +2,7 @@
   import type { Niveau } from '../risquesV2.d';
 
   interface Props {
-    niveau: Niveau;
+    niveau: Niveau | undefined;
     desactive?: boolean;
   }
 
@@ -15,7 +15,7 @@
     'brown-caramel',
     'pink-tuile',
   ];
-  let accentDuNiveau = $derived(desactive ? '' : couleurs[niveau]);
+  let accentDuNiveau = $derived(desactive || !niveau ? '' : couleurs[niveau]);
 </script>
 
 <dsfr-badge

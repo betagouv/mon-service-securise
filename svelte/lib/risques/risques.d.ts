@@ -27,7 +27,7 @@ export type TypeRisque = 'GENERAL' | 'SPECIFIQUE';
 export type Risque = DonneesRisque & { type: TypeRisque };
 
 export type NiveauGravite = {
-  position: number;
+  position: Niveau;
   description: string;
   descriptionLongue: string;
 };
@@ -35,7 +35,7 @@ export type NiveauGravite = {
 export type NiveauVraisemblance = {
   libelle: string;
   description: string;
-  position: number;
+  position: Niveau;
 };
 
 type RisqueDuReferentiel = {

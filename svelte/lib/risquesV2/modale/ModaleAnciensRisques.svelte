@@ -1,14 +1,12 @@
 <script lang="ts">
   import Modale from '../../ui/Modale.svelte';
-  import type { Niveau, RisquesV1, TousRisques } from '../risquesV2.d';
+  import type { RisquesV1 } from '../risquesV2.d';
   import type {
     ReferentielGravites,
     ReferentielVraisemblances,
   } from '../../risques/risques.d';
-  import type { ReferentielStatut } from '../../ui/types';
-  import TableauRisquesV2 from '../TableauRisquesV2.svelte';
-  import type { UUID } from '../../typesBasiquesSvelte';
   import Lien from '../../ui/Lien.svelte';
+  import TableauAnciensRisques from '../TableauAnciensRisques.svelte';
 
   let elementModale: Modale | undefined;
 
@@ -17,56 +15,10 @@
     risquesV1: RisquesV1;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
-    statuts: ReferentielStatut;
   }
 
-  let {
-    idService,
-    risquesV1,
-    niveauxGravite,
-    niveauxVraisemblance,
-    statuts,
-  }: Props = $props();
-
-  const graviteDepuisIdentifiant = (identifiant: string) => {
-    return niveauxGravite[identifiant as keyof ReferentielGravites]
-      ?.position as Niveau;
-  };
-
-  const vraisemblanceDepuisIdentifiant = (identifiant: string) => {
-    return niveauxVraisemblance[identifiant as keyof ReferentielVraisemblances]
-      ?.position as Niveau;
-  };
-
-  let tousLesRisques: TousRisques = $derived.by(() => {
-    const risques = risquesV1.risquesGeneraux.map((r) => ({
-      ...r,
-      description: r.description,
-      exemple: '',
-      gravite: graviteDepuisIdentifiant(r.niveauGravite),
-      graviteCalculee: graviteDepuisIdentifiant(r.niveauGravite),
-      vraisemblance: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
-      mesuresAssociees: [],
-      id: r.identifiantNumerique,
-    }));
-    const risquesSpecifiques = risquesV1.risquesSpecifiques.map((r) => ({
-      ...r,
-      description: r.description,
-      exemple: '',
-      gravite: graviteDepuisIdentifiant(r.niveauGravite),
-      graviteBrute: graviteDepuisIdentifiant(r.niveauGravite),
-      vraisemblance: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
-      vraisemblanceBrute: vraisemblanceDepuisIdentifiant(r.niveauVraisemblance),
-      id: r.id as UUID,
-    }));
-
-    return {
-      risques,
-      risquesBruts: [],
-      risquesCibles: [],
-      risquesSpecifiques,
-    };
-  });
+  let { idService, risquesV1, niveauxGravite, niveauxVraisemblance }: Props =
+    $props();
 
   export const affiche = () => {
     elementModale?.affiche();
@@ -85,12 +37,10 @@
         Vous pouvez les télécharger au format CSV si nécessaire ou supprimer définitivement
         la liste.
       </p>
-      <TableauRisquesV2
-        risques={tousLesRisques}
-        {statuts}
+      <TableauAnciensRisques
+        risques={risquesV1}
         {niveauxGravite}
         {niveauxVraisemblance}
-        versionInactive
       />
     </div>
   {/snippet}
