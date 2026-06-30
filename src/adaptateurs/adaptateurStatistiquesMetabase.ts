@@ -9,7 +9,7 @@ const enteteJSON = {
 };
 const urlBase = process.env.STATISTIQUES_DOMAINE_METABASE_MSS;
 
-const recupereResultat = async (idQuestion) => {
+const recupereResultat = async (idQuestion: string) => {
   const resultat = await axios.post(
     `${urlBase}/api/card/${idQuestion}/query`,
     {},
@@ -24,9 +24,9 @@ const recupereResultat = async (idQuestion) => {
 };
 
 const recupereStatistiques = async () => {
-  const idNbUtilisateurs = process.env.METABASE_ID_QUESTION_NB_UTILISATEURS;
-  const idNbServices = process.env.METABASE_ID_QUESTION_NB_SERVICES;
-  const idVulnerabilite = process.env.METABASE_ID_QUESTION_NB_VULNERABILITES;
+  const idNbUtilisateurs = process.env.METABASE_ID_QUESTION_NB_UTILISATEURS!;
+  const idNbServices = process.env.METABASE_ID_QUESTION_NB_SERVICES!;
+  const idVulnerabilite = process.env.METABASE_ID_QUESTION_NB_VULNERABILITES!;
 
   const [utilisateurs, services, vulnerabilites] = await Promise.all(
     [idNbUtilisateurs, idNbServices, idVulnerabilite].map((id) =>
