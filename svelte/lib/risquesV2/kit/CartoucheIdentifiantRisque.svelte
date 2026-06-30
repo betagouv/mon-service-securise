@@ -12,7 +12,10 @@
   let laCouleur = $derived(couleur(risque.gravite, risque.vraisemblance));
 </script>
 
-<dsfr-badge {label} type="accent" accent={mappingCouleursDSFR[laCouleur]}
+<dsfr-badge
+  {label}
+  type="accent"
+  accent={risque.desactive ? '' : mappingCouleursDSFR[laCouleur]}
 ></dsfr-badge>
 
 <style lang="scss">
