@@ -21,7 +21,6 @@
   import { afficheTitrePageServiceStore } from './store/afficheTitrePageService.store';
   import { donneesVisiteGuidee } from './donneesVisiteGuidees';
   import type { RisquesV1 } from '../risquesV2/risquesV2.d';
-  import { VersionService } from '../../../src/modeles/versionService';
 
   let props: PagesServiceProps = $props();
 
@@ -164,14 +163,6 @@
           {#if $afficheTitrePageServiceStore}
             <h1>
               <span>{donneesPage?.titre}</span>
-              {#if props.featureFlags.avecRisquesV2 && $pageCourante === 'risques' && service.version === VersionService.v2}
-                <dsfr-badge
-                  label="BÊTA"
-                  type="accent"
-                  accent="blue-cumulus"
-                  size="sm"
-                ></dsfr-badge>
-              {/if}
             </h1>
             <h2>{donneesPage?.sousTitre}</h2>
           {/if}

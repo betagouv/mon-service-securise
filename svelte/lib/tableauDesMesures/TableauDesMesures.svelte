@@ -287,7 +287,7 @@
   on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
-<NavigationSecuriser {idService} {visible} />
+<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img

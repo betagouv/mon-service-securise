@@ -67,6 +67,8 @@ export const propsPourPage = (
         categories: props.referentiel.mesures.categories,
         tranches: indicesCyber?.tranches.indiceCyber,
         tranchesPersonnalisees: indicesCyber?.tranches.indiceCyberPersonnalise,
+        versionService: service?.version,
+        avecRisquesV2: props.featureFlags.avecRisquesV2,
       };
     case 'dossiers':
       return {

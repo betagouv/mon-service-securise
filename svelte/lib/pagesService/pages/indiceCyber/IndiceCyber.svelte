@@ -8,6 +8,7 @@
   import RadarIndiceCyber from './RadarIndiceCyber.svelte';
   import type { EtapeService } from '../../../menuNavigationService/menuNavigationService.d';
   import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
+  import { VersionService } from '../../../../../src/modeles/versionService';
 
   interface Props {
     idService: string;
@@ -21,6 +22,8 @@
     tranches: Tranches;
     tranchesPersonnalisees: Tranches;
     visible: Record<EtapeService, boolean>;
+    avecRisquesV2: boolean;
+    versionService: VersionService | undefined;
   }
 
   let {
@@ -35,6 +38,8 @@
     tranches,
     tranchesPersonnalisees,
     visible,
+    avecRisquesV2,
+    versionService,
   }: Props = $props();
 
   const configurationsTabs = [
@@ -75,7 +80,7 @@
 </script>
 
 <div class="conteneur-indice-cyber">
-  <NavigationSecuriser {idService} {visible} />
+  <NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
   <dsfr-tabs
     tabs={configurationsTabs}
     activeTabIndex={tabActive}

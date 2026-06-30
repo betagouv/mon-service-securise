@@ -7,6 +7,7 @@ import type {
   TypeRisque,
 } from './risques.d';
 import { mount, unmount } from 'svelte';
+import { VersionService } from '../../../src/modeles/versionService';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
@@ -53,7 +54,12 @@ const rechargeApp = async (props: RisquesProps) => {
   ];
   app = mount(Risques, {
     target: document.getElementById('conteneur-risques')!,
-    props: { ...props, risques: tousRisques },
+    props: {
+      ...props,
+      risques: tousRisques,
+      versionService: VersionService.v1,
+      avecRisquesV2: false,
+    },
   });
 };
 
