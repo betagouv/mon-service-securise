@@ -23,6 +23,18 @@
   baseline: 1.5pt,
 )
 
+#let enteteDossier(titre, sousTitre) = grid(
+  columns: (auto, 1fr),
+  column-gutter: 2mm,
+  align: horizon,
+  image("assets/dossier_entete.svg", width: 30pt),
+  [
+    #text(size: 9pt, weight: "bold")[#upper[#titre]]
+    #v(2pt)
+    #text(size: 6.75pt, weight: "medium", fill: discret)[#sousTitre]
+  ],
+)
+
 #enteteMarianneANSSI()
 #titreDocumentAvecServiceEtOrganisation("Décision d'homologation de sécurité", donnees.organisationResponsable, donnees.nomService)
 
@@ -114,17 +126,7 @@
 
 #pagebreak()
 
-#grid(
-  columns: (auto, 1fr),
-  column-gutter: 2mm,
-  align: horizon,
-  image("assets/dossier_entete.svg", width: 30pt),
-  [
-    #text(size: 9pt, weight: "bold")[#upper[Avis sur la sécurité du service]]
-    #v(2pt)
-    #text(size: 6.75pt, weight: "medium", fill: discret)[Le ou les avis de l'équipe participant à la sécurité du service pour aider à la décision d'homologation de sécurité.]
-  ],
-)
+#enteteDossier("Avis sur la sécurité du service", "Le ou les avis de l'équipe participant à la sécurité du service pour aider à la décision d'homologation de sécurité.")
 
 #v(24pt)
 
@@ -160,4 +162,16 @@
       ]
     ]
   }
+}
+
+#if donnees.documents.len() > 0 {
+  pagebreak()
+
+  enteteDossier("Documents joints", "La liste des documents joints pour aider à la décision d'homologation de sécurité.")
+
+  v(24pt)
+
+  boiteSansEtiquette(0pt)[
+    #list(..donnees.documents.map(document => [#document]))
+  ]
 }
