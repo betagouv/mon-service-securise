@@ -76,8 +76,10 @@
     inset: (x: 9pt, y: 6pt),
   )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[X]]).height
 
-  let w-left  = (size.width - gutter) * 3 / 4
-  let w-right = (size.width - gutter) * 1 / 4
+  // 2fr + 1fr + 1fr = 4fr, 2 gouttières
+  let w-left  = (size.width - 2 * gutter) / 2
+  let w-mid   = (size.width - 2 * gutter) / 4
+  let w-right = (size.width - 2 * gutter) / 4
 
   let resume-contenu = [
     #dl("Type :", donnees.typeService)
@@ -90,9 +92,9 @@
     #text(size: 10pt, weight: "medium", fill: grisTexte)[Besoins de sécurité]
     #v(2pt)
     #text(size: 13pt, weight: "bold")[#donnees.labelNiveauSecurite]
-    #v(8pt)
-    #image("assets/" + donnees.niveauSecurite + ".svg", width: 65pt)
-    #v(8pt)
+    #v(12pt)
+    #image("assets/" + donnees.niveauSecurite + ".svg", width: 75pt)
+    #v(10pt)
     #if donnees.niveauSuperieurAuxRecommandations [
       #cartoucheBesoinsSuperieurs(donnees.labelNiveauRecommande)
     ] else [
@@ -100,18 +102,58 @@
     ]
   ]
 
-  // Mesure les deux boîtes à hauteur auto pour trouver la plus grande
-  let h-resume  = measure(boite("Résumé", resume-contenu), width: w-left).height
-  let h-besoins = measure(boiteSansEtiquette(h-pill, besoins-contenu), width: w-right).height
+  let svg-gauge = image(bytes(donnees.svgIndiceCyber), format: "svg", width: 65pt)
+  let h-svg = measure(svg-gauge).height
 
-  // inner-h = hauteur du bloc bordé sans l'excroissance pill/spacer (h-pill/2)
-  let inner-h = calc.max(h-resume, h-besoins) - h-pill / 2
+  let indice-cyber-contenu = [
+    #text(fill: grisTexte, size: 9pt)[Par catégorie :]
+    #v(6pt)
+    #for cat in donnees.categoriesIndiceCyber {
+      grid(
+        columns: (1fr, auto),
+        align: horizon,
+        text(size: 8pt)[#cat.description],
+        text(size: 9pt, fill: bleuMSS, weight: "bold")[
+          #if cat.note == none [–] else [#cat.note]
+        ],
+      )
+    }
+  ]
+
+  let indice-perso-contenu = [
+    #grid(
+      columns: (auto, 1fr),
+      column-gutter: 4pt,
+      align: horizon,
+      text(size: 9pt, fill: bleuFonce)[
+        Indice cyber#linebreak()Personnalisé
+      ],
+      image(bytes(donnees.svgIndiceCyberPersonnalise), format: "svg", width: 100%),
+    )
+  ]
+
+  // Décale col3 vers le haut pour aligner la bordure avec col1/col2 (h-pill/2)
+  // Le SVG déborde au-dessus de la ligne de bordure, éventuellement au-dessus du contenu précédent
+  let col3-contenu = [
+    #v(h-pill / 2 - h-svg / 2)
+    #boiteAvecMedaillon(svg-gauge, indice-cyber-contenu)
+    #boiteSansEtiquette(h-pill, indice-perso-contenu)
+  ]
+
+  // Mesure toutes les colonnes à hauteur auto
+  let h-resume  = measure(boite("Résumé", resume-contenu), width: w-left).height
+  let h-besoins = measure(boiteSansEtiquette(h-pill, besoins-contenu), width: w-mid).height
+  let h-col3    = measure(col3-contenu, width: w-right).height
+
+  // inner-h = hauteur du bloc bordé (pill/spacer exclu) pour col1 et col2
+  let inner-h = calc.max(h-resume, h-besoins, h-col3) - h-pill / 2
 
   grid(
-    columns: (3fr, 1fr),
+    columns: (2fr, 1fr, 1fr),
     column-gutter: gutter,
     align: top,
     boite("Résumé", inner-h: inner-h, resume-contenu),
     boiteSansEtiquette(h-pill, inner-h: inner-h, besoins-contenu),
+    col3-contenu,
   )
 })
