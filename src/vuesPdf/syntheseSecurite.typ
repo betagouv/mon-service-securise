@@ -21,4 +21,9 @@
   },
 )
 
-CONTENU
+#let blocMarianne = image("assets/logo_republique.svg")
+
+#let logoMssAnssi = image("assets/logo_ANSSI_MSS.svg")
+
+#grid(columns: (1fr, auto), blocMarianne, logoMssAnssi)
+#v(12pt)
