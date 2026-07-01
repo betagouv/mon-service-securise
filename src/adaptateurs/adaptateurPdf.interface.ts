@@ -1,5 +1,6 @@
 export type DonneesPdfSyntheseSecurite = {
   nomService: string;
+  nomEntite: string;
 };
 
 export interface AdaptateurPdf {

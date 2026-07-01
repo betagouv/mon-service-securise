@@ -33,4 +33,14 @@
     image("assets/logo_anssi.png", height: 12mm),
   ),
 )
-#v(10pt)
+
+#v(50pt)
+
+#text(size: 11pt, weight: "bold")[#upper[Synthèse de la sécurité du service]]
+#v(3pt)
+#line(length: 8mm, stroke: 0.5pt + black)
+#v(8pt)
+#text(size: 9pt, weight: "medium", fill: gris)[#upper[#donnees.nomEntite]]
+#v(2pt)
+#text(size: 10pt, weight: "medium", fill: bleuFonce)[#donnees.nomService]
+#v(20pt)
