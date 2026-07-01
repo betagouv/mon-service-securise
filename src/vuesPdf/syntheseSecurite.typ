@@ -21,9 +21,16 @@
   },
 )
 
-#let blocMarianne = image("assets/logo_republique.svg")
-
-#let logoMssAnssi = image("assets/logo_ANSSI_MSS.svg")
-
-#grid(columns: (1fr, auto), blocMarianne, logoMssAnssi)
-#v(12pt)
+#grid(
+  columns: (1fr, auto),
+  align: horizon,
+  image("assets/logo_republique.png", height: 12mm),
+  grid(
+    columns: 2,
+    column-gutter: 4mm,
+    align: horizon,
+    image("assets/logo_mss.png", height: 12mm),
+    image("assets/logo_anssi.png", height: 12mm),
+  ),
+)
+#v(10pt)
