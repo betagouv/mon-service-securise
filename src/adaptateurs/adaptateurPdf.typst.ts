@@ -1,5 +1,5 @@
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
-import { AdaptateurPdf } from './adaptateurPdf.interface.js';
+import { AdaptateurPdf, DonneesPdfAnnexes } from './adaptateurPdf.interface.js';
 import Service from '../modeles/service.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
 import { DonneesDocuments } from '../modeles/etapes/documents.js';
@@ -41,6 +41,17 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
     this.compilateur = NodeCompiler.create({
       fontArgs: [{ fontPaths: ['src/vuesPdf/fonts'] }],
     });
+  }
+
+  async genereAnnexes(
+    donnees: DonneesPdfAnnexes
+  ): Promise<Buffer<ArrayBuffer>> {
+    const res = this.compilateur.pdf({
+      mainFilePath: 'src/vuesPdf/annexes.typ',
+      inputs: { payload: JSON.stringify(donnees) },
+    });
+
+    return Buffer.from(res);
   }
 
   async genereSyntheseSecurite({
