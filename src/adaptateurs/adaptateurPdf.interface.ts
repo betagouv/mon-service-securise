@@ -1,3 +1,9 @@
+export type DonneesPdfSyntheseSecurite = {
+  nomService: string;
+};
+
 export interface AdaptateurPdf {
-  genereSyntheseSecurite: () => Promise<Buffer<ArrayBuffer>>;
+  genereSyntheseSecurite: (
+    donnees: DonneesPdfSyntheseSecurite
+  ) => Promise<Buffer<ArrayBuffer>>;
 }
