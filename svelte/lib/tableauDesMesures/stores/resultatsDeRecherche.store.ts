@@ -1,11 +1,13 @@
 import { derived } from 'svelte/store';
 import type {
   IdCategorie,
+  IdUtilisateur,
   MesureGenerale,
   Mesures,
   MesureSpecifique,
   PartieResponsable,
 } from '../tableauDesMesures.d';
+import { nomsDesContributeursParId } from './contributeurs.store';
 import {
   appliqueFiltreTextuel,
   rechercheTextuelle,
@@ -58,13 +60,14 @@ const construisFiltres = (
   avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes',
   uniquementMesMesures: boolean,
   thematiques: IdThematique[],
-  partiesResponsables: PartieResponsable[]
+  partiesResponsables: PartieResponsable[],
+  nomsDesResponsables: Record<IdUtilisateur, string>
 ) => {
   const filtres: Filtre[] = [];
 
   if (rechercheTextuelle)
     filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
-      appliqueFiltreTextuel(mesure, rechercheTextuelle)
+      appliqueFiltreTextuel(mesure, rechercheTextuelle, nomsDesResponsables)
     );
 
   if (categories.length > 0)
@@ -116,6 +119,7 @@ const predicats = derived<
     typeof rechercheMesMesures,
     typeof rechercheParThematique,
     typeof rechercheParPartieResponsable,
+    typeof nomsDesContributeursParId,
   ],
   Predicats
 >(
@@ -128,6 +132,7 @@ const predicats = derived<
     rechercheMesMesures,
     rechercheParThematique,
     rechercheParPartieResponsable,
+    nomsDesContributeursParId,
   ],
   ([
     $rechercheTextuelle,
@@ -138,6 +143,7 @@ const predicats = derived<
     $rechercheMesMesures,
     $rechercheParThematique,
     $rechercheParPartieResponsable,
+    $nomsDesResponsables,
   ]) => ({
     filtres: construisFiltres(
       $rechercheTextuelle,
@@ -147,7 +153,8 @@ const predicats = derived<
       $rechercheParAvancement,
       $rechercheMesMesures,
       $rechercheParThematique,
-      $rechercheParPartieResponsable
+      $rechercheParPartieResponsable,
+      $nomsDesResponsables
     ),
     substitueAvancement: (avancementDeSimulation: Avancement) => ({
       filtres: construisFiltres(
@@ -158,7 +165,8 @@ const predicats = derived<
         avancementDeSimulation,
         $rechercheMesMesures,
         $rechercheParThematique,
-        $rechercheParPartieResponsable
+        $rechercheParPartieResponsable,
+        $nomsDesResponsables
       ),
     }),
   })

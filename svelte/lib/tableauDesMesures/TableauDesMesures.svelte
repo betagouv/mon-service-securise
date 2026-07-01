@@ -298,7 +298,7 @@
       type="search"
       id="recherche"
       bind:value={$rechercheTextuelle}
-      placeholder="Rechercher par intitulé, description, ID"
+      placeholder="Rechercher par intitulé, description, ID, responsable"
     />
   </div>
   <MenuFiltres
