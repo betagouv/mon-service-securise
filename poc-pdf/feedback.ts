@@ -4,10 +4,14 @@ import fs from 'node:fs';
 
 const adaptateur = new AdaptateurPdfTypst();
 
-const s = unServiceV2().avecNomService('Mairie de Bordeaux').construis();
+const s = unServiceV2()
+  .avecNomService('Mairie de Bordeaux')
+  .avecOrganisationResponsable({ siret: 'ABCD', nom: 'ANSSI' })
+  .construis();
 
 const buffer = await adaptateur.genereSyntheseSecurite({
   nomService: s.nomService(),
+  nomEntite: s.descriptionService.organisationResponsable.nom!,
 });
 
 fs.writeFileSync('pocTypst.pdf', buffer, 'utf8');
