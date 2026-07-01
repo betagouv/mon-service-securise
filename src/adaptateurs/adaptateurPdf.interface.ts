@@ -1,18 +1,7 @@
-export type DonneesPdfSyntheseSecurite = {
-  nomService: string;
-  nomEntite: string;
-  typeService: string;
-  localisationDonnees: string;
-  statutDeploiement: string;
-  presentation: string;
-  niveauSecurite: string;
-  labelNiveauSecurite: string;
-  niveauSuperieurAuxRecommandations: boolean;
-  labelNiveauRecommande: string;
-};
+import Service from '../modeles/service.js';
 
 export interface AdaptateurPdf {
-  genereSyntheseSecurite: (
-    donnees: DonneesPdfSyntheseSecurite
-  ) => Promise<Buffer<ArrayBuffer>>;
+  genereSyntheseSecurite: (donnees: {
+    service: Service;
+  }) => Promise<Buffer<ArrayBuffer>>;
 }
