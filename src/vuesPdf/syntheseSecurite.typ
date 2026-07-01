@@ -1,16 +1,6 @@
-#let donnees = json(bytes(sys.inputs.payload))
+#import "commun.typ": *
 
-#let bleu       = rgb("#000091")
-#let bleuFonce  = rgb("#08416a")
-#let bleuMSS    = rgb("#0079d0")
-#let encre      = rgb("#161616")
-#let gris       = rgb("#666666")
-#let grisBord   = rgb("#dddddd")
-#let grisTexte  = rgb("#8a8a8a")
-#let grisClair  = rgb("#efefef")
-#let bordBleu   = rgb("#b5c1d2")
-#let orange     = rgb("#faa72c")
-#let orangeClair = rgb("#fff2de")
+#let donnees = json(bytes(sys.inputs.payload))
 
 #set text(font: "Marianne", size: 9pt, fill: encre, lang: "fr")
 #set par(spacing: 0.65em, leading: 0.6em)
@@ -27,48 +17,6 @@
   },
 )
 
-// Fieldset avec étiquette en pill centrée sur la bordure supérieure
-// inner-h : hauteur explicite du bloc bordé (auto = déterminée par le contenu)
-#let boite(label, inner-h: auto, contenu) = context {
-  let pill = box(
-    fill: grisClair,
-    stroke: 1pt + bordBleu,
-    radius: 20pt,
-    inset: (x: 9pt, y: 6pt),
-  )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[#label]]
-  let h = measure(pill).height
-  stack(
-    dir: btt,
-    block(
-      stroke: 1pt + bordBleu,
-      radius: 7pt,
-      width: 100%,
-      height: inner-h,
-      inset: (left: 16pt, right: 16pt, top: h / 2 + 6pt, bottom: 10pt),
-    )[#v(7pt) #contenu],
-    -(h / 2),
-    pad(left: 16pt)[#pill],
-  )
-}
-
-// Fieldset sans étiquette, aligné avec boite (décalage h-pill/2 en haut)
-// h-pill : hauteur de la pill de boite(), passée explicitement pour éviter un context imbriqué
-#let boiteSansEtiquette(h-pill, inner-h: auto, contenu) = [
-  #v(h-pill / 2)
-  #block(
-    stroke: 1pt + bordBleu,
-    radius: 7pt,
-    width: 100%,
-    height: inner-h,
-    inset: (x: 10pt, top: 10pt, bottom: 14pt),
-  )[#contenu]
-]
-
-// Ligne dt + dd inline (label gris bold, valeur medium)
-#let dl(libelle, valeur) = block(above: 0pt, below: 8pt)[
-  #set text(size: 8pt)
-  #text(fill: grisTexte, weight: "bold")[#libelle]#h(0.25em)#text(weight: "medium")[#valeur]
-]
 
 #grid(
   columns: (1fr, auto),

@@ -1,8 +1,25 @@
-import {
-  AdaptateurPdf,
-  DonneesPdfSyntheseSecurite,
-} from './adaptateurPdf.interface.js';
+import { AdaptateurPdf } from './adaptateurPdf.interface.js';
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
+import Service from '../modeles/service.js';
+
+const labelNiveaux: Record<string, string> = {
+  niveau1: 'Basiques',
+  niveau2: 'Modérés',
+  niveau3: 'Avancés',
+};
+
+export type DonneesPdfSyntheseSecurite = {
+  nomService: string;
+  nomEntite: string;
+  typeService: string;
+  localisationDonnees: string;
+  statutDeploiement: string;
+  presentation: string;
+  niveauSecurite: string;
+  labelNiveauSecurite: string;
+  niveauSuperieurAuxRecommandations: boolean;
+  labelNiveauRecommande: string;
+};
 
 export class AdaptateurPdfTypst implements AdaptateurPdf {
   private readonly compilateur: NodeCompiler;
@@ -13,9 +30,27 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
     });
   }
 
-  async genereSyntheseSecurite(
-    donnees: DonneesPdfSyntheseSecurite
-  ): Promise<Buffer<ArrayBuffer>> {
+  async genereSyntheseSecurite({
+    service,
+  }: {
+    service: Service;
+  }): Promise<Buffer<ArrayBuffer>> {
+    const niveauSecurite =
+      service.descriptionService.niveauSecurite ?? 'niveau2';
+    const niveauRecommande = service.estimeNiveauDeSecurite() ?? 'niveau1';
+    const donnees: DonneesPdfSyntheseSecurite = {
+      nomService: service.nomService(),
+      nomEntite: service.descriptionService.organisationResponsable.nom!,
+      typeService: service.descriptionTypeService() ?? '',
+      localisationDonnees: service.descriptionLocalisationDonnees() ?? '',
+      statutDeploiement: service.descriptionStatutDeploiement() ?? '',
+      presentation: service.presentation() ?? '',
+      niveauSecurite,
+      labelNiveauSecurite: labelNiveaux[niveauSecurite] ?? '',
+      niveauSuperieurAuxRecommandations:
+        service.niveauSecuriteDepasseRecommandation(),
+      labelNiveauRecommande: labelNiveaux[niveauRecommande] ?? '',
+    };
     const res = this.compilateur.pdf({
       mainFilePath: 'src/vuesPdf/syntheseSecurite.typ',
       inputs: { payload: JSON.stringify(donnees) },
