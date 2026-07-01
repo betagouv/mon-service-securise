@@ -1,6 +1,7 @@
 <script lang="ts">
   import { glisse } from './animations/transitions';
   import type { BoutonAction } from './stores/toaster.store';
+  import { onMount } from 'svelte';
 
   interface Props {
     niveau: 'info' | 'succes' | 'erreur' | 'alerte';
@@ -36,7 +37,7 @@
   };
   const stoppeFermeture = () => clearTimeout(minuteur);
 
-  $effect(() => {
+  onMount(() => {
     armeFermeture();
     return stoppeFermeture;
   });
