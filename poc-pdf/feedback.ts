@@ -9,6 +9,14 @@ const s = unServiceV2()
   .avecOrganisationResponsable({ siret: 'ABCD', nom: 'ANSSI' })
   .construis();
 
+const labelNiveaux: Record<string, string> = {
+  niveau1: 'Basiques',
+  niveau2: 'Modérés',
+  niveau3: 'Avancés',
+};
+const niveauSecurite = s.descriptionService.niveauSecurite ?? 'niveau2';
+const niveauRecommande = s.estimeNiveauDeSecurite() ?? 'niveau1';
+
 const buffer = await adaptateur.genereSyntheseSecurite({
   nomService: s.nomService(),
   nomEntite: s.descriptionService.organisationResponsable.nom!,
@@ -16,6 +24,10 @@ const buffer = await adaptateur.genereSyntheseSecurite({
   localisationDonnees: s.descriptionLocalisationDonnees() ?? '',
   statutDeploiement: s.descriptionStatutDeploiement() ?? '',
   presentation: s.presentation() ?? '',
+  niveauSecurite,
+  labelNiveauSecurite: labelNiveaux[niveauSecurite] ?? '',
+  niveauSuperieurAuxRecommandations: s.niveauSecuriteDepasseRecommandation(),
+  labelNiveauRecommande: labelNiveaux[niveauRecommande] ?? '',
 });
 
 fs.writeFileSync('pocTypst.pdf', buffer, 'utf8');

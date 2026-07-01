@@ -5,6 +5,10 @@ export type DonneesPdfSyntheseSecurite = {
   localisationDonnees: string;
   statutDeploiement: string;
   presentation: string;
+  niveauSecurite: string;
+  labelNiveauSecurite: string;
+  niveauSuperieurAuxRecommandations: boolean;
+  labelNiveauRecommande: string;
 };
 
 export interface AdaptateurPdf {
