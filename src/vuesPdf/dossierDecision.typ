@@ -111,3 +111,53 @@
     MonServiceSécurisé et l'ANSSI ne peuvent en aucun cas être tenus responsables d'incidents de sécurité susceptibles d'affecter le service numérique et des conséquences qui pourraient en découler.
   ]
 ]
+
+#pagebreak()
+
+#grid(
+  columns: (auto, 1fr),
+  column-gutter: 2mm,
+  align: horizon,
+  image("assets/dossier_entete.svg", width: 30pt),
+  [
+    #text(size: 9pt, weight: "bold")[#upper[Avis sur la sécurité du service]]
+    #v(2pt)
+    #text(size: 6.75pt, weight: "medium", fill: discret)[Le ou les avis de l'équipe participant à la sécurité du service pour aider à la décision d'homologation de sécurité.]
+  ],
+)
+
+#v(24pt)
+
+#boite("Recommandation ANSSI", fill: rgb("#eff6ff"))[
+  #set text(fill: bleuAutorite)
+  #text(weight: "bold")[L'indice cyber du service numérique est de #(donnees.recommandation.noteObtenue + "/" + str(donnees.recommandation.noteMaximale))]
+  #linebreak()
+  #text(weight: "bold")[#donnees.recommandation.texte]
+  #v(8pt)
+  #donnees.recommandation.complement
+]
+
+#v(16pt)
+
+#if donnees.avis.len() == 0 {
+  boite("Avis")[Aucun avis n'a été renseigné par l'équipe.]
+} else {
+  for (i, avis) in donnees.avis.enumerate() {
+    if i > 0 { v(16pt) }
+    boite("Avis " + str(i + 1))[
+      #grid(
+        columns: (auto, 1fr),
+        column-gutter: 4pt,
+        align: horizon,
+        image("assets/collaborateurs.svg", width: 30pt),
+        text(weight: "bold")[#(avis.collaborateurs.join(", ") + ".")],
+      )
+      #v(8pt)
+      #text(weight: "bold", fill: rgb("#0f7ac7"), size: 9.75pt)[#avis.statut]
+      #if avis.commentaires != "" [
+        #v(8pt)
+        #text(weight: "bold", fill: rgb("#8a8a8a"))[Commentaire : ]#avis.commentaires
+      ]
+    ]
+  }
+}

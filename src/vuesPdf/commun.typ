@@ -15,7 +15,7 @@
   #text(fill: grisTexte, weight: "bold")[#libelle]#h(0.25em)#text(weight: "medium")[#valeur]
 ]
 
-#let boite(label, inner-h: auto, contenu) = context {
+#let boite(label, inner-h: auto, fill: none, contenu) = context {
   let pill = box(
     fill: grisClair,
     stroke: 1pt + bordBleu,
@@ -26,6 +26,7 @@
   stack(
     dir: btt,
     block(
+      fill: fill,
       stroke: 1pt + bordBleu,
       radius: 7pt,
       width: 100%,
