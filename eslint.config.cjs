@@ -119,6 +119,8 @@ module.exports = defineConfig([
     '**/dist/',
     'svelte/**',
     'eslint.config.cjs',
+    '**/feedback.ts',
+    '**/feedback.js',
   ]),
   {
     files: ['test*/**/*.*js'],
