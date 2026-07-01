@@ -13,3 +13,9 @@ export const utilisateurCourant = derived<typeof contributeurs, Contributeur>(
   contributeurs,
   ($contributeurs) => $contributeurs.find((c) => c.estUtilisateurCourant)!
 );
+
+export const nomsDesContributeursParId = derived(
+  contributeurs,
+  ($contributeurs) =>
+    Object.fromEntries($contributeurs.map((c) => [c.id, c.prenomNom]))
+);
