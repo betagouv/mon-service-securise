@@ -12,6 +12,10 @@ const s = unServiceV2()
 const buffer = await adaptateur.genereSyntheseSecurite({
   nomService: s.nomService(),
   nomEntite: s.descriptionService.organisationResponsable.nom!,
+  typeService: s.descriptionTypeService() ?? '',
+  localisationDonnees: s.descriptionLocalisationDonnees() ?? '',
+  statutDeploiement: s.descriptionStatutDeploiement() ?? '',
+  presentation: s.presentation() ?? '',
 });
 
 fs.writeFileSync('pocTypst.pdf', buffer, 'utf8');
