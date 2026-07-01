@@ -1,17 +1,11 @@
-import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
-import fs from 'fs';
+import { AdaptateurPdfTypst } from '../src/adaptateurs/adaptateurPdf.typst.js';
+import fs from 'node:fs';
 
-const compiler = NodeCompiler.create({
-  // fontArgs: [{ fontPaths: ['fonts'] }],
-});
+const adaptateur = new AdaptateurPdfTypst();
 
-function genererDossier() {
-  const res = compiler.pdf({
-    mainFilePath: 'helloWorld.typ',
-    // inputs: { payload: JSON.stringify(payload) },
-  });
-  return Buffer.from(res);
-}
+const buffer = await adaptateur.genereSyntheseSecurite();
 
-fs.writeFileSync('output.pdf', genererDossier());
-console.log('Fichier généré.');
+fs.writeFileSync('pocTypst.pdf', buffer, 'utf8');
+console.log('done');
+
+// node --import tsx --watch-path=./poc-pdf --watch-path=src poc-pdf/feedback.ts
