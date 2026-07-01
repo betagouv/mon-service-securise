@@ -3,7 +3,6 @@ import { AdaptateurPdf } from './adaptateurPdf.interface.js';
 import Service from '../modeles/service.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
 import { DonneesDocuments } from '../modeles/etapes/documents.js';
-import Dossier from '../modeles/dossier.js';
 import { TousReferentiels } from '../referentiel.interface.js';
 
 const labelNiveaux: Record<string, string> = {
