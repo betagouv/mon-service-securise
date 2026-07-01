@@ -15,7 +15,11 @@
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
-  import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
+  import {
+    rechercheTextuelle,
+    responsablesCorrespondent,
+  } from '../stores/rechercheTextuelle.store';
+  import { nomsDesContributeursParId } from '../stores/contributeurs.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import SelectionEcheance from '../../ui/SelectionEcheance.svelte';
   import {
@@ -76,6 +80,15 @@
       (_, texte: string) => `<mark>${texte}</mark>`
     );
   });
+
+  let responsablesSurlignes = $derived(
+    !!$rechercheTextuelle &&
+      responsablesCorrespondent(
+        mesure,
+        $rechercheTextuelle,
+        $nomsDesContributeursParId
+      )
+  );
 </script>
 
 <tr class="ligne-de-mesure">
@@ -124,6 +137,7 @@
         responsables={mesure.responsables}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
+        surligne={responsablesSurlignes}
         {onModificationResponsables}
       />
     </td>

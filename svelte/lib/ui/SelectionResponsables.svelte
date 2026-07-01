@@ -8,12 +8,14 @@
   interface Props {
     responsables: IdUtilisateur[] | null | undefined;
     estLectureSeule: boolean;
+    surligne?: boolean;
     onModificationResponsables: (responsables: IdUtilisateur[]) => void;
   }
 
   let {
     responsables = $bindable(),
     estLectureSeule,
+    surligne = false,
     onModificationResponsables,
   }: Props = $props();
 
@@ -46,7 +48,7 @@
 
 <MenuFlottant bind:menuOuvert {estLectureSeule}>
   {#snippet declencheur()}
-    <div class="bouton-declencheur" class:estLectureSeule>
+    <div class="bouton-declencheur" class:estLectureSeule class:surligne>
       <div class="conteneur-image">
         <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
       </div>
@@ -119,6 +121,10 @@
     color: var(--liseres-fonce);
     background: var(--fond-gris-pale);
     border: none;
+  }
+
+  .bouton-declencheur.surligne {
+    background: #d4f4db;
   }
 
   .bouton-declencheur:not(.estLectureSeule):hover {
