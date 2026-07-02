@@ -1,6 +1,7 @@
 import Service from '../modeles/service.js';
 import { VersionService } from '../modeles/versionService.js';
 import { DonneesPourAnnexeDescriptionDeServiceV2 } from '../modeles/objetsPDF/objetPDFAnnexeDescriptionV2.js';
+import ObjetPDFAnnexeMesures from '../modeles/objetsPDF/objetPDFAnnexeMesures.js';
 
 export type DonneesPourAnnexeDescriptionDeServiceV1 = {
   nomService: string;
@@ -20,6 +21,7 @@ export type DonneesPdfAnnexes = {
         versionService: VersionService.v2 &
           DonneesPourAnnexeDescriptionDeServiceV2;
       };
+  donneesMesures: ReturnType<ObjetPDFAnnexeMesures['donnees']>;
 };
 
 export interface AdaptateurPdf {
