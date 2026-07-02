@@ -68,7 +68,6 @@
 #layout(size => context {
   let gutter = 8pt
 
-  // Hauteur de la pill (même spec que dans boite) — partagée avec boiteSansEtiquette
   let h-pill = measure(box(
     fill: grisClair,
     stroke: 1pt + bordBleu,
@@ -76,7 +75,6 @@
     inset: (x: 9pt, y: 6pt),
   )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[X]]).height
 
-  // 2fr + 1fr + 1fr = 4fr, 2 gouttières
   let w-left  = (size.width - 2 * gutter) / 2
   let w-mid   = (size.width - 2 * gutter) / 4
   let w-right = (size.width - 2 * gutter) / 4
@@ -92,9 +90,9 @@
     #text(size: 10pt, weight: "medium", fill: grisTexte)[Besoins de sécurité]
     #v(2pt)
     #text(size: 13pt, weight: "bold")[#donnees.labelNiveauSecurite]
-    #v(12pt)
+    #v(9pt)
     #image("assets/" + donnees.niveauSecurite + ".svg", width: 75pt)
-    #v(10pt)
+    #v(7pt)
     #if donnees.niveauSuperieurAuxRecommandations [
       #cartoucheBesoinsSuperieurs(donnees.labelNiveauRecommande)
     ] else [
@@ -106,13 +104,13 @@
   let h-svg = measure(svg-gauge).height
 
   let indice-cyber-contenu = [
-    #text(fill: grisTexte, size: 9pt)[Par catégorie :]
+    #text(fill: grisTexte, size: 9pt, weight: "bold")[Par catégorie :]
     #v(6pt)
     #for cat in donnees.categoriesIndiceCyber {
       grid(
         columns: (1fr, auto),
         align: horizon,
-        text(size: 8pt)[#cat.description],
+        text(size: 8pt, fill: bleuFonce, weight: "bold")[#cat.description],
         text(size: 9pt, fill: bleuMSS, weight: "bold")[
           #if cat.note == none [–] else [#cat.note]
         ],
@@ -123,29 +121,25 @@
   let indice-perso-contenu = [
     #grid(
       columns: (auto, 1fr),
-      column-gutter: 4pt,
+      column-gutter: 10pt,
       align: horizon,
-      text(size: 9pt, fill: bleuFonce)[
+      text(size: 8.5pt, weight: "bold", fill: bleuFonce)[
         Indice cyber#linebreak()Personnalisé
       ],
       image(bytes(donnees.svgIndiceCyberPersonnalise), format: "svg", width: 100%),
     )
   ]
 
-  // Décale col3 vers le haut pour aligner la bordure avec col1/col2 (h-pill/2)
-  // Le SVG déborde au-dessus de la ligne de bordure, éventuellement au-dessus du contenu précédent
   let col3-contenu = [
     #v(h-pill / 2 - h-svg / 2)
     #boiteAvecMedaillon(svg-gauge, indice-cyber-contenu)
-    #boiteSansEtiquette(h-pill, indice-perso-contenu)
+    #boiteSansEtiquette(h-pill, inset: (x: 10pt, top: 6pt, bottom: 6pt), indice-perso-contenu)
   ]
 
-  // Mesure toutes les colonnes à hauteur auto
   let h-resume  = measure(boite("Résumé", resume-contenu), width: w-left).height
   let h-besoins = measure(boiteSansEtiquette(h-pill, besoins-contenu), width: w-mid).height
   let h-col3    = measure(col3-contenu, width: w-right).height
 
-  // inner-h = hauteur du bloc bordé (pill/spacer exclu) pour col1 et col2
   let inner-h = calc.max(h-resume, h-besoins, h-col3) - h-pill / 2
 
   grid(
@@ -159,7 +153,6 @@
 
   v(gutter)
 
-  // ── Mesures de sécurité ──────────────────────────────────────────────────
   let rCell = 8pt
   let gapCells = 2pt
 
@@ -250,7 +243,6 @@
     )
   ]
 
-  // Mesure les deux cellules pour égaliser leur hauteur
   let w-cell = (size.width - gapCells) / 2
   let h-indisp = measure(
     celluleMesures("Indispensables", true, donnees.svgCamembertIndispensables, donnees.mesuresIndispensables, (top-left: rCell)),
@@ -262,7 +254,6 @@
   ).height
   let h-cells = calc.max(h-indisp, h-reco)
 
-  // Barre horizontale : table + fill par index pour éviter le spread de blocks
   let barreCategorie(cat) = {
     let segs = (
       (nb: cat.fait,    c: couleurFaites,  tc: white),
@@ -287,7 +278,6 @@
     ]
   }
 
-  // Contenu d'une case catégorie (titre centré + barre)
   let contenuCategorie(cat) = [
     #align(center)[#text(fill: bleuFonce, weight: "bold", size: 9pt)[#cat.description]]
     #v(6pt)
@@ -355,7 +345,6 @@
     #v(14pt)
     #text(size: 9pt)[Par catégorie]
     #v(8pt)
-    // Un seul bloc gris — toutes les catégories sur une ligne
     #grid(
       columns: (1fr,),
       row-gutter: gapCells,
@@ -372,7 +361,7 @@
     )
   ])
 
-  v(gutter)
+  v(16pt)
 
   set text(size: 7.5pt, fill: grisNeutre)
   [L'indice cyber est calculé sur la base des informations renseignées par l'équipe concernant les mesures de sécurité proposées par #donnees.referentielConcernes, et à l'exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.]
