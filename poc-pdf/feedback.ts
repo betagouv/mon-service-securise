@@ -111,6 +111,7 @@ const serviceV2 = unServiceV2(r2)
         gravite: 1,
         vraisemblance: 1,
         commentaire: 'efazf',
+        identifiantNumerique: 'RS1',
       },
     ],
   })
