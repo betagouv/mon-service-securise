@@ -85,6 +85,7 @@
       slot="cell:id:{i}"
       class="colonne-identifiant colonne"
       class:inactif={donnee.desactive}
+      class:avec-risques-specifiques={risques.risquesSpecifiques.length}
     >
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
@@ -177,6 +178,10 @@
 
   .colonne-identifiant {
     width: 168px;
+
+    &.avec-risques-specifiques {
+      width: 190px;
+    }
   }
 
   .colonne:not(.inactif) .lien-intitule-risque {
@@ -188,6 +193,10 @@
   }
 
   .colonne-intitule {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
     .lien-intitule-risque {
       display: flex;
       flex-direction: column;
