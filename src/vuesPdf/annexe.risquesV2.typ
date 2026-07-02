@@ -165,6 +165,6 @@
     blocRisqueV2(risque, risque.id)
   }
   #for risque in donneesRisques.risques.risquesSpecifiques {
-    blocRisqueV2(risque, "RS")
+    blocRisqueV2(risque, risque.at("identifiantNumerique", default: "RS"))
   }
 ]
