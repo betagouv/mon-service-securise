@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 import { uneDescriptionV2Valide } from '../test/constructeurs/constructeurDescriptionServiceV2.js';
 import Service from '../src/modeles/service.js';
+import { unUUIDRandom } from '../test/constructeurs/UUID.js';
 
 const adaptateur = new AdaptateurPdfTypst();
 
@@ -45,6 +46,9 @@ const mesures = {
     { id: 'ECOSYSTEME.4', statut: 'enCours', modalites: 'Mon commentaire' },
     { id: 'ECOSYSTEME.5', statut: 'enCours', modalites: 'Mon commentaire' },
     { id: 'ECOSYSTEME.6', statut: 'enCours', modalites: 'Mon commentaire' },
+  ],
+  mesuresSpecifiques: [
+    { id: unUUIDRandom(), statut: 'fait', categorie: 'gouvernance' },
   ],
 };
 const service = new Service(

@@ -31,7 +31,7 @@
   ),
 )
 
-#v(50pt)
+#v(20pt)
 
 #text(size: 11pt, weight: "bold")[#upper[Synthèse de la sécurité du service]]
 #v(3pt)
@@ -262,6 +262,72 @@
   ).height
   let h-cells = calc.max(h-indisp, h-reco)
 
+  // Barre horizontale : table + fill par index pour éviter le spread de blocks
+  let barreCategorie(cat) = {
+    let segs = (
+      (nb: cat.fait,    c: couleurFaites,  tc: white),
+      (nb: cat.enCours, c: couleurEnCours, tc: white),
+      (nb: cat.nonFait, c: couleurNonFait, tc: white),
+      (nb: cat.aLancer, c: couleurALancer, tc: couleurEnCours),
+      (nb: cat.aRemplir, c: white,          tc: bleuFonce),
+    ).filter(s => s.nb > 0)
+    if segs.len() == 0 { return none }
+    box(radius: 3pt, clip: true, width: 100%)[
+      #table(
+        columns: segs.map(s => s.nb * 1fr),
+        rows: (28pt,),
+        stroke: none,
+        inset: 0pt,
+        fill: (col, _) => segs.at(col).c,
+        ..segs.map(s => align(center + horizon)[
+          #set text(size: 9pt, weight: "bold", fill: s.tc)
+          #s.nb
+        ])
+      )
+    ]
+  }
+
+  // Contenu d'une case catégorie (titre centré + barre)
+  let contenuCategorie(cat) = [
+    #align(center)[#text(fill: bleuFonce, weight: "bold", size: 9pt)[#cat.description]]
+    #v(6pt)
+    #barreCategorie(cat)
+    #v(4pt)
+  ]
+
+  let totalCellCategorie = block(
+    fill: grisFond,
+    radius: (bottom-left: rCell, bottom-right: rCell),
+    width: 100%,
+    inset: (x: 10pt, y: 7pt),
+  )[
+    #grid(
+      columns: (1fr, auto),
+        column-gutter: 20pt,
+      align: horizon,
+      [
+        #set text(size: 7.5pt, fill: grisNeutre)
+        *Total :* #donnees.nombreTotalMesuresGenerales
+        #if donnees.nombreTotalMesuresGenerales <= 1 [mesure proposée] else [mesures proposées]
+        par #donnees.referentielConcernes
+        #if donnees.nombreMesuresSpecifiques > 0 [
+          \+ #donnees.nombreMesuresSpecifiques
+          #if donnees.nombreMesuresSpecifiques <= 1 [ajoutée] else [ajoutées] par l'équipe.
+        ] else [.]
+      ],
+      grid(
+        columns: (auto, auto, auto, auto, auto),
+        column-gutter: 8pt,
+        align: horizon,
+        legendeItem(couleurFaites,  "Faites"),
+        legendeItem(couleurEnCours, "Partielles"),
+        legendeItem(couleurNonFait, "Non prises en compte"),
+        legendeItem(couleurALancer, "À lancer"),
+        legendeItem(white, "À remplir", avecBord: true),
+      ),
+    )
+  ]
+
   boite("Mesures de sécurité", [
     #text(size: 9pt)[Par niveau de criticité]
     #v(8pt)
@@ -286,5 +352,24 @@
       ),
       grid.cell(colspan: 2)[#totalCell],
     )
+    #v(14pt)
+    #text(size: 9pt)[Par catégorie]
+    #v(8pt)
+    // Un seul bloc gris — toutes les catégories sur une ligne
+    #grid(
+      columns: (1fr,),
+      row-gutter: gapCells,
+      block(fill: grisFond, width: 100%, radius: (top-left: rCell, top-right: rCell), inset: (x: 10pt, top: 10pt, bottom: 10pt))[
+        #grid(
+          columns: donnees.categoriesMesures.map(_ => 1fr),
+          column-gutter: 10pt,
+          ..donnees.categoriesMesures.map(cat => [
+            #contenuCategorie(cat)
+          ])
+        )
+      ],
+      totalCellCategorie,
+    )
   ])
+  
 })
