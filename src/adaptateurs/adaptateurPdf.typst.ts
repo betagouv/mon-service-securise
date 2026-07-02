@@ -1,12 +1,13 @@
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
 import { AdaptateurPdf, DonneesPdfAnnexes } from './adaptateurPdf.interface.js';
 import Service from '../modeles/service.js';
+import { svgIndiceCyber, svgIndiceCyberPersonnalise } from './indiceCyberSvg.js';
+import { IdCategorieMesure, IdRisque } from '../referentiel.types.js';
+import { svgCamembertMesures } from './camembertsMesures.svg.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
 import { DonneesDocuments } from '../modeles/etapes/documents.js';
 import { TousReferentiels } from '../referentiel.interface.js';
 import ObjetPDFAnnexeRisques from '../modeles/objetsPDF/objetPDFAnnexeRisques.js';
-import { IdCategorieMesure, IdRisque } from '../referentiel.types.js';
-import { svgIndiceCyber, svgIndiceCyberPersonnalise } from './indiceCyberSvg.js';
 
 const labelNiveaux: Record<string, string> = {
   niveau1: 'Basiques',
@@ -34,6 +35,28 @@ export type DonneesPdfSyntheseSecurite = {
   svgIndiceCyberPersonnalise: string;
   categoriesIndiceCyber: { description: string; note: string | null }[];
   noteMaxIndiceCyber: number;
+  svgCamembertIndispensables: string;
+  svgCamembertRecommandees: string;
+  mesuresIndispensables: {
+    total: number;
+    restant: number;
+    fait: number;
+    enCours: number;
+    nonFait: number;
+    aLancer: number;
+    aRemplir: number;
+  };
+  mesuresRecommandees: {
+    total: number;
+    restant: number;
+    fait: number;
+    enCours: number;
+    nonFait: number;
+    aLancer: number;
+    aRemplir: number;
+  };
+  nombreTotalMesuresGenerales: number;
+  referentielConcernes: string;
 };
 
 const legendeNiveauxRisque = (referentiel: TousReferentiels) =>
@@ -122,6 +145,16 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
     const indice = service.indiceCyber();
     const indicePerso = service.indiceCyberPersonnalise();
 
+    const statsIndispensables = service.statistiquesMesuresIndispensables();
+    const statsRecommandees = service.statistiquesMesuresRecommandees();
+
+    const referentiels = Object.entries(
+      service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ).map(([, mesure]: [string, any]) => mesure.referentiel);
+    const referentielConcernes =
+      referentiel.formatteListeDeReferentiels(referentiels);
+
     const donnees: DonneesPdfSyntheseSecurite = {
       nomService: service.nomService(),
       nomEntite: service.descriptionService.organisationResponsable.nom!,
@@ -149,6 +182,28 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
             typeof indice[id] === 'number' ? formatteNote(indice[id]) : null,
         })),
       noteMaxIndiceCyber: noteMax,
+      svgCamembertIndispensables: svgCamembertMesures(statsIndispensables),
+      svgCamembertRecommandees: svgCamembertMesures(statsRecommandees),
+      mesuresIndispensables: {
+        total: statsIndispensables.total,
+        restant: statsIndispensables.restant,
+        fait: statsIndispensables.fait,
+        enCours: statsIndispensables.enCours,
+        nonFait: statsIndispensables.nonFait,
+        aLancer: statsIndispensables.aLancer,
+        aRemplir: statsIndispensables.aRemplir,
+      },
+      mesuresRecommandees: {
+        total: statsRecommandees.total,
+        restant: statsRecommandees.restant,
+        fait: statsRecommandees.fait,
+        enCours: statsRecommandees.enCours,
+        nonFait: statsRecommandees.nonFait,
+        aLancer: statsRecommandees.aLancer,
+        aRemplir: statsRecommandees.aRemplir,
+      },
+      nombreTotalMesuresGenerales: service.nombreTotalMesuresGenerales(),
+      referentielConcernes,
     };
     const res = this.compilateur.pdf({
       mainFilePath: 'src/vuesPdf/syntheseSecurite.typ',
