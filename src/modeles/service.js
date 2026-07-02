@@ -60,6 +60,7 @@ class Service {
       rolesResponsabilites = {},
       suggestionsActions = [],
       prochainIdNumeriqueDeRisqueSpecifique = 1,
+      prochainIdNumeriqueDeRisqueSpecifiqueV2 = 1,
       modelesDisponiblesDeMesureSpecifique = {},
       aUneSimulationMigrationReferentiel = false,
       risquesV2 = {},
@@ -69,6 +70,8 @@ class Service {
     this.versionService = versionService;
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
+    this.prochainIdNumeriqueDeRisqueSpecifiqueV2 =
+      prochainIdNumeriqueDeRisqueSpecifiqueV2;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
     this.descriptionService =
       versionService === VersionService.v2
@@ -227,6 +230,8 @@ class Service {
       rolesResponsabilites: this.rolesResponsabilites.donneesSerialisees(),
       prochainIdNumeriqueDeRisqueSpecifique:
         this.prochainIdNumeriqueDeRisqueSpecifique,
+      prochainIdNumeriqueDeRisqueSpecifiqueV2:
+        this.prochainIdNumeriqueDeRisqueSpecifiqueV2,
       versionService: this.versionService,
       ...(this.version() === VersionService.v2 &&
         this.risquesV2 && {
@@ -465,6 +470,12 @@ class Service {
     risque.identifiantNumerique = `RS${this.prochainIdNumeriqueDeRisqueSpecifique}`;
     this.prochainIdNumeriqueDeRisqueSpecifique += 1;
     this.risques.risquesSpecifiques.ajouteRisque(risque);
+  }
+
+  ajouteRisqueSpecifiqueV2(risque) {
+    risque.identifiantNumerique = `RS${this.prochainIdNumeriqueDeRisqueSpecifiqueV2}`;
+    this.prochainIdNumeriqueDeRisqueSpecifiqueV2 += 1;
+    this.risquesV2.ajouteRisqueSpecifique(risque);
   }
 
   supprimeRisqueSpecifique(idRisque) {

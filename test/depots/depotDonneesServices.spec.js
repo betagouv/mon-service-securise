@@ -3133,7 +3133,11 @@ describe('Le dépôt de données des services', () => {
       persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .ajouteUnService(
-          unServiceV2().avecId('S1').construis().donneesAPersister().donnees
+          unServiceV2()
+            .avecId('S1')
+            .avecProchainIdNumeriqueDeRisqueSpecifiqueV2(4)
+            .construis()
+            .donneesAPersister().donnees
         )
         .nommeCommeProprietaire('U1', ['S1'])
         .construis();
@@ -3144,7 +3148,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
     });
 
-    it('sauvegarde le risque mis à jour', async () => {
+    it('sauvegarde le nouveau risque avec le prochain identifiant numérique disponible pour ce service', async () => {
       await depot.ajouteRisqueSpecifiqueV2('S1', {
         intitule: 'Initulé du risque',
         description: 'une description',
@@ -3163,6 +3167,8 @@ describe('Le dépôt de données des services', () => {
       const risquesAJour = serviceAJour.risquesV2.toJSON().risquesSpecifiques;
       expect(risquesAJour[0].intitule).to.be('Initulé du risque');
       expect(risquesAJour[0].id).not.to.be(undefined);
+      expect(risquesAJour[0].identifiantNumerique).to.be('RS4');
+      expect(serviceAJour.prochainIdNumeriqueDeRisqueSpecifiqueV2).to.be(5);
     });
 
     it("publie un événement de 'Risques v2 modifiés'", async () => {

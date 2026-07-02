@@ -5,6 +5,7 @@ import { UUID } from '../../typesBasiques.js';
 
 export type DonneesRisqueSpecifiqueV2 = {
   id: UUID;
+  identifiantNumerique: string;
   intitule: string;
   description?: string;
   categories: CategorieRisque[];
@@ -16,12 +17,13 @@ export type DonneesRisqueSpecifiqueV2 = {
 
 export type DonneesMiseAJourRisqueSpecifiqueV2 = Omit<
   DonneesRisqueSpecifiqueV2,
-  'id'
+  'id' | 'identifiantNumerique'
 >;
 
 export class RisqueSpecifiqueV2 {
   readonly id: UUID;
   private intitule: string;
+  private readonly identifiantNumerique: string;
   private description?: string;
   private categories: CategorieRisque[];
   private risqueBrut: {
@@ -35,6 +37,7 @@ export class RisqueSpecifiqueV2 {
   constructor(donnees: DonneesRisqueSpecifiqueV2) {
     this.id = donnees.id;
     this.intitule = donnees.intitule;
+    this.identifiantNumerique = donnees.identifiantNumerique;
     this.description = donnees.description;
     this.categories = donnees.categories;
     this.risqueBrut = donnees.risqueBrut;
@@ -47,6 +50,7 @@ export class RisqueSpecifiqueV2 {
     return {
       id: this.id,
       intitule: this.intitule,
+      identifiantNumerique: this.identifiantNumerique,
       description: this.description,
       categories: this.categories,
       gravite: this.gravite,
@@ -61,6 +65,7 @@ export class RisqueSpecifiqueV2 {
     return {
       id: this.id,
       intitule: this.intitule,
+      identifiantNumerique: this.identifiantNumerique,
       description: this.description,
       categories: this.categories,
       risqueBrut: this.risqueBrut,

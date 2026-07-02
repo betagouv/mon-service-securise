@@ -103,6 +103,11 @@ class ConstructeurService {
     this.donnees.rolesResponsabilites = donneesContactsUtiles;
     return this;
   }
+
+  avecProchainIdNumeriqueDeRisqueSpecifiqueV2(identifiant) {
+    this.donnees.prochainIdNumeriqueDeRisqueSpecifiqueV2 = identifiant;
+    return this;
+  }
 }
 
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>
