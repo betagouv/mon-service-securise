@@ -47,14 +47,14 @@
   )
 }
 
-#let boiteSansEtiquette(h-pill, inner-h: auto, contenu) = [
+#let boiteSansEtiquette(h-pill, inner-h: auto, inset: (x: 10pt, top: 10pt, bottom: 8pt), contenu) = [
   #v(h-pill / 2)
   #block(
     stroke: 1pt + bordBleu,
     radius: 7pt,
     width: 100%,
     height: inner-h,
-    inset: (x: 10pt, top: 10pt, bottom: 14pt),
+    inset: inset,
   )[#contenu]
 ]
 
