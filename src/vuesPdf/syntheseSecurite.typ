@@ -31,7 +31,7 @@
   ),
 )
 
-#v(50pt)
+#v(20pt)
 
 #text(size: 11pt, weight: "bold")[#upper[Synthèse de la sécurité du service]]
 #v(3pt)
@@ -68,7 +68,6 @@
 #layout(size => context {
   let gutter = 8pt
 
-  // Hauteur de la pill (même spec que dans boite) — partagée avec boiteSansEtiquette
   let h-pill = measure(box(
     fill: grisClair,
     stroke: 1pt + bordBleu,
@@ -76,8 +75,9 @@
     inset: (x: 9pt, y: 6pt),
   )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[X]]).height
 
-  let w-left  = (size.width - gutter) * 3 / 4
-  let w-right = (size.width - gutter) * 1 / 4
+  let w-left  = (size.width - 2 * gutter) / 2
+  let w-mid   = (size.width - 2 * gutter) / 4
+  let w-right = (size.width - 2 * gutter) / 4
 
   let resume-contenu = [
     #dl("Type :", donnees.typeService)
@@ -90,9 +90,9 @@
     #text(size: 10pt, weight: "medium", fill: grisTexte)[Besoins de sécurité]
     #v(2pt)
     #text(size: 13pt, weight: "bold")[#donnees.labelNiveauSecurite]
-    #v(8pt)
-    #image("assets/" + donnees.niveauSecurite + ".svg", width: 65pt)
-    #v(8pt)
+    #v(9pt)
+    #image("assets/" + donnees.niveauSecurite + ".svg", width: 75pt)
+    #v(7pt)
     #if donnees.niveauSuperieurAuxRecommandations [
       #cartoucheBesoinsSuperieurs(donnees.labelNiveauRecommande)
     ] else [
@@ -100,18 +100,269 @@
     ]
   ]
 
-  // Mesure les deux boîtes à hauteur auto pour trouver la plus grande
-  let h-resume  = measure(boite("Résumé", resume-contenu), width: w-left).height
-  let h-besoins = measure(boiteSansEtiquette(h-pill, besoins-contenu), width: w-right).height
+  let svg-gauge = image(bytes(donnees.svgIndiceCyber), format: "svg", width: 65pt)
+  let h-svg = measure(svg-gauge).height
 
-  // inner-h = hauteur du bloc bordé sans l'excroissance pill/spacer (h-pill/2)
-  let inner-h = calc.max(h-resume, h-besoins) - h-pill / 2
+  let indice-cyber-contenu = [
+    #text(fill: grisTexte, size: 9pt, weight: "bold")[Par catégorie :]
+    #v(6pt)
+    #for cat in donnees.categoriesIndiceCyber {
+      grid(
+        columns: (1fr, auto),
+        align: horizon,
+        text(size: 8pt, fill: bleuFonce, weight: "bold")[#cat.description],
+        text(size: 9pt, fill: bleuMSS, weight: "bold")[
+          #if cat.note == none [–] else [#cat.note]
+        ],
+      )
+    }
+  ]
+
+  let indice-perso-contenu = [
+    #grid(
+      columns: (auto, 1fr),
+      column-gutter: 10pt,
+      align: horizon,
+      text(size: 8.5pt, weight: "bold", fill: bleuFonce)[
+        Indice cyber#linebreak()Personnalisé
+      ],
+      image(bytes(donnees.svgIndiceCyberPersonnalise), format: "svg", width: 100%),
+    )
+  ]
+
+  let col3-contenu = [
+    #v(h-pill / 2 - h-svg / 2)
+    #boiteAvecMedaillon(svg-gauge, indice-cyber-contenu)
+    #boiteSansEtiquette(h-pill, inset: (x: 10pt, top: 6pt, bottom: 6pt), indice-perso-contenu)
+  ]
+
+  let h-resume  = measure(boite("Résumé", resume-contenu), width: w-left).height
+  let h-besoins = measure(boiteSansEtiquette(h-pill, besoins-contenu), width: w-mid).height
+  let h-col3    = measure(col3-contenu, width: w-right).height
+
+  let inner-h = calc.max(h-resume, h-besoins, h-col3) - h-pill / 2
 
   grid(
-    columns: (3fr, 1fr),
+    columns: (2fr, 1fr, 1fr),
     column-gutter: gutter,
     align: top,
     boite("Résumé", inner-h: inner-h, resume-contenu),
     boiteSansEtiquette(h-pill, inner-h: inner-h, besoins-contenu),
+    col3-contenu,
   )
+
+  v(gutter)
+
+  let rCell = 8pt
+  let gapCells = 2pt
+
+  let mesuresRestantesBox(stats) = box(
+    fill: white,
+    radius: 4pt,
+    inset: (x: 8pt, y: 7pt),
+  )[
+    #set text(fill: grisNeutre, size: 8pt, weight: "bold")
+    #set par(leading: 0.45em)
+    #align(left)[
+      Il reste
+      #linebreak()
+      #text(fill: bleuVif)[#stats.restant #if stats.restant <= 1 [mesure] else [mesures]]
+      #linebreak()à mettre en œuvre
+    ]
+  ]
+
+  let celluleMesures(titre, avecEtoile, svg-str, stats, rad, inner-h: auto) = block(
+    fill: grisFond,
+    radius: rad,
+    width: 100%,
+    height: inner-h,
+    inset: (x: 10pt, top: 8pt, bottom: 12pt),
+  )[
+    #align(center)[
+      #grid(
+        columns: if avecEtoile { (auto, auto) } else { (auto,) },
+        column-gutter: 3pt,
+        align: horizon,
+        text(fill: bleuFonce, weight: "bold", size: 9pt)[#titre],
+        if avecEtoile { image("assets/etoile_orange.svg", height: 9pt) },
+      )
+    ]
+    #v(6pt)
+    #align(center)[
+      #grid(
+        columns: (auto, auto, auto),
+        column-gutter: 18pt,
+        align: horizon,
+        image(bytes(svg-str), format: "svg", width: 90pt),
+        image("assets/fleche_bleue.svg", height: 11pt),
+        mesuresRestantesBox(stats),
+      )
+    ]
+  ]
+
+  let legendeItem(couleur, label, avecBord: false) = grid(
+    columns: (9pt, auto),
+    column-gutter: 4pt,
+    align: horizon,
+    box(
+      width: 9pt,
+      height: 9pt,
+      fill: couleur,
+      stroke: if avecBord { 0.5pt + grisBordLeger } else { none },
+      radius: 1.5pt,
+    ),
+    text(size: 7pt)[#label],
+  )
+
+  let totalCell = block(
+    fill: grisFond,
+    radius: (bottom-left: rCell, bottom-right: rCell),
+    width: 100%,
+    inset: (x: 10pt, y: 7pt),
+  )[
+    #grid(
+      columns: (1fr, auto),
+      column-gutter: 20pt,
+      align: horizon,
+      [
+        #set text(size: 7.5pt, fill: grisNeutre)
+        *Total :* #donnees.nombreTotalMesuresGenerales
+        #if donnees.nombreTotalMesuresGenerales <= 1 [mesure proposée] else [mesures proposées]
+        par #donnees.referentielConcernes.
+      ],
+      grid(
+        columns: (auto, auto, auto, auto, auto),
+        column-gutter: 8pt,
+        align: horizon,
+        legendeItem(couleurFaites,  "Faites"),
+        legendeItem(couleurEnCours, "Partielles"),
+        legendeItem(couleurNonFait, "Non prises en compte"),
+        legendeItem(couleurALancer, "À lancer"),
+        legendeItem(white, "À remplir", avecBord: true),
+      ),
+    )
+  ]
+
+  let w-cell = (size.width - gapCells) / 2
+  let h-indisp = measure(
+    celluleMesures("Indispensables", true, donnees.svgCamembertIndispensables, donnees.mesuresIndispensables, (top-left: rCell)),
+    width: w-cell,
+  ).height
+  let h-reco = measure(
+    celluleMesures("Recommandées", false, donnees.svgCamembertRecommandees, donnees.mesuresRecommandees, (top-right: rCell)),
+    width: w-cell,
+  ).height
+  let h-cells = calc.max(h-indisp, h-reco)
+
+  let barreCategorie(cat) = {
+    let segs = (
+      (nb: cat.fait,    c: couleurFaites,  tc: white),
+      (nb: cat.enCours, c: couleurEnCours, tc: white),
+      (nb: cat.nonFait, c: couleurNonFait, tc: white),
+      (nb: cat.aLancer, c: couleurALancer, tc: couleurEnCours),
+      (nb: cat.aRemplir, c: white,          tc: bleuFonce),
+    ).filter(s => s.nb > 0)
+    if segs.len() == 0 { return none }
+    box(radius: 3pt, clip: true, width: 100%)[
+      #table(
+        columns: segs.map(s => s.nb * 1fr),
+        rows: (28pt,),
+        stroke: none,
+        inset: 0pt,
+        fill: (col, _) => segs.at(col).c,
+        ..segs.map(s => align(center + horizon)[
+          #set text(size: 9pt, weight: "bold", fill: s.tc)
+          #s.nb
+        ])
+      )
+    ]
+  }
+
+  let contenuCategorie(cat) = [
+    #align(center)[#text(fill: bleuFonce, weight: "bold", size: 9pt)[#cat.description]]
+    #v(6pt)
+    #barreCategorie(cat)
+    #v(4pt)
+  ]
+
+  let totalCellCategorie = block(
+    fill: grisFond,
+    radius: (bottom-left: rCell, bottom-right: rCell),
+    width: 100%,
+    inset: (x: 10pt, y: 7pt),
+  )[
+    #grid(
+      columns: (1fr, auto),
+        column-gutter: 20pt,
+      align: horizon,
+      [
+        #set text(size: 7.5pt, fill: grisNeutre)
+        *Total :* #donnees.nombreTotalMesuresGenerales
+        #if donnees.nombreTotalMesuresGenerales <= 1 [mesure proposée] else [mesures proposées]
+        par #donnees.referentielConcernes
+        #if donnees.nombreMesuresSpecifiques > 0 [
+          \+ #donnees.nombreMesuresSpecifiques
+          #if donnees.nombreMesuresSpecifiques <= 1 [ajoutée] else [ajoutées] par l'équipe.
+        ] else [.]
+      ],
+      grid(
+        columns: (auto, auto, auto, auto, auto),
+        column-gutter: 8pt,
+        align: horizon,
+        legendeItem(couleurFaites,  "Faites"),
+        legendeItem(couleurEnCours, "Partielles"),
+        legendeItem(couleurNonFait, "Non prises en compte"),
+        legendeItem(couleurALancer, "À lancer"),
+        legendeItem(white, "À remplir", avecBord: true),
+      ),
+    )
+  ]
+
+  boite("Mesures de sécurité", [
+    #text(size: 9pt)[Par niveau de criticité]
+    #v(8pt)
+    #grid(
+      columns: (1fr, 1fr),
+      rows: (auto, auto),
+      column-gutter: gapCells,
+      row-gutter: gapCells,
+      celluleMesures(
+        "Indispensables", true,
+        donnees.svgCamembertIndispensables,
+        donnees.mesuresIndispensables,
+        (top-left: rCell),
+        inner-h: h-cells,
+      ),
+      celluleMesures(
+        "Recommandées", false,
+        donnees.svgCamembertRecommandees,
+        donnees.mesuresRecommandees,
+        (top-right: rCell),
+        inner-h: h-cells,
+      ),
+      grid.cell(colspan: 2)[#totalCell],
+    )
+    #v(14pt)
+    #text(size: 9pt)[Par catégorie]
+    #v(8pt)
+    #grid(
+      columns: (1fr,),
+      row-gutter: gapCells,
+      block(fill: grisFond, width: 100%, radius: (top-left: rCell, top-right: rCell), inset: (x: 10pt, top: 10pt, bottom: 10pt))[
+        #grid(
+          columns: donnees.categoriesMesures.map(_ => 1fr),
+          column-gutter: 10pt,
+          ..donnees.categoriesMesures.map(cat => [
+            #contenuCategorie(cat)
+          ])
+        )
+      ],
+      totalCellCategorie,
+    )
+  ])
+
+  v(16pt)
+
+  set text(size: 7.5pt, fill: grisNeutre)
+  [L'indice cyber est calculé sur la base des informations renseignées par l'équipe concernant les mesures de sécurité proposées par #donnees.referentielConcernes, et à l'exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.]
 })
