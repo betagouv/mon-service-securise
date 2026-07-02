@@ -156,4 +156,135 @@
     boiteSansEtiquette(h-pill, inner-h: inner-h, besoins-contenu),
     col3-contenu,
   )
+
+  v(gutter)
+
+  // ── Mesures de sécurité ──────────────────────────────────────────────────
+  let rCell = 8pt
+  let gapCells = 2pt
+
+  let mesuresRestantesBox(stats) = box(
+    fill: white,
+    radius: 4pt,
+    inset: (x: 8pt, y: 7pt),
+  )[
+    #set text(fill: grisNeutre, size: 8pt, weight: "bold")
+    #set par(leading: 0.45em)
+    #align(left)[
+      Il reste
+      #linebreak()
+      #text(fill: bleuVif)[#stats.restant #if stats.restant <= 1 [mesure] else [mesures]]
+      #linebreak()à mettre en œuvre
+    ]
+  ]
+
+  let celluleMesures(titre, avecEtoile, svg-str, stats, rad, inner-h: auto) = block(
+    fill: grisFond,
+    radius: rad,
+    width: 100%,
+    height: inner-h,
+    inset: (x: 10pt, top: 8pt, bottom: 12pt),
+  )[
+    #align(center)[
+      #grid(
+        columns: if avecEtoile { (auto, auto) } else { (auto,) },
+        column-gutter: 3pt,
+        align: horizon,
+        text(fill: bleuFonce, weight: "bold", size: 9pt)[#titre],
+        if avecEtoile { image("assets/etoile_orange.svg", height: 9pt) },
+      )
+    ]
+    #v(6pt)
+    #align(center)[
+      #grid(
+        columns: (auto, auto, auto),
+        column-gutter: 18pt,
+        align: horizon,
+        image(bytes(svg-str), format: "svg", width: 90pt),
+        image("assets/fleche_bleue.svg", height: 11pt),
+        mesuresRestantesBox(stats),
+      )
+    ]
+  ]
+
+  let legendeItem(couleur, label, avecBord: false) = grid(
+    columns: (9pt, auto),
+    column-gutter: 4pt,
+    align: horizon,
+    box(
+      width: 9pt,
+      height: 9pt,
+      fill: couleur,
+      stroke: if avecBord { 0.5pt + grisBordLeger } else { none },
+      radius: 1.5pt,
+    ),
+    text(size: 7pt)[#label],
+  )
+
+  let totalCell = block(
+    fill: grisFond,
+    radius: (bottom-left: rCell, bottom-right: rCell),
+    width: 100%,
+    inset: (x: 10pt, y: 7pt),
+  )[
+    #grid(
+      columns: (1fr, auto),
+      column-gutter: 20pt,
+      align: horizon,
+      [
+        #set text(size: 7.5pt, fill: grisNeutre)
+        *Total :* #donnees.nombreTotalMesuresGenerales
+        #if donnees.nombreTotalMesuresGenerales <= 1 [mesure proposée] else [mesures proposées]
+        par #donnees.referentielConcernes.
+      ],
+      grid(
+        columns: (auto, auto, auto, auto, auto),
+        column-gutter: 8pt,
+        align: horizon,
+        legendeItem(couleurFaites,  "Faites"),
+        legendeItem(couleurEnCours, "Partielles"),
+        legendeItem(couleurNonFait, "Non prises en compte"),
+        legendeItem(couleurALancer, "À lancer"),
+        legendeItem(white, "À remplir", avecBord: true),
+      ),
+    )
+  ]
+
+  // Mesure les deux cellules pour égaliser leur hauteur
+  let w-cell = (size.width - gapCells) / 2
+  let h-indisp = measure(
+    celluleMesures("Indispensables", true, donnees.svgCamembertIndispensables, donnees.mesuresIndispensables, (top-left: rCell)),
+    width: w-cell,
+  ).height
+  let h-reco = measure(
+    celluleMesures("Recommandées", false, donnees.svgCamembertRecommandees, donnees.mesuresRecommandees, (top-right: rCell)),
+    width: w-cell,
+  ).height
+  let h-cells = calc.max(h-indisp, h-reco)
+
+  boite("Mesures de sécurité", [
+    #text(size: 9pt)[Par niveau de criticité]
+    #v(8pt)
+    #grid(
+      columns: (1fr, 1fr),
+      rows: (auto, auto),
+      column-gutter: gapCells,
+      row-gutter: gapCells,
+      celluleMesures(
+        "Indispensables", true,
+        donnees.svgCamembertIndispensables,
+        donnees.mesuresIndispensables,
+        (top-left: rCell),
+        inner-h: h-cells,
+      ),
+      celluleMesures(
+        "Recommandées", false,
+        donnees.svgCamembertRecommandees,
+        donnees.mesuresRecommandees,
+        (top-right: rCell),
+        inner-h: h-cells,
+      ),
+      grid.cell(colspan: 2)[#totalCell],
+    )
+  ])
 })

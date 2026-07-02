@@ -1,13 +1,14 @@
 import fs from 'node:fs';
+import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
+import { uneDescriptionV2Valide } from '../test/constructeurs/constructeurDescriptionServiceV2.js';
+import Service from '../src/modeles/service.js';
 import { AdaptateurPdfTypst } from '../src/adaptateurs/adaptateurPdf.typst.js';
 import {
   unService,
   unServiceV2,
 } from '../test/constructeurs/constructeurService.js';
-import Service from '../src/modeles/service.js';
 import uneDescriptionValide from '../test/constructeurs/constructeurDescriptionService.js';
 import { creeReferentiel } from '../src/referentiel.js';
-import { uneDescriptionV2Valide } from '../test/constructeurs/constructeurDescriptionServiceV2.js';
 import Mesures from '../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../src/referentielV2.js';
 import {
@@ -160,37 +161,39 @@ const risquesSpecifiques: DonneesRisqueSpecifique[] = [
   },
 ];
 
-await faisUneAnnexe(
-  unService(referentiel)
-    .avecDescription(
-      uneDescriptionValide(referentiel)
-        .avecNomService('V1 - Mairie XY')
-        .avecFonctionnalites(['questionnaire', 'newsletter'])
-        .avecDonneesCaracterePersonnel(['identite', 'document'])
-        .avecDelaiAvantImpactCritique('moinsUneHeure')
-        .construis()
-        .toJSON()
+const service = unService(referentiel)
+  .avecDescription(
+    uneDescriptionValide(referentiel)
+      .avecNomService('V1 - Mairie XY')
+      .avecFonctionnalites(['questionnaire', 'newsletter'])
+      .avecDonneesCaracterePersonnel(['identite', 'document'])
+      .avecDelaiAvantImpactCritique('moinsUneHeure')
+      .avecTypes(['api'])
+      .construis()
+      .toJSON()
+  )
+  .avecMesures(
+    new Mesures(
+      { mesuresGenerales: [{ id: 'analyseRisques', statut: 'fait' }] },
+      referentiel,
+      {
+        analyseRisques: { categorie: 'gouvernance', referentiel: 'ANSSI' },
+        auditsSecurite: { categorie: 'gouvernance', referentiel: 'ANSSI' },
+        verificationAutomatique: {
+          categorie: 'gouvernance',
+          referentiel: 'CNIL',
+        },
+      }
     )
-    .avecMesures(
-      new Mesures(
-        { mesuresGenerales: [{ id: 'analyseRisques', statut: 'fait' }] },
-        referentiel,
-        {
-          analyseRisques: { categorie: 'gouvernance', referentiel: 'ANSSI' },
-          auditsSecurite: { categorie: 'gouvernance', referentiel: 'ANSSI' },
-          verificationAutomatique: {
-            categorie: 'gouvernance',
-            referentiel: 'CNIL',
-          },
-        }
-      )
-    )
-    .avecRisques(
-      new Risques({ risquesGeneraux, risquesSpecifiques }, referentiel)
-    )
-    .avecOrganisationResponsable({ siret: 'ABCD', nom: 'ANSSI' })
-    .construis(),
-  { referentiel, versionPdfRisques: 'v1' }
-);
+  )
+  .avecRisques(
+    new Risques({ risquesGeneraux, risquesSpecifiques }, referentiel)
+  )
+  .avecOrganisationResponsable({ siret: 'ABCD', nom: 'ANSSI' })
+  .construis();
+await faisUneAnnexe(service, { referentiel, versionPdfRisques: 'v1' });
+
+const buffer = await adaptateur.genereSyntheseSecurite({ service });
+fs.writeFileSync(`pocTypst_syntheseSecurite.pdf`, buffer, 'utf8');
 
 // node --import tsx --watch-path=./poc-pdf --watch-path=src poc-pdf/feedback.ts
