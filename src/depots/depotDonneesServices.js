@@ -770,7 +770,7 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     const idRisqueV2 = adaptateurUUID.genereUUID();
 
-    s.risquesV2.ajouteRisqueSpecifique({ ...donneesRisque, id: idRisqueV2 });
+    s.ajouteRisqueSpecifiqueV2({ ...donneesRisque, id: idRisqueV2 });
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 

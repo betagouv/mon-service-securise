@@ -814,6 +814,7 @@ describe('Un service', () => {
           id: 'id-service',
           versionService: VersionService.v1,
           prochainIdNumeriqueDeRisqueSpecifique: 42,
+          prochainIdNumeriqueDeRisqueSpecifiqueV2: 64,
           descriptionService: uneDescriptionValide(
             Referentiel.creeReferentielVide()
           )
@@ -850,6 +851,7 @@ describe('Un service', () => {
         id: 'id-service',
         versionService: VersionService.v1,
         prochainIdNumeriqueDeRisqueSpecifique: 42,
+        prochainIdNumeriqueDeRisqueSpecifiqueV2: 64,
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
           localisationDonnees: 'uneLocalisation',
