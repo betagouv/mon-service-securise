@@ -106,19 +106,17 @@
     inset: (x: 9pt, y: 6pt),
   )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[#label]]
   let h = measure(pill).height
-  stack(
-    dir: btt,
-    block(
-      fill: fill,
-      stroke: 1pt + bordBleu,
-      radius: 7pt,
-      width: 100%,
-      height: inner-h,
-      inset: (left: 16pt, right: 16pt, top: h / 2 + 6pt, bottom: 10pt),
-    )[#v(7pt) #contenu],
-    -(h / 2),
-    pad(left: 16pt)[#pill],
-  )
+  block(
+    fill: fill,stroke: 1pt + bordBleu,
+    radius: 7pt,
+    width: 100%,
+    height: inner-h,
+    inset: (left: 16pt, right: 16pt, top: h / 2 + 6pt, bottom: 10pt),
+  )[
+    #place(top + left, dy: -(h + 6pt))[#pill]
+    #v(7pt)
+    #contenu
+  ]
 }
 
 #let boiteSansEtiquette(h-pill, inner-h: auto, contenu) = [
