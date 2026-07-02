@@ -4,6 +4,8 @@ import Service from '../modeles/service.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
 import { DonneesDocuments } from '../modeles/etapes/documents.js';
 import { TousReferentiels } from '../referentiel.interface.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { IdRisque } from '../referentiel.types.js';
 
 const labelNiveaux: Record<string, string> = {
   niveau1: 'Basiques',
@@ -23,6 +25,16 @@ export type DonneesPdfSyntheseSecurite = {
   niveauSuperieurAuxRecommandations: boolean;
   labelNiveauRecommande: string;
 };
+
+const legendeNiveauxRisque = (referentiel: Referentiel) =>
+  Object.entries(referentiel.niveauxRisque())
+    .filter(([, niveau]) => niveau.position >= 0)
+    .sort(([, a], [, b]) => a.position - b.position)
+    .map(([id, niveau]) => ({
+      id,
+      libelle: niveau.libelle,
+      description: niveau.description,
+    }));
 
 export type DonneesPdfDossierDecision = {
   nomService: string;
@@ -46,9 +58,32 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
   async genereAnnexes(
     donnees: DonneesPdfAnnexes
   ): Promise<Buffer<ArrayBuffer>> {
+    const { donneesRisques, referentiel, versionPdfRisques } = donnees;
+
+    const donneesRisquesResolues =
+      donneesRisques && referentiel && versionPdfRisques === 'v1'
+        ? {
+            ...donneesRisques,
+            risques: donneesRisques.risques.map((risque) => ({
+              ...risque,
+              definition:
+                referentiel.definitionRisque(risque.id as IdRisque) ??
+                (risque as { description?: string }).description ??
+                '',
+            })),
+            legendeNiveauxRisque: legendeNiveauxRisque(referentiel),
+          }
+        : undefined;
+
     const res = this.compilateur.pdf({
       mainFilePath: 'src/vuesPdf/annexes.typ',
-      inputs: { payload: JSON.stringify(donnees) },
+      inputs: {
+        payload: JSON.stringify({
+          donneesDescription: donnees.donneesDescription,
+          donneesMesures: donnees.donneesMesures,
+          donneesRisques: donneesRisquesResolues,
+        }),
+      },
     });
 
     return Buffer.from(res);

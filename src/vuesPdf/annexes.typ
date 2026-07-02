@@ -21,3 +21,8 @@
 
 #pagebreak()
 #include "annexe.mesures.typ"
+
+#if donnees.at("donneesRisques", default: none) != none {
+  pagebreak()
+  include "annexe.risques.typ"
+}

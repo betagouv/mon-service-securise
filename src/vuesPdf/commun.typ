@@ -9,6 +9,23 @@
 #let bordBleu    = rgb("#b5c1d2")
 #let orange      = rgb("#faa72c")
 #let orangeClair = rgb("#fff2de")
+#let vert        = rgb("#4cb963")
+#let rouge       = rgb("#e32630")
+#let vertFonce   = rgb("#0c8626")
+#let rougeClair  = rgb("#ff6584")
+#let grisAxe     = rgb("#cbd5e1")
+
+#let couleursNiveauRisque = (
+  faible: vert,
+  moyen: orange,
+  eleve: rouge,
+)
+
+#let couleursPastilleRisque = (
+  faible: vertFonce,
+  moyen: orange,
+  eleve: rougeClair,
+)
 
 #let entete(icone, titre, sousTitre, badge: none) = grid(
   columns: (auto, 1fr),
