@@ -17,6 +17,7 @@
     ReferentielGravites,
     ReferentielVraisemblances,
   } from '../risques/risques.d';
+  import CartoucheIdentifiantRisqueSpecifiqueV2 from './kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
 
   interface Props {
     idService?: string;
@@ -88,7 +89,7 @@
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
       {:else}
-        <dsfr-badge label="Risque spécifique" type="statut"></dsfr-badge>
+        <CartoucheIdentifiantRisqueSpecifiqueV2 risque={donnee} />
       {/if}
     </div>
     {#if estRisqueGeneral(donnee)}

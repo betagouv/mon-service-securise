@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { RisqueSpecifiqueV2 } from '../risquesV2.d';
   import CartouchesRisqueV2 from '../kit/CartouchesRisqueV2.svelte';
+  import CartoucheIdentifiantRisqueSpecifiqueV2 from '../kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
 
   interface Props {
     risque?: RisqueSpecifiqueV2;
@@ -10,7 +11,7 @@
 </script>
 
 <div>
-  <dsfr-badge label="Risque spécifique" type="statut"></dsfr-badge>
+  <CartoucheIdentifiantRisqueSpecifiqueV2 {risque} />
   {#if risque}
     <CartouchesRisqueV2 {risque} />
   {/if}
