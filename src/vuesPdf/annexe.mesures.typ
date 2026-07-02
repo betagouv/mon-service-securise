@@ -3,11 +3,14 @@
 #let donnees = json(bytes(sys.inputs.payload))
 #let donneesMesures = donnees.donneesMesures
 
+#let badgeAncienReferentiel = image("assets/badge_ancien_referentiel.svg", height: 12pt)
+
 #let enteteMesures() = entete(
   "assets/icone_dossier.png",
   "Mesures de sécurité détaillées",
   [Toutes les mesures indispensables #box(baseline: 20%, image("assets/icone_etoile.png", height: 7pt)), recommandées
   et créées sont classées selon leur statut de mise en œuvre et par catégorie.],
+  badge: if donnees.donneesDescription.versionService == "v1" { badgeAncienReferentiel },
 )
 
 #let cartouche(label) = box(
