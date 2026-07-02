@@ -137,14 +137,6 @@
   )
 }
 
-#entete(
-  "assets/icone_dossier.png",
-  "Risques de sécurité",
-  "Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.",
-)
-
-#v(18pt)
-
 #boite("Cartographie des risques")[
   #grid(
     columns: (auto, 11pt, 1fr),
@@ -166,7 +158,7 @@
   )
 ]
 
-#v(16pt)
+#pagebreak()
 
 #boite("Risques")[
   #for risque in donneesRisques.risques.risques {
