@@ -7,6 +7,14 @@ export type ServiceV2 = Omit<Service, 'descriptionService' | 'referentiel'> & {
   referentiel: ReferentielV2;
 };
 
+export type DonneesPourAnnexeDescriptionDeServiceV2 = {
+  nomService: string;
+  versionService: string;
+  caracteristiques: Array<{ label: string; valeur: string[] | string }>;
+  criticiteExposition: Array<{ label: string; valeur: string[] | string }>;
+  informationsGeneriques: Array<{ label: string; valeur: string[] | string }>;
+};
+
 export class ObjetPDFAnnexeDescriptionV2 {
   private readonly referentiel: ReferentielV2;
 

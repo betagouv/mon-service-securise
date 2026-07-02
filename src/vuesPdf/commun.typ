@@ -10,6 +10,50 @@
 #let orange      = rgb("#faa72c")
 #let orangeClair = rgb("#fff2de")
 
+#let entete(icone, titre, sousTitre, badge: none) = grid(
+  columns: (auto, 1fr),
+  column-gutter: 2mm,
+  align: horizon,
+  image(icone, width: 30pt, height: 30pt),
+  stack(
+    spacing: if badge == none { 5pt } else { 1pt },
+    if badge == none {
+      text(size: 9pt, weight: "bold", fill: encre)[#upper(titre)]
+    } else {
+      grid(
+        columns: (auto, auto),
+        column-gutter: 5pt,
+        align: horizon,
+        text(size: 9pt, weight: "bold", fill: encre)[#upper(titre)],
+        badge,
+      )
+    },
+    text(size: 6.75pt, weight: "medium", fill: rgb("#5e5e5e"))[#sousTitre],
+  ),
+)
+
+#let listeAPuces(contenus) = grid(
+  columns: (auto, 1fr),
+  column-gutter: 8pt,
+  row-gutter: 12pt,
+  align: top,
+  ..contenus
+    .map(c => (
+      box(inset: (top: 2.5pt), circle(radius: 2pt, fill: rgb("#0F7AC7"))),
+      c,
+    ))
+    .flatten(),
+)
+
+#let listePuces(items) = listeAPuces(
+  items.map(it => {
+    let valeur = if type(it.valeur) == array { it.valeur.join(", ") } else { it.valeur }
+    [#text(weight: "bold")[#it.label :] #valeur]
+  }),
+)
+
+#let listeSimple(items) = listeAPuces(items.map(it => [#it]))
+
 #let dl(libelle, valeur) = block(above: 0pt, below: 8pt)[
   #set text(size: 8pt)
   #text(fill: grisTexte, weight: "bold")[#libelle]#h(0.25em)#text(weight: "medium")[#valeur]
