@@ -22,6 +22,11 @@
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
   import { VersionService } from '../../../src/modeles/versionService';
+  import {
+    enRisquesActuelsAAfficher,
+    enRisquesBrutsAAfficher,
+    enRisquesCiblesAAfficher,
+  } from './matrice/matrice';
 
   interface Props {
     idService: string;
@@ -95,6 +100,10 @@
   const afficheModaleAnciensRisques = () => {
     modaleAnciensRisques?.affiche();
   };
+
+  let risquesBrutsAAfficher = $derived(enRisquesBrutsAAfficher(risques));
+  let risquesActuelsAAfficher = $derived(enRisquesActuelsAAfficher(risques));
+  let risquesCiblesAAfficher = $derived(enRisquesCiblesAAfficher(risques));
 </script>
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
@@ -139,19 +148,19 @@
         class="matrice"
         style="opacity: {Math.max(0, Math.min(1, 2 - opacite))}"
       >
-        <MatriceRisquesV2 risques={risques.risquesBruts} transparent />
+        <MatriceRisquesV2 risques={risquesBrutsAAfficher} transparent />
       </div>
       <div
         class="matrice"
         style="opacity: {Math.max(0, 1 - Math.abs(opacite - 2))}"
       >
-        <MatriceRisquesV2 risques={risques.risques} transparent />
+        <MatriceRisquesV2 risques={risquesActuelsAAfficher} transparent />
       </div>
       <div
         class="matrice"
         style="opacity: {Math.max(0, Math.min(1, opacite - 2))}"
       >
-        <MatriceRisquesV2 risques={risques.risquesCibles} transparent />
+        <MatriceRisquesV2 risques={risquesCiblesAAfficher} transparent />
       </div>
       <div class="conteneur-slider">
         <dsfr-range

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Risque } from '../risquesV2.d';
   import { couleur } from '../kit/kit';
+  import type { RisqueAAfficher } from './matrice';
 
   interface Props {
-    risques: Risque[];
+    risques: RisqueAAfficher[];
     enAttenteCompletionMesures?: boolean;
     transparent?: boolean;
     taille?: 'sm' | 'md';
@@ -38,10 +38,7 @@
             {@const vraisemblance = indexColonne + 1}
             {@const laCouleur = couleur(gravite, vraisemblance)}
             {@const risqueDeCetteCellule = risques.filter(
-              (r) =>
-                !r.desactive &&
-                r.gravite === gravite &&
-                r.vraisemblance === vraisemblance
+              (r) => r.gravite === gravite && r.vraisemblance === vraisemblance
             )}
             {@const idRisques = risqueDeCetteCellule
               .map((r) => r.id)

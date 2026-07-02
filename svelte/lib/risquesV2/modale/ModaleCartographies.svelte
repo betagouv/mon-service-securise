@@ -6,6 +6,11 @@
   import LegendeMatrice from '../matrice/LegendeMatrice.svelte';
   import TableauRisquesMesuresAssociees from './TableauRisquesMesuresAssociees.svelte';
   import type { ReferentielStatut } from '../../ui/types';
+  import {
+    enRisquesActuelsAAfficher,
+    enRisquesBrutsAAfficher,
+    enRisquesCiblesAAfficher,
+  } from '../matrice/matrice';
   let elementModale: Modale | undefined;
 
   interface Props {
@@ -19,6 +24,10 @@
   export const affiche = () => {
     elementModale?.affiche();
   };
+
+  let risquesBrutsAAfficher = $derived(enRisquesBrutsAAfficher(risques));
+  let risquesActuelsAAfficher = $derived(enRisquesActuelsAAfficher(risques));
+  let risquesCiblesAAfficher = $derived(enRisquesCiblesAAfficher(risques));
 </script>
 
 <Modale id="modale-cartographies-risques-v2" bind:this={elementModale}>
@@ -34,7 +43,7 @@
               enfantDirect
             />
           </div>
-          <MatriceRisquesV2 risques={risques.risquesBruts} taille="sm" />
+          <MatriceRisquesV2 risques={risquesBrutsAAfficher} taille="sm" />
         </div>
         <div class="conteneur-matrice">
           <div class="conteneur-titre">
@@ -44,7 +53,7 @@
               enfantDirect
             />
           </div>
-          <MatriceRisquesV2 risques={risques.risques} taille="sm" />
+          <MatriceRisquesV2 risques={risquesActuelsAAfficher} taille="sm" />
         </div>
         <div class="conteneur-matrice">
           <div class="conteneur-titre">
@@ -54,7 +63,7 @@
               enfantDirect
             />
           </div>
-          <MatriceRisquesV2 risques={risques.risquesCibles} taille="sm" />
+          <MatriceRisquesV2 risques={risquesCiblesAAfficher} taille="sm" />
         </div>
       </div>
       <LegendeMatrice />

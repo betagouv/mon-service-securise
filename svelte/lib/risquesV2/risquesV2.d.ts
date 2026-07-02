@@ -86,4 +86,7 @@ export type DonneesRisqueSpecifiqueV2 = {
   commentaire?: string;
 };
 
-export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & { id: UUID };
+export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & {
+  id: UUID;
+  identifiantNumerique: string;
+};
