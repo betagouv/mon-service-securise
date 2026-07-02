@@ -52,7 +52,11 @@
   let donneesRisque = $state(
     untrack(() => {
       if (risque) {
-        const { id: _id, ...donnees } = risque;
+        const {
+          id: _id,
+          identifiantNumerique: _identifiantNumerique,
+          ...donnees
+        } = risque;
         return donnees;
       }
       return undefined;
