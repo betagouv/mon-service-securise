@@ -371,5 +371,9 @@
       totalCellCategorie,
     )
   ])
-  
+
+  v(gutter)
+
+  set text(size: 7.5pt, fill: grisNeutre)
+  [L'indice cyber est calculé sur la base des informations renseignées par l'équipe concernant les mesures de sécurité proposées par #donnees.referentielConcernes, et à l'exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.]
 })
