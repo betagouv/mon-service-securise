@@ -10,14 +10,24 @@
 #let orange      = rgb("#faa72c")
 #let orangeClair = rgb("#fff2de")
 
-#let entete(icone, titre, sousTitre) = grid(
+#let entete(icone, titre, sousTitre, badge: none) = grid(
   columns: (auto, 1fr),
   column-gutter: 2mm,
   align: horizon,
   image(icone, width: 30pt, height: 30pt),
   stack(
-    spacing: 3pt,
-    text(size: 9pt, weight: "bold", fill: encre)[#upper(titre)],
+    spacing: if badge == none { 5pt } else { 1pt },
+    if badge == none {
+      text(size: 9pt, weight: "bold", fill: encre)[#upper(titre)]
+    } else {
+      grid(
+        columns: (auto, auto),
+        column-gutter: 5pt,
+        align: horizon,
+        text(size: 9pt, weight: "bold", fill: encre)[#upper(titre)],
+        badge,
+      )
+    },
     text(size: 6.75pt, weight: "medium", fill: rgb("#5e5e5e"))[#sousTitre],
   ),
 )
