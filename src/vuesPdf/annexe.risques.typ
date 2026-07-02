@@ -153,14 +153,6 @@
     v(12pt),
 )
 
-#entete(
-  "assets/icone_dossier.png",
-  "Risques de sécurité",
-  "Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.",
-)
-
-#v(18pt)
-
 #boite("Cartographie des risques")[
   #text(size: 9pt, fill: gris)[Évalué au départ]
   #v(11pt)

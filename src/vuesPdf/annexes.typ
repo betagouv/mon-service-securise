@@ -25,8 +25,30 @@
 #if donnees.at("donneesRisques", default: none) != none {
   pagebreak()
   if donnees.at("versionPdfRisques", default: "v1") == "v2" {
+    set page(
+      margin: (x: 1cm, top: 3cm, bottom: 1.4cm),
+      header: [
+        #v(0.78cm)
+        #entete(
+          "assets/icone_dossier.png",
+          "Risques de sécurité",
+          "Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.",
+        )
+      ],
+    )
     include "annexe.risquesV2.typ"
   } else {
+    set page(
+      margin: (x: 1cm, top: 3cm, bottom: 1.4cm),
+      header: [
+        #v(0.78cm)
+        #entete(
+          "assets/icone_dossier.png",
+          "Risques de sécurité",
+          "Tous les risques que l'on peut rencontrer pour votre service, classés par niveau de gravité en matière d'impact.",
+        )
+      ],
+    )
     include "annexe.risques.typ"
   }
 }
