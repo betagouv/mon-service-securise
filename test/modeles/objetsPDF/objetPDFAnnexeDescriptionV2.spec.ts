@@ -81,7 +81,7 @@ describe("L'objet PDF de l'annexe de description V2", () => {
         valeur: ["Portail d'information", 'API'],
       },
       {
-        label: 'Sécurisation prévues',
+        label: 'Sécurisations prévues',
         valeur: ['Un annuaire', 'Des postes de travail'],
       },
       {

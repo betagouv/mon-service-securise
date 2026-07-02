@@ -4,7 +4,8 @@ import { DonneesPourAnnexeDescriptionDeServiceV2 } from '../modeles/objetsPDF/ob
 import { DonneesPdfDossierDecision } from './adaptateurPdf.typst.js';
 import ObjetPDFAnnexeMesures from '../modeles/objetsPDF/objetPDFAnnexeMesures.js';
 import ObjetPDFAnnexeRisques from '../modeles/objetsPDF/objetPDFAnnexeRisques.js';
-import { Referentiel } from '../referentiel.interface.js';
+import { ObjetPDFAnnexeRisquesV2 } from '../modeles/objetsPDF/objetPDFAnnexeRisquesV2.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 export type DonneesPourAnnexeDescriptionDeServiceV1 = {
   nomService: string;
@@ -25,8 +26,10 @@ export type DonneesPdfAnnexes = {
           DonneesPourAnnexeDescriptionDeServiceV2;
       };
   donneesMesures: ReturnType<ObjetPDFAnnexeMesures['donnees']>;
-  donneesRisques?: ReturnType<ObjetPDFAnnexeRisques['donnees']>;
-  referentiel?: Referentiel;
+  donneesRisques?:
+    | ReturnType<ObjetPDFAnnexeRisques['donnees']>
+    | ReturnType<ObjetPDFAnnexeRisquesV2['donnees']>;
+  referentiel?: TousReferentiels;
   versionPdfRisques?: 'v1' | 'v2';
 };
 

@@ -10,7 +10,11 @@ import { creeReferentiel } from '../src/referentiel.js';
 import { uneDescriptionV2Valide } from '../test/constructeurs/constructeurDescriptionServiceV2.js';
 import Mesures from '../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../src/referentielV2.js';
-import { Referentiel } from '../src/referentiel.interface.js';
+import {
+  Referentiel,
+  ReferentielV2,
+  TousReferentiels,
+} from '../src/referentiel.interface.js';
 import { DonneesRisqueGeneral } from '../src/modeles/risqueGeneral.js';
 import { DonneesRisqueSpecifique } from '../src/modeles/risqueSpecifique.js';
 import { unUUID } from '../test/constructeurs/UUID.js';
@@ -20,7 +24,7 @@ const adaptateur = new AdaptateurPdfTypst();
 
 const faisUneAnnexe = async (
   service: Service,
-  options: { referentiel?: Referentiel; versionPdfRisques?: 'v1' | 'v2' } = {}
+  options: { referentiel: TousReferentiels; versionPdfRisques: 'v1' | 'v2' }
 ) => {
   const donneesDescription = service.vueAnnexePDFDescription().donnees();
   const donneesMesures = service.vueAnnexePDFMesures().donnees();
@@ -45,6 +49,10 @@ const serviceV2 = unServiceV2(r2)
       .avecStatutDeploiement('enProjet')
       .avecPresentation('La bibliothèque de …')
       .avecPointsAcces(['https://a.fr', 'https://b.fr'])
+      .avecSpecificitesProjet([
+        'accesPhysiqueAuxBureaux',
+        'accesPhysiqueAuxSallesTechniques',
+      ])
       .construis()
       .toJSON()
   )
@@ -56,9 +64,13 @@ const serviceV2 = unServiceV2(r2)
           {
             id: 'RECENSEMENT.1',
             statut: 'nonFait',
-            modalites: 'je vais le faire',
+            commentaire: 'je vais le faire',
           },
-          { id: 'RECENSEMENT.2', statut: 'nonFait' },
+          {
+            id: 'RECENSEMENT.2',
+            statut: 'nonFait',
+            commentaire: 'je vais le faire',
+          },
           { id: 'RECENSEMENT.3', statut: 'enCours' },
           { id: 'CONFORMITE.1', statut: 'nonFait' },
           { id: 'CONFORMITE.3', statut: 'aLancer' },
@@ -76,9 +88,38 @@ const serviceV2 = unServiceV2(r2)
       }
     )
   )
+  .avecRisquesV2({
+    risquesGeneraux: {
+      R2: { desactive: false, commentaire: 'un commentaire' },
+      R4: { desactive: false },
+      R5: {
+        desactive: false,
+        graviteSurchargee: 3,
+        commentaire: 'je vais le faire',
+      },
+      R6: {},
+      R12: { desactive: false },
+      R13: { desactive: true },
+    },
+    risquesSpecifiques: [
+      {
+        id: 'a99aa881-0c03-4a7b-90b3-0b908a33d727',
+        intitule: 'Un risque spé',
+        description: '',
+        categories: ['disponibilite'],
+        risqueBrut: { gravite: 1, vraisemblance: 1 },
+        gravite: 1,
+        vraisemblance: 1,
+        commentaire: 'efazf',
+      },
+    ],
+  })
   .construis();
 
-await faisUneAnnexe(serviceV2);
+await faisUneAnnexe(serviceV2, {
+  referentiel: r2 as ReferentielV2,
+  versionPdfRisques: 'v2',
+});
 
 const referentiel = creeReferentiel();
 
@@ -98,6 +139,8 @@ const risquesGeneraux: DonneesRisqueGeneral[] = [
   {
     id: 'logicielsMalveillants',
     niveauGravite: '',
+
+    // @ts-ignore
     niveauVraisemblance: '',
     commentaire: '',
     desactive: true,

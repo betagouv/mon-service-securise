@@ -27,6 +27,28 @@
   eleve: rougeClair,
 )
 
+#let vertV2  = rgb("#77b645")
+#let orangeV2 = rgb("#fa7a35")
+#let rougeV2 = rgb("#e1000f")
+#let grisAxeV2 = rgb("#929292")
+
+#let couleursNiveauRisqueV2 = (
+  faible: vertV2,
+  moyen: orangeV2,
+  eleve: rougeV2,
+)
+
+#let niveauRisqueV2(gravite, vraisemblance) = {
+  let niveau = gravite * vraisemblance
+  if niveau <= 4 and vraisemblance < 3 and gravite < 4 {
+    "faible"
+  } else if niveau >= 8 and vraisemblance > 2 and gravite >= 2 {
+    "eleve"
+  } else {
+    "moyen"
+  }
+}
+
 #let entete(icone, titre, sousTitre, badge: none) = grid(
   columns: (auto, 1fr),
   column-gutter: 2mm,
