@@ -34,7 +34,7 @@ export class ObjetPDFAnnexeDescriptionV2 {
           )
         ),
         this.metEnForme(
-          'Sécurisation prévues',
+          'Sécurisations prévues',
           descriptionService.specificitesProjet.map((s) =>
             this.referentiel.descriptionSpecificiteProjet(s)
           )

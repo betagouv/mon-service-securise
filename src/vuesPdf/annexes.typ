@@ -24,5 +24,9 @@
 
 #if donnees.at("donneesRisques", default: none) != none {
   pagebreak()
-  include "annexe.risques.typ"
+  if donnees.at("versionPdfRisques", default: "v1") == "v2" {
+    include "annexe.risquesV2.typ"
+  } else {
+    include "annexe.risques.typ"
+  }
 }

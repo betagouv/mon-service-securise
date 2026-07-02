@@ -4,7 +4,7 @@ import Service from '../modeles/service.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
 import { DonneesDocuments } from '../modeles/etapes/documents.js';
 import { TousReferentiels } from '../referentiel.interface.js';
-import { Referentiel } from '../referentiel.interface.js';
+import ObjetPDFAnnexeRisques from '../modeles/objetsPDF/objetPDFAnnexeRisques.js';
 import { IdRisque } from '../referentiel.types.js';
 
 const labelNiveaux: Record<string, string> = {
@@ -26,7 +26,7 @@ export type DonneesPdfSyntheseSecurite = {
   labelNiveauRecommande: string;
 };
 
-const legendeNiveauxRisque = (referentiel: Referentiel) =>
+const legendeNiveauxRisque = (referentiel: TousReferentiels) =>
   Object.entries(referentiel.niveauxRisque())
     .filter(([, niveau]) => niveau.position >= 0)
     .sort(([, a], [, b]) => a.position - b.position)
@@ -60,20 +60,27 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
   ): Promise<Buffer<ArrayBuffer>> {
     const { donneesRisques, referentiel, versionPdfRisques } = donnees;
 
-    const donneesRisquesResolues =
-      donneesRisques && referentiel && versionPdfRisques === 'v1'
-        ? {
-            ...donneesRisques,
-            risques: donneesRisques.risques.map((risque) => ({
-              ...risque,
-              definition:
-                referentiel.definitionRisque(risque.id as IdRisque) ??
-                (risque as { description?: string }).description ??
-                '',
-            })),
-            legendeNiveauxRisque: legendeNiveauxRisque(referentiel),
-          }
-        : undefined;
+    const donneesRisquesResolues = (() => {
+      if (!donneesRisques) return undefined;
+      if (versionPdfRisques === 'v1' && referentiel) {
+        const donneesV1 = donneesRisques as ReturnType<
+          ObjetPDFAnnexeRisques['donnees']
+        >;
+        return {
+          ...donneesV1,
+          risques: donneesV1.risques.map((risque) => ({
+            ...risque,
+            definition:
+              referentiel.definitionRisque(risque.id as IdRisque) ??
+              (risque as { description?: string }).description ??
+              '',
+          })),
+          legendeNiveauxRisque: legendeNiveauxRisque(referentiel),
+        };
+      }
+      if (versionPdfRisques === 'v2') return donneesRisques;
+      return undefined;
+    })();
 
     const res = this.compilateur.pdf({
       mainFilePath: 'src/vuesPdf/annexes.typ',
@@ -82,6 +89,9 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
           donneesDescription: donnees.donneesDescription,
           donneesMesures: donnees.donneesMesures,
           donneesRisques: donneesRisquesResolues,
+          versionPdfRisques: donneesRisquesResolues
+            ? versionPdfRisques
+            : undefined,
         }),
       },
     });
