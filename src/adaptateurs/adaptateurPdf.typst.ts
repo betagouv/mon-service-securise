@@ -56,7 +56,16 @@ export type DonneesPdfSyntheseSecurite = {
     aRemplir: number;
   };
   nombreTotalMesuresGenerales: number;
+  nombreMesuresSpecifiques: number;
   referentielConcernes: string;
+  categoriesMesures: Array<{
+    description: string;
+    fait: number;
+    enCours: number;
+    nonFait: number;
+    aLancer: number;
+    aRemplir: number;
+  }>;
 };
 
 const legendeNiveauxRisque = (referentiel: TousReferentiels) =>
@@ -147,6 +156,7 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
 
     const statsIndispensables = service.statistiquesMesuresIndispensables();
     const statsRecommandees = service.statistiquesMesuresRecommandees();
+    const statsGenerales = service.statistiquesMesuresGenerales();
 
     const referentiels = Object.entries(
       service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
@@ -203,7 +213,20 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
         aRemplir: statsRecommandees.aRemplir,
       },
       nombreTotalMesuresGenerales: service.nombreTotalMesuresGenerales(),
+      nombreMesuresSpecifiques: service.nombreMesuresSpecifiques(),
       referentielConcernes,
+      categoriesMesures: referentiel
+        .identifiantsCategoriesMesures()
+        .map((id: string) => ({
+          description: referentiel.descriptionCategorie(
+            id as IdCategorieMesure
+          ),
+          fait: statsGenerales.faites(id),
+          enCours: statsGenerales.enCours(id),
+          nonFait: statsGenerales.nonFaites(id),
+          aLancer: statsGenerales.aLancer(id),
+          aRemplir: statsGenerales.sansStatut(id),
+        })),
     };
     const res = this.compilateur.pdf({
       mainFilePath: 'src/vuesPdf/syntheseSecurite.typ',
