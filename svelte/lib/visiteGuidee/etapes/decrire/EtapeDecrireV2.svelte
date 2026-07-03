@@ -2,6 +2,7 @@
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount, tick } from 'svelte';
   import { navigationStore } from '../../../creationV2/etapes/navigation.store';
+  import { ciblage } from '../../ciblage';
 
   let cibleNomService: HTMLElement | undefined = $state();
   let cibleBesoinsSecurite: HTMLElement | undefined = $state();
@@ -21,10 +22,7 @@
         }
       });
 
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
+      observer.observe(document.body, { childList: true, subtree: true });
     });
   };
 
@@ -41,21 +39,16 @@
         }
       });
 
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
+      observer.observe(document.body, { childList: true, subtree: true });
     });
   };
 
-  const recupereCibleNomService = () =>
-    document
-      .querySelector('dsfr-input[nom="nom-service"]')
-      ?.shadowRoot?.getElementById('nom-service') as HTMLInputElement;
-
   onMount(async () => {
-    cibleNomService = recupereCibleNomService();
-    cibleBesoinsSecurite = document.getElementById('niveau1')!;
+    cibleNomService = ciblage().decrireV2().nomService().el();
+    cibleBesoinsSecurite = ciblage()
+      .decrireV2()
+      .besoinsSecurite('niveau1')
+      .el();
   });
 </script>
 
@@ -65,9 +58,9 @@
       cible: cibleNomService,
       callbackInitialeCible: async () => {
         navigationStore.retourneEtapeNomService();
-        await detecteElementHTML('dsfr-input[nom="nom-service"]');
+        await detecteElementHTML(ciblage().decrireV2().nomService().query());
         await detecteElementADisparu('#niveaux-securite');
-        cibleNomService = recupereCibleNomService();
+        cibleNomService = ciblage().decrireV2().nomService().el();
         cibleNomService.scrollIntoView({ behavior: 'instant' });
         return cibleNomService;
       },
@@ -82,7 +75,9 @@
       callbackInitialeCible: async () => {
         navigationStore.avanceEtapeBesoinsSecurite();
         await tick();
-        cibleBesoinsSecurite = await detecteElementHTML('#niveau1');
+        cibleBesoinsSecurite = await detecteElementHTML(
+          ciblage().decrireV2().besoinsSecurite('niveau1').query()
+        );
         cibleBesoinsSecurite.scrollIntoView({
           behavior: 'instant',
           block: 'end',

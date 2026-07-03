@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
+  import { cibleDeVisiteGuidee } from '../../../visiteGuidee/ciblage';
 
   interface Props {
     estComplete: boolean;
@@ -52,6 +53,7 @@
   type="text"
   id="nom-service"
   nom="nom-service"
+  {@attach cibleDeVisiteGuidee('nom-service')}
   value={$leBrouillon.nomService}
   status={estInvalide ? 'error' : 'info'}
   infoMessage={estInvalide ? '' : '200 caractères maximum'}
