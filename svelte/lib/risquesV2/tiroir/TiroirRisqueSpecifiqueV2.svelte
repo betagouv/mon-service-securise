@@ -307,15 +307,15 @@
             </div>
           </div>
           <div>
-            <dsfr-input
+            <dsfr-textarea
               label="Commentaire"
-              type="text"
               value={donneesRisque.commentaire}
               hint="Apportez des précisions sur le risque"
               onvaluechanged={metsAJourCommentaire}
               disabled={estLectureSeule}
               maxlength="1000"
-            ></dsfr-input>
+              rows="8"
+            ></dsfr-textarea>
           </div>
         </div>
       </div>
