@@ -21,12 +21,6 @@
         cible: cibleNomService,
         positionnementModale: 'BasDroite',
         margeElementMisEnAvant: 3,
-        callbackInitialeCible: async () => {
-          elementDeClasse('cellule-noms').removeAttribute('href');
-          const bouton =
-            document.querySelector<HTMLButtonElement>('.selection-service');
-          if (bouton) bouton.disabled = true;
-        },
         titre: 'Pilotez vos services grâce au tableau de bord',
         description:
           "Suivez l'état de vos homologations, la progression de vos mesures de sécurité et bénéficiez de recommandations personnalisées pour optimiser la protection de vos services.",
@@ -36,9 +30,6 @@
         cible: cibleCentreNotifications,
         positionnementModale: 'BasMilieu',
         margeElementMisEnAvant: 3,
-        callbackInitialeCible: async (cible) => {
-          (cible as HTMLButtonElement).disabled = true;
-        },
         titre: 'Découvrez le centre de notifications',
         description:
           'Ne ratez aucune information ou nouveauté importante de MonServiceSécurisé !',
@@ -70,11 +61,6 @@
         cible: cibleNouveauService,
         positionnementModale: 'HautGauche',
         margesElementMisEnAvant: '3 3 3 3',
-        callbackInitialeCible: async (cible) => {
-          if (!cible) return;
-          const cibleBouton = cible.shadowRoot?.querySelector('button');
-          if (cibleBouton) cibleBouton.inert = true;
-        },
         titre: 'Créez votre premier service !',
         description:
           'N’attendez plus et commencez à sécuriser en créant votre premier service numérique !',
@@ -85,10 +71,6 @@
     return {
       cible: cibleLignePremierService,
       positionnementModale: 'HautMilieu',
-      callbackInitialeCible: async (cible) => {
-        if (!cible) return;
-        cible.inert = true;
-      },
       titre: 'Collaborez avec votre équipe !',
       description:
         'N’attendez plus et contribuez au service numérique sur lequel vous avez été invité !',
