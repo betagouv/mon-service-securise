@@ -208,6 +208,7 @@
               onvaluechanged={metsAJourIntitule}
               required
               disabled={estLectureSeule}
+              maxlength="1000"
             ></dsfr-input>
           </p>
           <p>
@@ -218,6 +219,7 @@
               value={donneesRisque.description}
               onvaluechanged={metsAJourDescription}
               disabled={estLectureSeule}
+              maxlength="2000"
             ></dsfr-textarea>
           </p>
           <p>
