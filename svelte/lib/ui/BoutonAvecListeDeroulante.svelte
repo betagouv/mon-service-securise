@@ -13,6 +13,7 @@
     options: OptionBoutonListeDeroulante[];
     disabled?: boolean;
     aligneADroite?: boolean;
+    classesCss?: string[];
   }
 
   let {
@@ -20,6 +21,7 @@
     options,
     disabled = false,
     aligneADroite = false,
+    classesCss = [],
   }: Props = $props();
 
   let optionsPourDropdown = $derived(
@@ -40,6 +42,7 @@
 <dsfr-dropdown
   id="bouton-liste-deroulante"
   collapse-id="bouton-liste-deroulante-collapse"
+  class={classesCss.join(' ')}
   button-title={titre}
   button-kind="primary"
   button-size="md"

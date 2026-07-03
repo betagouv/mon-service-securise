@@ -20,10 +20,9 @@
       {
         cible: cibleNomService,
         positionnementModale: 'BasDroite',
+        margeElementMisEnAvant: 3,
         callbackInitialeCible: async () => {
-          document
-            .getElementsByClassName('lien-service')[0]
-            .removeAttribute('href');
+          elementDeClasse('cellule-noms').removeAttribute('href');
           const bouton =
             document.querySelector<HTMLButtonElement>('.selection-service');
           if (bouton) bouton.disabled = true;
@@ -51,7 +50,10 @@
 
   const rechargeEtape = () => {
     cibleNomService = elementDeClasse('cellule-noms');
-    cibleLignePremierService = elementDeClasse('ligne-service');
+    cibleLignePremierService =
+      document
+        .querySelector('dsfr-table')
+        ?.shadowRoot?.querySelector('tbody tr') ?? undefined;
     cibleCentreNotifications = elementDeClasse('centre-notifications');
     cibleNouveauService = elementDeClasse('nouveau-service');
   };
@@ -61,9 +63,8 @@
   );
 
   const derniereSousEtape = (): SousEtape | null => {
-    if (!cibleNouveauService || !cibleLignePremierService) {
-      return null;
-    }
+    if (!cibleNouveauService || !cibleLignePremierService) return null;
+
     if ($utilisateurCourant.profilComplet) {
       return {
         cible: cibleNouveauService,
@@ -71,10 +72,8 @@
         margesElementMisEnAvant: '3 3 3 3',
         callbackInitialeCible: async (cible) => {
           if (!cible) return;
-          const cibleBouton = cible.getElementsByClassName(
-            'bouton'
-          )[0] as HTMLButtonElement;
-          cibleBouton.inert = true;
+          const cibleBouton = cible.shadowRoot?.querySelector('button');
+          if (cibleBouton) cibleBouton.inert = true;
         },
         titre: 'Créez votre premier service !',
         description:
@@ -82,6 +81,7 @@
         texteBoutonDerniereEtape: "C'est parti !",
       };
     }
+
     return {
       cible: cibleLignePremierService,
       positionnementModale: 'HautMilieu',

@@ -21,13 +21,16 @@ const { subscribe: subscribeUtilisateur, set: setUtilisateur } =
   writable<Utilisateur>();
 
 const redirigeApresFinalisationVisite = () => {
-  const ligneService = document.getElementsByClassName(
-    'ligne-service'
-  )[0] as HTMLElement;
-  const { idService } = ligneService.dataset;
-  window.location.href = get(utilisateurCourant).profilComplet
-    ? '/tableauDeBord'
-    : `/service/${idService}`;
+  if (get(utilisateurCourant).profilComplet) {
+    window.location.href = '/tableauDeBord';
+    return;
+  }
+
+  const ligneService = document.querySelector(
+    '[data-visite-guidee-id-service]'
+  ) as HTMLElement;
+  const idService = ligneService.dataset.visiteGuideeIdService;
+  window.location.href = `/service/${idService}`;
 };
 
 export const visiteGuidee = {

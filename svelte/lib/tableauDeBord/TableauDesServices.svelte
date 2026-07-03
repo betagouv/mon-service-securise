@@ -122,6 +122,7 @@
         slot="cell:nom:{index}"
         class="cellule-noms"
         href="/service/{idService}"
+        data-visite-guidee-id-service={idService}
       >
         <span class="denomination-service">
           {#if service.estAdmin}
