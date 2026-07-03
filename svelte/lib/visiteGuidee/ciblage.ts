@@ -53,6 +53,16 @@ export const ciblage = () => {
         el: () => enCible('[data-visite-guidee-id="activite"]'),
       }),
     }),
+    homologuer: () => ({
+      creerHomologation: () => ({
+        id: () => 'creer-homologation',
+        el: () => enCible('[data-visite-guidee-id="creer-homologation"]'),
+      }),
+      voirTelechargement: () => ({
+        id: () => 'voir-telechargement',
+        el: () => enCible('[data-visite-guidee-id="voir-telechargement"]'),
+      }),
+    }),
     tiroir: () => ({
       id: () => 'tiroir',
       el: () => enCible('[data-visite-guidee-id="tiroir"]'),
