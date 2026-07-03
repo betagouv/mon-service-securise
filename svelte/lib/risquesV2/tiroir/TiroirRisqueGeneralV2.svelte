@@ -140,8 +140,7 @@
           </div>
         </div>
         <div>
-          <dsfr-input
-            type="text"
+          <dsfr-textarea
             id="commentaire"
             label="Commentaire"
             value={commentaire}
@@ -149,7 +148,8 @@
             hint="Apportez des précisions sur le risque"
             onvaluechanged={metsAJourCommentaire}
             maxlength="1000"
-          ></dsfr-input>
+            rows="8"
+          ></dsfr-textarea>
         </div>
       </div>
     {:else if ongletActif === 'mesuresAssociees'}
