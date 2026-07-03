@@ -4,6 +4,7 @@
   import type { IdNiveauDeSecurite } from '../ui/types';
   import { ordreDesNiveaux } from '../niveauxDeSecurite/niveauxDeSecurite.d';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   interface Props {
     niveauSelectionne: IdNiveauDeSecurite | '';
@@ -60,6 +61,9 @@
     {#each donneesNiveauxDeSecurite as niveauSecurite, index (index)}
       <details
         id={niveauSecurite.id}
+        {@attach cibleDeVisiteGuidee(
+          ciblage().decrireV2().besoinsSecurite(niveauSecurite.id).id()
+        )}
         class="conteneur-niveau-securite"
         class:selectionne={niveauSelectionne === niveauSecurite.id}
       >
