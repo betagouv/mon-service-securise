@@ -87,7 +87,6 @@
           behavior: 'instant',
           block: 'end',
         });
-        if (cibleBesoinsSecurite) cibleBesoinsSecurite.inert = true;
         return cibleBesoinsSecurite;
       },
       positionnementModale: 'HautMilieu',
