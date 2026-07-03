@@ -30,12 +30,6 @@
     sousEtapes = [
       {
         cible: ciblePremiereMesure,
-        callbackInitialeCible: async (cible) => {
-          if (!cible) return;
-
-          const ligneMesure = cible.parentElement;
-          if (ligneMesure) ligneMesure.inert = true;
-        },
         positionnementModale: 'BasDroite',
         titre: 'Sécurisez, grâce à des mesures adaptées',
         description:
@@ -44,15 +38,6 @@
       },
       {
         cible: cibleOnglets,
-        callbackInitialeCible: async (cible) => {
-          if (!cible) return;
-
-          const onglets =
-            cible.querySelectorAll<HTMLDivElement>('button.onglet');
-          for (let i = 0; i < onglets.length; i++) {
-            onglets[i].inert = true;
-          }
-        },
         positionnementModale: 'MilieuDroite',
         titre: 'Définissez un statut pour chaque mesure !',
         description:
@@ -85,19 +70,7 @@
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-          const bouton = document.querySelector<HTMLButtonElement>(
-            '#conteneur-mesure .conteneur-actions button'
-          );
-          if (bouton) bouton.disabled = true;
-          const boutonFermeture =
-            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
-          if (boutonFermeture) boutonFermeture.disabled = true;
-          const onglets = document.querySelectorAll<HTMLDivElement>(
-            '#conteneur-mesure .conteneur-onglet .onglet'
-          );
-          for (let i = 0; i < onglets.length; i++) {
-            onglets[i].inert = true;
-          }
+
           setTimeout(() => {
             const ongletPlanAction = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(2)'
@@ -125,19 +98,7 @@
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-          const bouton = document.querySelector<HTMLButtonElement>(
-            '#conteneur-mesure .conteneur-actions button'
-          );
-          if (bouton) bouton.disabled = true;
-          const boutonFermeture =
-            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
-          if (boutonFermeture) boutonFermeture.disabled = true;
-          const onglets = document.querySelectorAll<HTMLDivElement>(
-            '#conteneur-mesure .conteneur-onglet .onglet'
-          );
-          for (let i = 0; i < onglets.length; i++) {
-            onglets[i].inert = true;
-          }
+
           setTimeout(() => {
             const ongletActivites = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(3)'
