@@ -8,12 +8,14 @@
 </script>
 
 <script lang="ts">
+  import { cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+
   interface Props {
     titre: string;
     options: OptionBoutonListeDeroulante[];
     disabled?: boolean;
     aligneADroite?: boolean;
-    classesCss?: string[];
+    idVisiteGuidee?: string;
   }
 
   let {
@@ -21,7 +23,7 @@
     options,
     disabled = false,
     aligneADroite = false,
-    classesCss = [],
+    idVisiteGuidee = '',
   }: Props = $props();
 
   let optionsPourDropdown = $derived(
@@ -42,7 +44,6 @@
 <dsfr-dropdown
   id="bouton-liste-deroulante"
   collapse-id="bouton-liste-deroulante-collapse"
-  class={classesCss.join(' ')}
   button-title={titre}
   button-kind="primary"
   button-size="md"
@@ -52,5 +53,6 @@
   items={optionsPourDropdown}
   onitemclicked={executeAction}
   {disabled}
+  {@attach idVisiteGuidee !== '' && cibleDeVisiteGuidee(idVisiteGuidee)}
 >
 </dsfr-dropdown>

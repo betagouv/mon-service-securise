@@ -19,6 +19,7 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
   import { singulierPluriel } from '../outils/string';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   let selection = $derived([
     ...$resultatsDeRecherche
@@ -122,7 +123,7 @@
         slot="cell:nom:{index}"
         class="cellule-noms"
         href="/service/{idService}"
-        data-visite-guidee-id-service={idService}
+        {@attach cibleDeVisiteGuidee(ciblage().piloter().nomService().id())}
       >
         <span class="denomination-service">
           {#if service.estAdmin}

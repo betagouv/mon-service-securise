@@ -3,19 +3,18 @@
   import { onMount } from 'svelte';
   import { utilisateurCourant } from '../../visiteGuidee.store';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
+  import { ciblage } from '../../ciblage';
 
   let cibleNomService: HTMLElement | undefined = $state();
   let cibleCentreNotifications: HTMLElement | undefined = $state();
   let cibleNouveauService: HTMLElement | undefined = $state();
   let cibleLignePremierService: HTMLElement | undefined = $state();
-
-  const elementDeClasse = (classe: string) =>
-    document.getElementsByClassName(classe)[0]! as HTMLElement;
-
   let sousEtapes: SousEtape[] = $state([]);
+
   onMount(() => {
     rechargeEtape();
     const derniereEtape = derniereSousEtape();
+
     sousEtapes = [
       {
         cible: cibleNomService,
@@ -36,17 +35,15 @@
         animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
       },
     ];
+
     if (derniereEtape) sousEtapes.push(derniereEtape);
   });
 
   const rechargeEtape = () => {
-    cibleNomService = elementDeClasse('cellule-noms');
-    cibleLignePremierService =
-      document
-        .querySelector('dsfr-table')
-        ?.shadowRoot?.querySelector('tbody tr') ?? undefined;
-    cibleCentreNotifications = elementDeClasse('centre-notifications');
-    cibleNouveauService = elementDeClasse('nouveau-service');
+    cibleNomService = ciblage().piloter().nomService().el();
+    cibleLignePremierService = ciblage().piloter().premierService().el();
+    cibleCentreNotifications = ciblage().piloter().centreNotifications().el();
+    cibleNouveauService = ciblage().piloter().nouveauService().el();
   };
 
   document.body.addEventListener('svelte-tableau-des-services-rafraichi', () =>
