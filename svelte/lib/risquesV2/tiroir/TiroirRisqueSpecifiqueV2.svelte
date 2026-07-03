@@ -312,6 +312,7 @@
               hint="Apportez des précisions sur le risque"
               onvaluechanged={metsAJourCommentaire}
               disabled={estLectureSeule}
+              maxlength="1000"
             ></dsfr-input>
           </div>
         </div>
