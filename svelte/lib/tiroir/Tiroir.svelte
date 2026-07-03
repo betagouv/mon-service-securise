@@ -4,6 +4,7 @@
     tiroirStore,
   } from '../ui/stores/tiroir.store';
   import type { SvelteComponent } from 'svelte';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   let composant: SvelteComponent | undefined = $state();
   let configuration: ConfigurationTiroir = $derived(
@@ -13,6 +14,7 @@
 
 <aside
   id="tiroir"
+  {@attach cibleDeVisiteGuidee(ciblage().tiroir().id())}
   class={configuration?.taille || 'normal'}
   class:ouvert={$tiroirStore.ouvert}
 >

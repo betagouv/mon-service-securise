@@ -8,6 +8,7 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
   import { donneesServiceVisiteGuidee } from '../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   let {
     visible,
@@ -118,7 +119,12 @@
           </li>
         {/if}
       </ul>
-      <div id="gerer-contributeurs">
+      <div
+        id="gerer-contributeurs"
+        {@attach cibleDeVisiteGuidee(
+          ciblage().securiser().gererContributeurs().id()
+        )}
+      >
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-button
           label="Gérer les contributeurs"
