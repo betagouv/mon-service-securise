@@ -1,5 +1,6 @@
 <script lang="ts" generics="T extends string">
   import Pastille from './Pastille.svelte';
+  import { cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   interface Props {
     ongletActif: T;
@@ -7,6 +8,7 @@
     labelOnglet: string;
     badge?: 'info' | number;
     sansBordureEnBas?: boolean;
+    idVisiteGuidee?: string;
   }
 
   let {
@@ -15,6 +17,7 @@
     labelOnglet,
     badge = 0,
     sansBordureEnBas = false,
+    idVisiteGuidee = '',
   }: Props = $props();
 </script>
 
@@ -24,6 +27,7 @@
   class:active={ongletActif === cetOnglet}
   class:sansBordureEnBas
   onclick={() => (ongletActif = cetOnglet)}
+  {@attach idVisiteGuidee !== '' && cibleDeVisiteGuidee(idVisiteGuidee)}
 >
   <span class="label">{labelOnglet}</span>
   {#if badge === 'info'}

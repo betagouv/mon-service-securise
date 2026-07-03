@@ -24,6 +24,7 @@
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
   import { encode } from 'html-entities';
+  import { ciblage } from '../visiteGuidee/ciblage';
 
   interface Props {
     idService: IdService;
@@ -161,6 +162,7 @@
       bind:ongletActif
       cetOnglet="planAction"
       labelOnglet="Plan d'action"
+      idVisiteGuidee={ciblage().securiser().planAction().id()}
       sansBordureEnBas
       badge={!planDActionDisponible($store.mesureEditee.mesure.statut)
         ? 'info'
@@ -170,6 +172,7 @@
       bind:ongletActif
       cetOnglet="activite"
       labelOnglet="Activité"
+      idVisiteGuidee={ciblage().securiser().activite().id()}
       sansBordureEnBas
     />
   </div>

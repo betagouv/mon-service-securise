@@ -40,6 +40,18 @@ export const ciblage = () => {
         id: () => 'gerer-contributeurs',
         el: () => enCible('[data-visite-guidee-id="gerer-contributeurs"]'),
       }),
+      indiceCyber: () => ({
+        id: () => 'incide-cyber',
+        el: () => enCible('[data-visite-guidee-id="incide-cyber"]'),
+      }),
+      planAction: () => ({
+        id: () => 'plan-action',
+        el: () => enCible('[data-visite-guidee-id="plan-action"]'),
+      }),
+      activite: () => ({
+        id: () => 'activite',
+        el: () => enCible('[data-visite-guidee-id="activite"]'),
+      }),
     }),
     tiroir: () => ({
       id: () => 'tiroir',

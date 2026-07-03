@@ -28,9 +28,10 @@
 
     cibleTiroirMesure = ciblage().tiroirLegacy().el() as HTMLDivElement;
 
-    cibleIndiceCyber = document.getElementsByClassName(
-      'conteneur-indice-cyber'
-    )[0]! as HTMLDivElement;
+    cibleIndiceCyber = ciblage()
+      .securiser()
+      .indiceCyber()
+      .el() as HTMLDivElement;
 
     sousEtapes = [
       {
@@ -56,7 +57,7 @@
             services: [],
             modeVisiteGuidee: true,
           });
-          const tiroir = ciblage().tiroir().el() as HTMLElement;
+          const tiroir = ciblage().tiroir().el();
           tiroir.style.zIndex = '10001';
         },
         callbackFinaleCible: async () => {
@@ -78,18 +79,18 @@
             .dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
           setTimeout(() => {
-            const ongletPlanAction = document.querySelector(
-              '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(2)'
-            );
-            ongletPlanAction?.dispatchEvent(
-              new MouseEvent('click', { bubbles: true })
-            );
+            ciblage()
+              .securiser()
+              .planAction()
+              .el()!
+              .dispatchEvent(new MouseEvent('click', { bubbles: true }));
           }, 300);
         },
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
-          document
-            .getElementsByClassName('fermeture-tiroir')[0]
+          ciblage()
+            .tiroirLegacy()
+            .fermetureEl()
             .dispatchEvent(new Event('click'));
         },
         positionnementModale: 'MilieuGauche',
@@ -101,23 +102,25 @@
       {
         cible: cibleTiroirMesure,
         callbackInitialeCible: async () => {
-          document
-            .getElementsByClassName('titre-mesure')[0]
+          ciblage()
+            .securiser()
+            .premiereMesure()
+            .el()!
             .dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
           setTimeout(() => {
-            const ongletActivites = document.querySelector(
-              '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(3)'
-            );
-            ongletActivites?.dispatchEvent(
-              new MouseEvent('click', { bubbles: true })
-            );
+            ciblage()
+              .securiser()
+              .activite()
+              .el()!
+              .dispatchEvent(new MouseEvent('click', { bubbles: true }));
           }, 300);
         },
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
-          document
-            .getElementsByClassName('fermeture-tiroir')[0]
+          ciblage()
+            .tiroirLegacy()
+            .fermetureEl()
             .dispatchEvent(new Event('click'));
         },
         positionnementModale: 'MilieuGauche',
@@ -129,7 +132,6 @@
       },
       {
         cible: cibleIndiceCyber,
-        callbackInitialeCible: async (cible) => cible?.removeAttribute('href'),
         margeElementMisEnAvant: 0,
         positionnementModale: 'BasMilieu',
         titre: "Améliorez l'indice cyber de votre service",
