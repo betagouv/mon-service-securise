@@ -11,6 +11,7 @@ import {
   termineEtape,
 } from './visiteGuidee.api';
 import EtapeDecrireV2 from './etapes/decrire/EtapeDecrireV2.svelte';
+import { ciblage } from './ciblage';
 
 const etatParDefaut: EtatVisiteGuidee = {
   etapeCourante: 'BIENVENUE',
@@ -26,11 +27,11 @@ const redirigeApresFinalisationVisite = () => {
     return;
   }
 
-  const ligneService = document.querySelector(
-    '[data-visite-guidee-id-service]'
-  ) as HTMLElement;
-  const idService = ligneService.dataset.visiteGuideeIdService;
-  window.location.href = `/service/${idService}`;
+  const ligneService = ciblage()
+    .piloter()
+    .nomService()
+    .el() as HTMLAnchorElement;
+  window.location.href = ligneService.href;
 };
 
 export const visiteGuidee = {

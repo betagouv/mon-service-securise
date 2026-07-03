@@ -6,6 +6,7 @@
   import ListeNotifications from './kit/ListeNotifications.svelte';
   import Onglet from '../ui/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   let ouvert = $state(false);
   let elementCentreNotifications: HTMLDivElement | undefined = $state();
@@ -41,6 +42,7 @@
   class="centre-notifications"
   class:ouvert
   bind:this={elementCentreNotifications}
+  {@attach cibleDeVisiteGuidee(ciblage().piloter().centreNotifications().id())}
 >
   <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <dsfr-button

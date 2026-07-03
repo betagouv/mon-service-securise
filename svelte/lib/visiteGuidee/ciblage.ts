@@ -63,6 +63,27 @@ export const ciblage = () => {
         el: () => enCible('[data-visite-guidee-id="voir-telechargement"]'),
       }),
     }),
+    piloter: () => ({
+      nomService: () => ({
+        id: () => 'piloter-nom-service',
+        el: () => enCible(`[data-visite-guidee-id="piloter-nom-service"]`),
+      }),
+      centreNotifications: () => ({
+        id: () => 'centre-notifications',
+        el: () => enCible(`[data-visite-guidee-id="centre-notifications"]`),
+      }),
+      nouveauService: () => ({
+        id: () => 'nouveau-service',
+        el: () => enCible(`[data-visite-guidee-id="nouveau-service"]`),
+      }),
+      premierService: () => ({
+        el: () =>
+          (document
+            .querySelector('dsfr-table')
+            ?.shadowRoot?.querySelector('tbody tr') as HTMLElement) ??
+          undefined,
+      }),
+    }),
     tiroir: () => ({
       id: () => 'tiroir',
       el: () => enCible('[data-visite-guidee-id="tiroir"]'),

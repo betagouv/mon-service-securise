@@ -9,6 +9,7 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { brouillonsService } from './stores/brouillonsService.store';
   import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
+  import { ciblage } from '../visiteGuidee/ciblage';
 </script>
 
 <div class="conteneur-filtres">
@@ -94,8 +95,8 @@
     {#if $services.length > 0 || $brouillonsService.length > 0}
       <BoutonAvecListeDeroulante
         titre="Ajouter un / des services"
-        classesCss={['nouveau-service']}
         aligneADroite
+        idVisiteGuidee={ciblage().piloter().nouveauService().id()}
         options={[
           {
             label: 'Ajouter un service',
