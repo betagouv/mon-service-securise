@@ -18,11 +18,6 @@
     sousEtapes = [
       {
         cible: cibleNouvelleHomologation,
-        callbackInitialeCible: async (cible) => {
-          if (cible) {
-            cible.inert = true;
-          }
-        },
         positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',
         description:
@@ -33,17 +28,13 @@
       },
       {
         cible: cibleTelechargement,
-        callbackInitialeCible: async (cible) => {
+        callbackInitialeCible: async () => {
           tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
             modeVisiteGuidee: true,
             service: donneesVisiteGuidee.services[0],
           });
           const tiroir = document.querySelector<HTMLDivElement>('#tiroir');
           if (tiroir) tiroir.style.zIndex = '10001';
-          const boutonFermeture =
-            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
-          if (boutonFermeture) boutonFermeture.disabled = true;
-          if (cible) cible.inert = true;
         },
         callbackFinaleCible: async () => {
           tiroirStore.ferme();
