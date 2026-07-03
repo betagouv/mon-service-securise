@@ -35,6 +35,10 @@ const redirigeApresFinalisationVisite = () => {
 
 export const visiteGuidee = {
   initialise: (etatVisiteGuidee: EtatVisiteGuidee) => {
+    document
+      .querySelector('body')
+      ?.setAttribute('data-visite-guidee-en-cours', 'true');
+
     set(etatVisiteGuidee.etapeCourante ? etatVisiteGuidee : etatParDefaut);
   },
   subscribe,
