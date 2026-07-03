@@ -5,16 +5,16 @@
   import TiroirTelechargementDocumentsService from '../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import { donneesVisiteGuidee } from '../../../tableauDeBord/tableauDeBord';
+  import { ciblage } from '../../ciblage';
 
   let cibleNouvelleHomologation: HTMLElement | undefined = $state();
   let cibleTelechargement: HTMLElement | undefined = $state();
 
   let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
-    cibleNouvelleHomologation = document.querySelector(
-      'dsfr-button[nom="creer-homologation"]'
-    ) as HTMLButtonElement;
-    cibleTelechargement = document.getElementById('voir-telechargement')!;
+    cibleNouvelleHomologation = ciblage().homologuer().creerHomologation().el();
+    cibleTelechargement = ciblage().homologuer().voirTelechargement().el();
+
     sousEtapes = [
       {
         cible: cibleNouvelleHomologation,
@@ -33,7 +33,7 @@
             modeVisiteGuidee: true,
             service: donneesVisiteGuidee.services[0],
           });
-          const tiroir = document.querySelector<HTMLDivElement>('#tiroir');
+          const tiroir = ciblage().tiroir().el();
           if (tiroir) tiroir.style.zIndex = '10001';
         },
         callbackFinaleCible: async () => {

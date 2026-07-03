@@ -8,6 +8,7 @@
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { routeurStore } from '../../store/routeur.store';
   import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
+  import { ciblage, cibleDeVisiteGuidee } from '../../../visiteGuidee/ciblage';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -93,6 +94,9 @@
         size="md"
         nom="creer-homologation"
         id="creer-homologation"
+        {@attach cibleDeVisiteGuidee(
+          ciblage().homologuer().creerHomologation().id()
+        )}
       ></dsfr-button>
     {/if}
   </OngletVide>
