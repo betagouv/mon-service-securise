@@ -27,5 +27,28 @@ export const ciblage = () => {
         el: () => enCible(`[data-visite-guidee-id="besoins-securite-${id}`),
       }),
     }),
+    securiser: () => ({
+      premiereMesure: () => ({
+        id: () => 'titre-mesure',
+        el: () => enCible('[data-visite-guidee-id="titre-mesure"]'),
+      }),
+      onglets: () => ({
+        id: () => 'onglets-securiser',
+        el: () => enCible('[data-visite-guidee-id="onglets-securiser"]'),
+      }),
+      gererContributeurs: () => ({
+        id: () => 'gerer-contributeurs',
+        el: () => enCible('[data-visite-guidee-id="gerer-contributeurs"]'),
+      }),
+    }),
+    tiroir: () => ({
+      id: () => 'tiroir',
+      el: () => enCible('[data-visite-guidee-id="tiroir"]'),
+    }),
+    tiroirLegacy: () => ({
+      el: () => enCible('[data-visite-guidee-id="tiroir-legacy"]'),
+      fermetureEl: () =>
+        enCible('[data-visite-guidee-id="tiroir-legacy-fermeture"]'),
+    }),
   };
 };

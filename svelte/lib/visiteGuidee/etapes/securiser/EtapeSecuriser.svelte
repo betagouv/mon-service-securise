@@ -4,6 +4,7 @@
   import type { SousEtape } from '../../kit/ModaleSousEtape';
   import TiroirGestionContributeurs from '../../../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
+  import { ciblage } from '../../ciblage';
 
   let ciblePremiereMesure: HTMLDivElement | undefined = $state();
   let cibleOnglets: HTMLDivElement | undefined = $state();
@@ -13,16 +14,20 @@
 
   let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
-    ciblePremiereMesure = document.getElementsByClassName(
-      'titre-mesure'
-    )[0]! as HTMLDivElement;
-    cibleOnglets = document.getElementsByClassName(
-      'conteneur-onglet'
-    )[0]! as HTMLDivElement;
-    cibleGererContributeurs = document.getElementById('gerer-contributeurs')!;
-    cibleTiroirMesure = document.getElementsByClassName(
-      'tiroir'
-    )[0]! as HTMLDivElement;
+    ciblePremiereMesure = ciblage()
+      .securiser()
+      .premiereMesure()
+      .el() as HTMLDivElement;
+
+    cibleOnglets = ciblage().securiser().onglets().el() as HTMLDivElement;
+
+    cibleGererContributeurs = ciblage()
+      .securiser()
+      .gererContributeurs()
+      .el() as HTMLDivElement;
+
+    cibleTiroirMesure = ciblage().tiroirLegacy().el() as HTMLDivElement;
+
     cibleIndiceCyber = document.getElementsByClassName(
       'conteneur-indice-cyber'
     )[0]! as HTMLDivElement;
@@ -51,8 +56,7 @@
             services: [],
             modeVisiteGuidee: true,
           });
-          const tiroir =
-            document.querySelectorAll<HTMLDivElement>('#tiroir')[0];
+          const tiroir = ciblage().tiroir().el() as HTMLElement;
           tiroir.style.zIndex = '10001';
         },
         callbackFinaleCible: async () => {
@@ -67,8 +71,10 @@
       {
         cible: cibleTiroirMesure,
         callbackInitialeCible: async () => {
-          document
-            .getElementsByClassName('titre-mesure')[0]
+          ciblage()
+            .securiser()
+            .premiereMesure()
+            .el()!
             .dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
           setTimeout(() => {

@@ -30,6 +30,7 @@
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
+  import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuidee/ciblage';
 
   type IdDom = string;
 
@@ -92,7 +93,11 @@
 </script>
 
 <tr class="ligne-de-mesure">
-  <td class="titre-mesure" {onclick}>
+  <td
+    class="titre-mesure"
+    {@attach cibleDeVisiteGuidee(ciblage().securiser().premiereMesure().id())}
+    {onclick}
+  >
     {#if mesure.partieResponsable}
       <p class="partie-responsable">
         {partieResponsable[mesure.partieResponsable]}
