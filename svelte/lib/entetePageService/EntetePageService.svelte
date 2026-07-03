@@ -2,6 +2,7 @@
   import type { EntetePageServiceProps } from './entetePageService.d';
   import IndiceCyber from '../indiceCyber/IndiceCyber.svelte';
   import IndiceCyberPersonnalise from '../indiceCyberPersonnalise/IndiceCyberPersonnalise.svelte';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   let {
     nomService,
@@ -23,6 +24,7 @@
     <div class="indices-cyber">
       <a
         class="conteneur-indice-cyber"
+        {@attach cibleDeVisiteGuidee(ciblage().securiser().indiceCyber().id())}
         href="/service/{idService}/indiceCyber?onglet=indice-cyber-anssi"
       >
         <div class="indice-cyber">
