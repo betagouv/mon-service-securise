@@ -94,6 +94,7 @@
     {#if $services.length > 0 || $brouillonsService.length > 0}
       <BoutonAvecListeDeroulante
         titre="Ajouter un / des services"
+        classesCss={['nouveau-service']}
         aligneADroite
         options={[
           {
