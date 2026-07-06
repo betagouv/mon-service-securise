@@ -1,7 +1,6 @@
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
-import ActionExportMesures from '../modules/tableauDeBord/actions/ActionExportMesures.mjs';
 import ActionSuppressionDossierCourant from '../modules/tableauDeBord/actions/ActionSuppressionDossierCourant.mjs';
 
 $(() => {
@@ -69,14 +68,6 @@ $(() => {
     gestionnaireTiroir.afficheContenuAction(
       { action: actionMesure },
       propsDuBundle
-    );
-  });
-
-  const actionExportMesures = new ActionExportMesures();
-  $(document.body).on('svelte-affiche-tiroir-export-mesures', () => {
-    gestionnaireTiroir.afficheContenuAction(
-      { action: actionExportMesures },
-      { idService }
     );
   });
 
