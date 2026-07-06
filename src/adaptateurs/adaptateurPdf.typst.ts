@@ -1,7 +1,10 @@
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
 import { AdaptateurPdf, DonneesPdfAnnexes } from './adaptateurPdf.interface.js';
 import Service from '../modeles/service.js';
-import { svgIndiceCyber, svgIndiceCyberPersonnalise } from './indiceCyberSvg.js';
+import {
+  svgIndiceCyber,
+  svgIndiceCyberPersonnalise,
+} from './indiceCyberSvg.js';
 import { IdCategorieMesure, IdRisque } from '../referentiel.types.js';
 import { svgCamembertMesures } from './camembertsMesures.svg.js';
 import { DonneesEtapeAvis } from '../modeles/etapes/etapeAvis.js';
