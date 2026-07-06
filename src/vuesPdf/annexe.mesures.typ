@@ -38,7 +38,7 @@
   align: top,
   ..mesures
     .map(m => (
-      if m.at("indispensable") { puceEtoile } else { puceRonde },
+      if m.at("indispensable", default: false) { puceEtoile } else { puceRonde },
       contenuMesure(m),
     ))
     .flatten(),
