@@ -1,7 +1,6 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig, createLogger } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { resolve } from 'node:path';
 import { glob } from 'glob';
 
@@ -27,7 +26,7 @@ loggerPersonnalise.info = (msg, options) => {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    svelte({ preprocess: vitePreprocess() }),
+    svelte(),
     sentryVitePlugin({
       disable:
         !process.env.SENTRY_AUTH_TOKEN || process.env.NODE_ENV !== 'production',
