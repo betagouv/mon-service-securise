@@ -24,10 +24,5 @@
     align-items: center;
     gap: 8px;
     margin-top: 16px;
-
-    dsfr-badge {
-      height: fit-content;
-      white-space: nowrap;
-    }
   }
 </style>
