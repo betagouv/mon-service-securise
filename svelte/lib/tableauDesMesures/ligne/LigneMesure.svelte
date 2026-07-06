@@ -44,6 +44,7 @@
     referentielStatuts: ReferentielStatut;
     estLectureSeule: boolean;
     affichePlanAction: boolean;
+    afficheReferentielsExterne?: boolean;
     priorites: ReferentielPriorite;
     onModificationResponsables: (responsables: IdUtilisateur[]) => void;
     onModificationStatut: (statut: StatutMesure) => void;
@@ -62,6 +63,7 @@
     referentielStatuts,
     estLectureSeule,
     affichePlanAction,
+    afficheReferentielsExterne = false,
     priorites,
     onModificationResponsables,
     onModificationStatut,
@@ -122,7 +124,7 @@
       {/if}
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
-    {#if correspondAUneMesureReCyf}
+    {#if afficheReferentielsExterne && correspondAUneMesureReCyf}
       <span>Correspond à NIS2-ReCyf</span>
     {/if}
   </td>

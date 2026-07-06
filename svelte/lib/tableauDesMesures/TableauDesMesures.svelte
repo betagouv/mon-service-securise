@@ -297,6 +297,8 @@
     $rechercheMesMesures = false;
     $rechercheParPartieResponsable = [];
   };
+
+  let afficheReferentielsExterne: boolean = $state(false);
 </script>
 
 <svelte:body
@@ -330,6 +332,14 @@
     {versionService}
     onSupprimeFiltres={supprimeFiltres}
   />
+  {#if versionService === 'v2'}
+    <dsfr-toggle
+      label="Afficher les référentiels d'exigences associés"
+      id="affiche-referentiels-externes"
+      onvaluechanged={async (e: CustomEvent<boolean>) =>
+        (afficheReferentielsExterne = e.detail)}
+    ></dsfr-toggle>
+  {/if}
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures') && !modeVisiteGuidee}
   <Avertissement
@@ -469,6 +479,7 @@
             })}
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
           {affichePlanAction}
+          {afficheReferentielsExterne}
         />
       {/each}
       {#each $resultatsDeRecherche.mesuresSpecifiques as mesure, index (index)}
@@ -525,7 +536,7 @@
     display: flex;
     flex-direction: row;
     gap: 16px;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 32px;
   }
 
@@ -585,5 +596,9 @@
     margin-bottom: 24px;
     width: 100%;
     text-align: left;
+  }
+
+  dsfr-toggle {
+    white-space: nowrap;
   }
 </style>
