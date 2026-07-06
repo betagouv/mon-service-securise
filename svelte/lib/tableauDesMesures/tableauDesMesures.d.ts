@@ -48,6 +48,9 @@ export type MesureGenerale = {
   responsables?: IdUtilisateur[];
   thematique?: IdThematique;
   partieResponsable?: PartieResponsable;
+  mesuresReferentielsExternes?: {
+    ReCyf?: Array<{ id: string }>;
+  };
 };
 
 export type MesureSpecifique = {
