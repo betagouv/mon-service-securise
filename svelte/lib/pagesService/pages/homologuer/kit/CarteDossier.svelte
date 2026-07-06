@@ -5,6 +5,7 @@
   import { tiroirStore } from '../../../../ui/stores/tiroir.store';
   import TiroirTelechargementDocumentsService from '../../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirTelechargementTamponHomologation from './TiroirTelechargementTamponHomologation.svelte';
+  import TiroirSuppressionDossierCourant from './TiroirSuppressionDossierCourant.svelte';
   import { routeurStore } from '../../../store/routeur.store';
 
   interface Props {
@@ -168,9 +169,9 @@
           type="button"
           has-icon
           onclick={() =>
-            document.body.dispatchEvent(
-              new CustomEvent('affiche-tiroir-suppression-dossier-courant')
-            )}
+            tiroirStore.afficheContenu(TiroirSuppressionDossierCourant, {
+              idService,
+            })}
         ></dsfr-button>
       {/if}
       {#if avecTamponAccessible}
