@@ -19,16 +19,23 @@
   import type { VersionService } from '../../../../src/modeles/versionService';
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
   import { derived } from 'svelte/store';
+  import { rechercheParReferentielExterne } from '../stores/rechercheParReferentielExterne.store';
 
   interface Props {
     categories: Record<IdCategorie, string>;
     priorites: ReferentielPriorite;
     versionService: VersionService;
+    afficheReferentielsExterne?: boolean;
     onSupprimeFiltres?: () => void;
   }
 
-  let { categories, priorites, versionService, onSupprimeFiltres }: Props =
-    $props();
+  let {
+    categories,
+    priorites,
+    versionService,
+    afficheReferentielsExterne = false,
+    onSupprimeFiltres,
+  }: Props = $props();
 
   let cocheGlobaleANSSI = $derived(
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
@@ -150,6 +157,21 @@
         <label for="mesure-ajoutee">Mesures ajoutées</label>
       </div>
     </fieldset>
+    {#if afficheReferentielsExterne}
+      <fieldset>
+        <legend>Référentiels d'exigences associés</legend>
+        <div class="case-et-label">
+          <input
+            type="checkbox"
+            id="recyf"
+            name="recyf"
+            value="ReCyf"
+            bind:group={$rechercheParReferentielExterne}
+          />
+          <label for="recyf">NIS2-ReCyf</label>
+        </div>
+      </fieldset>
+    {/if}
     <fieldset>
       <legend>Priorité</legend>
       {#each Object.entries(priorites) as [id, labels] (id)}

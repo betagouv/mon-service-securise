@@ -331,6 +331,7 @@
     {priorites}
     {versionService}
     onSupprimeFiltres={supprimeFiltres}
+    {afficheReferentielsExterne}
   />
   {#if versionService === 'v2'}
     <dsfr-toggle
