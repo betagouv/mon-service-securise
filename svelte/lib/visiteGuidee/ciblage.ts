@@ -10,88 +10,55 @@ export const cibleDeVisiteGuidee = (
   };
 };
 
-export const ciblage = () => {
-  const enCible = (query: string) =>
-    document.querySelector(query) as HTMLElement;
+class CibleVisiteGuidee {
+  constructor(private readonly idCible: string) {}
 
-  return {
-    decrireV2: () => ({
-      nomService: () => ({
-        id: () => 'nom-service',
-        query: () => `[data-visite-guidee-id="nom-service"]`,
-        el: () => enCible(`[data-visite-guidee-id="nom-service"]`),
-      }),
-      besoinsSecurite: (id: IdNiveauDeSecurite) => ({
-        id: () => `besoins-securite-${id}`,
-        query: () => `[data-visite-guidee-id="besoins-securite-${id}`,
-        el: () => enCible(`[data-visite-guidee-id="besoins-securite-${id}`),
-      }),
+  public query() {
+    return `[data-visite-guidee-id="${this.idCible}"]`;
+  }
+
+  public el() {
+    return this.enCible(this.query());
+  }
+
+  public id() {
+    return this.idCible;
+  }
+
+  private enCible = (query: string) =>
+    document.querySelector(query) as HTMLElement;
+}
+
+export const ciblage = () => ({
+  decrireV2: () => ({
+    nomService: () => new CibleVisiteGuidee('nom-service'),
+    besoinsSecurite: (id: IdNiveauDeSecurite) =>
+      new CibleVisiteGuidee(`besoins-securite-${id}`),
+  }),
+  securiser: () => ({
+    premiereMesure: () => new CibleVisiteGuidee('titre-mesure'),
+    onglets: () => new CibleVisiteGuidee('onglets-securiser'),
+    gererContributeurs: () => new CibleVisiteGuidee('gerer-contributeurs'),
+    indiceCyber: () => new CibleVisiteGuidee('incide-cyber'),
+    planAction: () => new CibleVisiteGuidee('plan-action'),
+    activite: () => new CibleVisiteGuidee('activite'),
+  }),
+  homologuer: () => ({
+    creerHomologation: () => new CibleVisiteGuidee('creer-homologation'),
+    voirTelechargement: () => new CibleVisiteGuidee('voir-telechargement'),
+  }),
+  piloter: () => ({
+    nomService: () => new CibleVisiteGuidee('piloter-nom-service'),
+    centreNotifications: () => new CibleVisiteGuidee('centre-notifications'),
+    nouveauService: () => new CibleVisiteGuidee('nouveau-service'),
+    premierService: () => ({
+      el: () =>
+        (document
+          .querySelector('dsfr-table')
+          ?.shadowRoot?.querySelector('tbody tr') as HTMLElement) ?? undefined,
     }),
-    securiser: () => ({
-      premiereMesure: () => ({
-        id: () => 'titre-mesure',
-        el: () => enCible('[data-visite-guidee-id="titre-mesure"]'),
-      }),
-      onglets: () => ({
-        id: () => 'onglets-securiser',
-        el: () => enCible('[data-visite-guidee-id="onglets-securiser"]'),
-      }),
-      gererContributeurs: () => ({
-        id: () => 'gerer-contributeurs',
-        el: () => enCible('[data-visite-guidee-id="gerer-contributeurs"]'),
-      }),
-      indiceCyber: () => ({
-        id: () => 'incide-cyber',
-        el: () => enCible('[data-visite-guidee-id="incide-cyber"]'),
-      }),
-      planAction: () => ({
-        id: () => 'plan-action',
-        el: () => enCible('[data-visite-guidee-id="plan-action"]'),
-      }),
-      activite: () => ({
-        id: () => 'activite',
-        el: () => enCible('[data-visite-guidee-id="activite"]'),
-      }),
-    }),
-    homologuer: () => ({
-      creerHomologation: () => ({
-        id: () => 'creer-homologation',
-        el: () => enCible('[data-visite-guidee-id="creer-homologation"]'),
-      }),
-      voirTelechargement: () => ({
-        id: () => 'voir-telechargement',
-        el: () => enCible('[data-visite-guidee-id="voir-telechargement"]'),
-      }),
-    }),
-    piloter: () => ({
-      nomService: () => ({
-        id: () => 'piloter-nom-service',
-        el: () => enCible(`[data-visite-guidee-id="piloter-nom-service"]`),
-      }),
-      centreNotifications: () => ({
-        id: () => 'centre-notifications',
-        el: () => enCible(`[data-visite-guidee-id="centre-notifications"]`),
-      }),
-      nouveauService: () => ({
-        id: () => 'nouveau-service',
-        el: () => enCible(`[data-visite-guidee-id="nouveau-service"]`),
-      }),
-      premierService: () => ({
-        el: () =>
-          (document
-            .querySelector('dsfr-table')
-            ?.shadowRoot?.querySelector('tbody tr') as HTMLElement) ??
-          undefined,
-      }),
-    }),
-    tiroir: () => ({
-      id: () => 'tiroir',
-      el: () => enCible('[data-visite-guidee-id="tiroir"]'),
-    }),
-    tiroirLegacy: () => ({
-      el: () => enCible('[data-visite-guidee-id="tiroir-legacy"]'),
-      fermetureEl: () =>
-        enCible('[data-visite-guidee-id="tiroir-legacy-fermeture"]'),
-    }),
-  };
-};
+  }),
+  tiroir: () => new CibleVisiteGuidee('tiroir'),
+  tiroirLegacy: () => new CibleVisiteGuidee('tiroir-legacy'),
+  tiroirLegacyFermeture: () => new CibleVisiteGuidee('tiroir-legacy-fermeture'),
+});
