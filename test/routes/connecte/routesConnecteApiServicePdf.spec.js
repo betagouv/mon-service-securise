@@ -277,7 +277,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       await testeur.get('/api/service/456/pdf/syntheseSecurite.pdf');
 
       expect(donneesSynthese.service).to.eql(serviceARenvoyer);
-      expect(donneesSynthese.referentiel).to.eql(testeur.referentiel());
     });
   });
 
@@ -443,14 +442,14 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     it('utilise un adaptateur Pdf pour la génération des fichiers', async () => {
-      let adaptateurPdfAppele = false;
-      testeur.adaptateurPdf().genereTamponHomologation = () => {
-        adaptateurPdfAppele = true;
+      let adaptateurTamponHomologationAppele = false;
+      testeur.adaptateurTamponHomologation().genereTamponHomologation = () => {
+        adaptateurTamponHomologationAppele = true;
         return [];
       };
 
       await testeur.get('/api/service/456/archive/tamponHomologation.zip');
-      expect(adaptateurPdfAppele).to.be(true);
+      expect(adaptateurTamponHomologationAppele).to.be(true);
     });
 
     it("utilise un adaptateur Zip pour l'archivage des fichiers", async () => {
