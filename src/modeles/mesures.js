@@ -141,6 +141,8 @@ class Mesures extends InformationsService {
         const porteursSinguliers =
           this.referentiel.porteursSinguliersDeMesure(id);
         const thematique = this.referentiel.thematiqueDeMesure(id);
+        const mesuresReferentielsExternes =
+          this.referentiel.referentielsExternesDeMesure(id);
 
         return {
           ...acc,
@@ -149,6 +151,7 @@ class Mesures extends InformationsService {
             ...(generale && { ...generale }),
             ...(porteursSinguliers && { porteursSinguliers }),
             ...(thematique && { thematique }),
+            ...(mesuresReferentielsExternes && { mesuresReferentielsExternes }),
           },
         };
       },

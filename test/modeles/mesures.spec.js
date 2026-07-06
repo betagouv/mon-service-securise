@@ -361,6 +361,9 @@ describe('Les mesures liées à un service', () => {
           donneesComplementairesMesures: {
             mesure1: { porteursSinguliers: ['RSSI'] },
           },
+          donneesReferentielsExternesMesures: {
+            ReCyf: { mesures: {}, liens: {} },
+          },
         });
 
         const mesures = new Mesures(
@@ -396,6 +399,9 @@ describe('Les mesures liées à un service', () => {
           donneesComplementairesMesures: {
             mesure1: { thematique: "Gestion de l'écosystème" },
           },
+          donneesReferentielsExternesMesures: {
+            ReCyf: { mesures: {}, liens: {} },
+          },
         });
 
         const mesures = new Mesures(
@@ -421,6 +427,51 @@ describe('Les mesures liées à un service', () => {
 
         const { mesure1 } = enrichies.mesuresGenerales;
         expect(mesure1.thematique).to.be(undefined);
+      });
+    });
+
+    describe('concernant les mesures de référentiels externes', () => {
+      describe('pour le référentiel ReCyf NIS2', () => {
+        it('ajoute les données des mesures correspondantes', () => {
+          const referentielV2 = creeReferentielV2({
+            mesures: { mesure1: {} },
+            donneesComplementairesMesures: {
+              mesure1: { thematique: "Gestion de l'écosystème" },
+            },
+            donneesReferentielsExternesMesures: {
+              ReCyf: {
+                mesures: {
+                  ID_MESURE_RECYF_1: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                  },
+                },
+                liens: {
+                  mesure1: ['ID_MESURE_RECYF_1'],
+                },
+              },
+            },
+          });
+
+          const mesures = new Mesures(
+            { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+            referentielV2,
+            { mesure1: {} }
+          );
+
+          const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+          const { mesure1 } = enrichies.mesuresGenerales;
+          expect(mesure1.mesuresReferentielsExternes.ReCyf).to.eql([
+            {
+              id: 'ID_MESURE_RECYF_1',
+              objectif: 'Un objectif',
+              thematique: 'Une thématique',
+              description: 'Une description',
+            },
+          ]);
+        });
       });
     });
   });
