@@ -1,33 +1,5 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
-import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelechargement.mjs';
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
-
-const tiroirTelechargement = (idService) => {
-  const telechargement = new ActionTelechargement();
-  const chargeDonneesService = async () =>
-    (await axios.get(`/api/service/${idService}`)).data;
-
-  return {
-    brancheComportement: () => {
-      $(document.body).on(
-        'jquery-affiche-tiroir-telechargement-visite-guidee',
-        () =>
-          gestionnaireTiroir.afficheContenuAction(
-            { action: telechargement, estSelectionMulitple: false },
-            { modeVisiteGuidee: true }
-          )
-      );
-
-      $('#voir-telechargement').on('click', async () => {
-        const donneesService = await chargeDonneesService();
-        gestionnaireTiroir.afficheContenuAction(
-          { action: telechargement, estSelectionMulitple: false },
-          { idService, donneesService }
-        );
-      });
-    },
-  };
-};
 
 $(async () => {
   const idService = $('.page-service').data('id-service');
@@ -37,7 +9,6 @@ $(async () => {
     etatVisiteGuidee.enPause === false;
 
   gestionnaireTiroir.brancheComportement();
-  tiroirTelechargement(idService).brancheComportement();
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   const etapeActive = lisDonneesPartagees('etape-active');
