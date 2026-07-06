@@ -89,8 +89,8 @@
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
           ciblage()
-            .tiroirLegacy()
-            .fermetureEl()
+            .tiroirLegacyFermeture()
+            .el()
             .dispatchEvent(new Event('click'));
         },
         positionnementModale: 'MilieuGauche',
@@ -119,8 +119,8 @@
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
           ciblage()
-            .tiroirLegacy()
-            .fermetureEl()
+            .tiroirLegacyFermeture()
+            .el()
             .dispatchEvent(new Event('click'));
         },
         positionnementModale: 'MilieuGauche',
