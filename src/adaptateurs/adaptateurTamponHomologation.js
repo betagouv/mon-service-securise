@@ -14,7 +14,9 @@ const genereTamponHomologation = async (donnees) => {
     navigateur = await lanceNavigateur();
     const compileImageEnHTMLBase64 = (buffer, largeur) =>
       Buffer.from(
-        pug.compileFile('src/pdf/modeles/tamponHomologation.base64.pug')({
+        pug.compileFile(
+          'src/tamponHomologation/modeles/tamponHomologation.base64.pug'
+        )({
           ...donnees,
           base64: buffer.toString('base64'),
           largeur,
@@ -26,7 +28,9 @@ const genereTamponHomologation = async (donnees) => {
     /* eslint-disable no-await-in-loop */
     /* eslint-disable no-restricted-syntax */
     for (const { tailleDispositif, largeur } of configurationsDispositifs) {
-      const corps = pug.compileFile('src/pdf/modeles/tamponHomologation.pug')({
+      const corps = pug.compileFile(
+        'src/tamponHomologation/modeles/tamponHomologation.pug'
+      )({
         ...donnees,
         tailleDispositif,
       });
