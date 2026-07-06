@@ -45,6 +45,7 @@ const routesConnecteApiService = ({
   referentielV2,
   adaptateurHorloge,
   adaptateurPdf,
+  adaptateurTamponHomologation,
   adaptateurZip,
   adaptateurJournal,
   adaptateurEnvironnement,
@@ -55,6 +56,7 @@ const routesConnecteApiService = ({
     routesConnecteApiServicePdf({
       adaptateurHorloge,
       adaptateurPdf,
+      adaptateurTamponHomologation,
       adaptateurZip,
       adaptateurEnvironnement,
       middleware,

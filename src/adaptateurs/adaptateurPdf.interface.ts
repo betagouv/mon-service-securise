@@ -40,6 +40,5 @@ export interface AdaptateurPdf {
   genereDossierDecision: (
     donnees: DonneesPdfDossierDecision
   ) => Promise<Buffer<ArrayBuffer>>;
-
   genereAnnexes: (donnees: DonneesPdfAnnexes) => Promise<Buffer<ArrayBuffer>>;
 }

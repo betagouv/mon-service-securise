@@ -7,6 +7,7 @@ import { VersionService } from '../../modeles/versionService.js';
 const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
+  adaptateurTamponHomologation,
   adaptateurZip,
   adaptateurEnvironnement,
   middleware,
@@ -181,11 +182,12 @@ const routesConnecteApiServicePdf = ({
           return;
         }
 
-        const fichiers = await adaptateurPdf.genereTamponHomologation({
-          service,
-          dossier: service.dossiers.dossierActif(),
-          referentiel,
-        });
+        const fichiers =
+          await adaptateurTamponHomologation.genereTamponHomologation({
+            service,
+            dossier: service.dossiers.dossierActif(),
+            referentiel,
+          });
         const archive = await adaptateurZip.genereArchive(fichiers);
 
         // On omet volontairement le nom du service car on rencontre de nombreux soucis de formattage

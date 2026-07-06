@@ -10,7 +10,7 @@ import { fabriqueAdaptateurGestionErreur } from './src/adaptateurs/fabriqueAdapt
 import fabriqueAdaptateurTracking from './src/adaptateurs/fabriqueAdaptateurTracking.js';
 import { fabriqueAdaptateurHorloge } from './src/adaptateurs/adaptateurHorloge.js';
 import { fabriqueAdaptateurJWT } from './src/adaptateurs/adaptateurJWT.js';
-import * as adaptateurPdf from './src/adaptateurs/adaptateurPdf.js';
+import * as adaptateurTamponHomologation from './src/adaptateurs/adaptateurTamponHomologation.js';
 import * as lecteurDeFormData from './src/http/lecteurDeFormData.js';
 import * as adaptateurTeleversementServices from './src/adaptateurs/adaptateurTeleversementServices.xls.js';
 import * as adaptateurTeleversementModelesMesureSpecifique from './src/adaptateurs/adaptateurTeleversementModelesMesureSpecifique.xls.js';
@@ -35,6 +35,7 @@ import { ServiceAdministrationOrganisations } from './src/supervision/serviceAdm
 import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail.js';
 import { fabriqueAdaptateurAuditAdminOrganisations } from './src/adaptateurs/fabriqueAdaptateurAuditAdminOrganisations.js';
+import { AdaptateurPdfTypst } from './src/adaptateurs/adaptateurPdf.typst.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -146,7 +147,8 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     referentiel,
     referentielV2,
     adaptateurMail,
-    adaptateurPdf,
+    adaptateurPdf: new AdaptateurPdfTypst(),
+    adaptateurTamponHomologation,
     adaptateurHorloge,
     adaptateurGestionErreur,
     serviceAnnuaire,
