@@ -2,11 +2,12 @@
   import Lien from '../Lien.svelte';
 
   interface Props {
-    type: 'PDF' | 'ZIP';
+    type: 'PDF' | 'ZIP' | 'CSV';
     nom: string;
     description: string;
-    cheminDocument: string;
-    idService: string;
+    cheminDocument?: string;
+    idService?: string;
+    href?: string;
     modeVisiteGuidee?: boolean;
   }
 
@@ -16,11 +17,13 @@
     description,
     cheminDocument,
     idService,
+    href,
     modeVisiteGuidee = false,
   }: Props = $props();
 
   let lien = $derived(
-    `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`
+    href ??
+      `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`
   );
 </script>
 

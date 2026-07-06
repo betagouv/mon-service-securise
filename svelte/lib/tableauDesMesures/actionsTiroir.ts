@@ -28,9 +28,3 @@ export const afficheTiroirCreeMesure = () => {
     })
   );
 };
-
-export const afficheTiroirExportDesMesures = () => {
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-affiche-tiroir-export-mesures')
-  );
-};

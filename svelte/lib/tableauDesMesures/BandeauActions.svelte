@@ -4,12 +4,10 @@
     type IdCategorie,
     type IdService,
   } from './tableauDesMesures.d';
-  import {
-    afficheTiroirCreeMesure,
-    afficheTiroirExportDesMesures,
-  } from './actionsTiroir';
+  import { afficheTiroirCreeMesure } from './actionsTiroir';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirAssociationModelesMesureSpecifiqueAuService from './mesuresSpecifiques/TiroirAssociationModelesMesureSpecifiqueAuService.svelte';
+  import TiroirExportMesures from '../ui/tiroirs/TiroirExportMesures.svelte';
 
   const { EnCours } = EtatEnregistrement;
 
@@ -50,7 +48,8 @@
       </button>
       <button
         class="bouton-action-mesure"
-        onclick={afficheTiroirExportDesMesures}
+        onclick={() =>
+          tiroirStore.afficheContenu(TiroirExportMesures, { idService })}
       >
         <img src="/statique/assets/images/icone_export_gris.svg" alt="" />
         Exporter la liste des mesures
