@@ -62,6 +62,7 @@
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { rechercheParReferentielExterne } from './stores/rechercheParReferentielExterne.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -337,8 +338,10 @@
     <dsfr-toggle
       label="Afficher les référentiels d'exigences associés"
       id="affiche-referentiels-externes"
-      onvaluechanged={async (e: CustomEvent<boolean>) =>
-        (afficheReferentielsExterne = e.detail)}
+      onvaluechanged={async (e: CustomEvent<boolean>) => {
+        $rechercheParReferentielExterne = [];
+        afficheReferentielsExterne = e.detail;
+      }}
     ></dsfr-toggle>
   {/if}
 </div>
@@ -600,6 +603,7 @@
   }
 
   dsfr-toggle {
+    margin-left: auto;
     white-space: nowrap;
   }
 </style>
