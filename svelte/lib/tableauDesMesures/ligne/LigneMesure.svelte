@@ -90,6 +90,11 @@
         $nomsDesContributeursParId
       )
   );
+
+  let correspondAUneMesureReCyf = $derived(
+    ((mesure as MesureGenerale)?.mesuresReferentielsExternes?.ReCyf?.length ??
+      0) > 0
+  );
 </script>
 
 <tr class="ligne-de-mesure">
@@ -117,6 +122,9 @@
       {/if}
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
+    {#if correspondAUneMesureReCyf}
+      <span>Correspond à NIS2-ReCyf</span>
+    {/if}
   </td>
   {#if affichePlanAction}
     <td>
