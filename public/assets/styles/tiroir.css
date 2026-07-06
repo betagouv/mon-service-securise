@@ -247,14 +247,6 @@
   margin-top: 2em;
 }
 
-#contenu-telechargement {
-  width: 100%;
-}
-
-#contenu-telechargement p {
-  font-weight: 500;
-}
-
 .document-telechargeable {
   display: flex;
   flex-direction: column;
