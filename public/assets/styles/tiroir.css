@@ -83,21 +83,11 @@
   margin-bottom: 2em;
 }
 
-:is(
-    #contenu-duplication,
-    #contenu-suppression,
-    #contenu-suppression-dossier-courant
-  )
-  .banniere {
+:is(#contenu-duplication, #contenu-suppression) .banniere {
   margin-bottom: 2em;
 }
 
-:is(
-    #contenu-duplication,
-    #contenu-suppression,
-    #contenu-suppression-dossier-courant,
-    #contenu-contributeurs
-  )
+:is(#contenu-duplication, #contenu-suppression, #contenu-contributeurs)
   .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -110,21 +100,11 @@
   margin-bottom: 2em;
 }
 
-:is(
-    #contenu-duplication,
-    #contenu-suppression,
-    #contenu-suppression-dossier-courant
-  )
-  .titre-loader {
+:is(#contenu-duplication, #contenu-suppression) .titre-loader {
   font-weight: bold;
 }
 
-:is(
-    #contenu-duplication,
-    #contenu-suppression,
-    #contenu-suppression-dossier-courant
-  )
-  .info-loader {
+:is(#contenu-duplication, #contenu-suppression) .info-loader {
   font-weight: 500;
 }
 
@@ -212,18 +192,14 @@
   gap: 10px;
 }
 
-:is(#contenu-suppression, #contenu-suppression-dossier-courant) p {
+#contenu-suppression p {
   margin: 0 0 1em 0;
 }
 
-:is(#contenu-suppression, #contenu-suppression-dossier-courant)
+#contenu-suppression
   :is(.contenu-texte-information, .contenu-texte-avertissement)
   p {
   margin: 0;
-}
-
-#contenu-suppression-dossier-courant .conteneur-actions {
-  margin-top: 24px;
 }
 
 #contenu-suppression .banniere img {
