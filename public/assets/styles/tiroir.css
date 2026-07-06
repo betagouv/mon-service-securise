@@ -247,44 +247,6 @@
   margin-top: 2em;
 }
 
-.document-telechargeable {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-  border: 1px solid var(--liseres-fonce);
-  border-radius: 8px;
-  padding: 1em;
-  margin-bottom: 1em;
-}
-
-.document-telechargeable p {
-  margin: 0;
-}
-
-.document-telechargeable .contenu {
-  display: flex;
-  column-gap: 1em;
-}
-
-.document-telechargeable .titre-document {
-  font-weight: bold;
-  color: var(--bleu-anssi);
-  margin-bottom: 0.5em;
-}
-
-.document-telechargeable .description-document {
-  font-size: 0.9em;
-}
-
-.document-telechargeable .lien-telechargement {
-  align-self: flex-end;
-}
-
-.document-telechargeable .icone-type-document {
-  width: 2.8em;
-  height: 2.8em;
-}
-
 #contenu-contributeurs .declencheur-menu-flottant {
   border-radius: 4px;
   border: 1px solid #cbd5e1;
