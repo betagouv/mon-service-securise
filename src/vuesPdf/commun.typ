@@ -108,15 +108,16 @@
   #text(fill: grisTexte, weight: "bold")[#libelle]#h(0.25em)#text(weight: "medium")[#valeur]
 ]
 
-#let boite(label, inner-h: auto, fill: none, contenu) = context {
-  let pill = box(
+#let boite(label, inner-h: auto, fill: none, contenu) = context [
+  #let pill = box(
     fill: grisClair,
     stroke: 1pt + bordBleu,
     radius: 20pt,
     inset: (x: 9pt, y: 6pt),
   )[#text(fill: bleuFonce, weight: "bold", size: 8pt)[#label]]
-  let h = measure(pill).height
-  block(
+  #let h = measure(pill).height
+  #v(h / 2)
+  #block(
     fill: fill,stroke: 1pt + bordBleu,
     radius: 7pt,
     width: 100%,
@@ -127,7 +128,7 @@
     #v(7pt)
     #contenu
   ]
-}
+]
 
 #let boiteSansEtiquette(h-pill, inner-h: auto, inset: (x: 10pt, top: 10pt, bottom: 8pt), contenu) = [
   #v(h-pill / 2)
