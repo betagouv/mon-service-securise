@@ -74,21 +74,7 @@
   margin: 0;
 }
 
-#contenu-duplication {
-  flex-grow: 1;
-}
-
-#contenu-duplication p {
-  font-weight: 500;
-  margin-bottom: 2em;
-}
-
-:is(#contenu-duplication, #contenu-suppression) .banniere {
-  margin-bottom: 2em;
-}
-
-:is(#contenu-duplication, #contenu-suppression, #contenu-contributeurs)
-  .conteneur-loader {
+#contenu-contributeurs .conteneur-loader {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   display: flex;
@@ -98,30 +84,6 @@
   gap: 0.3em;
   padding: 1em 0;
   margin-bottom: 2em;
-}
-
-:is(#contenu-duplication, #contenu-suppression) .titre-loader {
-  font-weight: bold;
-}
-
-:is(#contenu-duplication, #contenu-suppression) .info-loader {
-  font-weight: 500;
-}
-
-:is(#contenu-duplication) label {
-  font-weight: bold;
-}
-
-:is(#contenu-duplication) input {
-  padding: 0.7em 1em;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  margin-top: 1em;
-  width: 8em;
-}
-
-#contenu-suppression .conteneur-actions {
-  margin-top: 16px;
 }
 
 #contenu-contributeurs input {
@@ -190,24 +152,6 @@
   display: flex;
   justify-content: end;
   gap: 10px;
-}
-
-#contenu-suppression p {
-  margin: 0 0 1em 0;
-}
-
-#contenu-suppression
-  :is(.contenu-texte-information, .contenu-texte-avertissement)
-  p {
-  margin: 0;
-}
-
-#contenu-suppression .banniere img {
-  width: 32px;
-}
-
-#contenu-suppression .banniere {
-  align-items: center;
 }
 
 #contenu-contributeurs .conteneur-confirmation .entete {
@@ -279,10 +223,6 @@
 
 .selectize-control.multi .selectize-input.has-items {
   padding: 0.8em;
-}
-
-.label-confirmation {
-  position: relative;
 }
 
 .invisible {
