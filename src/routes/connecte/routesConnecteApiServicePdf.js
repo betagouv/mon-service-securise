@@ -1,6 +1,5 @@
 import express from 'express';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
-import { genereGradientConique } from '../../pdf/graphiques/camembert.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import { VersionService } from '../../modeles/versionService.js';
 
@@ -58,31 +57,9 @@ const routesConnecteApiServicePdf = ({
     return adaptateurPdf.genereDossierDecision(donnees);
   };
 
-  const generePdfSyntheseSecurite = (service) => {
-    const referentiels = Object.entries(
-      service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
-    ).map(([_, mesure]) => mesure.referentiel);
-    const referentielConcernes =
-      referentiel.formatteListeDeReferentiels(referentiels);
+  const generePdfSyntheseSecurite = (service) =>
+    adaptateurPdf.genereSyntheseSecurite({ service });
 
-    const niveauSuperieurAuxRecommandations =
-      service.niveauSecuriteDepasseRecommandation();
-    const donnees = {
-      service,
-      camembertIndispensables: genereGradientConique(
-        service.statistiquesMesuresIndispensables()
-      ),
-      camembertRecommandees: genereGradientConique(
-        service.statistiquesMesuresRecommandees()
-      ),
-      referentielConcernes,
-      referentiel,
-      niveauRecommande: service.estimeNiveauDeSecurite(),
-      niveauSuperieurAuxRecommandations,
-    };
-
-    return adaptateurPdf.genereSyntheseSecurite(donnees);
-  };
   routes.get(
     '/:id/pdf/annexes.pdf',
     middleware.trouveService(Autorisation.DROITS_ANNEXES_PDF),

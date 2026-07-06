@@ -1,15 +1,3 @@
-mixin boite-grise(titre, classe)
-  table.boite-grise(class = classe)
-    thead: tr: th
-      .decalage-titre
-      if titre
-        .titre
-          p= titre
-      .bordure-titre
-    tbody: tr: td.bloc-indivisible: .contenu
-      block
-    tfoot: tr: th: .bordure-pied-table
-
 doctype html
 html(lang = 'fr')
   head
