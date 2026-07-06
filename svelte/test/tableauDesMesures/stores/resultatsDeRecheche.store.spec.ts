@@ -4,6 +4,7 @@ import { resultatsDeRecherche } from '../../../lib/tableauDesMesures/stores/resu
 import { mesures } from '../../../lib/tableauDesMesures/stores/mesures.store';
 import { rechercheParPriorite } from '../../../lib/tableauDesMesures/stores/rechercheParPriorite.store';
 import { rechercheMesMesures } from '../../../lib/tableauDesMesures/stores/rechercheMesMesures.store';
+import { rechercheParReferentielExterne } from '../../../lib/tableauDesMesures/stores/rechercheParReferentielExterne.store';
 import { type PrioriteMesure, Referentiel } from '../../../lib/ui/types.d';
 import type {
   Contributeur,
@@ -14,9 +15,11 @@ import { contributeurs } from '../../../lib/tableauDesMesures/stores/contributeu
 const creeMesureGenerale = ({
   priorite = 'p1',
   responsables = [],
+  mesuresReferentielsExternes,
 }: {
   priorite?: PrioriteMesure;
   responsables?: string[];
+  mesuresReferentielsExternes?: MesureGenerale['mesuresReferentielsExternes'];
 }): MesureGenerale => ({
   categorie: 'Protection',
   indispensable: true,
@@ -26,6 +29,7 @@ const creeMesureGenerale = ({
   identifiantNumerique: '000',
   priorite,
   responsables,
+  mesuresReferentielsExternes,
 });
 
 const creeContributeur = (contributeur: {
@@ -43,6 +47,7 @@ describe('Le store dérivé des résultats de recherche de mesure', () => {
   beforeEach(() => {
     rechercheParPriorite.set([]);
     rechercheMesMesures.set(false);
+    rechercheParReferentielExterne.set([]);
   });
 
   describe("sur application d'un filtre de priorité", () => {
@@ -106,6 +111,7 @@ describe('Le store dérivé des résultats de recherche de mesure', () => {
       expect(Object.keys(mesuresGenerales).length).toBe(0);
     });
   });
+
   describe("quand le filtre `Mes mesures` n'est pas coché", () => {
     it('conserve toutes les mesures', () => {
       const uneMesure = creeMesureGenerale({ responsables: [] });
@@ -114,6 +120,64 @@ describe('Le store dérivé des résultats de recherche de mesure', () => {
         mesuresSpecifiques: [],
       });
       rechercheMesMesures.set(false);
+
+      const { mesuresGenerales } = get(resultatsDeRecherche);
+
+      expect(Object.keys(mesuresGenerales).length).toBe(1);
+    });
+  });
+
+  describe("sur application d'un filtre de référentiel externe", () => {
+    it('conserve une mesure liée au référentiel externe sélectionné', () => {
+      const uneMesure = creeMesureGenerale({
+        mesuresReferentielsExternes: { ReCyf: [{ id: 'recyf-1' }] },
+      });
+      mesures.reinitialise({
+        mesuresGenerales: { uneMesure },
+        mesuresSpecifiques: [],
+      });
+      rechercheParReferentielExterne.set(['ReCyf']);
+
+      const { mesuresGenerales } = get(resultatsDeRecherche);
+
+      expect(Object.keys(mesuresGenerales).length).toBe(1);
+    });
+
+    it('ne conserve pas une mesure sans lien avec le référentiel externe', () => {
+      const uneMesure = creeMesureGenerale({
+        mesuresReferentielsExternes: { ReCyf: [] },
+      });
+      mesures.reinitialise({
+        mesuresGenerales: { uneMesure },
+        mesuresSpecifiques: [],
+      });
+      rechercheParReferentielExterne.set(['ReCyf']);
+
+      const { mesuresGenerales } = get(resultatsDeRecherche);
+
+      expect(Object.keys(mesuresGenerales).length).toBe(0);
+    });
+
+    it('ne conserve pas une mesure dépourvue de référentiels externes', () => {
+      const uneMesure = creeMesureGenerale({});
+      mesures.reinitialise({
+        mesuresGenerales: { uneMesure },
+        mesuresSpecifiques: [],
+      });
+      rechercheParReferentielExterne.set(['ReCyf']);
+
+      const { mesuresGenerales } = get(resultatsDeRecherche);
+
+      expect(Object.keys(mesuresGenerales).length).toBe(0);
+    });
+
+    it('conserve toutes les mesures quand aucun référentiel externe n’est sélectionné', () => {
+      const uneMesure = creeMesureGenerale({});
+      mesures.reinitialise({
+        mesuresGenerales: { uneMesure },
+        mesuresSpecifiques: [],
+      });
+      rechercheParReferentielExterne.set([]);
 
       const { mesuresGenerales } = get(resultatsDeRecherche);
 

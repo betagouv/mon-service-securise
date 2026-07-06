@@ -116,3 +116,5 @@ export type Utilisateur = {
   postes: string[];
   email: string;
 };
+
+export type ReferentielExterne = 'ReCyf';

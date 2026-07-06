@@ -31,7 +31,7 @@ import {
   appliqueFiltreParPriorite,
   rechercheParPriorite,
 } from './rechercheParPriorite.store';
-import type { PrioriteMesure } from '../../ui/types';
+import type { PrioriteMesure, ReferentielExterne } from '../../ui/types';
 import {
   appliqueFiltreMesMesures,
   rechercheMesMesures,
@@ -45,6 +45,10 @@ import {
   appliqueFiltrePartieResponsable,
   rechercheParPartieResponsable,
 } from './rechercheParPartieResponsable.store';
+import {
+  appliqueFiltreParReferentielExterne,
+  rechercheParReferentielExterne,
+} from './rechercheParReferentielExterne.store';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
@@ -61,6 +65,7 @@ const construisFiltres = (
   uniquementMesMesures: boolean,
   thematiques: IdThematique[],
   partiesResponsables: PartieResponsable[],
+  referentielsExternes: ReferentielExterne[],
   nomsDesResponsables: Record<IdUtilisateur, string>
 ) => {
   const filtres: Filtre[] = [];
@@ -106,6 +111,11 @@ const construisFiltres = (
       appliqueFiltrePartieResponsable(mesure, partiesResponsables)
     );
 
+  if (referentielsExternes.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreParReferentielExterne(mesure, referentielsExternes)
+    );
+
   return filtres;
 };
 
@@ -119,6 +129,7 @@ const predicats = derived<
     typeof rechercheMesMesures,
     typeof rechercheParThematique,
     typeof rechercheParPartieResponsable,
+    typeof rechercheParReferentielExterne,
     typeof nomsDesContributeursParId,
   ],
   Predicats
@@ -132,6 +143,7 @@ const predicats = derived<
     rechercheMesMesures,
     rechercheParThematique,
     rechercheParPartieResponsable,
+    rechercheParReferentielExterne,
     nomsDesContributeursParId,
   ],
   ([
@@ -143,6 +155,7 @@ const predicats = derived<
     $rechercheMesMesures,
     $rechercheParThematique,
     $rechercheParPartieResponsable,
+    $rechercheParReferentielExterne,
     $nomsDesResponsables,
   ]) => ({
     filtres: construisFiltres(
@@ -154,6 +167,7 @@ const predicats = derived<
       $rechercheMesMesures,
       $rechercheParThematique,
       $rechercheParPartieResponsable,
+      $rechercheParReferentielExterne,
       $nomsDesResponsables
     ),
     substitueAvancement: (avancementDeSimulation: Avancement) => ({
@@ -166,6 +180,7 @@ const predicats = derived<
         $rechercheMesMesures,
         $rechercheParThematique,
         $rechercheParPartieResponsable,
+        $rechercheParReferentielExterne,
         $nomsDesResponsables
       ),
     }),
