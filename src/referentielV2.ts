@@ -23,11 +23,28 @@ import {
 import { TypeService } from '../svelte/lib/creationV2/creationV2.types.js';
 import { IdRisqueV2 } from './moteurRisques/v2/risquesV2.types.js';
 import { donneesReferentielRisquesV2 } from '../donneesReferentielRisquesV2.js';
+import {
+  type IdMesureReCyf,
+  mesuresReCyf,
+} from './mesures/referentielsExternes/donneesReferentielMesuresReCyf.js';
+import { correspondanceMesuresV2VersReCyf } from './mesures/referentielsExternes/correspondanceMesuresV2VersReCyf.js';
+
+export type DonneesReferentielsMesuresReCyf = {
+  objectif: string;
+  thematique: string;
+  description: string;
+};
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
   risquesV2: typeof donneesReferentielRisquesV2;
+  donneesReferentielsExternesMesures: {
+    ReCyf: {
+      mesures: Record<string, DonneesReferentielsMesuresReCyf>;
+      liens: Partial<Record<IdMesureV2, IdMesureReCyf[]>>;
+    };
+  };
 };
 
 type MethodesSpecifiquesReferentielV2 = {
@@ -57,6 +74,13 @@ type MethodesSpecifiquesReferentielV2 = {
   mesures: () => typeof mesuresV2;
   mesure: (idMesure: IdMesureV2) => DetailReferentielMesureV2;
   porteursSinguliersDeMesure: (idMesure: IdMesureV2) => string[];
+  referentielsExternesDeMesure: (idMesure: IdMesureV2) => {
+    ReCyf: Array<
+      DonneesReferentielsMesuresReCyf & {
+        id: IdMesureReCyf;
+      }
+    >;
+  };
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
   typeService: (type: TypeDeService) => { nom: string; exemple: string };
 };
@@ -69,6 +93,9 @@ export const creeReferentielV2 = (
     mesures: mesuresV2,
     donneesComplementairesMesures: donneesComplementairesMesureV2,
     risquesV2: donneesReferentielRisquesV2,
+    donneesReferentielsExternesMesures: {
+      ReCyf: { mesures: mesuresReCyf, liens: correspondanceMesuresV2VersReCyf },
+    },
   }
 ): Surcharge<Referentiel, MethodesSpecifiquesReferentielV2> => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
@@ -126,6 +153,18 @@ export const creeReferentielV2 = (
   const thematiqueDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].thematique;
 
+  const referentielsExternesDeMesure = (idMesure: IdMesureV2) => ({
+    ReCyf:
+      donnees.donneesReferentielsExternesMesures.ReCyf.liens[idMesure]?.map(
+        (idMesureReCyf: IdMesureReCyf) => ({
+          id: idMesureReCyf,
+          ...donnees.donneesReferentielsExternesMesures.ReCyf.mesures[
+            idMesureReCyf
+          ],
+        })
+      ) ?? [],
+  });
+
   const ajouteThematiqueEtPorteurs = (desMesures: typeof mesuresV2) =>
     Object.fromEntries(
       Object.entries(desMesures).map(([id, m]) => {
@@ -157,6 +196,7 @@ export const creeReferentielV2 = (
     mesure,
     mesures,
     porteursSinguliersDeMesure,
+    referentielsExternesDeMesure,
     typeService,
     reglesMoteurV2,
     thematiqueDeMesure,
