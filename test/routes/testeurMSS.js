@@ -25,6 +25,7 @@ const testeurMss = () => {
   let adaptateurMail;
   let adaptateurGestionErreur;
   let adaptateurPdf;
+  let adaptateurTamponHomologation;
   let adaptateurCsv;
   let adaptateurZip;
   let adaptateurTracking;
@@ -106,6 +107,8 @@ const testeurMss = () => {
       genereAnnexes: async () => 'PDF Annexe',
       genereDossierDecision: async () => 'PDF Dossier decision',
       genereSyntheseSecurite: async () => 'PDF Synthese securite',
+    };
+    adaptateurTamponHomologation = {
       genereTamponHomologation: async () => 'PNG Tampon homologation',
     };
     adaptateurCsv = {};
@@ -184,6 +187,7 @@ const testeurMss = () => {
         referentielV2,
         adaptateurMail,
         adaptateurPdf,
+        adaptateurTamponHomologation,
         adaptateurHorloge,
         adaptateurGestionErreur,
         serviceAnnuaire,
@@ -241,6 +245,7 @@ const testeurMss = () => {
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
     adaptateurPdf: () => adaptateurPdf,
+    adaptateurTamponHomologation: () => adaptateurTamponHomologation,
     adaptateurCsv: () => adaptateurCsv,
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
