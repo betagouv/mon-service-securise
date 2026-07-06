@@ -184,32 +184,10 @@
     }
   }
 
-  .colonne:not(.inactif) .lien-intitule-risque {
-    cursor: pointer;
-
-    &:hover span {
-      color: var(--bleu-mise-en-avant);
-    }
-  }
-
   .colonne-intitule {
     display: flex;
     flex-direction: column;
     gap: 4px;
-
-    .lien-intitule-risque {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border: none;
-      outline: none;
-      background: none;
-      text-align: left;
-
-      span {
-        font-weight: 500;
-      }
-    }
   }
 
   .colonne-actions {

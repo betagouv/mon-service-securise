@@ -262,11 +262,6 @@
     margin-top: -30px;
     border-top: none;
 
-    label {
-      margin-bottom: 8px;
-      display: block;
-    }
-
     & > div {
       display: flex;
       flex-direction: column;

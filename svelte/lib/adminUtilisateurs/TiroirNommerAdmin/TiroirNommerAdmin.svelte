@@ -337,9 +337,6 @@
 </ActionsTiroir>
 
 <style lang="scss">
-  h1 {
-    text-align: center;
-  }
   .barre-actions {
     padding-bottom: 24px;
     display: flex;

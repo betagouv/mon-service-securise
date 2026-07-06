@@ -112,39 +112,11 @@
     width: 168px;
   }
 
-  .colonne:not(.inactif) .lien-intitule-risque {
-    cursor: pointer;
-
-    &:hover span {
-      color: var(--bleu-mise-en-avant);
-    }
-  }
-
-  .colonne-intitule {
-    .lien-intitule-risque {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border: none;
-      outline: none;
-      background: none;
-      text-align: left;
-
-      span {
-        font-weight: 500;
-      }
-    }
-  }
-
   .colonne-actions {
     min-width: 132px;
     display: flex;
     flex-direction: row;
     gap: 8px;
     align-items: center;
-  }
-
-  dsfr-button {
-    white-space: nowrap;
   }
 </style>

@@ -248,12 +248,6 @@
       .conteneur-ligne-service {
         display: flex;
         gap: 16px;
-
-        &.estAdmin {
-          span {
-            color: #666666;
-          }
-        }
       }
 
       dsfr-checkbox {
