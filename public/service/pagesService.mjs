@@ -1,7 +1,6 @@
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
-import ActionSuppressionDossierCourant from '../modules/tableauDeBord/actions/ActionSuppressionDossierCourant.mjs';
 
 $(() => {
   const idService = $('#pages-service').data('id-service');
@@ -74,20 +73,6 @@ $(() => {
   $(document.body).on('mesure-modifiee', (e) => {
     const doitFermerTiroir = e.detail?.sourceDeModification === 'tiroir';
     if (doitFermerTiroir) gestionnaireTiroir.basculeOuvert(false);
-  });
-
-  const actionSuppressionDossierCourant = new ActionSuppressionDossierCourant();
-  $(document.body).on('affiche-tiroir-suppression-dossier-courant', () => {
-    gestionnaireTiroir.afficheContenuAction({
-      action: actionSuppressionDossierCourant,
-    });
-  });
-
-  $('#formulaire-suppression-dossier-courant').on('submit', async (e) => {
-    e.preventDefault();
-    await actionSuppressionDossierCourant.execute({ idService });
-    document.dispatchEvent(new CustomEvent('homologation-supprimee'));
-    gestionnaireTiroir.basculeOuvert(false);
   });
 
   $(document.body).on('ferme-tiroir', () => {
