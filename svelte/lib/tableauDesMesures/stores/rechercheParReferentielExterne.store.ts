@@ -14,8 +14,11 @@ export const appliqueFiltreParReferentielExterne = (
     (mesure as MesureGenerale)?.mesuresReferentielsExternes?.ReCyf ?? [];
   const mesuresISO =
     (mesure as MesureGenerale)?.mesuresReferentielsExternes?.ISO2700X ?? [];
+  const mesuresAE =
+    (mesure as MesureGenerale)?.mesuresReferentielsExternes?.AE2690 ?? [];
   return (
     (mesuresRecyf.length > 0 && selection.includes('ReCyf')) ||
-    (mesuresISO.length > 0 && selection.includes('ISO2700X'))
+    (mesuresISO.length > 0 && selection.includes('ISO2700X')) ||
+    (mesuresAE.length > 0 && selection.includes('AE2690'))
   );
 };

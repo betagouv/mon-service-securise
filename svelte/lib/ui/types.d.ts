@@ -117,4 +117,4 @@ export type Utilisateur = {
   email: string;
 };
 
-export type ReferentielExterne = 'ReCyf' | 'ISO2700X';
+export type ReferentielExterne = 'ReCyf' | 'ISO2700X' | 'AE2690';

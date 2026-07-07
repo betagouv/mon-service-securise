@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { MesuresReferentielsExternes } from '../mesure';
   import { singulierPluriel } from '../../outils/string';
+  import { LIBELLES_REFERENTIELS_EXTERNES } from '../../tableauDesMesures/referentielsExternes';
 
   interface Props {
     mesuresReferentielsExternes: MesuresReferentielsExternes;
@@ -34,7 +35,8 @@
                 'Exigence',
                 'Exigences',
                 mesuresReferentielsExternes.ReCyf.length
-              )} NIS 2
+              )}
+              {LIBELLES_REFERENTIELS_EXTERNES['ReCyf']}
             </h4>
             <div class="badges">
               {#if mesure.entitesConcernees.find((e) => e === 'EI')}
@@ -78,7 +80,33 @@
                 'Exigence',
                 'Exigences',
                 mesuresReferentielsExternes.ISO2700X.length
-              )} ISO 2700X
+              )}
+              {LIBELLES_REFERENTIELS_EXTERNES['ISO2700X']}
+            </h4>
+            <div class="tags">
+              <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+            </div>
+          </div>
+          <p>{@html mesure.description}</p>
+          <dsfr-link
+            label="Voir les exigences et comparaison sur MesServicesCyber"
+            href="https://messervices.cyber.gouv.fr/nis2#exigences"
+            blank
+          ></dsfr-link>
+        </div>
+      {/each}
+    {/if}
+    {#if mesuresReferentielsExternes.AE2690.length > 0}
+      {#each mesuresReferentielsExternes.AE2690 as mesure (mesure.id)}
+        <div class="bloc-mesure">
+          <div class="conteneur-entete-referentiels-externes">
+            <h4>
+              {singulierPluriel(
+                'Exigence',
+                'Exigences',
+                mesuresReferentielsExternes.AE2690.length
+              )}
+              {LIBELLES_REFERENTIELS_EXTERNES['AE2690']}
             </h4>
             <div class="tags">
               <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
