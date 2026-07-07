@@ -36,7 +36,8 @@ export const convertisDonneesDescriptionEnLibelles = (
       questionsV2.specificiteProjet[specificiteProjet as SpecificiteProjet].nom
   ),
   typeHebergement:
-    questionsV2.typeHebergement[donnees.typeHebergement as TypeHebergement].nom,
+    questionsV2.typeHebergement[donnees.typeHebergement as TypeHebergement]
+      ?.nom,
   activitesExternalisees: donnees.activitesExternalisees.map(
     (activitesExternalisees) =>
       questionsV2.activiteExternalisee[
