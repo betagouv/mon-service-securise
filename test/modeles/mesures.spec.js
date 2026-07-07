@@ -452,6 +452,10 @@ describe('Les mesures liées à un service', () => {
                   mesure1: ['ID_MESURE_RECYF_1'],
                 },
               },
+              ISO2700X: {
+                mesures: {},
+                liens: {},
+              },
             },
           });
 
@@ -471,6 +475,65 @@ describe('Les mesures liées à un service', () => {
               thematique: 'Une thématique',
               description: 'Une description',
               entitesConcernees: ['EE'],
+            },
+          ]);
+        });
+      });
+
+      describe('pour le référentiel ISO2700X', () => {
+        it('ajoute les données des mesures ISO2700X correspondantes aux mesures ReCyf correspondantes', () => {
+          const referentielV2 = creeReferentielV2({
+            mesures: { mesure1: {} },
+            donneesComplementairesMesures: {
+              mesure1: { thematique: "Gestion de l'écosystème" },
+            },
+            donneesReferentielsExternesMesures: {
+              ReCyf: {
+                mesures: {
+                  ID_MESURE_RECYF_1: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                },
+                liens: {
+                  mesure1: ['ID_MESURE_RECYF_1'],
+                },
+              },
+              ISO2700X: {
+                mesures: {
+                  ID_MESURE_ISO_1: {
+                    description: 'Une description ISO1',
+                  },
+                  ID_MESURE_ISO_2: {
+                    description: 'Une description ISO2',
+                  },
+                },
+                liens: {
+                  ID_MESURE_RECYF_1: ['ID_MESURE_ISO_1', 'ID_MESURE_ISO_2'],
+                },
+              },
+            },
+          });
+
+          const mesures = new Mesures(
+            { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+            referentielV2,
+            { mesure1: {} }
+          );
+
+          const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+          const { mesure1 } = enrichies.mesuresGenerales;
+          expect(mesure1.mesuresReferentielsExternes.ISO2700X).to.eql([
+            {
+              id: 'ID_MESURE_ISO_1',
+              description: 'Une description ISO1',
+            },
+            {
+              id: 'ID_MESURE_ISO_2',
+              description: 'Une description ISO2',
             },
           ]);
         });
