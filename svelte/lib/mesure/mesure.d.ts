@@ -19,6 +19,7 @@ type MesureReCyf = {
   objectif: string;
   thematique: string;
   description: string;
+  entitesConcernees: Array<'EE' | 'EI'>;
 };
 
 export type MesuresReferentielsExternes = {

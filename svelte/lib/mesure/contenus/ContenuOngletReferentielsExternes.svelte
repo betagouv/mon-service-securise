@@ -26,18 +26,38 @@
     </h3>
 
     {#if mesuresReferentielsExternes.ReCyf.length > 0}
-      <h4>
-        {singulierPluriel(
-          'Exigence',
-          'Exigences',
-          mesuresReferentielsExternes.ReCyf.length
-        )} NIS 2
-      </h4>
       {#each mesuresReferentielsExternes.ReCyf as mesure (mesure.id)}
-        <div class="tags">
-          <dsfr-tag label={mesure.objectif} size="sm"></dsfr-tag>
-          <dsfr-tag label={mesure.thematique} size="sm"></dsfr-tag>
-          <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+        <div class="conteneur-entete-referentiels-externes">
+          <h4>
+            {singulierPluriel(
+              'Exigence',
+              'Exigences',
+              mesuresReferentielsExternes.ReCyf.length
+            )} NIS 2
+          </h4>
+          <div class="badges">
+            {#if mesure.entitesConcernees.find((e) => e === 'EI')}
+              <dsfr-badge
+                type="accent"
+                size="sm"
+                label="EI"
+                accent="green-archipel"
+              ></dsfr-badge>
+            {/if}
+            {#if mesure.entitesConcernees.find((e) => e === 'EE')}
+              <dsfr-badge
+                type="accent"
+                size="sm"
+                label="EE"
+                accent="green-bourgeon"
+              ></dsfr-badge>
+            {/if}
+          </div>
+          <div class="tags">
+            <dsfr-tag label={mesure.objectif} size="sm"></dsfr-tag>
+            <dsfr-tag label={mesure.thematique} size="sm"></dsfr-tag>
+            <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+          </div>
         </div>
         <p>{@html mesure.description}</p>
         <dsfr-link
@@ -56,6 +76,12 @@
     flex-direction: column;
     gap: 32px;
 
+    .conteneur-entete-referentiels-externes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     h3 {
       margin: 0;
       font-size: 1.375rem;
@@ -68,6 +94,7 @@
       line-height: 1.5rem;
     }
 
+    .badges,
     .tags {
       display: flex;
       gap: 8px;
