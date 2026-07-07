@@ -16,7 +16,7 @@ export const storeAutorisations = {
 
   charge: (autorisations: Autorisation[]) => {
     const parIdUtilisateur = Object.fromEntries(
-      autorisations.map((a) => [a.idUtilisateur, a])
+      autorisations?.map((a) => [a.idUtilisateur, a]) ?? []
     );
     update((etat) => ({ ...etat, autorisations: parIdUtilisateur }));
   },
