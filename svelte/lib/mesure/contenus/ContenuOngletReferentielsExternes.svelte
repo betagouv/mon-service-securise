@@ -69,6 +69,30 @@
         </div>
       {/each}
     {/if}
+    {#if mesuresReferentielsExternes.ISO2700X.length > 0}
+      {#each mesuresReferentielsExternes.ISO2700X as mesure (mesure.id)}
+        <div class="bloc-mesure">
+          <div class="conteneur-entete-referentiels-externes">
+            <h4>
+              {singulierPluriel(
+                'Exigence',
+                'Exigences',
+                mesuresReferentielsExternes.ISO2700X.length
+              )} ISO 2700X
+            </h4>
+            <div class="tags">
+              <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+            </div>
+          </div>
+          <p>{@html mesure.description}</p>
+          <dsfr-link
+            label="Voir les exigences et comparaison sur MesServicesCyber"
+            href="https://messervices.cyber.gouv.fr/nis2#exigences"
+            blank
+          ></dsfr-link>
+        </div>
+      {/each}
+    {/if}
   </div>
 {/if}
 
