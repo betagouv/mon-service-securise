@@ -193,6 +193,17 @@ const donnees = {
       image: 'risquesV2.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'referentielsExternes',
+      dateDeDeploiement: '2026-07-08 12:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-liens-entre-les-mesures-monservicesecurise-et-les-autres-referentiels-de-mesures-cyber-9jz5pm/',
+      titre:
+        'Visualisez les correspondances entre les mesures de MonServiceSécurisé et les autres éférentiels cyber standards !',
+      sousTitre:
+        'Référentiels proposés à date : ReCyF (NIS2), ISO 27001/27002, Annexe au Règlement d’exécution 2024/2690.',
+      image: 'referentielsExternes.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
