@@ -1,6 +1,7 @@
 <script lang="ts">
   import { store } from '../mesure.store';
   import { supprimeMesureSpecifique } from '../mesure.api';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
 
   interface Props {
     idService: string;
@@ -18,21 +19,24 @@
         detail: { sourceDeModification: 'tiroir' },
       })
     );
+    tiroirStore.ferme();
   };
 </script>
 
-<p class="introduction">Souhaitez-vous vraiment supprimer cette mesure ?</p>
-<div class="banniere-information">
-  <img
-    src="/statique/assets/images/icone_danger_bleu.svg"
-    alt="Avertissement de danger - Suppression"
-  />
-  <div class="contenu-texte-information">
-    <strong>Cette action est irréversible</strong>
-    <p>
-      Les données seront définitivement effacées. Les contributeurs n'auront
-      plus accès à cette mesure.
-    </p>
+<div>
+  <p class="introduction">Souhaitez-vous vraiment supprimer cette mesure ?</p>
+  <div class="banniere-information">
+    <img
+      src="/statique/assets/images/icone_danger_bleu.svg"
+      alt="Avertissement de danger - Suppression"
+    />
+    <div class="contenu-texte-information">
+      <strong>Cette action est irréversible</strong>
+      <p>
+        Les données seront définitivement effacées. Les contributeurs n'auront
+        plus accès à cette mesure.
+      </p>
+    </div>
   </div>
 </div>
 <div class="conteneur-actions">
@@ -60,6 +64,6 @@
     display: flex;
     flex-direction: row;
     justify-content: end;
-    margin-top: 40px;
+    margin-top: auto;
   }
 </style>

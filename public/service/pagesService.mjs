@@ -1,5 +1,4 @@
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
-import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 
 $(() => {
@@ -13,6 +12,7 @@ $(() => {
   const featureFlags = lisDonneesPartagees('feature-flags');
   const preferencesUtilisateur = lisDonneesPartagees('preferences-utilisateur');
   const suggestionsService = lisDonneesPartagees('suggestions-service');
+  const nonce = lisDonneesPartagees('nonce-commentaires');
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   document.body.dispatchEvent(
@@ -25,6 +25,7 @@ $(() => {
         featureFlags,
         preferencesUtilisateur,
         suggestionsService,
+        nonce,
         peutHomologuer: autorisationsService.peutHomologuer,
         visible: {
           rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
@@ -49,26 +50,6 @@ $(() => {
   );
 
   gestionnaireTiroir.brancheComportement();
-
-  let actionMesure;
-  $(document.body).on('svelte-affiche-tiroir-ajout-mesure-specifique', (e) => {
-    const propsDuBundle = {
-      idService,
-      categories: referentiel.mesures.categories,
-      statuts: referentiel.mesures.statuts,
-      priorites: referentiel.mesures.priorites,
-      retoursUtilisateur: referentiel.mesures.retoursUtilisateur,
-      estLectureSeule: autorisationsService.SECURISER.estLectureSeule,
-      modeVisiteGuidee,
-      mesureAEditer: e.detail.mesureAEditer,
-    };
-    actionMesure = new ActionMesure(e.detail.titreTiroir);
-
-    gestionnaireTiroir.afficheContenuAction(
-      { action: actionMesure },
-      propsDuBundle
-    );
-  });
 
   $(document.body).on('mesure-modifiee', (e) => {
     const doitFermerTiroir = e.detail?.sourceDeModification === 'tiroir';

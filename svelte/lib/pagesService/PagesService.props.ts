@@ -26,6 +26,8 @@ export const propsPourPage = (
         categories: props.referentiel.mesures.categories,
         statuts: props.referentiel.mesures.statuts,
         priorites: props.referentiel.mesures.priorites,
+        retoursUtilisateur: props.referentiel.mesures.retoursUtilisateur,
+        nonce: props.nonce,
         versionService: service?.version,
         avecRisquesV2: props.featureFlags.avecRisquesV2,
         afficheExplicationRisquesV2:

@@ -1,27 +1,5 @@
-import type {
-  PrioriteMesure,
-  Referentiel,
-  ReferentielPriorite,
-} from '../ui/types.d';
+import type { PrioriteMesure, Referentiel } from '../ui/types.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
-
-declare global {
-  interface HTMLElementEventMap {
-    'svelte-recharge-mesure': CustomEvent;
-  }
-}
-
-export type MesureProps = {
-  idService: string;
-  categories: Record<string, string>;
-  statuts: Record<StatutMesure, string>;
-  retoursUtilisateur: Record<string, string>;
-  estLectureSeule: boolean;
-  priorites: ReferentielPriorite;
-  modeVisiteGuidee: boolean;
-  mesureAEditer?: MesureEditee;
-  nonce: string;
-};
 
 type IdUtilisateur = string;
 type PlanAction = {

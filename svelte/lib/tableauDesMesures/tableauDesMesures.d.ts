@@ -22,6 +22,8 @@ export type TableauDesMesuresProps = {
   categories: Record<IdCategorie, string>;
   statuts: Record<StatutMesure, string>;
   priorites: ReferentielPriorite;
+  retoursUtilisateur: Record<string, string>;
+  nonce: string;
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
   versionService: VersionService;
@@ -62,6 +64,14 @@ export type MesureSpecifique = {
   responsables?: IdUtilisateur[];
   thematique?: IdThematique;
   partieResponsable?: undefined;
+};
+
+export type MesureAEditer = {
+  mesure: MesureSpecifique | MesureGenerale;
+  metadonnees: {
+    typeMesure: 'GENERALE' | 'SPECIFIQUE';
+    idMesure: string | number;
+  };
 };
 
 export type IdUtilisateur = string;
