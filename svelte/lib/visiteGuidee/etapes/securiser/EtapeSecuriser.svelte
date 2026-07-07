@@ -26,7 +26,7 @@
       .gererContributeurs()
       .el() as HTMLDivElement;
 
-    cibleTiroirMesure = ciblage().tiroirLegacy().el() as HTMLDivElement;
+    cibleTiroirMesure = ciblage().tiroir().el() as HTMLDivElement;
 
     cibleIndiceCyber = ciblage()
       .securiser()
@@ -88,10 +88,7 @@
         },
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
-          ciblage()
-            .tiroirLegacyFermeture()
-            .el()
-            .dispatchEvent(new Event('click'));
+          tiroirStore.ferme();
         },
         positionnementModale: 'MilieuGauche',
         titre: "Définissez votre plan d'action cyber !",
@@ -118,10 +115,7 @@
         },
         delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
-          ciblage()
-            .tiroirLegacyFermeture()
-            .el()
-            .dispatchEvent(new Event('click'));
+          tiroirStore.ferme();
         },
         positionnementModale: 'MilieuGauche',
         titre: "Suivez tout ce qu'il se passe sur les mesures !",

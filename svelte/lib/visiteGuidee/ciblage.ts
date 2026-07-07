@@ -59,6 +59,4 @@ export const ciblage = () => ({
     }),
   }),
   tiroir: () => new CibleVisiteGuidee('tiroir'),
-  tiroirLegacy: () => new CibleVisiteGuidee('tiroir-legacy'),
-  tiroirLegacyFermeture: () => new CibleVisiteGuidee('tiroir-legacy-fermeture'),
 });
