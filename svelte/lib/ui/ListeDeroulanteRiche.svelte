@@ -50,6 +50,7 @@
     onclick={() => (menuOuvert = !menuOuvert)}
     class="conteneur-select"
     bind:this={declencheurEl}
+    type="button"
   >
     <label for={id}>
       {libelle}
@@ -132,6 +133,7 @@
     gap: 8px;
     width: fit-content;
     margin: 0;
+    font-weight: normal;
   }
 
   .conteneur-liste-deroulante {

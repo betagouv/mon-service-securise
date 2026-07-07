@@ -2,6 +2,8 @@
   import type { MesuresReferentielsExternes } from '../mesure';
   import { singulierPluriel } from '../../outils/string';
   import { LIBELLES_REFERENTIELS_EXTERNES } from '../../tableauDesMesures/referentielsExternes';
+  import ListeDeroulanteRiche from '../../ui/ListeDeroulanteRiche.svelte';
+  import type { ReferentielExterne } from '../../ui/types';
 
   interface Props {
     mesuresReferentielsExternes: MesuresReferentielsExternes;
@@ -13,6 +15,13 @@
   let nombreTotalMesuresExternes = $derived(
     Object.values(mesuresReferentielsExternes).flat().length
   );
+
+  let referentielsAffiches: { referentielExterne: ReferentielExterne[] } =
+    $state({ referentielExterne: [] });
+
+  const doitAfficherMesuresDe = (referentielExterne: ReferentielExterne) =>
+    referentielsAffiches.referentielExterne.length === 0 ||
+    referentielsAffiches.referentielExterne.includes(referentielExterne);
 </script>
 
 {#if visible}
@@ -26,7 +35,31 @@
       )} avec des référentiels d'exigences
     </h3>
 
-    {#if mesuresReferentielsExternes.ReCyf.length > 0}
+    <ListeDeroulanteRiche
+      libelle="Filtrer"
+      id="filtre-referentiels-externes"
+      bind:valeursSelectionnees={referentielsAffiches}
+      options={{
+        categories: [
+          {
+            id: 'referentielExterne',
+            libelle: 'Référentiels d’exigences associés',
+          },
+        ],
+        items: Object.entries(LIBELLES_REFERENTIELS_EXTERNES)
+          .filter(
+            ([cle]) =>
+              mesuresReferentielsExternes[cle as ReferentielExterne].length > 0
+          )
+          .map(([valeur, libelle]) => ({
+            libelle,
+            valeur,
+            idCategorie: 'referentielExterne',
+          })),
+      }}
+    />
+
+    {#if mesuresReferentielsExternes.ReCyf.length > 0 && doitAfficherMesuresDe('ReCyf')}
       {#each mesuresReferentielsExternes.ReCyf as mesure (mesure.id)}
         <div class="bloc-mesure">
           <div class="conteneur-entete-referentiels-externes">
@@ -71,7 +104,7 @@
         </div>
       {/each}
     {/if}
-    {#if mesuresReferentielsExternes.ISO2700X.length > 0}
+    {#if mesuresReferentielsExternes.ISO2700X.length > 0 && doitAfficherMesuresDe('ISO2700X')}
       {#each mesuresReferentielsExternes.ISO2700X as mesure (mesure.id)}
         <div class="bloc-mesure">
           <div class="conteneur-entete-referentiels-externes">
@@ -96,7 +129,7 @@
         </div>
       {/each}
     {/if}
-    {#if mesuresReferentielsExternes.AE2690.length > 0}
+    {#if mesuresReferentielsExternes.AE2690.length > 0 && doitAfficherMesuresDe('AE2690')}
       {#each mesuresReferentielsExternes.AE2690 as mesure (mesure.id)}
         <div class="bloc-mesure">
           <div class="conteneur-entete-referentiels-externes">
