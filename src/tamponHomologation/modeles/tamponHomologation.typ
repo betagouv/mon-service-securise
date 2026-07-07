@@ -138,6 +138,29 @@
 
 #let pilule(texte, largeur-max: none) = context construitPilule(texte, largeur-max)
 
+// Approximation de l'ombre portée CSS des cartouches (box-shadow: 0px 2px 4px 0px
+// rgba(0,0,0,0.04)) : Typst n'a pas de flou natif, on empile donc quelques rectangles
+// arrondis semi-transparents, de plus en plus grands et de plus en plus clairs vers
+// l'extérieur, pour simuler un flou doux.
+#let ombrePortee(largeur, hauteur, rayon) = {
+  for (creux, alpha) in ((2.5pt, 0.2%), (1.5pt, 0.7%), (0.5pt, 1%)) {
+    place(top + left, dx: -creux, dy: 2pt - creux, box(
+      width: largeur + 2 * creux,
+      height: hauteur + 2 * creux,
+      radius: rayon + creux,
+      fill: rgb(0%, 0%, 0%, alpha),
+    ))
+  }
+}
+
+#let avecOmbrePortee(carte, rayon) = context {
+  let taille = measure(carte)
+  box(width: taille.width, height: taille.height)[
+    #ombrePortee(taille.width, taille.height, rayon)
+    #carte
+  ]
+}
+
 #let cartouche(titre, description) = context {
   if p.cartouche-en-ligne {
     // calc.max (plutôt qu'un simple if/else renvoyant p.titre-largeur-min tel quel)
@@ -172,22 +195,28 @@
     // désynchronise de la hauteur réellement occupée par la pilule repliée sur 2 lignes.
     let contenuPilule = construitPilule(description, plafondPilule)
     let colPilule = measure(contenuPilule).width
-    box(fill: white, radius: 5pt, inset: p.inset-cartouche)[
-      #grid(
-        columns: (colTitre, colPilule),
-        column-gutter: 12pt,
-        align: (left + horizon, left + horizon),
-        titreCartouche(titre, colTitre),
-        contenuPilule,
-      )
-    ]
+    avecOmbrePortee(
+      box(fill: white, radius: 5pt, inset: p.inset-cartouche)[
+        #grid(
+          columns: (colTitre, colPilule),
+          column-gutter: 12pt,
+          align: (left + horizon, left + horizon),
+          titreCartouche(titre, colTitre),
+          contenuPilule,
+        )
+      ],
+      5pt,
+    )
   } else {
-    block(fill: white, radius: 5pt, width: 100%, inset: p.inset-cartouche)[
-      #v(1pt)
-      #titreCartouche(titre, largeurContenuCartouche)
-      #v(7pt)
-      #pilule(description, largeur-max: largeurContenuCartouche)
-    ]
+    avecOmbrePortee(
+      block(fill: white, radius: 5pt, width: largeurContenuEntete, inset: p.inset-cartouche)[
+        #v(1pt)
+        #titreCartouche(titre, largeurContenuCartouche)
+        #v(7pt)
+        #pilule(description, largeur-max: largeurContenuCartouche)
+      ],
+      5pt,
+    )
   }
 }
 
