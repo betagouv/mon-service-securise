@@ -193,18 +193,26 @@ export const creeReferentielV2 = (
   const referentielsExternesDeMesure = (idMesure: IdMesureV2) => {
     const idsMesuresRecyf: Array<IdMesureReCyf> =
       donnees.donneesReferentielsExternesMesures.ReCyf.liens[idMesure] || [];
-    const idsMesuresISO: Array<IdMesureISO2700X> = idsMesuresRecyf.flatMap(
-      (idMesureRecyf) =>
-        donnees.donneesReferentielsExternesMesures.ISO2700X.liens[
-          idMesureRecyf
-        ] || []
-    );
-    const idsMesuresAE: Array<IdMesureAE2690> = idsMesuresRecyf.flatMap(
-      (idMesureRecyf) =>
-        donnees.donneesReferentielsExternesMesures.AE2690.liens[
-          idMesureRecyf
-        ] || []
-    );
+    const idsMesuresISO: Array<IdMesureISO2700X> = [
+      ...new Set(
+        idsMesuresRecyf.flatMap(
+          (idMesureRecyf) =>
+            donnees.donneesReferentielsExternesMesures.ISO2700X.liens[
+              idMesureRecyf
+            ] || []
+        )
+      ),
+    ];
+    const idsMesuresAE: Array<IdMesureAE2690> = [
+      ...new Set(
+        idsMesuresRecyf.flatMap(
+          (idMesureRecyf) =>
+            donnees.donneesReferentielsExternesMesures.AE2690.liens[
+              idMesureRecyf
+            ] || []
+        )
+      ),
+    ];
     return {
       ReCyf: idsMesuresRecyf.map((idMesureReCyf: IdMesureReCyf) => ({
         id: idMesureReCyf,
