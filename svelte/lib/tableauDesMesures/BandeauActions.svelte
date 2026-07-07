@@ -4,7 +4,6 @@
     type IdCategorie,
     type IdService,
   } from './tableauDesMesures.d';
-  import { afficheTiroirCreeMesure } from './actionsTiroir';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirAssociationModelesMesureSpecifiqueAuService from './mesuresSpecifiques/TiroirAssociationModelesMesureSpecifiqueAuService.svelte';
   import TiroirExportMesures from '../ui/tiroirs/TiroirExportMesures.svelte';
@@ -15,9 +14,11 @@
     etatEnregistrement: EtatEnregistrement;
     categories: Record<IdCategorie, string>;
     idService: IdService;
+    onAjouterMesure: () => void;
   }
 
-  let { etatEnregistrement, categories, idService }: Props = $props();
+  let { etatEnregistrement, categories, idService, onAjouterMesure }: Props =
+    $props();
 
   const afficheTiroirAssociationModeles = () => {
     tiroirStore.afficheContenu(
@@ -40,7 +41,7 @@
       </button>
       <button
         class="bouton-action-mesure"
-        onclick={() => afficheTiroirCreeMesure()}
+        onclick={onAjouterMesure}
         disabled={etatEnregistrement === EnCours}
       >
         <img src="/statique/assets/images/icone_plus_gris.svg" alt="" />

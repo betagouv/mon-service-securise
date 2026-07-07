@@ -25,6 +25,9 @@
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
   import { encode } from 'html-entities';
   import { ciblage } from '../visiteGuidee/ciblage';
+  import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
+  import EnteteTiroir from './entete/EnteteTiroir.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
 
   interface Props {
     idService: IdService;
@@ -48,6 +51,12 @@
     nonce,
   }: Props = $props();
 
+  export const titre =
+    $store.etape === 'Creation'
+      ? 'Ajouter une mesure'
+      : $store.mesureEditee.mesure.description;
+  export const composantEntete = EnteteTiroir;
+
   const statutInitial = $store.mesureEditee.mesure.statut;
 
   let enCoursEnvoi = $state(false);
@@ -61,7 +70,7 @@
   };
 
   const fermeTiroir = () => {
-    document.body.dispatchEvent(new CustomEvent('ferme-tiroir'));
+    tiroirStore.ferme();
   };
 
   const enregistreMesure = async () => {
@@ -82,13 +91,14 @@
     }
     await Promise.all(promesses);
     enCoursEnvoi = false;
-    rafraichisListeMesure();
     if (statutInitial !== $store.mesureEditee.mesure.statut) {
       toasterStore.afficheToastChangementStatutMesure(
         $store.mesureEditee.mesure as MesureGenerale | MesureSpecifique,
         statuts
       );
     }
+    rafraichisListeMesure();
+    fermeTiroir();
   };
 
   let retourUtilisateur: string = $state('');
@@ -131,12 +141,13 @@
         $store.mesureEditee.mesure.idModele,
         idService
       );
-      rafraichisListeMesure();
       toasterStore.succes(
         'Mesure supprimée avec succès !',
         `Vous avez supprimé la mesure <b>${encode(nomMesure)}</b>.`,
         true
       );
+      rafraichisListeMesure();
+      fermeTiroir();
     } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
@@ -149,72 +160,76 @@
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
-  <SuppressionMesureSpecifique {idService} />
+  <ContenuTiroir>
+    <SuppressionMesureSpecifique {idService} />
+  </ContenuTiroir>
 {:else}
-  <div class="conteneur-onglet">
-    <Onglet
-      bind:ongletActif
-      cetOnglet="mesure"
-      labelOnglet="Mesure"
-      sansBordureEnBas
-    />
-    <Onglet
-      bind:ongletActif
-      cetOnglet="planAction"
-      labelOnglet="Plan d'action"
-      idVisiteGuidee={ciblage().securiser().planAction().id()}
-      sansBordureEnBas
-      badge={!planDActionDisponible($store.mesureEditee.mesure.statut)
-        ? 'info'
-        : 0}
-    />
-    <Onglet
-      bind:ongletActif
-      cetOnglet="activite"
-      labelOnglet="Activité"
-      idVisiteGuidee={ciblage().securiser().activite().id()}
-      sansBordureEnBas
-    />
-  </div>
-
   <Formulaire
     onFormulaireValide={enregistreMesure}
     id="formulaire-mesure"
     onFormulaireInvalide={activeOngletMesure}
+    formulaireDuTiroir
   >
-    <div class="corps-formulaire">
-      {#if doitAfficherTiroirModeleMesureSpecifique}
-        <ContenuOngletMesureSpecifiqueLieeAModele
-          {estLectureSeule}
-          {categories}
-          {statuts}
-          bind:etapeCouranteModeleMesureSpecifique
+    <ContenuTiroir>
+      <div class="conteneur-onglet">
+        <Onglet
+          bind:ongletActif
+          cetOnglet="mesure"
+          labelOnglet="Mesure"
+          sansBordureEnBas
         />
-      {:else}
-        <ContenuOngletMesure
-          visible={ongletActif === 'mesure'}
-          {estLectureSeule}
-          {categories}
-          {retoursUtilisateur}
-          {statuts}
-          bind:retourUtilisateur
-          bind:commentaireRetourUtilisateur
+        <Onglet
+          bind:ongletActif
+          cetOnglet="planAction"
+          labelOnglet="Plan d'action"
+          idVisiteGuidee={ciblage().securiser().planAction().id()}
+          sansBordureEnBas
+          badge={!planDActionDisponible($store.mesureEditee.mesure.statut)
+            ? 'info'
+            : 0}
         />
-      {/if}
-      <ContenuOngletPlanAction
-        visible={ongletActif === 'planAction'}
-        {estLectureSeule}
-        {statuts}
-        {priorites}
-      />
-      <ContenuOngletActivite
-        visible={ongletActif === 'activite'}
-        {priorites}
-        {statuts}
-        {idService}
-        {modeVisiteGuidee}
-      />
-    </div>
+        <Onglet
+          bind:ongletActif
+          cetOnglet="activite"
+          labelOnglet="Activité"
+          idVisiteGuidee={ciblage().securiser().activite().id()}
+          sansBordureEnBas
+        />
+      </div>
+      <div class="corps-formulaire">
+        {#if doitAfficherTiroirModeleMesureSpecifique}
+          <ContenuOngletMesureSpecifiqueLieeAModele
+            {estLectureSeule}
+            {categories}
+            {statuts}
+            bind:etapeCouranteModeleMesureSpecifique
+          />
+        {:else}
+          <ContenuOngletMesure
+            visible={ongletActif === 'mesure'}
+            {estLectureSeule}
+            {categories}
+            {retoursUtilisateur}
+            {statuts}
+            bind:retourUtilisateur
+            bind:commentaireRetourUtilisateur
+          />
+        {/if}
+        <ContenuOngletPlanAction
+          visible={ongletActif === 'planAction'}
+          {estLectureSeule}
+          {statuts}
+          {priorites}
+        />
+        <ContenuOngletActivite
+          visible={ongletActif === 'activite'}
+          {priorites}
+          {statuts}
+          {idService}
+          {modeVisiteGuidee}
+        />
+      </div>
+    </ContenuTiroir>
     <div class="conteneur-actions">
       {#if doitAfficherActions}
         {#if doitAfficherTiroirModeleMesureSpecifique}
@@ -299,18 +314,16 @@
     align-items: center;
     position: sticky;
     bottom: 0;
-    width: calc(100% + 4em);
-    margin: 24px 0 -2em -2em;
     border-top: 1px solid #cbd5e1;
-    padding: 1em 0;
+    padding: 16px 24px;
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
+    z-index: 2;
   }
 
   .conteneur-actions button[type='submit'] {
     margin-left: auto;
-    margin-right: 2em;
     background: #0079d0;
     color: white;
     padding: 9px 16px;
@@ -320,7 +333,7 @@
     font-weight: 500;
     color: #0079d0;
     cursor: pointer;
-    margin: 0 0 0 2em;
+    margin: 0;
     padding: 0;
     background: none;
     border: none;
@@ -340,7 +353,6 @@
   .conteneur-onglet {
     display: flex;
     gap: 8px;
-    margin-bottom: 26px;
   }
 
   .conteneur-boutons-modele-mesure-specifique {
@@ -348,6 +360,5 @@
     align-items: end;
     gap: 10px;
     margin-left: auto;
-    margin-right: 32px;
   }
 </style>

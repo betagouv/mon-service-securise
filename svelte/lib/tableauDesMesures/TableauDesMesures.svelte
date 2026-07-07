@@ -42,7 +42,11 @@
   import Avertissement from '../ui/Avertissement.svelte';
   import TagStatutMesure from '../ui/TagStatutMesure.svelte';
   import BandeauActions from './BandeauActions.svelte';
-  import { afficheTiroirEditeMesure } from './actionsTiroir';
+  import type { MesureAEditer } from './tableauDesMesures.d';
+  import type { MesureEditee } from '../mesure/mesure.d';
+  import Mesure from '../mesure/Mesure.svelte';
+  import { store as mesureStore } from '../mesure/mesure.store';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
   import { contributeurs } from './stores/contributeurs.store';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
   import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
@@ -66,6 +70,8 @@
     categories: Record<IdCategorie, string>;
     statuts: ReferentielStatut;
     priorites: ReferentielPriorite;
+    retoursUtilisateur: Record<string, string>;
+    nonce: string;
     estLectureSeule: boolean;
     modeVisiteGuidee: boolean;
     versionService: VersionService;
@@ -79,6 +85,8 @@
     categories,
     statuts,
     priorites,
+    retoursUtilisateur,
+    nonce,
     estLectureSeule,
     modeVisiteGuidee,
     versionService,
@@ -101,7 +109,7 @@
       if (mesureAssociee) {
         $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
         const index = $mesures.mesuresSpecifiques.indexOf(mesureAssociee);
-        afficheTiroirEditeMesure({
+        ouvreTiroirMesure({
           mesure: { ...mesureAssociee },
           metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
         });
@@ -112,7 +120,7 @@
       const mesureAssociee = $mesures.mesuresGenerales[idMesure];
       if (mesureAssociee) {
         $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
-        afficheTiroirEditeMesure({
+        ouvreTiroirMesure({
           mesure: { ...mesureAssociee },
           metadonnees: { typeMesure: 'GENERALE', idMesure: idMesure },
         });
@@ -127,6 +135,20 @@
     );
     if (!modeVisiteGuidee && avecRisquesV2 && versionService === 'v2')
       await storeVraisemblanceRisqueV2.rafraichis(idService);
+  };
+
+  const ouvreTiroirMesure = (mesureAEditer?: MesureAEditer) => {
+    mesureStore.reinitialise(mesureAEditer as MesureEditee | undefined);
+    tiroirStore.afficheContenu(Mesure, {
+      idService,
+      categories,
+      statuts,
+      priorites,
+      retoursUtilisateur,
+      estLectureSeule,
+      modeVisiteGuidee,
+      nonce,
+    });
   };
 
   const rafraichisContributeurs = async () => {
@@ -388,7 +410,12 @@
       </th>
     </tr>
     {#if !estLectureSeule}
-      <BandeauActions {etatEnregistrement} {categories} {idService} />
+      <BandeauActions
+        {etatEnregistrement}
+        {categories}
+        {idService}
+        onAjouterMesure={() => ouvreTiroirMesure()}
+      />
     {/if}
     {#if !$nombreResultats.aucunResultat}
       <tr class="titres">
@@ -436,7 +463,7 @@
             metsAJourMesureGenerale(id);
           }}
           onclick={() =>
-            afficheTiroirEditeMesure({
+            ouvreTiroirMesure({
               mesure: { ...mesure },
               metadonnees: { typeMesure: 'GENERALE', idMesure: id },
             })}
@@ -474,7 +501,7 @@
             metsAJourMesureSpecifique(indexReel);
           }}
           onclick={() =>
-            afficheTiroirEditeMesure({
+            ouvreTiroirMesure({
               mesure: { ...mesure },
               metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
             })}

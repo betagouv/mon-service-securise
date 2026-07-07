@@ -22,7 +22,6 @@ block append styles
   link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
 
 block append scripts
-  +composantSvelte('mesure.js')
   +composantSvelte('pagesService.js')
   script(type = 'module', src = '/statique/service/pagesService.mjs')
   +donneesPartagees('etape-active', etapeActive)

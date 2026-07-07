@@ -130,7 +130,6 @@
 
 <style>
   form {
-    padding: 0 24px 0 2em;
     display: flex;
     flex-direction: row;
     align-items: center;

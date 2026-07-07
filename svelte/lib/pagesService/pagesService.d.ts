@@ -40,6 +40,7 @@ export type ReferentielPagesService = {
     categories: Record<IdCategorie, string>;
     statuts: Record<StatutMesure, string>;
     priorites: ReferentielPriorite;
+    retoursUtilisateur: Record<string, string>;
   };
   risques: {
     categories: ReferentielCategories;
@@ -74,6 +75,7 @@ export type PagesServiceProps = {
     finalisationDescriptionServiceImporte: boolean;
   };
   peutHomologuer: boolean;
+  nonce: string;
 };
 
 export type ServicePourPagesService = {
