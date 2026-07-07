@@ -49,7 +49,8 @@ export type MesureGenerale = {
   thematique?: IdThematique;
   partieResponsable?: PartieResponsable;
   mesuresReferentielsExternes?: {
-    ReCyf?: Array<{ id: string }>;
+    ReCyf: Array<{ id: string }>;
+    ISO2700X: Array<{ id: string }>;
   };
 };
 

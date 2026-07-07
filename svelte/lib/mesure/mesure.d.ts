@@ -22,8 +22,14 @@ type MesureReCyf = {
   entitesConcernees: Array<'EE' | 'EI'>;
 };
 
+type MesureISO2700X = {
+  id: string;
+  description: string;
+};
+
 export type MesuresReferentielsExternes = {
   ReCyf: Array<MesureReCyf>;
+  ISO2700X: Array<MesureISO2700X>;
 };
 
 export type MesureGeneraleEnrichie = MesureGenerale & {

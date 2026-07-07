@@ -169,18 +169,20 @@
 
   let mesuresReferentielsExternes: MesuresReferentielsExternes = $derived(
     ($store.mesureEditee.mesure as MesureGeneraleEnrichie)
-      .mesuresReferentielsExternes ?? { ReCyf: [] }
+      .mesuresReferentielsExternes ?? { ReCyf: [], ISO2700X: [] }
   );
 
   let avecOngletReferentielsExterne = $derived(
     versionService === 'v2' &&
       $store.mesureEditee.metadonnees.typeMesure === 'GENERALE' &&
-      mesuresReferentielsExternes.ReCyf.length > 0
+      (mesuresReferentielsExternes.ReCyf.length > 0 ||
+        mesuresReferentielsExternes.ISO2700X.length > 0)
   );
 
   let nombreMesuresReferentielsExternes = $derived(
     avecOngletReferentielsExterne
-      ? mesuresReferentielsExternes.ReCyf.length
+      ? mesuresReferentielsExternes.ReCyf.length +
+          mesuresReferentielsExternes.ISO2700X.length
       : undefined
   );
 </script>

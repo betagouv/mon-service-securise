@@ -9,6 +9,7 @@
     type EcheanceMesure,
     type PrioriteMesure,
     Referentiel,
+    type ReferentielExterne,
     type ReferentielPriorite,
     type ReferentielStatut,
   } from '../../ui/types.d';
@@ -53,6 +54,11 @@
     onclick: (e: MouseEvent) => void;
   }
 
+  const LIBELLES_REFERENTIELS: Record<ReferentielExterne, string> = {
+    ReCyf: 'NIS2-ReCyf',
+    ISO2700X: 'ISO 2700X',
+  };
+
   let {
     id,
     referentiel,
@@ -93,9 +99,25 @@
       )
   );
 
-  let correspondAUneMesureReCyf = $derived(
-    ((mesure as MesureGenerale)?.mesuresReferentielsExternes?.ReCyf?.length ??
-      0) > 0
+  let referentielsExternesExistants: Array<ReferentielExterne> = $derived.by(
+    () => {
+      const mesureGenerale = mesure as MesureGenerale;
+      if (!mesureGenerale.mesuresReferentielsExternes) {
+        return [];
+      }
+      const referentiels: ReferentielExterne[] = [];
+      if (mesureGenerale.mesuresReferentielsExternes.ReCyf.length > 0) {
+        referentiels.push('ReCyf');
+      }
+      if (mesureGenerale.mesuresReferentielsExternes.ISO2700X.length > 0) {
+        referentiels.push('ISO2700X');
+      }
+      return referentiels;
+    }
+  );
+
+  let aDesReferentielsExternes = $derived(
+    referentielsExternesExistants.length > 0
   );
 </script>
 
@@ -124,8 +146,13 @@
       {/if}
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
-    {#if afficheReferentielsExterne && correspondAUneMesureReCyf}
-      <span>Correspond à NIS2-ReCyf</span>
+    {#if afficheReferentielsExterne && aDesReferentielsExternes}
+      {@const labelsReferentiels = referentielsExternesExistants.map(
+        (id) => LIBELLES_REFERENTIELS[id]
+      )}
+      <span class="referentiels-externes"
+        >Correspond à {labelsReferentiels.join(', ')}</span
+      >
     {/if}
   </td>
   {#if affichePlanAction}
@@ -201,6 +228,12 @@
       font-style: italic;
       color: #3a3a3a;
     }
+  }
+
+  .referentiels-externes {
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
   }
 
   .titre-mesure:hover .titre {
