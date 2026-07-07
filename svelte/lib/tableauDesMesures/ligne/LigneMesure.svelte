@@ -32,6 +32,7 @@
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
   import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuidee/ciblage';
+  import { LIBELLES_REFERENTIELS_EXTERNES } from '../referentielsExternes';
 
   type IdDom = string;
 
@@ -53,11 +54,6 @@
     onModificationEcheance: (echeance: EcheanceMesure) => void;
     onclick: (e: MouseEvent) => void;
   }
-
-  const LIBELLES_REFERENTIELS: Record<ReferentielExterne, string> = {
-    ReCyf: 'NIS2-ReCyf',
-    ISO2700X: 'ISO 2700X',
-  };
 
   let {
     id,
@@ -148,7 +144,7 @@
     </div>
     {#if afficheReferentielsExterne && aDesReferentielsExternes}
       {@const labelsReferentiels = referentielsExternesExistants.map(
-        (id) => LIBELLES_REFERENTIELS[id]
+        (id) => LIBELLES_REFERENTIELS_EXTERNES[id]
       )}
       <span class="referentiels-externes"
         >Correspond à {labelsReferentiels.join(', ')}</span
