@@ -17,5 +17,5 @@ export const utilisateurCourant = derived<typeof contributeurs, Contributeur>(
 export const nomsDesContributeursParId = derived(
   contributeurs,
   ($contributeurs) =>
-    Object.fromEntries($contributeurs.map((c) => [c.id, c.prenomNom]))
+    Object.fromEntries($contributeurs?.map((c) => [c.id, c.prenomNom]) ?? [])
 );
