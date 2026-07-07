@@ -109,6 +109,16 @@ type MethodesSpecifiquesReferentielV2 = {
         id: IdMesureReCyf;
       }
     >;
+    ISO2700X: Array<
+      DonneesReferentielsMesuresISO2700X & {
+        id: IdMesureISO2700X;
+      }
+    >;
+    AE2690: Array<
+      DonneesReferentielsMesuresAE2690 & {
+        id: IdMesureAE2690;
+      }
+    >;
   };
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
   typeService: (type: TypeDeService) => { nom: string; exemple: string };

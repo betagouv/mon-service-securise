@@ -285,6 +285,14 @@ describe('Le serveur MSS des routes /service/*', () => {
       expect(reponse.status).to.eql(400);
     });
 
+    it('jette une erreur si le paramètres `avecReferentielsExternes` est invalide', async () => {
+      const reponse = await testeur.get(
+        '/service/456/mesures/export.csv?avecReferentielsExternes=pasUnBooleen'
+      );
+
+      expect(reponse.status).to.eql(400);
+    });
+
     it('autorise le paramètre `timestamp`', async () => {
       const reponse = await testeur.get(
         '/service/456/mesures/export.csv?avecDonneesAdditionnelles=true&timestamp=12345'

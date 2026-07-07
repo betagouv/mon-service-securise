@@ -14,11 +14,17 @@
     etatEnregistrement: EtatEnregistrement;
     categories: Record<IdCategorie, string>;
     idService: IdService;
+    avecReferentielsExternes: boolean;
     onAjouterMesure: () => void;
   }
 
-  let { etatEnregistrement, categories, idService, onAjouterMesure }: Props =
-    $props();
+  let {
+    etatEnregistrement,
+    categories,
+    avecReferentielsExternes,
+    idService,
+    onAjouterMesure,
+  }: Props = $props();
 
   const afficheTiroirAssociationModeles = () => {
     tiroirStore.afficheContenu(
@@ -50,7 +56,10 @@
       <button
         class="bouton-action-mesure"
         onclick={() =>
-          tiroirStore.afficheContenu(TiroirExportMesures, { idService })}
+          tiroirStore.afficheContenu(TiroirExportMesures, {
+            idService,
+            avecReferentielsExternes,
+          })}
       >
         <img src="/statique/assets/images/icone_export_gris.svg" alt="" />
         Exporter la liste des mesures

@@ -429,6 +429,7 @@
         {etatEnregistrement}
         {categories}
         {idService}
+        avecReferentielsExternes={afficheReferentielsExterne}
         onAjouterMesure={() => ouvreTiroirMesure()}
       />
     {/if}
