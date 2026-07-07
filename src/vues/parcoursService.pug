@@ -1,5 +1,4 @@
 extends mssConnecte
-include ./tiroirs/tiroir.pug
 
 block append styles
   link(href = '/statique/assets/styles/pagesService.css', rel = 'stylesheet')
@@ -50,6 +49,3 @@ block main
             .conteneur-page-formulaire
               block modale
               block formulaire
-
-  +tiroir
-    include ./tiroirs/tiroirMesure

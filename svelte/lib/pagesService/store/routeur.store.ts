@@ -91,7 +91,6 @@ const navigue = (
     });
 
     tiroirStore.ferme();
-    document.body.dispatchEvent(new CustomEvent('ferme-tiroir'));
   } else {
     navigueHorsSPA(url);
   }

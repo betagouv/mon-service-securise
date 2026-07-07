@@ -1,5 +1,4 @@
 extends ../mssConnecte
-include ../tiroirs/tiroir.pug
 
 block title
   -
@@ -58,6 +57,3 @@ block append scripts
 
 block main
   #pages-service(data-id-service=service.id)
-
-  +tiroir
-    include ../tiroirs/tiroirMesure
