@@ -456,6 +456,10 @@ describe('Les mesures liées à un service', () => {
                 mesures: {},
                 liens: {},
               },
+              AE2690: {
+                mesures: {},
+                liens: {},
+              },
             },
           });
 
@@ -514,6 +518,10 @@ describe('Les mesures liées à un service', () => {
                   ID_MESURE_RECYF_1: ['ID_MESURE_ISO_1', 'ID_MESURE_ISO_2'],
                 },
               },
+              AE2690: {
+                mesures: {},
+                liens: {},
+              },
             },
           });
 
@@ -534,6 +542,69 @@ describe('Les mesures liées à un service', () => {
             {
               id: 'ID_MESURE_ISO_2',
               description: 'Une description ISO2',
+            },
+          ]);
+        });
+      });
+
+      describe('pour le référentiel AE2690', () => {
+        it('ajoute les données des mesures AE2690 correspondantes aux mesures ReCyf correspondantes', () => {
+          const referentielV2 = creeReferentielV2({
+            mesures: { mesure1: {} },
+            donneesComplementairesMesures: {
+              mesure1: { thematique: "Gestion de l'écosystème" },
+            },
+            donneesReferentielsExternesMesures: {
+              ReCyf: {
+                mesures: {
+                  ID_MESURE_RECYF_1: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                },
+                liens: {
+                  mesure1: ['ID_MESURE_RECYF_1'],
+                },
+              },
+              ISO2700X: {
+                mesures: {},
+                liens: {},
+              },
+              AE2690: {
+                mesures: {
+                  ID_MESURE_AE_1: {
+                    description: 'Une description AE1',
+                  },
+                  ID_MESURE_AE_2: {
+                    description: 'Une description AE2',
+                  },
+                },
+                liens: {
+                  ID_MESURE_RECYF_1: ['ID_MESURE_AE_1', 'ID_MESURE_AE_2'],
+                },
+              },
+            },
+          });
+
+          const mesures = new Mesures(
+            { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+            referentielV2,
+            { mesure1: {} }
+          );
+
+          const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+          const { mesure1 } = enrichies.mesuresGenerales;
+          expect(mesure1.mesuresReferentielsExternes.AE2690).to.eql([
+            {
+              id: 'ID_MESURE_AE_1',
+              description: 'Une description AE1',
+            },
+            {
+              id: 'ID_MESURE_AE_2',
+              description: 'Une description AE2',
             },
           ]);
         });
