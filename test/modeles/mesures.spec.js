@@ -545,6 +545,62 @@ describe('Les mesures liées à un service', () => {
             },
           ]);
         });
+
+        it('dédoublonne les mesures ISO2700X', () => {
+          const referentielV2 = creeReferentielV2({
+            mesures: { mesure1: {} },
+            donneesComplementairesMesures: {
+              mesure1: { thematique: "Gestion de l'écosystème" },
+            },
+            donneesReferentielsExternesMesures: {
+              ReCyf: {
+                mesures: {
+                  ID_MESURE_RECYF_1: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                  ID_MESURE_RECYF_2: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                },
+                liens: {
+                  mesure1: ['ID_MESURE_RECYF_1', 'ID_MESURE_RECYF_2'],
+                },
+              },
+              ISO2700X: {
+                mesures: {
+                  ID_MESURE_ISO_1: {
+                    description: 'Une description ISO1',
+                  },
+                },
+                liens: {
+                  ID_MESURE_RECYF_1: ['ID_MESURE_ISO_1'],
+                  ID_MESURE_RECYF_2: ['ID_MESURE_ISO_1'],
+                },
+              },
+              AE2690: {
+                mesures: {},
+                liens: {},
+              },
+            },
+          });
+
+          const mesures = new Mesures(
+            { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+            referentielV2,
+            { mesure1: {} }
+          );
+
+          const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+          const { mesure1 } = enrichies.mesuresGenerales;
+          expect(mesure1.mesuresReferentielsExternes.ISO2700X.length).to.be(1);
+        });
       });
 
       describe('pour le référentiel AE2690', () => {
@@ -607,6 +663,62 @@ describe('Les mesures liées à un service', () => {
               description: 'Une description AE2',
             },
           ]);
+        });
+
+        it('dédoublonne les mesures AE2690', () => {
+          const referentielV2 = creeReferentielV2({
+            mesures: { mesure1: {} },
+            donneesComplementairesMesures: {
+              mesure1: { thematique: "Gestion de l'écosystème" },
+            },
+            donneesReferentielsExternesMesures: {
+              ReCyf: {
+                mesures: {
+                  ID_MESURE_RECYF_1: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                  ID_MESURE_RECYF_2: {
+                    objectif: 'Un objectif',
+                    thematique: 'Une thématique',
+                    description: 'Une description',
+                    entitesConcernees: ['EE'],
+                  },
+                },
+                liens: {
+                  mesure1: ['ID_MESURE_RECYF_1', 'ID_MESURE_RECYF_2'],
+                },
+              },
+              ISO2700X: {
+                mesures: {},
+                liens: {},
+              },
+              AE2690: {
+                mesures: {
+                  ID_MESURE_AE_1: {
+                    description: 'Une description AE1',
+                  },
+                },
+                liens: {
+                  ID_MESURE_RECYF_1: ['ID_MESURE_AE_1'],
+                  ID_MESURE_RECYF_2: ['ID_MESURE_AE_1'],
+                },
+              },
+            },
+          });
+
+          const mesures = new Mesures(
+            { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+            referentielV2,
+            { mesure1: {} }
+          );
+
+          const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+          const { mesure1 } = enrichies.mesuresGenerales;
+          expect(mesure1.mesuresReferentielsExternes.AE2690.length).to.be(1);
         });
       });
     });
