@@ -14,6 +14,17 @@ export type MesureGenerale = PlanAction & {
   id: string;
 };
 
+type MesureReCyf = {
+  id: string;
+  objectif: string;
+  thematique: string;
+  description: string;
+};
+
+export type MesuresReferentielsExternes = {
+  ReCyf: Array<MesureReCyf>;
+};
+
 export type MesureGeneraleEnrichie = MesureGenerale & {
   description: string;
   descriptionLongue: string;
@@ -24,6 +35,7 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
   lienBlog?: string;
   porteursSinguliers?: string[];
   thematique?: string;
+  mesuresReferentielsExternes?: MesuresReferentielsExternes;
 };
 
 export type MesureSpecifique = PlanAction & {

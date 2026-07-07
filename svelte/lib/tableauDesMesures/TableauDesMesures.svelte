@@ -149,6 +149,7 @@
       estLectureSeule,
       modeVisiteGuidee,
       nonce,
+      versionService,
     });
   };
 
