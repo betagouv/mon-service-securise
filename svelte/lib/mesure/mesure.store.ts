@@ -16,7 +16,7 @@ type AvecModalites<T> = T & {
   modalites: string;
 };
 
-type MesureEditeeAvecModalites = Omit<MesureEditee, 'mesure'> & {
+export type MesureEditeeAvecModalites = Omit<MesureEditee, 'mesure'> & {
   mesure: AvecModalites<MesureSpecifique | MesureGeneraleEnrichie>;
 };
 

@@ -28,6 +28,12 @@
   import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
   import EnteteTiroir from './entete/EnteteTiroir.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
+  import type { VersionService } from '../../../src/modeles/versionService';
+  import type {
+    MesureGeneraleEnrichie,
+    MesuresReferentielsExternes,
+  } from './mesure';
+  import ContenuOngletReferentielsExternes from './contenus/ContenuOngletReferentielsExternes.svelte';
 
   interface Props {
     idService: IdService;
@@ -38,6 +44,7 @@
     priorites: ReferentielPriorite;
     modeVisiteGuidee: boolean;
     nonce: string;
+    versionService: VersionService;
   }
 
   let {
@@ -49,6 +56,7 @@
     priorites,
     modeVisiteGuidee,
     nonce,
+    versionService,
   }: Props = $props();
 
   export const titre =
@@ -56,6 +64,7 @@
       ? 'Ajouter une mesure'
       : $store.mesureEditee.mesure.description;
   export const composantEntete = EnteteTiroir;
+  export const taille = 'large';
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -157,6 +166,23 @@
       enCoursEnvoi = false;
     }
   };
+
+  let mesuresReferentielsExternes: MesuresReferentielsExternes = $derived(
+    ($store.mesureEditee.mesure as MesureGeneraleEnrichie)
+      .mesuresReferentielsExternes ?? { ReCyf: [] }
+  );
+
+  let avecOngletReferentielsExterne = $derived(
+    versionService === 'v2' &&
+      $store.mesureEditee.metadonnees.typeMesure === 'GENERALE' &&
+      mesuresReferentielsExternes.ReCyf.length > 0
+  );
+
+  let nombreMesuresReferentielsExternes = $derived(
+    avecOngletReferentielsExterne
+      ? mesuresReferentielsExternes.ReCyf.length
+      : undefined
+  );
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -195,6 +221,15 @@
           idVisiteGuidee={ciblage().securiser().activite().id()}
           sansBordureEnBas
         />
+        {#if avecOngletReferentielsExterne}
+          <Onglet
+            bind:ongletActif
+            cetOnglet="referentiels-externes"
+            labelOnglet="Référentiel d’exigences"
+            sansBordureEnBas
+            badge={nombreMesuresReferentielsExternes}
+          />
+        {/if}
       </div>
       <div class="corps-formulaire">
         {#if doitAfficherTiroirModeleMesureSpecifique}
@@ -228,6 +263,12 @@
           {idService}
           {modeVisiteGuidee}
         />
+        {#if avecOngletReferentielsExterne}
+          <ContenuOngletReferentielsExternes
+            visible={ongletActif === 'referentiels-externes'}
+            {mesuresReferentielsExternes}
+          />
+        {/if}
       </div>
     </ContenuTiroir>
     <div class="conteneur-actions">
