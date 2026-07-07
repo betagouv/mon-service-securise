@@ -101,14 +101,9 @@
       if (!mesureGenerale.mesuresReferentielsExternes) {
         return [];
       }
-      const referentiels: ReferentielExterne[] = [];
-      if (mesureGenerale.mesuresReferentielsExternes.ReCyf.length > 0) {
-        referentiels.push('ReCyf');
-      }
-      if (mesureGenerale.mesuresReferentielsExternes.ISO2700X.length > 0) {
-        referentiels.push('ISO2700X');
-      }
-      return referentiels;
+      return Object.entries(mesureGenerale.mesuresReferentielsExternes)
+        .filter(([, items]) => items.length > 0)
+        .map(([cle]) => cle) as ReferentielExterne[];
     }
   );
 

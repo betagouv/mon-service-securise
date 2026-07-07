@@ -51,6 +51,7 @@ export type MesureGenerale = {
   mesuresReferentielsExternes?: {
     ReCyf: Array<{ id: string }>;
     ISO2700X: Array<{ id: string }>;
+    AE2690: Array<{ id: string }>;
   };
 };
 
