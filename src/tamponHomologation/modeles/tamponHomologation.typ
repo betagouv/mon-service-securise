@@ -28,14 +28,13 @@
   ).height
   let nombreDeLignes = calc.max(calc.round(hauteurSansInterligne / naturelle), 1)
   let hauteurTotale = nombreDeLignes * hauteurLigneCss
-  let interligne = if nombreDeLignes <= 1 {
-    0em
-  } else {
-    (
-      nombreDeLignes * (hauteurLigneCss - naturelle)
-        / ((nombreDeLignes - 1) * taillePolice)
-    ) * 1em
-  }
+  // CSS répartit l'écart (hauteurLigneCss - naturelle) pour moitié au-dessus et pour
+  // moitié en dessous de CHAQUE ligne : l'interligne entre deux lignes est donc
+  // constant, égal à cet écart complet (une moitié "en bas" de la ligne du dessus +
+  // une moitié "en haut" de celle du dessous), indépendamment du nombre de lignes.
+  // Le reliquat (un demi-écart en haut de la première ligne, un demi en bas de la
+  // dernière) est ensuite réparti par align(horizon) dans la boîte de hauteurTotale.
+  let interligne = (hauteurLigneCss - naturelle) / taillePolice * 1em
   box(height: hauteurTotale, width: disponible)[
     #align(horizon + left)[
       #block(width: disponible)[
@@ -117,9 +116,10 @@
 
 #let largeurContenuCartouche = largeurContenuEntete - 2 * p.inset-cartouche.x
 
-#let titreCartouche(texte, disponible) = block(width: disponible)[
-  #text(fill: bleuTitre, weight: "medium", size: 14pt)[#texte]
-]
+#let titreCartouche(texte, disponible) = ligneCss(
+  14pt, 24pt, disponible,
+  text(fill: bleuTitre, weight: "medium", size: 14pt)[#texte],
+)
 
 // Version "nue" (sans son propre contexte) pour pouvoir être appelée depuis un
 // contexte déjà ouvert (cartouche en ligne) sans imbriquer deux contextes autour
@@ -133,7 +133,7 @@
   } else {
     auto
   }
-  box(fill: fondPilule, radius: 4pt, inset: (x: 8pt, y: 4pt), width: largeur)[#contenu]
+  box(fill: fondPilule, radius: 4pt, inset: (x: 8pt, y: 7pt), width: largeur)[#contenu]
 }
 
 #let pilule(texte, largeur-max: none) = context construitPilule(texte, largeur-max)
@@ -183,8 +183,9 @@
     ]
   } else {
     block(fill: white, radius: 5pt, width: 100%, inset: p.inset-cartouche)[
+      #v(1pt)
       #titreCartouche(titre, largeurContenuCartouche)
-      #v(8pt)
+      #v(7pt)
       #pilule(description, largeur-max: largeurContenuCartouche)
     ]
   }
@@ -239,7 +240,7 @@
         ],
       )
     ]
-    #v(16pt)
+    #v(10pt)
     #ligneCss(
       14pt,
       24pt,
