@@ -27,44 +27,46 @@
 
     {#if mesuresReferentielsExternes.ReCyf.length > 0}
       {#each mesuresReferentielsExternes.ReCyf as mesure (mesure.id)}
-        <div class="conteneur-entete-referentiels-externes">
-          <h4>
-            {singulierPluriel(
-              'Exigence',
-              'Exigences',
-              mesuresReferentielsExternes.ReCyf.length
-            )} NIS 2
-          </h4>
-          <div class="badges">
-            {#if mesure.entitesConcernees.find((e) => e === 'EI')}
-              <dsfr-badge
-                type="accent"
-                size="sm"
-                label="EI"
-                accent="green-archipel"
-              ></dsfr-badge>
-            {/if}
-            {#if mesure.entitesConcernees.find((e) => e === 'EE')}
-              <dsfr-badge
-                type="accent"
-                size="sm"
-                label="EE"
-                accent="green-bourgeon"
-              ></dsfr-badge>
-            {/if}
+        <div class="bloc-mesure">
+          <div class="conteneur-entete-referentiels-externes">
+            <h4>
+              {singulierPluriel(
+                'Exigence',
+                'Exigences',
+                mesuresReferentielsExternes.ReCyf.length
+              )} NIS 2
+            </h4>
+            <div class="badges">
+              {#if mesure.entitesConcernees.find((e) => e === 'EI')}
+                <dsfr-badge
+                  type="accent"
+                  size="sm"
+                  label="EI"
+                  accent="green-archipel"
+                ></dsfr-badge>
+              {/if}
+              {#if mesure.entitesConcernees.find((e) => e === 'EE')}
+                <dsfr-badge
+                  type="accent"
+                  size="sm"
+                  label="EE"
+                  accent="green-bourgeon"
+                ></dsfr-badge>
+              {/if}
+            </div>
+            <div class="tags">
+              <dsfr-tag label={mesure.objectif} size="sm"></dsfr-tag>
+              <dsfr-tag label={mesure.thematique} size="sm"></dsfr-tag>
+              <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+            </div>
           </div>
-          <div class="tags">
-            <dsfr-tag label={mesure.objectif} size="sm"></dsfr-tag>
-            <dsfr-tag label={mesure.thematique} size="sm"></dsfr-tag>
-            <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
-          </div>
+          <p>{@html mesure.description}</p>
+          <dsfr-link
+            label="Voir les exigences et comparaison sur MesServicesCyber"
+            href="https://messervices.cyber.gouv.fr/nis2#exigences"
+            blank
+          ></dsfr-link>
         </div>
-        <p>{@html mesure.description}</p>
-        <dsfr-link
-          label="Voir les exigences et comparaison sur MesServicesCyber"
-          href="https://messervices.cyber.gouv.fr/nis2#exigences"
-          blank
-        ></dsfr-link>
       {/each}
     {/if}
   </div>
@@ -80,6 +82,17 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+    }
+
+    .bloc-mesure {
+      padding-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #ddd;
+      }
     }
 
     h3 {
