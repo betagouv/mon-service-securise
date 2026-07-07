@@ -904,7 +904,7 @@ class ConsoleAdministration {
         presentation: 'Une présentation',
         donneesCaracterePersonnel: [],
         fonctionnalites: [],
-        typeService: 'siteInternet',
+        typeService: ['siteInternet'],
         donneesSensiblesSpecifiques: [],
         fonctionnalitesSpecifiques: [],
         pointsAcces: [],
