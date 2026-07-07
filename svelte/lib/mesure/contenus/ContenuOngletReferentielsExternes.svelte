@@ -39,7 +39,7 @@
           <dsfr-tag label={mesure.thematique} size="sm"></dsfr-tag>
           <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
         </div>
-        <p>{mesure.description}</p>
+        <p>{@html mesure.description}</p>
         <dsfr-link
           label="Voir les exigences et comparaison sur MesServicesCyber"
           href="https://messervices.cyber.gouv.fr/nis2#exigences"

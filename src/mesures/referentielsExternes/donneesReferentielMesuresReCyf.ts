@@ -10,14 +10,14 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 1: Recensement des systèmes d'information",
     thematique: 'Recensement des SI',
     description:
-      "L’entité liste l’ensemble de ses activités et services, y compris les activités et services qui ne correspondent pas aux critères pour lesquels l’entité constitue une entité importante ou essentielle (par exemple : une entité essentielle au titre d’une activité exploitation d’un oléoduc doit lister, en plus des activités et services participant à l’exploitation de l’oléoduc, tous les services et les autres activités qu’elle fournit).\nPour chaque entrée de cette liste, l’entité :\n•\tidentifie un responsable de l’activité ou du service (par exemple le chef de service auquel est rattachée l'activité ou le service, un directeur métier, la direction générale) ;\n•\tliste les systèmes d’information les supportant.",
+      "L’entité liste l’ensemble de ses activités et services, y compris les activités et services qui ne correspondent pas aux critères pour lesquels l’entité constitue une entité importante ou essentielle (par exemple : une entité essentielle au titre d’une activité exploitation d’un oléoduc doit lister, en plus des activités et services participant à l’exploitation de l’oléoduc, tous les services et les autres activités qu’elle fournit).<br>Pour chaque entrée de cette liste, l’entité :<br>• identifie un responsable de l’activité ou du service (par exemple le chef de service auquel est rattachée l'activité ou le service, un directeur métier, la direction générale) ;<br>• liste les systèmes d’information les supportant.",
     entitesConcernees: ['EI', 'EE'],
   },
   '1.2-EI/EE': {
     objectif: "Objectif de sécurité 1: Recensement des systèmes d'information",
     thematique: 'Recensement des SI',
     description:
-      'L’entité précise dans la liste prévue au 1.1-EI/EE les systèmes d’information qui ne sont exposés à aucun des risques mentionnés à l’alinéa 2 de l’objectif de sécurité.\nL’entité renseigne les justifications de ces choix.',
+      'L’entité précise dans la liste prévue au 1.1-EI/EE les systèmes d’information qui ne sont exposés à aucun des risques mentionnés à l’alinéa 2 de l’objectif de sécurité.<br>L’entité renseigne les justifications de ces choix.',
     entitesConcernees: ['EI', 'EE'],
   },
   '1.3-EI/EE': {
@@ -64,7 +64,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 2: Mise en œuvre d'un cadre de gouvernance de la sécurité numérique",
     thematique: "Politique de sécurité des systèmes d'information",
     description:
-      'Cette PSSI comprend au moins :\n•\tL’organisation de la gouvernance de la sécurité numérique et notamment les rôles et les responsabilités du personnel interne et externe (par exemple : prestataires, fournisseurs) ;\n•\tLes orientations et objectifs stratégiques en matière de sécurité numérique déclinés de la stratégie globale de l’entité ;\n•\tL’engagement du dirigeant exécutif de l’entité à assurer la sécurité numérique des systèmes d’information dont il est responsable ;\n•\tL’engagement du dirigeant exécutif de l’entité à respecter les exigences légales et réglementaires et en particulier celles définies dans la transposition nationale de la directive NIS 2.\n•\tLa PSSI tient également compte des exigences, procédures et spécificités propres au(x) secteur(s) dans lesquels l’entité exerce ses activités.',
+      'Cette PSSI comprend au moins :<br>• L’organisation de la gouvernance de la sécurité numérique et notamment les rôles et les responsabilités du personnel interne et externe (par exemple : prestataires, fournisseurs) ;<br>• Les orientations et objectifs stratégiques en matière de sécurité numérique déclinés de la stratégie globale de l’entité ;<br>• L’engagement du dirigeant exécutif de l’entité à assurer la sécurité numérique des systèmes d’information dont il est responsable ;<br>• L’engagement du dirigeant exécutif de l’entité à respecter les exigences légales et réglementaires et en particulier celles définies dans la transposition nationale de la directive NIS 2.<br>• La PSSI tient également compte des exigences, procédures et spécificités propres au(x) secteur(s) dans lesquels l’entité exerce ses activités.',
     entitesConcernees: ['EI', 'EE'],
   },
   '2.B.3-EI/EE': {
@@ -87,7 +87,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 2: Mise en œuvre d'un cadre de gouvernance de la sécurité numérique",
     thematique: "Politique de sécurité des systèmes d'information",
     description:
-      'L’entité décline, en tant que de besoin, la PSSI en politiques de sécurité relatives à des thèmes précis permettant de couvrir tout ou partie des présentes mesures.\nEn particulier, l’entité définit et met en œuvre, au minimum, des politiques de sécurité en matière :\n•\tD’usage du chiffrement ;\n•\tDe contrôle d’accès physique et logique ;\n•\tDe revue de l’application des mesures de sécurité mises en œuvre ;\n•\tDe gestion des comptes.',
+      'L’entité décline, en tant que de besoin, la PSSI en politiques de sécurité relatives à des thèmes précis permettant de couvrir tout ou partie des présentes mesures.<br>En particulier, l’entité définit et met en œuvre, au minimum, des politiques de sécurité en matière :<br>• D’usage du chiffrement ;<br>• De contrôle d’accès physique et logique ;<br>• De revue de l’application des mesures de sécurité mises en œuvre ;<br>• De gestion des comptes.',
     entitesConcernees: ['EI', 'EE'],
   },
   '2.C.1-EI/EE': {
@@ -95,7 +95,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 2: Mise en œuvre d'un cadre de gouvernance de la sécurité numérique",
     thematique: 'Gestion de la conformité',
     description:
-      'Pour chaque système d’information, l’entité réalise et maintient à jour une analyse de la conformité du système d’information vis-à-vis des mesures du présent référentiel.\nL’analyse de la conformité identifie les éventuels écarts entre les mesures mises en œuvre par l’entité et les mesures prévues dans le présent référentiel.\nCette analyse tient compte de la PSSI de l’entité.',
+      'Pour chaque système d’information, l’entité réalise et maintient à jour une analyse de la conformité du système d’information vis-à-vis des mesures du présent référentiel.<br>L’analyse de la conformité identifie les éventuels écarts entre les mesures mises en œuvre par l’entité et les mesures prévues dans le présent référentiel.<br>Cette analyse tient compte de la PSSI de l’entité.',
     entitesConcernees: ['EI', 'EE'],
   },
   '2.C.2-EI/EE': {
@@ -103,7 +103,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 2: Mise en œuvre d'un cadre de gouvernance de la sécurité numérique",
     thematique: 'Gestion de la conformité',
     description:
-      'L’entité établit, met en œuvre et suit dans la durée un plan d’action adapté à la structure et à l’environnement dans lequel elle opère afin de corriger ces écarts dans les meilleurs délais.\nLa responsabilité de ce plan d’action est déterminée au regard du cadre de gouvernance de la sécurité numérique mis en place.\nCe plan d’action prévoit, au minimum, une échéance raisonnable au regard du besoin de sécurisation du système d’information et un responsable pour la réalisation de chaque action.\nCe plan d’action ne préjuge pas de l’appréciation du respect de ses obligations légales et réglementaires lors d’un contrôle de l’ANSSI.',
+      'L’entité établit, met en œuvre et suit dans la durée un plan d’action adapté à la structure et à l’environnement dans lequel elle opère afin de corriger ces écarts dans les meilleurs délais.<br>La responsabilité de ce plan d’action est déterminée au regard du cadre de gouvernance de la sécurité numérique mis en place.<br>Ce plan d’action prévoit, au minimum, une échéance raisonnable au regard du besoin de sécurisation du système d’information et un responsable pour la réalisation de chaque action.<br>Ce plan d’action ne préjuge pas de l’appréciation du respect de ses obligations légales et réglementaires lors d’un contrôle de l’ANSSI.',
     entitesConcernees: ['EI', 'EE'],
   },
   '2.C.3-EI/EE': {
@@ -118,7 +118,7 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 3: Maîtrise de l'écosystème",
     thematique: "Cartographie de l'écosystème",
     description:
-      'L’entité définit et maintient à jour une cartographie de l’écosystème dans lequel ses systèmes d’information sont mis en œuvre et contenant, au minimum, les informations suivantes :\n•\tLa liste des prestataires et fournisseurs informatiques contribuant à la réalisation des activités ou des services de l’entité et avec lesquels il existe une relation de droit ou de fait (par exemple : prestataire d’infogérance, matériels et services fournis par la maison mère à une filiale, fournisseur de matériel informatique)\n•\tLa liste des interconnexions avec les systèmes d’information de l’entité.\n(Cette liste peut s’appuyer sur les démarches déjà réalisées par l’entité pour réaliser une telle liste. Par exemple, la déclaration de sous-traitance réalisée dans le cadre d’un contrat de la commande publique).',
+      'L’entité définit et maintient à jour une cartographie de l’écosystème dans lequel ses systèmes d’information sont mis en œuvre et contenant, au minimum, les informations suivantes :<br>• La liste des prestataires et fournisseurs informatiques contribuant à la réalisation des activités ou des services de l’entité et avec lesquels il existe une relation de droit ou de fait (par exemple : prestataire d’infogérance, matériels et services fournis par la maison mère à une filiale, fournisseur de matériel informatique)<br>• La liste des interconnexions avec les systèmes d’information de l’entité.<br>(Cette liste peut s’appuyer sur les démarches déjà réalisées par l’entité pour réaliser une telle liste. Par exemple, la déclaration de sous-traitance réalisée dans le cadre d’un contrat de la commande publique).',
     entitesConcernees: ['EI', 'EE'],
   },
   '3.A.2-EI/EE': {
@@ -149,7 +149,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 4: Prise en compte de la sécurité numérique dans la gestion des ressources humaines',
     thematique: 'Sécurité des ressources humaines',
     description:
-      "L'entité définit et met en œuvre une charte d'usage des systèmes d'information, et la rend opposable à chacun des utilisateurs de ces systèmes d'information.\nCette charte peut prévoir des dispositions spécifiques pour les administrateurs.\nCette charte peut également couvrir les systèmes d'information pour lesquels l'entité a décidé de ne pas appliquer les objectifs de sécurité.",
+      "L'entité définit et met en œuvre une charte d'usage des systèmes d'information, et la rend opposable à chacun des utilisateurs de ces systèmes d'information.<br>Cette charte peut prévoir des dispositions spécifiques pour les administrateurs.<br>Cette charte peut également couvrir les systèmes d'information pour lesquels l'entité a décidé de ne pas appliquer les objectifs de sécurité.",
     entitesConcernees: ['EI', 'EE'],
   },
   '4.2-EI/EE': {
@@ -157,7 +157,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 4: Prise en compte de la sécurité numérique dans la gestion des ressources humaines',
     thematique: 'Sécurité des ressources humaines',
     description:
-      'L’entité définit et met en œuvre un programme de sensibilisation à la sécurité numérique de l’ensemble des utilisateurs.\nCe programme doit comporter des actions tout au long de la présence des utilisateurs dans l’entité.',
+      'L’entité définit et met en œuvre un programme de sensibilisation à la sécurité numérique de l’ensemble des utilisateurs.<br>Ce programme doit comporter des actions tout au long de la présence des utilisateurs dans l’entité.',
     entitesConcernees: ['EI', 'EE'],
   },
   '4.3-EE': {
@@ -173,7 +173,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 4: Prise en compte de la sécurité numérique dans la gestion des ressources humaines',
     thematique: 'Sécurité des ressources humaines',
     description:
-      'L’entité définit et met en œuvre un processus de gestion des arrivées, des départs et des changements de fonction des personnels et des tiers accédant aux systèmes d’information. Ce processus prévoit :\n•\tLa prise de connaissance des règles de sécurité en vigueur lors leur arrivée ;\n•\tL’attribution des accès appropriés lors de leur arrivée ;\n•\tLa mise à jour des accès lors d’un changement de fonction ;\n•\tLors du départ, la restitution de l’ensemble du matériel qui a été mis à disposition et la désactivation de l’ensemble des accès logiques aux systèmes d’information et physiques aux locaux et salles.',
+      'L’entité définit et met en œuvre un processus de gestion des arrivées, des départs et des changements de fonction des personnels et des tiers accédant aux systèmes d’information. Ce processus prévoit :<br>• La prise de connaissance des règles de sécurité en vigueur lors leur arrivée ;<br>• L’attribution des accès appropriés lors de leur arrivée ;<br>• La mise à jour des accès lors d’un changement de fonction ;<br>• Lors du départ, la restitution de l’ensemble du matériel qui a été mis à disposition et la désactivation de l’ensemble des accès logiques aux systèmes d’information et physiques aux locaux et salles.',
     entitesConcernees: ['EI', 'EE'],
   },
   '4.5-EI/EE': {
@@ -188,7 +188,7 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 5: Maitrise des systèmes d'information",
     thematique: "Cartographie des systèmes d'information",
     description:
-      'L’entité élabore et maintient à jour au moins une cartographie de ses systèmes d’information dont le niveau de détail est suffisant pour lui permettre :\no\td’assurer le maintien en condition opérationnelles et de sécurité de ces systèmes (par exemple : être capable d’identifier les ressources matérielles ou logicielles vulnérables suite à la publication d’un bulletin d’alerte) ;\no\tde pouvoir réagir sans retard injustifié à un incident de sécurité affectant ces systèmes d’information (par exemple : être capable d’identifier les ressources matérielles ou logicielles affectées par un incident de sécurité et ainsi limiter les conséquences de l’incident).\nCette cartographie peut s’appuyer sur les recommandations de l’autorité nationale de sécurité des systèmes d’information en matière de cartographie.',
+      'L’entité élabore et maintient à jour au moins une cartographie de ses systèmes d’information dont le niveau de détail est suffisant pour lui permettre :<br>o d’assurer le maintien en condition opérationnelles et de sécurité de ces systèmes (par exemple : être capable d’identifier les ressources matérielles ou logicielles vulnérables suite à la publication d’un bulletin d’alerte) ;<br>o de pouvoir réagir sans retard injustifié à un incident de sécurité affectant ces systèmes d’information (par exemple : être capable d’identifier les ressources matérielles ou logicielles affectées par un incident de sécurité et ainsi limiter les conséquences de l’incident).<br>Cette cartographie peut s’appuyer sur les recommandations de l’autorité nationale de sécurité des systèmes d’information en matière de cartographie.',
     entitesConcernees: ['EI', 'EE'],
   },
   '5.B.1-EE': {
@@ -216,7 +216,7 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 5: Maitrise des systèmes d'information",
     thematique: 'Maintien en condition opérationnelle et de sécurité',
     description:
-      'L’entité met en œuvre, au regard de la nature de la vulnérabilité :\n•\tsans délai : les actions visant à l’installation des correctifs de sécurité (par exemple : le déploiement en environnement de test, pré-production et production, mécanismes de rollback) ;\n•\tsans retard injustifié : l’application effective des correctifs de sécurité après la réalisation des actions précédentes\nsur les ressources exposées à des systèmes d’information tiers (par exemple : un serveur Web, un pare-feu exposé sur Internet, un serveur de messagerie) et les postes de travail des utilisateurs.',
+      'L’entité met en œuvre, au regard de la nature de la vulnérabilité :<br>• sans délai : les actions visant à l’installation des correctifs de sécurité (par exemple : le déploiement en environnement de test, pré-production et production, mécanismes de rollback) ;<br>• sans retard injustifié : l’application effective des correctifs de sécurité après la réalisation des actions précédentes<br>sur les ressources exposées à des systèmes d’information tiers (par exemple : un serveur Web, un pare-feu exposé sur Internet, un serveur de messagerie) et les postes de travail des utilisateurs.',
     entitesConcernees: ['EI', 'EE'],
   },
   '5.B.5-EE': {
@@ -265,7 +265,7 @@ export const mesuresReCyf = {
     objectif: 'Objectif de sécurité 6: Maitrise des accès physiques aux locaux',
     thematique: 'Maîtrise des accès physiques',
     description:
-      'L’entité s’assure de la protection physique des locaux, salles serveurs et locaux techniques (par exemple : vidéosurveillance, gardiennage, alarme).\nCette protection physique permet de prévenir, de surveiller et de réagir aux accès non autorisés à ces locaux.',
+      'L’entité s’assure de la protection physique des locaux, salles serveurs et locaux techniques (par exemple : vidéosurveillance, gardiennage, alarme).<br>Cette protection physique permet de prévenir, de surveiller et de réagir aux accès non autorisés à ces locaux.',
     entitesConcernees: ['EE'],
   },
   '6.3-EE': {
@@ -303,7 +303,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 7: Sécurisation de l'architecture des systèmes d'information",
     thematique: 'Cloisonnement',
     description:
-      'L’entité mène des réflexions, pour chaque système d’information, sur la pertinence de définir des sous-systèmes. Lorsqu’elle n’identifie aucun sous-système, l’entité en apporte la justification.\nUn sous-système regroupe des ressources assurant des fonctionnalités similaires et ayant des niveaux de sensibilité, d’exposition et de sécurité homogènes.',
+      'L’entité mène des réflexions, pour chaque système d’information, sur la pertinence de définir des sous-systèmes. Lorsqu’elle n’identifie aucun sous-système, l’entité en apporte la justification.<br>Un sous-système regroupe des ressources assurant des fonctionnalités similaires et ayant des niveaux de sensibilité, d’exposition et de sécurité homogènes.',
     entitesConcernees: ['EE'],
   },
   '7.A.4-EE': {
@@ -319,7 +319,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 7: Sécurisation de l'architecture des systèmes d'information",
     thematique: 'Cloisonnement',
     description:
-      'L’entité met en œuvre au moins un sous-système “passerelle sortante” permettant :\n•\taux ressources de ses systèmes d’information d’accéder aux systèmes d’informations tiers ;\n•\td’authentifier, de filtrer et de tracer les accès aux systèmes d’information tiers (par exemple : un serveur mandataire).',
+      'L’entité met en œuvre au moins un sous-système “passerelle sortante” permettant :<br>• aux ressources de ses systèmes d’information d’accéder aux systèmes d’informations tiers ;<br>• d’authentifier, de filtrer et de tracer les accès aux systèmes d’information tiers (par exemple : un serveur mandataire).',
     entitesConcernees: ['EE'],
   },
   '7.A.6-EE': {
@@ -327,7 +327,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 7: Sécurisation de l'architecture des systèmes d'information",
     thematique: 'Cloisonnement',
     description:
-      'L’entité met en œuvre au moins un sous-système “passerelle entrante” permettant :\n•\td’exposer des ressources de ses systèmes d’information aux systèmes d’information tiers ;\n•\tde filtrer et de tracer les accès depuis des systèmes d’information tiers (par exemple : un serveur mandataire inverse ou un relai).',
+      'L’entité met en œuvre au moins un sous-système “passerelle entrante” permettant :<br>• d’exposer des ressources de ses systèmes d’information aux systèmes d’information tiers ;<br>• de filtrer et de tracer les accès depuis des systèmes d’information tiers (par exemple : un serveur mandataire inverse ou un relai).',
     entitesConcernees: ['EE'],
   },
   '7.A.7-EI/EE': {
@@ -351,7 +351,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 7: Sécurisation de l'architecture des systèmes d'information",
     thematique: 'Filtrage des communications',
     description:
-      'L’entité définit et documente les communications nécessaires :\n•\tà la réalisation de ses activités et services ;\n•\tau maintien en condition opérationnelle de sécurité circulant entre ses systèmes d’information et les autres systèmes d’information pour lesquels elle a décidé de ne pas appliquer les objectifs de sécurité, d’une part, et les systèmes d’information tiers, d’autre part.',
+      'L’entité définit et documente les communications nécessaires :<br>• à la réalisation de ses activités et services ;<br>• au maintien en condition opérationnelle de sécurité circulant entre ses systèmes d’information et les autres systèmes d’information pour lesquels elle a décidé de ne pas appliquer les objectifs de sécurité, d’une part, et les systèmes d’information tiers, d’autre part.',
     entitesConcernees: ['EI', 'EE'],
   },
   '7.B.2-EE': {
@@ -375,7 +375,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 7: Sécurisation de l'architecture des systèmes d'information",
     thematique: 'Filtrage des communications',
     description:
-      "L’entité filtre par un ou plusieurs pares-feux dédiés à cet usage, au minimum :\n•\tles communications entre les systèmes d’information de l’entité pour lesquels elle a décidé d'appliquer les objectifs ou non, d’une part ; et\n•\tles SI tiers d’autre part.\nPar exemple : une entité mettant en œuvre un pare-feu pour filtrer les communications entre ses systèmes d’information (pour lesquels elle applique les objectifs de sécurité ou non) d’une part et les systèmes d’information tiers d’autre part est une solution acceptable.",
+      "L’entité filtre par un ou plusieurs pares-feux dédiés à cet usage, au minimum :<br>• les communications entre les systèmes d’information de l’entité pour lesquels elle a décidé d'appliquer les objectifs ou non, d’une part ; et<br>• les SI tiers d’autre part.<br>Par exemple : une entité mettant en œuvre un pare-feu pour filtrer les communications entre ses systèmes d’information (pour lesquels elle applique les objectifs de sécurité ou non) d’une part et les systèmes d’information tiers d’autre part est une solution acceptable.",
     entitesConcernees: ['EI', 'EE'],
   },
   '7.B.5-EI/EE': {
@@ -431,7 +431,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 9: Protection des systèmes d'information contre les codes malveillants",
     thematique: 'Protection contre les codes malveillants',
     description:
-      'L’entité définit les ressources matérielles, en particulier les terminaux, autorisées à se connecter à ses systèmes d’information.\nNB : Cette mesure autorise le AVEC (Apportez votre équipement de communication) ou BYOD en anglais.',
+      'L’entité définit les ressources matérielles, en particulier les terminaux, autorisées à se connecter à ses systèmes d’information.<br>NB : Cette mesure autorise le AVEC (Apportez votre équipement de communication) ou BYOD en anglais.',
     entitesConcernees: ['EI', 'EE'],
   },
   '9.2-EE': {
@@ -439,7 +439,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 9: Protection des systèmes d'information contre les codes malveillants",
     thematique: 'Protection contre les codes malveillants',
     description:
-      'Seules les ressources matérielles dont l’entité, ou le prestataire qu’elle a mandaté à cet effet, assure la gestion et qui participent à la réalisation des activités ou des services de l’entité ou au maintien en condition opérationnelle et de sécurité se connectent aux systèmes d’information.\nNB : Cette mesure interdit le AVEC (Apportez votre équipement de communication) ou BYOD en anglais.',
+      'Seules les ressources matérielles dont l’entité, ou le prestataire qu’elle a mandaté à cet effet, assure la gestion et qui participent à la réalisation des activités ou des services de l’entité ou au maintien en condition opérationnelle et de sécurité se connectent aux systèmes d’information.<br>NB : Cette mesure interdit le AVEC (Apportez votre équipement de communication) ou BYOD en anglais.',
     entitesConcernees: ['EE'],
   },
   '9.3-EI/EE': {
@@ -623,7 +623,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 11: Maitrise de l'administration des systèmes d'information",
     thematique: "Comptes d'administration",
     description:
-      "Les actions d'administration sont effectuées exclusivement à partir de comptes d'administration et les comptes d'administration sont utilisés exclusivement pour les actions d'administration.\nPar exemple : le compte d’administration d’un poste utilisateur est utilisé exclusivement pour l’administration de ce poste. L’utilisateur de ce poste dispose d’un compte bureautique non administrateur pour son utilisation quotidienne.",
+      "Les actions d'administration sont effectuées exclusivement à partir de comptes d'administration et les comptes d'administration sont utilisés exclusivement pour les actions d'administration.<br>Par exemple : le compte d’administration d’un poste utilisateur est utilisé exclusivement pour l’administration de ce poste. L’utilisateur de ce poste dispose d’un compte bureautique non administrateur pour son utilisation quotidienne.",
     entitesConcernees: ['EI', 'EE'],
   },
   '11.A.2-EI/EE': {
@@ -671,7 +671,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 11: Maitrise de l'administration des systèmes d'information",
     thematique: "Comptes d'administration",
     description:
-      "Lors de toute modification d'un compte d’administration (ajout, suppression, suspension ou modification des droits associés), l’entité vérifie que les droits d'accès aux ressources et fonctionnalités sont attribués en cohérence avec les besoins d'utilisation du compte.\nEn particulier, afin de limiter la portée des droits individuels, ils sont attribués à chaque compte d’administration en les restreignant autant que possible au périmètre fonctionnel et technique de ce dernier.\nPour ceci, il est recommandé d’octroyer les droits d’administration au travers des groupes dont les comptes d’administration sont membres.",
+      "Lors de toute modification d'un compte d’administration (ajout, suppression, suspension ou modification des droits associés), l’entité vérifie que les droits d'accès aux ressources et fonctionnalités sont attribués en cohérence avec les besoins d'utilisation du compte.<br>En particulier, afin de limiter la portée des droits individuels, ils sont attribués à chaque compte d’administration en les restreignant autant que possible au périmètre fonctionnel et technique de ce dernier.<br>Pour ceci, il est recommandé d’octroyer les droits d’administration au travers des groupes dont les comptes d’administration sont membres.",
     entitesConcernees: ['EE'],
   },
   '11.B.1-EI/EE': {
@@ -687,7 +687,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 11: Maitrise de l'administration des systèmes d'information",
     thematique: 'Sécurité des annuaires',
     description:
-      'La sécurité des systèmes d’information de l’entité repose en grande partie sur la sécurité du ou des annuaires gérant les utilisateurs ou les ressources des systèmes d’information.\nL’ensemble des ressources regroupant un annuaire, les ressources matérielles et logicielles hébergeant cet annuaire ou permettant de prendre le contrôle de cet annuaire (les comptes, les hyperviseurs, les machines d’administration, etc.) est désigné « cœur de confiance » (par exemple : Le Tier0 un annuaire AD DS constitue le cœur de confiance du système d’information).\nPour chacun de ses annuaires, l’entité identifie les ressources constituant son cœur de confiance.',
+      'La sécurité des systèmes d’information de l’entité repose en grande partie sur la sécurité du ou des annuaires gérant les utilisateurs ou les ressources des systèmes d’information.<br>L’ensemble des ressources regroupant un annuaire, les ressources matérielles et logicielles hébergeant cet annuaire ou permettant de prendre le contrôle de cet annuaire (les comptes, les hyperviseurs, les machines d’administration, etc.) est désigné « cœur de confiance » (par exemple : Le Tier0 un annuaire AD DS constitue le cœur de confiance du système d’information).<br>Pour chacun de ses annuaires, l’entité identifie les ressources constituant son cœur de confiance.',
     entitesConcernees: ['EE'],
   },
   '11.B.3-EE': {
@@ -719,7 +719,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 11: Maitrise de l'administration des systèmes d'information",
     thematique: 'Sécurité des annuaires',
     description:
-      'L’entité effectue annuellement une revue de la configuration des annuaires gérant les utilisateurs ou les ressources de ses systèmes d’information, afin d’identifier tout élément inutile ou anormal.\nIl est recommandé que cette revue s’appuie sur un outil automatisé.',
+      'L’entité effectue annuellement une revue de la configuration des annuaires gérant les utilisateurs ou les ressources de ses systèmes d’information, afin d’identifier tout élément inutile ou anormal.<br>Il est recommandé que cette revue s’appuie sur un outil automatisé.',
     entitesConcernees: ['EE'],
   },
   '11.B.7-EE': {
@@ -743,7 +743,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 12: Identification et réaction aux incidents de sécurité',
     thematique: 'Gestion des incidents',
     description:
-      'L’entité s’assure de la mise en œuvre des outils permettant de collecter les signalements remontés, en particulier par les sources suivantes :\n•\tLes employés de l’entité essentielle ;\n•\tLes clients et les usagers des activités et services mis en œuvre par l’entité essentielle ;\n•\tLes prestataires et les fournisseurs contractant avec l’entité essentielle.',
+      'L’entité s’assure de la mise en œuvre des outils permettant de collecter les signalements remontés, en particulier par les sources suivantes :<br>• Les employés de l’entité essentielle ;<br>• Les clients et les usagers des activités et services mis en œuvre par l’entité essentielle ;<br>• Les prestataires et les fournisseurs contractant avec l’entité essentielle.',
     entitesConcernees: ['EE'],
   },
   '12.3-EI/EE': {
@@ -759,7 +759,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 12: Identification et réaction aux incidents de sécurité',
     thematique: 'Gestion des incidents',
     description:
-      'L’entité s’assure de la définition et de la mise en œuvre des mécanismes organisationnels et techniques permettant de réagir en cas d’incident et de limiter les conséquences sur la fourniture des services.\nCes mécanismes sont repris, le cas échéant, dans la définition des plans de continuité et de reprise d’activité.',
+      'L’entité s’assure de la définition et de la mise en œuvre des mécanismes organisationnels et techniques permettant de réagir en cas d’incident et de limiter les conséquences sur la fourniture des services.<br>Ces mécanismes sont repris, le cas échéant, dans la définition des plans de continuité et de reprise d’activité.',
     entitesConcernees: ['EE'],
   },
   '12.5-EE': {
@@ -767,7 +767,7 @@ export const mesuresReCyf = {
       'Objectif de sécurité 12: Identification et réaction aux incidents de sécurité',
     thematique: 'Gestion des incidents',
     description:
-      'En complément des dispositions de l’article 17 de la loi XXX, l’entité s’assure, après chaque incident de sécurité, qu’une analyse des causes de l’incident a été réalisée.\nL’analyse des causes vise à définir et mettre en œuvre les mesures de sécurité permettant de limiter la vraisemblance d’un nouvel incident ou d’en réduire l’impact. L’entité conserve des preuves de cette analyse.',
+      'En complément des dispositions de l’article 17 de la loi XXX, l’entité s’assure, après chaque incident de sécurité, qu’une analyse des causes de l’incident a été réalisée.<br>L’analyse des causes vise à définir et mettre en œuvre les mesures de sécurité permettant de limiter la vraisemblance d’un nouvel incident ou d’en réduire l’impact. L’entité conserve des preuves de cette analyse.',
     entitesConcernees: ['EE'],
   },
   '12.6-EI/EE': {
@@ -832,7 +832,7 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 13: Continuité et reprise d'activité",
     thematique: "Continuité et reprise d'activité",
     description:
-      'L’identification de ces mesures de continuité s’appuie notamment :\n•\tSur la cartographie de l’écosystème ;\n•\tSur la procédure de gestion des incidents pour détecter et réagir au plus tôt aux incidents ;\n•\tSur la procédure de gestion des crises d’origine cyber pour permettre la reprise au plus tôt des services.',
+      'L’identification de ces mesures de continuité s’appuie notamment :<br>• Sur la cartographie de l’écosystème ;<br>• Sur la procédure de gestion des incidents pour détecter et réagir au plus tôt aux incidents ;<br>• Sur la procédure de gestion des crises d’origine cyber pour permettre la reprise au plus tôt des services.',
     entitesConcernees: ['EE'],
   },
   '14.1-EI/EE': {
@@ -895,7 +895,7 @@ export const mesuresReCyf = {
     objectif: "Objectif de sécurité 14: Réaction aux crises d'origine cyber",
     thematique: 'Gestion de crise',
     description:
-      'L’entité s’assure de la définition et de la mise en œuvre des mesures pour isoler, protéger et, le cas échéant, reconstruire les systèmes d’information concernés, activables en cas d’incident de sécurité.\nCes mesures prennent en compte les infrastructures, applicatifs et services numériques externalisés à des prestataires et sont mises en place en cohérence avec les plans de continuité et de reprise d’activité.',
+      'L’entité s’assure de la définition et de la mise en œuvre des mesures pour isoler, protéger et, le cas échéant, reconstruire les systèmes d’information concernés, activables en cas d’incident de sécurité.<br>Ces mesures prennent en compte les infrastructures, applicatifs et services numériques externalisés à des prestataires et sont mises en place en cohérence avec les plans de continuité et de reprise d’activité.',
     entitesConcernees: ['EE'],
   },
   '14.9-EE': {
@@ -916,21 +916,21 @@ export const mesuresReCyf = {
     objectif: 'Objectif de sécurité 15: Exercices, tests et entrainements',
     thematique: 'Exercices, tests et entraînements',
     description:
-      'L’entité définit et met en œuvre une stratégie d’entraînement qui comporte, au minimum, les éléments suivants :\n•\tUne liste des acteurs amenés à participer aux différents dispositifs d’entraînement et d’exercice ;\n•\tUne liste d’exercices permettant d’entraîner ou de tester les capacités opérationnelles ;\n•\tLes objectifs visés par la stratégie ; \n•\tLes moyens de vérification ou d’évaluation d’atteinte de ces objectifs ;\n•\tLes scénarios de risques ou d’attaques à tester en priorité ;\n•\tLa comitologie de suivi de la stratégie.\nCette stratégie peut être mutualisée avec d’autres livrables.',
+      'L’entité définit et met en œuvre une stratégie d’entraînement qui comporte, au minimum, les éléments suivants :<br>• Une liste des acteurs amenés à participer aux différents dispositifs d’entraînement et d’exercice ;<br>• Une liste d’exercices permettant d’entraîner ou de tester les capacités opérationnelles ;<br>• Les objectifs visés par la stratégie ; <br>• Les moyens de vérification ou d’évaluation d’atteinte de ces objectifs ;<br>• Les scénarios de risques ou d’attaques à tester en priorité ;<br>• La comitologie de suivi de la stratégie.<br>Cette stratégie peut être mutualisée avec d’autres livrables.',
     entitesConcernees: ['EE'],
   },
   '15.3-EE': {
     objectif: 'Objectif de sécurité 15: Exercices, tests et entrainements',
     thematique: 'Exercices, tests et entraînements',
     description:
-      'Cette stratégie d’entraînement vise à tester les dispositifs mis en œuvre par l’entité en matière :\n•\tDe gestion des alertes relatives aux incidents, aux vulnérabilités et menaces ;\n•\tDe continuité et de reprise d’activité ;\n•\tDe gestion des crises d’origine cyber.',
+      'Cette stratégie d’entraînement vise à tester les dispositifs mis en œuvre par l’entité en matière :<br>• De gestion des alertes relatives aux incidents, aux vulnérabilités et menaces ;<br>• De continuité et de reprise d’activité ;<br>• De gestion des crises d’origine cyber.',
     entitesConcernees: ['EE'],
   },
   '15.4-EE': {
     objectif: 'Objectif de sécurité 15: Exercices, tests et entrainements',
     thematique: 'Exercices, tests et entraînements',
     description:
-      'L’entité décline cette stratégie dans la définition et la mise en œuvre d’un programme triennal d’entraînement et d’exercice. Ce programme précise notamment la fréquence de ces entraînements et exercices ainsi que leur nature et que leurs objectifs.\nCe programme triennal doit permettre de tester les dispositifs de gestion des incidents, de gestion des crises d’origine cyber et de coopération avec l’écosystème et, le cas échéant, le volet cyber des plans de continuité et de reprise d’activité.',
+      'L’entité décline cette stratégie dans la définition et la mise en œuvre d’un programme triennal d’entraînement et d’exercice. Ce programme précise notamment la fréquence de ces entraînements et exercices ainsi que leur nature et que leurs objectifs.<br>Ce programme triennal doit permettre de tester les dispositifs de gestion des incidents, de gestion des crises d’origine cyber et de coopération avec l’écosystème et, le cas échéant, le volet cyber des plans de continuité et de reprise d’activité.',
     entitesConcernees: ['EE'],
   },
   '16.1-EE': {
@@ -938,7 +938,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 16: Mise en œuvre d'une approche par les risques",
     thematique: 'Approche par les risques',
     description:
-      'L’entité définit, met en œuvre et maintient à jour une gouvernance par les risques.\nCette gouvernance vise à s’assurer que le risque numérique est pris en compte par le dirigeant exécutif de l’entité et les responsables d’activité ou de service de l’entité au regard des rôles et responsabilités définis et que les moyens financiers, humains ou techniques adéquats sont alloués pour maîtriser ce risque.\nCette gouvernance intègre les éléments issus de l’approche par la conformité et la complète par une approche par les risques, réalisée dans les conditions définies ci-après. Ces approches sont complémentaires et peuvent être mutualisées, notamment en termes de livrables attendus.',
+      'L’entité définit, met en œuvre et maintient à jour une gouvernance par les risques.<br>Cette gouvernance vise à s’assurer que le risque numérique est pris en compte par le dirigeant exécutif de l’entité et les responsables d’activité ou de service de l’entité au regard des rôles et responsabilités définis et que les moyens financiers, humains ou techniques adéquats sont alloués pour maîtriser ce risque.<br>Cette gouvernance intègre les éléments issus de l’approche par la conformité et la complète par une approche par les risques, réalisée dans les conditions définies ci-après. Ces approches sont complémentaires et peuvent être mutualisées, notamment en termes de livrables attendus.',
     entitesConcernees: ['EE'],
   },
   '16.2-EE': {
@@ -946,7 +946,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 16: Mise en œuvre d'une approche par les risques",
     thematique: 'Approche par les risques',
     description:
-      'L’entité s’assure que chaque système d’information fait l’objet d’une analyse de risques.\nCette exigence peut être satisfaite via la réalisation et le maintien à jour d’une analyse de risques pour chaque activité ou service qu’elle fournit, couvrant l’ensemble des systèmes d’information supportant cette activité ou ce service.\nCette analyse de risques s’appuie sur les éléments issus :\n•\tDe la PSSI et des spécificités sectorielles ;\n•\tDe la maîtrise de l’écosystème ;\n•\tDe la maîtrise du système d’information ;\n•\tDe l’approche par conformité ;\n•\tDes audits.\nLa méthode EBIOS RM peut être utilisée pour réaliser cette analyse de risques.',
+      'L’entité s’assure que chaque système d’information fait l’objet d’une analyse de risques.<br>Cette exigence peut être satisfaite via la réalisation et le maintien à jour d’une analyse de risques pour chaque activité ou service qu’elle fournit, couvrant l’ensemble des systèmes d’information supportant cette activité ou ce service.<br>Cette analyse de risques s’appuie sur les éléments issus :<br>• De la PSSI et des spécificités sectorielles ;<br>• De la maîtrise de l’écosystème ;<br>• De la maîtrise du système d’information ;<br>• De l’approche par conformité ;<br>• Des audits.<br>La méthode EBIOS RM peut être utilisée pour réaliser cette analyse de risques.',
     entitesConcernees: ['EE'],
   },
   '16.3-EE': {
@@ -954,7 +954,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 16: Mise en œuvre d'une approche par les risques",
     thematique: 'Approche par les risques',
     description:
-      'L’entité valide l’analyse de risques, accepte les risques résiduels et met en œuvre le plan d’action pour maîtriser ces risques.\nLe plan d’action prévoit, au minimum, une échéance raisonnable et un responsable pour la réalisation de chaque action.',
+      'L’entité valide l’analyse de risques, accepte les risques résiduels et met en œuvre le plan d’action pour maîtriser ces risques.<br>Le plan d’action prévoit, au minimum, une échéance raisonnable et un responsable pour la réalisation de chaque action.',
     entitesConcernees: ['EE'],
   },
   '16.4-EE': {
@@ -970,7 +970,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 17: Audit de la sécurité des systèmes d'information",
     thematique: 'Audits de la sécurité',
     description:
-      'L’entité définit et met en œuvre un programme d’audit de l’ensemble de ses systèmes d’information et s’assure que les audits associés à ce programme ainsi que leur profondeur et leur fréquence tiennent compte de tout ou partie de l’analyse de risque réalisée, de la criticité du système d’information au regard de son organisation et de l’exposition du système d’information aux risques numériques.\nPour évaluer cette criticité et ce niveau d’exposition, l’entité peut s’appuyer sur les recommandations de l’autorité nationale de sécurité des systèmes d’information en matière de gestion des risques numériques.',
+      'L’entité définit et met en œuvre un programme d’audit de l’ensemble de ses systèmes d’information et s’assure que les audits associés à ce programme ainsi que leur profondeur et leur fréquence tiennent compte de tout ou partie de l’analyse de risque réalisée, de la criticité du système d’information au regard de son organisation et de l’exposition du système d’information aux risques numériques.<br>Pour évaluer cette criticité et ce niveau d’exposition, l’entité peut s’appuyer sur les recommandations de l’autorité nationale de sécurité des systèmes d’information en matière de gestion des risques numériques.',
     entitesConcernees: ['EE'],
   },
   '17.2-EE': {
@@ -978,7 +978,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 17: Audit de la sécurité des systèmes d'information",
     thematique: 'Audits de la sécurité',
     description:
-      'L’audit de sécurité permet, de manière indépendante :\n•\tDe vérifier, sur le périmètre défini, l’atteinte des objectifs fixés par la réglementation via \no\tLa conformité aux présentes mesures, ou \no\tLa mise en œuvre de mesures alternatives ; et\n•\tD’évaluer le niveau de sécurité du ou des systèmes d’information couverts au regard des menaces et des vulnérabilités connues.',
+      'L’audit de sécurité permet, de manière indépendante :<br>• De vérifier, sur le périmètre défini, l’atteinte des objectifs fixés par la réglementation via <br>o La conformité aux présentes mesures, ou <br>o La mise en œuvre de mesures alternatives ; et<br>• D’évaluer le niveau de sécurité du ou des systèmes d’information couverts au regard des menaces et des vulnérabilités connues.',
     entitesConcernees: ['EE'],
   },
   '17.3-EE': {
@@ -994,7 +994,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 17: Audit de la sécurité des systèmes d'information",
     thematique: 'Audits de la sécurité',
     description:
-      'Le rapport de l’audit de sécurité présente :\n•\tUne synthèse de la conformité aux présentes mesures ou aux mesures définies par l’entité pour atteindre les objectifs fixés par la réglementation et du niveau de sécurité des systèmes d’information audités ;\n•\tLes constats de non-conformité et les vulnérabilités identifiées ;\n•\tLes recommandations pour y remédier.',
+      'Le rapport de l’audit de sécurité présente :<br>• Une synthèse de la conformité aux présentes mesures ou aux mesures définies par l’entité pour atteindre les objectifs fixés par la réglementation et du niveau de sécurité des systèmes d’information audités ;<br>• Les constats de non-conformité et les vulnérabilités identifiées ;<br>• Les recommandations pour y remédier.',
     entitesConcernees: ['EE'],
   },
   '17.5-EE': {
@@ -1002,7 +1002,7 @@ export const mesuresReCyf = {
       "Objectif de sécurité 17: Audit de la sécurité des systèmes d'information",
     thematique: 'Audits de la sécurité',
     description:
-      'L’entité définit et met en œuvre un plan d’action visant à corriger les non-conformités et les vulnérabilités identifiées.\nCe plan d’action prévoit, au minimum, une échéance raisonnable et un responsable pour la réalisation de chaque action.',
+      'L’entité définit et met en œuvre un plan d’action visant à corriger les non-conformités et les vulnérabilités identifiées.<br>Ce plan d’action prévoit, au minimum, une échéance raisonnable et un responsable pour la réalisation de chaque action.',
     entitesConcernees: ['EE'],
   },
   '18.1-EE': {

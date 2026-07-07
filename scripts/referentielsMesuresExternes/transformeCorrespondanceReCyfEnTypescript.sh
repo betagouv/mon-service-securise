@@ -48,7 +48,12 @@ DONNEES_REFERENTIEL="$(
           recyf: .["Références (New)"],
           objectif: ((.["Objectif de sécurité"] // "") | gsub("^\\s+|\\s+$"; "")),
           thematique: ((.["Thématique"] // "") | gsub("^\\s+|\\s+$"; "")),
-          description: ((.["Contenu"] // "") | gsub("^\\s+|\\s+$"; "")),
+          description: (
+            (.["Contenu"] // "")
+            | gsub("^\\s+|\\s+$"; "")
+            | gsub("\\r\\n|\\r|\\n"; "<br>")
+            | gsub("\\t"; " ")
+          ),
           entitesConcernees: (
             (.["EIEE"] // "")
             | split(",")
