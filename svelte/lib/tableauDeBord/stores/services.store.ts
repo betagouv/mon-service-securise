@@ -8,7 +8,7 @@ export const services = {
   ajouteIndicesCyber: (indicesCybers: IndiceCyber[]) => {
     update((services: ServiceAvecIndiceCyber[]) => {
       return services.map((service) => {
-        const indiceCyberDuService = indicesCybers.find(
+        const indiceCyberDuService = indicesCybers?.find(
           (i) => i.id === service.id
         );
         return {
