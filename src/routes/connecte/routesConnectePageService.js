@@ -97,13 +97,15 @@ const routesConnectePageService = ({
     valideQuery(
       z.strictObject({
         avecDonneesAdditionnelles: z.stringbool().optional(),
+        avecReferentielsExternes: z.stringbool().optional(),
         timestamp: z.string().optional(),
       })
     ),
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
       const { service } = requete;
-      const { avecDonneesAdditionnelles } = requete.query;
+      const { avecDonneesAdditionnelles, avecReferentielsExternes } =
+        requete.query;
 
       try {
         const contributeurs = Object.fromEntries(
@@ -113,7 +115,9 @@ const routesConnectePageService = ({
           service.mesures.enrichiesAvecDonneesPersonnalisees(),
           contributeurs,
           avecDonneesAdditionnelles,
-          service.referentiel
+          service.referentiel,
+          true,
+          avecReferentielsExternes
         );
 
         const s = service

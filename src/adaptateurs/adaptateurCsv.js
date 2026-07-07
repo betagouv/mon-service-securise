@@ -56,7 +56,8 @@ const genereCsvMesures = async (
   contributeurs,
   avecDonneesAdditionnnelles,
   referentiel,
-  avecTypeMesure = true
+  avecTypeMesure = true,
+  avecReferentielsExternes = false
 ) => {
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
 
@@ -86,11 +87,32 @@ const genereCsvMesures = async (
     colonnes.push({ id: 'priorite', title: 'Priorité' });
     colonnes.push({ id: 'echeance', title: 'Échéance' });
     colonnes.push({ id: 'responsables', title: 'Responsables' });
+    if (avecReferentielsExternes) {
+      colonnes.push({
+        id: 'mesuresAssocieesReCyf',
+        title: 'Exigences NIS2-ReCyf associées',
+      });
+      colonnes.push({
+        id: 'mesuresAssocieesISO',
+        title: 'Exigences ISO 2700X associées',
+      });
+      colonnes.push({
+        id: 'mesuresAssocieesAE',
+        title: 'Exigences Annexe au Règlement d’exécution 2024/2690 associées',
+      });
+    }
   }
 
   const formatteResponsables = (responsables) =>
     separesParVirgule(
       responsables.map((id) => contributeurs[id]).filter((value) => !!value)
+    );
+
+  const mesuresAssociees = (idMesure, referentielExterne) =>
+    separesParVirgule(
+      referentiel
+        .referentielsExternesDeMesure(idMesure)
+        [referentielExterne].map((d) => d.id)
     );
 
   const donneesCsv = Object.entries(mesuresGenerales)
@@ -110,6 +132,9 @@ const genereCsvMesures = async (
       responsables: m.responsables
         ? formatteResponsables(m.responsables)
         : null,
+      mesuresAssocieesReCyf: mesuresAssociees(idMesure, 'ReCyf'),
+      mesuresAssocieesISO: mesuresAssociees(idMesure, 'ISO2700X'),
+      mesuresAssocieesAE: mesuresAssociees(idMesure, 'AE2690'),
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
