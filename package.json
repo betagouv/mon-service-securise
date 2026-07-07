@@ -36,6 +36,7 @@
     "@lab-anssi/lib": "^2.1.6",
     "@lab-anssi/ui-kit": "1.55.0",
     "@myriaddreamin/typst-ts-node-compiler": "0.7.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@sentry/node": "^7.102.1",
     "@tiptap/core": "^3.22.5",
     "@tiptap/extension-mention": "^3.22.5",
