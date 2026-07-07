@@ -1,4 +1,3 @@
-import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(async () => {
@@ -7,8 +6,6 @@ $(async () => {
   const modeVisiteGuidee =
     etatVisiteGuidee.dejaTerminee === false &&
     etatVisiteGuidee.enPause === false;
-
-  gestionnaireTiroir.brancheComportement();
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   const etapeActive = lisDonneesPartagees('etape-active');

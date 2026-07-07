@@ -1,5 +1,4 @@
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
-import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 
 $(() => {
   const idService = $('#pages-service').data('id-service');
@@ -48,15 +47,4 @@ $(() => {
       },
     })
   );
-
-  gestionnaireTiroir.brancheComportement();
-
-  $(document.body).on('mesure-modifiee', (e) => {
-    const doitFermerTiroir = e.detail?.sourceDeModification === 'tiroir';
-    if (doitFermerTiroir) gestionnaireTiroir.basculeOuvert(false);
-  });
-
-  $(document.body).on('ferme-tiroir', () => {
-    gestionnaireTiroir.basculeOuvert(false);
-  });
 });
