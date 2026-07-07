@@ -28,6 +28,11 @@ import {
   mesuresReCyf,
 } from './mesures/referentielsExternes/donneesReferentielMesuresReCyf.js';
 import { correspondanceMesuresV2VersReCyf } from './mesures/referentielsExternes/correspondanceMesuresV2VersReCyf.js';
+import {
+  IdMesureISO2700X,
+  mesuresISO2700X,
+} from './mesures/referentielsExternes/donneesReferentielMesuresISO2700X.js';
+import { correspondanceMesuresReCyfVersISO2700X } from './mesures/referentielsExternes/correspondanceMesuresReCyfVersISO2700X.js';
 
 export type EntiteConcernee = 'EI' | 'EE';
 
@@ -47,6 +52,10 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
   risquesV2: typeof donneesReferentielRisquesV2;
   donneesReferentielsExternesMesures: {
+    ISO2700X: {
+      mesures: Record<string, DonneesReferentielsMesuresISO2700X>;
+      liens: Partial<Record<IdMesureReCyf, IdMesureISO2700X[]>>;
+    };
     ReCyf: {
       mesures: Record<string, DonneesReferentielsMesuresReCyf>;
       liens: Partial<Record<IdMesureV2, IdMesureReCyf[]>>;
@@ -102,6 +111,10 @@ export const creeReferentielV2 = (
     risquesV2: donneesReferentielRisquesV2,
     donneesReferentielsExternesMesures: {
       ReCyf: { mesures: mesuresReCyf, liens: correspondanceMesuresV2VersReCyf },
+      ISO2700X: {
+        mesures: mesuresISO2700X,
+        liens: correspondanceMesuresReCyfVersISO2700X,
+      },
     },
   }
 ): Surcharge<Referentiel, MethodesSpecifiquesReferentielV2> => {
@@ -160,17 +173,30 @@ export const creeReferentielV2 = (
   const thematiqueDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].thematique;
 
-  const referentielsExternesDeMesure = (idMesure: IdMesureV2) => ({
-    ReCyf:
-      donnees.donneesReferentielsExternesMesures.ReCyf.liens[idMesure]?.map(
-        (idMesureReCyf: IdMesureReCyf) => ({
-          id: idMesureReCyf,
-          ...donnees.donneesReferentielsExternesMesures.ReCyf.mesures[
-            idMesureReCyf
-          ],
-        })
-      ) ?? [],
-  });
+  const referentielsExternesDeMesure = (idMesure: IdMesureV2) => {
+    const idsMesuresRecyf: Array<IdMesureReCyf> =
+      donnees.donneesReferentielsExternesMesures.ReCyf.liens[idMesure] || [];
+    const idsMesuresISO: Array<IdMesureISO2700X> = idsMesuresRecyf.flatMap(
+      (idMesureRecyf) =>
+        donnees.donneesReferentielsExternesMesures.ISO2700X.liens[
+          idMesureRecyf
+        ] || []
+    );
+    return {
+      ReCyf: idsMesuresRecyf.map((idMesureReCyf: IdMesureReCyf) => ({
+        id: idMesureReCyf,
+        ...donnees.donneesReferentielsExternesMesures.ReCyf.mesures[
+          idMesureReCyf
+        ],
+      })),
+      ISO2700X: idsMesuresISO.map((idMesureISO: IdMesureISO2700X) => ({
+        id: idMesureISO,
+        ...donnees.donneesReferentielsExternesMesures.ISO2700X.mesures[
+          idMesureISO
+        ],
+      })),
+    };
+  };
 
   const ajouteThematiqueEtPorteurs = (desMesures: typeof mesuresV2) =>
     Object.fromEntries(
