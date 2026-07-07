@@ -38,6 +38,10 @@ export type DonneesReferentielsMesuresReCyf = {
   entitesConcernees: readonly EntiteConcernee[];
 };
 
+export type DonneesReferentielsMesuresISO2700X = {
+  description: string;
+};
+
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
