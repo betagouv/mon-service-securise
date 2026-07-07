@@ -20,6 +20,7 @@
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
   import { derived } from 'svelte/store';
   import { rechercheParReferentielExterne } from '../stores/rechercheParReferentielExterne.store';
+  import { LIBELLES_REFERENTIELS_EXTERNES } from '../referentielsExternes';
 
   interface Props {
     categories: Record<IdCategorie, string>;
@@ -160,16 +161,18 @@
     {#if afficheReferentielsExterne}
       <fieldset>
         <legend>Référentiels d'exigences associés</legend>
-        <div class="case-et-label">
-          <input
-            type="checkbox"
-            id="recyf"
-            name="recyf"
-            value="ReCyf"
-            bind:group={$rechercheParReferentielExterne}
-          />
-          <label for="recyf">NIS2-ReCyf</label>
-        </div>
+        {#each Object.entries(LIBELLES_REFERENTIELS_EXTERNES) as [id, libelle] (id)}
+          <div class="case-et-label">
+            <input
+              type="checkbox"
+              {id}
+              name={id}
+              value={id}
+              bind:group={$rechercheParReferentielExterne}
+            />
+            <label for={id}>{libelle}</label>
+          </div>
+        {/each}
       </fieldset>
     {/if}
     <fieldset>

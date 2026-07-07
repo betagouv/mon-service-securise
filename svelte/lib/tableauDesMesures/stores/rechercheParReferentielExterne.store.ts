@@ -12,5 +12,10 @@ export const appliqueFiltreParReferentielExterne = (
 ): boolean => {
   const mesuresRecyf =
     (mesure as MesureGenerale)?.mesuresReferentielsExternes?.ReCyf ?? [];
-  return mesuresRecyf.length > 0 && selection.includes('ReCyf');
+  const mesuresISO =
+    (mesure as MesureGenerale)?.mesuresReferentielsExternes?.ISO2700X ?? [];
+  return (
+    (mesuresRecyf.length > 0 && selection.includes('ReCyf')) ||
+    (mesuresISO.length > 0 && selection.includes('ISO2700X'))
+  );
 };
