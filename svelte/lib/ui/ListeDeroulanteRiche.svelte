@@ -31,12 +31,12 @@
   ) => {
     if (valeur) {
       valeursSelectionnees[categorie] = [
-        ...new Set([...valeursSelectionnees[categorie], id]),
+        ...new Set([...(valeursSelectionnees[categorie] ?? []), id]),
       ];
     } else {
-      valeursSelectionnees[categorie] = valeursSelectionnees[categorie].filter(
-        (v) => v !== id
-      );
+      valeursSelectionnees[categorie] = (
+        valeursSelectionnees[categorie] ?? []
+      ).filter((v) => v !== id);
     }
   };
 </script>
