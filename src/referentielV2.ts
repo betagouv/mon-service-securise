@@ -29,10 +29,13 @@ import {
 } from './mesures/referentielsExternes/donneesReferentielMesuresReCyf.js';
 import { correspondanceMesuresV2VersReCyf } from './mesures/referentielsExternes/correspondanceMesuresV2VersReCyf.js';
 
+export type EntiteConcernee = 'EI' | 'EE';
+
 export type DonneesReferentielsMesuresReCyf = {
   objectif: string;
   thematique: string;
   description: string;
+  entitesConcernees: readonly EntiteConcernee[];
 };
 
 export type DonneesReferentielV2 = typeof questionsV2 & {

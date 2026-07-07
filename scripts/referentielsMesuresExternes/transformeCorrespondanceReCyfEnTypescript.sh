@@ -7,8 +7,11 @@
 #
 # Il en tire deux fichiers source Typescript :
 #   - donneesReferentielMesuresReCyf.ts : l'objet `mesuresReCyf` (identifiant
-#     ReCyF -> { objectif, thematique, description }) déclaré `as const`, d'où
-#     l'on dérive le type `IdMesureReCyf = keyof typeof mesuresReCyf`.
+#     ReCyF -> { objectif, thematique, description, entitesConcernees }) déclaré
+#     `as const satisfies Record<string, DonneesReferentielsMesuresReCyf>`. Le
+#     `as const` (et non une annotation de type) est indispensable pour que
+#     `keyof typeof mesuresReCyf` reste l'union littérale des identifiants ; le
+#     `satisfies` valide la forme de chaque entrée sans élargir ce type.
 #   - correspondanceMesuresV2VersReCyf.ts : la table IdMesureV2 (MSS) ->
 #     IdMesureReCyf[]. C'est Typescript qui vérifie, à la compilation, que chaque
 #     identifiant ReCyF de la table existe bien dans le référentiel.
@@ -38,14 +41,20 @@ CLE_TRI='def cleTri: [ splits("[.]") ] | map(if test("^[0-9]+$") then tonumber e
 
 # Référentiel ReCyF : une entrée par mesure, triée par numérotation.
 DONNEES_REFERENTIEL="$(
-  mlr --icsv --ojson cut -f 'Références (New),Objectif de sécurité,Thématique,Contenu' "$FICHIER_REFERENTIEL_CSV" \
+  mlr --icsv --ojson cut -f 'Références (New),Objectif de sécurité,Thématique,Contenu,EIEE' "$FICHIER_REFERENTIEL_CSV" \
     | jq "$CLE_TRI"'
       map(select(.["Références (New)"] != null and .["Références (New)"] != ""))
       | map({
           recyf: .["Références (New)"],
           objectif: ((.["Objectif de sécurité"] // "") | gsub("^\\s+|\\s+$"; "")),
           thematique: ((.["Thématique"] // "") | gsub("^\\s+|\\s+$"; "")),
-          description: ((.["Contenu"] // "") | gsub("^\\s+|\\s+$"; ""))
+          description: ((.["Contenu"] // "") | gsub("^\\s+|\\s+$"; "")),
+          entitesConcernees: (
+            (.["EIEE"] // "")
+            | split(",")
+            | map(gsub("^\\s+|\\s+$"; ""))
+            | map(select(length > 0))
+          )
         })
       | group_by(.recyf) | map(.[0])
       | sort_by(.recyf | cleTri)
@@ -84,8 +93,8 @@ DONNEES_MAPPING="$(
   echo "import { DonneesReferentielsMesuresReCyf } from '../../referentielV2.js';"
   echo ""
   echo "export const mesuresReCyf = {"
-  echo "$DONNEES_REFERENTIEL" | jq -r '.[] | "  \u0027" + .recyf + "\u0027: { objectif: " + (.objectif | @json) + ", thematique: " + (.thematique | @json) + ", description: " + (.description | @json) + " },"'
-  echo "} as const;"
+  echo "$DONNEES_REFERENTIEL" | jq -r '.[] | "  \u0027" + .recyf + "\u0027: { objectif: " + (.objectif | @json) + ", thematique: " + (.thematique | @json) + ", description: " + (.description | @json) + ", entitesConcernees: [" + (.entitesConcernees | map(@json) | join(", ")) + "] },"'
+  echo "} as const satisfies Record<string, DonneesReferentielsMesuresReCyf>;"
   echo ""
   echo "export type IdMesureReCyf = keyof typeof mesuresReCyf;"
 } > "$FICHIER_REFERENTIEL_RECYF"

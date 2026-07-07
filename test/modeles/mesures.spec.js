@@ -445,6 +445,7 @@ describe('Les mesures liées à un service', () => {
                     objectif: 'Un objectif',
                     thematique: 'Une thématique',
                     description: 'Une description',
+                    entitesConcernees: ['EE'],
                   },
                 },
                 liens: {
@@ -469,6 +470,7 @@ describe('Les mesures liées à un service', () => {
               objectif: 'Un objectif',
               thematique: 'Une thématique',
               description: 'Une description',
+              entitesConcernees: ['EE'],
             },
           ]);
         });
