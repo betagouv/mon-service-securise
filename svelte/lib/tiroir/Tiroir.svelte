@@ -44,7 +44,7 @@
         </div>
       </div>
       {@const Composant = $tiroirStore.contenu.composant}
-      <Composant bind:this={composant} {...$tiroirStore.contenu.props} />
+      <Composant bind:this={composant} {...$tiroirStore.contenu?.props} />
     {/if}
   {/key}
 </aside>
