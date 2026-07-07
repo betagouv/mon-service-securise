@@ -34,7 +34,7 @@
     <dd>{donnees.presentation || '-'}</dd>
     <dt>URL du service :</dt>
     <dd>
-      {#if donnees.pointsAcces.length > 0}
+      {#if donnees.pointsAcces?.length > 0}
         {#each donnees.pointsAcces as pointAcces, i (i)}
           <span>{pointAcces}</span>
         {/each}
