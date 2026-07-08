@@ -96,7 +96,8 @@
 
 #let listePuces(items) = listeAPuces(
   items.map(it => {
-    let valeur = if type(it.valeur) == array { it.valeur.join(", ") } else { it.valeur }
+    let valeurItem = it.at("valeur", default: "")
+    let valeur = if type(valeurItem) == array { valeurItem.join(", ") } else { valeurItem }
     [#text(weight: "bold")[#it.label :] #valeur]
   }),
 )
