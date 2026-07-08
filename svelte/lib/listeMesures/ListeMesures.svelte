@@ -46,6 +46,7 @@
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
   import { thematiques } from './thematiques';
   import { derived } from 'svelte/store';
+  import { singulierPluriel } from '../outils/string';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -266,6 +267,11 @@
     ).length,
     mesureSpecifiques: $modelesMesureSpecifique.length,
   });
+
+  const servicesAssociesSansStatut = (modeleMesure: ModeleDeMesure) =>
+    $servicesAvecMesuresAssociees
+      .filter((s) => !!modeleMesure?.idsServicesAssocies?.includes(s?.id))
+      .filter((s) => !s.mesuresAssociees[modeleMesure.id]?.statut);
 </script>
 
 <Toaster />
@@ -287,6 +293,7 @@
   colonnes={[
     { cle: 'description', libelle: 'Intitulé de la mesure' },
     { cle: 'servicesAssocies', libelle: 'Services associés' },
+    { cle: 'servicesStatutADefinir', libelle: 'Statut de la mesure' },
     { cle: 'actions', libelle: 'Action' },
   ]}
   donnees={configurationTableau.donnees.map((d) => ({
@@ -413,6 +420,32 @@
           />
         {:else}
           <span class="aucun-service">Aucun service associé</span>
+        {/if}
+      </div>
+    {:else if colonne.cle === 'servicesStatutADefinir'}
+      {@const servicesSansStatut = servicesAssociesSansStatut(donnee)}
+      <div class="services-associes">
+        {#if $servicesAvecMesuresAssocieesEnCoursDeChargement}
+          <Loader />
+        {:else if aDesServicesAssocies && servicesSansStatut.length > 0}
+          Statut à définir sur
+          <Bouton
+            type="lien-dsfr"
+            titre="{servicesSansStatut.length} {singulierPluriel(
+              'service',
+              'services',
+              servicesSansStatut.length
+            )}"
+            onclick={async () => {
+              await afficheDetailServiceAssocies(donnee);
+            }}
+          />
+        {:else if aDesServicesAssocies}
+          <span class="aucun-service"
+            >Cette mesure est définie sur tous les services associés</span
+          >
+        {:else}
+          <span class="aucun-service">-</span>
         {/if}
       </div>
     {:else if colonne.cle === 'actions'}
