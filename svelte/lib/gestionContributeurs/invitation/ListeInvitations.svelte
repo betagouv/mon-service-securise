@@ -76,4 +76,9 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
+
+  .conteneur-actions {
+    display: flex;
+    gap: 8px;
+  }
 </style>
