@@ -74,12 +74,6 @@ const controleurErreurs = (
     reponse.end();
     return;
   }
-  const estErreurCSRF = erreur.message === 'CSRF token mismatch';
-  if (estErreurCSRF) {
-    logueErreur(new Error('Une erreur CSRF mismatch a été détectée'), {
-      'Token CSRF du client': requete.headers['x-csrf-token'],
-    });
-  }
 
   Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
 };
