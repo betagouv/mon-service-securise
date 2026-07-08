@@ -21,7 +21,7 @@ export const nouvelAdaptateur = () => {
     utilisateurLambda,
     entite,
     utilisateurAdmin,
-    idService,
+    idServiceV2,
     utilisateurFuturAdmin,
     utilisateurSuperviseur,
   } = donneesTestsAccessibilite;
@@ -49,8 +49,8 @@ export const nouvelAdaptateur = () => {
     chiffrement.hacheSha256(utilisateurSuperviseur.email)
   );
 
-  const service = unServiceV2()
-    .avecId(idService)
+  const serviceV2 = unServiceV2()
+    .avecId(idServiceV2)
     .avecNomService(`Mon service test ${new Date().getTime()}`)
     .avecDossiers([
       unDossier(creeReferentielV2()).avecAutorite(
@@ -60,24 +60,24 @@ export const nouvelAdaptateur = () => {
     ])
     .avecOrganisationResponsable(entite.toJSON()).donnees;
   persistance.sauvegardeService(
-    service.id,
-    service,
-    chiffrement.hacheSha256(service.descriptionService.nomService),
+    serviceV2.id,
+    serviceV2,
+    chiffrement.hacheSha256(serviceV2.descriptionService.nomService),
     chiffrement.hacheSha256(entite.siret),
     VersionService.v2
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
-    uneAutorisation().deProprietaire(utilisateurLambda.id, service.id).donnees
+    uneAutorisation().deProprietaire(utilisateurLambda.id, serviceV2.id).donnees
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
-    uneAutorisation().deContributeur(utilisateurFuturAdmin.id, service.id)
+    uneAutorisation().deContributeur(utilisateurFuturAdmin.id, serviceV2.id)
       .donnees
   );
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
-    uneAutorisation().dAdmin(utilisateurAdmin.id, service.id).donnees
+    uneAutorisation().dAdmin(utilisateurAdmin.id, serviceV2.id).donnees
   );
 
   return persistance;
