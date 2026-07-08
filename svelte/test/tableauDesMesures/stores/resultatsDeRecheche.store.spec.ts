@@ -133,6 +133,7 @@ describe('Le store dérivé des résultats de recherche de mesure', () => {
         mesuresReferentielsExternes: {
           ReCyf: [{ id: 'recyf-1' }],
           ISO2700X: [],
+          AE2690: [],
         },
       });
       mesures.reinitialise({
@@ -148,7 +149,7 @@ describe('Le store dérivé des résultats de recherche de mesure', () => {
 
     it('ne conserve pas une mesure sans lien avec le référentiel externe', () => {
       const uneMesure = creeMesureGenerale({
-        mesuresReferentielsExternes: { ReCyf: [], ISO2700X: [] },
+        mesuresReferentielsExternes: { ReCyf: [], ISO2700X: [], AE2690: [] },
       });
       mesures.reinitialise({
         mesuresGenerales: { uneMesure },
