@@ -127,19 +127,17 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
       return undefined;
     })();
 
-    const res = this.compilateur.pdf({
-      mainFilePath: 'src/vuesPdf/annexes.typ',
-      inputs: {
-        payload: JSON.stringify({
-          donneesDescription: donnees.donneesDescription,
-          donneesMesures: donnees.donneesMesures,
-          donneesRisques: donneesRisquesResolues,
-          versionPdfRisques: donneesRisquesResolues
-            ? versionPdfRisques
-            : undefined,
-        }),
+    const res = this.renduPDF(
+      {
+        donneesDescription: donnees.donneesDescription,
+        donneesMesures: donnees.donneesMesures,
+        donneesRisques: donneesRisquesResolues,
+        versionPdfRisques: donneesRisquesResolues
+          ? versionPdfRisques
+          : undefined,
       },
-    });
+      'src/vuesPdf/annexes.typ'
+    );
 
     return Buffer.from(res);
   }
@@ -231,10 +229,8 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
           aRemplir: statsGenerales.sansStatut(id),
         })),
     };
-    const res = this.compilateur.pdf({
-      mainFilePath: 'src/vuesPdf/syntheseSecurite.typ',
-      inputs: { payload: JSON.stringify(donnees) },
-    });
+
+    const res = this.renduPDF(donnees, 'src/vuesPdf/syntheseSecurite.typ');
 
     return Buffer.from(res);
   }
@@ -265,17 +261,23 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
       complement: tranche.recommandationANSSIComplement ?? '',
     };
 
-    const res = this.compilateur.pdf({
-      mainFilePath: 'src/vuesPdf/dossierDecision.typ',
-      inputs: {
-        payload: JSON.stringify({
-          ...reste,
-          avis: avisResolus,
-          recommandation,
-        }),
+    const res = this.renduPDF(
+      {
+        ...reste,
+        avis: avisResolus,
+        recommandation,
       },
-    });
+      'src/vuesPdf/dossierDecision.typ'
+    );
 
     return Buffer.from(res);
+  }
+
+  private renduPDF(donnees: Record<string, unknown>, cheminDuTemplate: string) {
+    const res = this.compilateur.pdf({
+      mainFilePath: cheminDuTemplate,
+      inputs: { payload: JSON.stringify(donnees) },
+    });
+    return res;
   }
 }
