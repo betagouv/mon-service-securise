@@ -293,7 +293,9 @@
   colonnes={[
     { cle: 'description', libelle: 'Intitulé de la mesure' },
     { cle: 'servicesAssocies', libelle: 'Services associés' },
-    { cle: 'servicesStatutADefinir', libelle: 'Statut de la mesure' },
+    ...(ongletActif !== 'specifiques'
+      ? [{ cle: 'servicesStatutADefinir', libelle: 'Statut de la mesure' }]
+      : []),
     { cle: 'actions', libelle: 'Action' },
   ]}
   donnees={configurationTableau.donnees.map((d) => ({
