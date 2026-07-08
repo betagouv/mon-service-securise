@@ -112,7 +112,7 @@ const genereCsvMesures = async (
     separesParVirgule(
       referentiel
         .referentielsExternesDeMesure(idMesure)
-        [referentielExterne].map((d) => d.id)
+        ?.[referentielExterne]?.map((d) => d.id) ?? []
     );
 
   const donneesCsv = Object.entries(mesuresGenerales)
