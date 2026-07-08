@@ -10,6 +10,7 @@
     type ReferentielStatut,
     type ReferentielTypesService,
   } from '../ui/types.d';
+  import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
   import Tableau from '../ui/Tableau.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
@@ -39,7 +40,6 @@
   import TiroirConfigurationModeleMesureSpecifique from './mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
-  import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
@@ -82,10 +82,6 @@
     modelesMesureSpecifique,
     ($s) => $s.length < capaciteAjoutDeMesure.nombreMaximum
   );
-
-  const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
-    await modaleDetailsMesure?.affiche(modeleMesure);
-  };
 
   const itemsFiltrageReferentiel = [
     { libelle: 'ANSSI', valeur: Referentiel.ANSSI, idCategorie: 'referentiel' },
@@ -210,9 +206,12 @@
   ): modeleMesure is Extract<ModeleDeMesure, { type: 'generale' }> =>
     modeleMesure.type === 'generale';
 
-  const afficheDetailServiceAssocies = async (modeleMesure: ModeleDeMesure) => {
-    await afficheModaleDetailsMesure(modeleMesure);
-  };
+  const afficheDetailServiceAssocies = async (modeleMesure: ModeleDeMesure) =>
+    modaleDetailsMesure?.affiche(modeleMesure, { cellesSansStatut: false });
+
+  const afficheDetailServiceAssociesSansStatut = async (
+    modeleMesure: ModeleDeMesure
+  ) => modaleDetailsMesure?.affiche(modeleMesure, { cellesSansStatut: true });
 
   const afficheTiroirModificationMultipleMesuresGenerales = (
     modeleMesure: ModeleDeMesure
@@ -271,7 +270,14 @@
   const servicesAssociesSansStatut = (modeleMesure: ModeleDeMesure) =>
     $servicesAvecMesuresAssociees
       .filter((s) => !!modeleMesure?.idsServicesAssocies?.includes(s?.id))
-      .filter((s) => !s.mesuresAssociees[modeleMesure.id]?.statut);
+      .filter(
+        (s) =>
+          (modeleMesure.type === 'generale' &&
+            !s.mesuresAssociees[modeleMesure.id]?.statut) ||
+          (modeleMesure.type === 'specifique' &&
+            !s.mesuresSpecifiques.find((m) => m.idModele === modeleMesure.id)
+              ?.statut)
+      );
 </script>
 
 <Toaster />
@@ -439,13 +445,11 @@
               servicesSansStatut.length
             )}"
             onclick={async () => {
-              await afficheDetailServiceAssocies(donnee);
+              await afficheDetailServiceAssociesSansStatut(donnee);
             }}
           />
         {:else if aDesServicesAssocies}
-          <span class="aucun-service"
-            >Cette mesure est définie sur tous les services associés</span
-          >
+          <span class="aucun-service">Statut défini sur tous les services</span>
         {:else}
           <span class="aucun-service">-</span>
         {/if}

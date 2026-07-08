@@ -33,6 +33,8 @@
 
   let servicesAvecMesure: ServiceAssocieAUneMesure[] = $state([]);
 
+  let filtreSansStatut = $state(false);
+
   $effect(() => {
     if (!modeleDeMesure) return;
 
@@ -40,6 +42,11 @@
       modeleDeMesure &&
       $servicesAvecMesuresAssociees
         .filter((s) => modeleDeMesure?.idsServicesAssocies.includes(s?.id))
+        .filter((s) =>
+          filtreSansStatut && modeleDeMesure
+            ? !s.mesuresAssociees[modeleDeMesure.id]?.statut
+            : true
+        )
         .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
           ...autresDonnees,
           mesure:
@@ -59,8 +66,12 @@
         }));
   });
 
-  export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {
+  export const affiche = async (
+    modeleMesureAAfficher: ModeleDeMesure,
+    config: { cellesSansStatut: boolean }
+  ) => {
     modeleDeMesure = modeleMesureAAfficher;
+    filtreSansStatut = config.cellesSansStatut;
     await tick();
     elementModale?.affiche();
   };

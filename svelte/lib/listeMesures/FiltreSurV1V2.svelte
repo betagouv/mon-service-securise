@@ -12,7 +12,7 @@
   };
 </script>
 
-<th colspan="3">
+<th colspan="4">
   <div>
     <label for="version-v2" class:actif={value === 'v2'}>
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
