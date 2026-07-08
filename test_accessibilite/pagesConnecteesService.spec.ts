@@ -8,35 +8,48 @@ import {
 } from './aideAuxTests.js';
 import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
-const { idServiceV2 } = donneesTestsAccessibilite;
+const { idServiceV1, idServiceV2 } = donneesTestsAccessibilite;
 
 const pages = [
   {
     nom: 'Description du service',
-    url: `/service/${idServiceV2}/descriptionService`,
+    url: `/descriptionService`,
   },
   {
     nom: 'Mesures du service',
-    url: `/service/${idServiceV2}/mesures`,
+    url: `/mesures`,
   },
   {
     nom: 'Indice cyber',
-    url: `/service/${idServiceV2}/indiceCyber`,
+    url: `/indiceCyber`,
   },
   {
     nom: 'Rôles et responsabilités',
-    url: `/service/${idServiceV2}/rolesResponsabilites`,
+    url: `/rolesResponsabilites`,
   },
-  { nom: 'Risques', url: `/service/${idServiceV2}/risques` },
-  { nom: 'Dossiers', url: `/service/${idServiceV2}/dossiers` },
+  { nom: 'Risques', url: `/risques` },
+  { nom: 'Dossiers', url: `/dossiers` },
 ];
 
 for (const { nom, url } of pages) {
-  test(`La page ${nom} n'a aucune violation grave d'accessibilité`, async ({
+  test(`La page ${nom} n'a aucune violation grave d'accessibilité pour un service V1`, async ({
     page,
   }) => {
-    await navigueSurPageConnectee(url, page);
-    await captureDEcran(page, `page-service-${nom}.png`);
+    const urlComplet = `/service/${idServiceV1}${url}`;
+    await navigueSurPageConnectee(urlComplet, page);
+    await captureDEcran(page, `page-service-v1-${nom}.png`);
+
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
+
+    expect(problemes.length, messageDErreur(problemes)).toBe(0);
+  });
+
+  test(`La page ${nom} n'a aucune violation grave d'accessibilité pour un service V2`, async ({
+    page,
+  }) => {
+    const urlComplet = `/service/${idServiceV2}${url}`;
+    await navigueSurPageConnectee(urlComplet, page);
+    await captureDEcran(page, `page-service-v2-${nom}.png`);
 
     const problemes = await problemesDAccessibiliteDeLaPage(page);
 

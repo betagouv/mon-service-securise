@@ -21,6 +21,7 @@ export const nouvelAdaptateur = () => {
     utilisateurLambda,
     entite,
     utilisateurAdmin,
+    idServiceV1,
     idServiceV2,
     utilisateurFuturAdmin,
     utilisateurSuperviseur,
@@ -78,6 +79,50 @@ export const nouvelAdaptateur = () => {
   persistance.sauvegardeAutorisation(
     unUUIDRandom(),
     uneAutorisation().dAdmin(utilisateurAdmin.id, serviceV2.id).donnees
+  );
+
+  const serviceV1 = {
+    descriptionService: {
+      delaiAvantImpactCritique: 'moinsUneHeure',
+      localisationDonnees: 'france',
+      nomService: `Mon service test V1 ${new Date().getTime()}`,
+      provenanceService: 'developpement',
+      statutDeploiement: 'enProjet',
+      nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+      niveauSecurite: 'niveau3',
+      presentation: 'Une présentation',
+      donneesCaracterePersonnel: [],
+      fonctionnalites: [],
+      typeService: ['siteInternet'],
+      donneesSensiblesSpecifiques: [],
+      fonctionnalitesSpecifiques: [],
+      pointsAcces: [],
+      organisationResponsable: {
+        siret: '13000766900018',
+        nom: 'ANSSI',
+        departement: '75',
+      },
+    },
+    dossiers: [],
+    mesuresGenerales: [],
+    mesuresSpecifiques: [],
+    risquesGeneraux: [],
+    risquesSpecifiques: [],
+    rolesResponsabilites: { acteursHomologation: [], partiesPrenantes: [] },
+    prochainIdNumeriqueDeRisqueSpecifique: 1,
+    versionService: 'v1',
+  };
+
+  persistance.sauvegardeService(
+    idServiceV1,
+    serviceV1,
+    chiffrement.hacheSha256(serviceV1.descriptionService.nomService),
+    chiffrement.hacheSha256(entite.siret),
+    VersionService.v1
+  );
+  persistance.sauvegardeAutorisation(
+    unUUIDRandom(),
+    uneAutorisation().deProprietaire(utilisateurLambda.id, idServiceV1).donnees
   );
 
   return persistance;
