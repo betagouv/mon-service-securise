@@ -89,4 +89,8 @@
     font-weight: 500;
     color: #667892;
   }
+  .conteneur-actions {
+    display: flex;
+    gap: 8px;
+  }
 </style>

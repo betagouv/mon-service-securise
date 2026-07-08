@@ -27,19 +27,24 @@
     <strong>{service.nomService}</strong> ?
   </p>
   <div class="conteneur-actions">
-    <button
-      class="bouton bouton-secondaire"
-      type="button"
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      kind="secondary"
       onclick={() => store.navigation.afficheEtapeListe()}
+      label="Annuler"
     >
-      Annuler
-    </button>
-    <button
-      class="bouton confirmation-suppression"
-      type="button"
-      onclick={supprimeContributeur}
-    >
-      Retirer du service
-    </button>
+    </dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button onclick={supprimeContributeur} label="Retirer du service">
+    </dsfr-button>
   </div>
 </div>
+
+<style>
+  .conteneur-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 32px;
+    justify-content: flex-end;
+  }
+</style>

@@ -9,17 +9,22 @@
 </script>
 
 <div class="conteneur-actions">
-  <button
-    class="bouton bouton-secondaire fermeture-tiroir"
-    type="button"
-    onclick={onAnnuler}
-  >
-    Annuler
-  </button>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button kind="secondary" onclick={onAnnuler} label="Annuler">
+  </dsfr-button>
 
   {#if afficherBoutonEnvoyer}
-    <button class="bouton" type="button" onclick={onEnvoyer}>
-      Envoyer une invitation
-    </button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button onclick={onEnvoyer} label="Envoyer une invitation">
+    </dsfr-button>
   {/if}
 </div>
+
+<style>
+  .conteneur-actions {
+    justify-content: flex-end;
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+</style>
