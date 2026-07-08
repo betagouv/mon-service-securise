@@ -27,7 +27,6 @@
     estAdmin: boolean;
     avecGestionOrganisations: boolean;
     modeVisiteGuidee: boolean;
-    dateInscriptionUtilisateur: Date;
     profilUtilisateurComplet?: boolean;
   }
 
@@ -36,7 +35,6 @@
     estAdmin,
     avecGestionOrganisations,
     modeVisiteGuidee,
-    dateInscriptionUtilisateur,
     profilUtilisateurComplet = true,
   }: Props = $props();
 
@@ -168,7 +166,7 @@
       {/each}
     </dsfr-tabs>
 
-    <BandeauBlog {dateInscriptionUtilisateur} />
+    <BandeauBlog />
   {/if}
 </div>
 
