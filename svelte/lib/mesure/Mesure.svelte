@@ -169,7 +169,7 @@
 
   let mesuresReferentielsExternes: MesuresReferentielsExternes = $derived(
     ($store.mesureEditee.mesure as MesureGeneraleEnrichie)
-      .mesuresReferentielsExternes ?? { ReCyf: [], ISO2700X: [] }
+      .mesuresReferentielsExternes ?? { ReCyf: [], ISO2700X: [], AE2690: [] }
   );
 
   let avecOngletReferentielsExterne = $derived(
