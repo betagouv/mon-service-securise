@@ -87,7 +87,7 @@ module.exports = defineConfig([
       'no-underscore-dangle': [
         'error',
         {
-          allow: ['_paq', '_mtm'],
+          allow: ['_paq', '_mtm', '_csrf'],
         },
       ],
 

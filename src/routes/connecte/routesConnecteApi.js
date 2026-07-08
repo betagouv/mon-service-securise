@@ -74,6 +74,13 @@ const routesConnecteApi = ({
 }) => {
   const routes = express.Router();
 
+  routes.get('/csrf', (_requete, reponse) => {
+    reponse.json({
+      token: reponse.locals._csrf,
+      hashIdUtilisateur: reponse.locals.hashIdUtilisateurCourant,
+    });
+  });
+
   routes.get(
     '/services',
     middleware.verificationAcceptationCGU,

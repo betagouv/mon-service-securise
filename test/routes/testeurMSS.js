@@ -132,7 +132,10 @@ const testeurMss = () => {
       oidc: () => ({ fournisseursAvecMFA: () => [] }),
     };
     adaptateurProtection = {
-      protectionCsrf: () => (_requete, _reponse, suite) => suite(),
+      protectionCsrf: () => (_requete, reponse, suite) => {
+        reponse.locals._csrf = 'token-csrf-de-test';
+        suite();
+      },
       protectionLimiteTrafic: () => (_requete, _reponse, suite) => suite(),
       protectionLimiteTraficEndpointSensible:
         () => (_requete, _reponse, suite) =>

@@ -204,10 +204,12 @@ const middlewareFantaisie = {
     suite();
   },
 
-  verificationJWT: (requete, _reponse, suite) => {
+  verificationJWT: (requete, reponse, suite) => {
     requete.sourceAuthentification = sourceAuthentification;
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
+    reponse.locals.hashIdUtilisateurCourant =
+      idUtilisateurCourant && `hash-de-${idUtilisateurCourant}`;
     verificationJWTMenee = true;
     suite();
   },

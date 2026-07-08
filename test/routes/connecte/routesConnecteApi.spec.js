@@ -43,6 +43,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       .verifieRequeteExigeJWT(testeur.app(), '/api/services');
   });
 
+  describe('quand requête GET sur `/api/csrf`', () => {
+    it("retourne le token CSRF courant et le hash de l'identifiant de l'utilisateur, sans exposer l'identifiant en clair", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+
+      const reponse = await testeur.get('/api/csrf');
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.body).to.eql({
+        token: 'token-csrf-de-test',
+        hashIdUtilisateur: 'hash-de-U1',
+      });
+    });
+  });
+
   describe('quand requête GET sur `/api/services`', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
