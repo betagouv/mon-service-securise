@@ -12,9 +12,6 @@ $(() => {
   const modeVisiteGuidee = visiteGuideeActive;
   const profilUtilisateurComplet =
     etatVisiteGuidee.utilisateurCourant.profilComplet;
-  const dateInscriptionUtilisateur = new Date(
-    etatVisiteGuidee.utilisateurCourant.dateInscription
-  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-de-bord', {
@@ -24,7 +21,6 @@ $(() => {
         avecGestionOrganisations,
         modeVisiteGuidee,
         profilUtilisateurComplet,
-        dateInscriptionUtilisateur,
       },
     })
   );
