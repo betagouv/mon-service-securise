@@ -45,10 +45,10 @@ const utilisateurFuturAdmin = unUtilisateur()
   .quiSAppelle('Utilisateur FuturAdmin')
   .donnees as unknown as DonneesUtilisateur;
 
-const idService = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
+const idServiceV2 = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
 
 export const donneesTestsAccessibilite = {
-  idService,
+  idServiceV2,
   entite,
   utilisateurAdmin,
   utilisateurLambda,

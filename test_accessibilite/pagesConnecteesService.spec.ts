@@ -8,27 +8,27 @@ import {
 } from './aideAuxTests.js';
 import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
 
-const { idService } = donneesTestsAccessibilite;
+const { idServiceV2 } = donneesTestsAccessibilite;
 
 const pages = [
   {
     nom: 'Description du service',
-    url: `/service/${idService}/descriptionService`,
+    url: `/service/${idServiceV2}/descriptionService`,
   },
   {
     nom: 'Mesures du service',
-    url: `/service/${idService}/mesures`,
+    url: `/service/${idServiceV2}/mesures`,
   },
   {
     nom: 'Indice cyber',
-    url: `/service/${idService}/indiceCyber`,
+    url: `/service/${idServiceV2}/indiceCyber`,
   },
   {
     nom: 'Rôles et responsabilités',
-    url: `/service/${idService}/rolesResponsabilites`,
+    url: `/service/${idServiceV2}/rolesResponsabilites`,
   },
-  { nom: 'Risques', url: `/service/${idService}/risques` },
-  { nom: 'Dossiers', url: `/service/${idService}/dossiers` },
+  { nom: 'Risques', url: `/service/${idServiceV2}/risques` },
+  { nom: 'Dossiers', url: `/service/${idServiceV2}/dossiers` },
 ];
 
 for (const { nom, url } of pages) {
