@@ -274,10 +274,24 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
   }
 
   private renduPDF(donnees: Record<string, unknown>, cheminDuTemplate: string) {
-    const res = this.compilateur.pdf({
+    const document = this.compilateur.compile({
       mainFilePath: cheminDuTemplate,
       inputs: { payload: JSON.stringify(donnees) },
     });
-    return res;
+
+    if (document.hasError()) {
+      const err = document.takeError();
+      throw new Error(
+        this.compilateur
+          .fetchDiagnostics(err!)
+          .map(
+            (e) =>
+              `${e.message} at ${e.path}:[l${e.range?.start?.line}:${e.range?.start?.character} -> l${e.range?.end?.line}:${e.range?.end?.character}]`
+          )
+          .join('\n')
+      );
+    }
+
+    return this.compilateur.pdf(document.result!);
   }
 }

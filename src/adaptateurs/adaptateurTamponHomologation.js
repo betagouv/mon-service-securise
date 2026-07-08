@@ -45,10 +45,25 @@ const genereImageEncartHomologation = ({
     dureeEtEcheance: `${referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite)} | ${formatteDateFrancaise(dossier.dateProchaineHomologation())}`,
   };
 
-  const svg = compilateurTypst.plainSvg({
+  const document = compilateurTypst.compile({
     mainFilePath: 'src/tamponHomologation/modeles/tamponHomologation.typ',
     inputs: { payload: JSON.stringify(payload) },
   });
+
+  if (document.hasError()) {
+    const err = document.takeError();
+    throw new Error(
+      this.compilateur
+        .fetchDiagnostics(err)
+        .map(
+          (e) =>
+            `${e.message} at ${e.path}:[l${e.range?.start?.line}:${e.range?.start?.character} -> l${e.range?.end?.line}:${e.range?.end?.character}]`
+        )
+        .join('\n')
+    );
+  }
+
+  const svg = compilateurTypst.plainSvg(document.result);
 
   const rasterizeur = new Resvg(svg, {
     fitTo: { mode: 'width', value: largeur * 4 },
