@@ -163,6 +163,9 @@ const middleware = (configuration: ConfigurationMiddleware) => {
 
     requete.idUtilisateurCourant = utilisateurCourant.id;
     requete.sourceAuthentification = utilisateurCourant.source;
+    reponse.locals.hashIdUtilisateurCourant = adaptateurChiffrement.hacheSha256(
+      utilisateurCourant.id
+    );
     reponse.locals.utilisateurConnecte = {
       prenomNom: utilisateurCourant.prenomNom,
       email: utilisateurCourant.email,

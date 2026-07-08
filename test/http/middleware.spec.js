@@ -279,6 +279,17 @@ describe('Le middleware MSS', () => {
       });
     });
 
+    it("ajoute le hash de l'identifiant de l'utilisateur connecté à `reponse.locals`", async () => {
+      const adaptateurChiffrement = {
+        hacheSha256: (chaine) => `HASH-${chaine}`,
+      };
+      const middleware = leMiddleware({ adaptateurChiffrement });
+
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(reponse.locals.hashIdUtilisateurCourant).to.be('HASH-123');
+    });
+
     describe('quand le JWT est expiré', () => {
       const adaptateurJWT = {
         decode: () => {
