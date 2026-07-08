@@ -46,8 +46,10 @@ const utilisateurFuturAdmin = unUtilisateur()
   .donnees as unknown as DonneesUtilisateur;
 
 const idServiceV2 = '85b26710-0d8b-404b-bfe4-0d30b7a878c1';
+const idServiceV1 = '1832e76a-8591-4f3d-880e-0319356d1d54';
 
 export const donneesTestsAccessibilite = {
+  idServiceV1,
   idServiceV2,
   entite,
   utilisateurAdmin,
