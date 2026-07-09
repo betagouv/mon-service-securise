@@ -28,7 +28,7 @@ block bandeau-titre
     tag=(tag ? JSON.stringify(tag) : false)
   )
   +schemaFilAriane(filAriane)
-  +schemaArticle(titre, description)
+  +schemaArticle(titre, description, datePublication, dateMiseAJour)
 
 block main
   lab-anssi-page-crisp(contenu=contenu table-des-matieres=JSON.stringify(tableDesMatieres))
