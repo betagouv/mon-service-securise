@@ -32,3 +32,22 @@ mixin schemaSocle
       ],
     }
   script(type='application/ld+json')!= JSON.stringify(socle, null, 2)
+
+mixin schemaFilAriane(filAriane)
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const elements = filAriane.map((etape, position) => {
+      const element = {
+        '@type': 'ListItem',
+        position: position + 1,
+        name: etape.label,
+      }
+      if (etape.href) element.item = `${origine}${etape.href}`
+      return element
+    })
+    const filDAriane = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: elements,
+    }
+  script(type='application/ld+json')!= JSON.stringify(filDAriane, null, 2)
