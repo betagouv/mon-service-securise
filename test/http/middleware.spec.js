@@ -995,6 +995,98 @@ describe('Le middleware MSS', () => {
     expect(reponse.locals.urlBase).to.be('https://monsite.fr');
   });
 
+  describe("concernant l'URL canonique", () => {
+    const adaptateurEnvironnement = {
+      mss: () => ({ urlBase: () => 'https://monsite.fr' }),
+    };
+
+    it("expose l'URL canonique de la page dans `reponse.locals`", () => {
+      requete.path = '/aPropos';
+      requete.method = 'GET';
+      requete.originalUrl = '/aPropos';
+
+      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.positionneCanonical(requete, reponse, () => {});
+
+      expect(reponse.locals.canonical).to.be('https://monsite.fr/aPropos');
+    });
+
+    it("exclut la chaîne de requête de l'URL canonique", () => {
+      requete.path = '/aPropos';
+      requete.method = 'GET';
+      requete.originalUrl = '/aPropos?utm_source=newsletter';
+
+      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.positionneCanonical(requete, reponse, () => {});
+
+      expect(reponse.locals.canonical).to.be('https://monsite.fr/aPropos');
+    });
+
+    it('redirige en 301 vers le chemin sans slash final, en conservant la requête', () => {
+      requete.path = '/aPropos/';
+      requete.method = 'GET';
+      requete.originalUrl = '/aPropos/?utm_source=newsletter';
+
+      let statut;
+      let cible;
+      reponse.redirect = (s, url) => {
+        statut = s;
+        cible = url;
+      };
+
+      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.positionneCanonical(requete, reponse, () =>
+        expect().fail(
+          'la suite ne doit pas être appelée lors de la redirection'
+        )
+      );
+
+      expect(statut).to.be(301);
+      expect(cible).to.be('/aPropos?utm_source=newsletter');
+    });
+
+    it('ne redirige pas la racine', () => {
+      requete.path = '/';
+      requete.method = 'GET';
+      requete.originalUrl = '/';
+
+      let aRedirige = false;
+      reponse.redirect = () => {
+        aRedirige = true;
+      };
+
+      let aFini = false;
+      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.positionneCanonical(requete, reponse, () => {
+        aFini = true;
+      });
+
+      expect(aRedirige).to.be(false);
+      expect(aFini).to.be(true);
+      expect(reponse.locals.canonical).to.be('https://monsite.fr/');
+    });
+
+    it('ne redirige pas une requête non GET comportant un slash final', () => {
+      requete.path = '/api/service/';
+      requete.method = 'POST';
+      requete.originalUrl = '/api/service/';
+
+      let aRedirige = false;
+      reponse.redirect = () => {
+        aRedirige = true;
+      };
+
+      let aFini = false;
+      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.positionneCanonical(requete, reponse, () => {
+        aFini = true;
+      });
+
+      expect(aRedirige).to.be(false);
+      expect(aFini).to.be(true);
+    });
+  });
+
   describe('concernant le mode maintenance', () => {
     let adaptateurEnvironnement;
 
