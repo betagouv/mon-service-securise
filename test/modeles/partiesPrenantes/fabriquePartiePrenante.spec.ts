@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import { ErreurTypeInconnu } from '../../../src/erreurs.js';
 import { fabriquePartiePrenante } from '../../../src/modeles/partiesPrenantes/fabriquePartiePrenante.js';
 import DeveloppementFourniture from '../../../src/modeles/partiesPrenantes/developpementFourniture.js';
@@ -13,7 +12,7 @@ describe('La fabrique de partie prenante', () => {
       type: 'Hebergement',
       nom: 'Un hébergeur',
     });
-    expect(hebergement).to.be.an(Hebergement);
+    expect(hebergement).toBeInstanceOf(Hebergement);
   });
 
   it('fabrique des développements / fournitures de service', () => {
@@ -21,7 +20,7 @@ describe('La fabrique de partie prenante', () => {
       type: 'DeveloppementFourniture',
       nom: 'Mss',
     });
-    expect(developpementFourniture).to.be.a(DeveloppementFourniture);
+    expect(developpementFourniture).toBeInstanceOf(DeveloppementFourniture);
   });
 
   it('fabrique des maintenances du service', () => {
@@ -29,7 +28,7 @@ describe('La fabrique de partie prenante', () => {
       type: 'MaintenanceService',
       nom: 'Mss',
     });
-    expect(maintenanceService).to.be.a(MaintenanceService);
+    expect(maintenanceService).toBeInstanceOf(MaintenanceService);
   });
 
   it('fabrique des sécurité du service', () => {
@@ -37,7 +36,7 @@ describe('La fabrique de partie prenante', () => {
       type: 'SecuriteService',
       nom: 'Structure supervision',
     });
-    expect(securiteService).to.be.a(SecuriteService);
+    expect(securiteService).toBeInstanceOf(SecuriteService);
   });
 
   it('fabrique des parties prenantes spécifiques', () => {
@@ -45,15 +44,12 @@ describe('La fabrique de partie prenante', () => {
       type: 'PartiePrenanteSpecifique',
       nom: 'Partie',
     });
-    expect(partiePrenanteSpecifique).to.be.a(PartiePrenanteSpecifique);
+    expect(partiePrenanteSpecifique).toBeInstanceOf(PartiePrenanteSpecifique);
   });
 
   it('retourne une erreur si le type est inconnu', () => {
-    expect(() =>
-      fabriquePartiePrenante.cree({ type: 'inconnu' })
-    ).to.throwException((e) => {
-      expect(e).to.be.an(ErreurTypeInconnu);
-      expect(e.message).to.equal('Le type "inconnu" est inconnu');
-    });
+    expect(() => fabriquePartiePrenante.cree({ type: 'inconnu' })).toThrowError(
+      new ErreurTypeInconnu('Le type "inconnu" est inconnu')
+    );
   });
 });

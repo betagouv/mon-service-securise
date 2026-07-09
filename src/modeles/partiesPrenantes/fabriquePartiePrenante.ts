@@ -3,6 +3,7 @@ import Hebergement from './hebergement.js';
 import MaintenanceService from './maintenanceService.js';
 import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
 import SecuriteService from './securiteService.js';
+import PartiePrenante from './partiePrenante.js';
 import { ErreurTypeInconnu } from '../../erreurs.js';
 
 const partiesPrenantesAutorises = [
@@ -14,16 +15,16 @@ const partiesPrenantesAutorises = [
 ];
 
 export const fabriquePartiePrenante = {
-  cree: (donnees) => {
+  cree: (donnees: Record<string, unknown>): PartiePrenante => {
     const { type } = donnees;
-
-    if (!partiesPrenantesAutorises.some((classe) => classe.name === type)) {
-      throw new ErreurTypeInconnu(`Le type "${type}" est inconnu`);
-    }
 
     const ClassePartiePrenante = partiesPrenantesAutorises.find(
       (classe) => classe.name === type
     );
+    if (!ClassePartiePrenante) {
+      throw new ErreurTypeInconnu(`Le type "${type}" est inconnu`);
+    }
+
     return new ClassePartiePrenante(donnees);
   },
 };
