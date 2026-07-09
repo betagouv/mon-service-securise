@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
-    "@lab-anssi/lib": "^2.1.6",
+    "@lab-anssi/lib": "^2.2.0",
     "@lab-anssi/ui-kit": "1.55.1",
     "@myriaddreamin/typst-ts-node-compiler": "0.7.0",
     "@resvg/resvg-js": "^2.6.2",
