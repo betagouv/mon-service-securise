@@ -1,0 +1,24 @@
+# MonServiceSécurisé
+
+> MonServiceSécurisé est un service public gratuit conçu par l'Agence nationale de la sécurité des systèmes d'information (ANSSI). Il permet aux entités publiques d'évaluer, de piloter et d'améliorer la cybersécurité de leurs services numériques, et de les homologuer rapidement en s'appuyant sur les mesures de sécurité de l'ANSSI et de la CNIL.
+
+MonServiceSécurisé s'adresse aux collectivités territoriales, administrations et établissements publics. Le service guide les équipes, même non spécialistes, à travers une démarche d'homologation de sécurité simplifiée : description du service, évaluation des risques, mise en œuvre des mesures, puis décision d'homologation.
+
+## Pages principales
+
+- [Accueil](https://monservicesecurise.cyber.gouv.fr/): présentation du service et de ses bénéfices.
+- [À propos](https://monservicesecurise.cyber.gouv.fr/aPropos): origine du service, ANSSI, BetaGouv, hébergement et engagements de sécurité.
+- [Sécurité](https://monservicesecurise.cyber.gouv.fr/securite): mesures de sécurité et homologation de MonServiceSécurisé lui-même.
+- [Statistiques](https://monservicesecurise.cyber.gouv.fr/statistiques): chiffres d'usage et impact du service.
+
+## Ressources et conseils cyber
+
+- [Conseils cyber](https://monservicesecurise.cyber.gouv.fr/conseils-cyber): articles sur la sécurité, l'homologation et l'usage du service.
+- [L'homologation simplifiée](https://monservicesecurise.cyber.gouv.fr/doctrine-homologation-anssi): doctrine d'homologation de l'ANSSI.
+
+## Mentions
+
+- [Mentions légales](https://monservicesecurise.cyber.gouv.fr/mentionsLegales)
+- [Confidentialité](https://monservicesecurise.cyber.gouv.fr/confidentialite)
+- [Accessibilité](https://monservicesecurise.cyber.gouv.fr/accessibilite)
+- [Conditions générales d'utilisation](https://monservicesecurise.cyber.gouv.fr/cgu)
