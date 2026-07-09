@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import ItemAvecDescription from '../../src/modeles/itemAvecDescription.js';
 
 describe('Un item avec description', () => {
@@ -7,10 +6,10 @@ describe('Un item avec description', () => {
       description: 'Une description',
     });
 
-    expect(itemAvecDescription.description).to.equal('Une description');
+    expect(itemAvecDescription.description).toEqual('Une description');
   });
 
   it('donne la clé de sa propriété', () => {
-    expect(ItemAvecDescription.proprietes()).to.eql(['description']);
+    expect(ItemAvecDescription.proprietes()).toEqual(['description']);
   });
 });
