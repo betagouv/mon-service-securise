@@ -51,3 +51,18 @@ mixin schemaFilAriane(filAriane)
       itemListElement: elements,
     }
   script(type='application/ld+json')!= JSON.stringify(filDAriane, null, 2)
+
+mixin schemaArticle(titre, description)
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const article = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: titre,
+      description,
+      inLanguage: 'fr-FR',
+      mainEntityOfPage: canonical,
+      url: canonical,
+      publisher: { '@id': `${origine}/#organisation` },
+    }
+  script(type='application/ld+json')!= JSON.stringify(article, null, 2)
