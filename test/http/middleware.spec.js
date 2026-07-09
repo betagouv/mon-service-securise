@@ -984,6 +984,17 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  it("ajoute l'URL de base dans `reponse.locals`, le rendant ainsi accessible aux `.pug`", async () => {
+    const adaptateurEnvironnement = {
+      mss: () => ({ urlBase: () => 'https://monsite.fr' }),
+    };
+    const middleware = leMiddleware({ adaptateurEnvironnement });
+
+    middleware.exposeUrlBase(requete, reponse, () => {});
+
+    expect(reponse.locals.urlBase).to.be('https://monsite.fr');
+  });
+
   describe('concernant le mode maintenance', () => {
     let adaptateurEnvironnement;
 

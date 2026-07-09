@@ -121,6 +121,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  exposeUrlBase: (_requete, reponse, suite) => {
+    reponse.locals.urlBase = 'http://localhost:1234';
+    suite();
+  },
+
   chargeAutorisationsService: (requete, reponse, suite) => {
     reponse.locals.autorisationsService = {
       [DECRIRE]: {},
