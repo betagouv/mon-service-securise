@@ -101,6 +101,7 @@ const creeServeur = ({
       cmsCrisp,
       middleware,
       referentiel,
+      referentielV2,
       serviceGestionnaireSession,
     })
   );

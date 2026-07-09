@@ -10,6 +10,7 @@ const routesNonConnectePage = ({
   cmsCrisp,
   middleware,
   referentiel,
+  referentielV2,
   serviceGestionnaireSession,
 }) => {
   const routes = express.Router();
@@ -172,6 +173,13 @@ const routesNonConnectePage = ({
     const sections = await cmsCrisp.recupereSectionsBlog();
     const articles = await cmsCrisp.recupereArticlesBlog();
     reponse.render('conseilsCyber', { sections, articles });
+  });
+
+  routes.get('/referentiel-mesures', async (_requete, reponse) => {
+    reponse.render('referentielMesures', {
+      mesuresV2: referentielV2.mesures(),
+      referentiel: referentielV2,
+    });
   });
 
   const sitemap = readFileSync('./public/assets/fichiers/sitemap.xml', 'utf8');

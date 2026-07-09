@@ -1,0 +1,23 @@
+extends mssDocumentation
+
+block variables
+  - const meta_description = 'Découvrez qui nous sommes, notre mission et notre expertise. Ensemble, protégeons vos services numériques.'
+  - const titrePage = 'Référentiel de mesures'
+
+block contenu-documentation
+  table
+    thead
+      tr
+        th Identifiant
+        th Mesure
+        th Description
+        th Catégorie
+        th Référentiel
+    tbody
+      each mesure in Object.values(mesuresV2)
+        tr(id=mesure.identifiantNumerique)
+          td ##{mesure.identifiantNumerique}
+          td= mesure.description
+          td!= mesure.descriptionLongue
+          td= referentiel.descriptionCategorie(mesure.categorie)
+          td= mesure.referentiel
