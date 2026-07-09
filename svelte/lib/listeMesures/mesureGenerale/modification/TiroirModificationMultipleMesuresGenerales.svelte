@@ -41,9 +41,14 @@
   interface Props {
     modeleMesureGenerale: ModeleMesureGenerale;
     statuts: ReferentielStatut;
+    deplieDescription?: boolean;
   }
 
-  let { modeleMesureGenerale, statuts }: Props = $props();
+  let {
+    modeleMesureGenerale,
+    statuts,
+    deplieDescription = false,
+  }: Props = $props();
 
   let etapeCourante = $state(1);
   let enCoursEnvoi = $state(false);
@@ -106,7 +111,10 @@
 <ContenuTiroir>
   {#if etapeCourante === 1}
     <div>
-      <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
+      <DescriptionCompleteMesure
+        modeleDeMesure={modeleMesureGenerale}
+        deplieeParDefaut={deplieDescription}
+      />
       {#if modeleMesureGenerale.porteursSinguliers}
         <PorteursSinguliersMesure
           porteursSinguliers={modeleMesureGenerale.porteursSinguliers}

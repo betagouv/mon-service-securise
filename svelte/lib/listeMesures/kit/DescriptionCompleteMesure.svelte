@@ -8,9 +8,10 @@
 
   interface Props {
     modeleDeMesure: Omit<ModeleDeMesure, 'type' | 'idsServicesAssocies'>;
+    deplieeParDefaut?: boolean;
   }
 
-  let { modeleDeMesure }: Props = $props();
+  let { modeleDeMesure, deplieeParDefaut = false }: Props = $props();
 </script>
 
 <p class="description">{modeleDeMesure.description}</p>
@@ -26,7 +27,7 @@
 </div>
 <DescriptionLongueMesure
   description={modeleDeMesure.descriptionLongue}
-  repliee={true}
+  repliee={!deplieeParDefaut}
 />
 
 <style lang="scss">

@@ -68,7 +68,7 @@
         (m) => m.identifiantNumerique === mesureGeneraleAffichee
       ) as ModeleDeMesure;
       if (mesureCible)
-        afficheTiroirModificationMultipleMesuresGenerales(mesureCible);
+        afficheTiroirModificationMultipleMesuresGenerales(mesureCible, true);
     }
   });
 
@@ -87,7 +87,6 @@
       ? ongletDemande
       : 'toutes';
   });
-
   let peutAjouterModelesMesureSpecifique = derived(
     modelesMesureSpecifique,
     ($s) => $s.length < capaciteAjoutDeMesure.nombreMaximum
@@ -224,12 +223,14 @@
   ) => modaleDetailsMesure?.affiche(modeleMesure, { cellesSansStatut: true });
 
   const afficheTiroirModificationMultipleMesuresGenerales = (
-    modeleMesure: ModeleDeMesure
+    modeleMesure: ModeleDeMesure,
+    deplieDescription: boolean = false
   ) => {
     if (estModeleMesureGenerale(modeleMesure))
       tiroirStore.afficheContenu(TiroirModificationMultipleMesuresGenerales, {
         modeleMesureGenerale: modeleMesure,
         statuts,
+        deplieDescription,
       });
   };
 
