@@ -80,6 +80,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.text).to.contain('rel="canonical"');
     });
+
+    it("ne déclare qu'une seule balise title", async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      const nombreDeTitles = reponse.text.split('<title').length - 1;
+      expect(nombreDeTitles).to.equal(1);
+    });
+
+    it('place le title à l’intérieur du <head>', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text.indexOf('<title')).to.be.lessThan(
+        reponse.text.indexOf('</head>')
+      );
+    });
   });
 
   describe('quand requête GET sur `/articles/:slug`', () => {
