@@ -151,6 +151,28 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.text).to.contain('"@type": "Article"');
       expect(reponse.text).to.contain('"headline": "Un titre"');
+      expect(reponse.text).to.contain('"author"');
+    });
+
+    it('renseigne les dates de publication et de mise à jour dans le schéma Article', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+        datePublication: '2024-01-01T00:00:00.000Z',
+        dateMiseAJour: '2024-02-01T00:00:00.000Z',
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain(
+        '"datePublished": "2024-01-01T00:00:00.000Z"'
+      );
+      expect(reponse.text).to.contain(
+        '"dateModified": "2024-02-01T00:00:00.000Z"'
+      );
     });
 
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
