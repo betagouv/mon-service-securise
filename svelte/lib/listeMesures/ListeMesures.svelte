@@ -47,6 +47,7 @@
   import { thematiques } from './thematiques';
   import { derived } from 'svelte/store';
   import { singulierPluriel } from '../outils/string';
+  import { mesureViaPermalink } from './permalink';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -61,15 +62,9 @@
   onMount(async () => {
     await servicesAvecMesuresAssociees.rafraichis();
 
-    const requete = new URLSearchParams(window.location.search);
-    const mesureGeneraleAffichee = requete.get('idMesureGenerale');
-    if (mesureGeneraleAffichee) {
-      const mesureCible = $listeModeleMesuresGenerales.find(
-        (m) => m.identifiantNumerique === mesureGeneraleAffichee
-      ) as ModeleDeMesure;
-      if (mesureCible)
-        afficheTiroirModificationMultipleMesuresGenerales(mesureCible, true);
-    }
+    const mesurePermalink = mesureViaPermalink($listeModeleMesuresGenerales);
+    if (mesurePermalink)
+      afficheTiroirModificationMultipleMesuresGenerales(mesurePermalink, true);
   });
 
   const requete = new URLSearchParams(window.location.search);
