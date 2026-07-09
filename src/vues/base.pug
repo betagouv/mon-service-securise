@@ -1,3 +1,4 @@
+include fragments/donneesStructurees
 block variables
     - const meta_description = ''
 doctype html
@@ -17,13 +18,8 @@ html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
         title MonServiceSécurisé
     block page
 
-    script(type="application/ld+json").
-      {
-        "@context" : "https://schema.org",
-        "@type" : "WebSite",
-        "name" : "monservicesecurise.cyber.gouv.fr",
-        "url" : "https://monservicesecurise.cyber.gouv.fr/"
-      }
+    block schema
+        +schemaSocle
 
     if process.env.ID_MATOMO
         script(src='/statique/scripts/matomo.js', id='script-matomo' data-id-matomo=process.env.ID_MATOMO)
