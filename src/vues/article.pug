@@ -27,6 +27,7 @@ block bandeau-titre
     fil-ariane=JSON.stringify(filAriane)
     tag=(tag ? JSON.stringify(tag) : false)
   )
+  +schemaFilAriane(filAriane)
 
 block main
   lab-anssi-page-crisp(contenu=contenu table-des-matieres=JSON.stringify(tableDesMatieres))

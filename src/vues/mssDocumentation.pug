@@ -7,6 +7,12 @@ block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
 
 block main
+  -
+    const filAriane = [
+      { label: "Accueil", href: "/" },
+      { label: titrePage }
+    ]
+  +schemaFilAriane(filAriane)
   .fond-entete
     .entete-documentation
       p.fil-d-ariane

@@ -62,6 +62,18 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.status).to.equal(404);
       expect(reponse.text).not.to.contain('GovernmentOrganization');
     });
+
+    it('expose un BreadcrumbList sur les pages de documentation', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+    });
+
+    it('expose un BreadcrumbList sur la page conseils cyber', async () => {
+      const reponse = await testeur.get('/conseils-cyber');
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+    });
   });
 
   describe('quand requête GET sur `/articles/:slug`', () => {
@@ -103,6 +115,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.status).to.be(200);
       expect(reponse.headers['content-type']).to.contain('text/html');
       expect(reponse.text).to.contain('Un titre');
+    });
+
+    it('expose un BreadcrumbList décrivant le fil d’Ariane de l’article', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+      expect(reponse.text).to.contain('"name": "Un titre"');
     });
 
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
