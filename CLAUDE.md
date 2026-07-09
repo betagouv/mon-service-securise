@@ -104,3 +104,10 @@ Classes en français : `Service`, `Dossier`, `Utilisateur`, `Mesure`, `Autorisat
 - Runner : **Vitest**. Unitaires dans `/test/` (miroir de la structure `src/`).
 - Les tests instancient directement les objets de domaine — pas de mocks de DB, utilisation de l'adaptateur de persistance en mémoire (`adaptateurPersistanceMemoire.js`).
 - A11y/E2E : `/test_accessibilite/` (Playwright, voir `playwright.config.ts`).
+
+## Conventions de développement
+
+- **TDD** : écrire le test d'abord (rouge), puis le code minimal qui le fait passer (vert), puis refactor. Avancer par petits pas.
+- **Pas de commentaires intempestifs** : le code doit s'expliquer par lui-même. Un commentaire uniquement quand le « pourquoi » n'est pas évident.
+- **Meaningful variables** : nommer explicitement les variables et fonctions. Extraire des méthodes/fonctions locales bien nommées plutôt que d'empiler des expressions.
+- **Revue par étapes** : sur un chantier en plusieurs items, marquer une pause entre chaque item (review + commit) avant de passer au suivant.
