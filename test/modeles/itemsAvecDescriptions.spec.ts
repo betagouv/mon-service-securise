@@ -1,33 +1,30 @@
-import expect from 'expect.js';
 import ItemsAvecDescription from '../../src/modeles/itemsAvecDescription.js';
 
-const ils = it;
-
 describe('Les items avec descriptions', () => {
-  ils('savent se dénombrer', () => {
+  it('savent se dénombrer', () => {
     const itemsAvecDescription = new ItemsAvecDescription({
       items: [
         { description: 'Une description' },
         { description: 'Une autre description' },
       ],
     });
-    expect(itemsAvecDescription.nombre()).to.equal(2);
+    expect(itemsAvecDescription.nombre()).toEqual(2);
   });
 
-  ils('savent transmettre leurs descriptions', () => {
+  it('savent transmettre leurs descriptions', () => {
     const itemsAvecDescription = new ItemsAvecDescription({
       items: [
         { description: 'Une description' },
         { description: 'Une autre description' },
       ],
     });
-    expect(itemsAvecDescription.descriptions()).to.eql([
+    expect(itemsAvecDescription.descriptions()).toEqual([
       'Une description',
       'Une autre description',
     ]);
   });
 
-  ils("donnent la liste des propriétés de l'item", () => {
-    expect(ItemsAvecDescription.proprietesItem()).to.eql(['description']);
+  it("donnent la liste des propriétés de l'item", () => {
+    expect(ItemsAvecDescription.proprietesItem()).toEqual(['description']);
   });
 });

@@ -1,7 +1,15 @@
 import InformationsService from './informationsService.js';
 
+export type DonneesItemAvecDescription = {
+  description: string;
+};
+
 class ItemAvecDescription extends InformationsService {
-  constructor(donneesItemAvecDescription) {
+  readonly description!: string;
+
+  constructor(
+    donneesItemAvecDescription: Partial<DonneesItemAvecDescription> = {}
+  ) {
     super({ proprietesAtomiquesRequises: ['description'] });
     this.renseigneProprietes(donneesItemAvecDescription);
   }
