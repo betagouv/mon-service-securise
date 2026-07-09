@@ -176,6 +176,7 @@ const routesNonConnectePage = ({
 
   const sitemap = readFileSync('./public/assets/fichiers/sitemap.xml', 'utf8');
   const robots = readFileSync('./public/assets/fichiers/robots.txt', 'utf8');
+  const llms = readFileSync('./public/assets/fichiers/llms.txt', 'utf8');
 
   routes.get('/sitemap.xml', async (_requete, reponse) => {
     reponse.type('application/xml').send(sitemap);
@@ -183,6 +184,10 @@ const routesNonConnectePage = ({
 
   routes.get('/robots.txt', async (_requete, reponse) => {
     reponse.type('text/plain').send(robots);
+  });
+
+  routes.get('/llms.txt', async (_requete, reponse) => {
+    reponse.type('text/markdown').send(llms);
   });
 
   return routes;

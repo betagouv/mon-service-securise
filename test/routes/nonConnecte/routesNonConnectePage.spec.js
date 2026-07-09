@@ -244,6 +244,25 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('text/plain');
     });
+
+    it('autorise explicitement les principaux robots des IA', async () => {
+      const reponse = await testeur.get('/robots.txt');
+
+      expect(reponse.text).to.contain('GPTBot');
+      expect(reponse.text).to.contain('ClaudeBot');
+      expect(reponse.text).to.contain('PerplexityBot');
+      expect(reponse.text).to.contain('Google-Extended');
+    });
+  });
+
+  describe('quand requête GET sur `/llms.txt`', () => {
+    it('sert un contenu Markdown décrivant le service', async () => {
+      const reponse = await testeur.get('/llms.txt');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/markdown');
+      expect(reponse.text).to.contain('# MonServiceSécurisé');
+    });
   });
 
   describe('quand requete GET sur `/creation-compte`', () => {
