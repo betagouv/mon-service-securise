@@ -74,6 +74,12 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
     });
+
+    it('déclare une balise canonical sur la page', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text).to.contain('rel="canonical"');
+    });
   });
 
   describe('quand requête GET sur `/articles/:slug`', () => {
@@ -130,6 +136,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
       expect(reponse.text).to.contain('"name": "Un titre"');
+    });
+
+    it('expose un schéma Article décrivant le contenu éditorial', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('"@type": "Article"');
+      expect(reponse.text).to.contain('"headline": "Un titre"');
     });
 
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
