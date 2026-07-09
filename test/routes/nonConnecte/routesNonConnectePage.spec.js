@@ -56,6 +56,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.text).to.contain('ANSSI');
     });
 
+    it("relie l'ANSSI à ses fiches Wikidata et Wikipedia", async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('https://www.wikidata.org/wiki/Q392502');
+      expect(reponse.text).to.contain(
+        'https://fr.wikipedia.org/wiki/Agence_nationale_de_la_s'
+      );
+    });
+
     it("n'expose pas le socle sur la page 404", async () => {
       const reponse = await testeur.get('/une-page-qui-nexiste-pas');
 
