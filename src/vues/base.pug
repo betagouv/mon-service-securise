@@ -16,6 +16,22 @@ html(lang = 'fr', xml:lang = 'fr', xmlns = 'http://www.w3.org/1999/xhtml')
             meta(property="csp-nonce", nonce=nonce)
         link(rel='icon', href='/statique/assets/images/favicons/favicon.ico')
 
+        -
+            const titreDePartage = titrePartage || 'MonServiceSécurisé'
+            const descriptionDePartage = tronqueMetaDescription(meta_description)
+            const typeDePartage = ogType || 'website'
+            const imageDePartage = `${(urlBase || '').replace(/\/$/, '')}/statique/assets/images/partage-monservicesecurise.png`
+        meta(property = 'og:type', content = typeDePartage)
+        meta(property = 'og:title', content = titreDePartage)
+        meta(property = 'og:description', content = descriptionDePartage)
+        if canonical
+            meta(property = 'og:url', content = canonical)
+        meta(property = 'og:image', content = imageDePartage)
+        meta(name = 'twitter:card', content = 'summary_large_image')
+        meta(name = 'twitter:title', content = titreDePartage)
+        meta(name = 'twitter:description', content = descriptionDePartage)
+        meta(name = 'twitter:image', content = imageDePartage)
+
         block title
             title MonServiceSécurisé
 
