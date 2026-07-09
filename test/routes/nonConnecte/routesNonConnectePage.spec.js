@@ -95,6 +95,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         reponse.text.indexOf('</head>')
       );
     });
+
+    it('tronque une méta-description trop longue', async () => {
+      const reponse = await testeur.get('/mentionsLegales');
+
+      expect(reponse.text).to.contain('…');
+      expect(reponse.text).not.to.contain(
+        'Protégez-vous en toute transparence'
+      );
+    });
   });
 
   describe('quand requête GET sur `/articles/:slug`', () => {
@@ -167,6 +176,23 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.text).to.contain('"@type": "Article"');
       expect(reponse.text).to.contain('"headline": "Un titre"');
       expect(reponse.text).to.contain('"author"');
+    });
+
+    it("retire les emojis en tête du <title> de l'article", async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: '📝 Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain(
+        '<title>Un titre | MonServiceSécurisé</title>'
+      );
+      expect(reponse.text).not.to.contain('📝 Un titre |');
     });
 
     it('renseigne les dates de publication et de mise à jour dans le schéma Article', async () => {
