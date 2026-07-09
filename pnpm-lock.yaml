@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@lab-anssi/lib':
-        specifier: ^2.1.6
-        version: 2.1.7(express@5.2.1)
+        specifier: ^2.2.0
+        version: 2.2.0(express@5.2.1)
       '@lab-anssi/ui-kit':
         specifier: 1.55.1
         version: 1.55.1(svelte@5.55.7(@typescript-eslint/types@8.62.0))
@@ -681,8 +681,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lab-anssi/lib@2.1.7':
-    resolution: {integrity: sha512-/HLKWaru5wua4vqzgWpWV7OfmLwZU+9zLSFI82whn2BC8wFjZ2qh3lqXeuh5mwZf0HW0+Vg3SjilpE2rx462Tw==}
+  '@lab-anssi/lib@2.2.0':
+    resolution: {integrity: sha512-gASt7Nhl+16zF7UzEFba/UI0UwbdJKKbM5iMGCn1AqJxmy6sIMet/be8cU1dQ4//KN/okB4Eqzz4UKhGwKDvfA==}
     peerDependencies:
       express: ~5.2.1
 
@@ -4796,7 +4796,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lab-anssi/lib@2.1.7(express@5.2.1)':
+  '@lab-anssi/lib@2.2.0(express@5.2.1)':
     dependencies:
       axios: 1.15.2
       express: 5.2.1
