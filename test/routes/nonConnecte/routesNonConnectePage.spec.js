@@ -90,6 +90,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.text).to.contain('rel="canonical"');
     });
 
+    it('expose les balises OpenGraph et Twitter Card', async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('property="og:title"');
+      expect(reponse.text).to.contain('property="og:description"');
+      expect(reponse.text).to.contain('property="og:url"');
+      expect(reponse.text).to.contain('property="og:type"');
+      expect(reponse.text).to.contain('property="og:image"');
+      expect(reponse.text).to.contain('name="twitter:card"');
+    });
+
     it("ne déclare qu'une seule balise title", async () => {
       const reponse = await testeur.get('/aPropos');
 
@@ -185,6 +196,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.text).to.contain('"@type": "Article"');
       expect(reponse.text).to.contain('"headline": "Un titre"');
       expect(reponse.text).to.contain('"author"');
+    });
+
+    it("marque l'article comme og:type « article » avec son titre", async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('property="og:type" content="article"');
+      expect(reponse.text).to.contain('property="og:title" content="Un titre"');
     });
 
     it("retire les emojis en tête du <title> de l'article", async () => {

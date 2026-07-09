@@ -2,6 +2,8 @@ extends mssDeconnecte
 
 block variables
   - const meta_description = description
+  - const titrePartage = retireEmojisEnTete(titre)
+  - const ogType = 'article'
 
 block title
   title= `${retireEmojisEnTete(titre)} | MonServiceSécurisé`
