@@ -435,6 +435,11 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
+  const exposeUrlBase: RequestHandler = (_requete, reponse, suite) => {
+    reponse.locals.urlBase = adaptateurEnvironnement.mss().urlBase();
+    suite();
+  };
+
   const verificationModeMaintenance: RequestHandler = (
     _requete,
     reponse,
@@ -506,6 +511,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeFeatureFlags,
     chargeTypeRequete,
     chargeUtilisateurConnecte,
+    exposeUrlBase,
     filtreIpAutorisees,
     interdisLaMiseEnCache,
     positionneHeaders,
