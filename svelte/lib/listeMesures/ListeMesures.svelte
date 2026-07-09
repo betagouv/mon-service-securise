@@ -60,6 +60,16 @@
 
   onMount(async () => {
     await servicesAvecMesuresAssociees.rafraichis();
+
+    const requete = new URLSearchParams(window.location.search);
+    const mesureGeneraleAffichee = requete.get('idMesureGenerale');
+    if (mesureGeneraleAffichee) {
+      const mesureCible = $listeModeleMesuresGenerales.find(
+        (m) => m.identifiantNumerique === mesureGeneraleAffichee
+      ) as ModeleDeMesure;
+      if (mesureCible)
+        afficheTiroirModificationMultipleMesuresGenerales(mesureCible);
+    }
   });
 
   const requete = new URLSearchParams(window.location.search);
