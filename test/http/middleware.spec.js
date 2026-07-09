@@ -671,6 +671,13 @@ describe('Le middleware MSS', () => {
       );
     });
 
+    it('impose HTTPS via HSTS (deux ans, sous-domaines inclus, preload)', async () => {
+      verifiePositionnementHeader(
+        'strict-transport-security',
+        /^max-age=63072000; includeSubDomains; preload$/
+      );
+    });
+
     it('positionne un nonce dans le reponse.locals', async () => {
       const middleware = leMiddleware({
         adaptateurChiffrement: {

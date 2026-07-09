@@ -94,8 +94,11 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       frameCsp,
     ].filter((csp) => csp !== '');
 
+    const DEUX_ANS = '63072000';
+
     reponse.set({
       'content-security-policy': `${toutesCsp.join('; ')}`,
+      'strict-transport-security': `max-age=${DEUX_ANS}; includeSubDomains; preload`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
