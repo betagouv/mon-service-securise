@@ -440,6 +440,27 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
+  const positionneCanonical: RequestHandler = (requete, reponse, suite) => {
+    const origine = adaptateurEnvironnement.mss().urlBase()!.replace(/\/$/, '');
+    const chemin = requete.path;
+    const aUnSlashFinalSuperflu = chemin.length > 1 && chemin.endsWith('/');
+
+    if (aUnSlashFinalSuperflu && requete.method === 'GET') {
+      const cheminNormalise = chemin.replace(/\/+$/, '');
+      const indexDebutRequete = requete.originalUrl.indexOf('?');
+      const chaineDeRequete =
+        indexDebutRequete >= 0
+          ? requete.originalUrl.slice(indexDebutRequete)
+          : '';
+      reponse.redirect(301, `${cheminNormalise}${chaineDeRequete}`);
+      return;
+    }
+
+    const cheminCanonique = chemin === '/' ? '/' : chemin.replace(/\/+$/, '');
+    reponse.locals.canonical = `${origine}${cheminCanonique}`;
+    suite();
+  };
+
   const verificationModeMaintenance: RequestHandler = (
     _requete,
     reponse,
@@ -514,6 +535,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     exposeUrlBase,
     filtreIpAutorisees,
     interdisLaMiseEnCache,
+    positionneCanonical,
     positionneHeaders,
     protegeTrafic,
     redirigeVersUrlBase,

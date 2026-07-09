@@ -126,6 +126,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  positionneCanonical: (requete, reponse, suite) => {
+    reponse.locals.canonical = `http://localhost:1234${requete.path}`;
+    suite();
+  },
+
   chargeAutorisationsService: (requete, reponse, suite) => {
     reponse.locals.autorisationsService = {
       [DECRIRE]: {},

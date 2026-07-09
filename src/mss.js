@@ -79,6 +79,7 @@ const creeServeur = ({
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.exposeUrlBase);
+  app.use(middleware.positionneCanonical);
   app.use(middleware.ajouteVersionFichierCompiles);
   app.use(middleware.chargeFeatureFlags);
   ajouteHtmlEntitiesEncode(app);
