@@ -1,0 +1,34 @@
+mixin schemaSocle
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const urlSite = `${origine}/`
+    const identifiantSite = `${urlSite}#site`
+    const identifiantOrganisation = `${urlSite}#organisation`
+    const socle = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': identifiantSite,
+          name: 'MonServiceSécurisé',
+          url: urlSite,
+          inLanguage: 'fr-FR',
+          publisher: { '@id': identifiantOrganisation },
+        },
+        {
+          '@type': 'GovernmentOrganization',
+          '@id': identifiantOrganisation,
+          name: 'MonServiceSécurisé',
+          url: urlSite,
+          logo: `${origine}/statique/assets/images/logo_mss.svg`,
+          parentOrganization: {
+            '@type': 'GovernmentOrganization',
+            name: "Agence nationale de la sécurité des systèmes d'information",
+            alternateName: 'ANSSI',
+            url: 'https://cyber.gouv.fr',
+          },
+          sameAs: ['https://github.com/betagouv/mon-service-securise'],
+        },
+      ],
+    }
+  script(type='application/ld+json')!= JSON.stringify(socle, null, 2)

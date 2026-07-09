@@ -46,6 +46,24 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
+  describe('concernant les données structurées (JSON-LD)', () => {
+    it("expose le socle WebSite et GovernmentOrganization sur la page d'accueil", async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('application/ld+json');
+      expect(reponse.text).to.contain('"@type": "WebSite"');
+      expect(reponse.text).to.contain('"@type": "GovernmentOrganization"');
+      expect(reponse.text).to.contain('ANSSI');
+    });
+
+    it("n'expose pas le socle sur la page 404", async () => {
+      const reponse = await testeur.get('/une-page-qui-nexiste-pas');
+
+      expect(reponse.status).to.equal(404);
+      expect(reponse.text).not.to.contain('GovernmentOrganization');
+    });
+  });
+
   describe('quand requête GET sur `/articles/:slug`', () => {
     it('utilise le CMS Crisp pour récupérer un article de blog', async () => {
       let slugRecu;
