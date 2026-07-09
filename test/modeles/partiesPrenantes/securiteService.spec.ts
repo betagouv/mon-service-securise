@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import SecuriteService from '../../../src/modeles/partiesPrenantes/securiteService.js';
 
 describe('Une sécurité du service', () => {
@@ -6,7 +5,7 @@ describe('Une sécurité du service', () => {
     const securiteService = new SecuriteService({
       nom: 'Structure supervision',
     });
-    expect(securiteService.toJSON()).to.eql({
+    expect(securiteService.toJSON()).toEqual({
       type: 'SecuriteService',
       nom: 'Structure supervision',
     });
