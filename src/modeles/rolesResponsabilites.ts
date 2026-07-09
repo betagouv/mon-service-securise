@@ -1,9 +1,24 @@
 import ActeursHomologation from './acteursHomologation.js';
+import { DonneesActeurHomologation } from './acteurHomologation.js';
 import InformationsService from './informationsService.js';
 import PartiesPrenantes from './partiesPrenantes/partiesPrenantes.js';
+import { DonneesPartiePrenante } from './partiesPrenantes/partiePrenante.js';
 
-const descriptionRole = (nomPrenom, fonction) => {
-  const description = [];
+export type DonneesRolesResponsabilites = {
+  autoriteHomologation: string;
+  fonctionAutoriteHomologation: string;
+  delegueProtectionDonnees: string;
+  fonctionDelegueProtectionDonnees: string;
+  piloteProjet: string;
+  fonctionPiloteProjet: string;
+  expertCybersecurite: string;
+  fonctionExpertCybersecurite: string;
+  acteursHomologation: DonneesActeurHomologation[];
+  partiesPrenantes: Array<Partial<DonneesPartiePrenante> & { type: string }>;
+};
+
+const descriptionRole = (nomPrenom?: string, fonction?: string): string => {
+  const description: string[] = [];
   if (nomPrenom) {
     description.push(nomPrenom);
     description.push(fonction ? `(${fonction})` : '(fonction non renseignée)');
@@ -15,7 +30,20 @@ const descriptionRole = (nomPrenom, fonction) => {
 };
 
 class RolesResponsabilites extends InformationsService {
-  constructor(donneesRolesResponsabilites = {}) {
+  readonly autoriteHomologation!: string;
+  readonly fonctionAutoriteHomologation!: string;
+  readonly delegueProtectionDonnees!: string;
+  readonly fonctionDelegueProtectionDonnees!: string;
+  readonly piloteProjet!: string;
+  readonly fonctionPiloteProjet!: string;
+  readonly expertCybersecurite!: string;
+  readonly fonctionExpertCybersecurite!: string;
+  readonly acteursHomologation!: ActeursHomologation;
+  readonly partiesPrenantes!: PartiesPrenantes;
+
+  constructor(
+    donneesRolesResponsabilites: Partial<DonneesRolesResponsabilites> = {}
+  ) {
     super({
       proprietesAtomiquesRequises: [
         'autoriteHomologation',

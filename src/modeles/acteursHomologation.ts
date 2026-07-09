@@ -11,12 +11,12 @@ type DonneesActeursHomologation = {
 
 class ActeursHomologation extends ElementsConstructibles<ActeurHomologation> {
   constructor(
-    donnees: DonneesActeursHomologation,
+    donnees: Partial<DonneesActeursHomologation> = {},
     referentiel: TousReferentiels = creeReferentielVide()
   ) {
     super(
       ActeurHomologation,
-      { items: donnees.acteursHomologation },
+      { items: donnees.acteursHomologation ?? [] },
       referentiel
     );
   }

@@ -24,7 +24,7 @@ class PartiePrenante extends InformationsService {
     return this.constructor.name === Type?.name;
   }
 
-  toJSON() {
+  toJSON(): Partial<DonneesPartiePrenante> & { type: string } {
     return {
       ...super.toJSON(),
       type: this.constructor.name,
