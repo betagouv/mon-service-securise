@@ -1,12 +1,10 @@
 <script lang="ts">
+  import { derived } from 'svelte/store';
   import { store } from './gestionContributeurs.store';
   import InvitationContributeur from './invitation/InvitationContributeur.svelte';
   import LigneContributeur from './kit/LigneContributeur.svelte';
   import SuppressionContributeur from './suppression/SuppressionContributeur.svelte';
   import PersonnalisationContributeur from './personnalisation/PersonnalisationContributeur.svelte';
-  import { autorisationsVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
-  import { storeAutorisations } from './stores/autorisations.store';
-  import { derived } from 'svelte/store';
 
   interface Props {
     modeVisiteGuidee: boolean;
@@ -16,18 +14,6 @@
 
   let surServiceUnique = derived(store, ($s) => $s.services.length === 1);
   let serviceUnique = derived(store, ($s) => $s.services[0]);
-
-  $effect(() => {
-    if (modeVisiteGuidee) storeAutorisations.charge(autorisationsVisiteGuidee);
-    else if ($surServiceUnique) {
-      (async () => {
-        const reponse = await axios.get(
-          `/api/service/${$serviceUnique.id}/autorisations`
-        );
-        storeAutorisations.charge(reponse.data);
-      })();
-    }
-  });
 </script>
 
 {#if $store.etapeCourante === 'SuppressionContributeur'}
