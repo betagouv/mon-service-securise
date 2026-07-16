@@ -116,5 +116,3 @@ export type Utilisateur = {
   postes: string[];
   email: string;
 };
-
-export type ReferentielExterne = 'ReCyf' | 'ISO2700X' | 'AE2690';

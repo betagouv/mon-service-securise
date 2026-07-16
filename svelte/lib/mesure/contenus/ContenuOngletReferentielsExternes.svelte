@@ -1,9 +1,11 @@
 <script lang="ts">
   import type { MesuresReferentielsExternes } from '../mesure';
   import { singulierPluriel } from '../../outils/string';
-  import { LIBELLES_REFERENTIELS_EXTERNES } from '../../tableauDesMesures/referentielsExternes';
+  import {
+    LIBELLES_REFERENTIELS_EXTERNES,
+    type ReferentielExterne,
+  } from '../../referentielsExternesDeMesures/referentielsExternes';
   import ListeDeroulanteRiche from '../../ui/ListeDeroulanteRiche.svelte';
-  import type { ReferentielExterne } from '../../ui/types';
 
   interface Props {
     mesuresReferentielsExternes: MesuresReferentielsExternes;

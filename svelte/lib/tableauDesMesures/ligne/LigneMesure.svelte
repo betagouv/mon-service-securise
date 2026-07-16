@@ -9,7 +9,6 @@
     type EcheanceMesure,
     type PrioriteMesure,
     Referentiel,
-    type ReferentielExterne,
     type ReferentielPriorite,
     type ReferentielStatut,
   } from '../../ui/types.d';
@@ -32,7 +31,7 @@
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
   import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuidee/ciblage';
-  import { LIBELLES_REFERENTIELS_EXTERNES } from '../referentielsExternes';
+  import EncartReferentielsExternes from '../../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
 
   type IdDom = string;
 
@@ -94,22 +93,6 @@
         $nomsDesContributeursParId
       )
   );
-
-  let referentielsExternesExistants: Array<ReferentielExterne> = $derived.by(
-    () => {
-      const mesureGenerale = mesure as MesureGenerale;
-      if (!mesureGenerale.mesuresReferentielsExternes) {
-        return [];
-      }
-      return Object.entries(mesureGenerale.mesuresReferentielsExternes)
-        .filter(([, items]) => items.length > 0)
-        .map(([cle]) => cle) as ReferentielExterne[];
-    }
-  );
-
-  let aDesReferentielsExternes = $derived(
-    referentielsExternesExistants.length > 0
-  );
 </script>
 
 <tr class="ligne-de-mesure">
@@ -137,13 +120,10 @@
       {/if}
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
-    {#if afficheReferentielsExterne && aDesReferentielsExternes}
-      {@const labelsReferentiels = referentielsExternesExistants.map(
-        (id) => LIBELLES_REFERENTIELS_EXTERNES[id]
-      )}
-      <span class="referentiels-externes"
-        >Correspond à {labelsReferentiels.join(', ')}</span
-      >
+    {#if afficheReferentielsExterne}
+      <EncartReferentielsExternes
+        donnees={(mesure as MesureGenerale).mesuresReferentielsExternes!}
+      />
     {/if}
   </td>
   {#if affichePlanAction}
@@ -219,12 +199,6 @@
       font-style: italic;
       color: #3a3a3a;
     }
-  }
-
-  .referentiels-externes {
-    font-style: italic;
-    font-size: 0.75rem;
-    line-height: 1.125rem;
   }
 
   .titre-mesure:hover .titre {

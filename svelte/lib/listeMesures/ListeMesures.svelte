@@ -45,6 +45,7 @@
   import { derived } from 'svelte/store';
   import { singulierPluriel } from '../outils/string';
   import ActionsComplementaires from './ActionsComplementaires.svelte';
+  import EncartReferentielsExternes from '../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -365,6 +366,9 @@
         onclick={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
+        {#if donnee.referentielsExternes}
+          <EncartReferentielsExternes donnees={donnee.referentielsExternes} />
+        {/if}
         <div class="conteneur-cartouches">
           <CartoucheReferentiel referentiel={donnee.referentiel} />
           <CartoucheCategorieMesure categorie={donnee.categorie} />

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { MesureGenerale, MesureSpecifique } from '../tableauDesMesures.d';
-import type { ReferentielExterne } from '../../ui/types.d';
+import type { ReferentielExterne } from '../../referentielsExternesDeMesures/referentielsExternes';
 
 export const rechercheParReferentielExterne = writable<ReferentielExterne[]>(
   []

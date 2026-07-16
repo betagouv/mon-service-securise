@@ -20,7 +20,7 @@
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
   import { derived } from 'svelte/store';
   import { rechercheParReferentielExterne } from '../stores/rechercheParReferentielExterne.store';
-  import { LIBELLES_REFERENTIELS_EXTERNES } from '../referentielsExternes';
+  import { LIBELLES_REFERENTIELS_EXTERNES } from '../../referentielsExternesDeMesures/referentielsExternes';
 
   interface Props {
     categories: Record<IdCategorie, string>;

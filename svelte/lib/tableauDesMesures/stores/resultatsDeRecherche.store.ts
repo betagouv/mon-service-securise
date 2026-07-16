@@ -31,7 +31,7 @@ import {
   appliqueFiltreParPriorite,
   rechercheParPriorite,
 } from './rechercheParPriorite.store';
-import type { PrioriteMesure, ReferentielExterne } from '../../ui/types';
+import type { PrioriteMesure } from '../../ui/types';
 import {
   appliqueFiltreMesMesures,
   rechercheMesMesures,
@@ -49,6 +49,7 @@ import {
   appliqueFiltreParReferentielExterne,
   rechercheParReferentielExterne,
 } from './rechercheParReferentielExterne.store';
+import type { ReferentielExterne } from '../../referentielsExternesDeMesures/referentielsExternes';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
