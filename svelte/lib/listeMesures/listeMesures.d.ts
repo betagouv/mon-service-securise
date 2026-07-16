@@ -11,6 +11,7 @@ import {
   Referentiel,
   ReferentielTypesService,
 } from '../ui/types.d';
+import type { ReferentielExterne } from '../referentielsExternesDeMesures/referentielsExternes';
 
 declare global {
   interface HTMLElementEventMap {
@@ -69,6 +70,7 @@ export type ModeleDeMesure = {
   type: 'generale' | 'specifique';
   versionReferentiel?: VersionService;
   thematique?: string;
+  referentielsExternes?: Record<ReferentielExterne, Array<{ id: string }>>;
 };
 
 export type CapaciteAjoutDeMesure = {

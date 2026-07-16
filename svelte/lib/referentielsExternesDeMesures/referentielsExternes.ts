@@ -1,4 +1,4 @@
-import type { ReferentielExterne } from '../ui/types';
+export type ReferentielExterne = 'ReCyf' | 'ISO2700X' | 'AE2690';
 
 export const LIBELLES_REFERENTIELS_EXTERNES: Record<
   ReferentielExterne,
