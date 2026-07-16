@@ -87,20 +87,21 @@ const genereCsvMesures = async (
     colonnes.push({ id: 'priorite', title: 'Priorité' });
     colonnes.push({ id: 'echeance', title: 'Échéance' });
     colonnes.push({ id: 'responsables', title: 'Responsables' });
-    if (avecReferentielsExternes) {
-      colonnes.push({
-        id: 'mesuresAssocieesReCyf',
-        title: 'Exigences NIS2-ReCyf associées',
-      });
-      colonnes.push({
-        id: 'mesuresAssocieesISO',
-        title: 'Exigences ISO 2700X associées',
-      });
-      colonnes.push({
-        id: 'mesuresAssocieesAE',
-        title: 'Exigences Annexe au Règlement d’exécution 2024/2690 associées',
-      });
-    }
+  }
+
+  if (avecReferentielsExternes) {
+    colonnes.push({
+      id: 'mesuresAssocieesReCyf',
+      title: 'Exigences NIS2-ReCyf associées',
+    });
+    colonnes.push({
+      id: 'mesuresAssocieesISO',
+      title: 'Exigences ISO 2700X associées',
+    });
+    colonnes.push({
+      id: 'mesuresAssocieesAE',
+      title: 'Exigences Annexe au Règlement d’exécution 2024/2690 associées',
+    });
   }
 
   const formatteResponsables = (responsables) =>

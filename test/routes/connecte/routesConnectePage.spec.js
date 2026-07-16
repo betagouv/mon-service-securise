@@ -276,9 +276,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     it('utilise un adaptateur CSV pour la génération', async () => {
       let donneesRecues;
       testeur.referentiel().recharge({
-        mesures: {
-          uneMesure: {},
-        },
+        mesures: { uneMesure: {} },
       });
       testeur.adaptateurCsv().genereCsvMesures = async (
         donneesMesures,
@@ -379,6 +377,26 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           'RECENSEMENT.1'
         )
       ).to.be(true);
+    });
+
+    it("rajoute les données des référentiels externes si c'est demandé", async () => {
+      let demandeReferentielsExternes;
+      testeur.adaptateurCsv().genereCsvMesures = async (
+        _d,
+        _c,
+        _a,
+        _r,
+        _t,
+        avecReferentielsExternes
+      ) => {
+        demandeReferentielsExternes = avecReferentielsExternes;
+      };
+
+      await testeur.get(
+        '/mesures/export.csv?version=v2&avecReferentielsExternes=true'
+      );
+
+      expect(demandeReferentielsExternes).to.be(true);
     });
   });
 });

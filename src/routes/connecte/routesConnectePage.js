@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import Utilisateur from '../../modeles/utilisateur.js';
 import Service from '../../modeles/service.js';
 import routesConnectePageService from './routesConnectePageService.js';
@@ -6,6 +7,7 @@ import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { adaptateurJWT } from '../../adaptateurs/adaptateurJWT.js';
 import { routesConnectePageAdmin } from './routesConnectePageAdmin.js';
+import { valideQuery } from '../../http/validePayloads.js';
 
 const routesConnectePage = ({
   middleware,
@@ -170,9 +172,15 @@ const routesConnectePage = ({
   routes.get(
     '/mesures/export.csv',
     middleware.verificationAcceptationCGU,
+    valideQuery(
+      z.strictObject({
+        version: z.enum(VersionService).optional(),
+        avecReferentielsExternes: z.stringbool().optional().default(false),
+      })
+    ),
     async (requete, reponse) => {
       try {
-        const { version } = requete.query;
+        const { version, avecReferentielsExternes } = requete.query;
         const modelesMesureSpecifique =
           await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
             requete.idUtilisateurCourant
@@ -188,7 +196,8 @@ const routesConnectePage = ({
           [],
           false,
           referentielAUtiliser,
-          false
+          false,
+          avecReferentielsExternes
         );
         reponse
           .contentType('text/csv;charset=utf-8')
