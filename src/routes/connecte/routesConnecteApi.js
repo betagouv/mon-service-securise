@@ -600,7 +600,7 @@ const routesConnecteApi = ({
           ...mesuresInteressantes,
           ...ajouteVersion(
             VersionService.v2,
-            referentielV2.ajouteThematiqueEtPorteurs(mesuresV2)
+            referentielV2.enrichisPourListeCentraliseeDeMesures(mesuresV2)
           ),
         };
       }
