@@ -46,6 +46,10 @@
   import { singulierPluriel } from '../outils/string';
   import ActionsComplementaires from './ActionsComplementaires.svelte';
   import EncartReferentielsExternes from '../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
+  import {
+    LIBELLES_REFERENTIELS_EXTERNES,
+    type ReferentielExterne,
+  } from '../referentielsExternesDeMesures/referentielsExternes';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -96,17 +100,30 @@
     idCategorie: 'thematique',
   }));
 
+  const itemsFiltrageReferentielsExternes = Object.entries(
+    LIBELLES_REFERENTIELS_EXTERNES
+  ).map(([cle, valeur]) => ({
+    libelle: valeur,
+    valeur: cle,
+    idCategorie: 'referentielsExternes',
+  }));
+
   let afficherReferentielsExternes = $state(false);
 
   const groupeReferentiel = { id: 'referentiel', libelle: 'Référentiel' };
   const groupeCategorie = { id: 'categorie', libelle: 'Catégories' };
   const groupeThematique = { id: 'thematique', libelle: 'Thématiques' };
+  const groupeReferentielsExternes = {
+    id: 'referentielsExternes',
+    libelle: "Référentiels d'exigences associés",
+  };
 
   type ConfigurationTableau = {
     donnees: ModeleDeMesure[];
     configurationRecherche: { champsRecherche: string[] };
     configurationFiltrage: ConfigurationFiltrage;
   };
+
   const listeModeleMesuresGenerales = derived(
     [modelesMesureGenerale, mesuresAvecServicesAssociesStore],
     ([$mMG, $mASAS]) =>
@@ -120,10 +137,15 @@
   const categoriesFiltragePourMesuresGenerales = derived(
     storeVersionsDeService,
     ($s) => {
-      const categoriesFiltrage = [groupeReferentiel, groupeCategorie];
-      if ($s.versionSelectionnee === 'v2') {
+      const categoriesFiltrage = [
+        groupeReferentiel,
+        groupeCategorie,
+        groupeReferentielsExternes,
+      ];
+
+      if ($s.versionSelectionnee === 'v2')
         categoriesFiltrage.push(groupeThematique);
-      }
+
       return categoriesFiltrage;
     }
   );
@@ -131,10 +153,15 @@
   const itemsFiltragePourMesuresGenerales = derived(
     storeVersionsDeService,
     ($s) => {
-      const items = [...itemsFiltrageReferentiel, ...itemsFiltrageCategories];
-      if ($s.versionSelectionnee === 'v2') {
+      const items = [
+        ...itemsFiltrageReferentiel,
+        ...itemsFiltrageCategories,
+        ...itemsFiltrageReferentielsExternes,
+      ];
+
+      if ($s.versionSelectionnee === 'v2')
         items.push(...itemsFiltrageThematiques);
-      }
+
       return items;
     }
   );
@@ -146,12 +173,34 @@
       type: 'specifique' as ModeleDeMesure['type'],
     }))
   );
+
+  const filtreSurReferentielExterne = (
+    donnee: object,
+    referentielsSelectionnes: string[]
+  ) => {
+    // Le 'donnee' est envoyé par <Tableau.svelte>, via un mécanisme de prédicat.
+    // De notre côté, on sait que c'est un record { ReCyf: […], ISO2700x: […] … }
+    const d = donnee as Record<ReferentielExterne, []>;
+    const mesuresRecyf = d?.ReCyf ?? [];
+    const mesuresISO = d?.ISO2700X ?? [];
+    const mesuresAE = d?.AE2690 ?? [];
+    return (
+      (mesuresRecyf.length > 0 && referentielsSelectionnes.includes('ReCyf')) ||
+      (mesuresISO.length > 0 &&
+        referentielsSelectionnes.includes('ISO2700X')) ||
+      (mesuresAE.length > 0 && referentielsSelectionnes.includes('AE2690'))
+    );
+  };
+
   let configurationTableau: ConfigurationTableau = $derived.by(() => {
     let config = {
       donnees: [],
       configurationRecherche: { champsRecherche: [] },
-      configurationFiltrage: { options: { categories: [], items: [] } },
+      configurationFiltrage: {
+        options: { categories: [], items: [], predicats: {} },
+      },
     } as ConfigurationTableau;
+
     if (ongletActif === 'generales') {
       config.donnees = $listeModeleMesuresGenerales;
       config.configurationRecherche.champsRecherche = [
@@ -161,6 +210,12 @@
       config.configurationFiltrage.options = {
         categories: $categoriesFiltragePourMesuresGenerales,
         items: $itemsFiltragePourMesuresGenerales,
+        predicats: {
+          referentielsExternes: (
+            referentielsSelectionnes: string[],
+            donnee: object
+          ) => filtreSurReferentielExterne(donnee, referentielsSelectionnes),
+        },
       };
     } else if (ongletActif === 'specifiques') {
       config.donnees = $listeModelesMesureSpecifique;
@@ -168,6 +223,7 @@
       config.configurationFiltrage.options = {
         categories: [groupeCategorie],
         items: [...itemsFiltrageCategories],
+        predicats: {},
       };
     } else if (ongletActif === 'toutes') {
       config.donnees = [
@@ -188,6 +244,12 @@
             idCategorie: 'referentiel',
           },
         ],
+        predicats: {
+          referentielsExternes: (
+            referentielsSelectionnes: string[],
+            donnee: object
+          ) => filtreSurReferentielExterne(donnee, referentielsSelectionnes),
+        },
       };
     }
     config.donnees = seulementCellesDeLaVersion(

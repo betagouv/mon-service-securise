@@ -9,11 +9,7 @@
   };
 
   export type ConfigurationSelection<T> = {
-    texteIndicatif: {
-      vide: string;
-      unique: string;
-      multiple: string;
-    };
+    texteIndicatif: { vide: string; unique: string; multiple: string };
     champSelection: string;
     predicatSelectionDesactive?: (donnee: T) => boolean;
   };
@@ -85,9 +81,12 @@
         if (valeurs && valeurs.length)
           filtrees = filtrees.filter((d) => {
             const donnee = d[cleFiltrage];
-            if (Array.isArray(donnee)) {
+            const predicatApplicable =
+              configurationFiltrage.options.predicats?.[cleFiltrage];
+            if (predicatApplicable !== undefined)
+              return predicatApplicable(valeurs, donnee);
+            if (Array.isArray(donnee))
               return donnee.some((v) => valeurs.includes(v));
-            }
             return valeurs.includes(donnee);
           });
       });
