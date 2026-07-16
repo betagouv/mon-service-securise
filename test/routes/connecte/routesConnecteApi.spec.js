@@ -1356,6 +1356,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ...mesuresV2['RECENSEMENT.1'],
       thematique: 'Gouvernance et gestion des risques',
       porteursSinguliers: ['Chef de projet numérique', 'Chef de projet métier'],
+      referentielsExternes: { AE2690: [], ISO2700X: [], ReCyf: [] },
       versionReferentiel: 'v2',
     };
 
@@ -1493,6 +1494,16 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           'Chef de projet métier',
         ],
       });
+    });
+
+    it('ajoute les liens vers les référentiels externes aux mesures v2', async () => {
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur =
+        async () => ['v2'];
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      const mesureContrat1 = reponse.body['CONTRAT.1'];
+      expect(mesureContrat1.referentielsExternes.ReCyf).to.have.length(1);
     });
   });
 });

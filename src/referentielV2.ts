@@ -77,7 +77,9 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
 };
 
 type MethodesSpecifiquesReferentielV2 = {
-  ajouteThematiqueEtPorteurs: (mesures: typeof mesuresV2) => typeof mesuresV2;
+  enrichisPourListeCentraliseeDeMesures: (
+    mesures: typeof mesuresV2
+  ) => typeof mesuresV2;
   descriptionAudienceCible: (audienceCible: AudienceCible) => string;
   descriptionDelaiAvantImpactCritique: (
     dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable
@@ -245,12 +247,18 @@ export const creeReferentielV2 = (
     };
   };
 
-  const ajouteThematiqueEtPorteurs = (desMesures: typeof mesuresV2) =>
+  const enrichisPourListeCentraliseeDeMesures = (
+    desMesures: typeof mesuresV2
+  ) =>
     Object.fromEntries(
       Object.entries(desMesures).map(([id, m]) => {
         const thematique = thematiqueDeMesure(id);
         const porteursSinguliers = porteursSinguliersDeMesure(id);
-        return [id, { ...m, thematique, porteursSinguliers }];
+        const referentielsExternes = referentielsExternesDeMesure(id);
+        return [
+          id,
+          { ...m, thematique, porteursSinguliers, referentielsExternes },
+        ];
       })
     );
 
@@ -260,7 +268,7 @@ export const creeReferentielV2 = (
 
   return {
     ...creeReferentiel(),
-    ajouteThematiqueEtPorteurs,
+    enrichisPourListeCentraliseeDeMesures,
     descriptionAudienceCible,
     descriptionDelaiAvantImpactCritique,
     descriptionsDonneesCaracterePersonnel,
