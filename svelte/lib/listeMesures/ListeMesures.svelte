@@ -96,6 +96,8 @@
     idCategorie: 'thematique',
   }));
 
+  let afficherReferentielsExternes = $state(false);
+
   const groupeReferentiel = { id: 'referentiel', libelle: 'Référentiel' };
   const groupeCategorie = { id: 'categorie', libelle: 'Catégories' };
   const groupeThematique = { id: 'thematique', libelle: 'Thématiques' };
@@ -323,6 +325,7 @@
       onajouterunemesureclick={afficheTiroirAjout}
       onteleverserdesmesuresclick={afficheTiroirTeleversement}
       {capaciteAjoutDeMesure}
+      bind:afficherReferentielsExternes
     />
   {/snippet}
 
@@ -366,7 +369,7 @@
         onclick={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
-        {#if donnee.referentielsExternes}
+        {#if afficherReferentielsExternes && donnee.referentielsExternes}
           <EncartReferentielsExternes donnees={donnee.referentielsExternes} />
         {/if}
         <div class="conteneur-cartouches">

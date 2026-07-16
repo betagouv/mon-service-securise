@@ -11,12 +11,15 @@
     capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
     onajouterunemesureclick: () => void;
     onteleverserdesmesuresclick: () => void;
+    afficherReferentielsExternes: boolean;
   }
 
   let {
     capaciteAjoutDeMesure,
     onajouterunemesureclick,
     onteleverserdesmesuresclick,
+    // eslint-disable-next-line no-useless-assignment
+    afficherReferentielsExternes = $bindable(),
   }: Props = $props();
 
   let peutAjouterModelesMesureSpecifique = derived(
@@ -29,6 +32,9 @@
   <dsfr-toggle
     label="Afficher les référentiels d'exigences associés"
     id="affiche-referentiels-externes"
+    onvaluechanged={async (e: CustomEvent<boolean>) => {
+      afficherReferentielsExternes = e.detail;
+    }}
   ></dsfr-toggle>
   <div class="ligne-2">
     <Lien
