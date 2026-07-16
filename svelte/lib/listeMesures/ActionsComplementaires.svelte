@@ -39,7 +39,7 @@
   <div class="ligne-2">
     <Lien
       type="bouton-tertiaire"
-      href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
+      href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}&avecReferentielsExternes={afficherReferentielsExternes}"
       titre="Télécharger la liste de mesures"
       target="_blank"
       icone="telecharger"
