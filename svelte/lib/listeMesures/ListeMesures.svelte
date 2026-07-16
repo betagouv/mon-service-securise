@@ -26,7 +26,6 @@
   } from './mesureGenerale/modelesMesureGenerale.store';
   import ModaleRapportModification from './modificationStatutPrecision/rapport/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './modificationStatutPrecision/rapport/modaleRapport.store';
-  import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { modelesMesureSpecifique } from '../ui/stores/modelesMesureSpecifique.store';
@@ -38,15 +37,14 @@
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './mesureSpecifique/ajout/TiroirAjoutModeleMesureSpecifique.svelte';
   import TiroirConfigurationModeleMesureSpecifique from './mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
-  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
-  import Infobulle from '../ui/Infobulle.svelte';
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
   import { thematiques } from './thematiques';
   import { derived } from 'svelte/store';
   import { singulierPluriel } from '../outils/string';
+  import ActionsComplementaires from './ActionsComplementaires.svelte';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -77,11 +75,6 @@
       ? ongletDemande
       : 'toutes';
   });
-
-  let peutAjouterModelesMesureSpecifique = derived(
-    modelesMesureSpecifique,
-    ($s) => $s.length < capaciteAjoutDeMesure.nombreMaximum
-  );
 
   const itemsFiltrageReferentiel = [
     { libelle: 'ANSSI', valeur: Referentiel.ANSSI, idCategorie: 'referentiel' },
@@ -325,39 +318,11 @@
     {/if}
   {/snippet}
   {#snippet actionsComplementaires()}
-    <div class="conteneur-actions-complementaires">
-      <Lien
-        type="bouton-tertiaire"
-        href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
-        titre="Télécharger la liste de mesures"
-        target="_blank"
-        icone="telecharger"
-      />
-      <div class="action-ajout-modeles-mesure-specifique">
-        <BoutonAvecListeDeroulante
-          titre="Ajouter une / des mesures"
-          aligneADroite
-          options={[
-            {
-              label: 'Ajouter une mesure',
-              icone: 'add-line',
-              action: afficheTiroirAjout,
-            },
-            {
-              label: 'Téléverser des mesures',
-              icone: 'upload-2-line',
-              action: afficheTiroirTeleversement,
-            },
-          ]}
-          disabled={!$peutAjouterModelesMesureSpecifique}
-        />
-        {#if !$peutAjouterModelesMesureSpecifique}
-          <Infobulle
-            contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
-          />
-        {/if}
-      </div>
-    </div>
+    <ActionsComplementaires
+      onajouterunemesureclick={afficheTiroirAjout}
+      onteleverserdesmesuresclick={afficheTiroirTeleversement}
+      {capaciteAjoutDeMesure}
+    />
   {/snippet}
 
   {#snippet onglets()}
@@ -524,18 +489,6 @@
 
   :global(tr.met-en-avant) {
     animation: montre-ligne 2s ease-out 0.5s;
-  }
-
-  .conteneur-actions-complementaires {
-    margin-left: auto;
-    display: flex;
-    gap: 12px;
-
-    .action-ajout-modeles-mesure-specifique {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
   }
 
   @keyframes montre-ligne {
