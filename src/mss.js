@@ -13,6 +13,7 @@ import routesNonConnecteApiStyles from './routes/nonConnecte/routesNonConnecteAp
 import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js';
 import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
+import routesNonConnecteWebhooks from './routes/nonConnecte/routesNonConnecteWebhooks.js';
 import { ajouteHtmlEntitiesEncode } from './http/encodeEntitesHTML.js';
 
 const creeServeur = ({
@@ -132,6 +133,11 @@ const creeServeur = ({
       inscriptionUtilisateur,
       serviceCgu,
     })
+  );
+  app.use(
+    '/webhooks',
+    middleware.chargeTypeRequete(TYPES_REQUETES.API),
+    routesNonConnecteWebhooks({ middleware, depotDonnees })
   );
   app.use(
     '/oidc',
