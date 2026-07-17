@@ -43,6 +43,7 @@ describe('Un utilisateur', () => {
     postes: [],
     infolettreAcceptee: true,
     transactionnelAccepte: true,
+    pixelDeSuiviAccepte: true,
     ...surcharge,
   });
 
@@ -259,6 +260,26 @@ describe('Un utilisateur', () => {
       adaptateursParDefaut
     );
     expect(autreUtilisateur.accepteInfolettre()).toBe(false);
+  });
+
+  it('sait détecter le consentement au pixel de suivi', () => {
+    // On teste en passant par toJSON() car c'est ce que le pug va appeler
+    // quand il va sérialiser l'objet dans le DOM pour que Svelte le récupère.
+    const avec = new Utilisateur(
+      donneesUtilisateur({ pixelDeSuiviAccepte: true }),
+      adaptateursParDefaut
+    );
+    expect((avec.toJSON() as DonneesUtilisateur).pixelDeSuiviAccepte).toBe(
+      true
+    );
+
+    const sans = new Utilisateur(
+      donneesUtilisateur({ pixelDeSuiviAccepte: false }),
+      adaptateursParDefaut
+    );
+    expect((sans.toJSON() as DonneesUtilisateur).pixelDeSuiviAccepte).toBe(
+      false
+    );
   });
 
   it("exige que l'adresse électronique soit renseignée", () => {
