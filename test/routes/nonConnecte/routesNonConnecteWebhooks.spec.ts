@@ -55,7 +55,12 @@ describe('Les routes non connectées des webhooks', () => {
         );
     });
 
-    it("renvoie une 400 s'il ne s'agit pas d'une mise à jour du pixel de suivi", async () => {
+    it("ne fait rien et renvoie une 204 s'il ne s'agit pas d'une mise à jour du pixel de suivi", async () => {
+      let miseAJourFaite = false;
+      testeur.depotDonnees().metsAJourUtilisateur = async () => {
+        miseAJourFaite = true;
+      };
+
       const bodyPourAutreDonnee = bodyBrevo();
       // @ts-expect-error On force un autre attribut
       bodyPourAutreDonnee.content[0].attributes = { work_phone: '0102030405' };
@@ -65,7 +70,8 @@ describe('Les routes non connectées des webhooks', () => {
         bodyPourAutreDonnee
       );
 
-      expect(status).toBe(400);
+      expect(status).toBe(204);
+      expect(miseAJourFaite).toBe(false);
     });
 
     describe("quand l'appel Brevo est correct", () => {
