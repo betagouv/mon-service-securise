@@ -25,6 +25,7 @@ export type DonneesUtilisateur = {
   cguAcceptees: string;
   infolettreAcceptee: boolean;
   transactionnelAccepte: boolean;
+  pixelDeSuiviAccepte: boolean;
   estimationNombreServices: EstimationNombreServices;
   postes: Array<string>;
   entite: Partial<DonneesEntite>;
@@ -71,6 +72,7 @@ class Utilisateur extends Base {
         'cguAcceptees',
         'infolettreAcceptee',
         'transactionnelAccepte',
+        'pixelDeSuiviAccepte',
         'estimationNombreServices',
       ],
       proprietesListes: ['postes'],

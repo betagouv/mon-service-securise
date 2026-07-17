@@ -55,6 +55,7 @@
           postes: $utilisateur.postes,
           telephone: $utilisateur.telephone,
           transactionnelAccepte: $utilisateur.transactionnelAccepte,
+          pixelDeSuiviAccepte: $utilisateur.pixelDeSuiviAccepte,
           siretEntite: entite.siret,
         });
         window.location.href = '/tableauDeBord';
@@ -210,6 +211,18 @@
         <label for="transactionnelAccepte">
           J'accepte de recevoir des informations relatives à l'utilisation de
           MonServiceSécurisé
+        </label>
+      </div>
+      <div class="case-a-cocher">
+        <input
+          id="pixelDeSuiviAccepte"
+          type="checkbox"
+          bind:checked={$utilisateur.pixelDeSuiviAccepte}
+          name="pixelDeSuiviAccepte"
+        />
+        <label for="pixelDeSuiviAccepte">
+          J'accepte que l'ouverture des emails qui me sont adressés puisse être
+          mesurée afin d'en améliorer la pertinence.
         </label>
       </div>
     </div>

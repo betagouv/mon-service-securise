@@ -23,6 +23,7 @@ export type Utilisateur = {
   postes: string[];
   infolettreAcceptee: boolean;
   transactionnelAccepte: boolean;
+  pixelDeSuiviAccepte: boolean;
   estimationNombreServices: {
     borneBasse: string;
     borneHaute: string;
