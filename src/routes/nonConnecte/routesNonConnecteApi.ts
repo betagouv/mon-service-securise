@@ -98,7 +98,7 @@ const routesNonConnecteApi = ({
 
   routes.post(
     '/desinscriptionInfolettre',
-    middleware.verificationAddresseIP(['185.107.232.1/24', '1.179.112.1/20']),
+    middleware.verificationAddresseIP(['1.179.112.0/20', '172.246.240.0/20']),
     valideBody(z.looseObject(reglesValidationDesinscriptionInfolettre)),
     async (requete, reponse) => {
       const { email } = requete.body;

@@ -560,7 +560,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       await testeur
         .middleware()
         .verifieAdresseIP(
-          ['185.107.232.1/24', '1.179.112.1/20'],
+          ['1.179.112.0/20', '172.246.240.0/20'],
           testeur.app(),
           {
             method: 'post',
