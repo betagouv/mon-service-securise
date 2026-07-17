@@ -47,6 +47,7 @@ class Utilisateur extends Base {
   private readonly cguAcceptees!: string;
   private readonly infolettreAcceptee!: boolean;
   private readonly transactionnelAccepte!: boolean;
+  private readonly pixelDeSuiviAccepte!: boolean;
   private readonly estimationNombreServices!: EstimationNombreServices;
   readonly postes!: Array<string>;
   readonly entite: Entite;
@@ -234,6 +235,7 @@ class Utilisateur extends Base {
     nouvellesPreferences: {
       infolettreAcceptee?: boolean;
       transactionnelAccepte?: boolean;
+      pixelDeSuiviAccepte?: boolean;
     },
     adaptateurEmail: AdaptateurMail
   ) {
@@ -254,6 +256,16 @@ class Utilisateur extends Base {
       await adaptateurEmail.inscrisEmailsTransactionnels(this.email);
     if (desinscrisTransac)
       await adaptateurEmail.desinscrisEmailsTransactionnels(this.email);
+
+    const pixelDeSuiviActuel = this.pixelDeSuiviAccepte;
+    const nouveauPixelDeSuivi = nouvellesPreferences.pixelDeSuiviAccepte;
+    const acceptePixel = !pixelDeSuiviActuel && nouveauPixelDeSuivi === true;
+    const refusePixel = pixelDeSuiviActuel && nouveauPixelDeSuivi === false;
+
+    if (acceptePixel)
+      await adaptateurEmail.changeConsentementPixelDeSuivi(this.email, true);
+    if (refusePixel)
+      await adaptateurEmail.changeConsentementPixelDeSuivi(this.email, false);
   }
 }
 

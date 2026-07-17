@@ -161,6 +161,14 @@ const metAJourContact = (
     SMS: numeroTelephoneAvecIndicatif(telephone),
   });
 
+const changeConsentementPixelDeSuivi = (
+  emailDuContact: string,
+  nouvelleValeur: boolean
+) =>
+  metAJourDonneesContact(emailDuContact, {
+    _PIXEL_TRACKING_CONSENT: nouvelleValeur,
+  });
+
 const basculeEmailsTransactionnels = async (
   destinataire: string,
   etat: boolean
@@ -442,6 +450,7 @@ export const adaptateurMailSendinblue = {
   creeContact,
   metAJourContact,
   metAJourDonneesContact: metAJourDonneesContactCadencee,
+  changeConsentementPixelDeSuivi,
   creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,

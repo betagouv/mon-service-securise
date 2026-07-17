@@ -15,6 +15,7 @@ class ConstructeurUtilisateur {
       estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
       infolettreAcceptee: '',
       transactionnelAccepte: '',
+      pixelDeSuiviAccepte: false,
     };
   }
 
@@ -112,6 +113,16 @@ class ConstructeurUtilisateur {
 
   quiRefuseEmailsTransactionnels() {
     this.donnees.transactionnelAccepte = false;
+    return this;
+  }
+
+  quiAcceptePixelDeSuivi() {
+    this.donnees.pixelDeSuiviAccepte = true;
+    return this;
+  }
+
+  quiRefusePixelDeSuivi() {
+    this.donnees.pixelDeSuiviAccepte = false;
     return this;
   }
 

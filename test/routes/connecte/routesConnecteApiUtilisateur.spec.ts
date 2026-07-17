@@ -156,6 +156,16 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         }
       );
 
+      it.each([null, undefined, 'abc', 10])(
+        `refuse le consentement au pixel de suivi "%s"`,
+        async (pixelDeSuiviAccepte) => {
+          // @ts-expect-error On force des valeurs invalides pour le test.
+          donneesRequete.pixelDeSuiviAccepte = pixelDeSuiviAccepte;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).toBe(400);
+        }
+      );
+
       it("valide le champ `token` s'il est présent", async () => {
         // @ts-expect-error On force un valeur invalide pour le test.
         donneesRequete.token = 123;
@@ -196,6 +206,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       expect(donneesRecues!.entite.siret).toEqual('13000766900018');
       expect(donneesRecues!.infolettreAcceptee).toEqual(true);
       expect(donneesRecues!.transactionnelAccepte).toEqual(true);
+      expect(donneesRecues!.pixelDeSuiviAccepte).toEqual(true);
       expect(donneesRecues!.postes).to.eql([
         'RSSI',
         "Chargé des systèmes d'informations",
@@ -285,11 +296,13 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
 
       donneesRequete.infolettreAcceptee = true;
       donneesRequete.transactionnelAccepte = true;
+      donneesRequete.pixelDeSuiviAccepte = true;
       await testeur.put('/api/utilisateur', donneesRequete);
 
       expect(preferencesChangees).to.eql({
         infolettreAcceptee: true,
         transactionnelAccepte: true,
+        pixelDeSuiviAccepte: true,
       });
     });
   });
