@@ -4,6 +4,8 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { schemaPostConsentementPixelDeSuivi } from './routesNonConnecteWebhooks.schema.js';
 
+/* eslint-disable no-underscore-dangle */
+
 const routesNonConnecteWebhooks = ({
   middleware,
   depotDonnees,
@@ -19,6 +21,14 @@ const routesNonConnecteWebhooks = ({
     valideBody(schemaPostConsentementPixelDeSuivi),
     async (requete, reponse) => {
       const { email } = requete.body;
+      const pixelDeSuiviAccepte =
+        requete.body.content[0].attributes._PIXEL_TRACKING_CONSENT;
+
+      const concerneAutreChoseQueLePixel = pixelDeSuiviAccepte === undefined;
+      if (concerneAutreChoseQueLePixel) {
+        reponse.sendStatus(204);
+        return;
+      }
 
       const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
       if (!utilisateur) {
@@ -26,9 +36,6 @@ const routesNonConnecteWebhooks = ({
         return;
       }
 
-      /* eslint-disable no-underscore-dangle */
-      const pixelDeSuiviAccepte =
-        requete.body.content[0].attributes._PIXEL_TRACKING_CONSENT;
       await depotDonnees.metsAJourUtilisateur(utilisateur.id, {
         pixelDeSuiviAccepte,
       });
