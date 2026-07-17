@@ -9,7 +9,8 @@ export interface AdaptateurMail {
     nom: string,
     telephone: string,
     bloqueNewsletter: boolean,
-    bloqueMarketing: boolean
+    bloqueMarketing: boolean,
+    pixelDeSuiviAccepte: boolean
   ): Promise<void>;
 
   creeEntreprise(

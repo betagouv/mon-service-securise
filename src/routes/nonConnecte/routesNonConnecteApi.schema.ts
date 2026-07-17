@@ -18,6 +18,7 @@ export const schemaCommunPutPostUtilisateur = {
     .or(z.literal('')),
   transactionnelAccepte: z.boolean(),
   infolettreAcceptee: z.boolean(),
+  pixelDeSuiviAccepte: z.boolean(),
   agentConnect: z.literal(true).optional(),
 };
 

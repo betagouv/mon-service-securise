@@ -17,6 +17,7 @@ const obtentionDonneesDeBaseUtilisateur = (
     estimationNombreServices: corps.estimationNombreServices,
     infolettreAcceptee: corps.infolettreAcceptee,
     transactionnelAccepte: corps.transactionnelAccepte,
+    pixelDeSuiviAccepte: corps.pixelDeSuiviAccepte,
     postes: corps.postes,
   };
   if (corps.cguAcceptees) {

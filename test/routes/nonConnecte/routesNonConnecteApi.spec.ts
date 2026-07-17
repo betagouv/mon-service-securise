@@ -45,6 +45,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         cguAcceptees: true,
         infolettreAcceptee: true,
         transactionnelAccepte: true,
+        pixelDeSuiviAccepte: true,
         token: tokenJWT,
       };
 
@@ -164,6 +165,21 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         }
       );
 
+      it.each([{ valeurErronee: '1' }, { valeurErronee: undefined }])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du pixel de suivi",
+        async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
+          donneesRequete.pixelDeSuiviAccepte = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).toEqual(400);
+        }
+      );
+
       it.each([
         { valeurErronee: [] },
         { valeurErronee: [uneChaineDeCaracteres(201, 'a')] },
@@ -198,7 +214,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         { valeurErronee: { borneBasse: '10', borneHaute: '42' } },
         { valeurErronee: undefined },
       ])(
-        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'estimation du nombre de services",
         async ({ valeurErronee }) => {
           // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.estimationNombreServices = valeurErronee;
@@ -364,6 +380,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
+        pixelDeSuiviAccepte: true,
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         cguAcceptees: true,
         email: 'jean.dupont@mail.fr',
@@ -396,7 +413,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         nom: string,
         telephone: string,
         bloqueEmails: boolean,
-        bloqueMarketing: boolean
+        bloqueMarketing: boolean,
+        pixelDeSuiviAccepte: boolean
       ) => {
         expect(destinataire).toEqual('jean.dupont@mail.fr');
         expect(prenom).toEqual('Jean');
@@ -404,6 +422,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         expect(telephone).toEqual('0100000000');
         expect(bloqueEmails).toEqual(false);
         expect(bloqueMarketing).toBe(false);
+        expect(pixelDeSuiviAccepte).toBe(true);
         contactCree = true;
       };
 

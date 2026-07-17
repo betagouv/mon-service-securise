@@ -52,5 +52,6 @@ export type FormulaireInscription = {
   cguAcceptees: boolean;
   infolettreAcceptee: boolean;
   transactionnelAccepte: boolean;
+  pixelDeSuiviAccepte: boolean;
   token: string;
 };
