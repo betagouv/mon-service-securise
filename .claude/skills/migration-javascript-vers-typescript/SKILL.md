@@ -1,3 +1,13 @@
+---
+name: migration-javascript-vers-typescript
+description: >-
+  Guide pas-à-pas pour convertir un fichier JavaScript du domaine (`src/modeles/`)
+  en TypeScript strict dans ce projet. À utiliser dès qu'on demande de migrer ou
+  convertir un modèle métier de `.js` vers `.ts`, de typer un constructeur, un
+  agrégat ou un `toJSON()`, de traduire un `.spec` d'expect.js vers Vitest, ou
+  lors des tâches « [SOIN] Convertis le modèle … en Typescript ».
+---
+
 # Migration JS → TypeScript (modèles de domaine)
 
 Guide pour convertir un fichier `.js` du domaine en TypeScript **strict** (`tsconfig.json` : `strict: true`). Le style du projet reste inchangé : nommage **en français**, pas de commentaires superflus, code propre.
