@@ -19,7 +19,8 @@ function fabriqueInscriptionUtilisateur(config = {}) {
         utilisateur.nom ?? '',
         utilisateur.telephone ?? '',
         !utilisateur.infolettreAcceptee,
-        false
+        false,
+        utilisateur.pixelDeSuiviAccepte
       )
     );
   };

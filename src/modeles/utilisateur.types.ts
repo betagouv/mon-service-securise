@@ -7,6 +7,7 @@ export type PartieModifiableProfilUtilisateur = {
   };
   infolettreAcceptee: boolean;
   transactionnelAccepte: boolean;
+  pixelDeSuiviAccepte: boolean;
   postes: string[];
   cguAcceptees?: string;
 };

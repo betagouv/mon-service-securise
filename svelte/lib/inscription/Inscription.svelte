@@ -99,6 +99,7 @@
     cguAcceptees: false,
     infolettreAcceptee: false,
     transactionnelAccepte: true,
+    pixelDeSuiviAccepte: false,
     token: untrack(() => token),
   });
 
@@ -276,6 +277,18 @@
             <label for="cguAcceptees" class="requis">
               J'accepte les <a href="/cgu">conditions générales d'utilisation</a
               > de MonServiceSécurisé
+            </label>
+          </div>
+          <div class="case-a-cocher">
+            <input
+              id="pixelDeSuiviAccepte"
+              type="checkbox"
+              bind:checked={formulaireInscription.pixelDeSuiviAccepte}
+              name="pixelDeSuiviAccepte"
+            />
+            <label for="pixelDeSuiviAccepte">
+              J'accepte que l'ouverture des emails qui me sont adressés puisse
+              être mesurée afin d'en améliorer la pertinence.
             </label>
           </div>
         </div>

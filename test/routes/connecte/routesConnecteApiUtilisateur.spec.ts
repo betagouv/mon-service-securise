@@ -82,6 +82,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
+        pixelDeSuiviAccepte: true,
         cguAcceptees: true,
       };
 
