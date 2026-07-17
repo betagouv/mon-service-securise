@@ -74,7 +74,8 @@ const creeContact = async (
   nom: string,
   telephone: string,
   bloqueNewsletter: boolean,
-  bloqueMarketing: boolean
+  bloqueMarketing: boolean,
+  pixelDeSuiviAccepte: boolean
 ) => {
   const codesErreurTelephone = ['duplicate_parameter', 'invalid_parameter'];
 
@@ -88,6 +89,7 @@ const creeContact = async (
       ...(inclutTelephone && {
         SMS: numeroTelephoneAvecIndicatif(telephone),
       }),
+      _PIXEL_TRACKING_CONSENT: pixelDeSuiviAccepte,
     },
     ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
   });
