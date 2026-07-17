@@ -14,6 +14,7 @@ import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js
 import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
 import { ajouteHtmlEntitiesEncode } from './http/encodeEntitesHTML.js';
+import { ajouteAidesVues } from './http/aidesVues.js';
 
 const creeServeur = ({
   depotDonnees,
@@ -78,9 +79,12 @@ const creeServeur = ({
   app.use(adaptateurProtection.protectionLimiteTrafic());
 
   app.use(middleware.positionneHeaders);
+  app.use(middleware.exposeUrlBase);
+  app.use(middleware.positionneCanonical);
   app.use(middleware.ajouteVersionFichierCompiles);
   app.use(middleware.chargeFeatureFlags);
   ajouteHtmlEntitiesEncode(app);
+  ajouteAidesVues(app);
 
   app.disable('x-powered-by');
 

@@ -94,8 +94,11 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       frameCsp,
     ].filter((csp) => csp !== '');
 
+    const DEUX_ANS = '63072000';
+
     reponse.set({
       'content-security-policy': `${toutesCsp.join('; ')}`,
+      'strict-transport-security': `max-age=${DEUX_ANS}; includeSubDomains; preload`,
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
@@ -435,6 +438,32 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
+  const exposeUrlBase: RequestHandler = (_requete, reponse, suite) => {
+    reponse.locals.urlBase = adaptateurEnvironnement.mss().urlBase();
+    suite();
+  };
+
+  const positionneCanonical: RequestHandler = (requete, reponse, suite) => {
+    const origine = adaptateurEnvironnement.mss().urlBase()!.replace(/\/$/, '');
+    const chemin = requete.path;
+    const aUnSlashFinalSuperflu = chemin.length > 1 && chemin.endsWith('/');
+
+    if (aUnSlashFinalSuperflu && requete.method === 'GET') {
+      const cheminNormalise = chemin.replace(/\/+$/, '');
+      const indexDebutRequete = requete.originalUrl.indexOf('?');
+      const chaineDeRequete =
+        indexDebutRequete >= 0
+          ? requete.originalUrl.slice(indexDebutRequete)
+          : '';
+      reponse.redirect(301, `${cheminNormalise}${chaineDeRequete}`);
+      return;
+    }
+
+    const cheminCanonique = chemin === '/' ? '/' : chemin.replace(/\/+$/, '');
+    reponse.locals.canonical = `${origine}${cheminCanonique}`;
+    suite();
+  };
+
   const verificationModeMaintenance: RequestHandler = (
     _requete,
     reponse,
@@ -506,8 +535,10 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeFeatureFlags,
     chargeTypeRequete,
     chargeUtilisateurConnecte,
+    exposeUrlBase,
     filtreIpAutorisees,
     interdisLaMiseEnCache,
+    positionneCanonical,
     positionneHeaders,
     protegeTrafic,
     redirigeVersUrlBase,

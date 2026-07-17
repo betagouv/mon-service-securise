@@ -1,0 +1,76 @@
+mixin schemaSocle
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const urlSite = `${origine}/`
+    const identifiantSite = `${urlSite}#site`
+    const identifiantOrganisation = `${urlSite}#organisation`
+    const socle = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': identifiantSite,
+          name: 'MonServiceSécurisé',
+          url: urlSite,
+          inLanguage: 'fr-FR',
+          publisher: { '@id': identifiantOrganisation },
+        },
+        {
+          '@type': 'GovernmentOrganization',
+          '@id': identifiantOrganisation,
+          name: 'MonServiceSécurisé',
+          url: urlSite,
+          logo: `${origine}/statique/assets/images/logo_mss.svg`,
+          parentOrganization: {
+            '@type': 'GovernmentOrganization',
+            name: "Agence nationale de la sécurité des systèmes d'information",
+            alternateName: 'ANSSI',
+            url: 'https://cyber.gouv.fr',
+            sameAs: [
+              'https://www.wikidata.org/wiki/Q392502',
+              "https://fr.wikipedia.org/wiki/Agence_nationale_de_la_sécurité_des_systèmes_d'information",
+            ],
+          },
+          sameAs: ['https://github.com/betagouv/mon-service-securise'],
+        },
+      ],
+    }
+  script(type='application/ld+json')!= JSON.stringify(socle, null, 2)
+
+mixin schemaFilAriane(filAriane)
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const elements = filAriane.map((etape, position) => {
+      const element = {
+        '@type': 'ListItem',
+        position: position + 1,
+        name: etape.label,
+      }
+      if (etape.href) element.item = `${origine}${etape.href}`
+      return element
+    })
+    const filDAriane = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: elements,
+    }
+  script(type='application/ld+json')!= JSON.stringify(filDAriane, null, 2)
+
+mixin schemaArticle(titre, description, datePublication, dateMiseAJour)
+  -
+    const origine = urlBase.replace(/\/$/, '')
+    const identifiantOrganisation = `${origine}/#organisation`
+    const article = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: titre,
+      description,
+      inLanguage: 'fr-FR',
+      mainEntityOfPage: canonical,
+      url: canonical,
+      author: { '@id': identifiantOrganisation },
+      publisher: { '@id': identifiantOrganisation },
+    }
+    if (datePublication) article.datePublished = datePublication
+    if (dateMiseAJour) article.dateModified = dateMiseAJour
+  script(type='application/ld+json')!= JSON.stringify(article, null, 2)

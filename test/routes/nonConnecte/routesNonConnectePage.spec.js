@@ -47,6 +47,86 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
+  describe('concernant les données structurées (JSON-LD)', () => {
+    it("expose le socle WebSite et GovernmentOrganization sur la page d'accueil", async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('application/ld+json');
+      expect(reponse.text).to.contain('"@type": "WebSite"');
+      expect(reponse.text).to.contain('"@type": "GovernmentOrganization"');
+      expect(reponse.text).to.contain('ANSSI');
+    });
+
+    it("relie l'ANSSI à ses fiches Wikidata et Wikipedia", async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('https://www.wikidata.org/wiki/Q392502');
+      expect(reponse.text).to.contain(
+        'https://fr.wikipedia.org/wiki/Agence_nationale_de_la_s'
+      );
+    });
+
+    it("n'expose pas le socle sur la page 404", async () => {
+      const reponse = await testeur.get('/une-page-qui-nexiste-pas');
+
+      expect(reponse.status).to.equal(404);
+      expect(reponse.text).not.to.contain('GovernmentOrganization');
+    });
+
+    it('expose un BreadcrumbList sur les pages de documentation', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+    });
+
+    it('expose un BreadcrumbList sur la page conseils cyber', async () => {
+      const reponse = await testeur.get('/conseils-cyber');
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+    });
+
+    it('déclare une balise canonical sur la page', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text).to.contain('rel="canonical"');
+    });
+
+    it('expose les balises OpenGraph et Twitter Card', async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain('property="og:title"');
+      expect(reponse.text).to.contain('property="og:description"');
+      expect(reponse.text).to.contain('property="og:url"');
+      expect(reponse.text).to.contain('property="og:type"');
+      expect(reponse.text).to.contain('property="og:image"');
+      expect(reponse.text).to.contain('name="twitter:card"');
+    });
+
+    it("ne déclare qu'une seule balise title", async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      const nombreDeTitles = reponse.text.split('<title').length - 1;
+      expect(nombreDeTitles).to.equal(1);
+    });
+
+    it('place le title à l’intérieur du <head>', async () => {
+      const reponse = await testeur.get('/aPropos');
+
+      expect(reponse.text.indexOf('<title')).to.be.lessThan(
+        reponse.text.indexOf('</head>')
+      );
+    });
+
+    it('tronque une méta-description trop longue', async () => {
+      const reponse = await testeur.get('/mentionsLegales');
+
+      expect(reponse.text).to.contain('…');
+      expect(reponse.text).not.to.contain(
+        'Protégez-vous en toute transparence'
+      );
+    });
+  });
+
   describe('quand requête GET sur `/articles/:slug`', () => {
     it('utilise le CMS Crisp pour récupérer un article de blog', async () => {
       let slugRecu;
@@ -88,6 +168,90 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(reponse.text).to.contain('Un titre');
     });
 
+    it('expose un BreadcrumbList décrivant le fil d’Ariane de l’article', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('"@type": "BreadcrumbList"');
+      expect(reponse.text).to.contain('"name": "Un titre"');
+    });
+
+    it('expose un schéma Article décrivant le contenu éditorial', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('"@type": "Article"');
+      expect(reponse.text).to.contain('"headline": "Un titre"');
+      expect(reponse.text).to.contain('"author"');
+    });
+
+    it("marque l'article comme og:type « article » avec son titre", async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain('property="og:type" content="article"');
+      expect(reponse.text).to.contain('property="og:title" content="Un titre"');
+    });
+
+    it("retire les emojis en tête du <title> de l'article", async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: '📝 Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain(
+        '<title>Un titre | MonServiceSécurisé</title>'
+      );
+      expect(reponse.text).not.to.contain('📝 Un titre |');
+    });
+
+    it('renseigne les dates de publication et de mise à jour dans le schéma Article', async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
+        contenu: 'Un contenu',
+        titre: 'Un titre',
+        description: 'Une description',
+        tableDesMatieres: [],
+        section: { id: 'IdSection', nom: 'Une section' },
+        datePublication: '2024-01-01T00:00:00.000Z',
+        dateMiseAJour: '2024-02-01T00:00:00.000Z',
+      });
+
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
+
+      expect(reponse.text).to.contain(
+        '"datePublished": "2024-01-01T00:00:00.000Z"'
+      );
+      expect(reponse.text).to.contain(
+        '"dateModified": "2024-02-01T00:00:00.000Z"'
+      );
+    });
+
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
       testeur.cmsCrisp().recupereArticleBlog = async () => {
         throw new ErreurArticleCrispIntrouvable();
@@ -115,6 +279,25 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('text/plain');
+    });
+
+    it('autorise explicitement les principaux robots des IA', async () => {
+      const reponse = await testeur.get('/robots.txt');
+
+      expect(reponse.text).to.contain('GPTBot');
+      expect(reponse.text).to.contain('ClaudeBot');
+      expect(reponse.text).to.contain('PerplexityBot');
+      expect(reponse.text).to.contain('Google-Extended');
+    });
+  });
+
+  describe('quand requête GET sur `/llms.txt`', () => {
+    it('sert un contenu Markdown décrivant le service', async () => {
+      const reponse = await testeur.get('/llms.txt');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/markdown');
+      expect(reponse.text).to.contain('# MonServiceSécurisé');
     });
   });
 

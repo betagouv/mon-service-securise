@@ -7,7 +7,7 @@ onlyBuiltDependencies:
   - bcrypt@6.0.0
 
 minimumReleaseAgeExclude:
-  - '@lab-anssi/lib@2.1.6'
+  - '@lab-anssi/lib@2.2.0'
   - '@lab-anssi/ui-kit'
   - axios@1.15.0
   # Renovate security update: vite@8.0.5 || 8.0.16

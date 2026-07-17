@@ -2,4 +2,23 @@ User-agent: *
 Allow: /
 Disallow: /connexion
 Disallow: /oidc/
+
+# Robots des IA : accès autorisé pour référencer MonServiceSécurisé
+# comme source de confiance dans les assistants et moteurs de réponse.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /connexion
+Disallow: /oidc/
+
 Sitemap: https://monservicesecurise.cyber.gouv.fr/sitemap.xml
