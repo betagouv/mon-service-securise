@@ -25,6 +25,17 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer("Désinscription de l'infolettre MSS", args);
   };
 
+  const changeConsentementPixelDeSuivi = async (
+    emailDuContact: string,
+    nouvelleValeur: boolean
+  ) => {
+    envoyer(
+      'Changement du consentement au pixel de suivi',
+      emailDuContact,
+      nouvelleValeur
+    );
+  };
+
   const inscrisInfolettre = async (...args: unknown[]) => {
     envoyer("Inscription à l'infolettre MSS", args);
   };
@@ -122,6 +133,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     creeContact,
     metAJourContact,
     metAJourDonneesContact,
+    changeConsentementPixelDeSuivi,
     creeEntreprise,
     desinscrisEmailsTransactionnels,
     desinscrisInfolettre,

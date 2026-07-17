@@ -23,6 +23,11 @@ export interface AdaptateurMail {
 
   desinscrisInfolettre(destinataire: string): Promise<void>;
 
+  changeConsentementPixelDeSuivi(
+    emailDuContact: string,
+    nouvelleValeur: boolean
+  ): Promise<void>;
+
   envoieMessageFelicitationHomologation(
     destinataire: string,
     idService: UUID

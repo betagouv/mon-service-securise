@@ -955,8 +955,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: '',
         transactionnelAccepte: '',
+        pixelDeSuiviAccepte: false,
       });
     });
+
     it("n'écrase pas le téléphone si MPA ne l'a pas", async () => {
       adaptateurProfilAnssi.recupere = async () => ({
         email: 'email2',

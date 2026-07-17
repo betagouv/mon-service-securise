@@ -513,6 +513,62 @@ describe('Un utilisateur', () => {
       expect(desinscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
+    it("modifie le consentement au pixel de suivi s'il passe de « non » à « oui »", async () => {
+      let emailTransmis;
+      let valeurTransmise;
+      adaptateurEmail.changeConsentementPixelDeSuivi = async (
+        email,
+        valeur
+      ) => {
+        emailTransmis = email;
+        valeurTransmise = valeur;
+      };
+
+      const refusait = jeanDupont().quiRefusePixelDeSuivi().construis();
+      await refusait.changePreferencesCommunication(
+        { pixelDeSuiviAccepte: true },
+        adaptateurEmail
+      );
+
+      expect(emailTransmis).toBe('jean.dupont@mail.fr');
+      expect(valeurTransmise).toBe(true);
+    });
+
+    it("modifie le consentement au pixel de suivi s'il passe de « oui » à « non »", async () => {
+      let emailTransmis;
+      let valeurTransmise;
+      adaptateurEmail.changeConsentementPixelDeSuivi = async (
+        email,
+        valeur
+      ) => {
+        emailTransmis = email;
+        valeurTransmise = valeur;
+      };
+
+      const acceptait = jeanDupont().quiAcceptePixelDeSuivi().construis();
+      await acceptait.changePreferencesCommunication(
+        { pixelDeSuiviAccepte: false },
+        adaptateurEmail
+      );
+
+      expect(emailTransmis).toBe('jean.dupont@mail.fr');
+      expect(valeurTransmise).toBe(false);
+    });
+
+    it('ne transmet aucun changement de consentement au pixel de suivi si le choix reste identique', async () => {
+      adaptateurEmail.changeConsentementPixelDeSuivi = async () => {
+        throw new Error(
+          'Ce test ne devrait pas déclencher de changement de consentement au pixel de suivi'
+        );
+      };
+
+      const acceptait = jeanDupont().quiAcceptePixelDeSuivi().construis();
+      await acceptait.changePreferencesCommunication(
+        { pixelDeSuiviAccepte: true },
+        adaptateurEmail
+      );
+    });
+
     it('sait dire si un utilisateur a toutes les informations fournies par AgentConnect', () => {
       const utilisateurComplet = unUtilisateur()
         .avecEmail('jean.dujardin@beta.gouv.fr')

@@ -83,6 +83,7 @@ export const routesConnecteApiUtilisateur = ({
             {
               infolettreAcceptee: donnees.infolettreAcceptee,
               transactionnelAccepte: donnees.transactionnelAccepte,
+              pixelDeSuiviAccepte: donnees.pixelDeSuiviAccepte,
             },
             adaptateurMail
           )
