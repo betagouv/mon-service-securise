@@ -435,7 +435,7 @@ describe('Un utilisateur', () => {
 
     const jeanDupont = () => unUtilisateur().avecEmail('jean.dupont@mail.fr');
 
-    it("s'inscrit à l'infolettre s'il passe de « non » à « oui » sur ce canal de communication", async () => {
+    it("s'inscrit à l'infolettre s'il passe de « non » à « oui »", async () => {
       let inscriptionEffectuee;
       adaptateurEmail.inscrisInfolettre = async (email) => {
         inscriptionEffectuee = email;
@@ -453,7 +453,7 @@ describe('Un utilisateur', () => {
       expect(inscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
-    it("se désinscrit de l'infolettre s'il passe de « oui » à « non » sur ce canal de communication", async () => {
+    it("se désinscrit de l'infolettre s'il passe de « oui » à « non »", async () => {
       let desinscriptionEffectuee;
       adaptateurEmail.desinscrisInfolettre = async (email) => {
         desinscriptionEffectuee = email;
@@ -471,7 +471,7 @@ describe('Un utilisateur', () => {
       expect(desinscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
-    it("s'inscrit aux emails transactionnels s'il passe de « non » à « oui » sur ce canal de communications", async () => {
+    it("s'inscrit aux emails transactionnels s'il passe de « non » à « oui »", async () => {
       let inscriptionEffectuee;
       adaptateurEmail.inscrisEmailsTransactionnels = async (email) => {
         inscriptionEffectuee = email;
@@ -492,7 +492,7 @@ describe('Un utilisateur', () => {
       expect(inscriptionEffectuee).toBe('jean.dupont@mail.fr');
     });
 
-    it("se déinscrit des emails transactionnels s'il passe de « oui » à « non » sur ce canal de communications", async () => {
+    it("se déinscrit des emails transactionnels s'il passe de « oui » à « non »", async () => {
       let desinscriptionEffectuee;
       adaptateurEmail.desinscrisEmailsTransactionnels = async (email) => {
         desinscriptionEffectuee = email;
