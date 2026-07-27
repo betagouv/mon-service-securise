@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@lab-anssi/lib':
-        specifier: ^2.2.0
-        version: 2.2.0(express@5.2.1)
+        specifier: ^2.2.1
+        version: 2.2.1(express@5.2.1)
       '@lab-anssi/ui-kit':
         specifier: 1.55.1
         version: 1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))
@@ -681,8 +681,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lab-anssi/lib@2.2.0':
-    resolution: {integrity: sha512-gASt7Nhl+16zF7UzEFba/UI0UwbdJKKbM5iMGCn1AqJxmy6sIMet/be8cU1dQ4//KN/okB4Eqzz4UKhGwKDvfA==}
+  '@lab-anssi/lib@2.2.1':
+    resolution: {integrity: sha512-EofCilxzkzCZIHhHD0d+/pcGaCD4hhS/b2+w9k4PfZSZ1pXgVd5pFIzlRN54lroe0nng/iCp56Eucqo5m9AUkQ==}
     peerDependencies:
       express: ~5.2.1
 
@@ -1957,9 +1957,6 @@ packages:
     resolution: {integrity: sha512-aR99oXhpEDGo0UuAlYcn2iGRds30k366Zfa05XWScR9QaQD4JYiP3/1Qt1u7YlefUOK+cn0CcwoL1oefavQUlQ==}
     peerDependencies:
       axios: 0.x || 1.x
-
-  axios@1.15.2:
-    resolution: {integrity: sha512-wLrXxPtcrPTsNlJmKjkPnNPK2Ihe0hn0wGSaTEiHRPxwjvJwT3hKmXF4dpqxmPO9SoNb2FsYXj/xEo0gHN+D5A==}
 
   axios@1.18.1:
     resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
@@ -4796,9 +4793,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lab-anssi/lib@2.2.0(express@5.2.1)':
+  '@lab-anssi/lib@2.2.1(express@5.2.1)':
     dependencies:
-      axios: 1.15.2
+      axios: 1.18.1
       express: 5.2.1
       express-ipfilter: 1.4.0
       express-rate-limit: 7.5.1(express@5.2.1)
@@ -4806,6 +4803,7 @@ snapshots:
       marked: 13.0.3
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   '@lab-anssi/ui-kit@1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))':
     dependencies:
@@ -5975,14 +5973,6 @@ snapshots:
     dependencies:
       axios: 1.18.1
       is-retry-allowed: 2.2.0
-
-  axios@1.15.2:
-    dependencies:
-      follow-redirects: 1.16.0
-      form-data: 4.0.6
-      proxy-from-env: 2.1.0
-    transitivePeerDependencies:
-      - debug
 
   axios@1.18.1:
     dependencies:
