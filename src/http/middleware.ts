@@ -444,23 +444,20 @@ const middleware = (configuration: ConfigurationMiddleware) => {
   };
 
   const positionneCanonical: RequestHandler = (requete, reponse, suite) => {
-    const origine = adaptateurEnvironnement.mss().urlBase()!.replace(/\/$/, '');
-    const chemin = requete.path;
-    const aUnSlashFinalSuperflu = chemin.length > 1 && chemin.endsWith('/');
+    const url = new URL(
+      requete.originalUrl,
+      adaptateurEnvironnement.mss().urlBase()!
+    );
+    const cheminSansSlashFinal = url.pathname.replace(/\/+$/, '') || '/';
 
-    if (aUnSlashFinalSuperflu && requete.method === 'GET') {
-      const cheminNormalise = chemin.replace(/\/+$/, '');
-      const indexDebutRequete = requete.originalUrl.indexOf('?');
-      const chaineDeRequete =
-        indexDebutRequete >= 0
-          ? requete.originalUrl.slice(indexDebutRequete)
-          : '';
-      reponse.redirect(301, `${cheminNormalise}${chaineDeRequete}`);
+    if (cheminSansSlashFinal !== url.pathname && requete.method === 'GET') {
+      reponse.redirect(301, `${cheminSansSlashFinal}${url.search}`);
       return;
     }
 
-    const cheminCanonique = chemin === '/' ? '/' : chemin.replace(/\/+$/, '');
-    reponse.locals.canonical = `${origine}${cheminCanonique}`;
+    url.pathname = cheminSansSlashFinal;
+    url.search = '';
+    reponse.locals.canonical = url.href;
     suite();
   };
 
