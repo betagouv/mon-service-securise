@@ -74,6 +74,7 @@ export type ModeleMesureGenerale = ModeleMesure & {
   referentiel: Referentiel;
   versionReferentiel: VersionService;
   porteursSinguliers?: string[];
+  thematique?: string;
 };
 
 export type ModeleMesureSpecifique = ModeleMesure & {
