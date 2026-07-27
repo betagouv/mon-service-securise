@@ -15,7 +15,7 @@ import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
 import routesNonConnecteWebhooks from './routes/nonConnecte/routesNonConnecteWebhooks.js';
 import { ajouteHtmlEntitiesEncode } from './http/encodeEntitesHTML.js';
-import { ajouteAidesVues } from './http/aidesVues.js';
+import { ajouteAidesSeo } from './http/seo.js';
 
 const creeServeur = ({
   depotDonnees,
@@ -85,7 +85,7 @@ const creeServeur = ({
   app.use(middleware.ajouteVersionFichierCompiles);
   app.use(middleware.chargeFeatureFlags);
   ajouteHtmlEntitiesEncode(app);
-  ajouteAidesVues(app);
+  ajouteAidesSeo(app);
 
   app.disable('x-powered-by');
 
