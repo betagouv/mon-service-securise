@@ -70,10 +70,10 @@ export const configurationAffichage = derived(store, ($store) => {
       ? ($store.mesureEditee.mesure as MesureGeneraleEnrichie).referentiel
       : Referentiel.SPECIFIQUE;
 
-  const categorie: CategorieMesure | '' =
+  const categorie: CategorieMesure | undefined =
     $store.etape === 'EditionGenerale' || $store.etape === 'EditionSpecifique'
       ? ($store.mesureEditee.mesure.categorie as CategorieMesure)
-      : '';
+      : undefined;
 
   return {
     referentiel,
