@@ -1,7 +1,7 @@
 import {
   tronqueMetaDescription,
   retireEmojisEnTete,
-} from '../../src/http/aidesVues.js';
+} from '../../src/http/seo.js';
 
 describe('Les aides de vues', () => {
   describe('sur troncature de la méta-description', () => {

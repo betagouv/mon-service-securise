@@ -20,7 +20,7 @@ const EMOJIS_ET_ESPACES_EN_TETE =
 export const retireEmojisEnTete = (texte: string): string =>
   texte ? texte.replace(EMOJIS_ET_ESPACES_EN_TETE, '') : texte;
 
-export const ajouteAidesVues = (app: Express) => {
+export const ajouteAidesSeo = (app: Express) => {
   // eslint-disable-next-line no-param-reassign
   app.locals.tronqueMetaDescription = tronqueMetaDescription;
   // eslint-disable-next-line no-param-reassign
