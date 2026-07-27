@@ -48,9 +48,9 @@ axios
     const versions = Object.values(mesures).map((m) => m.versionReferentiel);
     setVersions({
       plusieursVersionsDeService: new Set(versions).size > 1,
-      versionSelectionnee: versions.includes('v1' as VersionService)
-        ? ('v1' as VersionService)
-        : ('v2' as VersionService),
+      versionSelectionnee: versions.includes('v2' as VersionService)
+        ? ('v2' as VersionService)
+        : ('v1' as VersionService),
     });
   });
 
