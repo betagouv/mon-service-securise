@@ -458,7 +458,6 @@
           referentiel={mesure.referentiel}
           indispensable={mesure.indispensable}
           nom={mesure.description}
-          categorie={categories[mesure.categorie]}
           referentielStatuts={statuts}
           {priorites}
           bind:mesure={$mesures.mesuresGenerales[id]}
@@ -494,7 +493,6 @@
           id={`specifique-${index}`}
           referentiel={Referentiel.SPECIFIQUE}
           nom={mesure.description}
-          categorie={categories[mesure.categorie]}
           referentielStatuts={statuts}
           {priorites}
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
