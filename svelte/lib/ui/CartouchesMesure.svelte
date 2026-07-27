@@ -12,6 +12,7 @@
     categorie?: CategorieMesure;
     thematique?: string;
     identifiantNumerique: string;
+    sansCartoucheIndispensable?: boolean;
   }
 
   let {
@@ -20,11 +21,12 @@
     categorie,
     thematique,
     identifiantNumerique,
+    sansCartoucheIndispensable = false,
   }: Props = $props();
 </script>
 
 <div class="conteneur">
-  {#if referentiel !== Referentiel.SPECIFIQUE}
+  {#if referentiel !== Referentiel.SPECIFIQUE && !sansCartoucheIndispensable}
     <CartoucheIndispensable indispensable={indispensable ?? false} />
   {/if}
   <CartoucheReferentiel {referentiel} />

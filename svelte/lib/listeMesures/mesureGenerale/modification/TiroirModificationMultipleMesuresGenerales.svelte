@@ -32,11 +32,8 @@
   import { mesuresAvecServicesAssociesStore } from '../../servicesAssocies/mesuresAvecServicesAssocies.store';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
   import PorteursSinguliersMesure from '../../kit/PorteursSinguliersMesure.svelte';
-
-  export const titre: string = 'Configurer la mesure';
-  export const sousTitre: string =
-    'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
-  export const taille = 'large';
+  import { untrack } from 'svelte';
+  import EnteteTiroir from './EnteteTiroir.svelte';
 
   interface Props {
     modeleMesureGenerale: ModeleMesureGenerale;
@@ -44,6 +41,17 @@
   }
 
   let { modeleMesureGenerale, statuts }: Props = $props();
+
+  const modeleInitial = untrack(() => modeleMesureGenerale);
+  export const titre: string = modeleInitial.description;
+  export const composantEntete = EnteteTiroir;
+  export const propsComposantEntete = {
+    referentiel: modeleInitial.referentiel,
+    categorie: modeleInitial.categorie,
+    thematique: modeleInitial.thematique,
+    identifiantNumerique: modeleInitial.identifiantNumerique,
+  };
+  export const taille = 'large';
 
   let etapeCourante = $state(1);
   let enCoursEnvoi = $state(false);
