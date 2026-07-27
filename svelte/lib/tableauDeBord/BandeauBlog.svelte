@@ -6,7 +6,7 @@
 <div class="conteneur-liens-blog">
   <CarteDePromotion
     titre="Inscrivez-vous à la formation à l'homologation de sécurité avec MonServiceSécurisé !"
-    href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique?s=fd6032fa-4833-4403-8087-3945d168752e"
+    href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
     illustration="/statique/assets/images/tableauDeBord/image_formation_mss.png"
     description="Découvrez pas à pas comment lancer un premier projet d'homologation et passez à l'échelle !"
   />
