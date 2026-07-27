@@ -4,8 +4,8 @@
     MesureGenerale,
     MesureSpecifique,
   } from '../tableauDesMesures.d';
-  import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import {
+    CategorieMesure,
     type EcheanceMesure,
     type PrioriteMesure,
     Referentiel,
@@ -13,8 +13,6 @@
     type ReferentielStatut,
   } from '../../ui/types.d';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
-  import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
-  import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import {
     rechercheTextuelle,
     responsablesCorrespondent,
@@ -27,11 +25,11 @@
     type StatutMesure,
   } from '../../modeles/modeleMesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
-  import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
   import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuidee/ciblage';
   import EncartReferentielsExternes from '../../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
+  import CartouchesMesure from '../../ui/CartouchesMesure.svelte';
 
   type IdDom = string;
 
@@ -41,7 +39,6 @@
     indispensable?: boolean;
     mesure: MesureSpecifique | MesureGenerale;
     nom: string;
-    categorie: string;
     referentielStatuts: ReferentielStatut;
     estLectureSeule: boolean;
     affichePlanAction: boolean;
@@ -60,7 +57,6 @@
     indispensable = false,
     mesure = $bindable(),
     nom,
-    categorie,
     referentielStatuts,
     estLectureSeule,
     affichePlanAction,
@@ -109,17 +105,13 @@
     <p class="titre">
       {@html texteSurligne}
     </p>
-    <div class="conteneur-cartouches">
-      {#if referentiel !== Referentiel.SPECIFIQUE}
-        <CartoucheIndispensable {indispensable} />
-      {/if}
-      <CartoucheReferentiel {referentiel} />
-      <dsfr-tag label={categorie} size="sm"></dsfr-tag>
-      {#if mesure.thematique}
-        <CartoucheThematique thematique={mesure.thematique} />
-      {/if}
-      <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
-    </div>
+    <CartouchesMesure
+      {referentiel}
+      {indispensable}
+      categorie={mesure.categorie as CategorieMesure}
+      thematique={mesure.thematique}
+      identifiantNumerique={mesure.identifiantNumerique}
+    />
     {#if afficheReferentielsExterne}
       <EncartReferentielsExternes
         donnees={(mesure as MesureGenerale).mesuresReferentielsExternes!}
@@ -213,13 +205,6 @@
     font-weight: 500;
     text-align: left;
     word-break: break-word;
-  }
-
-  .conteneur-cartouches {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    align-items: center;
   }
 
   :global(mark) {
