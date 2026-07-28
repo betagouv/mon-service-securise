@@ -36,8 +36,8 @@ describe("L'adaptateur des statistiques admin", () => {
         ])
       );
 
-      const resultat =
-        await adaptateur.servicesParNiveauSecurite(unUUIDRandom());
+      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+        .servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
         niveau1: 1,
@@ -54,8 +54,8 @@ describe("L'adaptateur des statistiques admin", () => {
         ])
       );
 
-      const resultat =
-        await adaptateur.servicesParNiveauSecurite(unUUIDRandom());
+      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+        .servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
         niveau1: 1,
@@ -81,12 +81,28 @@ describe("L'adaptateur des statistiques admin", () => {
         ])
       );
 
-      const resultat = await adaptateur.servicesParType(unUUIDRandom());
+      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+        .servicesParType;
 
       expect(resultat).toEqual({
         serviceEnLigne: 1,
         api: 2,
         applicationMobile: 1,
+      });
+    });
+  });
+
+  describe('sur demande de toutes les statistiques', () => {
+    it('retourne toutes les statistiques', async () => {
+      const adaptateur = new AdaptateurStatistiquesAdmin(
+        unLecteurDeServices([])
+      );
+
+      const resultat = await adaptateur.statistiques(unUUIDRandom());
+
+      expect(resultat).toEqual({
+        servicesParType: expect.any(Object),
+        servicesParNiveauSecurite: expect.any(Object),
       });
     });
   });
