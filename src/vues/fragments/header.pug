@@ -41,6 +41,14 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
         "href": "/"
       },
       {
+        "id": "nav-doctrine-homologation-anssi",
+        "type": "link",
+        "active": ongletActif === 'doctrine-homologation-anssi',
+        "collapsable": false,
+        "label": "L'homologation simplifiée",
+        "href": "/doctrine-homologation-anssi"
+      },
+      {
         "id": "nav-co-construire",
         "type": "link",
         "active": ongletActif === 'co-construire-monservicesecurise',
@@ -55,14 +63,6 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
         "collapsable": false,
         "label": "Conseils Cyber",
         "href": "/conseils-cyber"
-      },
-      {
-        "id": "nav-doctrine-homologation-anssi",
-        "type": "link",
-        "active": ongletActif === 'doctrine-homologation-anssi',
-        "collapsable": false,
-        "label": "L'homologation simplifiée",
-        "href": "/doctrine-homologation-anssi"
       },
     ];
     const contenuFluide = estConnecte ? contenuMenuAdmin : [];
