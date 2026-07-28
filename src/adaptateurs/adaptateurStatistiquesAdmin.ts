@@ -13,12 +13,9 @@ export interface LecteurServices {
 export class AdaptateurStatistiquesAdmin {
   constructor(private readonly lecteurServices: LecteurServices) {}
 
-  async servicesParNiveauSecurite(
-    idUtilisateur: UUID
+  private static async servicesParNiveauSecurite(
+    services: Array<Service>
   ): Promise<Partial<Record<NiveauSecurite, number>>> {
-    const services =
-      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
-
     const parNiveau = Object.groupBy(
       services,
       (s) => s.descriptionService.niveauSecurite
@@ -32,12 +29,9 @@ export class AdaptateurStatistiquesAdmin {
     );
   }
 
-  async servicesParType(
-    idUtilisateur: UUID
+  private static async servicesParType(
+    services: Array<Service>
   ): Promise<Partial<Record<TypeDeService | IdTypeService, number>>> {
-    const services =
-      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
-
     const tousTypes = services.flatMap((s) => s.descriptionService.typeService);
     const parType = Object.groupBy(tousTypes, (t) => t);
 
@@ -47,5 +41,17 @@ export class AdaptateurStatistiquesAdmin {
         occurencesParType.length,
       ])
     );
+  }
+
+  async statistiques(idUtilisateur: UUID) {
+    const services =
+      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
+
+    return {
+      servicesParType:
+        await AdaptateurStatistiquesAdmin.servicesParType(services),
+      servicesParNiveauSecurite:
+        await AdaptateurStatistiquesAdmin.servicesParNiveauSecurite(services),
+    };
   }
 }
