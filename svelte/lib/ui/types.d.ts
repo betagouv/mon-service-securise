@@ -1,5 +1,6 @@
 import type { StatutMesure } from '../modeles/modeleMesure';
 import type { VersionService } from '../../../src/modeles/versionService';
+import type { MesuresReferentielsExternes } from '../mesure/mesure';
 
 export enum Referentiel {
   ANSSI = 'ANSSI',
@@ -75,6 +76,7 @@ export type ModeleMesureGenerale = ModeleMesure & {
   versionReferentiel: VersionService;
   porteursSinguliers?: string[];
   thematique?: string;
+  referentielsExternes?: MesuresReferentielsExternes;
 };
 
 export type ModeleMesureSpecifique = ModeleMesure & {
