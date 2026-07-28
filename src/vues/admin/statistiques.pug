@@ -1,0 +1,13 @@
+extends ../mssConnecte
+
+block title
+  title Statistiques | MonServiceSécurisé
+
+block variables
+  - const ongletActif = "admin-statistiques"
+
+block append scripts
+  +composantSvelte('adminStatistiques.js')
+
+block main
+  #conteneur-admin-statistiques
