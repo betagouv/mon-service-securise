@@ -272,12 +272,9 @@ const routesConnecteApiAdmin = ({
   routes.get('/statistiques', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
-    reponse.json({
-      servicesParNiveauSecurite:
-        await adaptateurStatistiquesAdmin.servicesParNiveauSecurite(
-          idUtilisateurCourant
-        ),
-    });
+    reponse.json(
+      await adaptateurStatistiquesAdmin.statistiques(idUtilisateurCourant)
+    );
   });
 
   return routes;
