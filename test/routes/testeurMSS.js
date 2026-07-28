@@ -151,7 +151,7 @@ const testeurMss = () => {
       recupereStatistiques: async () => {},
     };
     adaptateurStatistiquesAdmin = {
-      servicesParNiveauSecurite: async () => {},
+      statistiques: async () => {},
     };
     adaptateurJWT = fabriqueAdaptateurJWT();
     adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
