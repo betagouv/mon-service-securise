@@ -12,8 +12,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(express@5.2.1)
       '@lab-anssi/ui-kit':
-        specifier: 1.55.1
-        version: 1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))
+        specifier: 1.55.2
+        version: 1.55.2(svelte@5.55.7(@typescript-eslint/types@8.63.0))
       '@myriaddreamin/typst-ts-node-compiler':
         specifier: 0.7.0
         version: 0.7.0
@@ -686,8 +686,8 @@ packages:
     peerDependencies:
       express: ~5.2.1
 
-  '@lab-anssi/ui-kit@1.55.1':
-    resolution: {integrity: sha512-My9bkh/fDR00ssFlf+h9UqlBK1iz09eEh4hrhabwTr3t8qvS4O1gZ0cA7DiZ3FgrB2rjF7d1CXY0Jzs6RZS7AA==}
+  '@lab-anssi/ui-kit@1.55.2':
+    resolution: {integrity: sha512-2EFvS4sQ016FAzsf9ilCGYMiAXBhK+vQYbxQpZq9G3ZbxhVV8bgIqxVoMuCMh9EAmWfnu2Lcly9q5oE5uHGqWA==}
     peerDependencies:
       svelte: ~5.55.10 || ~5.56.0
 
@@ -4382,7 +4382,7 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
   xlsx@https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz:
-    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz}
+    resolution: {integrity: sha512-oLDq3jw7AcLqKWH2AhCpVTZl8mf6X2YReP+Neh0SJUzV/BdZYjth94tG5toiMB1PPrYtxOCfaoUCkvtuH+3AJA==, tarball: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz}
     version: 0.20.3
     engines: {node: '>=0.8'}
     hasBin: true
@@ -4805,7 +4805,7 @@ snapshots:
       - debug
       - supports-color
 
-  '@lab-anssi/ui-kit@1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))':
+  '@lab-anssi/ui-kit@1.55.2(svelte@5.55.7(@typescript-eslint/types@8.63.0))':
     dependencies:
       svelte: 5.55.7(@typescript-eslint/types@8.63.0)
 
