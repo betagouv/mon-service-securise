@@ -52,6 +52,10 @@ const routesConnectePageAdmin = ({
     reponse.render('admin/administrateurs');
   });
 
+  routes.get('/statistiques', async (_requete, reponse) => {
+    reponse.render('admin/statistiques');
+  });
+
   return routes;
 };
 
