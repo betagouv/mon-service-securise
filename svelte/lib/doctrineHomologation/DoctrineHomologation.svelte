@@ -24,9 +24,10 @@
       />
       <dsfr-button
         markup="a"
-        label="Consulter les articles"
+        label="Se former à l'homologation"
         kind="inverted-primary"
-        href="/conseils-cyber"
+        target="_blank"
+        href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
       ></dsfr-button>
     </div>
   </div>
