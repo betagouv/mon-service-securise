@@ -166,6 +166,31 @@
     classe="lien-commencer-homologuer"
   />
 </Bloc>
+<Bloc variation="attenue">
+  <div class="formation">
+    <h2>Formez-vous à l'homologation de sécurité</h2>
+    <p class="sous-texte">
+      En 2 ateliers pratiques, prenez en main MonServiceSécurisé et devenez
+      autonome sur toute la démarche d’homologation, de l'évaluation de votre
+      système jusqu'au dossier d'homologation prêt à signer.
+    </p>
+    <div class="conteneur-illustration">
+      <img
+        src="/statique/assets/images/doctrine-homologation/illustration_formation.svg"
+        alt="Illustration de formation à MonServiceSécurisé"
+        class="illustration"
+      />
+    </div>
+    <div class="conteneur-liens">
+      <Lien
+        titre="Découvrir la formation"
+        type="bouton-primaire"
+        href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
+        target="_blank"
+      />
+    </div>
+  </div>
+</Bloc>
 <Bloc variation="defaut">
   <h2 class="grande-marge-basse" id="les-documents-utiles">
     Les documents utiles
@@ -187,7 +212,7 @@
   </div>
 </Bloc>
 
-<style>
+<style lang="scss">
   h1 {
     font-size: 40px;
     margin: 0;
@@ -297,6 +322,22 @@
     margin: 0 auto;
   }
 
+  .formation {
+    display: grid;
+
+    .illustration {
+      max-width: 320px;
+    }
+
+    .conteneur-illustration {
+      text-align: center;
+    }
+
+    .conteneur-liens {
+      margin-top: 32px;
+    }
+  }
+
   @media screen and (min-width: 577px) {
     :global(#doctrine-homologation .hero) {
       display: flex;
@@ -384,6 +425,38 @@
     .enjeu,
     .proposition {
       grid-column-gap: 24px;
+    }
+
+    .formation {
+      grid-template-areas:
+        'illustration titre'
+        'illustration contenu'
+        'illustration liens';
+      grid-template-columns: 50%;
+      grid-column-gap: 16px;
+
+      h2 {
+        grid-area: titre;
+      }
+
+      .sous-texte {
+        grid-area: contenu;
+      }
+
+      .conteneur-illustration {
+        grid-area: illustration;
+        align-self: center;
+      }
+
+      .illustration {
+        margin: 0;
+      }
+
+      .conteneur-liens {
+        grid-area: liens;
+        align-self: start;
+        margin-top: 0;
+      }
     }
   }
 </style>
