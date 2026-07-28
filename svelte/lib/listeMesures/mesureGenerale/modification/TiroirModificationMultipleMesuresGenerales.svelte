@@ -33,6 +33,8 @@
   import PorteursSinguliersMesure from '../../kit/PorteursSinguliersMesure.svelte';
   import { untrack } from 'svelte';
   import EnteteTiroir from './EnteteTiroir.svelte';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
+  import ContenuOngletReferentielsExternes from '../../../mesure/contenus/ContenuOngletReferentielsExternes.svelte';
 
   interface Props {
     modeleMesureGenerale: ModeleMesureGenerale;
@@ -114,6 +116,12 @@
     { id: 'configuration-mesure', label: 'Configurer la mesure' },
     { id: 'informations-mesure', label: 'Informations sur la mesure' },
   ];
+
+  let aDesMesuresDeReferentielsExternes = $derived(
+    modeleMesureGenerale.referentielsExternes &&
+      Object.values(modeleMesureGenerale.referentielsExternes).flatMap((m) => m)
+        .length > 0
+  );
 </script>
 
 <ContenuTiroir>
@@ -140,6 +148,14 @@
         {#if modeleMesureGenerale.porteursSinguliers}
           <PorteursSinguliersMesure
             porteursSinguliers={modeleMesureGenerale.porteursSinguliers}
+          />
+        {/if}
+        {#if aDesMesuresDeReferentielsExternes && modeleMesureGenerale.referentielsExternes}
+          <SeparateurHorizontal />
+          <div class="separateur"></div>
+          <ContenuOngletReferentielsExternes
+            visible
+            mesuresReferentielsExternes={modeleMesureGenerale.referentielsExternes}
           />
         {/if}
       </div>
@@ -176,5 +192,9 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
+
+  .separateur {
+    margin-top: 32px;
   }
 </style>
