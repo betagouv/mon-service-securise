@@ -36,6 +36,7 @@ import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail.js';
 import { fabriqueAdaptateurAuditAdminOrganisations } from './src/adaptateurs/fabriqueAdaptateurAuditAdminOrganisations.js';
 import { AdaptateurPdfTypst } from './src/adaptateurs/adaptateurPdf.typst.js';
+import { fabriqueAdaptateurStatistiquesAdmin } from './src/adaptateurs/fabriqueAdaptateurStatistiquesAdmin.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -87,6 +88,8 @@ const adaptateurAuditAdminOrganisations =
   );
 
 const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
+const adaptateurStatistiquesAdmin =
+  fabriqueAdaptateurStatistiquesAdmin(depotDonnees);
 
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
@@ -159,6 +162,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurOidc,
     adaptateurEnvironnement,
     adaptateurStatistiques,
+    adaptateurStatistiquesAdmin,
     adaptateurJWT,
     adaptateurTeleversementServices,
     adaptateurTeleversementModelesMesureSpecifique,

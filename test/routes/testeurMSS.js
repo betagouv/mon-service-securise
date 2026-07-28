@@ -34,6 +34,7 @@ const testeurMss = () => {
   let adaptateurOidc;
   let adaptateurEnvironnement;
   let adaptateurStatistiques;
+  let adaptateurStatistiquesAdmin;
   let adaptateurJWT;
   let adaptateurProfilAnssi;
   let lecteurDeFormData;
@@ -149,6 +150,9 @@ const testeurMss = () => {
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };
+    adaptateurStatistiquesAdmin = {
+      servicesParNiveauSecurite: async () => {},
+    };
     adaptateurJWT = fabriqueAdaptateurJWT();
     adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
     middleware.reinitialise({});
@@ -198,6 +202,7 @@ const testeurMss = () => {
         adaptateurOidc,
         adaptateurEnvironnement,
         adaptateurStatistiques,
+        adaptateurStatistiquesAdmin,
         adaptateurJWT,
         adaptateurProfilAnssi,
         lecteurDeFormData,
@@ -252,6 +257,7 @@ const testeurMss = () => {
     adaptateurJournalMSS: () => adaptateurJournal,
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
+    adaptateurStatistiquesAdmin: () => adaptateurStatistiquesAdmin,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     adaptateurEnvironnement: () => adaptateurEnvironnement,

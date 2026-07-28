@@ -63,6 +63,7 @@ const routesConnecteApi = ({
   adaptateurJournal,
   lecteurDeFormData,
   adaptateurEnvironnement,
+  adaptateurStatistiquesAdmin,
   adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
   procedures,
@@ -426,6 +427,7 @@ const routesConnecteApi = ({
     '/admin',
     middleware.verificationAcceptationCGU,
     routesConnecteApiAdmin({
+      adaptateurStatistiquesAdmin,
       depotDonnees,
       middleware,
       serviceAdministrationOrganisations,

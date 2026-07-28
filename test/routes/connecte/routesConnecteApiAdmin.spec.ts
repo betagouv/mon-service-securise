@@ -610,4 +610,22 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(422);
     });
   });
+
+  describe('quand requête GET sur `/api/admin/statistiques`', () => {
+    it("utilise l'adaptateur de statistiques admin", async () => {
+      const U1 = unUUIDRandom();
+      testeur.middleware().reinitialise({ idUtilisateur: U1 });
+      testeur.adaptateurStatistiquesAdmin().servicesParNiveauSecurite = async (
+        idUtilisateur: UUID
+      ) => {
+        if (idUtilisateur === U1) return { niveau1: 4 };
+        return undefined;
+      };
+
+      const { status, body } = await testeur.get('/api/admin/statistiques');
+
+      expect(status).toBe(200);
+      expect(body).toEqual({ servicesParNiveauSecurite: { niveau1: 4 } });
+    });
+  });
 });
