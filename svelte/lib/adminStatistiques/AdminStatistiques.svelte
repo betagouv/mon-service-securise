@@ -1,7 +1,19 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { api } from './adminStatistiques.api';
+  import type { Statistiques } from './adminStatistiques.types';
+
+  let statistiques: Statistiques | undefined = $state();
+
+  onMount(async () => {
+    statistiques = await api.statistiques();
+  });
 </script>
 
 <h1>Statistiques</h1>
+{#if statistiques}
+  <pre>{JSON.stringify(statistiques, null, 2)}</pre>
+{/if}
 
 <style lang="scss">
   :global(#conteneur-admin-statistiques) {
