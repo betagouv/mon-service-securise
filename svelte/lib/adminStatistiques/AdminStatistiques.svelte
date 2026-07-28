@@ -24,6 +24,16 @@
       y: Object.values(donnees),
     };
   });
+
+  let parType = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.servicesParType;
+    return {
+      x: Object.keys(donnees),
+      y: Object.values(donnees),
+    };
+  });
 </script>
 
 <h1>Statistiques</h1>
@@ -34,6 +44,16 @@
       x={JSON.stringify([parNiveauDeSecurite.x])}
       y={JSON.stringify([parNiveauDeSecurite.y])}
       name={JSON.stringify(parNiveauDeSecurite.x)}
+      unit-tooltip="services"
+      selected-palette="categorical"
+    ></pie-chart>
+  </div>
+  <div class="graphique">
+    <h2>Types de services</h2>
+    <pie-chart
+      x={JSON.stringify([parType.x])}
+      y={JSON.stringify([parType.y])}
+      name={JSON.stringify(parType.x)}
       unit-tooltip="services"
       selected-palette="categorical"
     ></pie-chart>
