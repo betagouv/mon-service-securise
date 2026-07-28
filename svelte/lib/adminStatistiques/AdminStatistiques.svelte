@@ -6,6 +6,7 @@
   import { api } from './adminStatistiques.api';
   import type { Statistiques } from './adminStatistiques.types';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
+  import PieChart from './charts/PieChart.svelte';
 
   let statistiques: Statistiques | undefined = $state();
 
@@ -19,7 +20,8 @@
     const donnees = statistiques.servicesParNiveauSecurite;
     return {
       x: Object.keys(donnees).map(
-        (niveau) => donneesNiveauxDeSecurite.find((n) => n.id === niveau)?.nom
+        (niveau) =>
+          donneesNiveauxDeSecurite.find((n) => n.id === niveau)?.nom as string
       ),
       y: Object.values(donnees),
     };
@@ -38,26 +40,18 @@
 
 <h1>Statistiques</h1>
 <div class="grille-graphiques">
-  <div class="graphique">
-    <h2>Besoins de sécurité</h2>
-    <pie-chart
-      x={JSON.stringify([parNiveauDeSecurite.x])}
-      y={JSON.stringify([parNiveauDeSecurite.y])}
-      name={JSON.stringify(parNiveauDeSecurite.x)}
-      unit-tooltip="services"
-      selected-palette="categorical"
-    ></pie-chart>
-  </div>
-  <div class="graphique">
-    <h2>Types de services</h2>
-    <pie-chart
-      x={JSON.stringify([parType.x])}
-      y={JSON.stringify([parType.y])}
-      name={JSON.stringify(parType.x)}
-      unit-tooltip="services"
-      selected-palette="categorical"
-    ></pie-chart>
-  </div>
+  <PieChart
+    titre="Besoins de sécurité"
+    x={parNiveauDeSecurite.x}
+    y={parNiveauDeSecurite.y}
+    unite="services"
+  />
+  <PieChart
+    titre="Types de services"
+    x={parType.x}
+    y={parType.y}
+    unite="services"
+  />
 </div>
 
 <style lang="scss">
@@ -85,15 +79,6 @@
     gap: 24px;
     padding: 24px 0;
     box-sizing: border-box;
-
-    .graphique {
-      border: 1px solid var(--liseres-fonce);
-      padding: 16px;
-
-      h2 {
-        margin: 0 0 24px;
-      }
-    }
 
     /* Les graphiques DSFR se mettent en page en supposant le reset et les classes
        utilitaires du DSFR, que MSS ne charge pas. On les redéfinit ici, à l'identique,
