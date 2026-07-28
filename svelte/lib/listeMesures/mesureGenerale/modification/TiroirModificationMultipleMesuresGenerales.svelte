@@ -30,7 +30,6 @@
     type DonneesModificationAAppliquer,
   } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import { mesuresAvecServicesAssociesStore } from '../../servicesAssocies/mesuresAvecServicesAssocies.store';
-  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
   import PorteursSinguliersMesure from '../../kit/PorteursSinguliersMesure.svelte';
   import { untrack } from 'svelte';
   import EnteteTiroir from './EnteteTiroir.svelte';
@@ -109,31 +108,46 @@
   let elementEtapesModification:
     | EtapesModificationMultipleStatutPrecision
     | undefined = $state();
+
+  let tabActive = $state(0);
+  const configurationsTabs = [
+    { id: 'configuration-mesure', label: 'Configurer la mesure' },
+    { id: 'informations-mesure', label: 'Informations sur la mesure' },
+  ];
 </script>
 
 <ContenuTiroir>
-  {#if etapeCourante === 1}
-    <div>
-      <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
-      {#if modeleMesureGenerale.porteursSinguliers}
-        <PorteursSinguliersMesure
-          porteursSinguliers={modeleMesureGenerale.porteursSinguliers}
-        />
-      {/if}
-      <SeparateurHorizontal />
+  <dsfr-tabs
+    tabs={configurationsTabs}
+    active-tab-index={tabActive}
+    ontabchanged={(e: CustomEvent<{ index: number }>) => {
+      tabActive = e.detail.index;
+    }}
+  >
+    <div slot="panel-1" class="conteneur-onglet">
+      <EtapesModificationMultipleStatutPrecision
+        bind:this={elementEtapesModification}
+        bind:etapeCourante
+        bind:boutonSuivantActif
+        {statuts}
+        {servicesAssocies}
+        onModificationAAppliquer={appliqueModifications}
+      />
     </div>
-  {/if}
-  <EtapesModificationMultipleStatutPrecision
-    bind:this={elementEtapesModification}
-    bind:etapeCourante
-    bind:boutonSuivantActif
-    {statuts}
-    {servicesAssocies}
-    onModificationAAppliquer={appliqueModifications}
-  />
+    <div slot="panel-2" class="conteneur-onglet">
+      <div>
+        <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
+        {#if modeleMesureGenerale.porteursSinguliers}
+          <PorteursSinguliersMesure
+            porteursSinguliers={modeleMesureGenerale.porteursSinguliers}
+          />
+        {/if}
+      </div>
+    </div>
+  </dsfr-tabs>
 </ContenuTiroir>
 <ActionsTiroir>
-  {#if etapeCourante === 1}
+  {#if etapeCourante === 1 || tabActive === 1}
     <Bouton
       type="lien"
       titre="Retour à la liste de mesures"
@@ -146,11 +160,21 @@
       onclick={() => elementEtapesModification?.etapePrecedente()}
     />
   {/if}
-  <Bouton
-    titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
-    type="primaire"
-    actif={boutonSuivantActif}
-    {enCoursEnvoi}
-    onclick={() => elementEtapesModification?.etapeSuivante()}
-  />
+  {#if tabActive === 0}
+    <Bouton
+      titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
+      type="primaire"
+      actif={boutonSuivantActif}
+      {enCoursEnvoi}
+      onclick={() => elementEtapesModification?.etapeSuivante()}
+    />
+  {/if}
 </ActionsTiroir>
+
+<style lang="scss">
+  .conteneur-onglet {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+</style>
