@@ -23,6 +23,14 @@
   if avecMargeGauche { align(right, contenu) } else { contenu }
 }
 
+#let identifiantRisqueSpecifique(risque) = risque.at("identifiantNumerique", default: "RS")
+
+#let avecRisquesSpecifiques(risques, champGravite, champVraisemblance) = risques + donneesRisques.risques.risquesSpecifiques.map(risque => (
+  id: identifiantRisqueSpecifique(risque),
+  gravite: risque.at(champGravite),
+  vraisemblance: risque.at(champVraisemblance),
+))
+
 #let traitPointille = (paint: grisAxeV2, thickness: 0.5pt, dash: "dashed")
 #let traitPlein = 1pt + grisAxeV2
 #let largeurZoneCellulesV2 = largeurCelluleV2 * 4 + 3pt * 3
@@ -145,9 +153,18 @@
     inset: (right: 10pt),
     stack(
       spacing: 12pt,
-      sectionMatriceV2("Risques bruts", donneesRisques.risques.risquesBruts),
-      sectionMatriceV2("Risques actuels", donneesRisques.risques.risques),
-      sectionMatriceV2("Risques résiduels cibles", donneesRisques.risques.risquesCibles),
+      sectionMatriceV2(
+        "Risques bruts",
+        avecRisquesSpecifiques(donneesRisques.risques.risquesBruts, "graviteBrute", "vraisemblanceBrute"),
+      ),
+      sectionMatriceV2(
+        "Risques actuels",
+        avecRisquesSpecifiques(donneesRisques.risques.risques, "gravite", "vraisemblance"),
+      ),
+      sectionMatriceV2(
+        "Risques résiduels cibles",
+        avecRisquesSpecifiques(donneesRisques.risques.risquesCibles, "gravite", "vraisemblance"),
+      ),
     ),
     [],
     stack(
@@ -165,6 +182,6 @@
     blocRisqueV2(risque, risque.id)
   }
   #for risque in donneesRisques.risques.risquesSpecifiques {
-    blocRisqueV2(risque, risque.at("identifiantNumerique", default: "RS"))
+    blocRisqueV2(risque, identifiantRisqueSpecifique(risque))
   }
 ]
