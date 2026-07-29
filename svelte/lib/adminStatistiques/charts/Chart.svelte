@@ -16,10 +16,15 @@
 
 <style lang="scss">
   .graphique {
-    border: 1px solid var(--liseres-fonce);
-    padding: 16px;
+    padding: 40px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
 
     h2 {
+      color: #282828;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.75rem;
       margin: 0 0 24px;
     }
   }
