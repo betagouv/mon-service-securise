@@ -66,7 +66,7 @@ describe("L'adaptateur Postgres du Journal MSS", () => {
       await trx('journal_mss.evenements').insert([
         unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
         unServiceCree('S2', '2026-06-25T08:32:14.474Z'),
-        unServiceCree('S2', '2026-07-29T08:30:54.761Z'),
+        unServiceCree('S3', '2026-07-29T08:30:54.761Z'),
       ]);
 
       const resultat = await journalMSS.evolutionNombreServices([
@@ -123,6 +123,18 @@ describe("L'adaptateur Postgres du Journal MSS", () => {
       expect(resultat).toEqual([{ mois: '2026-05', total: 1 }]);
     });
 
+    it('ne compte qu’une fois un service dont la création est consignée plusieurs fois', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
+        unServiceCree('S1', '2026-07-29T08:30:54.761Z'),
+      ]);
+
+      const resultat = await journalMSS.evolutionNombreServices(['S1']);
+
+      expect(resultat).toEqual([{ mois: '2026-05', total: 1 }]);
+    });
+
     it('ne tient compte que des évènements de création de service', async () => {
       const journalMSS = new AdaptateurJournalMSSPostgres(trx);
       await trx('journal_mss.evenements').insert([
@@ -152,6 +164,70 @@ describe("L'adaptateur Postgres du Journal MSS", () => {
       ]);
 
       expect(await journalMSS.evolutionNombreServices([])).toEqual([]);
+    });
+  });
+
+  describe("sur demande de l'évolution du nombre d'organisations", () => {
+    const unServiceCree = (idService: string, date: string) => ({
+      date,
+      type: 'NOUVEAU_SERVICE_CREE',
+      donnees: { idService },
+    });
+
+    it('ne compte une organisation qu’à la création de son premier service', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
+        unServiceCree('S2', '2026-07-29T08:30:54.761Z'),
+      ]);
+
+      const resultat = await journalMSS.evolutionNombreOrganisations([
+        { idServiceHache: 'S1', siretHache: 'SIRET_A' },
+        { idServiceHache: 'S2', siretHache: 'SIRET_A' },
+      ]);
+
+      expect(resultat).toEqual([{ mois: '2026-05', total: 1 }]);
+    });
+
+    it('cumule les organisations distinctes au fil des mois', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
+        unServiceCree('S2', '2026-06-25T08:32:14.474Z'),
+        unServiceCree('S3', '2026-06-26T08:32:14.474Z'),
+      ]);
+
+      const resultat = await journalMSS.evolutionNombreOrganisations([
+        { idServiceHache: 'S1', siretHache: 'SIRET_A' },
+        { idServiceHache: 'S2', siretHache: 'SIRET_B' },
+        { idServiceHache: 'S3', siretHache: 'SIRET_A' },
+      ]);
+
+      expect(resultat).toEqual([
+        { mois: '2026-05', total: 1 },
+        { mois: '2026-06', total: 2 },
+      ]);
+    });
+
+    it('retient le premier service créé, quel que soit son ordre en base', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-07-29T08:30:54.761Z'),
+        unServiceCree('S2', '2026-05-18T08:32:18.660Z'),
+      ]);
+
+      const resultat = await journalMSS.evolutionNombreOrganisations([
+        { idServiceHache: 'S1', siretHache: 'SIRET_A' },
+        { idServiceHache: 'S2', siretHache: 'SIRET_A' },
+      ]);
+
+      expect(resultat[0]).toEqual({ mois: '2026-05', total: 1 });
+    });
+
+    it("ne retourne rien quand aucune organisation n'est demandée", async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      expect(await journalMSS.evolutionNombreOrganisations([])).toEqual([]);
     });
   });
 });

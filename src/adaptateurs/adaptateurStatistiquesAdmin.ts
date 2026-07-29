@@ -57,6 +57,17 @@ export class AdaptateurStatistiquesAdmin {
     return this.adaptateurJournalMSS.evolutionNombreServices(idsHaches);
   }
 
+  private async evolutionNombreOrganisations(services: Array<Service>) {
+    return this.adaptateurJournalMSS.evolutionNombreOrganisations(
+      services.map((s) => ({
+        idServiceHache: this.adaptateurChiffrement.hacheSha256(s.id),
+        siretHache: this.adaptateurChiffrement.hacheSha256(
+          s.siretDeOrganisation()
+        ),
+      }))
+    );
+  }
+
   async statistiques(idUtilisateur: UUID) {
     const services =
       await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
@@ -67,6 +78,8 @@ export class AdaptateurStatistiquesAdmin {
       servicesParNiveauSecurite:
         await AdaptateurStatistiquesAdmin.servicesParNiveauSecurite(services),
       evolutionNombreServices: await this.evolutionNombreServices(services),
+      evolutionNombreOrganisations:
+        await this.evolutionNombreOrganisations(services),
     };
   }
 }

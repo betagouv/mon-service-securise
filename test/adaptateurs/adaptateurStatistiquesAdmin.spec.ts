@@ -124,6 +124,37 @@ describe("L'adaptateur des statistiques admin", () => {
     expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
   });
 
+  it("transmet au journal le SIRET haché de chaque service pour l'évolution du nombre d'organisations", async () => {
+    let recu: Array<{ idServiceHache: string; siretHache: string }> = [];
+    adaptateurJournal.evolutionNombreOrganisations = async (services) => {
+      recu = services;
+      return [{ mois: '2026-01', total: 1 }];
+    };
+    const service = unServiceV2()
+      .avecDescription(
+        uneDescriptionV2Valide()
+          .avecOrganisationResponsable({ siret: '13000766900018' })
+          .donneesDescription()
+      )
+      .construis();
+    const adaptateur = new AdaptateurStatistiquesAdmin(
+      unLecteurDeServices([service]),
+      adaptateurChiffrement,
+      adaptateurJournal
+    );
+
+    const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+      .evolutionNombreOrganisations;
+
+    expect(recu).toEqual([
+      {
+        idServiceHache: adaptateurChiffrement.hacheSha256(service.id),
+        siretHache: adaptateurChiffrement.hacheSha256('13000766900018'),
+      },
+    ]);
+    expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new AdaptateurStatistiquesAdmin(
@@ -138,6 +169,7 @@ describe("L'adaptateur des statistiques admin", () => {
         servicesParType: expect.any(Object),
         servicesParNiveauSecurite: expect.any(Object),
         evolutionNombreServices: expect.any(Object),
+        evolutionNombreOrganisations: expect.any(Object),
       });
     });
   });
