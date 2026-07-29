@@ -12,8 +12,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(express@5.2.1)
       '@lab-anssi/ui-kit':
-        specifier: 1.55.1
-        version: 1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))
+        specifier: 1.57.0
+        version: 1.57.0(svelte@5.55.7(@typescript-eslint/types@8.63.0))
       '@myriaddreamin/typst-ts-node-compiler':
         specifier: 0.7.0
         version: 0.7.0
@@ -686,8 +686,9 @@ packages:
     peerDependencies:
       express: ~5.2.1
 
-  '@lab-anssi/ui-kit@1.55.1':
-    resolution: {integrity: sha512-My9bkh/fDR00ssFlf+h9UqlBK1iz09eEh4hrhabwTr3t8qvS4O1gZ0cA7DiZ3FgrB2rjF7d1CXY0Jzs6RZS7AA==}
+  '@lab-anssi/ui-kit@1.57.0':
+    resolution: {integrity: sha512-sWMRH6gJEiL5vU7f4LUFlEMHWBGmdqmPwU5ifIRFaE7qx3oBiBeQNWiZ2UTWUl0INShxRLuZ+RX72SudRFPeAw==}
+    engines: {node: '>=24.18.0'}
     peerDependencies:
       svelte: ~5.55.10 || ~5.56.0
 
@@ -4805,7 +4806,7 @@ snapshots:
       - debug
       - supports-color
 
-  '@lab-anssi/ui-kit@1.55.1(svelte@5.55.7(@typescript-eslint/types@8.63.0))':
+  '@lab-anssi/ui-kit@1.57.0(svelte@5.55.7(@typescript-eslint/types@8.63.0))':
     dependencies:
       svelte: 5.55.7(@typescript-eslint/types@8.63.0)
 
