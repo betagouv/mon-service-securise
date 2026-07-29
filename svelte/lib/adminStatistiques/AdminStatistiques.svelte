@@ -57,12 +57,39 @@
     };
   });
 
+  let parEntite = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.evolutionNombreOrganisations;
+    return {
+      x: donnees.map((donnee) => donnee.mois),
+      y: donnees.map((donnee) => donnee.total),
+    };
+  });
+
   let nombreTotalServices = $derived(parDateCreation.y.at(-1) ?? 0);
+  let nombreTotalEntites = $derived(parEntite.y.at(-1) ?? 0);
 </script>
 
 <h1>Statistiques</h1>
 {#if statistiques}
   <div class="grille-graphiques">
+    <LineChart
+      titre="Évolution du nombre d’entités"
+      baniereAvecChiffre={{
+        chiffre: nombreTotalEntites,
+        description: singulierPluriel(
+          'Entité utilisatrice',
+          'Entités utilisatrices',
+          nombreTotalEntites
+        ),
+        icone: 'city_hall',
+      }}
+      x={parEntite.x}
+      y={parEntite.y}
+      nom="Nombre d'entités"
+      unite="entités"
+    />
     <LineChart
       titre="Évolution du nombre de services"
       baniereAvecChiffre={{

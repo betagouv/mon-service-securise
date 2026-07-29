@@ -4,7 +4,7 @@
   export interface ChartProps {
     titre: string;
     baniereAvecChiffre?: {
-      icone: 'internet';
+      icone: 'internet' | 'city_hall';
       chiffre: number;
       description: string;
     };
