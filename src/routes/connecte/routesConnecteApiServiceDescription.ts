@@ -8,7 +8,7 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
-import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { Referentiel } from '../../referentiel.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { valideBody } from '../../http/validePayloads.js';
 import {
@@ -23,19 +23,17 @@ export const routesConnecteApiServiceDescription = ({
   depotDonnees,
   middleware,
   referentiel,
-  referentielV2,
 }: {
   depotDonnees: DepotDonnees;
   middleware: Middleware;
   referentiel: Referentiel;
-  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
   routes.put(
     '/:id',
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
-    valideBody(z.strictObject(schemaPutDescriptionService(referentielV2))),
+    valideBody(z.strictObject(schemaPutDescriptionService(referentiel))),
     async (requete, reponse, suite) => {
       try {
         const {
@@ -100,9 +98,7 @@ export const routesConnecteApiServiceDescription = ({
   routes.post(
     '/estimationNiveauSecurite',
     middleware.verificationAcceptationCGU,
-    valideBody(
-      z.strictObject(schemaPostEstimationNiveauSecurite(referentielV2))
-    ),
+    valideBody(z.strictObject(schemaPostEstimationNiveauSecurite(referentiel))),
     async (requete, reponse) => {
       const {
         nomService,
