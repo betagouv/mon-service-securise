@@ -3,6 +3,7 @@
   import '@gouvfr/dsfr-chart/css';
   import { onMount } from 'svelte';
   import { api } from './adminStatistiques.api';
+  import { api as apiEntites } from '../adminEntites/adminEntites.api';
   import type {
     ReferentielStatistiques,
     Statistiques,
@@ -11,6 +12,8 @@
   import PieChart from './charts/PieChart.svelte';
   import LineChart from './charts/LineChart.svelte';
   import { singulierPluriel } from '../outils/string';
+  import type { IdNiveauDeSecurite } from '../ui/types';
+  import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -19,9 +22,18 @@
   let { referentiel }: Props = $props();
 
   let statistiques: Statistiques | undefined = $state();
+  let entites: Array<EntiteSupervisee> = $state([]);
+
+  const rafraichisStatistiques = async () => {
+    statistiques = await api.statistiques({
+      filtreNiveauxSecurite,
+      filtreEntites,
+    });
+  };
 
   onMount(async () => {
-    statistiques = await api.statistiques();
+    await rafraichisStatistiques();
+    entites = await apiEntites.entitesDansMonPerimetre();
   });
 
   let parNiveauDeSecurite = $derived.by(() => {
@@ -69,10 +81,53 @@
 
   let nombreTotalServices = $derived(parDateCreation.y.at(-1) ?? 0);
   let nombreTotalEntites = $derived(parEntite.y.at(-1) ?? 0);
+
+  let filtreNiveauxSecurite = $state<IdNiveauDeSecurite[]>([]);
+  let filtreEntites = $state<string[]>([]);
+  $effect(() => {
+    rafraichisStatistiques();
+  });
 </script>
 
 <h1>Statistiques</h1>
 {#if statistiques}
+  <div class="conteneur-filtres">
+    <lab-anssi-multi-select
+      label="Besoins de sécurité"
+      options={[
+        {
+          id: 'niveau1',
+          value: 'niveau1',
+          label: 'Basiques',
+        },
+        {
+          id: 'niveau2',
+          value: 'niveau2',
+          label: 'Modérés',
+        },
+        {
+          id: 'niveau3',
+          value: 'niveau3',
+          label: 'Avancés',
+        },
+      ]}
+      placeholder="Séléctionner un/des besoins"
+      values={filtreNiveauxSecurite}
+      onvaluechanged={(e: CustomEvent<IdNiveauDeSecurite[]>) =>
+        (filtreNiveauxSecurite = e.detail)}
+    ></lab-anssi-multi-select>
+    <lab-anssi-multi-select
+      label="Entités"
+      options={entites.map((entite) => ({
+        id: entite.siret,
+        value: entite.siret,
+        label: entite.nom,
+      }))}
+      placeholder="Sélectionner une/des entités"
+      values={filtreEntites}
+      onvaluechanged={(e: CustomEvent<string[]>) => (filtreEntites = e.detail)}
+    ></lab-anssi-multi-select>
+  </div>
   <div class="grille-graphiques">
     <LineChart
       titre="Évolution du nombre d’entités"
@@ -137,7 +192,16 @@
   h1 {
     font-size: 2.5rem;
     line-height: 3rem;
-    margin: 0;
+    margin: 0 0 24px;
+  }
+
+  .conteneur-filtres {
+    display: flex;
+    gap: 16px;
+
+    lab-anssi-multi-select {
+      width: fit-content;
+    }
   }
 
   .grille-graphiques {
