@@ -6,10 +6,13 @@ declare global {
   }
 }
 
+type EvolutionMensurelle = Array<{ mois: string; total: number }>;
+
 export type Statistiques = {
   servicesParNiveauSecurite: Partial<Record<IdNiveauDeSecurite, number>>;
   servicesParType: Partial<Record<IdTypeService, number>>;
-  evolutionNombreServices: Array<{ mois: string; total: number }>;
+  evolutionNombreServices: EvolutionMensurelle;
+  evolutionNombreOrganisations: EvolutionMensurelle;
 };
 
 export type ReferentielStatistiques = {
