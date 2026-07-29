@@ -10,6 +10,7 @@
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import PieChart from './charts/PieChart.svelte';
   import LineChart from './charts/LineChart.svelte';
+  import { singulierPluriel } from '../outils/string';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -55,35 +56,43 @@
       y: donnees.map((donnee) => donnee.total),
     };
   });
+
+  let nombreTotalServices = $derived(parDateCreation.y.at(-1) ?? 0);
 </script>
 
 <h1>Statistiques</h1>
-<div class="grille-graphiques">
-  <LineChart
-    titre="Évolution du nombre de services"
-    baniereAvecChiffre={{
-      chiffre: parDateCreation.y.at(-1) as number,
-      description: 'Services référencés',
-      icone: 'internet',
-    }}
-    x={parDateCreation.x}
-    y={parDateCreation.y}
-    nom="Nombre de services"
-    unite="services"
-  />
-  <PieChart
-    titre="Besoins de sécurité"
-    x={parNiveauDeSecurite.x}
-    y={parNiveauDeSecurite.y}
-    unite="services"
-  />
-  <PieChart
-    titre="Types de services"
-    x={parType.x}
-    y={parType.y}
-    unite="services"
-  />
-</div>
+{#if statistiques}
+  <div class="grille-graphiques">
+    <LineChart
+      titre="Évolution du nombre de services"
+      baniereAvecChiffre={{
+        chiffre: nombreTotalServices,
+        description: singulierPluriel(
+          'Service référencé',
+          'Services référencés',
+          nombreTotalServices
+        ),
+        icone: 'internet',
+      }}
+      x={parDateCreation.x}
+      y={parDateCreation.y}
+      nom="Nombre de services"
+      unite="services"
+    />
+    <PieChart
+      titre="Besoins de sécurité"
+      x={parNiveauDeSecurite.x}
+      y={parNiveauDeSecurite.y}
+      unite="services"
+    />
+    <PieChart
+      titre="Types de services"
+      x={parType.x}
+      y={parType.y}
+      unite="services"
+    />
+  </div>
+{/if}
 
 <style lang="scss">
   :global(#conteneur-admin-statistiques) {
