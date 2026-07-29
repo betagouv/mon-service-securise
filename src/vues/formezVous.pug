@@ -59,3 +59,17 @@ block main
               src="/statique/assets/images/formation/illustration_public.png"
               alt=""
             )
+
+    .bloc-contenu.bloc-chiffres
+      dsfr-container
+        -
+          const chiffresCles = [
+            { valeur: '1 000 personnes', libelle: 'déjà formées !' },
+            { valeur: '97 %', libelle: 'de satisfaction !' },
+            { valeur: '2 ateliers', libelle: 'chaque mois !' },
+          ]
+        ul.chiffres
+          each chiffre in chiffresCles
+            li.chiffre
+              p.valeur= chiffre.valeur
+              p.libelle= chiffre.libelle
