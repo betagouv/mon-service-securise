@@ -125,6 +125,7 @@ type MethodesSpecifiquesReferentielV2 = {
   };
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
   typeService: (type: TypeDeService) => { nom: string; exemple: string };
+  typesService: () => Record<TypeDeService, { nom: string; exemple: string }>;
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -194,6 +195,8 @@ export const creeReferentielV2 = (
   const mesures = () => structuredClone(donnees.mesures);
 
   const typeService = (type: TypeDeService) => donnees.typeDeService[type];
+
+  const typesService = () => donnees.typeDeService;
 
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
 
@@ -287,6 +290,7 @@ export const creeReferentielV2 = (
     porteursSinguliersDeMesure,
     referentielsExternesDeMesure,
     typeService,
+    typesService,
     reglesMoteurV2,
     thematiqueDeMesure,
     version: () => 'v2',
