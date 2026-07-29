@@ -1,12 +1,20 @@
 <script lang="ts">
   import '@gouvfr/dsfr-chart';
   import '@gouvfr/dsfr-chart/css';
-
   import { onMount } from 'svelte';
   import { api } from './adminStatistiques.api';
-  import type { Statistiques } from './adminStatistiques.types';
+  import type {
+    ReferentielStatistiques,
+    Statistiques,
+  } from './adminStatistiques.types';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import PieChart from './charts/PieChart.svelte';
+
+  interface Props {
+    referentiel: ReferentielStatistiques;
+  }
+
+  let { referentiel }: Props = $props();
 
   let statistiques: Statistiques | undefined = $state();
 
@@ -32,7 +40,7 @@
 
     const donnees = statistiques.servicesParType;
     return {
-      x: Object.keys(donnees),
+      x: Object.keys(donnees).map((type) => referentiel.typesService[type]),
       y: Object.values(donnees),
     };
   });
