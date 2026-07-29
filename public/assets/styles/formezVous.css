@@ -1,3 +1,41 @@
 .landing {
   text-align: left;
 }
+
+.bloc-public {
+  @media (min-width: 992px) {
+    --padding-block: 4.5rem;
+  }
+
+  .conteneur-colonnes {
+    --colonnes-gap: 1.5rem;
+
+    .principale,
+    .secondaire {
+      @media (min-width: 992px) {
+        --colonne-taille: 50%;
+      }
+    }
+  }
+
+  .principale {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .titre {
+    margin-block: 0;
+  }
+
+  .corps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .description {
+    margin-block: 0;
+  }
+}
