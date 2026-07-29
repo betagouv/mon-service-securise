@@ -18,6 +18,8 @@ const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
   servicesDeUtilisateur: async () => services,
 });
 
+const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
+
 describe("L'adaptateur des statistiques admin", () => {
   let adaptateurJournal: AdaptateurJournalMSS;
   const adaptateurChiffrement = fauxAdaptateurChiffrement();
@@ -48,8 +50,9 @@ describe("L'adaptateur des statistiques admin", () => {
         adaptateurJournal
       );
 
-      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
-        .servicesParNiveauSecurite;
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
         niveau1: 1,
@@ -68,8 +71,9 @@ describe("L'adaptateur des statistiques admin", () => {
         adaptateurJournal
       );
 
-      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
-        .servicesParNiveauSecurite;
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
         niveau1: 1,
@@ -97,8 +101,9 @@ describe("L'adaptateur des statistiques admin", () => {
         adaptateurJournal
       );
 
-      const resultat = (await adaptateur.statistiques(unUUIDRandom()))
-        .servicesParType;
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParType;
 
       expect(resultat).toEqual({
         serviceEnLigne: 1,
@@ -118,7 +123,7 @@ describe("L'adaptateur des statistiques admin", () => {
       adaptateurJournal
     );
 
-    const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+    const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
       .evolutionNombreServices;
 
     expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
@@ -143,7 +148,7 @@ describe("L'adaptateur des statistiques admin", () => {
       adaptateurJournal
     );
 
-    const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+    const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
       .evolutionNombreOrganisations;
 
     expect(recu).toEqual([
@@ -155,6 +160,108 @@ describe("L'adaptateur des statistiques admin", () => {
     expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
   });
 
+  describe('sur demande de statistiques filtrées', () => {
+    const unServiceDe = (niveau: NiveauSecurite, siret: string) =>
+      unServiceV2()
+        .avecDescription(
+          uneDescriptionV2Valide()
+            .avecNiveauSecurite(niveau)
+            .avecOrganisationResponsable({ siret })
+            .donneesDescription()
+        )
+        .construis();
+
+    const adaptateurAvec = (services: Array<Service>) =>
+      new AdaptateurStatistiquesAdmin(
+        unLecteurDeServices(services),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+    it('ne garde que les services des niveaux de sécurité demandés', async () => {
+      const adaptateur = adaptateurAvec([
+        unServiceDe('niveau1', '13000766900018'),
+        unServiceDe('niveau2', '13000766900018'),
+        unServiceDe('niveau3', '13000766900018'),
+      ]);
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), {
+          filtreNiveauxSecurite: ['niveau1', 'niveau3'],
+          filtreEntites: [],
+        })
+      ).servicesParNiveauSecurite;
+
+      expect(resultat).toEqual({ niveau1: 1, niveau3: 1 });
+    });
+
+    it('ne garde que les services des entités demandées', async () => {
+      const adaptateur = adaptateurAvec([
+        unServiceDe('niveau1', '13000766900018'),
+        unServiceDe('niveau2', '92050000000009'),
+      ]);
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), {
+          filtreNiveauxSecurite: [],
+          filtreEntites: ['92050000000009'],
+        })
+      ).servicesParNiveauSecurite;
+
+      expect(resultat).toEqual({ niveau2: 1 });
+    });
+
+    it('combine les deux filtres', async () => {
+      const adaptateur = adaptateurAvec([
+        unServiceDe('niveau1', '13000766900018'),
+        unServiceDe('niveau1', '92050000000009'),
+        unServiceDe('niveau2', '92050000000009'),
+      ]);
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), {
+          filtreNiveauxSecurite: ['niveau1'],
+          filtreEntites: ['92050000000009'],
+        })
+      ).servicesParNiveauSecurite;
+
+      expect(resultat).toEqual({ niveau1: 1 });
+    });
+
+    it('ne filtre pas quand les filtres sont vides', async () => {
+      const adaptateur = adaptateurAvec([
+        unServiceDe('niveau1', '13000766900018'),
+        unServiceDe('niveau2', '92050000000009'),
+      ]);
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParNiveauSecurite;
+
+      expect(resultat).toEqual({ niveau1: 1, niveau2: 1 });
+    });
+
+    it('ne transmet au journal que les services filtrés', async () => {
+      let recus: Array<string> = [];
+      adaptateurJournal.evolutionNombreServices = async (idsHaches) => {
+        recus = idsHaches;
+        return [];
+      };
+      const gardé = unServiceDe('niveau1', '13000766900018');
+      const adaptateur = adaptateurAvec([
+        gardé,
+        unServiceDe('niveau2', '92050000000009'),
+      ]);
+
+      await adaptateur.statistiques(unUUIDRandom(), {
+        filtreNiveauxSecurite: ['niveau1'],
+        filtreEntites: [],
+      });
+
+      expect(recus).toEqual([adaptateurChiffrement.hacheSha256(gardé.id)]);
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new AdaptateurStatistiquesAdmin(
@@ -163,7 +270,10 @@ describe("L'adaptateur des statistiques admin", () => {
         adaptateurJournal
       );
 
-      const resultat = await adaptateur.statistiques(unUUIDRandom());
+      const resultat = await adaptateur.statistiques(
+        unUUIDRandom(),
+        sansFiltre
+      );
 
       expect(resultat).toEqual({
         servicesParType: expect.any(Object),
