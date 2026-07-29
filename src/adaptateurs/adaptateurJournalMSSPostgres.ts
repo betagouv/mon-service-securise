@@ -6,29 +6,25 @@ import {
   EvenementJournal,
 } from './adaptateurJournalMSS.interface.js';
 
-const config = {
-  client: 'pg',
-  connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-  pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
-};
+export class AdaptateurJournalMSSPostgres implements AdaptateurJournalMSS {
+  private readonly knex: Knex.Knex;
 
-const nouvelAdaptateur = (): AdaptateurJournalMSS => {
-  const knex = Knex(config);
+  constructor() {
+    this.knex = Knex({
+      client: 'pg',
+      connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
+      pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
+    });
+  }
 
-  const consigneEvenement = async (evenement: EvenementJournal) => {
+  async consigneEvenement(evenement: EvenementJournal) {
     const { type, donnees, date } = evenement;
 
-    await knex('journal_mss.evenements').insert({
+    await this.knex('journal_mss.evenements').insert({
       id: uuid.v4(),
       type,
       donnees,
       date: new Date(date).toISOString(),
     });
-  };
-
-  return {
-    consigneEvenement,
-  };
-};
-
-export { nouvelAdaptateur };
+  }
+}
