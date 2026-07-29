@@ -9,6 +9,7 @@
   } from './adminStatistiques.types';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import PieChart from './charts/PieChart.svelte';
+  import LineChart from './charts/LineChart.svelte';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -44,10 +45,32 @@
       y: Object.values(donnees),
     };
   });
+
+  let parDateCreation = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.evolutionNombreServices;
+    return {
+      x: donnees.map((donnee) => donnee.mois),
+      y: donnees.map((donnee) => donnee.total),
+    };
+  });
 </script>
 
 <h1>Statistiques</h1>
 <div class="grille-graphiques">
+  <LineChart
+    titre="Évolution du nombre de services"
+    baniereAvecChiffre={{
+      chiffre: parDateCreation.y.at(-1) as number,
+      description: 'Services référencés',
+      icone: 'internet',
+    }}
+    x={parDateCreation.x}
+    y={parDateCreation.y}
+    nom="Nombre de services"
+    unite="services"
+  />
   <PieChart
     titre="Besoins de sécurité"
     x={parNiveauDeSecurite.x}

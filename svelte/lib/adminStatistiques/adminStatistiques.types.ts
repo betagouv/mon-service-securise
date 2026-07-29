@@ -9,6 +9,7 @@ declare global {
 export type Statistiques = {
   servicesParNiveauSecurite: Partial<Record<IdNiveauDeSecurite, number>>;
   servicesParType: Partial<Record<IdTypeService, number>>;
+  evolutionNombreServices: Array<{ mois: string; total: number }>;
 };
 
 export type ReferentielStatistiques = {
