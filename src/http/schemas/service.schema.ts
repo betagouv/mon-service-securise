@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import { schemaSiret } from './siret.schema.js';
-import { ReferentielV2 } from '../../referentiel.interface.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
 
 const tableauDeDescription = z
   .array(z.strictObject({ description: z.string().min(1).max(200) }))
@@ -9,18 +9,18 @@ const tableauDeDescription = z
 const clesDe = (objet: Record<string, unknown>) => z.enum(Object.keys(objet));
 
 export const schemaService = {
-  delaiAvantImpactCritique: (referentielV2: ReferentielV2) =>
-    clesDe(referentielV2.delaisAvantImpactCritique()),
-  donneesCaracterePersonnel: (referentielV2: ReferentielV2) =>
-    z.array(clesDe(referentielV2.donneesCaracterePersonnel())),
+  delaiAvantImpactCritique: (referentiel: TousReferentiels) =>
+    clesDe(referentiel.delaisAvantImpactCritique()),
+  donneesCaracterePersonnel: (referentiel: TousReferentiels) =>
+    z.array(clesDe(referentiel.donneesCaracterePersonnel())),
   donneesSensiblesSpecifiques: () => tableauDeDescription,
-  fonctionnalites: (referentielV2: ReferentielV2) =>
-    z.array(clesDe(referentielV2.fonctionnalites())),
+  fonctionnalites: (referentiel: TousReferentiels) =>
+    z.array(clesDe(referentiel.fonctionnalites())),
   fonctionnalitesSpecifiques: () => tableauDeDescription,
-  localisationDonnees: (referentielV2: ReferentielV2) =>
-    clesDe(referentielV2.localisationsDonnees()),
-  niveauSecurite: (referentielV2: ReferentielV2) =>
-    z.enum(referentielV2.niveauxDeSecurite()),
+  localisationDonnees: (referentiel: TousReferentiels) =>
+    clesDe(referentiel.localisationsDonnees()),
+  niveauSecurite: (referentiel: TousReferentiels) =>
+    z.enum(referentiel.niveauxDeSecurite()),
   nomService: () => z.string().trim().nonempty().max(200),
   nombreOrganisationsUtilisatrices: () =>
     z.union([
@@ -48,10 +48,10 @@ export const schemaService = {
     }),
   pointsAcces: () => tableauDeDescription,
   presentation: () => z.string().max(2000),
-  provenanceService: (referentielV2: ReferentielV2) =>
-    clesDe(referentielV2.provenancesService()),
-  statutDeploiement: (referentielV2: ReferentielV2) =>
-    clesDe(referentielV2.statutsDeploiement()),
-  typeService: (referentielV2: ReferentielV2) =>
-    z.array(clesDe(referentielV2.typesService())).min(1),
+  provenanceService: (referentiel: TousReferentiels) =>
+    clesDe(referentiel.provenancesService()),
+  statutDeploiement: (referentiel: TousReferentiels) =>
+    clesDe(referentiel.statutsDeploiement()),
+  typeService: (referentiel: TousReferentiels) =>
+    z.array(clesDe(referentiel.typesService())).min(1),
 };

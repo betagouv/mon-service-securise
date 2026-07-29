@@ -7,6 +7,7 @@ import {
 import { UUID } from '../../../src/typesBasiques.js';
 import DescriptionService from '../../../src/modeles/descriptionService.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { creeReferentiel } from '../../../src/referentiel.js';
 
 const { ECRITURE } = Permissions;
 const { DECRIRE } = Rubriques;
@@ -14,7 +15,7 @@ const { DECRIRE } = Rubriques;
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(() => testeur.initialise());
+  beforeEach(() => testeur.initialise(creeReferentiel()));
 
   describe('quand requête PUT sur `/api/service/:id`', () => {
     const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
@@ -42,10 +43,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     beforeEach(() => {
       testeur.depotDonnees().ajouteDescriptionService = async () => {};
-      testeur.referentiel().recharge({
-        statutsDeploiement: { enLigne: {} },
-        localisationsDonnees: { france: {} },
-      });
     });
 
     it('recherche le service correspondant', async () => {
@@ -150,13 +147,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ],
       organisationResponsable: { siret: '93939105800012' },
       ...cleValeur,
-    });
-
-    beforeEach(() => {
-      testeur.referentiel().recharge({
-        statutsDeploiement: { enLigne: {} },
-        localisationsDonnees: { france: {} },
-      });
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {

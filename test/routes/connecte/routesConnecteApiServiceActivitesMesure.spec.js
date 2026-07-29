@@ -22,14 +22,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
   const idService = unUUIDRandom();
 
   beforeEach(async () => {
-    const referentiel = creeReferentiel({
-      mesures: {
-        audit: { identifiantNumerique: '0007', categorie: 'gouvernance' },
-      },
-      categoriesMesures: { gouvernance: {} },
-      statutsMesures: {},
-    });
-    await testeur.initialise(referentiel);
+    await testeur.initialise(creeReferentiel());
   });
 
   describe('quand requête GET sur `/api/service/:id/mesures/:id/activites`', () => {
@@ -106,7 +99,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         {
           date: '2024-09-29T09:15:02.817Z',
           idActeur: '9724853e-037c-4bca-9350-0a4b14a85a29',
-          identifiantNumeriqueMesure: '0007',
+          identifiantNumeriqueMesure: '0002',
           type: 'ajoutPriorite',
           details: { nouvelleValeur: 'p3' },
         },
@@ -249,9 +242,6 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
     describe("délègue au dépôt de données l'enregistrement du commentaire", () => {
       describe("dans le cas d'une mesure générale", () => {
         it('si elle existe dans le référentiel associé', async () => {
-          testeur.referentiel().enrichis({
-            mesures: { audit: {} },
-          });
           testeur.middleware().reinitialise({
             idUtilisateur: 'U1',
             serviceARenvoyer: unService(testeur.referentiel())
