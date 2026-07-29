@@ -9,12 +9,14 @@ import {
 export class AdaptateurJournalMSSPostgres implements AdaptateurJournalMSS {
   private readonly knex: Knex.Knex;
 
-  constructor() {
-    this.knex = Knex({
-      client: 'pg',
-      connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-      pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
-    });
+  constructor(knex?: Knex.Knex) {
+    this.knex =
+      knex ??
+      Knex({
+        client: 'pg',
+        connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
+        pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
+      });
   }
 
   async consigneEvenement(evenement: EvenementJournal) {
