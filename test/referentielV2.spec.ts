@@ -37,6 +37,20 @@ describe('Le référentiel V2', () => {
         false
       );
     });
+
+    it('retourne les types de services V2', () => {
+      const referentielV2 = creeReferentielV2();
+
+      const typesService = referentielV2.typesService();
+
+      expect(Object.keys(typesService)).toEqual([
+        'portailInformation',
+        'serviceEnLigne',
+        'api',
+        'applicationMobile',
+        'autreSystemeInformation',
+      ]);
+    });
   });
 
   describe('concernant les méthodes spécifiques du référentielV2', () => {
