@@ -18,6 +18,7 @@ const nouvelAdaptateur = (): AdaptateurJournalMSS => {
   return {
     consigneEvenement,
     evolutionNombreServices: async () => [],
+    evolutionNombreOrganisations: async () => [],
   };
 };
 
