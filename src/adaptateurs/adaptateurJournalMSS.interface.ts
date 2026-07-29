@@ -6,4 +6,7 @@ export type EvenementJournal = {
 
 export interface AdaptateurJournalMSS {
   consigneEvenement(evenement: EvenementJournal): Promise<void>;
+  evolutionNombreServices(
+    idsServicesHaches: Array<string>
+  ): Promise<Array<{ mois: string; total: number }>>;
 }
