@@ -5,13 +5,19 @@ import {
 } from '../../donneesReferentielMesuresV2.js';
 import { UUID } from '../typesBasiques.js';
 import { IdTypeService } from '../referentiel.types.js';
+import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
+import { AdaptateurJournalMSS } from './adaptateurJournalMSS.interface.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
 }
 
 export class AdaptateurStatistiquesAdmin {
-  constructor(private readonly lecteurServices: LecteurServices) {}
+  constructor(
+    private readonly lecteurServices: LecteurServices,
+    private readonly adaptateurChiffrement: AdaptateurChiffrement,
+    private readonly adaptateurJournalMSS: AdaptateurJournalMSS
+  ) {}
 
   private static async servicesParNiveauSecurite(
     services: Array<Service>
@@ -43,6 +49,14 @@ export class AdaptateurStatistiquesAdmin {
     );
   }
 
+  private async evolutionNombreServices(services: Array<Service>) {
+    const idsHaches = services.map((s) =>
+      this.adaptateurChiffrement.hacheSha256(s.id)
+    );
+
+    return this.adaptateurJournalMSS.evolutionNombreServices(idsHaches);
+  }
+
   async statistiques(idUtilisateur: UUID) {
     const services =
       await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
@@ -52,6 +66,7 @@ export class AdaptateurStatistiquesAdmin {
         await AdaptateurStatistiquesAdmin.servicesParType(services),
       servicesParNiveauSecurite:
         await AdaptateurStatistiquesAdmin.servicesParNiveauSecurite(services),
+      evolutionNombreServices: await this.evolutionNombreServices(services),
     };
   }
 }

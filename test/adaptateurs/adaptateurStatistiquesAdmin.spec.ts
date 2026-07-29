@@ -10,12 +10,22 @@ import {
 } from '../../donneesReferentielMesuresV2.ts';
 import Service from '../../src/modeles/service.js';
 import { unUUIDRandom } from '../constructeurs/UUID.ts';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import * as adaptateurJournalMemoire from '../../src/adaptateurs/adaptateurJournalMSSMemoire.ts';
+import { AdaptateurJournalMSS } from '../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
 
 const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
   servicesDeUtilisateur: async () => services,
 });
 
 describe("L'adaptateur des statistiques admin", () => {
+  let adaptateurJournal: AdaptateurJournalMSS;
+  const adaptateurChiffrement = fauxAdaptateurChiffrement();
+
+  beforeEach(() => {
+    adaptateurJournal = adaptateurJournalMemoire.nouvelAdaptateur();
+  });
+
   describe('sur demande de la repartition des services par niveau de sécurité', () => {
     const unServiceDeNiveau = (niveau: NiveauSecurite) =>
       unServiceV2()
@@ -33,7 +43,9 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceDeNiveau('niveau2'),
           unServiceDeNiveau('niveau2'),
           unServiceDeNiveau('niveau3'),
-        ])
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
       );
 
       const resultat = (await adaptateur.statistiques(unUUIDRandom()))
@@ -51,7 +63,9 @@ describe("L'adaptateur des statistiques admin", () => {
         unLecteurDeServices([
           unServiceDeNiveau('niveau1'),
           unServiceDeNiveau('niveau3'),
-        ])
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
       );
 
       const resultat = (await adaptateur.statistiques(unUUIDRandom()))
@@ -78,7 +92,9 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceDeType(['serviceEnLigne', 'api']),
           unServiceDeType(['api']),
           unServiceDeType(['applicationMobile']),
-        ])
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
       );
 
       const resultat = (await adaptateur.statistiques(unUUIDRandom()))
@@ -92,10 +108,28 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  it("délègue à l'adaptateur journal le calcul de l'évolution du nombre de services", async () => {
+    adaptateurJournal.evolutionNombreServices = async () => [
+      { mois: '2026-01', total: 1 },
+    ];
+    const adaptateur = new AdaptateurStatistiquesAdmin(
+      unLecteurDeServices([]),
+      adaptateurChiffrement,
+      adaptateurJournal
+    );
+
+    const resultat = (await adaptateur.statistiques(unUUIDRandom()))
+      .evolutionNombreServices;
+
+    expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new AdaptateurStatistiquesAdmin(
-        unLecteurDeServices([])
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal
       );
 
       const resultat = await adaptateur.statistiques(unUUIDRandom());
@@ -103,6 +137,7 @@ describe("L'adaptateur des statistiques admin", () => {
       expect(resultat).toEqual({
         servicesParType: expect.any(Object),
         servicesParNiveauSecurite: expect.any(Object),
+        evolutionNombreServices: expect.any(Object),
       });
     });
   });
