@@ -230,7 +230,12 @@ const routesConnectePage = ({
   routes.use(
     '/admin',
     middleware.verificationAcceptationCGU,
-    routesConnectePageAdmin({ depotDonnees, adaptateurEnvironnement })
+    routesConnectePageAdmin({
+      depotDonnees,
+      adaptateurEnvironnement,
+      referentiel,
+      referentielV2,
+    })
   );
 
   return routes;
