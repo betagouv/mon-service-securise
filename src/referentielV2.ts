@@ -97,6 +97,7 @@ type MethodesSpecifiquesReferentielV2 = {
   descriptionTypeService: (typeService: TypeService) => string;
   descriptionOuvertureSysteme: (ouvertureSysteme: OuvertureSysteme) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
+  estIdentifiantMesureConnu: (idMesure: IdMesureV2) => boolean;
   identifiantsRisquesV2: () => IdRisqueV2[];
   localisationDonnees: (localisation: LocalisationDonneesTraitees) => {
     nom: string;
