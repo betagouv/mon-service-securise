@@ -12,6 +12,25 @@ block append styles
 
 block main
   .landing(data-themeable="true")
-    .bloc-contenu.bloc-hero
-      dsfr-container
-        h1.titre Formez-vous à l'homologation de sécurité
+    lab-anssi-bandeau-page(
+      titre="Formez-vous à l'homologation de sécurité"
+      description="En 2 ateliers pratiques, prenez en main MonServiceSécurisé et devenez autonome sur toute la démarche d’homologation, de l'évaluation de votre système jusqu'au dossier d'homologation prêt à signer."
+      url-image="/statique/assets/images/formation/illustration_hero.svg"
+      inverse
+    )
+      dsfr-button(
+        slot="buttonsgroup"
+        label="M'inscrire à la formation"
+        markup="a"
+        href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
+        target="_blank"
+        centered
+      )
+      dsfr-button(
+        slot="buttonsgroup"
+        label="Voir le déroulé"
+        kind="secondary"
+        markup="a"
+        href="#ateliers"
+        centered
+      )
