@@ -1,0 +1,17 @@
+extends mssDeconnecte
+
+block title
+  title Formez-vous à l'homologation de sécurité | MonServiceSécurisé
+
+block variables
+  - const meta_description = "En 2 ateliers pratiques, prenez en main MonServiceSécurisé et devenez autonome sur toute la démarche d'homologation de sécurité."
+
+block append styles
+  link(href="/statique/assets/styles/landing.css", rel="stylesheet")
+  link(href="/statique/assets/styles/formezVous.css", rel="stylesheet")
+
+block main
+  .landing(data-themeable="true")
+    .bloc-contenu.bloc-hero
+      dsfr-container
+        h1.titre Formez-vous à l'homologation de sécurité

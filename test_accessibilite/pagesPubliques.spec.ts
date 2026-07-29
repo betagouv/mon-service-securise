@@ -29,6 +29,7 @@ const pages = [
   },
   { nom: 'Co-construire', url: '/co-construire-monservicesecurise' },
   { nom: 'Conseils cyber', url: '/conseils-cyber' },
+  { nom: 'Formez-vous', url: '/formez-vous' },
 ];
 
 for (const { nom, url } of pages) {
