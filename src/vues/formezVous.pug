@@ -34,3 +34,28 @@ block main
         href="#ateliers"
         centered
       )
+
+    .bloc-contenu.bloc-public
+      dsfr-container
+        .conteneur-colonnes.inverse
+          .principale
+            -
+              const publicsVises = ['Ministères', 'Établissements publics', 'Collectivités', 'GIP', 'Prestataires']
+            dsfr-tags-group(
+              tags=JSON.stringify(publicsVises.map((label) => ({ label })))
+              size="md"
+              group-markup="ul"
+            )
+            h2.titre Agent public ou prestataire du secteur public ?
+            .corps
+              p.description
+                | Cette formation est faite pour vous !
+                br
+                | Que vous soyez chef de projet, référent numérique, RSSI ou simplement en charge d'un service à homologuer, nous vous accompagnons pas à pas.
+              p.description
+                strong Pas besoin d'être expert en cybersécurité.
+          figure.secondaire
+            img.illustration(
+              src="/statique/assets/images/formation/illustration_public.png"
+              alt=""
+            )
