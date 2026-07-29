@@ -88,8 +88,11 @@ const adaptateurAuditAdminOrganisations =
   );
 
 const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
-const adaptateurStatistiquesAdmin =
-  fabriqueAdaptateurStatistiquesAdmin(depotDonnees);
+const adaptateurStatistiquesAdmin = fabriqueAdaptateurStatistiquesAdmin(
+  depotDonnees,
+  adaptateurChiffrement,
+  adaptateurJournal
+);
 
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
