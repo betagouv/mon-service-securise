@@ -12,6 +12,11 @@ export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
 }
 
+type FiltresStatistiques = {
+  filtreNiveauxSecurite: Array<NiveauSecurite>;
+  filtreEntites: Array<string>;
+};
+
 export class AdaptateurStatistiquesAdmin {
   constructor(
     private readonly lecteurServices: LecteurServices,
@@ -68,9 +73,25 @@ export class AdaptateurStatistiquesAdmin {
     );
   }
 
-  async statistiques(idUtilisateur: UUID) {
-    const services =
-      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur);
+  private static filtre(
+    services: Array<Service>,
+    { filtreNiveauxSecurite, filtreEntites }: FiltresStatistiques
+  ) {
+    const estRetenu = (valeur: string, filtre: Array<string>) =>
+      filtre.length === 0 || filtre.includes(valeur);
+
+    return services.filter(
+      (s) =>
+        estRetenu(s.descriptionService.niveauSecurite, filtreNiveauxSecurite) &&
+        estRetenu(s.siretDeOrganisation(), filtreEntites)
+    );
+  }
+
+  async statistiques(idUtilisateur: UUID, filtres: FiltresStatistiques) {
+    const services = AdaptateurStatistiquesAdmin.filtre(
+      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur),
+      filtres
+    );
 
     return {
       servicesParType:

@@ -2,13 +2,18 @@ import express from 'express';
 import z from 'zod';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
-import { valideBody, valideParams } from '../../http/validePayloads.js';
+import {
+  valideBody,
+  valideParams,
+  valideQuery,
+} from '../../http/validePayloads.js';
 import {
   schemaAttributionRoleServices,
   schemaDeleteAdmin,
   schemaPostAdminNomme,
   schemaPutPerimetreAdmin,
   schemaRetraitAccesServices,
+  schemaStatistiquesAdmin,
 } from './routesConnecteApiAdmin.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
@@ -21,6 +26,7 @@ import {
   ErreurUtilisateurNonAdministre,
 } from '../../erreurs.js';
 import { AdaptateurStatistiquesAdmin } from '../../adaptateurs/adaptateurStatistiquesAdmin.js';
+import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 
 type Configuration = {
   adaptateurStatistiquesAdmin: AdaptateurStatistiquesAdmin;
@@ -269,13 +275,24 @@ const routesConnecteApiAdmin = ({
     }
   );
 
-  routes.get('/statistiques', async (requete, reponse) => {
-    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+  routes.get(
+    '/statistiques',
+    valideQuery(schemaStatistiquesAdmin),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const { filtreNiveauxSecurite, filtreEntites } = requete.query as z.infer<
+        typeof schemaStatistiquesAdmin
+      >;
 
-    reponse.json(
-      await adaptateurStatistiquesAdmin.statistiques(idUtilisateurCourant)
-    );
-  });
+      reponse.json(
+        await adaptateurStatistiquesAdmin.statistiques(idUtilisateurCourant, {
+          filtreNiveauxSecurite: filtreNiveauxSecurite as Array<NiveauSecurite>,
+          filtreEntites,
+        })
+      );
+    }
+  );
 
   return routes;
 };

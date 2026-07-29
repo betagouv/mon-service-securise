@@ -634,5 +634,90 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         servicesParNiveauSecurite: { api: 1 },
       });
     });
+
+    it('transmet les filtres reçus', async () => {
+      let filtresRecus;
+      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+        _idUtilisateur: UUID,
+        filtres: unknown
+      ) => {
+        filtresRecus = filtres;
+        return {};
+      };
+
+      const { status } = await testeur.get(
+        '/api/admin/statistiques?filtreNiveauxSecurite=niveau1&filtreNiveauxSecurite=niveau2&filtreEntites=13000766900018'
+      );
+
+      expect(status).toBe(200);
+      expect(filtresRecus).toEqual({
+        filtreNiveauxSecurite: ['niveau1', 'niveau2'],
+        filtreEntites: ['13000766900018'],
+      });
+    });
+
+    it('normalise en tableau un filtre reçu avec une seule valeur', async () => {
+      let filtresRecus;
+      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+        _idUtilisateur: UUID,
+        filtres: unknown
+      ) => {
+        filtresRecus = filtres;
+        return {};
+      };
+
+      const { status } = await testeur.get(
+        '/api/admin/statistiques?filtreNiveauxSecurite=niveau1&filtreEntites=13000766900018'
+      );
+
+      expect(status).toBe(200);
+      expect(filtresRecus).toEqual({
+        filtreNiveauxSecurite: ['niveau1'],
+        filtreEntites: ['13000766900018'],
+      });
+    });
+
+    it('utilise des filtres vides quand la requête n’en contient pas', async () => {
+      let filtresRecus;
+      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+        _idUtilisateur: UUID,
+        filtres: unknown
+      ) => {
+        filtresRecus = filtres;
+        return {};
+      };
+
+      const { status } = await testeur.get('/api/admin/statistiques');
+
+      expect(status).toBe(200);
+      expect(filtresRecus).toEqual({
+        filtreNiveauxSecurite: [],
+        filtreEntites: [],
+      });
+    });
+
+    it('refuse un niveau de sécurité inconnu', async () => {
+      const { status } = await testeur.get(
+        '/api/admin/statistiques?filtreNiveauxSecurite=niveauInconnu'
+      );
+
+      expect(status).toBe(400);
+    });
+
+    it('refuse un SIRET invalide', async () => {
+      const { status } = await testeur.get(
+        '/api/admin/statistiques?filtreEntites=pasUnSiret'
+      );
+
+      expect(status).toBe(400);
+    });
+
+    it('refuse un filtre inconnu', async () => {
+      const { status } = await testeur.get(
+        '/api/admin/statistiques?filtreInconnu=valeur'
+      );
+
+      expect(status).toBe(400);
+    });
   });
 });
