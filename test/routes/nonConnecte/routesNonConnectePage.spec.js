@@ -27,6 +27,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/doctrine-homologation-anssi',
     '/industrialisez-vos-homologations',
     '/securisez-votre-service-numerique',
+    '/formez-vous',
     '/referentiel-mesures',
   ].forEach((route) => {
     beforeEach(() => {

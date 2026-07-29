@@ -58,6 +58,10 @@ const routesNonConnectePage = ({
     reponse.render('securisezServiceNumerique');
   });
 
+  routes.get('/formez-vous', (_requete, reponse) => {
+    reponse.render('formezVous');
+  });
+
   routes.get('/statistiques', async (_requete, reponse) => {
     const { utilisateurs, services, vulnerabilites, indiceCyber } =
       await adaptateurStatistiques.recupereStatistiques();
