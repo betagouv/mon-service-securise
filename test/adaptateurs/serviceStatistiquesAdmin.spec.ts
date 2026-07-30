@@ -152,6 +152,86 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe('sur demande de la répartition des indices cyber par tranche', () => {
+    const unServiceAvecIndiceCyber = (indiceCyber: number) => {
+      const s = unServiceV2().construis();
+      s.indiceCyber = () => ({ total: indiceCyber });
+      return s;
+    };
+
+    it('compte les services de chaque tranche', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceAvecIndiceCyber(0),
+          unServiceAvecIndiceCyber(1.5),
+          unServiceAvecIndiceCyber(2.5),
+          unServiceAvecIndiceCyber(2.9),
+          unServiceAvecIndiceCyber(3.2),
+          unServiceAvecIndiceCyber(4.7),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheIndiceCyber;
+
+      expect(resultat).toEqual({
+        '< 1': 1,
+        '< 2': 1,
+        '< 3': 2,
+        '< 4': 1,
+        '≥ 4': 1,
+      });
+    });
+
+    it('range chaque borne dans la tranche supérieure', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceAvecIndiceCyber(1),
+          unServiceAvecIndiceCyber(2),
+          unServiceAvecIndiceCyber(3),
+          unServiceAvecIndiceCyber(4),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheIndiceCyber;
+
+      expect(resultat).toEqual({
+        '< 1': 0,
+        '< 2': 1,
+        '< 3': 1,
+        '< 4': 1,
+        '≥ 4': 1,
+      });
+    });
+
+    it('conserve les tranches vides', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheIndiceCyber;
+
+      expect(resultat).toEqual({
+        '< 1': 0,
+        '< 2': 0,
+        '< 3': 0,
+        '< 4': 0,
+        '≥ 4': 0,
+      });
+    });
+  });
+
   it("délègue à l'adaptateur journal le calcul de l'évolution du nombre de services", async () => {
     adaptateurJournal.evolutionNombreServices = async () => [
       { mois: '2026-01', total: 1 },
@@ -320,6 +400,7 @@ describe("L'adaptateur des statistiques admin", () => {
         evolutionNombreServices: expect.any(Object),
         evolutionNombreOrganisations: expect.any(Object),
         indiceCyberMoyen: expect.any(Number),
+        servicesParTrancheIndiceCyber: expect.any(Object),
       });
     });
   });

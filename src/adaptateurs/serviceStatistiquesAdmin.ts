@@ -17,6 +17,9 @@ type FiltresStatistiques = {
   filtreEntites: Array<string>;
 };
 
+const TRANCHES_INDICE_CYBER = ['< 1', '< 2', '< 3', '< 4', '≥ 4'] as const;
+type TrancheIndiceCyber = (typeof TRANCHES_INDICE_CYBER)[number];
+
 export class ServiceStatistiquesAdmin {
   constructor(
     private readonly lecteurServices: LecteurServices,
@@ -59,6 +62,29 @@ export class ServiceStatistiquesAdmin {
     if (!indicesCyber.length) return 0;
 
     return indicesCyber.reduce((acc, i) => acc + i, 0) / indicesCyber.length;
+  }
+
+  private static trancheDe(indiceCyber: number): TrancheIndiceCyber {
+    if (indiceCyber < 1) return '< 1';
+    if (indiceCyber < 2) return '< 2';
+    if (indiceCyber < 3) return '< 3';
+    if (indiceCyber < 4) return '< 4';
+    return '≥ 4';
+  }
+
+  private static servicesParTrancheIndiceCyber(
+    services: Array<Service>
+  ): Record<TrancheIndiceCyber, number> {
+    const tranchesVides = Object.fromEntries(
+      TRANCHES_INDICE_CYBER.map((tranche) => [tranche, 0])
+    ) as Record<TrancheIndiceCyber, number>;
+
+    return services.reduce((repartition, s) => {
+      const tranche = ServiceStatistiquesAdmin.trancheDe(s.indiceCyber().total);
+      // eslint-disable-next-line no-param-reassign
+      repartition[tranche] += 1;
+      return repartition;
+    }, tranchesVides);
   }
 
   private async evolutionNombreServices(services: Array<Service>) {
@@ -108,6 +134,8 @@ export class ServiceStatistiquesAdmin {
       evolutionNombreOrganisations:
         await this.evolutionNombreOrganisations(services),
       indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(services),
+      servicesParTrancheIndiceCyber:
+        ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(services),
     };
   }
 }
