@@ -15,6 +15,7 @@
   import type { IdNiveauDeSecurite } from '../ui/types';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import CarteChiffreCle from './CarteChiffreCle.svelte';
+  import BarChart from './charts/BarChart.svelte';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -77,6 +78,16 @@
     return {
       x: donnees.map((donnee) => donnee.mois),
       y: donnees.map((donnee) => donnee.total),
+    };
+  });
+
+  let parTrancheIndiceCyber = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.servicesParTrancheIndiceCyber;
+    return {
+      x: Object.keys(donnees),
+      y: Object.values(donnees),
     };
   });
 
@@ -162,11 +173,19 @@
       nom="Nombre de services"
       unite="services"
     />
-    <CarteChiffreCle
-      chiffre={statistiques.indiceCyberMoyen.toFixed(1)}
-      description="Moyenne Indice Cyber"
-      icone="data_visualization"
-    />
+    <div class="ligne-un-tiers-deux-tiers">
+      <CarteChiffreCle
+        chiffre={statistiques.indiceCyberMoyen.toFixed(1)}
+        description="Moyenne Indice Cyber"
+        icone="data_visualization"
+      />
+      <BarChart
+        titre="Répartition des Indices Cybers"
+        x={parTrancheIndiceCyber.x}
+        y={parTrancheIndiceCyber.y}
+        unite="services"
+      />
+    </div>
     <PieChart
       titre="Besoins de sécurité"
       x={parNiveauDeSecurite.x}
@@ -217,6 +236,13 @@
     padding: 24px 0;
     box-sizing: border-box;
     max-width: 1200px;
+
+    .ligne-un-tiers-deux-tiers {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 24px;
+    }
 
     /* Les graphiques DSFR se mettent en page en supposant le reset et les classes
        utilitaires du DSFR, que MSS ne charge pas. On les redéfinit ici, à l'identique,

@@ -14,6 +14,10 @@ export type Statistiques = {
   evolutionNombreServices: EvolutionMensurelle;
   evolutionNombreOrganisations: EvolutionMensurelle;
   indiceCyberMoyen: number;
+  servicesParTrancheIndiceCyber: Record<
+    '< 1' | '< 2' | '< 3' | '< 4' | '≥ 4',
+    number
+  >;
 };
 
 export type ReferentielStatistiques = {
