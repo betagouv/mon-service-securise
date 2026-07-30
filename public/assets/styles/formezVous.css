@@ -206,6 +206,38 @@
   }
 }
 
+.bloc-prerequis {
+  background-color: var(--background-action-high-blue-france);
+
+  @media (min-width: 992px) {
+    --padding-block: 6rem;
+  }
+
+  .conteneur {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-inline: auto;
+    max-width: 62.25rem;
+
+    @media (min-width: 992px) {
+      gap: 3rem;
+    }
+  }
+
+  .titre {
+    color: var(--text-inverted-grey);
+    margin-block: 0;
+    text-align: center;
+  }
+
+  img[slot='pictogram'] {
+    width: 5rem;
+    height: 5rem;
+    object-fit: contain;
+  }
+}
+
 .panneau-programme {
   display: flex;
   flex-direction: column;

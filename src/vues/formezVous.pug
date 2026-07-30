@@ -315,3 +315,44 @@ block main
                 text="Roadmap, mise en place d'objectifs, réunion à M+3, repartage des liens de l'atelier 1, accompagnement personnalisé selon le nombre de SI importés, aide ReCyF pour l'inventaire de votre parc."
                 accent="yellow-moutarde"
               )
+
+    .bloc-contenu.bloc-prerequis
+      dsfr-container
+        .conteneur
+          h2.titre 3 prérequis, c'est tout.
+          lab-anssi-carrousel-tuiles(fond="sombre")
+            dsfr-tile(
+              title="Être agent ou prestataire du secteur public"
+              no-link
+              action-markup="false"
+              size="md"
+            )
+              img(
+                slot="pictogram"
+                src="/statique/assets/images/illustration_human_cooperation.svg"
+                alt=""
+              )
+            dsfr-tile(
+              title="Avoir un compte ProConnect"
+              has-details
+              details="(ou le créer avant l'atelier 1)"
+              no-link
+              action-markup="false"
+              size="md"
+            )
+              img(
+                slot="pictogram"
+                src="/statique/assets/images/illustration_success.svg"
+                alt=""
+              )
+            dsfr-tile(
+              title="Venir avec un système d'information réel à homologuer"
+              no-link
+              action-markup="false"
+              size="md"
+            )
+              img(
+                slot="pictogram"
+                src="/statique/assets/images/navigateur.svg"
+                alt=""
+              )
