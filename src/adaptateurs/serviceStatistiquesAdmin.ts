@@ -54,6 +54,13 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
+  private static indiceCyberMoyen(services: Service[]) {
+    const indicesCyber = services.map((s) => s.indiceCyber().total);
+    if (!indicesCyber.length) return 0;
+
+    return indicesCyber.reduce((acc, i) => acc + i, 0) / indicesCyber.length;
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -100,6 +107,7 @@ export class ServiceStatistiquesAdmin {
       evolutionNombreServices: await this.evolutionNombreServices(services),
       evolutionNombreOrganisations:
         await this.evolutionNombreOrganisations(services),
+      indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(services),
     };
   }
 }
