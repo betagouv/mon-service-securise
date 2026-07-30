@@ -73,3 +73,42 @@ block main
             li.chiffre
               p.valeur= chiffre.valeur
               p.libelle= chiffre.libelle
+
+    .bloc-contenu.bloc-competences
+      dsfr-container
+        .entete
+          dsfr-badge(label="À la clé" type="accent" accent="green-menthe")
+          h2.titre Vous repartez enfin à l'aise avec l'homologation
+          p.description La démarche d’homologation qui vous semblait complexe devient claire, structurée et pilotable, avec un dossier en main et une équipe embarquée.
+        .competences
+          p.introduction 6 compétences concrètes, applicables directement sur votre périmètre.
+          -
+            const competences = [
+              { titre: "Comprendre l'homologation", description: "Découvrez et expliquez la démarche d'homologation." },
+              { titre: 'Évaluer les besoins', description: 'Référencez votre projet et identifiez ses besoins de sécurité.' },
+              { titre: 'Appliquer les mesures', description: 'Mettez en œuvre et suivez les mesures ANSSI adaptées.' },
+              { titre: 'Générer le dossier', description: "Créez un dossier d'homologation prêt à être utilisé." },
+              { titre: 'Collaborer efficacement', description: 'Impliquez toutes les parties prenantes en un seul endroit.' },
+              { titre: 'Piloter vos SI', description: "Suivez l'ensemble de vos systèmes d'information depuis un tableau de bord unique." },
+            ]
+          ul.cartes
+            each competence in competences
+              li
+                dsfr-card(
+                  title=competence.titre
+                  has-description
+                  description=competence.description
+                  markup="h3"
+                  size="sm"
+                  no-link
+                )
+        .actions
+          dsfr-button(
+            label="Réserver ma place"
+            markup="a"
+            href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
+            target="_blank"
+            has-icon
+            icon="calendar-event-line"
+            icon-place="left"
+          )

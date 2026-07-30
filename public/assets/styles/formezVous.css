@@ -84,3 +84,72 @@
     text-align: center;
   }
 }
+
+.bloc-competences {
+  background-color: var(--background-alt-blue-france);
+
+  @media (min-width: 992px) {
+    --padding-block: 6rem;
+  }
+
+  .entete {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    @media (min-width: 992px) {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .titre {
+    margin-block: 0;
+  }
+
+  .description {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin-block: 0;
+  }
+
+  .competences {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-block-start: 2rem;
+
+    @media (min-width: 992px) {
+      margin-block-start: 3rem;
+    }
+  }
+
+  .introduction {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin-block: 0;
+  }
+
+  .cartes {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+    list-style: none;
+
+    @media (min-width: 992px) {
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 1rem;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-block-start: 2rem;
+
+    @media (min-width: 992px) {
+      margin-block-start: 3rem;
+    }
+  }
+}
