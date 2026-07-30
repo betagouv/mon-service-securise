@@ -113,6 +113,45 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe("sur demande de l'indice cyber moyen", () => {
+    const unServiceAvecIndiceCyber = (indiceCyber: number) => {
+      const s = unServiceV2().construis();
+      s.indiceCyber = () => ({ total: indiceCyber });
+      return s;
+    };
+
+    it('retourne la moyenne', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceAvecIndiceCyber(1),
+          unServiceAvecIndiceCyber(3),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).indiceCyberMoyen;
+
+      expect(resultat).toEqual(2);
+    });
+
+    it("reste robuste s'il n'y a aucun service", async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).indiceCyberMoyen;
+
+      expect(resultat).toEqual(0);
+    });
+  });
+
   it("délègue à l'adaptateur journal le calcul de l'évolution du nombre de services", async () => {
     adaptateurJournal.evolutionNombreServices = async () => [
       { mois: '2026-01', total: 1 },
@@ -280,6 +319,7 @@ describe("L'adaptateur des statistiques admin", () => {
         servicesParNiveauSecurite: expect.any(Object),
         evolutionNombreServices: expect.any(Object),
         evolutionNombreOrganisations: expect.any(Object),
+        indiceCyberMoyen: expect.any(Number),
       });
     });
   });
