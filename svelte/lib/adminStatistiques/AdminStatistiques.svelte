@@ -14,6 +14,7 @@
   import { singulierPluriel } from '../outils/string';
   import type { IdNiveauDeSecurite } from '../ui/types';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
+  import CarteChiffreCle from './CarteChiffreCle.svelte';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -160,6 +161,11 @@
       y={parDateCreation.y}
       nom="Nombre de services"
       unite="services"
+    />
+    <CarteChiffreCle
+      chiffre={statistiques.indiceCyberMoyen.toFixed(1)}
+      description="Moyenne Indice Cyber"
+      icone="data_visualization"
     />
     <PieChart
       titre="Besoins de sécurité"

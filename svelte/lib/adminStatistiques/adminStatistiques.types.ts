@@ -13,6 +13,7 @@ export type Statistiques = {
   servicesParType: Partial<Record<IdTypeService, number>>;
   evolutionNombreServices: EvolutionMensurelle;
   evolutionNombreOrganisations: EvolutionMensurelle;
+  indiceCyberMoyen: number;
 };
 
 export type ReferentielStatistiques = {
