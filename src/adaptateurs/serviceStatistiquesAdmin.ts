@@ -24,9 +24,9 @@ export class ServiceStatistiquesAdmin {
     private readonly adaptateurJournalMSS: AdaptateurJournalMSS
   ) {}
 
-  private static async servicesParNiveauSecurite(
+  private static servicesParNiveauSecurite(
     services: Array<Service>
-  ): Promise<Partial<Record<NiveauSecurite, number>>> {
+  ): Partial<Record<NiveauSecurite, number>> {
     const parNiveau = Object.groupBy(
       services,
       (s) => s.descriptionService.niveauSecurite
@@ -40,9 +40,9 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
-  private static async servicesParType(
+  private static servicesParType(
     services: Array<Service>
-  ): Promise<Partial<Record<TypeDeService | IdTypeService, number>>> {
+  ): Partial<Record<TypeDeService | IdTypeService, number>> {
     const tousTypes = services.flatMap((s) => s.descriptionService.typeService);
     const parType = Object.groupBy(tousTypes, (t) => t);
 
@@ -94,9 +94,9 @@ export class ServiceStatistiquesAdmin {
     );
 
     return {
-      servicesParType: await ServiceStatistiquesAdmin.servicesParType(services),
+      servicesParType: ServiceStatistiquesAdmin.servicesParType(services),
       servicesParNiveauSecurite:
-        await ServiceStatistiquesAdmin.servicesParNiveauSecurite(services),
+        ServiceStatistiquesAdmin.servicesParNiveauSecurite(services),
       evolutionNombreServices: await this.evolutionNombreServices(services),
       evolutionNombreOrganisations:
         await this.evolutionNombreOrganisations(services),
