@@ -123,6 +123,7 @@ block main
             href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
             target="_blank"
             icon-place="left"
+            centered
           )
 
     #ateliers.bloc-contenu.bloc-ateliers
@@ -182,7 +183,7 @@ block main
           horizontal
         )
 
-        dsfr-modal#modale-programme(title="Programme détaillé" size="lg")
+        dsfr-modal#modale-programme(title="Programme détaillé" size="lg" footer)
           dsfr-tabs(
             tabs=JSON.stringify([{ id: 'atelier-1', label: 'Atelier 1' }, { id: 'atelier-2', label: 'Atelier 2' }])
             aria-label="Programme des deux ateliers"
@@ -315,6 +316,15 @@ block main
                 accent="yellow-moutarde"
               )
 
+          .footer-modal(slot="footer")
+            dsfr-button(
+              label="Réserver ma place"
+              markup="a"
+              href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
+              target="_blank"
+              icon-place="left"
+              centered
+            )
     .bloc-contenu.bloc-prerequis
       dsfr-container
         .conteneur
