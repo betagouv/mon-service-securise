@@ -356,3 +356,20 @@ block main
                 src="/statique/assets/images/navigateur.svg"
                 alt=""
               )
+
+    .bloc-contenu.bloc-avis
+      dsfr-container
+        h2.titre Témoignages
+        //- Contenu provisoire : les témoignages définitifs sont attendus de l'équipe produit.
+        -
+          const temoignages = [
+            {
+              citation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+              auteur: 'Prénom Nom',
+              source: 'Organisation · Fonction',
+            },
+          ]
+        lab-anssi-temoignages(
+          titre=""
+          temoignages=JSON.stringify(temoignages)
+        )
