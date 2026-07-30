@@ -34,7 +34,7 @@ const testeurMss = () => {
   let adaptateurOidc;
   let adaptateurEnvironnement;
   let adaptateurStatistiques;
-  let adaptateurStatistiquesAdmin;
+  let serviceStatistiquesAdmin;
   let adaptateurJWT;
   let adaptateurProfilAnssi;
   let lecteurDeFormData;
@@ -150,7 +150,7 @@ const testeurMss = () => {
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };
-    adaptateurStatistiquesAdmin = {
+    serviceStatistiquesAdmin = {
       statistiques: async () => {},
     };
     adaptateurJWT = fabriqueAdaptateurJWT();
@@ -202,7 +202,7 @@ const testeurMss = () => {
         adaptateurOidc,
         adaptateurEnvironnement,
         adaptateurStatistiques,
-        adaptateurStatistiquesAdmin,
+        serviceStatistiquesAdmin,
         adaptateurJWT,
         adaptateurProfilAnssi,
         lecteurDeFormData,
@@ -245,6 +245,7 @@ const testeurMss = () => {
       serviceAdministrationOrganisations,
     serviceAnnuaire: () => serviceAnnuaire,
     serviceGestionnaireSession: () => serviceGestionnaireSession,
+    serviceStatistiquesAdmin: () => serviceStatistiquesAdmin,
     serviceSupervision: () => serviceSupervision,
     adaptateurGestionErreur: () => adaptateurGestionErreur,
     adaptateurHorloge: () => adaptateurHorloge,
@@ -257,7 +258,6 @@ const testeurMss = () => {
     adaptateurJournalMSS: () => adaptateurJournal,
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
-    adaptateurStatistiquesAdmin: () => adaptateurStatistiquesAdmin,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     adaptateurEnvironnement: () => adaptateurEnvironnement,

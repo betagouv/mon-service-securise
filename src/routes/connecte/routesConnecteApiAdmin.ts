@@ -25,18 +25,18 @@ import {
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
 } from '../../erreurs.js';
-import { AdaptateurStatistiquesAdmin } from '../../adaptateurs/adaptateurStatistiquesAdmin.js';
+import { ServiceStatistiquesAdmin } from '../../adaptateurs/serviceStatistiquesAdmin.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 
 type Configuration = {
-  adaptateurStatistiquesAdmin: AdaptateurStatistiquesAdmin;
+  serviceStatistiquesAdmin: ServiceStatistiquesAdmin;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 };
 
 const routesConnecteApiAdmin = ({
-  adaptateurStatistiquesAdmin,
+  serviceStatistiquesAdmin,
   depotDonnees,
   middleware,
   serviceAdministrationOrganisations,
@@ -286,7 +286,7 @@ const routesConnecteApiAdmin = ({
       >;
 
       reponse.json(
-        await adaptateurStatistiquesAdmin.statistiques(idUtilisateurCourant, {
+        await serviceStatistiquesAdmin.statistiques(idUtilisateurCourant, {
           filtreNiveauxSecurite: filtreNiveauxSecurite as Array<NiveauSecurite>,
           filtreEntites,
         })

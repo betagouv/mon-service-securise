@@ -615,7 +615,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it("utilise l'adaptateur de statistiques admin", async () => {
       const U1 = unUUIDRandom();
       testeur.middleware().reinitialise({ idUtilisateur: U1 });
-      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+      testeur.serviceStatistiquesAdmin().statistiques = async (
         idUtilisateur: UUID
       ) => {
         if (idUtilisateur === U1)
@@ -637,7 +637,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
     it('transmet les filtres reçus', async () => {
       let filtresRecus;
-      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+      testeur.serviceStatistiquesAdmin().statistiques = async (
         _idUtilisateur: UUID,
         filtres: unknown
       ) => {
@@ -658,7 +658,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
     it('normalise en tableau un filtre reçu avec une seule valeur', async () => {
       let filtresRecus;
-      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+      testeur.serviceStatistiquesAdmin().statistiques = async (
         _idUtilisateur: UUID,
         filtres: unknown
       ) => {
@@ -679,7 +679,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
     it('utilise des filtres vides quand la requête n’en contient pas', async () => {
       let filtresRecus;
-      testeur.adaptateurStatistiquesAdmin().statistiques = async (
+      testeur.serviceStatistiquesAdmin().statistiques = async (
         _idUtilisateur: UUID,
         filtres: unknown
       ) => {

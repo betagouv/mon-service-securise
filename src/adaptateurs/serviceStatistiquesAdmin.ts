@@ -17,7 +17,7 @@ type FiltresStatistiques = {
   filtreEntites: Array<string>;
 };
 
-export class AdaptateurStatistiquesAdmin {
+export class ServiceStatistiquesAdmin {
   constructor(
     private readonly lecteurServices: LecteurServices,
     private readonly adaptateurChiffrement: AdaptateurChiffrement,
@@ -88,16 +88,15 @@ export class AdaptateurStatistiquesAdmin {
   }
 
   async statistiques(idUtilisateur: UUID, filtres: FiltresStatistiques) {
-    const services = AdaptateurStatistiquesAdmin.filtre(
+    const services = ServiceStatistiquesAdmin.filtre(
       await this.lecteurServices.servicesDeUtilisateur(idUtilisateur),
       filtres
     );
 
     return {
-      servicesParType:
-        await AdaptateurStatistiquesAdmin.servicesParType(services),
+      servicesParType: await ServiceStatistiquesAdmin.servicesParType(services),
       servicesParNiveauSecurite:
-        await AdaptateurStatistiquesAdmin.servicesParNiveauSecurite(services),
+        await ServiceStatistiquesAdmin.servicesParNiveauSecurite(services),
       evolutionNombreServices: await this.evolutionNombreServices(services),
       evolutionNombreOrganisations:
         await this.evolutionNombreOrganisations(services),
