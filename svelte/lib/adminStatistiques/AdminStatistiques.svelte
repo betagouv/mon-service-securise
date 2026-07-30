@@ -210,6 +210,7 @@
     gap: 24px;
     padding: 24px 0;
     box-sizing: border-box;
+    max-width: 1200px;
 
     /* Les graphiques DSFR se mettent en page en supposant le reset et les classes
        utilitaires du DSFR, que MSS ne charge pas. On les redéfinit ici, à l'identique,
