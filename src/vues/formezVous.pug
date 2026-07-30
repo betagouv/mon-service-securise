@@ -10,6 +10,19 @@ block append styles
   link(href="/statique/assets/styles/landing.css", rel="stylesheet")
   link(href="/statique/assets/styles/formezVous.css", rel="stylesheet")
 
+block append scripts
+  script(type="module", src="/statique/scripts/formezVous.mjs")
+
+mixin etapeProgramme(numero, titre)
+  li.etape
+    span.numero(aria-hidden="true")= numero
+    .detail
+      h3.titre-etape= titre
+      block
+
+mixin tempsPourQuestions()
+  p.mention Temps pour questions
+
 block main
   .landing(data-themeable="true")
     lab-anssi-bandeau-page(
@@ -112,3 +125,193 @@ block main
             icon="calendar-event-line"
             icon-place="left"
           )
+
+    #ateliers.bloc-contenu.bloc-ateliers
+      dsfr-container
+        .entete
+          h2.titre 2 ateliers pour maîtriser votre démarche d'homologation
+          p.description Du premier ajout d'un SI à la signature de la décision d'homologation, MonServiceSécurisé vous guide à chaque étape.
+        -
+          const ateliers = [
+            {
+              badge: 'Atelier 1 · 2h',
+              accent: 'blue-cumulus',
+              titre: "Je déclare un projet d'homologation",
+              description: "Mise en contexte, obligation d'homologation, saisie du projet, évaluation des besoins de sécurité, mesures ANSSI, plan d'action, indice cyber, le collaboratif.",
+              illustration: '/statique/assets/images/landing/illustration_decrire.png',
+            },
+            {
+              badge: 'Entre les deux',
+              accent: 'purple-glycine',
+              titre: 'Travail pratique',
+              description: "Vous renseignez le statut des mesures sur votre service : c'est le travail pratique qui donne tout son sens au second atelier.",
+              illustration: '/statique/assets/images/formation/illustration_atelier_pratique.png',
+            },
+            {
+              badge: 'Atelier 2 · 2h',
+              accent: 'blue-cumulus',
+              titre: "Je pilote et j'homologue",
+              description: "Les 6 étapes de l'homologation, génération du dossier, le tableau de bord, gestion globale des mesures, matrice des risques, questions / réponses.",
+              illustration: '/statique/assets/images/formation/illustration_atelier_pilotage.png',
+            },
+          ]
+        ul.ateliers
+          each atelier in ateliers
+            li
+              dsfr-card(
+                title=atelier.titre
+                has-description
+                description=atelier.description
+                src=atelier.illustration
+                alt=""
+                has-badge
+                markup="h3"
+                size="md"
+                no-link
+              )
+                dsfr-badge(
+                  slot="badgesgroup"
+                  label=atelier.badge
+                  type="accent"
+                  accent=atelier.accent
+                )
+        dsfr-card#declencheur-programme(
+          title="Voir le programme détaillé"
+          action-markup="button"
+          enlarge
+          size="sm"
+          horizontal
+        )
+
+        dsfr-modal#modale-programme(title="Programme détaillé" size="lg")
+          dsfr-tabs(
+            tabs=JSON.stringify([{ id: 'atelier-1', label: 'Atelier 1' }, { id: 'atelier-2', label: 'Atelier 2' }])
+            aria-label="Programme des deux ateliers"
+          )
+            .panneau-programme(slot="panel-1")
+              dsfr-callout(
+                has-title
+                title="Atelier 1"
+                title-markup="h2"
+                text="Je déclare un projet d'homologation"
+                accent="blue-cumulus"
+              )
+              ol.etapes
+                +etapeProgramme(1, 'Introduction')
+                  ul
+                    li Présentation de l'équipe, déroulé et bénéfices de la formation, ReCyF
+                    li Vidéo (en option)
+                    li Rappel de l'obligation d'homologation
+                    li Niveau d'homologation et de sécurité
+                    li Bénéfices de MonServiceSécurisé
+                  +tempsPourQuestions()
+                +etapeProgramme(2, 'Je renseigne mon premier service — évaluation des besoins de sécurité')
+                  ul
+                    li
+                      strong Informations génériques
+                      |  : importance du SIRET et lien à l'entité, statut des services, présentation du service (autonomie &amp; collaboratif), liens d'accès URL
+                    li
+                      strong Caractéristiques
+                      |  : type de service, cloud / hébergement, activités externalisées
+                    li
+                      strong Criticité et exposition
+                      |  : ouverture, audience cible, durée maximale de dysfonctionnement acceptable, données traitées, volume, localisation
+                    li Résumé du service
+                    li Besoins de sécurité identifiés par l'ANSSI
+                  +tempsPourQuestions()
+                +etapeProgramme(3, 'Liste des mesures de sécurité personnalisée')
+                  ul
+                    li Explication de la liste des mesures
+                    li
+                      strong Au niveau d'une mesure
+                      |  : description, mise en œuvre, plan d'action, historique des actions
+                    li
+                      strong Les indices
+                      |  : indice cyber ANSSI, indice cyber personnalisé
+                    li
+                      strong Autres fonctionnalités
+                      |  : onglet, filtres, ajout de mesures, export
+                  +tempsPourQuestions()
+                +etapeProgramme(4, 'Le collaboratif')
+                  ul
+                    li Inviter les contributeurs
+                    li Gestion fine des droits
+                    li Bientôt : gestion des organisations
+                    li Bonus : rejoindre la communauté Tchap
+                  +tempsPourQuestions()
+                +etapeProgramme(5, 'La suite du programme')
+                  ul
+                    li Inscription au webinaire de l'atelier 2
+                    li Ateliers de formation dédiés à une entité (selon critères)
+                    li Roadmap, suggestions, ReCyF
+              dsfr-callout(
+                has-title
+                title="Entre les ateliers"
+                title-markup="h2"
+                text="Renseigner le statut des mesures du service"
+                accent="purple-glycine"
+              )
+            .panneau-programme(slot="panel-2")
+              dsfr-callout(
+                has-title
+                title="Atelier 2"
+                title-markup="h2"
+                text="Préparation à la commission d'homologation, je passe à l'échelle"
+                accent="blue-cumulus"
+              )
+              ol.etapes(start="6")
+                +etapeProgramme(6, 'Rappel des objectifs')
+                  ul
+                    li Déroulé de l'atelier
+                    li Sondage sur l'entre-atelier et prise en compte des avis
+                    li Rappel : retour sur le processus des mesures de sécurité
+                  +tempsPourQuestions()
+                +etapeProgramme(7, "L'homologation")
+                  ul
+                    li Générer un projet d'homologation
+                    li «&nbsp;Rappel concernant votre service&nbsp;» — lien avec l'homologation simplifiée
+                    li
+                      strong Les 6 étapes pour homologuer
+                      |  : autorité d'homologation, avis à renseigner, référencement des docs, dossier (synthèse, décision, annexes), date, enregistrement
+                    li L'encart d'homologation
+                  +tempsPourQuestions()
+                +etapeProgramme(8, 'Le tableau de bord')
+                  ul
+                    li Indicateurs globaux
+                    li
+                      strong Liste des SI
+                      |  : nom, contributeurs, besoins de sécurité, indice cyber, homologué ?, actions recommandées
+                    li
+                      strong Fonctionnalités par SI
+                      |  : ajout de contributeurs, téléchargement des PDF, export de la sélection, duplication, suppression
+                    li Recherche, filtres et onglets par services et par homologations
+                    li Import des services en masse
+                  +tempsPourQuestions()
+                +etapeProgramme(9, 'La liste des mesures')
+                  ul
+                    li
+                      strong Onglets
+                      |  : toutes les mesures, ANSSI-CNIL, mesures ajoutées, ancien et nouveau référentiel
+                    li
+                      strong Ajouter des mesures
+                      |  : une par une, ou téléversement via le template
+                    li
+                      strong Configurer sur plusieurs SI
+                      |  : mise à jour du statut, sélection des SI, résumé et enregistrement
+                    li Filtres et recherche
+                  +tempsPourQuestions()
+                +etapeProgramme(10, 'Les risques')
+                  ul
+                    li Cartographie des risques usuels
+                    li Les 3 niveaux : bruts, actuels, résiduels cibles
+                    li Les 14 risques
+                    li Les mesures associées aux risques
+                    li Ajout de risques
+                  +tempsPourQuestions()
+              dsfr-callout(
+                has-title
+                title="Et après ?"
+                title-markup="h2"
+                text="Roadmap, mise en place d'objectifs, réunion à M+3, repartage des liens de l'atelier 1, accompagnement personnalisé selon le nombre de SI importés, aide ReCyF pour l'inventaire de votre parc."
+                accent="yellow-moutarde"
+              )
