@@ -1,7 +1,7 @@
 import {
-  AdaptateurStatistiquesAdmin,
+  ServiceStatistiquesAdmin,
   LecteurServices,
-} from '../../src/adaptateurs/adaptateurStatistiquesAdmin.ts';
+} from '../../src/adaptateurs/serviceStatistiquesAdmin.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.ts';
 import {
@@ -39,7 +39,7 @@ describe("L'adaptateur des statistiques admin", () => {
         .construis();
 
     it('retourne la répartition', async () => {
-      const adaptateur = new AdaptateurStatistiquesAdmin(
+      const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([
           unServiceDeNiveau('niveau1'),
           unServiceDeNiveau('niveau2'),
@@ -62,7 +62,7 @@ describe("L'adaptateur des statistiques admin", () => {
     });
 
     it('ne prend pas en compte les niveaux inexistants', async () => {
-      const adaptateur = new AdaptateurStatistiquesAdmin(
+      const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([
           unServiceDeNiveau('niveau1'),
           unServiceDeNiveau('niveau3'),
@@ -91,7 +91,7 @@ describe("L'adaptateur des statistiques admin", () => {
         .construis();
 
     it('retourne la répartition', async () => {
-      const adaptateur = new AdaptateurStatistiquesAdmin(
+      const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([
           unServiceDeType(['serviceEnLigne', 'api']),
           unServiceDeType(['api']),
@@ -117,7 +117,7 @@ describe("L'adaptateur des statistiques admin", () => {
     adaptateurJournal.evolutionNombreServices = async () => [
       { mois: '2026-01', total: 1 },
     ];
-    const adaptateur = new AdaptateurStatistiquesAdmin(
+    const adaptateur = new ServiceStatistiquesAdmin(
       unLecteurDeServices([]),
       adaptateurChiffrement,
       adaptateurJournal
@@ -142,7 +142,7 @@ describe("L'adaptateur des statistiques admin", () => {
           .donneesDescription()
       )
       .construis();
-    const adaptateur = new AdaptateurStatistiquesAdmin(
+    const adaptateur = new ServiceStatistiquesAdmin(
       unLecteurDeServices([service]),
       adaptateurChiffrement,
       adaptateurJournal
@@ -172,7 +172,7 @@ describe("L'adaptateur des statistiques admin", () => {
         .construis();
 
     const adaptateurAvec = (services: Array<Service>) =>
-      new AdaptateurStatistiquesAdmin(
+      new ServiceStatistiquesAdmin(
         unLecteurDeServices(services),
         adaptateurChiffrement,
         adaptateurJournal
@@ -264,7 +264,7 @@ describe("L'adaptateur des statistiques admin", () => {
 
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
-      const adaptateur = new AdaptateurStatistiquesAdmin(
+      const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal
