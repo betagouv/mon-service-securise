@@ -71,6 +71,16 @@
     };
   });
 
+  let parDateHomologation = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.evolutionNombreHomologations;
+    return {
+      x: donnees.map((donnee) => donnee.mois),
+      y: donnees.map((donnee) => donnee.total),
+    };
+  });
+
   let parEntite = $derived.by(() => {
     if (!statistiques) return { x: [], y: [] };
 
@@ -196,6 +206,13 @@
           statistiques.nombreServicesHomologues
         )}
         icone="success"
+      />
+      <LineChart
+        titre="Évolution du nombre d'homologations"
+        x={parDateHomologation.x}
+        y={parDateHomologation.y}
+        nom="Nombre d'homologations"
+        unite="homologations"
       />
     </div>
 
