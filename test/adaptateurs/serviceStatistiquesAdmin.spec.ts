@@ -1,6 +1,6 @@
 import {
-  ServiceStatistiquesAdmin,
   LecteurServices,
+  ServiceStatistiquesAdmin,
 } from '../../src/adaptateurs/serviceStatistiquesAdmin.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.ts';
@@ -21,6 +21,17 @@ const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
 });
 
 const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
+
+const serviceAvecCompletude = (pourcentageCompletude: number) => {
+  const serviceV2Plus80 = unServiceV2().construis();
+  serviceV2Plus80.completudeMesures = () => ({
+    nombreTotalMesures: 100,
+    nombreMesuresCompletes: pourcentageCompletude,
+    detailMesures: [],
+    indiceCyber: {},
+  });
+  return serviceV2Plus80;
+};
 
 describe("L'adaptateur des statistiques admin", () => {
   let adaptateurJournal: AdaptateurJournalMSS;
@@ -556,15 +567,11 @@ describe("L'adaptateur des statistiques admin", () => {
 
   describe('sur demande du nombre de services complété à plus de 80%', async () => {
     it('retourne la valeur', async () => {
-      const serviceV2Plus80 = unServiceV2().construis();
-      serviceV2Plus80.completudeMesures = () => ({
-        nombreTotalMesures: 10,
-        nombreMesuresCompletes: 9,
-        detailMesures: [],
-        indiceCyber: {},
-      });
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([unServiceV2().construis(), serviceV2Plus80]),
+        unLecteurDeServices([
+          serviceAvecCompletude(10),
+          serviceAvecCompletude(90),
+        ]),
         adaptateurChiffrement,
         adaptateurJournal
       );
@@ -575,6 +582,52 @@ describe("L'adaptateur des statistiques admin", () => {
       );
 
       expect(resultat.nombreServicesCompletudeSuperieur80).toEqual(1);
+    });
+  });
+
+  describe('sur demande de la répartition des complétudes de mesure par tranche', () => {
+    it('compte les services de chaque tranche', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          serviceAvecCompletude(10),
+          serviceAvecCompletude(30),
+          serviceAvecCompletude(60),
+          serviceAvecCompletude(90),
+          serviceAvecCompletude(100),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheCompletudeMesures;
+
+      expect(resultat).toEqual({
+        '< 25%': 1,
+        '< 50%': 1,
+        '< 75%': 1,
+        '≤ 100%': 2,
+      });
+    });
+
+    it('conserve les tranches vides', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheCompletudeMesures;
+
+      expect(resultat).toEqual({
+        '< 25%': 0,
+        '< 50%': 0,
+        '< 75%': 0,
+        '≤ 100%': 0,
+      });
     });
   });
 
@@ -602,6 +655,7 @@ describe("L'adaptateur des statistiques admin", () => {
         servicesParTrancheIndiceCyber: expect.any(Object),
         servicesParTrancheExpirationHomologation: expect.any(Object),
         nombreServicesCompletudeSuperieur80: expect.any(Number),
+        servicesParTrancheCompletudeMesures: expect.any(Object),
       });
     });
   });

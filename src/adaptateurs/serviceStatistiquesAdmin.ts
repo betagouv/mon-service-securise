@@ -32,6 +32,14 @@ const TRANCHES_EXPIRATION_HOMOLOGATION = [
 type TrancheExpirationHomologation =
   (typeof TRANCHES_EXPIRATION_HOMOLOGATION)[number];
 
+const TRANCHES_COMPLETUDE_MESURES = [
+  '< 25%',
+  '< 50%',
+  '< 75%',
+  '≤ 100%',
+] as const;
+type TrancheCompletudeMesures = (typeof TRANCHES_COMPLETUDE_MESURES)[number];
+
 type CleMoisAnnee = `${number}-${number}`;
 
 const moisAvecRemplissage = (date: Date) =>
@@ -206,6 +214,36 @@ export class ServiceStatistiquesAdmin {
       }, tranchesVides);
   }
 
+  private static trancheCompletudeMesures(completudeMesure: {
+    nombreTotalMesures: number;
+    nombreMesuresCompletes: number;
+  }): TrancheCompletudeMesures {
+    const pourcentage =
+      completudeMesure.nombreMesuresCompletes /
+      completudeMesure.nombreTotalMesures;
+    if (pourcentage < 0.25) return '< 25%';
+    if (pourcentage < 0.5) return '< 50%';
+    if (pourcentage < 0.75) return '< 75%';
+    return '≤ 100%';
+  }
+
+  private static servicesParTrancheCompletudeMesures(
+    services: Array<Service>
+  ): Record<TrancheCompletudeMesures, number> {
+    const tranchesVides = Object.fromEntries(
+      TRANCHES_COMPLETUDE_MESURES.map((tranche) => [tranche, 0])
+    ) as Record<TrancheCompletudeMesures, number>;
+
+    return services.reduce((repartition, s) => {
+      const tranche = ServiceStatistiquesAdmin.trancheCompletudeMesures(
+        s.completudeMesures()
+      );
+      // eslint-disable-next-line no-param-reassign
+      repartition[tranche] += 1;
+      return repartition;
+    }, tranchesVides);
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -265,6 +303,8 @@ export class ServiceStatistiquesAdmin {
         ),
       nombreServicesCompletudeSuperieur80:
         ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(services),
+      servicesParTrancheCompletudeMesures:
+        ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(services),
     };
   }
 }
