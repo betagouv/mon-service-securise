@@ -8,6 +8,7 @@ import { IdTypeService } from '../referentiel.types.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { AdaptateurJournalMSS } from './adaptateurJournalMSS.interface.js';
 import Dossiers from '../modeles/dossiers.js';
+import Dossier from '../modeles/dossier.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
@@ -20,6 +21,16 @@ type FiltresStatistiques = {
 
 const TRANCHES_INDICE_CYBER = ['< 1', '< 2', '< 3', '< 4', '≥ 4'] as const;
 type TrancheIndiceCyber = (typeof TRANCHES_INDICE_CYBER)[number];
+
+const TRANCHES_EXPIRATION_HOMOLOGATION = [
+  'expire',
+  '< 6',
+  '< 12',
+  '< 24',
+  '< 36',
+] as const;
+type TrancheExpirationHomologation =
+  (typeof TRANCHES_EXPIRATION_HOMOLOGATION)[number];
 
 type CleMoisAnnee = `${number}-${number}`;
 
@@ -143,6 +154,48 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
+  private static trancheExpirationHomologationDe(
+    dossier: Dossier
+  ): TrancheExpirationHomologation {
+    if (dossier.estExpire()) return 'expire';
+
+    const dateProchaineHomologation =
+      dossier.decision.dateProchaineHomologation();
+    const dans6Mois = new Date();
+    dans6Mois.setMonth(dans6Mois.getMonth() + 6);
+    if (dateProchaineHomologation < dans6Mois) return '< 6';
+
+    const dans12Mois = new Date();
+    dans12Mois.setMonth(dans12Mois.getMonth() + 12);
+    if (dateProchaineHomologation < dans12Mois) return '< 12';
+
+    const dans24Mois = new Date();
+    dans24Mois.setMonth(dans24Mois.getMonth() + 24);
+    if (dateProchaineHomologation < dans24Mois) return '< 24';
+
+    return '< 36';
+  }
+
+  private static servicesParTrancheExpirationHomologation(
+    services: Array<Service>
+  ): Record<TrancheExpirationHomologation, number> {
+    const tranchesVides = Object.fromEntries(
+      TRANCHES_EXPIRATION_HOMOLOGATION.map((tranche) => [tranche, 0])
+    ) as Record<TrancheExpirationHomologation, number>;
+
+    return services
+      .filter((s) => !!s.dossiers.dossierActif())
+      .reduce((repartition, s) => {
+        const tranche =
+          ServiceStatistiquesAdmin.trancheExpirationHomologationDe(
+            s.dossiers.dossierActif()
+          );
+        // eslint-disable-next-line no-param-reassign
+        repartition[tranche] += 1;
+        return repartition;
+      }, tranchesVides);
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -196,6 +249,10 @@ export class ServiceStatistiquesAdmin {
         ServiceStatistiquesAdmin.nombreServicesHomologues(services),
       evolutionNombreHomologations:
         ServiceStatistiquesAdmin.evolutionNombreHomologations(services),
+      servicesParTrancheExpirationHomologation:
+        ServiceStatistiquesAdmin.servicesParTrancheExpirationHomologation(
+          services
+        ),
     };
   }
 }
