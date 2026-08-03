@@ -7,6 +7,7 @@ import { UUID } from '../typesBasiques.js';
 import { IdTypeService } from '../referentiel.types.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { AdaptateurJournalMSS } from './adaptateurJournalMSS.interface.js';
+import Dossiers from '../modeles/dossiers.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
@@ -87,6 +88,14 @@ export class ServiceStatistiquesAdmin {
     }, tranchesVides);
   }
 
+  private static nombreServicesHomologues(services: Service[]) {
+    return services.filter(
+      (s) =>
+        s.dossiers.statutHomologation() === Dossiers.ACTIVEE ||
+        s.dossiers.statutHomologation() === Dossiers.BIENTOT_EXPIREE
+    ).length;
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -136,6 +145,8 @@ export class ServiceStatistiquesAdmin {
       indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(services),
       servicesParTrancheIndiceCyber:
         ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(services),
+      nombreServicesHomologues:
+        ServiceStatistiquesAdmin.nombreServicesHomologues(services),
     };
   }
 }
