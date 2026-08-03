@@ -16,6 +16,7 @@ export type TrancheExpirationHomologation =
   | '< 36';
 
 export type Statistiques = {
+  nombreServicesCompletudeSuperieur80: number;
   nombreServicesHomologues: number;
   servicesParNiveauSecurite: Partial<Record<IdNiveauDeSecurite, number>>;
   servicesParType: Partial<Record<IdTypeService, number>>;

@@ -247,6 +247,18 @@
       />
     </div>
 
+    <div class="ligne-trois-items">
+      <CarteChiffreCle
+        chiffre={statistiques.nombreServicesCompletudeSuperieur80}
+        description="{singulierPluriel(
+          'Service',
+          'Services',
+          statistiques.nombreServicesCompletudeSuperieur80
+        )} dont les mesures de sécurités sont remplies à plus de 80%"
+        icone="data_security"
+      />
+    </div>
+
     <PieChart
       titre="Besoins de sécurité"
       x={parNiveauDeSecurite.x}
