@@ -186,6 +186,19 @@
         unite="services"
       />
     </div>
+
+    <div class="ligne-un-tiers-deux-tiers">
+      <CarteChiffreCle
+        chiffre={statistiques.nombreServicesHomologues}
+        description={singulierPluriel(
+          'Service homologué',
+          'Services homologués',
+          statistiques.nombreServicesHomologues
+        )}
+        icone="success"
+      />
+    </div>
+
     <PieChart
       titre="Besoins de sécurité"
       x={parNiveauDeSecurite.x}
