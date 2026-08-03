@@ -32,6 +32,10 @@ export type Statistiques = {
     '< 1' | '< 2' | '< 3' | '< 4' | '≥ 4',
     number
   >;
+  servicesParTrancheCompletudeMesures: Record<
+    '< 25%' | '< 50%' | '< 75%' | '≤ 100%',
+    number
+  >;
 };
 
 export type ReferentielStatistiques = {

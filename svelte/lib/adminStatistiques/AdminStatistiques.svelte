@@ -102,6 +102,16 @@
     };
   });
 
+  let parTrancheCompletude = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.servicesParTrancheCompletudeMesures;
+    return {
+      x: Object.keys(donnees),
+      y: Object.values(donnees),
+    };
+  });
+
   const LIBELLES_TRANCHES_EXPIRATION: Record<
     TrancheExpirationHomologation,
     string
@@ -256,6 +266,12 @@
           statistiques.nombreServicesCompletudeSuperieur80
         )} dont les mesures de sécurités sont remplies à plus de 80%"
         icone="data_security"
+      />
+      <BarChart
+        titre="Taux de complétion moyen des mesures"
+        x={parTrancheCompletude.x}
+        y={parTrancheCompletude.y}
+        unite="services"
       />
     </div>
 
