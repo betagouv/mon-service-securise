@@ -408,6 +408,17 @@ describe("L'adaptateur des statistiques admin", () => {
       ])
       .construis();
 
+  const unServiceV2AvecDossierQuiExpireDans = (
+    nombreMoisDiciExpiration: number
+  ) =>
+    unServiceV2()
+      .avecDossiers([
+        unDossier(creeReferentielV2())
+          .quiEstComplet()
+          .quiVaExpirer(nombreMoisDiciExpiration * 30, 'unAn').donnees,
+      ])
+      .construis();
+
   describe('sur demande du nombre de services homologués', async () => {
     it('retourne la valeur', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -494,6 +505,55 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe("sur demande de la répartition des dates d'expiration d'homologation par tranche", () => {
+    it('compte les services de chaque tranche', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceV2AvecDossierQuiExpireDans(-13),
+          unServiceV2AvecDossierQuiExpireDans(1),
+          unServiceV2AvecDossierQuiExpireDans(7),
+          unServiceV2AvecDossierQuiExpireDans(13),
+          unServiceV2AvecDossierQuiExpireDans(25),
+          unServiceV2AvecDossierQuiExpireDans(37),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheExpirationHomologation;
+
+      expect(resultat).toEqual({
+        expire: 1,
+        '< 6': 1,
+        '< 12': 1,
+        '< 24': 1,
+        '< 36': 2,
+      });
+    });
+
+    it('conserve les tranches vides', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheExpirationHomologation;
+
+      expect(resultat).toEqual({
+        expire: 0,
+        '< 6': 0,
+        '< 12': 0,
+        '< 24': 0,
+        '< 36': 0,
+      });
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -515,7 +575,8 @@ describe("L'adaptateur des statistiques admin", () => {
         evolutionNombreServices: expect.any(Array),
         evolutionNombreOrganisations: expect.any(Array),
         indiceCyberMoyen: expect.any(Number),
-        servicesParTrancheIndiceCyber: expect.any(Array),
+        servicesParTrancheIndiceCyber: expect.any(Object),
+        servicesParTrancheExpirationHomologation: expect.any(Object),
       });
     });
   });
