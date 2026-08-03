@@ -13,6 +13,8 @@ import { unUUIDRandom } from '../constructeurs/UUID.ts';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import * as adaptateurJournalMemoire from '../../src/adaptateurs/adaptateurJournalMSSMemoire.ts';
 import { AdaptateurJournalMSS } from '../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+import { unDossier } from '../constructeurs/constructeurDossier.ts';
+import { creeReferentielV2 } from '../../src/referentielV2.ts';
 
 const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
   servicesDeUtilisateur: async () => services,
@@ -381,6 +383,42 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  const unServiceV2AvecDossierActif = () =>
+    unServiceV2()
+      .avecDossiers([
+        unDossier(creeReferentielV2()).quiEstComplet().quiEstActif().donnees,
+      ])
+      .construis();
+  const unServiceV2AvecDossierBientotExpire = () =>
+    unServiceV2()
+      .avecDossiers([
+        unDossier(creeReferentielV2())
+          .quiEstComplet()
+          .quiVaExpirer(2, 'sixMois').donnees,
+      ])
+      .construis();
+
+  describe('sur demande du nombre de services homologués', async () => {
+    it('retourne la valeur', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceV2AvecDossierActif(),
+          unServiceV2AvecDossierBientotExpire(),
+          unServiceV2().construis(),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = await adaptateur.statistiques(
+        unUUIDRandom(),
+        sansFiltre
+      );
+
+      expect(resultat.nombreServicesHomologues).toEqual(2);
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -395,6 +433,7 @@ describe("L'adaptateur des statistiques admin", () => {
       );
 
       expect(resultat).toEqual({
+        nombreServicesHomologues: expect.any(Number),
         servicesParType: expect.any(Object),
         servicesParNiveauSecurite: expect.any(Object),
         evolutionNombreServices: expect.any(Object),
