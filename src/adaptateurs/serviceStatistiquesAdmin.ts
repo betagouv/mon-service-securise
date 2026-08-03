@@ -21,6 +21,11 @@ type FiltresStatistiques = {
 const TRANCHES_INDICE_CYBER = ['< 1', '< 2', '< 3', '< 4', '≥ 4'] as const;
 type TrancheIndiceCyber = (typeof TRANCHES_INDICE_CYBER)[number];
 
+type CleMoisAnnee = `${number}-${number}`;
+
+const moisAvecRemplissage = (date: Date) =>
+  String(date.getMonth() + 1).padStart(2, '0');
+
 export class ServiceStatistiquesAdmin {
   constructor(
     private readonly lecteurServices: LecteurServices,
@@ -96,6 +101,48 @@ export class ServiceStatistiquesAdmin {
     ).length;
   }
 
+  private static clesMois(debut: Date, fin: Date): CleMoisAnnee[] {
+    const cles: string[] = [];
+    const curseur = new Date(debut.getFullYear(), debut.getMonth(), 1);
+    const borne = new Date(fin.getFullYear(), fin.getMonth(), 1);
+
+    while (curseur <= borne) {
+      cles.push(`${curseur.getFullYear()}-${moisAvecRemplissage(curseur)}`);
+      curseur.setMonth(curseur.getMonth() + 1);
+    }
+    return cles as CleMoisAnnee[];
+  }
+
+  private static evolutionNombreHomologations(services: Service[]) {
+    const datesDhomologation = services
+      .map((s) => s.dossiers.dossierActif()?.decision.dateHomologation)
+      .filter(Boolean)
+      .map((d) => new Date(d));
+    const premiereHomologation = new Date(
+      Math.min(...datesDhomologation.map((d) => d.getTime()))
+    );
+    const listeMoisAnnee = ServiceStatistiquesAdmin.clesMois(
+      premiereHomologation,
+      new Date()
+    );
+    const datesParMoisAnnee = Object.groupBy(
+      datesDhomologation,
+      (d) => `${d.getFullYear()}-${moisAvecRemplissage(d)}`
+    );
+    const nombreHomologueeParMoisAnnee = listeMoisAnnee.map((moisAnnee) => ({
+      mois: moisAnnee,
+      total: datesParMoisAnnee[moisAnnee]?.length || 0,
+    }));
+
+    return nombreHomologueeParMoisAnnee.reduce(
+      (acc, { mois, total }) => {
+        const precedent = acc.at(-1)?.total || 0;
+        return [...acc, { mois, total: precedent + total }];
+      },
+      [] as Array<{ mois: CleMoisAnnee; total: number }>
+    );
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -147,6 +194,8 @@ export class ServiceStatistiquesAdmin {
         ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(services),
       nombreServicesHomologues:
         ServiceStatistiquesAdmin.nombreServicesHomologues(services),
+      evolutionNombreHomologations:
+        ServiceStatistiquesAdmin.evolutionNombreHomologations(services),
     };
   }
 }
