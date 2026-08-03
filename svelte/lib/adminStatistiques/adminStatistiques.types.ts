@@ -14,6 +14,7 @@ export type Statistiques = {
   servicesParType: Partial<Record<IdTypeService, number>>;
   evolutionNombreServices: EvolutionMensuelle;
   evolutionNombreOrganisations: EvolutionMensuelle;
+  evolutionNombreHomologations: EvolutionMensuelle;
   indiceCyberMoyen: number;
   servicesParTrancheIndiceCyber: Record<
     '< 1' | '< 2' | '< 3' | '< 4' | '≥ 4',

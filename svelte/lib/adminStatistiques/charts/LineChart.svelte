@@ -27,5 +27,6 @@
     name={JSON.stringify([nom])}
     unit-tooltip={unite}
     selected-palette={palette}
+    y-min="0"
   ></line-chart>
 </Chart>
