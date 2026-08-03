@@ -1,6 +1,6 @@
 <script lang="ts">
   interface Props {
-    icone: 'data_visualization';
+    icone: 'data_visualization' | 'success';
     chiffre: number | string;
     description: string;
   }
