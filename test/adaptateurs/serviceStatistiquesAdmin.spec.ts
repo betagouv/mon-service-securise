@@ -631,6 +631,30 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe('sur demande de la répartition des statuts de mesure par catégorie de mesure', () => {
+    it('compte les services de chaque tranche', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          // un service avec 1 mesure faite pour gouvernance
+          // un service avec 1 mesure partielle pour gouvernance
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).nombreMesuresParStatutEtCategorie;
+
+      expect(resultat).toEqual({
+        gouvernance: { fait: 1, nonFait: 0, enCours: 1, aLancer: 0 },
+        resilience: { fait: 0, nonFait: 0, enCours: 0, aLancer: 0 },
+        protection: { fait: 0, nonFait: 0, enCours: 0, aLancer: 0 },
+        defense: { fait: 0, nonFait: 0, enCours: 0, aLancer: 0 },
+      });
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -656,6 +680,7 @@ describe("L'adaptateur des statistiques admin", () => {
         servicesParTrancheExpirationHomologation: expect.any(Object),
         nombreServicesCompletudeSuperieur80: expect.any(Number),
         servicesParTrancheCompletudeMesures: expect.any(Object),
+        nombreMesuresParStatutEtCategorie: expect.any(Object),
       });
     });
   });
