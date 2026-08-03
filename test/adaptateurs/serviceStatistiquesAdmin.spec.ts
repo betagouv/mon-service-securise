@@ -554,6 +554,30 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe('sur demande du nombre de services complété à plus de 80%', async () => {
+    it('retourne la valeur', async () => {
+      const serviceV2Plus80 = unServiceV2().construis();
+      serviceV2Plus80.completudeMesures = () => ({
+        nombreTotalMesures: 10,
+        nombreMesuresCompletes: 9,
+        detailMesures: [],
+        indiceCyber: {},
+      });
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([unServiceV2().construis(), serviceV2Plus80]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = await adaptateur.statistiques(
+        unUUIDRandom(),
+        sansFiltre
+      );
+
+      expect(resultat.nombreServicesCompletudeSuperieur80).toEqual(1);
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -577,6 +601,7 @@ describe("L'adaptateur des statistiques admin", () => {
         indiceCyberMoyen: expect.any(Number),
         servicesParTrancheIndiceCyber: expect.any(Object),
         servicesParTrancheExpirationHomologation: expect.any(Object),
+        nombreServicesCompletudeSuperieur80: expect.any(Number),
       });
     });
   });
