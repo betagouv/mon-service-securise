@@ -389,6 +389,16 @@ describe("L'adaptateur des statistiques admin", () => {
         unDossier(creeReferentielV2()).quiEstComplet().quiEstActif().donnees,
       ])
       .construis();
+
+  const unServiceV2AvecDossierHomologueLe = (date: Date) =>
+    unServiceV2()
+      .avecDossiers([
+        unDossier(creeReferentielV2())
+          .quiEstComplet()
+          .avecDateHomologation(date).donnees,
+      ])
+      .construis();
+
   const unServiceV2AvecDossierBientotExpire = () =>
     unServiceV2()
       .avecDossiers([
@@ -419,6 +429,71 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  const moisAvecRemplissage = (date: Date) =>
+    String(date.getMonth() + 1).padStart(2, '0');
+
+  describe("sur demande de l'évolution du nombre d'homologations", async () => {
+    it("cumule les dates d'homologation des dossiers de chaque service", async () => {
+      const aujourdhui = new Date();
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = await adaptateur.statistiques(
+        unUUIDRandom(),
+        sansFiltre
+      );
+
+      expect(resultat.evolutionNombreHomologations).toEqual([
+        {
+          mois: `${aujourdhui.getFullYear()}-${moisAvecRemplissage(aujourdhui)}`,
+          total: 2,
+        },
+      ]);
+    });
+
+    it('génère les mois sans nouveau dossier entre deux dates avec dossier', async () => {
+      const aujourdhui = new Date();
+      const ilYA1Mois = new Date();
+      ilYA1Mois.setMonth(ilYA1Mois.getMonth() - 1);
+      const ilYA2Mois = new Date();
+      ilYA2Mois.setMonth(ilYA2Mois.getMonth() - 2);
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+          unServiceV2AvecDossierHomologueLe(ilYA2Mois),
+        ]),
+        adaptateurChiffrement,
+        adaptateurJournal
+      );
+
+      const resultat = await adaptateur.statistiques(
+        unUUIDRandom(),
+        sansFiltre
+      );
+
+      expect(resultat.evolutionNombreHomologations).toEqual([
+        {
+          mois: `${ilYA2Mois.getFullYear()}-${moisAvecRemplissage(ilYA2Mois)}`,
+          total: 1,
+        },
+        {
+          mois: `${ilYA1Mois.getFullYear()}-${moisAvecRemplissage(ilYA1Mois)}`,
+          total: 1,
+        },
+        {
+          mois: `${aujourdhui.getFullYear()}-${moisAvecRemplissage(aujourdhui)}`,
+          total: 2,
+        },
+      ]);
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -434,12 +509,13 @@ describe("L'adaptateur des statistiques admin", () => {
 
       expect(resultat).toEqual({
         nombreServicesHomologues: expect.any(Number),
+        evolutionNombreHomologations: expect.any(Array),
         servicesParType: expect.any(Object),
         servicesParNiveauSecurite: expect.any(Object),
-        evolutionNombreServices: expect.any(Object),
-        evolutionNombreOrganisations: expect.any(Object),
+        evolutionNombreServices: expect.any(Array),
+        evolutionNombreOrganisations: expect.any(Array),
         indiceCyberMoyen: expect.any(Number),
-        servicesParTrancheIndiceCyber: expect.any(Object),
+        servicesParTrancheIndiceCyber: expect.any(Array),
       });
     });
   });
