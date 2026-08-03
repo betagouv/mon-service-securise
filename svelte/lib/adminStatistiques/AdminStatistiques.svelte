@@ -7,6 +7,7 @@
   import type {
     ReferentielStatistiques,
     Statistiques,
+    TrancheExpirationHomologation,
   } from './adminStatistiques.types';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import PieChart from './charts/PieChart.svelte';
@@ -97,6 +98,30 @@
     const donnees = statistiques.servicesParTrancheIndiceCyber;
     return {
       x: Object.keys(donnees),
+      y: Object.values(donnees),
+    };
+  });
+
+  const LIBELLES_TRANCHES_EXPIRATION: Record<
+    TrancheExpirationHomologation,
+    string
+  > = {
+    expire: 'Expirée',
+    '< 6': 'Expire dans 6 mois',
+    '< 12': 'Expire dans 1 an',
+    '< 24': 'Expire dans 2 ans',
+    '< 36': 'Expire dans 3 ans',
+  };
+
+  let parTrancheDureeExpirationHomologation = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.servicesParTrancheExpirationHomologation;
+    return {
+      x: Object.keys(donnees).map(
+        (tranche) =>
+          LIBELLES_TRANCHES_EXPIRATION[tranche as TrancheExpirationHomologation]
+      ),
       y: Object.values(donnees),
     };
   });
@@ -197,7 +222,7 @@
       />
     </div>
 
-    <div class="ligne-un-tiers-deux-tiers">
+    <div class="ligne-trois-items">
       <CarteChiffreCle
         chiffre={statistiques.nombreServicesHomologues}
         description={singulierPluriel(
@@ -213,6 +238,12 @@
         y={parDateHomologation.y}
         nom="Nombre d'homologations"
         unite="homologations"
+      />
+      <PieChart
+        titre="Répartition des dates d’expiration des homologations "
+        x={parTrancheDureeExpirationHomologation.x}
+        y={parTrancheDureeExpirationHomologation.y}
+        unite="services"
       />
     </div>
 
@@ -271,6 +302,13 @@
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: 1fr 2fr;
+      gap: 24px;
+    }
+
+    .ligne-trois-items {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr;
       gap: 24px;
     }
 
