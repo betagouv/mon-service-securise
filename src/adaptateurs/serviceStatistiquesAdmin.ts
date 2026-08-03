@@ -112,6 +112,16 @@ export class ServiceStatistiquesAdmin {
     ).length;
   }
 
+  private static nombreServicesCompletudeSuperieur80(services: Service[]) {
+    return services.filter((s) => {
+      const completude = s.completudeMesures();
+
+      return (
+        completude.nombreMesuresCompletes / completude.nombreTotalMesures > 0.8
+      );
+    }).length;
+  }
+
   private static clesMois(debut: Date, fin: Date): CleMoisAnnee[] {
     const cles: string[] = [];
     const curseur = new Date(debut.getFullYear(), debut.getMonth(), 1);
@@ -253,6 +263,8 @@ export class ServiceStatistiquesAdmin {
         ServiceStatistiquesAdmin.servicesParTrancheExpirationHomologation(
           services
         ),
+      nombreServicesCompletudeSuperieur80:
+        ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(services),
     };
   }
 }
