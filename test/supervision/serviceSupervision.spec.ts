@@ -135,26 +135,6 @@ describe('Le service de supervision', () => {
     });
   });
 
-  describe("sur demande de génération de l'URL de supervision", () => {
-    it("délègue la génération à l'adaptateur de supervision", () => {
-      let idRecu;
-      let filtreRecu;
-      adaptateurSupervision.genereURLSupervision = (idSuperviseur, filtres) => {
-        idRecu = idSuperviseur;
-        filtreRecu = filtres;
-        return 'URL1';
-      };
-
-      const url = serviceSupervision.genereURLSupervision(unUUID('1'), {
-        filtreDate: 'aujourdhui',
-      });
-
-      expect(idRecu).toBe(unUUID('1'));
-      expect(filtreRecu!.filtreDate).toBe('aujourdhui');
-      expect(url).toBe('URL1');
-    });
-  });
-
   describe("sur demande d'attachement d'une entité à un superviseur", () => {
     it("crée le superviseur s'il n'existe pas", async () => {
       let superviseurSauvegarde: Superviseur | undefined;

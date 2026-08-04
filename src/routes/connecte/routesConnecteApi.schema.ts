@@ -6,7 +6,6 @@ import {
   schemaMesureGenerale,
   schemaMesureSpecifique,
 } from '../../http/schemas/mesure.schema.js';
-import { schemaSiret } from '../../http/schemas/siret.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
 export const schemaPutUtilisateur = {
