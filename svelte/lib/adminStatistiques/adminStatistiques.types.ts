@@ -49,6 +49,8 @@ export type Statistiques = {
 
 export type ReferentielStatistiques = {
   typesService: Record<string, string>;
+  statutsMesures: Record<StatutMesure, string>;
+  categoriesMesures: Record<CategorieMesure, string>;
 };
 
 export type AdminStatistiquesProps = {

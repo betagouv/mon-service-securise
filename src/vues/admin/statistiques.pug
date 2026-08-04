@@ -10,6 +10,8 @@ block append scripts
   script(type = 'module', src = '/statique/adminStatistiques.mjs')
   +composantSvelte('adminStatistiques.js')
   +donneesPartagees('referentiel', {
+    categoriesMesures: referentiel.categoriesMesures(),
+    statutsMesures: referentiel.statutsMesures(),
     typesService: {
       ...Object.fromEntries(Object.entries(referentiel.typesService()).map(([id, { description }]) => [id, description])),
       ...Object.fromEntries(Object.entries(referentielV2.typesService()).map(([id, { nom }]) => [id, nom])),

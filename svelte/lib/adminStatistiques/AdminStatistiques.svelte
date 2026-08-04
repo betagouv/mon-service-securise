@@ -13,10 +13,11 @@
   import PieChart from './charts/PieChart.svelte';
   import LineChart from './charts/LineChart.svelte';
   import { singulierPluriel } from '../outils/string';
-  import type { IdNiveauDeSecurite } from '../ui/types';
+  import { CategorieMesure, type IdNiveauDeSecurite } from '../ui/types.d';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import CarteChiffreCle from './CarteChiffreCle.svelte';
   import BarChart from './charts/BarChart.svelte';
+  import type { StatutMesure } from '../modeles/modeleMesure';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -116,12 +117,17 @@
     if (!statistiques) return { x: [], y: [] };
 
     const donnees = statistiques.nombreMesuresParStatutEtCategorie;
+    const statuts = Object.keys(referentiel.statutsMesures);
     return {
-      x: Object.keys(donnees),
-      y: Object.values(donnees).map((nombreMesuresParStatutPourCategorie) =>
-        Object.values(nombreMesuresParStatutPourCategorie)
+      x: Object.keys(donnees).map(
+        (c) => referentiel.categoriesMesures[c as CategorieMesure]
       ),
-      libelles: ['fait', 'partiel', 'non prise en compte', 'à lancer'],
+      y: Object.values(donnees).map((nombreMesuresParStatutPourCategorie) =>
+        statuts.map(
+          (s) => nombreMesuresParStatutPourCategorie[s as StatutMesure]
+        )
+      ),
+      libelles: Object.values(referentiel.statutsMesures),
     };
   });
 
