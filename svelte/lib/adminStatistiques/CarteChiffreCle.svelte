@@ -31,7 +31,8 @@
     align-items: center;
 
     img {
-      max-width: 80px;
+      width: 80px;
+      height: 80px;
     }
 
     & > div {

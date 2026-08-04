@@ -294,7 +294,7 @@
           'Service',
           'Services',
           statistiques.nombreServicesCompletudeSuperieur80
-        )} dont les mesures de sécurités sont remplies à plus de 80%"
+        )} dont les mesures de sécurité sont remplies à plus de 80%"
         icone="data_security"
       />
       <BarChart
