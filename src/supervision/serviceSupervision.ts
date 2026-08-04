@@ -1,7 +1,6 @@
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurSupervision } from '../adaptateurs/adaptateurSupervision.interface.js';
 import { UUID } from '../typesBasiques.js';
-import { FiltresSupervision } from '../adaptateurs/adaptateurSupervisionMetabase.js';
 import Service from '../modeles/service.js';
 import Entite from '../modeles/entite.js';
 import Superviseur from '../modeles/superviseur.js';
@@ -33,13 +32,6 @@ class ServiceSupervision {
 
   async delieServiceEtSuperviseurs(idService: UUID) {
     await this.adaptateurSupervision.delieServiceDesSuperviseurs(idService);
-  }
-
-  genereURLSupervision(idSuperviseur: UUID, filtres: FiltresSupervision) {
-    return this.adaptateurSupervision.genereURLSupervision(
-      idSuperviseur,
-      filtres
-    );
   }
 
   async relieServiceEtSuperviseurs(service: Service) {

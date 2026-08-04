@@ -32,7 +32,6 @@ import {
 } from '../../http/validePayloads.js';
 import {
   schemaDeleteAutorisation,
-  schemaGetSupervision,
   schemaPostAutorisation,
   schemaPutMesureGenerale,
   schemaPutMesuresSpecifiques,
@@ -70,7 +69,6 @@ const routesConnecteApi = ({
   serviceAdministrationOrganisations,
   serviceAnnuaire,
   serviceGestionnaireSession,
-  serviceSupervision,
   serviceCgu,
 }) => {
   const routes = express.Router();

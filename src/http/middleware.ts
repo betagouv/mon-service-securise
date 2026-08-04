@@ -77,11 +77,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     const styleCsp = `style-src 'self' 'nonce-${nonce}'`;
     const styleSrcElemCsp = `style-src-elem 'self' 'nonce-${nonce}'`;
     const scriptCsp = `script-src 'self' https://browser.sentry-cdn.com 'nonce-${nonce}'`;
-    const frameCsp = adaptateurEnvironnement.supervision().domaineMetabaseMSS()
-      ? `frame-src ${adaptateurEnvironnement
-          .supervision()
-          .domaineMetabaseMSS()}`
-      : '';
 
     const toutesCsp = [
       defaultCsp,
@@ -91,7 +86,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       styleCsp,
       styleSrcElemCsp,
       scriptCsp,
-      frameCsp,
     ].filter((csp) => csp !== '');
 
     const DEUX_ANS = '63072000';

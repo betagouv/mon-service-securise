@@ -629,24 +629,6 @@ describe('Le middleware MSS', () => {
           "connect-src 'self' https://sentry.incubateur.net https://stats.beta.gouv.fr/matomo.php"
         );
       });
-
-      it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', async () => {
-        const adaptateurEnvironnement = {
-          supervision: () => ({
-            domaineMetabaseMSS: () => 'https://journal-mss.fr/',
-          }),
-        };
-
-        const middleware = leMiddleware({ adaptateurEnvironnement });
-
-        middleware.positionneHeaders(requete, reponse, () => {
-          verifieValeurHeader(
-            'content-security-policy',
-            'frame-src https://journal-mss.fr/',
-            reponse
-          );
-        });
-      });
     });
 
     it('interdit le chargement de la page dans une iFrame', async () => {
