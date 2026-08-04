@@ -17,6 +17,7 @@ const nouvelAdaptateur = (): AdaptateurJournalMSS => {
 
   return {
     consigneEvenement,
+    dateDerniereMiseAJourServices: async () => [],
     evolutionNombreServices: async () => [],
     evolutionNombreOrganisations: async () => [],
   };

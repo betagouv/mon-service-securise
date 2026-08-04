@@ -14,4 +14,7 @@ export interface AdaptateurJournalMSS {
   evolutionNombreOrganisations(
     services: Array<{ idServiceHache: string; siretHache: string }>
   ): Promise<EvolutionMensuelle>;
+  dateDerniereMiseAJourServices: (
+    idsServicesHaches: Array<string>
+  ) => Promise<Date[]>;
 }
