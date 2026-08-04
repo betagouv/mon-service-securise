@@ -2,7 +2,6 @@ import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
-import Superviseur from '../../../src/modeles/superviseur.js';
 import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
@@ -224,37 +223,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand GET sur /supervision', () => {
-    beforeEach(() => {
-      testeur.depotDonnees().superviseur = async () => {};
-    });
-
     it("vérifie que l'utilisateur a accepté les CGU", async () => {
       await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(testeur.app(), `/supervision`);
     });
 
-    it("renvoie une erreur 401 si l'utilisateur n'est pas un superviseur", async () => {
-      testeur.depotDonnees().superviseur = async () => undefined;
-
+    it('redirige vers la nouvelle page de statistiques', async () => {
       const reponse = await testeur.get(`/supervision`);
 
-      expect(reponse.status).to.be(401);
-    });
-
-    it("insère les entités supervisées dans la page si l'utilisateur est superviseur", async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: '456' });
-      testeur.depotDonnees().lisSuperviseur = async () =>
-        Superviseur.hydrate({
-          idUtilisateur: '456',
-          entitesSupervisees: [{ siret: 'SIRET-123', nom: 'MonEntite' }],
-        });
-
-      const reponse = await testeur.get(`/supervision`);
-
-      const donnees = donneesPartagees(reponse.text, 'entites-supervisees');
-      expect(donnees.length).to.be(1);
-      expect(donnees[0].nom).to.be('MonEntite');
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be('/admin/statistiques');
     });
   });
 
