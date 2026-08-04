@@ -65,14 +65,20 @@
       {#each mesuresReferentielsExternes.ReCyf as mesure (mesure.id)}
         <div class="bloc-mesure">
           <div class="conteneur-entete-referentiels-externes">
-            <h4>
-              {singulierPluriel(
-                'Exigence',
-                'Exigences',
-                mesuresReferentielsExternes.ReCyf.length
-              )}
-              {LIBELLES_REFERENTIELS_EXTERNES['ReCyf']}
-            </h4>
+            <div>
+              <h4>
+                {singulierPluriel(
+                  'Exigence',
+                  'Exigences',
+                  mesuresReferentielsExternes.ReCyf.length
+                )}
+                {LIBELLES_REFERENTIELS_EXTERNES['ReCyf']}
+              </h4>
+              <span class="sous-titre"
+                >Les exigences sont issues de la version 2.4 du référentiel
+                ReCyF.</span
+              >
+            </div>
             <div class="badges">
               {#if mesure.entitesConcernees.find((e) => e === 'EI')}
                 <dsfr-badge
@@ -192,6 +198,13 @@
       margin: 0;
       font-size: 1rem;
       line-height: 1.5rem;
+    }
+
+    .sous-titre {
+      color: #666;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
     }
 
     .badges,
