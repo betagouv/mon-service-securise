@@ -1079,4 +1079,65 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(evenement.siret).toBe(entite2.siret);
     });
   });
+
+  describe('sur demande de lecture des services', () => {
+    let serviceAdmin: ServiceAdministrationOrganisations;
+    const idSuperviseur = unUUIDRandom();
+    const idUtilisateur = unUUIDRandom();
+
+    beforeEach(() => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idSuperviseur).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idUtilisateur).donnees)
+        .ajouteUnService(
+          unServiceV2().avecId(idService).avecOrganisationResponsable(entite)
+            .donnees
+        )
+        .ajouteUnService(
+          unServiceV2().avecId(idService2).avecOrganisationResponsable(entite2)
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().dAdmin(idAdmin, idService).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire(idUtilisateur, idService).donnees
+        )
+        .construis() as unknown as AdaptateurPersistance;
+
+      adaptateurPersistanceTS = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(idAdmin, [entite])
+        .ajouteSuperviseurSurPerimetre(idSuperviseur, [entite, entite2])
+        .construis();
+
+      depotComplet = unDepotComplet({
+        adaptateurPersistance,
+        adaptateurPersistanceTS,
+      });
+
+      serviceAdmin = leServiceDAdministrationDesOrgas();
+    });
+
+    it("lis les services d'un admin via le dépôt de données", async () => {
+      const services = await serviceAdmin.servicesDe(idAdmin);
+
+      expect(services).toHaveLength(1);
+      expect(services[0].id).toBe(idService);
+    });
+
+    it("lis les services appartenant aux entités supervisées d'un superviseur via le dépôt de données", async () => {
+      const services = await serviceAdmin.servicesDe(idSuperviseur);
+
+      expect(services).toHaveLength(2);
+      expect(services[0].id).toBe(idService);
+      expect(services[1].id).toBe(idService2);
+    });
+
+    it('retourne un tableau vide pour les utilisateurs non admin et non superviseur', async () => {
+      const services = await serviceAdmin.servicesDe(idUtilisateur);
+
+      expect(services).toHaveLength(0);
+    });
+  });
 });
