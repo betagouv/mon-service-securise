@@ -6,7 +6,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
       {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href:'/admin/entites'},
       {id: 'admin-admins', type: 'link', active: ongletActif === 'admin-admins', label: 'Admins', href:'/admin/administrateurs'},
       {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href:'/tableauDeBord'},
-      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
+      {id: 'admin-statistiques', type: 'link', active: ongletActif === 'admin-statistiques', label: 'Statistiques', href:'/admin/statistiques'},
     ];
     const contenuAdmin = [
       {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
@@ -14,21 +14,13 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
       {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
       {id: 'admin-statistiques', type: 'link', active: ongletActif === 'admin-statistiques', label: 'Statistiques', href:'/admin/statistiques'},
     ];
-    const contenuAdminEtSuperviseur = [
-      {id: 'services', type: 'link', active: ongletActif === 'services', label: 'Services', href: '/tableauDeBord'},
-      {id: 'admin-utilisateurs', type: 'link', active: ongletActif === 'admin-utilisateurs', label: 'Utilisateurs', href: '/admin/utilisateurs'},
-      {id: 'admin-entites', type: 'link', active: ongletActif === 'admin-entites', label: 'Entités', href: '/admin/entites'},
-      {id: 'admin-supervision', type: 'link', active: ongletActif === 'admin-supervision', label: 'Statistiques', href:'/supervision'},
-    ];
 
     let contenuMenuAdmin = [];
     if (featureFlags.avecGestionDesOrganisations && estConnecte) {
-      if (utilisateurConnecte.estAdmin && utilisateurConnecte.estSuperviseur) {
-        contenuMenuAdmin = contenuAdminEtSuperviseur;
+      if (utilisateurConnecte.estAdmin) {
+        contenuMenuAdmin = contenuAdmin;
       } else if (utilisateurConnecte.estSuperviseur) {
         contenuMenuAdmin = contenuSuperviseur;
-      } else if (utilisateurConnecte.estAdmin) {
-        contenuMenuAdmin = contenuAdmin;
       }
     }
 
