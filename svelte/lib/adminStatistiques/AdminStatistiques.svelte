@@ -242,6 +242,7 @@
         x={parTrancheIndiceCyber.x}
         y={[parTrancheIndiceCyber.y]}
         unite="services"
+        name={['nombre de services']}
       />
     </div>
 
@@ -285,6 +286,7 @@
         x={parTrancheCompletude.x}
         y={[parTrancheCompletude.y]}
         unite="services"
+        name={['nombre de services']}
       />
       <BarChart
         titre="Répartition des mesures par catégorie et statut"
