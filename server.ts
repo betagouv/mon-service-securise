@@ -91,7 +91,8 @@ const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
 const serviceStatistiquesAdmin = fabriqueServiceStatistiquesAdmin(
   depotDonnees,
   adaptateurChiffrement,
-  adaptateurJournal
+  adaptateurJournal,
+  referentielV2
 );
 
 cableTousLesAbonnes(busEvenements, {

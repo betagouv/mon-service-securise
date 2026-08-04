@@ -15,12 +15,17 @@ import * as adaptateurJournalMemoire from '../../src/adaptateurs/adaptateurJourn
 import { AdaptateurJournalMSS } from '../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
 import { unDossier } from '../constructeurs/constructeurDossier.ts';
 import { creeReferentielV2 } from '../../src/referentielV2.ts';
+import Mesures from '../../src/modeles/mesures.js';
+import { IdCategorieMesure } from '../../src/referentiel.types.ts';
+import { StatutMesure } from '../../src/modeles/mesure.ts';
 
 const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
   servicesDeUtilisateur: async () => services,
 });
 
 const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
+
+const referentiel = creeReferentielV2();
 
 const serviceAvecCompletude = (pourcentageCompletude: number) => {
   const serviceV2Plus80 = unServiceV2().construis();
@@ -31,6 +36,20 @@ const serviceAvecCompletude = (pourcentageCompletude: number) => {
     indiceCyber: {},
   });
   return serviceV2Plus80;
+};
+
+const unServiceV2AvecMesureDeStatutEtCategorie = (
+  id: string,
+  statut: StatutMesure,
+  categorie: IdCategorieMesure
+) => {
+  const mesures = new Mesures(
+    { mesuresGenerales: [{ id, statut }] },
+    // @ts-expect-error mesures est en js pour l'instant
+    referentiel,
+    { [id]: { categorie } }
+  );
+  return unServiceV2(referentiel).avecMesures(mesures).construis();
 };
 
 describe("L'adaptateur des statistiques admin", () => {
@@ -60,7 +79,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceDeNiveau('niveau3'),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -81,7 +101,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceDeNiveau('niveau3'),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -111,7 +132,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceDeType(['applicationMobile']),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -140,7 +162,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceAvecIndiceCyber(3),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -154,7 +177,8 @@ describe("L'adaptateur des statistiques admin", () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -183,7 +207,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceAvecIndiceCyber(4.7),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -208,7 +233,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceAvecIndiceCyber(4),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -228,7 +254,8 @@ describe("L'adaptateur des statistiques admin", () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -252,7 +279,8 @@ describe("L'adaptateur des statistiques admin", () => {
     const adaptateur = new ServiceStatistiquesAdmin(
       unLecteurDeServices([]),
       adaptateurChiffrement,
-      adaptateurJournal
+      adaptateurJournal,
+      referentiel
     );
 
     const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
@@ -277,7 +305,8 @@ describe("L'adaptateur des statistiques admin", () => {
     const adaptateur = new ServiceStatistiquesAdmin(
       unLecteurDeServices([service]),
       adaptateurChiffrement,
-      adaptateurJournal
+      adaptateurJournal,
+      referentiel
     );
 
     const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
@@ -307,7 +336,8 @@ describe("L'adaptateur des statistiques admin", () => {
       new ServiceStatistiquesAdmin(
         unLecteurDeServices(services),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
     it('ne garde que les services des niveaux de sécurité demandés', async () => {
@@ -439,7 +469,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceV2().construis(),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = await adaptateur.statistiques(
@@ -463,7 +494,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceV2AvecDossierHomologueLe(aujourdhui),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = await adaptateur.statistiques(
@@ -491,7 +523,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceV2AvecDossierHomologueLe(ilYA2Mois),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = await adaptateur.statistiques(
@@ -528,7 +561,8 @@ describe("L'adaptateur des statistiques admin", () => {
           unServiceV2AvecDossierQuiExpireDans(37),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -548,7 +582,8 @@ describe("L'adaptateur des statistiques admin", () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -573,7 +608,8 @@ describe("L'adaptateur des statistiques admin", () => {
           serviceAvecCompletude(90),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = await adaptateur.statistiques(
@@ -596,7 +632,8 @@ describe("L'adaptateur des statistiques admin", () => {
           serviceAvecCompletude(100),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -615,7 +652,8 @@ describe("L'adaptateur des statistiques admin", () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -635,11 +673,20 @@ describe("L'adaptateur des statistiques admin", () => {
     it('compte les services de chaque tranche', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([
-          // un service avec 1 mesure faite pour gouvernance
-          // un service avec 1 mesure partielle pour gouvernance
+          unServiceV2AvecMesureDeStatutEtCategorie(
+            'RECENSEMENT.1',
+            'fait',
+            'gouvernance'
+          ),
+          unServiceV2AvecMesureDeStatutEtCategorie(
+            'RECENSEMENT.2',
+            'enCours',
+            'gouvernance'
+          ),
         ]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = (
@@ -660,7 +707,8 @@ describe("L'adaptateur des statistiques admin", () => {
       const adaptateur = new ServiceStatistiquesAdmin(
         unLecteurDeServices([]),
         adaptateurChiffrement,
-        adaptateurJournal
+        adaptateurJournal,
+        referentiel
       );
 
       const resultat = await adaptateur.statistiques(
