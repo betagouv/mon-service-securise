@@ -1,15 +1,10 @@
-import {
-  LecteurServices,
-  ServiceStatistiquesAdmin,
-} from '../../src/adaptateurs/serviceStatistiquesAdmin.ts';
+import { ServiceStatistiquesAdmin } from '../../src/adaptateurs/serviceStatistiquesAdmin.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.ts';
 import {
   NiveauSecurite,
   TypeDeService,
 } from '../../donneesReferentielMesuresV2.ts';
-import Service from '../../src/modeles/service.js';
-import { unUUIDRandom } from '../constructeurs/UUID.ts';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import * as adaptateurJournalMemoire from '../../src/adaptateurs/adaptateurJournalMSSMemoire.ts';
 import { AdaptateurJournalMSS } from '../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
@@ -18,10 +13,6 @@ import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import Mesures from '../../src/modeles/mesures.js';
 import { IdCategorieMesure } from '../../src/referentiel.types.ts';
 import { StatutMesure } from '../../src/modeles/mesure.ts';
-
-const unLecteurDeServices = (services: Array<Service>): LecteurServices => ({
-  servicesDeUtilisateur: async () => services,
-});
 
 const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
 
@@ -72,19 +63,21 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('retourne la répartition', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceDeNiveau('niveau1'),
-          unServiceDeNiveau('niveau2'),
-          unServiceDeNiveau('niveau2'),
-          unServiceDeNiveau('niveau3'),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceDeNiveau('niveau1'),
+            unServiceDeNiveau('niveau2'),
+            unServiceDeNiveau('niveau2'),
+            unServiceDeNiveau('niveau3'),
+          ],
+          sansFiltre
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
@@ -96,17 +89,16 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('ne prend pas en compte les niveaux inexistants', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceDeNiveau('niveau1'),
-          unServiceDeNiveau('niveau3'),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [unServiceDeNiveau('niveau1'), unServiceDeNiveau('niveau3')],
+          sansFiltre
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({
@@ -126,18 +118,20 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('retourne la répartition', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceDeType(['serviceEnLigne', 'api']),
-          unServiceDeType(['api']),
-          unServiceDeType(['applicationMobile']),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceDeType(['serviceEnLigne', 'api']),
+            unServiceDeType(['api']),
+            unServiceDeType(['applicationMobile']),
+          ],
+          sansFiltre
+        )
       ).servicesParType;
 
       expect(resultat).toEqual({
@@ -157,17 +151,16 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('retourne la moyenne', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceAvecIndiceCyber(1),
-          unServiceAvecIndiceCyber(3),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [unServiceAvecIndiceCyber(1), unServiceAvecIndiceCyber(3)],
+          sansFiltre
+        )
       ).indiceCyberMoyen;
 
       expect(resultat).toEqual(2);
@@ -175,15 +168,13 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it("reste robuste s'il n'y a aucun service", async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
-      ).indiceCyberMoyen;
+      const resultat = (await adaptateur.statistiques([], sansFiltre))
+        .indiceCyberMoyen;
 
       expect(resultat).toEqual(0);
     });
@@ -198,21 +189,23 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('compte les services de chaque tranche', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceAvecIndiceCyber(0),
-          unServiceAvecIndiceCyber(1.5),
-          unServiceAvecIndiceCyber(2.5),
-          unServiceAvecIndiceCyber(2.9),
-          unServiceAvecIndiceCyber(3.2),
-          unServiceAvecIndiceCyber(4.7),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceAvecIndiceCyber(0),
+            unServiceAvecIndiceCyber(1.5),
+            unServiceAvecIndiceCyber(2.5),
+            unServiceAvecIndiceCyber(2.9),
+            unServiceAvecIndiceCyber(3.2),
+            unServiceAvecIndiceCyber(4.7),
+          ],
+          sansFiltre
+        )
       ).servicesParTrancheIndiceCyber;
 
       expect(resultat).toEqual({
@@ -226,19 +219,21 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('range chaque borne dans la tranche supérieure', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceAvecIndiceCyber(1),
-          unServiceAvecIndiceCyber(2),
-          unServiceAvecIndiceCyber(3),
-          unServiceAvecIndiceCyber(4),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceAvecIndiceCyber(1),
+            unServiceAvecIndiceCyber(2),
+            unServiceAvecIndiceCyber(3),
+            unServiceAvecIndiceCyber(4),
+          ],
+          sansFiltre
+        )
       ).servicesParTrancheIndiceCyber;
 
       expect(resultat).toEqual({
@@ -252,15 +247,13 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('conserve les tranches vides', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
-      ).servicesParTrancheIndiceCyber;
+      const resultat = (await adaptateur.statistiques([], sansFiltre))
+        .servicesParTrancheIndiceCyber;
 
       expect(resultat).toEqual({
         '< 1': 0,
@@ -277,13 +270,12 @@ describe("L'adaptateur des statistiques admin", () => {
       { mois: '2026-01', total: 1 },
     ];
     const adaptateur = new ServiceStatistiquesAdmin(
-      unLecteurDeServices([]),
       adaptateurChiffrement,
       adaptateurJournal,
       referentiel
     );
 
-    const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
+    const resultat = (await adaptateur.statistiques([], sansFiltre))
       .evolutionNombreServices;
 
     expect(resultat).toEqual([{ mois: '2026-01', total: 1 }]);
@@ -303,13 +295,12 @@ describe("L'adaptateur des statistiques admin", () => {
       )
       .construis();
     const adaptateur = new ServiceStatistiquesAdmin(
-      unLecteurDeServices([service]),
       adaptateurChiffrement,
       adaptateurJournal,
       referentiel
     );
 
-    const resultat = (await adaptateur.statistiques(unUUIDRandom(), sansFiltre))
+    const resultat = (await adaptateur.statistiques([service], sansFiltre))
       .evolutionNombreOrganisations;
 
     expect(recu).toEqual([
@@ -332,72 +323,92 @@ describe("L'adaptateur des statistiques admin", () => {
         )
         .construis();
 
-    const adaptateurAvec = (services: Array<Service>) =>
-      new ServiceStatistiquesAdmin(
-        unLecteurDeServices(services),
+    it('ne garde que les services des niveaux de sécurité demandés', async () => {
+      const adaptateur = new ServiceStatistiquesAdmin(
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-    it('ne garde que les services des niveaux de sécurité demandés', async () => {
-      const adaptateur = adaptateurAvec([
-        unServiceDe('niveau1', '13000766900018'),
-        unServiceDe('niveau2', '13000766900018'),
-        unServiceDe('niveau3', '13000766900018'),
-      ]);
-
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), {
-          filtreNiveauxSecurite: ['niveau1', 'niveau3'],
-          filtreEntites: [],
-        })
+        await adaptateur.statistiques(
+          [
+            unServiceDe('niveau1', '13000766900018'),
+            unServiceDe('niveau2', '13000766900018'),
+            unServiceDe('niveau3', '13000766900018'),
+          ],
+          {
+            filtreNiveauxSecurite: ['niveau1', 'niveau3'],
+            filtreEntites: [],
+          }
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({ niveau1: 1, niveau3: 1 });
     });
 
     it('ne garde que les services des entités demandées', async () => {
-      const adaptateur = adaptateurAvec([
-        unServiceDe('niveau1', '13000766900018'),
-        unServiceDe('niveau2', '92050000000009'),
-      ]);
+      const adaptateur = new ServiceStatistiquesAdmin(
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), {
-          filtreNiveauxSecurite: [],
-          filtreEntites: ['92050000000009'],
-        })
+        await adaptateur.statistiques(
+          [
+            unServiceDe('niveau1', '13000766900018'),
+            unServiceDe('niveau2', '92050000000009'),
+          ],
+          {
+            filtreNiveauxSecurite: [],
+            filtreEntites: ['92050000000009'],
+          }
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({ niveau2: 1 });
     });
 
     it('combine les deux filtres', async () => {
-      const adaptateur = adaptateurAvec([
-        unServiceDe('niveau1', '13000766900018'),
-        unServiceDe('niveau1', '92050000000009'),
-        unServiceDe('niveau2', '92050000000009'),
-      ]);
+      const adaptateur = new ServiceStatistiquesAdmin(
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), {
-          filtreNiveauxSecurite: ['niveau1'],
-          filtreEntites: ['92050000000009'],
-        })
+        await adaptateur.statistiques(
+          [
+            unServiceDe('niveau1', '13000766900018'),
+            unServiceDe('niveau1', '92050000000009'),
+            unServiceDe('niveau2', '92050000000009'),
+          ],
+          {
+            filtreNiveauxSecurite: ['niveau1'],
+            filtreEntites: ['92050000000009'],
+          }
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({ niveau1: 1 });
     });
 
     it('ne filtre pas quand les filtres sont vides', async () => {
-      const adaptateur = adaptateurAvec([
-        unServiceDe('niveau1', '13000766900018'),
-        unServiceDe('niveau2', '92050000000009'),
-      ]);
+      const adaptateur = new ServiceStatistiquesAdmin(
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceDe('niveau1', '13000766900018'),
+            unServiceDe('niveau2', '92050000000009'),
+          ],
+          sansFiltre
+        )
       ).servicesParNiveauSecurite;
 
       expect(resultat).toEqual({ niveau1: 1, niveau2: 1 });
@@ -410,15 +421,19 @@ describe("L'adaptateur des statistiques admin", () => {
         return [];
       };
       const gardé = unServiceDe('niveau1', '13000766900018');
-      const adaptateur = adaptateurAvec([
-        gardé,
-        unServiceDe('niveau2', '92050000000009'),
-      ]);
+      const adaptateur = new ServiceStatistiquesAdmin(
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
 
-      await adaptateur.statistiques(unUUIDRandom(), {
-        filtreNiveauxSecurite: ['niveau1'],
-        filtreEntites: [],
-      });
+      await adaptateur.statistiques(
+        [gardé, unServiceDe('niveau2', '92050000000009')],
+        {
+          filtreNiveauxSecurite: ['niveau1'],
+          filtreEntites: [],
+        }
+      );
 
       expect(recus).toEqual([adaptateurChiffrement.hacheSha256(gardé.id)]);
     });
@@ -463,18 +478,17 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande du nombre de services homologués', async () => {
     it('retourne la valeur', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceV2AvecDossierActif(),
-          unServiceV2AvecDossierBientotExpire(),
-          unServiceV2().construis(),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = await adaptateur.statistiques(
-        unUUIDRandom(),
+        [
+          unServiceV2AvecDossierActif(),
+          unServiceV2AvecDossierBientotExpire(),
+          unServiceV2().construis(),
+        ],
         sansFiltre
       );
 
@@ -489,17 +503,16 @@ describe("L'adaptateur des statistiques admin", () => {
     it("cumule les dates d'homologation des dossiers de chaque service", async () => {
       const aujourdhui = new Date();
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceV2AvecDossierHomologueLe(aujourdhui),
-          unServiceV2AvecDossierHomologueLe(aujourdhui),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = await adaptateur.statistiques(
-        unUUIDRandom(),
+        [
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+        ],
         sansFiltre
       );
 
@@ -518,17 +531,16 @@ describe("L'adaptateur des statistiques admin", () => {
       const ilYA2Mois = new Date();
       ilYA2Mois.setMonth(ilYA2Mois.getMonth() - 2);
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceV2AvecDossierHomologueLe(aujourdhui),
-          unServiceV2AvecDossierHomologueLe(ilYA2Mois),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = await adaptateur.statistiques(
-        unUUIDRandom(),
+        [
+          unServiceV2AvecDossierHomologueLe(aujourdhui),
+          unServiceV2AvecDossierHomologueLe(ilYA2Mois),
+        ],
         sansFiltre
       );
 
@@ -552,21 +564,23 @@ describe("L'adaptateur des statistiques admin", () => {
   describe("sur demande de la répartition des dates d'expiration d'homologation par tranche", () => {
     it('compte les services de chaque tranche', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceV2AvecDossierQuiExpireDans(-13),
-          unServiceV2AvecDossierQuiExpireDans(1),
-          unServiceV2AvecDossierQuiExpireDans(7),
-          unServiceV2AvecDossierQuiExpireDans(13),
-          unServiceV2AvecDossierQuiExpireDans(25),
-          unServiceV2AvecDossierQuiExpireDans(37),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceV2AvecDossierQuiExpireDans(-13),
+            unServiceV2AvecDossierQuiExpireDans(1),
+            unServiceV2AvecDossierQuiExpireDans(7),
+            unServiceV2AvecDossierQuiExpireDans(13),
+            unServiceV2AvecDossierQuiExpireDans(25),
+            unServiceV2AvecDossierQuiExpireDans(37),
+          ],
+          sansFiltre
+        )
       ).servicesParTrancheExpirationHomologation;
 
       expect(resultat).toEqual({
@@ -580,15 +594,13 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('conserve les tranches vides', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
-      ).servicesParTrancheExpirationHomologation;
+      const resultat = (await adaptateur.statistiques([], sansFiltre))
+        .servicesParTrancheExpirationHomologation;
 
       expect(resultat).toEqual({
         expire: 0,
@@ -603,17 +615,13 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande du nombre de services complété à plus de 80%', async () => {
     it('retourne la valeur', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          serviceAvecCompletude(10),
-          serviceAvecCompletude(90),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = await adaptateur.statistiques(
-        unUUIDRandom(),
+        [serviceAvecCompletude(10), serviceAvecCompletude(90)],
         sansFiltre
       );
 
@@ -624,20 +632,22 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande de la répartition des complétudes de mesure par tranche', () => {
     it('compte les services de chaque tranche', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          serviceAvecCompletude(10),
-          serviceAvecCompletude(30),
-          serviceAvecCompletude(60),
-          serviceAvecCompletude(90),
-          serviceAvecCompletude(100),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            serviceAvecCompletude(10),
+            serviceAvecCompletude(30),
+            serviceAvecCompletude(60),
+            serviceAvecCompletude(90),
+            serviceAvecCompletude(100),
+          ],
+          sansFiltre
+        )
       ).servicesParTrancheCompletudeMesures;
 
       expect(resultat).toEqual({
@@ -650,15 +660,13 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('conserve les tranches vides', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
-      ).servicesParTrancheCompletudeMesures;
+      const resultat = (await adaptateur.statistiques([], sansFiltre))
+        .servicesParTrancheCompletudeMesures;
 
       expect(resultat).toEqual({
         '< 25%': 0,
@@ -672,25 +680,27 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande de la répartition des statuts de mesure par catégorie de mesure', () => {
     it('compte les services de chaque tranche', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([
-          unServiceV2AvecMesureDeStatutEtCategorie(
-            'RECENSEMENT.1',
-            'fait',
-            'gouvernance'
-          ),
-          unServiceV2AvecMesureDeStatutEtCategorie(
-            'RECENSEMENT.2',
-            'enCours',
-            'gouvernance'
-          ),
-        ]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
       const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+        await adaptateur.statistiques(
+          [
+            unServiceV2AvecMesureDeStatutEtCategorie(
+              'RECENSEMENT.1',
+              'fait',
+              'gouvernance'
+            ),
+            unServiceV2AvecMesureDeStatutEtCategorie(
+              'RECENSEMENT.2',
+              'enCours',
+              'gouvernance'
+            ),
+          ],
+          sansFiltre
+        )
       ).nombreMesuresParStatutEtCategorie;
 
       expect(resultat).toEqual({
@@ -707,13 +717,15 @@ describe("L'adaptateur des statistiques admin", () => {
       adaptateurJournal.dateDerniereMiseAJourServices = vi.fn(async () => []);
 
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([unServiceV2().avecId('S1').construis()]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      await adaptateur.statistiques(unUUIDRandom(), sansFiltre);
+      await adaptateur.statistiques(
+        [unServiceV2().avecId('S1').construis()],
+        sansFiltre
+      );
 
       expect(
         adaptateurJournal.dateDerniereMiseAJourServices
@@ -735,15 +747,13 @@ describe("L'adaptateur des statistiques admin", () => {
         ilYaNMois(14),
       ];
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = (
-        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
-      ).servicesParTrancheDateDerniereModification;
+      const resultat = (await adaptateur.statistiques([], sansFiltre))
+        .servicesParTrancheDateDerniereModification;
 
       expect(resultat).toEqual({
         '< 1 mois': 1,
@@ -757,16 +767,12 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
-        unLecteurDeServices([]),
         adaptateurChiffrement,
         adaptateurJournal,
         referentiel
       );
 
-      const resultat = await adaptateur.statistiques(
-        unUUIDRandom(),
-        sansFiltre
-      );
+      const resultat = await adaptateur.statistiques([], sansFiltre);
 
       expect(resultat).toEqual({
         nombreServicesHomologues: expect.any(Number),

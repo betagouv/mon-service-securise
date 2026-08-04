@@ -16,6 +16,8 @@ import {
   Autorisation,
   DonneesAutorisation,
 } from '../../../src/modeles/autorisations/autorisation.ts';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import Service from '../../../src/modeles/service.js';
 
 describe('Le serveur MSS des routes /api/admin/*', () => {
   const testeur = testeurMSS();
@@ -612,20 +614,35 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
   });
 
   describe('quand requête GET sur `/api/admin/statistiques`', () => {
-    it("utilise l'adaptateur de statistiques admin", async () => {
-      const U1 = unUUIDRandom();
-      testeur.middleware().reinitialise({ idUtilisateur: U1 });
-      testeur.serviceStatistiquesAdmin().statistiques = async (
-        idUtilisateur: UUID
-      ) => {
-        if (idUtilisateur === U1)
-          return {
-            servicesParType: { niveau1: 4 },
-            servicesParNiveauSecurite: { api: 1 },
-          };
-        return undefined;
-      };
+    const unService = unServiceV2().construis();
+    const U1 = unUUIDRandom();
 
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: U1 });
+      testeur.serviceAdministrationOrganisations().servicesDe = vi.fn(() => [
+        unService,
+      ]);
+      testeur.serviceStatistiquesAdmin().statistiques = vi.fn(() => ({
+        servicesParType: { niveau1: 4 },
+        servicesParNiveauSecurite: { api: 1 },
+      }));
+    });
+
+    it("récupère les services de l'utilisateur", async () => {
+      await testeur.get('/api/admin/statistiques');
+
+      expect(
+        testeur.serviceAdministrationOrganisations().servicesDe
+      ).toHaveBeenCalledWith(U1);
+      expect(
+        testeur.serviceStatistiquesAdmin().statistiques
+      ).toHaveBeenCalledWith([unService], {
+        filtreEntites: [],
+        filtreNiveauxSecurite: [],
+      });
+    });
+
+    it("retourne la réponse de l'adaptateur de statistiques admin", async () => {
       const { status, body } = await testeur.get('/api/admin/statistiques');
 
       expect(status).toBe(200);
@@ -638,7 +655,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     it('transmet les filtres reçus', async () => {
       let filtresRecus;
       testeur.serviceStatistiquesAdmin().statistiques = async (
-        _idUtilisateur: UUID,
+        _services: Array<Service>,
         filtres: unknown
       ) => {
         filtresRecus = filtres;

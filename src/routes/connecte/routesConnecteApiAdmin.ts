@@ -285,8 +285,12 @@ const routesConnecteApiAdmin = ({
         typeof schemaStatistiquesAdmin
       >;
 
+      const services =
+        await serviceAdministrationOrganisations.servicesDe(
+          idUtilisateurCourant
+        );
       reponse.json(
-        await serviceStatistiquesAdmin.statistiques(idUtilisateurCourant, {
+        await serviceStatistiquesAdmin.statistiques(services, {
           filtreNiveauxSecurite: filtreNiveauxSecurite as Array<NiveauSecurite>,
           filtreEntites,
         })
