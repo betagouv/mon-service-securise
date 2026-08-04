@@ -702,6 +702,58 @@ describe("L'adaptateur des statistiques admin", () => {
     });
   });
 
+  describe('sur demande de la repartition des dates de dernière mise à jour de services', () => {
+    it("délègue à l'adaptateur journal la récupération des dates de dernières mise à jour de chaque service", async () => {
+      adaptateurJournal.dateDerniereMiseAJourServices = vi.fn(async () => []);
+
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([unServiceV2().avecId('S1').construis()]),
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
+
+      await adaptateur.statistiques(unUUIDRandom(), sansFiltre);
+
+      expect(
+        adaptateurJournal.dateDerniereMiseAJourServices
+      ).toHaveBeenCalledWith(['S1-haché256']);
+    });
+
+    it('groupe les dates par tranches', async () => {
+      const ilYaNMois = (nombreMois: number) => {
+        const date = new Date();
+        date.setMonth(date.getMonth() - nombreMois);
+        return date;
+      };
+
+      adaptateurJournal.dateDerniereMiseAJourServices = async () => [
+        ilYaNMois(0),
+        ilYaNMois(3),
+        ilYaNMois(4),
+        ilYaNMois(8),
+        ilYaNMois(14),
+      ];
+      const adaptateur = new ServiceStatistiquesAdmin(
+        unLecteurDeServices([]),
+        adaptateurChiffrement,
+        adaptateurJournal,
+        referentiel
+      );
+
+      const resultat = (
+        await adaptateur.statistiques(unUUIDRandom(), sansFiltre)
+      ).servicesParTrancheDateDerniereModification;
+
+      expect(resultat).toEqual({
+        '< 1 mois': 1,
+        '< 6 mois': 2,
+        '< 1 an': 1,
+        '≥ 1 an': 1,
+      });
+    });
+  });
+
   describe('sur demande de toutes les statistiques', () => {
     it('retourne toutes les statistiques', async () => {
       const adaptateur = new ServiceStatistiquesAdmin(
@@ -729,6 +781,7 @@ describe("L'adaptateur des statistiques admin", () => {
         nombreServicesCompletudeSuperieur80: expect.any(Number),
         servicesParTrancheCompletudeMesures: expect.any(Object),
         nombreMesuresParStatutEtCategorie: expect.any(Object),
+        servicesParTrancheDateDerniereModification: expect.any(Object),
       });
     });
   });

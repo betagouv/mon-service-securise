@@ -42,6 +42,15 @@ const TRANCHES_COMPLETUDE_MESURES = [
 ] as const;
 type TrancheCompletudeMesures = (typeof TRANCHES_COMPLETUDE_MESURES)[number];
 
+const TRANCHES_DATE_DERNIERE_MODIFICATION = [
+  '< 1 mois',
+  '< 6 mois',
+  '< 1 an',
+  '≥ 1 an',
+] as const;
+type TrancheDateDerniereModification =
+  (typeof TRANCHES_DATE_DERNIERE_MODIFICATION)[number];
+
 type CleMoisAnnee = `${number}-${number}`;
 
 const moisAvecRemplissage = (date: Date) =>
@@ -297,6 +306,47 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
+  private static trancheDateDerniereModification(
+    date: Date
+  ): TrancheDateDerniereModification {
+    const ilYA1Mois = new Date();
+    ilYA1Mois.setMonth(ilYA1Mois.getMonth() - 1);
+    if (date > ilYA1Mois) return '< 1 mois';
+
+    const ilYA6Mois = new Date();
+    ilYA6Mois.setMonth(ilYA6Mois.getMonth() - 6);
+    if (date > ilYA6Mois) return '< 6 mois';
+
+    const ilYA12Mois = new Date();
+    ilYA12Mois.setMonth(ilYA12Mois.getMonth() - 12);
+    if (date > ilYA12Mois) return '< 1 an';
+
+    return '≥ 1 an';
+  }
+
+  private async servicesParTrancheDateDerniereModification(
+    services: Service[]
+  ) {
+    const idsHaches = services.map((s) =>
+      this.adaptateurChiffrement.hacheSha256(s.id)
+    );
+
+    const toutesDates =
+      await this.adaptateurJournalMSS.dateDerniereMiseAJourServices(idsHaches);
+
+    const tranchesVides = Object.fromEntries(
+      TRANCHES_DATE_DERNIERE_MODIFICATION.map((tranche) => [tranche, 0])
+    ) as Record<TrancheDateDerniereModification, number>;
+
+    return toutesDates.reduce((repartition, d) => {
+      const tranche =
+        ServiceStatistiquesAdmin.trancheDateDerniereModification(d);
+      // eslint-disable-next-line no-param-reassign
+      repartition[tranche] += 1;
+      return repartition;
+    }, tranchesVides);
+  }
+
   private static filtre(
     services: Array<Service>,
     { filtreNiveauxSecurite, filtreEntites }: FiltresStatistiques
@@ -341,6 +391,8 @@ export class ServiceStatistiquesAdmin {
         ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(services),
       nombreMesuresParStatutEtCategorie:
         this.nombreMesuresParStatutEtCategorie(services),
+      servicesParTrancheDateDerniereModification:
+        await this.servicesParTrancheDateDerniereModification(services),
     };
   }
 }
