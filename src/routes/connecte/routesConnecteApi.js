@@ -548,29 +548,6 @@ const routesConnecteApi = ({
   );
 
   routes.get(
-    '/supervision',
-    middleware.verificationAcceptationCGU,
-    valideQuery(z.strictObject(schemaGetSupervision(referentielV2))),
-    async (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-
-      const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
-      if (!estSuperviseur) {
-        reponse.sendStatus(401);
-        return;
-      }
-
-      const { filtreDate, filtreBesoinsSecurite, filtreEntite } = requete.query;
-      const urlSupervision = serviceSupervision.genereURLSupervision(
-        idUtilisateur,
-        { filtreDate, filtreBesoinsSecurite, filtreEntite }
-      );
-
-      reponse.status(200).json({ urlSupervision });
-    }
-  );
-
-  routes.get(
     '/referentiel/mesures',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {

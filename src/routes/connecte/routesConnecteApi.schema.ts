@@ -79,11 +79,3 @@ export const schemaPutModelesMesureSpecifiqueServices = () => ({
 export const schemaDeleteModelesMesureSpecifiqueServices = () => ({
   idsServices: z.array(z.uuid()),
 });
-
-export const schemaGetSupervision = (referentielV2: ReferentielV2) => ({
-  filtreDate: z
-    .enum(Object.keys(referentielV2.optionsFiltrageDate()))
-    .optional(),
-  filtreBesoinsSecurite: z.enum(referentielV2.niveauxDeSecurite()).optional(),
-  filtreEntite: schemaSiret.siret().optional(),
-});
