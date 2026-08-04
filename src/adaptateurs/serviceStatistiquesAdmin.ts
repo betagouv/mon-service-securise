@@ -4,11 +4,13 @@ import {
   TypeDeService,
 } from '../../donneesReferentielMesuresV2.js';
 import { UUID } from '../typesBasiques.js';
-import { IdTypeService } from '../referentiel.types.js';
+import { IdCategorieMesure, IdTypeService } from '../referentiel.types.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { AdaptateurJournalMSS } from './adaptateurJournalMSS.interface.js';
 import Dossiers from '../modeles/dossiers.js';
 import Dossier from '../modeles/dossier.js';
+import { StatutMesure } from '../modeles/mesure.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
@@ -49,7 +51,8 @@ export class ServiceStatistiquesAdmin {
   constructor(
     private readonly lecteurServices: LecteurServices,
     private readonly adaptateurChiffrement: AdaptateurChiffrement,
-    private readonly adaptateurJournalMSS: AdaptateurJournalMSS
+    private readonly adaptateurJournalMSS: AdaptateurJournalMSS,
+    private readonly referentiel: TousReferentiels
   ) {}
 
   private static servicesParNiveauSecurite(
@@ -244,6 +247,37 @@ export class ServiceStatistiquesAdmin {
     }, tranchesVides);
   }
 
+  private nombreMesuresParStatutEtCategorie(
+    services: Array<Service>
+  ): Record<IdCategorieMesure, Record<StatutMesure, number>> {
+    const categories = this.referentiel.identifiantsCategoriesMesures();
+    const statuts = this.referentiel.identifiantsStatutsMesures();
+
+    const repartitionVide = Object.fromEntries(
+      categories.map((categorie) => [
+        categorie,
+        Object.fromEntries(statuts.map((statut) => [statut, 0])),
+      ])
+    ) as Record<IdCategorieMesure, Record<StatutMesure, number>>;
+
+    return services.reduce((repartition, service) => {
+      const mesuresParStatutEtCategorie = service.mesuresParStatutEtCategorie();
+      Object.entries(mesuresParStatutEtCategorie).forEach(
+        ([statut, mesuresParCategorie]) => {
+          Object.entries(mesuresParCategorie).forEach(
+            ([categorie, mesures]) => {
+              // eslint-disable-next-line no-param-reassign
+              repartition[categorie as IdCategorieMesure][
+                statut as StatutMesure
+              ] += mesures.length;
+            }
+          );
+        }
+      );
+      return repartition;
+    }, repartitionVide);
+  }
+
   private async evolutionNombreServices(services: Array<Service>) {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
@@ -305,6 +339,8 @@ export class ServiceStatistiquesAdmin {
         ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(services),
       servicesParTrancheCompletudeMesures:
         ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(services),
+      nombreMesuresParStatutEtCategorie:
+        this.nombreMesuresParStatutEtCategorie(services),
     };
   }
 }

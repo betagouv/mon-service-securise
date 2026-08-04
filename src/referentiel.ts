@@ -187,6 +187,7 @@ const creeReferentiel = (
   const statutDeploiementValide = (id: IdStatutDeploiement) =>
     Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
+  const identifiantsStatutsMesures = () => Object.keys(donnees.statutsMesures);
   const descriptionStatutMesure = (idStatut: IdStatutMesure) =>
     statutsMesures()[idStatut];
   const prioritesMesures = () => donnees.prioritesMesures;
@@ -542,7 +543,7 @@ const creeReferentiel = (
   };
 
   const estStatutMesureConnu = (statut: IdStatutMesure) =>
-    Object.keys(statutsMesures()).includes(statut);
+    identifiantsStatutsMesures().includes(statut);
 
   const nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
     donnees.modelesMesureSpecifique.nombreMaximumParUtilisateur;
@@ -615,6 +616,7 @@ const creeReferentiel = (
     identifiantsNiveauxVraisemblance,
     identifiantNumeriqueRisque,
     identifiantsRisques,
+    identifiantsStatutsMesures,
     idEtapeSuivante,
     infosNiveauxGravite,
     infosNiveauxGraviteConcernes,

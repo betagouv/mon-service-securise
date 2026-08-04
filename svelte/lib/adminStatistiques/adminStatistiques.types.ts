@@ -1,4 +1,9 @@
-import type { IdNiveauDeSecurite, IdTypeService } from '../ui/types.d';
+import {
+  CategorieMesure,
+  type IdNiveauDeSecurite,
+  type IdTypeService,
+} from '../ui/types.d';
+import type { StatutMesure } from '../modeles/modeleMesure';
 
 declare global {
   interface HTMLElementEventMap {
@@ -35,6 +40,10 @@ export type Statistiques = {
   servicesParTrancheCompletudeMesures: Record<
     '< 25%' | '< 50%' | '< 75%' | '≤ 100%',
     number
+  >;
+  nombreMesuresParStatutEtCategorie: Record<
+    CategorieMesure,
+    Record<StatutMesure, number>
   >;
 };
 

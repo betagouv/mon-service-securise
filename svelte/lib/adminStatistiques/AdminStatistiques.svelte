@@ -112,6 +112,19 @@
     };
   });
 
+  let mesuresParCategorieEtStatut = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.nombreMesuresParStatutEtCategorie;
+    return {
+      x: Object.keys(donnees),
+      y: Object.values(donnees).map((nombreMesuresParStatutPourCategorie) =>
+        Object.values(nombreMesuresParStatutPourCategorie)
+      ),
+      libelles: ['fait', 'partiel', 'non prise en compte', 'à lancer'],
+    };
+  });
+
   const LIBELLES_TRANCHES_EXPIRATION: Record<
     TrancheExpirationHomologation,
     string
@@ -227,7 +240,7 @@
       <BarChart
         titre="Répartition des Indices Cybers"
         x={parTrancheIndiceCyber.x}
-        y={parTrancheIndiceCyber.y}
+        y={[parTrancheIndiceCyber.y]}
         unite="services"
       />
     </div>
@@ -270,8 +283,17 @@
       <BarChart
         titre="Taux de complétion moyen des mesures"
         x={parTrancheCompletude.x}
-        y={parTrancheCompletude.y}
+        y={[parTrancheCompletude.y]}
         unite="services"
+      />
+      <BarChart
+        titre="Répartition des mesures par catégorie et statut"
+        x={mesuresParCategorieEtStatut.x}
+        y={mesuresParCategorieEtStatut.y}
+        name={mesuresParCategorieEtStatut.libelles}
+        unite="mesures"
+        empile
+        horizontal
       />
     </div>
 
