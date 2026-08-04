@@ -58,7 +58,6 @@ const moisAvecRemplissage = (date: Date) =>
 
 export class ServiceStatistiquesAdmin {
   constructor(
-    private readonly lecteurServices: LecteurServices,
     private readonly adaptateurChiffrement: AdaptateurChiffrement,
     private readonly adaptateurJournalMSS: AdaptateurJournalMSS,
     private readonly referentiel: TousReferentiels
@@ -361,38 +360,42 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
-  async statistiques(idUtilisateur: UUID, filtres: FiltresStatistiques) {
-    const services = ServiceStatistiquesAdmin.filtre(
-      await this.lecteurServices.servicesDeUtilisateur(idUtilisateur),
-      filtres
-    );
+  async statistiques(services: Array<Service>, filtres: FiltresStatistiques) {
+    const servicesFiltres = ServiceStatistiquesAdmin.filtre(services, filtres);
 
     return {
-      servicesParType: ServiceStatistiquesAdmin.servicesParType(services),
+      servicesParType:
+        ServiceStatistiquesAdmin.servicesParType(servicesFiltres),
       servicesParNiveauSecurite:
-        ServiceStatistiquesAdmin.servicesParNiveauSecurite(services),
-      evolutionNombreServices: await this.evolutionNombreServices(services),
+        ServiceStatistiquesAdmin.servicesParNiveauSecurite(servicesFiltres),
+      evolutionNombreServices:
+        await this.evolutionNombreServices(servicesFiltres),
       evolutionNombreOrganisations:
-        await this.evolutionNombreOrganisations(services),
-      indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(services),
+        await this.evolutionNombreOrganisations(servicesFiltres),
+      indiceCyberMoyen:
+        ServiceStatistiquesAdmin.indiceCyberMoyen(servicesFiltres),
       servicesParTrancheIndiceCyber:
-        ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(services),
+        ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(servicesFiltres),
       nombreServicesHomologues:
-        ServiceStatistiquesAdmin.nombreServicesHomologues(services),
+        ServiceStatistiquesAdmin.nombreServicesHomologues(servicesFiltres),
       evolutionNombreHomologations:
-        ServiceStatistiquesAdmin.evolutionNombreHomologations(services),
+        ServiceStatistiquesAdmin.evolutionNombreHomologations(servicesFiltres),
       servicesParTrancheExpirationHomologation:
         ServiceStatistiquesAdmin.servicesParTrancheExpirationHomologation(
-          services
+          servicesFiltres
         ),
       nombreServicesCompletudeSuperieur80:
-        ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(services),
+        ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(
+          servicesFiltres
+        ),
       servicesParTrancheCompletudeMesures:
-        ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(services),
+        ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(
+          servicesFiltres
+        ),
       nombreMesuresParStatutEtCategorie:
-        this.nombreMesuresParStatutEtCategorie(services),
+        this.nombreMesuresParStatutEtCategorie(servicesFiltres),
       servicesParTrancheDateDerniereModification:
-        await this.servicesParTrancheDateDerniereModification(services),
+        await this.servicesParTrancheDateDerniereModification(servicesFiltres),
     };
   }
 }

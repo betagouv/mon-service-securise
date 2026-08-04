@@ -89,7 +89,6 @@ const adaptateurAuditAdminOrganisations =
 
 const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
 const serviceStatistiquesAdmin = fabriqueServiceStatistiquesAdmin(
-  depotDonnees,
   adaptateurChiffrement,
   adaptateurJournal,
   referentielV2
