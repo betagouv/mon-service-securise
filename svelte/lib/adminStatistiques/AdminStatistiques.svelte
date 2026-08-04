@@ -155,6 +155,16 @@
     };
   });
 
+  let parTrancheDateModification = $derived.by(() => {
+    if (!statistiques) return { x: [], y: [] };
+
+    const donnees = statistiques.servicesParTrancheDateDerniereModification;
+    return {
+      x: Object.keys(donnees),
+      y: Object.values(donnees),
+    };
+  });
+
   let nombreTotalServices = $derived(parDateCreation.y.at(-1) ?? 0);
   let nombreTotalEntites = $derived(parEntite.y.at(-1) ?? 0);
 
@@ -304,19 +314,28 @@
         horizontal
       />
     </div>
-
-    <PieChart
-      titre="Besoins de sécurité"
-      x={parNiveauDeSecurite.x}
-      y={parNiveauDeSecurite.y}
-      unite="services"
-    />
-    <PieChart
-      titre="Types de services"
-      x={parType.x}
-      y={parType.y}
-      unite="services"
-    />
+    <div class="ligne-trois-items-egaux">
+      <PieChart
+        titre="Besoins de sécurité"
+        x={parNiveauDeSecurite.x}
+        y={parNiveauDeSecurite.y}
+        unite="services"
+      />
+      <PieChart
+        titre="Types de services"
+        x={parType.x}
+        y={parType.y}
+        unite="services"
+      />
+      <BarChart
+        titre="Répartitions des services en fonction de la dernière mise à jour"
+        x={parTrancheDateModification.x}
+        y={[parTrancheDateModification.y]}
+        name={['nombre de services']}
+        unite="services"
+        horizontal
+      />
+    </div>
   </div>
 {/if}
 
@@ -367,6 +386,13 @@
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: 1fr 2fr 2fr;
+      gap: 24px;
+    }
+
+    .ligne-trois-items-egaux {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 24px;
     }
 

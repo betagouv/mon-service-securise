@@ -45,6 +45,10 @@ export type Statistiques = {
     CategorieMesure,
     Record<StatutMesure, number>
   >;
+  servicesParTrancheDateDerniereModification: Record<
+    '< 1 mois' | '< 6 mois' | '< 1 an' | '≥ 1 an',
+    number
+  >;
 };
 
 export type ReferentielStatistiques = {
