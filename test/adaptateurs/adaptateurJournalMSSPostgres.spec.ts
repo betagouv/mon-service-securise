@@ -230,4 +230,85 @@ describe("L'adaptateur Postgres du Journal MSS", () => {
       expect(await journalMSS.evolutionNombreOrganisations([])).toEqual([]);
     });
   });
+
+  describe('sur demande de la date de dernière mise à jour des services', () => {
+    const unServiceModifie = (idService: string, date: string) => ({
+      date,
+      type: 'COMPLETUDE_SERVICE_MODIFIEE',
+      donnees: { idService },
+    });
+
+    it('renvoie la date du dernier évènement pour un service', async () => {
+      await trx('journal_mss.evenements').insert([
+        unServiceModifie('S1', '2026-01-01T00:00:00.000Z'),
+        unServiceModifie('S1', '2026-02-01T00:00:00.000Z'),
+      ]);
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      const resultat = await journalMSS.dateDerniereMiseAJourServices(['S1']);
+
+      expect(resultat).toEqual([new Date('2026-02-01T00:00:00.000Z')]);
+    });
+
+    it('renvoie la date du dernier évènement pour chaque service', async () => {
+      await trx('journal_mss.evenements').insert([
+        unServiceModifie('S1', '2026-01-01T00:00:00.000Z'),
+        unServiceModifie('S1', '2026-02-01T00:00:00.000Z'),
+        unServiceModifie('S2', '2026-03-01T00:00:00.000Z'),
+        unServiceModifie('S2', '2026-04-01T00:00:00.000Z'),
+      ]);
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      const resultat = await journalMSS.dateDerniereMiseAJourServices([
+        'S1',
+        'S2',
+      ]);
+
+      expect(resultat).toHaveLength(2);
+      expect(resultat).toContainEqual(new Date('2026-02-01T00:00:00.000Z'));
+      expect(resultat).toContainEqual(new Date('2026-04-01T00:00:00.000Z'));
+    });
+
+    it('renvoie plusieurs fois la même date si plusieurs service on été modifié en même temps', async () => {
+      await trx('journal_mss.evenements').insert([
+        unServiceModifie('S1', '2026-01-01T00:00:00.000Z'),
+        unServiceModifie('S2', '2026-01-01T00:00:00.000Z'),
+      ]);
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      const resultat = await journalMSS.dateDerniereMiseAJourServices([
+        'S1',
+        'S2',
+      ]);
+
+      expect(resultat).toEqual([
+        new Date('2026-01-01T00:00:00.000Z'),
+        new Date('2026-01-01T00:00:00.000Z'),
+      ]);
+    });
+
+    it('ne considere que les services passés en paramètres', async () => {
+      await trx('journal_mss.evenements').insert([
+        unServiceModifie('S1', '2026-01-01T00:00:00.000Z'),
+        unServiceModifie('S-AUTRE', '2026-03-01T00:00:00.000Z'),
+      ]);
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      const resultat = await journalMSS.dateDerniereMiseAJourServices(['S1']);
+
+      expect(resultat).toEqual([new Date('2026-01-01T00:00:00.000Z')]);
+    });
+
+    it("reste robuste si aucun service n'est passé en paramètre", async () => {
+      await trx('journal_mss.evenements').insert([
+        unServiceModifie('S1', '2026-01-01T00:00:00.000Z'),
+        unServiceModifie('S2', '2026-03-01T00:00:00.000Z'),
+      ]);
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      const resultat = await journalMSS.dateDerniereMiseAJourServices([]);
+
+      expect(resultat).toEqual([]);
+    });
+  });
 });

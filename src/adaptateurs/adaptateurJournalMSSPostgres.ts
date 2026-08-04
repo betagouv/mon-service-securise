@@ -74,4 +74,23 @@ export class AdaptateurJournalMSSPostgres implements AdaptateurJournalMSS {
       date: new Date(date).toISOString(),
     });
   }
+
+  async dateDerniereMiseAJourServices(idsServicesHaches: Array<string>) {
+    const resultat = await this.knex.raw(
+      `
+        SELECT donnees->>'idService' AS id_service,
+               MAX(date) AS derniere_date
+        FROM journal_mss.evenements
+        WHERE donnees->>'idService' IS NOT NULL
+          AND donnees->>'idService' = ANY(:idsServicesHaches)
+        GROUP BY 1
+        ORDER BY derniere_date DESC;
+      `,
+      { idsServicesHaches }
+    );
+
+    return resultat.rows.map(
+      ({ derniere_date: date }: { derniere_date: Date }) => date
+    );
+  }
 }
