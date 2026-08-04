@@ -1,8 +1,8 @@
 <script lang="ts">
   const legende = [
-    { classe: 'vert', label: 'Faible : Acceptable en l’état' },
-    { classe: 'orange', label: 'Moyen : Tolérable sous contrôle' },
-    { classe: 'rouge', label: 'Élevé : Inacceptable' },
+    { classe: 'vert', label: 'Faible : acceptable en l’état' },
+    { classe: 'orange', label: 'Moyen : tolérable sous contrôle' },
+    { classe: 'rouge', label: 'Élevé : inacceptable' },
   ];
 </script>
 
