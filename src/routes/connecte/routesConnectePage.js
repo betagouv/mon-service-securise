@@ -25,19 +25,8 @@ const routesConnectePage = ({
   routes.get(
     '/supervision',
     middleware.verificationAcceptationCGU,
-    async (requete, reponse) => {
-      const superviseur = await depotDonnees.lisSuperviseur(
-        requete.idUtilisateurCourant
-      );
-
-      if (!superviseur) {
-        reponse.sendStatus(401);
-        return;
-      }
-      reponse.render('supervision', {
-        referentiel,
-        entitesSupervisees: superviseur.donnees().entitesSupervisees,
-      });
+    async (_requete, reponse) => {
+      reponse.redirect('/admin/statistiques');
     }
   );
 
