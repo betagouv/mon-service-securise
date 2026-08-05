@@ -17,6 +17,9 @@
 
 <style lang="scss">
   .conteneur-legende {
+    --rouge: #fa7659;
+    --orange: #fcc63a;
+    --vert: #7fc04b;
     display: flex;
     padding: 16px;
     gap: 24px;
@@ -32,15 +35,15 @@
         height: 13px;
 
         &.vert {
-          background: #77b645;
+          background: var(--vert);
         }
 
         &.orange {
-          background: #fa7a35;
+          background: var(--orange);
         }
 
         &.rouge {
-          background: #e1000f;
+          background: var(--rouge);
         }
       }
 
