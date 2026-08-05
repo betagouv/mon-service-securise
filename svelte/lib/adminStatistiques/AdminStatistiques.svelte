@@ -482,6 +482,8 @@
 
     :global(body) {
       zoom: 0.8;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
   }
 </style>
