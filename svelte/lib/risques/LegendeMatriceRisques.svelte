@@ -26,6 +26,9 @@
 
 <style>
   .legende-matrice {
+    --rouge: #fa7659;
+    --orange: #fcc63a;
+    --vert: #7fc04b;
     margin-top: 32px;
   }
 
@@ -54,15 +57,15 @@
   }
 
   li.faible:before {
-    --couleur-fond: #4cb963;
+    --couleur-fond: var(--vert);
   }
 
   li.moyen:before {
-    --couleur-fond: #faa72c;
+    --couleur-fond: var(--orange);
   }
 
   li.eleve:before {
-    --couleur-fond: #e32630;
+    --couleur-fond: var(--rouge);
   }
 
   .niveau {

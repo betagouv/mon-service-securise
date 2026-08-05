@@ -101,6 +101,10 @@
 
 <style>
   .matrice {
+    --rouge: #fa7659;
+    --orange: #fcc63a;
+    --vert: #7fc04b;
+    --texte: #161616;
     position: relative;
     width: fit-content;
   }
@@ -191,19 +195,19 @@
     font-size: 10px;
     font-weight: 700;
     line-height: 16px;
-    color: white;
+    color: var(--texte);
     text-align: center;
   }
 
   .cellule-matrice.faible {
-    --couleur-fond: #4cb963;
+    --couleur-fond: var(--vert);
   }
 
   .cellule-matrice.moyen {
-    --couleur-fond: #faa72c;
+    --couleur-fond: var(--orange);
   }
 
   .cellule-matrice.eleve {
-    --couleur-fond: #e32630;
+    --couleur-fond: var(--rouge);
   }
 </style>
