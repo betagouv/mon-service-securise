@@ -84,9 +84,8 @@
               .planAction()
               .el()!
               .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-          }, 300);
+          }, 1);
         },
-        delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
           tiroirStore.ferme();
         },
@@ -111,9 +110,8 @@
               .activite()
               .el()!
               .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-          }, 300);
+          }, 1);
         },
-        delaiAvantAffichage: 300,
         callbackFinaleCible: async () => {
           tiroirStore.ferme();
         },
