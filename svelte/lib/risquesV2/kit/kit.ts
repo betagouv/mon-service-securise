@@ -15,7 +15,7 @@ export const couleur = (
 };
 
 export const mappingCouleursDSFR: Record<CouleurNiveauRisque, string> = {
-  vert: 'green-emeraude',
+  vert: 'green-bourgeon',
   orange: 'yellow-moutarde',
   rouge: 'pink-macaron',
 };

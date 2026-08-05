@@ -80,9 +80,10 @@
   table {
     border-collapse: collapse;
     --bordure: #929292;
-    --rouge: #e1000f;
-    --orange: #fa7a35;
-    --vert: #77b645;
+    --rouge: #fa7659;
+    --orange: #fcc63a;
+    --vert: #7fc04b;
+    --texte: #161616;
 
     &.en-attente {
       --bordure: #dddddd;
@@ -117,13 +118,14 @@
         }
 
         .contenu-cellule {
-          color: #fff;
+          color: var(--texte);
           font-size: 0.875rem;
           font-weight: bold;
           line-height: 1rem;
           display: flex;
           align-items: center;
           justify-content: center;
+          text-align: center;
 
           &.md {
             width: 123px;
