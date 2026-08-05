@@ -17,8 +17,8 @@
   let contenu = box(
     width: largeur,
     height: hauteurCelluleV2 - margeVerticaleCelluleV2,
-    fill: couleursNiveauRisqueV2.at(niveau),
-    align(center + horizon)[#text(size: 7pt, weight: "bold", fill: white)[#idRisques]],
+    fill: couleursNiveauRisque.at(niveau),
+    align(center + horizon)[#text(size: 7pt, weight: "bold", fill: encre)[#idRisques]],
   )
   if avecMargeGauche { align(right, contenu) } else { contenu }
 }
@@ -106,20 +106,10 @@
     columns: (11pt, auto),
     column-gutter: 6pt,
     align: horizon,
-    box(width: 11pt, height: 11pt, fill: couleursNiveauRisqueV2.at(niveau.id)),
+    box(width: 11pt, height: 11pt, fill: couleursNiveauRisque.at(niveau.id)),
     [#text(size: 8pt)[#text(weight: "bold")[#niveau.libelle :] #niveau.description]],
   )),
 )
-
-#let pastilleIdentifiantV2(id, niveau) = {
-  let couleur = couleursPastilleRisque.at(niveau, default: rgb("#667892"))
-  box(
-    stroke: 1.5pt + couleur,
-    radius: 20pt,
-    inset: (x: 8pt, y: 5pt),
-    fill: white,
-  )[#text(size: 10pt, weight: "bold", fill: couleur)[#id]]
-}
 
 #let blocRisqueV2(risque, idAffiche) = {
   let niveau = niveauRisqueV2(risque.gravite, risque.vraisemblance)
@@ -127,7 +117,7 @@
     columns: (56pt, 1fr),
     column-gutter: 10pt,
     align: top,
-    pastilleIdentifiantV2(idAffiche, niveau),
+    pastilleIdentifiantRisque(idAffiche, niveau),
     [
       #text(weight: "bold")[#risque.intitule]
       #v(8pt)

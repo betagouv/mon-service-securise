@@ -24,7 +24,7 @@
     width: 100%,
     height: 100%,
     fill: couleurCellule(classe),
-    align(center + horizon)[#text(size: 8pt, weight: "bold", fill: white)[#contenu]],
+    align(center + horizon)[#text(size: 8pt, weight: "bold", fill: encre)[#contenu]],
   )
 }
 
@@ -123,23 +123,11 @@
   )),
 )
 
-
-
-#let pastilleIdentifiant(id, niveau) = {
-  let couleur = couleursPastilleRisque.at(niveau, default: rgb("#667892"))
-  box(
-    stroke: 1.5pt + couleur,
-    radius: 20pt,
-    inset: (x: 8pt, y: 5pt),
-    fill: white,
-  )[#text(size: 10pt, weight: "bold", fill: couleur)[#id]]
-}
-
 #let blocRisque(risque) = grid(
   columns: (56pt, 1fr),
   column-gutter: 10pt,
   align: top,
-  pastilleIdentifiant(risque.identifiantNumerique, risque.niveauRisque),
+  pastilleIdentifiantRisque(risque.identifiantNumerique, risque.niveauRisque),
   [
     #text(weight: "bold")[#risque.intitule]
     #v(8pt)
