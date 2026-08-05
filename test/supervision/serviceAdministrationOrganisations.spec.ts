@@ -17,7 +17,6 @@ import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import BusEvenements from '../../src/bus/busEvenements.js';
-import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
@@ -34,12 +33,14 @@ import { EvenementRoleUtilisateurAdministreAttribue } from '../../src/bus/evenem
 import { EvenementAccesUtilisateurAdministreRetires } from '../../src/bus/evenementAccesUtilisateurAdministreRetires.js';
 import { EvenementAdminNommeSurOrganisation } from '../../src/bus/evenementAdminNommeSurOrganisation.ts';
 import { EvenementAdminRetireDeOrganisation } from '../../src/bus/evenementAdminRetireDeOrganisation.ts';
+import { AdaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
 >;
 
 describe("Le service de gestion des admins d'organisation", () => {
+  const idActeurConsoleAdmin = unUUIDRandom();
   const idService = unUUID('s');
   const idService2 = unUUID('s2');
   const idService3 = unUUID('s3');
@@ -55,6 +56,7 @@ describe("Le service de gestion des admins d'organisation", () => {
   let adaptateurPersistance: AdaptateurPersistance;
   let adaptateurPersistanceTS: PersistanceTS;
   let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
+  let adaptateurEnvironnement: AdaptateurEnvironnement;
 
   const unDepotComplet = (surcharge?: Partial<ConfigDepotDonnees>) => {
     adaptateurPersistance = unePersistanceMemoire()
@@ -92,11 +94,17 @@ describe("Le service de gestion des admins d'organisation", () => {
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       adaptateurMail: fabriqueAdaptateurMailMemoire(),
       busEvenements: busEvenements as unknown as BusEvenements,
+      adaptateurEnvironnement,
       ...surcharge,
     });
 
   beforeEach(() => {
     depotComplet = unDepotComplet();
+    adaptateurEnvironnement = {
+      consoleAdmin: () => ({
+        idConsoleAdmin: () => idActeurConsoleAdmin,
+      }),
+    } as AdaptateurEnvironnement;
   });
 
   describe("sur demande de rattachement d'un service à ses admins", () => {
@@ -935,6 +943,17 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(() =>
         service.assignePerimetre(idActeur, idAdmin, ['UN-AUTRE-SIRET'], [])
       ).rejects.toThrow(ErreurEntiteNonAdministre);
+    });
+
+    it("autorise l'id console admin à nommer sans vérification de périmètre", async () => {
+      await expect(
+        service.assignePerimetre(
+          idActeurConsoleAdmin,
+          idAdmin,
+          ['UN-AUTRE-SIRET'],
+          []
+        )
+      ).resolves.not.toThrow();
     });
 
     it("jette une erreur si l'acteur n'est pas admin", async () => {

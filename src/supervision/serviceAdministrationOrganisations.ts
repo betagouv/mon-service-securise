@@ -32,6 +32,7 @@ import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
 import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
 import { EvenementAdminNommeSurOrganisation } from '../bus/evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from '../bus/evenementAdminRetireDeOrganisation.js';
+import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -50,6 +51,7 @@ export class ServiceAdministrationOrganisations {
   private readonly adaptateurUUID: AdaptateurUUID;
   private readonly adaptateurMail: AdaptateurMail;
   private readonly busEvenements: BusEvenements;
+  private readonly adaptateurEnvironnement: AdaptateurEnvironnement;
   private readonly procedureSuppressionContributeurAdmin: ProcedureSuppressionContributeurAdmin;
 
   constructor({
@@ -58,18 +60,21 @@ export class ServiceAdministrationOrganisations {
     adaptateurUUID = fabriqueAdaptateurUUID(),
     adaptateurMail,
     busEvenements,
+    adaptateurEnvironnement,
   }: {
     depotDonnees: DepotDonnees;
     adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
     adaptateurUUID: AdaptateurUUID;
     adaptateurMail: AdaptateurMail;
     busEvenements: BusEvenements;
+    adaptateurEnvironnement: AdaptateurEnvironnement;
   }) {
     this.depotDonnees = depotDonnees;
     this.adaptateurRechercheEntite = adaptateurRechercheEntite;
     this.adaptateurUUID = adaptateurUUID;
     this.adaptateurMail = adaptateurMail;
     this.busEvenements = busEvenements;
+    this.adaptateurEnvironnement = adaptateurEnvironnement;
     this.procedureSuppressionContributeurAdmin =
       new ProcedureSuppressionContributeurAdmin({ depotDonnees });
   }
@@ -382,6 +387,11 @@ export class ServiceAdministrationOrganisations {
   }
 
   private async verifieEntitesAdministrees(idActeur: UUID, sirets: string[]) {
+    if (
+      this.adaptateurEnvironnement.consoleAdmin().idConsoleAdmin() === idActeur
+    )
+      return;
+
     const acteurAdmin = await this.depotDonnees.lisAdminOrganisations(idActeur);
     const acteurSuperviseur = await this.depotDonnees.lisSuperviseur(idActeur);
 

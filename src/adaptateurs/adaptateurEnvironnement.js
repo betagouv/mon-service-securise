@@ -137,9 +137,14 @@ const JWT = () => ({
   secret: () => process.env.SECRET_JWT,
 });
 
+const consoleAdmin = () => ({
+  idConsoleAdmin: () => process.env.GESTION_ORGANISATIONS_ID_CONSOLE_ADMIN,
+});
+
 export {
   baseDeDonnees,
   chiffrement,
+  consoleAdmin,
   crisp,
   emailMemoire,
   featureFlag,

@@ -73,6 +73,7 @@ class ConsoleAdministration {
     this.adaptateurSupervision = fabriqueAdaptateurSupervision();
 
     cableTousLesAbonnes(this.busEvenements, {
+      adaptateurEnvironnement,
       adaptateurHorloge,
       adaptateurTracking,
       adaptateurJournal: this.adaptateurJournalMSS,
@@ -662,15 +663,21 @@ class ConsoleAdministration {
     const serviceAdminOrgas = new ServiceAdministrationOrganisations({
       depotDonnees: this.depotDonnees,
       adaptateurUUID: fabriqueAdaptateurUUID(),
+      adaptateurMail,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
       busEvenements: this.busEvenements,
+      adaptateurEnvironnement,
     });
 
     /* eslint-disable no-restricted-syntax */
     /* eslint-disable no-await-in-loop */
     for (const siret of sirets) {
       console.log(`Ajout du SIRET ${siret}`);
-      await serviceAdminOrgas.nommeAdmin(siret, admin.id, admin.email);
+      await serviceAdminOrgas.nommeAdmin(
+        adaptateurEnvironnement.consoleAdmin().idConsoleAdmin(),
+        siret,
+        admin.id
+      );
     }
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
