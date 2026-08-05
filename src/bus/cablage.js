@@ -81,6 +81,7 @@ import { consigneRisquesV2DansJournal } from './abonnements/consigneRisquesV2Dan
 const cableTousLesAbonnes = (
   busEvenements,
   {
+    adaptateurEnvironnement,
     adaptateurHorloge,
     adaptateurTracking,
     adaptateurJournal,
@@ -106,6 +107,7 @@ const cableTousLesAbonnes = (
       depotDonnees,
       adaptateurRechercheEntite: adaptateurRechercheEntreprise,
       busEvenements,
+      adaptateurEnvironnement,
     });
 
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [

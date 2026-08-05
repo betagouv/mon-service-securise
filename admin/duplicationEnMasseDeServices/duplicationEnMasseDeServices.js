@@ -1,6 +1,7 @@
 import readline from 'readline';
 import papaparse from 'papaparse';
 import * as DepotDonnees from '../../src/depotDonnees.js';
+import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurChiffrement } from '../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
 import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
@@ -112,6 +113,7 @@ class DuplicationEnMasseDeServices {
     });
 
     cableTousLesAbonnes(this.busEvenements, {
+      adaptateurEnvironnement,
       adaptateurHorloge,
       adaptateurTracking,
       adaptateurJournal,

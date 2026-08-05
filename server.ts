@@ -95,6 +95,7 @@ const serviceStatistiquesAdmin = fabriqueServiceStatistiquesAdmin(
 );
 
 cableTousLesAbonnes(busEvenements, {
+  adaptateurEnvironnement,
   adaptateurHorloge,
   adaptateurTracking,
   adaptateurJournal,
@@ -141,6 +142,7 @@ const serviceAdministrationOrganisations =
     adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
     adaptateurMail,
     busEvenements,
+    adaptateurEnvironnement,
   });
 
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
