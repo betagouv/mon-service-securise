@@ -19,34 +19,48 @@
 #let bordBleu     = rgb("#b5c1d2")
 #let orange       = rgb("#faa72c")
 #let orangeClair  = rgb("#fff2de")
-#let vert        = rgb("#4cb963")
-#let rouge       = rgb("#e32630")
-#let vertFonce   = rgb("#0c8626")
-#let rougeClair  = rgb("#ff6584")
 #let grisAxe     = rgb("#cbd5e1")
+#let grisAxeV2 = rgb("#929292")
+#let vertFondRisque = rgb("#fcc63a")
+#let orangeFondRisque = rgb("#7fc04b")
+#let rougeFondRisque = rgb("#fa7659")
+#let vertFondPastilleRisque = rgb("#C9FCAC")
+#let orangeFondPastilleRisque = rgb("#FEEBD0")
+#let rougeFondPastilleRisque = rgb("#FEE9E6")
+#let grisFondPastilleRisque = rgb("#EEEEEE")
+#let vertTextePastilleRisque = rgb("#447049")
+#let orangeTextePastilleRisque = rgb("#695240")
+#let rougeTextePastilleRisque = rgb("#A94645")
+#let grisTextePastilleRisque = rgb("#3A3A3A")
+
 
 #let couleursNiveauRisque = (
-  faible: vert,
-  moyen: orange,
-  eleve: rouge,
+  faible: vertFondRisque,
+  moyen: orangeFondRisque,
+  eleve: rougeFondRisque,
 )
 
-#let couleursPastilleRisque = (
-  faible: vertFonce,
-  moyen: orange,
-  eleve: rougeClair,
+#let couleursFondPastilleRisque = (
+  faible: vertFondPastilleRisque,
+  moyen: orangeFondPastilleRisque,
+  eleve: rougeFondPastilleRisque,
 )
 
-#let vertV2  = rgb("#77b645")
-#let orangeV2 = rgb("#fa7a35")
-#let rougeV2 = rgb("#e1000f")
-#let grisAxeV2 = rgb("#929292")
-
-#let couleursNiveauRisqueV2 = (
-  faible: vertV2,
-  moyen: orangeV2,
-  eleve: rougeV2,
+#let couleursTextePastilleRisque = (
+  faible: vertTextePastilleRisque,
+  moyen: orangeTextePastilleRisque,
+  eleve: rougeTextePastilleRisque,
 )
+
+#let pastilleIdentifiantRisque(id, niveau) = {
+  let couleurFond = couleursFondPastilleRisque.at(niveau, default: grisFondPastilleRisque)
+  let couleurTexte = couleursTextePastilleRisque.at(niveau, default: grisTextePastilleRisque)
+  box(
+    radius: 5pt,
+    inset: (x: 5pt, y: 5pt),
+    fill: couleurFond,
+  )[#text(size: 10pt, weight: "bold", fill: couleurTexte)[#id]]
+}
 
 #let niveauRisqueV2(gravite, vraisemblance) = {
   let niveau = gravite * vraisemblance
