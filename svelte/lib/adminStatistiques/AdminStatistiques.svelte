@@ -175,9 +175,22 @@
   });
 </script>
 
-<h1>Statistiques</h1>
+<div class="entete-statistiques">
+  <h1>Statistiques</h1>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button
+    class="invisible-print"
+    kind="tertiary"
+    label="Télécharger en PDF"
+    icon="file-download-line"
+    has-icon
+    onclick={() => {
+      window.print();
+    }}
+  ></dsfr-button>
+</div>
 {#if statistiques}
-  <div class="conteneur-filtres">
+  <div class="conteneur-filtres invisible-print">
     <lab-anssi-multi-select
       label="Besoins de sécurité"
       options={[
@@ -352,10 +365,22 @@
     background: white;
   }
 
-  h1 {
-    font-size: 2.5rem;
-    line-height: 3rem;
-    margin: 0 0 24px;
+  .entete-statistiques {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+
+    dsfr-button {
+      height: fit-content;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      line-height: 3rem;
+      margin: 0 0 24px;
+    }
   }
 
   .conteneur-filtres {
@@ -465,7 +490,7 @@
 
     :global(#footer),
     :global(lab-anssi-centre-aide),
-    .conteneur-filtres {
+    .invisible-print {
       display: none;
     }
 
