@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Risque } from './risques.d';
+  import { IdentifiantNiveauRisque, type Risque } from './risques.d';
 
   interface Props {
     risque: Risque;
@@ -14,47 +14,30 @@
         })`
       : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`
   );
+
+  export const mappingCouleursDSFR: Record<IdentifiantNiveauRisque, string> = {
+    faible: 'green-bourgeon',
+    moyen: 'yellow-moutarde',
+    eleve: 'pink-macaron',
+    indeterminable: '',
+    negligeable: '',
+  };
 </script>
 
-<span
+<dsfr-badge
   class:inactif={risque.desactive}
-  class={`identifiant-numerique ${risque.niveauRisque || ''}`}
->
-  {libelle}
-</span>
+  label={libelle}
+  type="accent"
+  accent={risque.desactive ? '' : mappingCouleursDSFR[risque.niveauRisque]}
+></dsfr-badge>
 
-<style>
-  .identifiant-numerique {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    display: flex;
-    padding: 1px 8px 3px;
-    align-items: center;
-    gap: 4px;
-    border-radius: 40px;
-    border: 1.5px solid var(--couleur-identifiant-numerique);
-    width: fit-content;
-    color: var(--couleur-identifiant-numerique);
-    background: white;
+<style lang="scss">
+  dsfr-badge {
+    height: fit-content;
     white-space: nowrap;
-    --couleur-identifiant-numerique: var(--role-inconnu-texte);
-  }
 
-  .identifiant-numerique.faible {
-    --couleur-identifiant-numerique: var(--role-personnalise-texte);
-  }
-
-  .identifiant-numerique.moyen {
-    --couleur-identifiant-numerique: var(--role-proprietaire-texte);
-  }
-
-  .identifiant-numerique.eleve {
-    --couleur-identifiant-numerique: var(--rose-anssi);
-  }
-
-  .identifiant-numerique.inactif {
-    --couleur-identifiant-numerique: #f1f5f9;
-    color: #cbd5e1;
+    &.inactif {
+      opacity: 0.5;
+    }
   }
 </style>
