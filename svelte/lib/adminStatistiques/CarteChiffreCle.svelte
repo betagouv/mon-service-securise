@@ -56,4 +56,11 @@
       }
     }
   }
+
+  @media print {
+    .carte-chiffre {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  }
 </style>
