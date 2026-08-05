@@ -148,6 +148,7 @@ section:last-of-type {
   height: 100vh;
   background: #2f3a43b2;
   z-index: 10000;
+  transition: clip-path 0.3s ease-in-out;
 }
 
 #visite-guidee {

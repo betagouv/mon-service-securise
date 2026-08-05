@@ -119,10 +119,6 @@
   );
   let estPremiereSousEtape = $derived(indexEtapeCourante === 0);
 
-  $effect(() => {
-    if (!afficheModale) rideau.style.clipPath = 'none';
-  });
-
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;
     let { left, top, right, bottom } = positionCible;
