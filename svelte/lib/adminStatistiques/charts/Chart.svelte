@@ -77,4 +77,11 @@
       }
     }
   }
+
+  @media print {
+    .graphique {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  }
 </style>

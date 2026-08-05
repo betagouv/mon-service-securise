@@ -456,4 +456,32 @@
       }
     }
   }
+
+  @media print {
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+
+    :global(#footer),
+    :global(lab-anssi-centre-aide),
+    .conteneur-filtres {
+      display: none;
+    }
+
+    :global(#conteneur-admin-statistiques) {
+      background: none;
+      padding: 1cm 0;
+      margin: 0;
+    }
+
+    :global(main) {
+      background: none;
+      margin: 0;
+    }
+
+    :global(body) {
+      zoom: 0.8;
+    }
+  }
 </style>
