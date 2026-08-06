@@ -144,6 +144,8 @@ section:last-of-type {
 
 #visite-guidee-rideau {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: #2f3a43b2;
@@ -153,6 +155,8 @@ section:last-of-type {
 
 #visite-guidee-cadre-blanc {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: #fff;
