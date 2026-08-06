@@ -258,4 +258,8 @@
   :global(body[data-visite-guidee-en-cours] #tiroir) {
     transition: none;
   }
+
+  :global(lab-anssi-centre-aide) {
+    display: none;
+  }
 </style>
