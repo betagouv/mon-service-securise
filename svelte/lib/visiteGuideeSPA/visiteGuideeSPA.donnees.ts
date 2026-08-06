@@ -5,13 +5,20 @@ import type {
 } from './visiteGuideeSPA.d';
 import { tiroirStore } from '../ui/stores/tiroir.store';
 
-const detecteElementHTML = async (selecteur: string): Promise<HTMLElement> => {
+const detecteElementHTML = async (
+  selecteur: string,
+  index = 0
+): Promise<HTMLElement> => {
   return new Promise((resolve) => {
-    const el: HTMLElement | null = document.querySelector(selecteur);
+    const el = document.querySelectorAll(selecteur)[index] as
+      | HTMLElement
+      | undefined;
     if (el) return resolve(el);
 
     const observer = new MutationObserver(() => {
-      const el: HTMLElement | null = document.querySelector(selecteur);
+      const el = document.querySelectorAll(selecteur)[index] as
+        | HTMLElement
+        | undefined;
       if (el) {
         observer.disconnect();
         resolve(el);
@@ -63,11 +70,12 @@ export const donneesEtapesVisiteGuidee: Record<
     titre: "Suivez l'avancement de vos mesures",
     description:
       "Statut, priorité, échéance : vous voyez d'un coup d'œil où en est chaque mesure et ce qui arrive à terme.",
-    ouverture: () => ciblage().securiser().premiereLigneMesure().el(),
+    ouverture: () => ciblage().securiser().deuxiemeLigneMesure().el(),
     callbackAvantOuverture: async () => {
       tiroirStore.ferme();
       await detecteElementHTML(
-        ciblage().securiser().premiereLigneMesure().query()
+        ciblage().securiser().deuxiemeLigneMesure().query(),
+        1
       );
     },
     positionModale: 'bas',

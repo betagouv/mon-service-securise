@@ -94,7 +94,7 @@
 <tr
   class="ligne-de-mesure"
   {@attach cibleDeVisiteGuidee(
-    ciblage().securiser().premiereLigneMesure().id()
+    ciblage().securiser().deuxiemeLigneMesure().id()
   )}
 >
   <td

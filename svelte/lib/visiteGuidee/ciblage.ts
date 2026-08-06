@@ -11,22 +11,22 @@ export const cibleDeVisiteGuidee = (
 };
 
 class CibleVisiteGuidee {
-  constructor(private readonly idCible: string) {}
+  constructor(
+    private readonly idCible: string,
+    private readonly index: number = 0
+  ) {}
 
   public query() {
     return `[data-visite-guidee-id="${this.idCible}"]`;
   }
 
   public el() {
-    return this.enCible(this.query());
+    return document.querySelectorAll(this.query())[this.index] as HTMLElement;
   }
 
   public id() {
     return this.idCible;
   }
-
-  private enCible = (query: string) =>
-    document.querySelector(query) as HTMLElement;
 }
 
 export const ciblage = () => ({
@@ -36,7 +36,7 @@ export const ciblage = () => ({
       new CibleVisiteGuidee(`besoins-securite-${id}`),
   }),
   securiser: () => ({
-    premiereLigneMesure: () => new CibleVisiteGuidee('ligne-de-mesure'),
+    deuxiemeLigneMesure: () => new CibleVisiteGuidee('ligne-de-mesure', 1),
     matriceRisquesV2: () => new CibleVisiteGuidee('matrice-risques-v2'),
     premiereMesure: () => new CibleVisiteGuidee('titre-mesure'),
     onglets: () => new CibleVisiteGuidee('onglets-securiser'),
