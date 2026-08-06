@@ -16,6 +16,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   [
     '/profil',
     '/tableauDeBord',
+    '/visiteGuidee',
     '/visiteGuidee/decrire',
     '/visiteGuidee/mesures',
     '/visiteGuidee/dossiers',

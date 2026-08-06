@@ -1,5 +1,6 @@
 import type { ServiceComplet, ServicePourPagesService } from './pagesService.d';
 import type { VersionService } from '../../../src/modeles/versionService';
+import type { BrouillonServiceV2 } from '../creationV2/creationV2.types';
 
 const service: ServicePourPagesService = {
   id: 'ID-SERVICE-VISITE-GUIDEE',
@@ -7,6 +8,27 @@ const service: ServicePourPagesService = {
   nomService: 'Nom de mon service',
   organisationResponsable: 'Nom de mon entité',
   documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+};
+
+const brouillonComplet: BrouillonServiceV2 = {
+  activitesExternalisees: ['developpementLogiciel'],
+  audienceCible: 'moyenne',
+  categoriesDonneesTraiteesSupplementaires: [],
+  id: 'af64ffdd-fbb0-41ab-8b97-92add8f0dede',
+  dureeDysfonctionnementAcceptable: 'moinsDe4h',
+  localisationDonneesTraitees: 'UE',
+  ouvertureSysteme: 'accessibleSurInternet',
+  pointsAcces: ['uneUrl.com'],
+  specificitesProjet: ['accesPhysiqueAuxBureaux'],
+  typeHebergement: 'cloud',
+  typeService: ['api'],
+  nomService: 'Service A',
+  categoriesDonneesTraitees: ['donneesSensibles'],
+  volumetrieDonneesTraitees: 'moyen',
+  statutDeploiement: 'enCours',
+  presentation: 'Le service A …',
+  niveauSecurite: 'niveau3',
+  siret: '12345',
 };
 
 const serviceComplet: ServiceComplet = {
@@ -127,4 +149,8 @@ const serviceComplet: ServiceComplet = {
   },
 };
 
-export const donneesVisiteGuidee = { service, serviceComplet };
+export const donneesVisiteGuidee = {
+  service,
+  serviceComplet,
+  brouillonComplet,
+};

@@ -171,7 +171,7 @@
 </div>
 
 <style>
-  :global(#tableau-de-bord) {
+  :global(#tableau-de-bord, #visite-guidee-spa) {
     width: 100%;
     padding: 32px 20px;
     text-align: left;
