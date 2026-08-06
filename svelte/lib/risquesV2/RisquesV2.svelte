@@ -28,6 +28,7 @@
     enRisquesCiblesAAfficher,
   } from './matrice/matrice';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { donneesVisiteGuidee } from './donneesVisiteGuidee';
 
   interface Props {
     idService: string;
@@ -39,6 +40,7 @@
     estLectureSeule: boolean;
     avecRisquesV2: boolean;
     versionService: VersionService | undefined;
+    modeVisiteGuidee: boolean;
   }
 
   let {
@@ -51,6 +53,7 @@
     estLectureSeule,
     avecRisquesV2,
     versionService,
+    modeVisiteGuidee,
   }: Props = $props();
 
   let risques: TousRisques = $state({
@@ -66,7 +69,13 @@
   );
 
   onMount(async () => {
-    risques = await api.recupereRisques(idService);
+    if (modeVisiteGuidee) {
+      console.log('modeVisiteGuidee', modeVisiteGuidee);
+      risques = donneesVisiteGuidee.risques;
+    } else {
+      risques = await api.recupereRisques(idService);
+      console.log(risques);
+    }
 
     const url = new URL(window.location.href);
     const idRisque = url.searchParams.get('id');
@@ -299,6 +308,7 @@
   {risques}
   {idService}
   {statuts}
+  {modeVisiteGuidee}
 />
 
 <ModaleAnciensRisques

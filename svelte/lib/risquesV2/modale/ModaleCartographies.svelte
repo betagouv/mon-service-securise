@@ -17,9 +17,10 @@
     risques: TousRisques;
     idService: string;
     statuts: ReferentielStatut;
+    modeVisiteGuidee: boolean;
   }
 
-  let { risques, idService, statuts }: Props = $props();
+  let { risques, idService, statuts, modeVisiteGuidee }: Props = $props();
 
   export const affiche = () => {
     elementModale?.affiche();
@@ -71,6 +72,7 @@
         risques={risques.risques}
         {idService}
         {statuts}
+        {modeVisiteGuidee}
       />
     </div>
   {/snippet}
