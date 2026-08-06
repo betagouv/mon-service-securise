@@ -17,16 +17,23 @@
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { AxiosError } from 'axios';
+  import { donneesVisiteGuidee } from '../pagesService/donneesVisiteGuidees';
 
   interface Props {
     entite: Entite | undefined;
+    modeVisiteGuidee?: boolean;
   }
 
-  let { entite }: Props = $props();
+  let { entite, modeVisiteGuidee = false }: Props = $props();
   let enCoursDeChargement = $state(false);
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
+    if (modeVisiteGuidee) {
+      leBrouillon.chargeDonnees(donneesVisiteGuidee.brouillonComplet);
+      navigationStore.reprendreEditionDe($leBrouillon, false);
+      navigationStore.avanceEtapeBesoinsSecurite();
+    }
     if (requete.has('id')) {
       const idBrouillon = requete.get('id') as UUID;
       const donneesBrouillon = await lisBrouillonService(idBrouillon);
