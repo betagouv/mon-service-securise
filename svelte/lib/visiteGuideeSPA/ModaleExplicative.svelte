@@ -2,61 +2,84 @@
   import type {
     DonneesEtapeVisiteGuidee,
     EtapeVisiteGuidee,
+    PositionModale,
+    RectCible,
   } from './visiteGuideeSPA.d';
   import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
 
   interface Props {
     etape: EtapeVisiteGuidee;
+    rectCible: RectCible | undefined;
+    position: PositionModale;
   }
 
-  let { etape = $bindable() }: Props = $props();
+  let { etape = $bindable(), rectCible, position }: Props = $props();
 
   let donneesEtape: DonneesEtapeVisiteGuidee = $derived(
     donneesEtapesVisiteGuidee[etape]
   );
+  let decalageModale: number = $derived(donneesEtape.decalageModale || 0);
+
+  let elementModale: HTMLElement | undefined = $state();
+
+  $effect(() => {
+    if (!rectCible || !elementModale) return;
+
+    const { width: largeurModale, height: hauteurModale } =
+      elementModale.getBoundingClientRect();
+
+    const { top, left } =
+      position === 'bas'
+        ? {
+            top: rectCible.top - hauteurModale + decalageModale,
+            left: rectCible.left + rectCible.width / 2 - largeurModale / 2,
+          }
+        : {
+            top: rectCible.top + rectCible.height / 2 - hauteurModale / 2,
+            left: rectCible.left - largeurModale + decalageModale,
+          };
+
+    elementModale.style.top = `${top}px`;
+    elementModale.style.left = `${left}px`;
+    elementModale.style.transform = 'none';
+  });
 </script>
 
 <dialog
+  bind:this={elementModale}
   id="modale-visite-guidee"
   class="fr-modal fr-modal--opened"
   aria-labelledby="modale-visite-guidee-title"
   aria-modal="true"
   open
 >
-  <div class="fr-container fr-container--fluid fr-container-md">
-    <div class="fr-grid-row fr-grid-row--center">
-      <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
-        <div class="modal_body">
-          <div class="modal_header">
-            <dsfr-button
-              preset="close"
-              aria-controls="modale-visite-guidee"
-              title="Fermer la visite guidée"
-              >Fermer
-            </dsfr-button>
-          </div>
-          <div class="modal_content">
-            <h2 class="modal_title" id="modale-visite-guidee-title">
-              {donneesEtape.titre}
-            </h2>
-            <div class="conteneur-modale">
-              <div class="etapier">
-                Étape {etape} sur {Object.keys(donneesEtapesVisiteGuidee)
-                  .length}
-              </div>
-              <div>{donneesEtape.description}</div>
-            </div>
-          </div>
-          <div class="modal_footer">
-            <dsfr-button kind="secondary" size="md" onclick={() => (etape -= 1)}
-              >Précédent</dsfr-button
-            >
-            <dsfr-button kind="primary" size="md" onclick={() => (etape += 1)}
-              >Suivant</dsfr-button
-            >
-          </div>
+  <div class="modal_body">
+    <div class="modal_header">
+      <dsfr-button
+        preset="close"
+        aria-controls="modale-visite-guidee"
+        title="Fermer la visite guidée"
+        >Fermer
+      </dsfr-button>
+    </div>
+    <div class="modal_content">
+      <h2 class="modal_title" id="modale-visite-guidee-title">
+        {donneesEtape.titre}
+      </h2>
+      <div class="conteneur-modale">
+        <div class="etapier">
+          Étape {etape} sur {Object.keys(donneesEtapesVisiteGuidee).length}
         </div>
+        <div>{donneesEtape.description}</div>
       </div>
+    </div>
+    <div class="modal_footer">
+      <dsfr-button kind="secondary" size="md" onclick={() => (etape -= 1)}
+        >Précédent</dsfr-button
+      >
+      <dsfr-button kind="primary" size="md" onclick={() => (etape += 1)}
+        >Suivant</dsfr-button
+      >
     </div>
   </div>
 </dialog>
@@ -65,6 +88,7 @@
   dialog {
     z-index: 10000;
     background: none;
+    box-shadow: 0 6px 18px 0 rgba(0, 0, 18, 0.16);
   }
 
   .fr-modal {
@@ -73,24 +97,20 @@
     color: inherit;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: space-between;
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     visibility: inherit;
     opacity: 1;
     transition:
       opacity 0.3s,
-      visibility 0.3s;
+      visibility 0.3s,
+      top 0.3s ease-in-out,
+      left 0.3s ease-in-out;
   }
 
   .modal_body {
-    flex: 1 1 auto;
     background-color: var(--background-lifted-grey);
     max-height: 80vh;
   }

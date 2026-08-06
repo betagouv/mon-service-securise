@@ -4,6 +4,7 @@
     DonneesEtapeVisiteGuidee,
     EtapeVisiteGuidee,
     PageFondVisiteGuidee,
+    RectCible,
     VisiteGuideeSPAProps,
   } from './visiteGuideeSPA.d';
   import AssistantServiceV2 from '../creationV2/AssistantServiceV2.svelte';
@@ -21,6 +22,7 @@
   let pageFondVisiteGuidee: PageFondVisiteGuidee = $derived(
     donneesEtape.pageFond
   );
+  let rectCible: RectCible | undefined = $state();
   const rideau = $state(document.getElementById('visite-guidee-rideau')!);
   const cadreBlanc = $state(
     document.getElementById('visite-guidee-cadre-blanc')!
@@ -70,27 +72,9 @@
     );
   };
 
-  const attendStabiliteDefilement = (essaisRestants = 120): Promise<void> =>
-    new Promise((resolve) => {
-      const precedent = window.scrollY;
-      requestAnimationFrame(() => {
-        const actuel = window.scrollY;
-        if (actuel === precedent || essaisRestants <= 0) {
-          resolve();
-        } else {
-          resolve(attendStabiliteDefilement(essaisRestants - 1));
-        }
-      });
-    });
-
-  const attendFinDuScroll = async (declencheScroll: () => void) => {
-    declencheScroll();
-    await attendStabiliteDefilement();
-  };
-
-  const scrolleSansBloquerLeCorps = async (declencheScroll: () => void) => {
+  const scrolleSansBloquerLeCorps = (declencheScroll: () => void) => {
     degeleDefilementDuCorps();
-    await attendFinDuScroll(declencheScroll);
+    declencheScroll();
     geleDefilementDuCorps();
   };
 
@@ -178,24 +162,30 @@
       const ouverture = donneesEtape.ouverture();
       if (seraitEntierementVisibleEnHautDePage(ouverture)) {
         if (defilementActuel() !== 0) {
-          await scrolleSansBloquerLeCorps(() =>
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+          scrolleSansBloquerLeCorps(() =>
+            window.scrollTo({ top: 0, behavior: 'instant' })
           );
         }
       } else if (!estEntierementVisible(ouverture)) {
-        await scrolleSansBloquerLeCorps(() =>
-          ouverture.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        scrolleSansBloquerLeCorps(() =>
+          ouverture.scrollIntoView({ behavior: 'instant', block: 'center' })
         );
       }
       const restaureTransition = desactiveTransition(ouverture);
       await attendStabiliteRect(ouverture);
       calculeDecoupe(ouverture, donneesEtape.decoupe ?? decoupeParDefaut);
+      const { top, left, width, height } = ouverture.getBoundingClientRect();
+      rectCible = { top, left, width, height };
       restaureTransition();
     })();
   });
 </script>
 
-<ModaleExplicative bind:etape={etapeVisiteGuidee} />
+<ModaleExplicative
+  bind:etape={etapeVisiteGuidee}
+  {rectCible}
+  position={donneesEtape.positionModale}
+/>
 
 <div>
   {#if pageFondVisiteGuidee === 'creationV2'}
