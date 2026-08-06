@@ -3,7 +3,7 @@
     DonneesEtapeVisiteGuidee,
     EtapeVisiteGuidee,
   } from './visiteGuideeSPA.d';
-  import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.d';
+  import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
 
   interface Props {
     etape: EtapeVisiteGuidee;

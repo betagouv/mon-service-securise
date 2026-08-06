@@ -151,6 +151,16 @@ section:last-of-type {
   transition: clip-path 0.3s ease-in-out;
 }
 
+#visite-guidee-cadre-blanc {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 9999;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.3s ease-in-out;
+}
+
 #visite-guidee {
   z-index: 10002;
   position: fixed;
