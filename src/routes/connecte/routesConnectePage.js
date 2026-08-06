@@ -81,6 +81,15 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/visiteGuidee',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    (_requete, reponse) => {
+      reponse.render('visiteGuidee/spa', { referentiel });
+    }
+  );
+
+  routes.get(
     '/visiteGuidee/:idEtape',
     middleware.verificationAcceptationCGU,
     middleware.chargeExplicationNouveauReferentiel,

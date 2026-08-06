@@ -97,9 +97,13 @@
     await rafraichisServiceComplet();
   });
 
+  let pageActive = $derived(
+    props.modeVisiteGuidee ? props.etapeActive : $pageCourante
+  );
+
   let propsDuComposant = $derived.by(() =>
     propsPourPage(
-      $pageCourante,
+      pageActive,
       props,
       service,
       descriptionService,
@@ -154,11 +158,11 @@
         idService={props.idService}
         visible={props.visible}
         modeVisiteGuidee={props.modeVisiteGuidee}
-        etapeActive={$pageCourante}
+        etapeActive={pageActive}
       />
       <div class="conteneur-page">
         {#key $routeurStore.location}
-          {@const donneesPage = metadonneesPages[$pageCourante]}
+          {@const donneesPage = metadonneesPages[pageActive]}
           {@const Composant = donneesPage?.composant}
           {#if $afficheTitrePageServiceStore}
             <h1>

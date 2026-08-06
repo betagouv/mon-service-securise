@@ -1,0 +1,40 @@
+extends ../mssConnecte
+
+block title
+  title Visite guidée | MonServiceSécurisé
+
+block append scripts
+  +composantSvelte('visiteGuideeSPA.js')
+  script(type = 'module', src = '/statique/visiteGuideeSPA.mjs')
+  +donneesPartagees('referentiel', {
+    indiceCyber: {
+      noteMax: referentiel.indiceCyberNoteMax()
+    },
+    mesures: {
+      categories: referentiel.categoriesMesures(),
+      priorites: referentiel.prioritesMesures(),
+      statuts: referentiel.statutsMesures(),
+      retoursUtilisateur: referentiel.retoursUtilisateurMesure()
+    },
+    risques: {
+      categories: referentiel.detailCategoriesRisque(),
+      gravites: referentiel.niveauxGravite(),
+      vraisemblances: referentiel.niveauxVraisemblance(),
+      descriptions: referentiel.risques(),
+      matrice: referentiel.matriceNiveauxRisques(),
+      niveaux: referentiel.niveauxRisque()
+    },
+    dossiers: {
+      statutsHomologation: referentiel.statutsHomologation(),
+      etapesParcoursHomologation: referentiel.etapesParcoursHomologation(true),
+      statutsAvisDossierHomologation: referentiel.statutsAvisDossierHomologation(),
+      echeancesRenouvellement: referentiel.echeancesRenouvellement(),
+    }
+  })
+  +donneesPartagees('feature-flags', {avecRisquesV2: featureFlags.avecRisquesV2})
+  +donneesPartagees('nonce-commentaires', nonce)
+  +donneesPartagees('autorisations-service', autorisationsService)
+
+
+block main
+  #visite-guidee-spa
