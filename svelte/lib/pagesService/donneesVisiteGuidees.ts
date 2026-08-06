@@ -11,23 +11,23 @@ const service: ServicePourPagesService = {
 };
 
 const brouillonComplet: BrouillonServiceV2 = {
-  activitesExternalisees: ['developpementLogiciel'],
-  audienceCible: 'moyenne',
+  activitesExternalisees: [],
+  audienceCible: 'limitee',
   categoriesDonneesTraiteesSupplementaires: [],
   id: 'af64ffdd-fbb0-41ab-8b97-92add8f0dede',
-  dureeDysfonctionnementAcceptable: 'moinsDe4h',
+  dureeDysfonctionnementAcceptable: 'plusDe24h',
   localisationDonneesTraitees: 'UE',
-  ouvertureSysteme: 'accessibleSurInternet',
+  ouvertureSysteme: 'interne',
   pointsAcces: ['uneUrl.com'],
-  specificitesProjet: ['accesPhysiqueAuxBureaux'],
+  specificitesProjet: [],
   typeHebergement: 'cloud',
   typeService: ['api'],
   nomService: 'Service A',
-  categoriesDonneesTraitees: ['donneesSensibles'],
-  volumetrieDonneesTraitees: 'moyen',
+  categoriesDonneesTraitees: [],
+  volumetrieDonneesTraitees: 'faible',
   statutDeploiement: 'enCours',
   presentation: 'Le service A …',
-  niveauSecurite: 'niveau3',
+  niveauSecurite: 'niveau1',
   siret: '12345',
 };
 
