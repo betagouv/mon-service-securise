@@ -38,6 +38,8 @@ export const donneesEtapesVisiteGuidee: Record<
       );
     },
     ouverture: () => ciblage().decrireV2().besoinsSecurite('niveau1').el(),
+    positionModale: 'bas',
+    decalageModale: 14,
   },
   2: {
     pageFond: 'mesures',
@@ -53,6 +55,8 @@ export const donneesEtapesVisiteGuidee: Record<
     },
     ouverture: () => ciblage().tiroir().el(),
     decoupe: { marge: 0, rayon: 0 },
+    positionModale: 'droite',
+    decalageModale: 24,
   },
   3: {
     pageFond: 'mesures',
@@ -66,6 +70,8 @@ export const donneesEtapesVisiteGuidee: Record<
         ciblage().securiser().premiereLigneMesure().query()
       );
     },
+    positionModale: 'bas',
+    decalageModale: 14,
   },
   4: {
     pageFond: 'risques',
@@ -78,5 +84,7 @@ export const donneesEtapesVisiteGuidee: Record<
         ciblage().securiser().matriceRisquesV2().query()
       );
     },
+    positionModale: 'droite',
+    decalageModale: 160,
   },
 };

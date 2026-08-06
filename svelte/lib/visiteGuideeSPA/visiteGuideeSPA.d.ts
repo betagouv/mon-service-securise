@@ -29,6 +29,15 @@ export type DecoupeVisiteGuidee = {
   rayon: number;
 };
 
+export type PositionModale = 'bas' | 'droite';
+
+export type RectCible = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+};
+
 export type DonneesEtapeVisiteGuidee = {
   pageFond: PageFondVisiteGuidee;
   titre: string;
@@ -36,5 +45,7 @@ export type DonneesEtapeVisiteGuidee = {
   ouverture: () => HTMLElement;
   callbackAvantOuverture?: () => Promise<void>;
   decoupe?: DecoupeVisiteGuidee;
+  positionModale: PositionModale;
+  decalageModale?: number;
   tiroirOuvert?: TiroirTeleversementServicesV2 | Mesure;
 };
