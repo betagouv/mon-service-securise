@@ -36,6 +36,8 @@ export const ciblage = () => ({
       new CibleVisiteGuidee(`besoins-securite-${id}`),
   }),
   securiser: () => ({
+    premiereLigneMesure: () => new CibleVisiteGuidee('ligne-de-mesure'),
+    matriceRisquesV2: () => new CibleVisiteGuidee('matrice-risques-v2'),
     premiereMesure: () => new CibleVisiteGuidee('titre-mesure'),
     onglets: () => new CibleVisiteGuidee('onglets-securiser'),
     gererContributeurs: () => new CibleVisiteGuidee('gerer-contributeurs'),

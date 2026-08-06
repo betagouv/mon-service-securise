@@ -91,7 +91,12 @@
   );
 </script>
 
-<tr class="ligne-de-mesure">
+<tr
+  class="ligne-de-mesure"
+  {@attach cibleDeVisiteGuidee(
+    ciblage().securiser().premiereLigneMesure().id()
+  )}
+>
   <td
     class="titre-mesure"
     {@attach cibleDeVisiteGuidee(ciblage().securiser().premiereMesure().id())}
