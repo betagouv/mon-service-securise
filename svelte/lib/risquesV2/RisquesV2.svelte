@@ -27,6 +27,7 @@
     enRisquesBrutsAAfficher,
     enRisquesCiblesAAfficher,
   } from './matrice/matrice';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   interface Props {
     idService: string;
@@ -130,7 +131,10 @@
   </span>
 </div>
 
-<div class="conteneur">
+<div
+  class="conteneur"
+  {@attach cibleDeVisiteGuidee(ciblage().securiser().matriceRisquesV2().id())}
+>
   <div class="entete">
     <h2>Cartographie des risques usuels</h2>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
