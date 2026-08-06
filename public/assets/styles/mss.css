@@ -144,14 +144,29 @@ section:last-of-type {
 
 #visite-guidee-rideau {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: #2f3a43b2;
   z-index: 10000;
+  transition: clip-path 0.3s ease-in-out;
+}
+
+#visite-guidee-cadre-blanc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 9999;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.3s ease-in-out;
 }
 
 #visite-guidee {
-  z-index: 10001;
+  z-index: 10002;
   position: fixed;
 }
 

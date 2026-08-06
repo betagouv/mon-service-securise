@@ -36,6 +36,27 @@
   let sousEtape: SousEtape | undefined = $state();
   let afficheModale = $state(true);
 
+  const estEntierementVisibleDansHautPage = (element: Element) => {
+    const position = element.getBoundingClientRect();
+    return position.top >= 0 && position.bottom <= window.innerHeight * 0.7;
+  };
+
+  const attendFinDuScroll = (declencheScroll: () => void) =>
+    new Promise<void>((resolve) => {
+      let resolu = false;
+      const termine = () => {
+        if (resolu) return;
+        resolu = true;
+        window.removeEventListener('scrollend', termine);
+        resolve();
+      };
+
+      window.addEventListener('scrollend', termine, { once: true });
+      setTimeout(termine, 500);
+
+      declencheScroll();
+    });
+
   const afficheEtape = async (index: number) => {
     afficheModale = false;
     await sousEtape?.callbackFinaleCible?.(sousEtape.cible);
@@ -46,6 +67,24 @@
       sousEtape.cible
     );
     if (nouvelleCible) sousEtape.cible = nouvelleCible;
+
+    if (window.scrollY !== 0) {
+      await attendFinDuScroll(() =>
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      );
+    }
+
+    if (
+      sousEtape.cible &&
+      !estEntierementVisibleDansHautPage(sousEtape.cible)
+    ) {
+      await attendFinDuScroll(() =>
+        sousEtape?.cible?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      );
+    }
 
     setTimeout(() => {
       if (!sousEtape) return;
@@ -79,10 +118,6 @@
     indexEtapeCourante === sousEtapes.length - 1
   );
   let estPremiereSousEtape = $derived(indexEtapeCourante === 0);
-
-  $effect(() => {
-    if (!afficheModale) rideau.style.clipPath = 'none';
-  });
 
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;

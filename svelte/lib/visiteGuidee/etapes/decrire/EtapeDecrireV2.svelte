@@ -61,7 +61,6 @@
         await detecteElementHTML(ciblage().decrireV2().nomService().query());
         await detecteElementADisparu('#niveaux-securite');
         cibleNomService = ciblage().decrireV2().nomService().el();
-        cibleNomService.scrollIntoView({ behavior: 'instant' });
         return cibleNomService;
       },
       positionnementModale: 'MilieuDroite',
@@ -78,10 +77,6 @@
         cibleBesoinsSecurite = await detecteElementHTML(
           ciblage().decrireV2().besoinsSecurite('niveau1').query()
         );
-        cibleBesoinsSecurite.scrollIntoView({
-          behavior: 'instant',
-          block: 'end',
-        });
         return cibleBesoinsSecurite;
       },
       positionnementModale: 'HautMilieu',

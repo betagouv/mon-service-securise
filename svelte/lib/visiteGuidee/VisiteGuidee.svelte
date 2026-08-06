@@ -21,4 +21,8 @@
   :global(body[data-visite-guidee-en-cours] #visite-guidee-menu-navigation) {
     pointer-events: auto;
   }
+
+  :global(body[data-visite-guidee-en-cours] #tiroir) {
+    transition: none;
+  }
 </style>
