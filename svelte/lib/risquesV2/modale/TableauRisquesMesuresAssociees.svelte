@@ -12,17 +12,20 @@
     risques: Risque[];
     idService: string;
     statuts: ReferentielStatut;
+    modeVisiteGuidee: boolean;
   }
 
-  let { risques, idService, statuts }: Props = $props();
+  let { risques, idService, statuts, modeVisiteGuidee }: Props = $props();
 
   let mesures: MesuresAssocieesARisque['mesuresGenerales'] = $state({});
 
   onMount(async () => {
-    const resultat = await axios.get<MesuresAssocieesARisque>(
-      `/api/service/${idService}/mesures`
-    );
-    mesures = resultat.data?.mesuresGenerales;
+    if (!modeVisiteGuidee) {
+      const resultat = await axios.get<MesuresAssocieesARisque>(
+        `/api/service/${idService}/mesures`
+      );
+      mesures = resultat.data?.mesuresGenerales;
+    }
   });
 
   let risquesReplies = new SvelteSet<string>();

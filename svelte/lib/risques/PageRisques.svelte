@@ -29,6 +29,7 @@
     statuts: ReferentielStatut;
     avecRisquesV2: boolean;
     versionService: VersionService | undefined;
+    modeVisiteGuidee?: boolean;
   }
 
   let {
@@ -45,6 +46,7 @@
     visible,
     versionService,
     avecRisquesV2,
+    modeVisiteGuidee = false,
   }: Props = $props();
 </script>
 
@@ -59,6 +61,7 @@
     {estLectureSeule}
     {avecRisquesV2}
     {versionService}
+    {modeVisiteGuidee}
   />
 {:else}
   <RisquesV1
