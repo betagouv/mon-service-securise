@@ -1,23 +1,17 @@
 import Knex from 'knex';
 import * as uuid from 'uuid';
-import { journalMSS } from './adaptateurEnvironnement.js';
 import {
   AdaptateurJournalMSS,
   EvenementJournal,
   EvolutionMensuelle,
 } from './adaptateurJournalMSS.interface.js';
+import { knexJournalMSS } from '../bdd/knexJournal.js';
 
 export class AdaptateurJournalMSSPostgres implements AdaptateurJournalMSS {
   private readonly knex: Knex.Knex;
 
   constructor(knex?: Knex.Knex) {
-    this.knex =
-      knex ??
-      Knex({
-        client: 'pg',
-        connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-        pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
-      });
+    this.knex = knex ?? knexJournalMSS;
   }
 
   private async evolutionCumuleeParGroupe(
