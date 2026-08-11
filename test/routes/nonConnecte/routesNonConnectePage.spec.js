@@ -418,10 +418,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       testeur.adaptateurStatistiques().recupereStatistiques = async () => {
         adaptateurAppele = true;
         return {
-          utilisateurs: { nombre: 0, progression: 0 },
-          services: { nombre: 0, progression: 0 },
-          vulnerabilites: { nombre: 0, progression: 0 },
-          indiceCyber: { nombre: 0, progression: 0 },
+          utilisateurs: { nombre: 0 },
+          services: { nombre: 0 },
+          vulnerabilites: { nombre: 0 },
         };
       };
 
