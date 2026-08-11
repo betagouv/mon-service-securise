@@ -25,6 +25,12 @@ describe("L'adaptateur de statistiques publiques Postgres", () => {
     await knexJournal.schema.createSchema('journal_mss');
     await knexJournal.schema
       .withSchema('journal_mss')
+      .createTable('evenements', (table) => {
+        table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
+        table.timestamp('date');
+        table.text('type');
+        table.jsonb('donnees');
+      })
       .createTable('donnees_statuts_des_mesures', (table) => {
         table.text('id_service');
         table.text('id_mesure');
@@ -53,10 +59,21 @@ describe("L'adaptateur de statistiques publiques Postgres", () => {
     await knexJournal.destroy();
   });
 
-  const ajouteUnUtilisateur = async () =>
-    trx('utilisateurs').insert({
-      id: unUUIDRandom(),
+  const inscrisUnUtilisateur = async (avecAcceptationCGU = true) => {
+    const idUtilisateur = unUUIDRandom();
+
+    await trxJournal('journal_mss.evenements').insert({
+      date: new Date(),
+      type: 'NOUVEL_UTILISATEUR_INSCRIT',
+      donnees: { idUtilisateur },
     });
+    if (avecAcceptationCGU)
+      await trxJournal('journal_mss.evenements').insert({
+        date: new Date(),
+        type: 'CGU_ACCEPTEES',
+        donnees: { idUtilisateur },
+      });
+  };
 
   const ajouteUnService = async () =>
     trx('services').insert({
@@ -73,13 +90,24 @@ describe("L'adaptateur de statistiques publiques Postgres", () => {
       version_service: 'v2',
     });
 
-  it("sait donner le nombre d'utilisateurs", async () => {
-    await ajouteUnUtilisateur();
-    await ajouteUnUtilisateur();
+  describe("concernant le nombre d'utilisateurs", () => {
+    it("sait donner le nombre total d'inscription", async () => {
+      await inscrisUnUtilisateur();
+      await inscrisUnUtilisateur();
 
-    const resultat = await adaptateur.recupereStatistiques();
+      const resultat = await adaptateur.recupereStatistiques();
 
-    expect(resultat.utilisateurs.nombre).toBe(2);
+      expect(resultat.utilisateurs.nombre).toBe(2);
+    });
+
+    it('ne considère que les utilisateurs ayants accepté les CGU', async () => {
+      await inscrisUnUtilisateur();
+      await inscrisUnUtilisateur(false);
+
+      const resultat = await adaptateur.recupereStatistiques();
+
+      expect(resultat.utilisateurs.nombre).toBe(1);
+    });
   });
 
   it('sait donner le nombre de services', async () => {

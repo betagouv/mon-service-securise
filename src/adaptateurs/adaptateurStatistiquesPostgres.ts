@@ -20,8 +20,28 @@ export class AdaptateurStatistiquesPostgres implements AdaptateurStatistiques {
   }
 
   private async nombreUtilisateurs(): Promise<NombrePourStatistiquesPubliques> {
+    const idUtilisateur = this.knexJournal.raw("donnees->>'idUtilisateur'");
+
+    const inscriptions = this.knexJournal('journal_mss.evenements')
+      .select({ idUtilisateur })
+      .where('type', 'NOUVEL_UTILISATEUR_INSCRIT')
+      .as('creation');
+
+    const acceptationsCGU = this.knexJournal('journal_mss.evenements')
+      .select({ idUtilisateur })
+      .where('type', 'CGU_ACCEPTEES')
+      .groupBy(idUtilisateur)
+      .as('acceptation');
+
     return (
-      await this.knex('utilisateurs').count('* as nombre')
+      await this.knexJournal
+        .from(inscriptions)
+        .innerJoin(
+          acceptationsCGU,
+          'creation.idUtilisateur',
+          'acceptation.idUtilisateur'
+        )
+        .count('* as nombre')
     )[0] as NombrePourStatistiquesPubliques;
   }
 
