@@ -1,11 +1,11 @@
-type Nombre = {
+export type NombrePourStatistiquesPubliques = {
   nombre: number;
 };
 
 type StatistiquesPubliques = {
-  utilisateurs: Nombre;
-  services: Nombre;
-  vulnerabilites: Nombre;
+  utilisateurs: NombrePourStatistiquesPubliques;
+  services: NombrePourStatistiquesPubliques;
+  vulnerabilites: NombrePourStatistiquesPubliques;
 };
 
 export interface AdaptateurStatistiques {
