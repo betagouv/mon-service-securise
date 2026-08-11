@@ -1,3 +1,13 @@
-import * as adaptateurStatistiquesMetabase from './adaptateurStatistiquesMetabase.js';
+type Nombre = {
+  nombre: number;
+};
 
-export type AdaptateurStatistiques = typeof adaptateurStatistiquesMetabase;
+type StatistiquesPubliques = {
+  utilisateurs: Nombre;
+  services: Nombre;
+  vulnerabilites: Nombre;
+};
+
+export interface AdaptateurStatistiques {
+  recupereStatistiques: () => Promise<StatistiquesPubliques>;
+}

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AdaptateurStatistiques } from './adaptateurStatistiques.interface.js';
 
 const enteteJSON = {
   headers: {
@@ -17,9 +18,6 @@ const recupereResultat = async (idQuestion: string) => {
   );
   return {
     nombre: parseInt(resultat.data.data.insights[0]['last-value'], 10),
-    progression: (
-      parseFloat(resultat.data.data.insights[0]['last-change']) * 100.0
-    ).toFixed(1),
   };
 };
 
@@ -38,8 +36,9 @@ const recupereStatistiques = async () => {
     utilisateurs,
     services,
     vulnerabilites,
-    indiceCyber: { nombre: '58%' },
   };
 };
 
-export { recupereStatistiques };
+export const adaptateurStatistiquesMetabase: AdaptateurStatistiques = {
+  recupereStatistiques,
+};
