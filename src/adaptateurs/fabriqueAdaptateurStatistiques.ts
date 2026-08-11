@@ -1,9 +1,15 @@
-import { adaptateurStatistiquesMetabase } from './adaptateurStatistiquesMetabase.js';
+import { AdaptateurStatistiquesPostgres } from './adaptateurStatistiquesPostgres.js';
+import { knexMSS } from '../bdd/knex.js';
+import { knexJournalMSS } from '../bdd/knexJournal.js';
 import { adaptateurStatistiquesMemoire } from './adaptateurStatistiquesMemoire.js';
 
 const fabriqueAdaptateurStatistiques = () =>
-  process.env.METABASE_API_KEY && process.env.STATISTIQUES_DOMAINE_METABASE_MSS
-    ? adaptateurStatistiquesMetabase
+  process.env.STATISTIQUES_PUBLIQUES_TYPE_ADAPTATEUR?.toLowerCase().trim() ===
+  'postgres'
+    ? new AdaptateurStatistiquesPostgres({
+        knex: knexMSS,
+        knexJournal: knexJournalMSS,
+      })
     : adaptateurStatistiquesMemoire;
 
 export default fabriqueAdaptateurStatistiques;
