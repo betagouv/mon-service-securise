@@ -70,11 +70,9 @@
 
   onMount(async () => {
     if (modeVisiteGuidee) {
-      console.log('modeVisiteGuidee', modeVisiteGuidee);
       risques = donneesVisiteGuidee.risques;
     } else {
       risques = await api.recupereRisques(idService);
-      console.log(risques);
     }
 
     const url = new URL(window.location.href);
