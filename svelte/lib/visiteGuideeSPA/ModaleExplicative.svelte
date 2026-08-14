@@ -74,12 +74,15 @@
       </div>
     </div>
     <div class="modal_footer">
-      <dsfr-button kind="secondary" size="md" onclick={() => (etape -= 1)}
-        >Précédent</dsfr-button
-      >
-      <dsfr-button kind="primary" size="md" onclick={() => (etape += 1)}
-        >Suivant</dsfr-button
-      >
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button kind="secondary" size="md" onclick={() => (etape -= 1)}>
+        Précédent
+      </dsfr-button>
+
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button kind="primary" size="md" onclick={() => (etape += 1)}>
+        Suivant
+      </dsfr-button>
     </div>
   </div>
 </dialog>
