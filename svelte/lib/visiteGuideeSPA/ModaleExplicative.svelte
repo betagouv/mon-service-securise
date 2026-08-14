@@ -75,7 +75,12 @@
     </div>
     <div class="modal_footer">
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button kind="secondary" size="md" onclick={() => (etape -= 1)}>
+      <dsfr-button
+        kind="secondary"
+        size="md"
+        onclick={() => (etape -= 1)}
+        disabled={etape === 1}
+      >
         Précédent
       </dsfr-button>
 
