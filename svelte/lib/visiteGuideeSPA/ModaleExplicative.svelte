@@ -55,10 +55,12 @@
 >
   <div class="modal_body">
     <div class="modal_header">
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
         preset="close"
         aria-controls="modale-visite-guidee"
         title="Fermer la visite guidée"
+        onclick={() => (window.location.href = '/tableauDeBord')}
         >Fermer
       </dsfr-button>
     </div>
