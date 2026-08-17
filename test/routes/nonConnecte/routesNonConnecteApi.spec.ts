@@ -557,17 +557,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("vérifie l'adresse IP de la requête", async () => {
+      // Voir dans testeurMSS pour la définition en dur de l'IP.
       await testeur
         .middleware()
-        .verifieAdresseIP(
-          ['1.179.112.0/20', '172.246.240.0/20'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/desinscriptionInfolettre',
-            data: donneesRequete,
-          }
-        );
+        .verifieAdresseIP(['1.2.3.4/20'], testeur.app(), {
+          method: 'post',
+          url: '/api/desinscriptionInfolettre',
+          data: donneesRequete,
+        });
     });
 
     it("désabonne l'utilisateur des mails marketing", async () => {

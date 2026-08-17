@@ -131,6 +131,9 @@ const testeurMss = () => {
         avecGestionDesOrganisations: () => true,
       }),
       oidc: () => ({ fournisseursAvecMFA: () => [] }),
+      sendinblue: () => ({
+        adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
+      }),
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),

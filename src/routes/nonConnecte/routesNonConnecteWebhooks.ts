@@ -3,13 +3,16 @@ import { valideBody } from '../../http/validePayloads.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { schemaPostConsentementPixelDeSuivi } from './routesNonConnecteWebhooks.schema.js';
+import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 
 /* eslint-disable no-underscore-dangle */
 
 const routesNonConnecteWebhooks = ({
+  adaptateurEnvironnement,
   middleware,
   depotDonnees,
 }: {
+  adaptateurEnvironnement: AdaptateurEnvironnement;
   middleware: Middleware;
   depotDonnees: DepotDonnees;
 }) => {
@@ -17,7 +20,9 @@ const routesNonConnecteWebhooks = ({
 
   routes.post(
     '/updateConsentementPixelDeSuivi',
-    middleware.verificationAddresseIP(['1.179.112.0/20', '172.246.240.0/20']),
+    middleware.verificationAddresseIP(
+      adaptateurEnvironnement.sendinblue().adressesIpAppelantNosWebhooks()
+    ),
     valideBody(schemaPostConsentementPixelDeSuivi),
     async (requete, reponse) => {
       const { email } = requete.body;
