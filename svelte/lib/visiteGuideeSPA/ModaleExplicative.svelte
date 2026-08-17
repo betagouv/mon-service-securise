@@ -6,6 +6,7 @@
     RectCible,
   } from './visiteGuideeSPA.d';
   import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
+  import { termineVisiteGuidee } from './visiteGuidee.api';
 
   interface Props {
     etape: EtapeVisiteGuidee;
@@ -43,6 +44,11 @@
     elementModale.style.left = `${left}px`;
     elementModale.style.transform = 'none';
   });
+
+  const ferme = async () => {
+    await termineVisiteGuidee();
+    window.location.href = '/tableauDeBord';
+  };
 </script>
 
 <dialog
@@ -60,7 +66,7 @@
         preset="close"
         aria-controls="modale-visite-guidee"
         title="Fermer la visite guidée"
-        onclick={() => (window.location.href = '/tableauDeBord')}
+        onclick={() => ferme()}
         >Fermer
       </dsfr-button>
     </div>
