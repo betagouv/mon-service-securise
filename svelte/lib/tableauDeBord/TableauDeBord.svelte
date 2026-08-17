@@ -32,6 +32,7 @@
     modeVisiteGuidee: boolean;
     profilUtilisateurComplet?: boolean;
     prenomNom?: string;
+    aDejaVuEntierementVisiteGuidee: boolean;
   }
 
   let {
@@ -41,6 +42,7 @@
     modeVisiteGuidee,
     prenomNom,
     profilUtilisateurComplet = true,
+    aDejaVuEntierementVisiteGuidee,
   }: Props = $props();
 
   let enCoursChargement = $state(true);
@@ -141,6 +143,7 @@
   bind:estOuverte={avecModaleAccueilVisiteGuidee}
   {prenomNom}
   {profilUtilisateurComplet}
+  {aDejaVuEntierementVisiteGuidee}
 />
 
 <svelte:body

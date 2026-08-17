@@ -12,6 +12,7 @@ export type TableauDeBordProps = {
   modeVisiteGuidee: boolean;
   profilUtilisateurComplet?: boolean;
   prenomNom?: string;
+  aDejaVuEntierementVisiteGuidee: boolean;
 };
 
 type Contributeur = {
