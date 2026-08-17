@@ -52,24 +52,48 @@ describe('Les routes non connectées des webhooks', () => {
         });
     });
 
-    it("ne fait rien et renvoie une 204 s'il ne s'agit pas d'une mise à jour du pixel de suivi", async () => {
-      let miseAJourFaite = false;
-      testeur.depotDonnees().metsAJourUtilisateur = async () => {
-        miseAJourFaite = true;
-      };
+    it.each([
+      // Changement de numéro de téléphone
+      {
+        event: 'contact_updated',
+        email: 'jean.dujardin@beta.gouv.fr',
+        content: [
+          {
+            email: 'jean.dujardin@beta.gouv.fr',
+            attributes: { work_phone: '0102030405' },
+          },
+        ],
+      },
+      // Changement d'une liste de diffusion
+      {
+        event: 'contact_updated',
+        content: { emails: ['jean.dujardin@brevo.fr'], link_list_ids: [41] },
+      },
+      // Changement de la préférence blacklist
+      {
+        event: 'contact_updated',
+        email: 'jean.dujardin@beta.gouv.fr',
+        content: [
+          { email: 'jean.dujardin@beta.gouv.fr', emailBlacklist: true },
+        ],
+      },
+    ])(
+      "ne fait rien et renvoie une 204 s'il ne s'agit pas d'une mise à jour du pixel de suivi",
+      async (payloadBrevo) => {
+        let miseAJourFaite = false;
+        testeur.depotDonnees().metsAJourUtilisateur = async () => {
+          miseAJourFaite = true;
+        };
 
-      const bodyPourAutreDonnee = bodyBrevo();
-      // @ts-expect-error On force un autre attribut
-      bodyPourAutreDonnee.content[0].attributes = { work_phone: '0102030405' };
+        const { status } = await testeur.post(
+          '/webhooks/updateConsentementPixelDeSuivi',
+          payloadBrevo
+        );
 
-      const { status } = await testeur.post(
-        '/webhooks/updateConsentementPixelDeSuivi',
-        bodyPourAutreDonnee
-      );
-
-      expect(status).toBe(204);
-      expect(miseAJourFaite).toBe(false);
-    });
+        expect(status).toBe(204);
+        expect(miseAJourFaite).toBe(false);
+      }
+    );
 
     describe("quand l'appel Brevo est correct", () => {
       beforeEach(() => {
