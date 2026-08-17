@@ -7,6 +7,7 @@ import type {
 import { tiroirStore } from '../ui/stores/tiroir.store';
 import TiroirTeleversementServicesV2 from '../tableauDeBord/televersementServices/TiroirTeleversementServicesV2.svelte';
 import { tick } from 'svelte';
+import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
 
 const detecteElementHTML = async (
   selecteur: string,
@@ -41,6 +42,18 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     titre: 'Travaillez avec votre équipe',
     description:
       "Invitez vos contributeurs et vos prestataires, désignez un responsable par mesure et ajustez leurs droits d'accès.",
+    callbackAvantOuverture: async () => {
+      await tick();
+      tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+        modeVisiteGuidee: true,
+        services: [],
+      });
+      await detecteElementHTML(ciblage().tiroir().query());
+    },
+    ouverture: () => ciblage().tiroir().el(),
+    decoupe: { marge: 0, rayon: 0 },
+    positionModale: 'droite',
+    decalageModale: 24,
   },
   'liste-mesures': {
     pageFond: 'liste-mesures',
