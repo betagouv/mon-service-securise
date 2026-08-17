@@ -138,7 +138,10 @@
   };
 </script>
 
-<ModaleFinVisiteGuidee bind:estOuverte={avecModaleFinVisiteGuidee} />
+<ModaleFinVisiteGuidee
+  bind:estOuverte={avecModaleFinVisiteGuidee}
+  utilisateurADesServices={$services.length > 0}
+/>
 <ModaleAccueilVisiteGuidee
   bind:estOuverte={avecModaleAccueilVisiteGuidee}
   {prenomNom}
