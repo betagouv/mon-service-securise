@@ -1,8 +1,9 @@
 import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
-  const { estSuperviseur } = lisDonneesPartagees('utilisateur-superviseur');
-  const { estAdmin } = lisDonneesPartagees('utilisateur-admin');
+  const { estSuperviseur, estAdmin, prenomNom } = lisDonneesPartagees(
+    'utilisateur-connecte'
+  );
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   const avecGestionOrganisations = lisDonneesPartagees(
     'avec-gestion-organisations'
@@ -18,6 +19,7 @@ $(() => {
       detail: {
         estSuperviseur,
         estAdmin,
+        prenomNom,
         avecGestionOrganisations,
         modeVisiteGuidee,
         profilUtilisateurComplet,

@@ -22,6 +22,8 @@
     type StatutHomologation,
   } from './stores/affichageParStatutHomologation';
   import ModaleFinVisiteGuidee from '../visiteGuideeSPA/ModaleFinVisiteGuidee.svelte';
+  import ModaleAccueilVisiteGuidee from '../visiteGuideeSPA/ModaleAccueilVisiteGuidee.svelte';
+  import { enleveParametreDeUrl } from '../outils/url';
 
   interface Props {
     estSuperviseur: boolean;
@@ -29,6 +31,7 @@
     avecGestionOrganisations: boolean;
     modeVisiteGuidee: boolean;
     profilUtilisateurComplet?: boolean;
+    prenomNom?: string;
   }
 
   let {
@@ -36,6 +39,7 @@
     estAdmin,
     avecGestionOrganisations,
     modeVisiteGuidee,
+    prenomNom,
     profilUtilisateurComplet = true,
   }: Props = $props();
 
@@ -46,6 +50,7 @@
   let nombreHomologationsExpirees: number | undefined = $state();
   let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
   let avecModaleFinVisiteGuidee = $state(false);
+  let avecModaleAccueilVisiteGuidee = $state(false);
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -60,10 +65,21 @@
       enCoursChargement = false;
     } else {
       await rafraichisServices();
-      const requete = new URLSearchParams(window.location.search);
-      avecModaleFinVisiteGuidee = !!requete.get('avecModaleFinVisiteGuidee');
+      afficheModalesVisiteGuideeSiNecessaire();
     }
   });
+
+  const afficheModalesVisiteGuideeSiNecessaire = () => {
+    const requete = new URLSearchParams(window.location.search);
+    avecModaleFinVisiteGuidee = !!requete.get('avecModaleFinVisiteGuidee');
+    if (avecModaleFinVisiteGuidee)
+      enleveParametreDeUrl('avecModaleFinVisiteGuidee');
+    avecModaleAccueilVisiteGuidee = !!requete.get(
+      'avecModaleAccueilVisiteGuidee'
+    );
+    if (avecModaleAccueilVisiteGuidee)
+      enleveParametreDeUrl('avecModaleAccueilVisiteGuidee');
+  };
 
   const recupereServices = async () => {
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
@@ -121,6 +137,11 @@
 </script>
 
 <ModaleFinVisiteGuidee bind:estOuverte={avecModaleFinVisiteGuidee} />
+<ModaleAccueilVisiteGuidee
+  bind:estOuverte={avecModaleAccueilVisiteGuidee}
+  {prenomNom}
+  {profilUtilisateurComplet}
+/>
 
 <svelte:body
   on:rafraichis-services={rafraichisServices}
