@@ -50,6 +50,7 @@
     donneesEtape.pageFond
   );
   let rectCible: RectCible | undefined = $state();
+  let elementModaleExplicative: HTMLElement | undefined = $state();
   const rideau = $state(document.getElementById('visite-guidee-rideau')!);
   const cadreBlanc = $state(
     document.getElementById('visite-guidee-cadre-blanc')!
@@ -73,7 +74,18 @@
       await donneesEtape.callbackAvantOuverture?.();
       await tick();
       const ouverture = donneesEtape.ouverture();
-      ajusteHauteurScroll(ouverture, defilementActuel, scrollGele);
+      scrollGele = ajusteHauteurScroll(
+        ouverture,
+        defilementActuel,
+        scrollGele,
+        elementModaleExplicative
+          ? {
+              element: elementModaleExplicative,
+              position: donneesEtape.positionModale,
+              decalage: donneesEtape.decalageModale || 0,
+            }
+          : undefined
+      );
       rectCible = await calculeRectangleOuverture(
         ouverture,
         rideau,
@@ -86,6 +98,7 @@
 
 <ModaleExplicative
   bind:etape={etapeVisiteGuidee}
+  bind:elementModale={elementModaleExplicative}
   {rectCible}
   {modeAdditionnel}
   {donneesEtape}
