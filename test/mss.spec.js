@@ -8,10 +8,6 @@ describe('Le serveur MSS', () => {
 
   beforeEach(() => testeur.initialise());
 
-  it('utilise un filtrage IP pour ne servir que les IP autorisées', async () => {
-    await testeur.middleware().verifieFiltrageIp(testeur.app(), '/');
-  });
-
   it('charge la version de build des fichiers', async () => {
     await testeur
       .middleware()

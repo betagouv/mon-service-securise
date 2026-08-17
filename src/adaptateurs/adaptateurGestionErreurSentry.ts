@@ -1,7 +1,6 @@
 import axios from 'axios';
 import express, { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
-import ipFilter from 'express-ipfilter';
 import { sentry } from './adaptateurEnvironnement.js';
 import { UUID } from '../typesBasiques.js';
 
@@ -67,13 +66,6 @@ const controleurErreurs = (
   reponse: Response,
   suite: NextFunction
 ) => {
-  const estErreurDeFiltrageIp = erreur instanceof ipFilter.IpDeniedError;
-  if (estErreurDeFiltrageIp) {
-    // On termine la connexion directement si qqun nous appelle sans passer par le WAF.
-    reponse.status(401);
-    reponse.end();
-    return;
-  }
   const estErreurCSRF = erreur.message === 'CSRF token mismatch';
   if (estErreurCSRF) {
     logueErreur(new Error('Une erreur CSRF mismatch a été détectée'), {

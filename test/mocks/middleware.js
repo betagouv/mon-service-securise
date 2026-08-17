@@ -67,7 +67,6 @@ let etatExplicationRisquesV2Charge = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
 let etatExplicationUtilisationMFA = false;
-let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let traficProtege = false;
@@ -103,7 +102,6 @@ const middlewareFantaisie = {
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
     etatExplicationUtilisationMFA = false;
-    filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     traficProtege = false;
@@ -170,11 +168,6 @@ const middlewareFantaisie = {
 
   chargeExplicationUtilisationMFA: (_requete, _reponse, suite) => {
     etatExplicationUtilisationMFA = true;
-    suite();
-  },
-
-  filtreIpAutorisees: () => (_requete, _reponse, suite) => {
-    filtrageIpEstActif = true;
     suite();
   },
 
@@ -281,13 +274,6 @@ const middlewareFantaisie = {
   verifieChargementDeLExplicationDesRisquesV2: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatExplicationRisquesV2Charge },
-      app,
-      ...params
-    ),
-
-  verifieFiltrageIp: async (app, ...params) =>
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => filtrageIpEstActif },
       app,
       ...params
     ),
