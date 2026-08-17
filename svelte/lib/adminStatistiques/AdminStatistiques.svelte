@@ -18,12 +18,15 @@
   import CarteChiffreCle from './CarteChiffreCle.svelte';
   import BarChart from './charts/BarChart.svelte';
   import type { StatutMesure } from '../modeles/modeleMesure';
+  import { donneesVisiteGuidee } from './donneesVisiteGuidee';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   interface Props {
     referentiel: ReferentielStatistiques;
+    modeVisiteGuidee?: boolean;
   }
 
-  let { referentiel }: Props = $props();
+  let { referentiel, modeVisiteGuidee = false }: Props = $props();
 
   let statistiques: Statistiques | undefined = $state();
   let entites: Array<EntiteSupervisee> = $state([]);
@@ -36,8 +39,14 @@
   };
 
   onMount(async () => {
-    await rafraichisStatistiques();
-    entites = await apiEntites.entitesDansMonPerimetre();
+    if (!modeVisiteGuidee) {
+      await rafraichisStatistiques();
+      entites = await apiEntites.entitesDansMonPerimetre();
+    } else {
+      console.log(referentiel);
+      statistiques = donneesVisiteGuidee.statistiques;
+      entites = donneesVisiteGuidee.entites;
+    }
   });
 
   let parNiveauDeSecurite = $derived.by(() => {
@@ -228,38 +237,43 @@
     ></lab-anssi-multi-select>
   </div>
   <div class="grille-graphiques">
-    <LineChart
-      titre="Évolution du nombre d’entités"
-      baniereAvecChiffre={{
-        chiffre: nombreTotalEntites,
-        description: singulierPluriel(
-          'Entité utilisatrice',
-          'Entités utilisatrices',
-          nombreTotalEntites
-        ),
-        icone: 'city_hall',
-      }}
-      x={parEntite.x}
-      y={parEntite.y}
-      nom="Nombre d'entités"
-      unite="entités"
-    />
-    <LineChart
-      titre="Évolution du nombre de services"
-      baniereAvecChiffre={{
-        chiffre: nombreTotalServices,
-        description: singulierPluriel(
-          'Service référencé',
-          'Services référencés',
-          nombreTotalServices
-        ),
-        icone: 'internet',
-      }}
-      x={parDateCreation.x}
-      y={parDateCreation.y}
-      nom="Nombre de services"
-      unite="services"
-    />
+    <div
+      class="ligne-deux-items"
+      {@attach cibleDeVisiteGuidee(ciblage().statistiques().id())}
+    >
+      <LineChart
+        titre="Évolution du nombre d’entités"
+        baniereAvecChiffre={{
+          chiffre: nombreTotalEntites,
+          description: singulierPluriel(
+            'Entité utilisatrice',
+            'Entités utilisatrices',
+            nombreTotalEntites
+          ),
+          icone: 'city_hall',
+        }}
+        x={parEntite.x}
+        y={parEntite.y}
+        nom="Nombre d'entités"
+        unite="entités"
+      />
+      <LineChart
+        titre="Évolution du nombre de services"
+        baniereAvecChiffre={{
+          chiffre: nombreTotalServices,
+          description: singulierPluriel(
+            'Service référencé',
+            'Services référencés',
+            nombreTotalServices
+          ),
+          icone: 'internet',
+        }}
+        x={parDateCreation.x}
+        y={parDateCreation.y}
+        nom="Nombre de services"
+        unite="services"
+      />
+    </div>
     <div class="ligne-un-tiers-deux-tiers">
       <CarteChiffreCle
         chiffre={statistiques.indiceCyberMoyen.toFixed(1)}
@@ -399,6 +413,12 @@
     padding: 24px 0;
     box-sizing: border-box;
     max-width: 1200px;
+
+    .ligne-deux-items {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
 
     .ligne-un-tiers-deux-tiers {
       grid-column: 1 / -1;
