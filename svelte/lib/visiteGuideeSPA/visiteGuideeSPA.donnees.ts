@@ -5,6 +5,8 @@ import type {
   EtapeVisiteGuideeAdditionnelle,
 } from './visiteGuideeSPA.d';
 import { tiroirStore } from '../ui/stores/tiroir.store';
+import TiroirTeleversementServicesV2 from '../tableauDeBord/televersementServices/TiroirTeleversementServicesV2.svelte';
+import { tick } from 'svelte';
 
 const detecteElementHTML = async (
   selecteur: string,
@@ -51,6 +53,15 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     titre: "Jusqu'à 250 services importés en une seule fois",
     description:
       "Remplissez le modèle XLSX fourni et importez jusqu'à 250 services, homologués ou non. Un rapport vous signale ligne par ligne ce qui doit être corrigé avant validation. ",
+    callbackAvantOuverture: async () => {
+      await tick();
+      tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {});
+      await detecteElementHTML(ciblage().tiroir().query());
+    },
+    ouverture: () => ciblage().tiroir().el(),
+    decoupe: { marge: 0, rayon: 0 },
+    positionModale: 'droite',
+    decalageModale: 24,
   },
   organisations: {
     pageFond: 'statistiques',
