@@ -1,6 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import controlAcces from 'express-ip-access-control';
-import { IpFilter as ipfilter } from 'express-ipfilter';
 import { z } from 'zod';
 import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
 import { CSP_BIBLIOTHEQUES } from '../routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
@@ -15,7 +14,6 @@ import {
   ErreurDroitsIncoherents,
 } from '../erreurs.js';
 import { ajouteLaRedirectionPostConnexion } from './redirection.js';
-import { extraisIp } from './requeteHttp.js';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 import { TYPES_REQUETES } from './configurationServeur.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
@@ -406,23 +404,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
   const protegeTrafic = () =>
     adaptateurProtection.protectionLimiteTraficEndpointSensible();
 
-  const filtreIpAutorisees = () => {
-    const config = adaptateurEnvironnement.filtrageIp();
-
-    if (!config.activerFiltrageIp()) {
-      const aucunFiltrage: RequestHandler = (_req, _rep, suite) => suite();
-      return aucunFiltrage;
-    }
-
-    return ipfilter(config.ipAutorisees(), {
-      // Seules les IP du WAF doivent être autorisées si jamais le filtrage IP est activé.
-      detectIp: (requete) => extraisIp(requete.headers).waf,
-      excluding: ['/api/sante'],
-      mode: 'allow',
-      log: false,
-    });
-  };
-
   const ajouteVersionFichierCompiles: RequestHandler = (
     _requete,
     reponse,
@@ -527,7 +508,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeTypeRequete,
     chargeUtilisateurConnecte,
     exposeUrlBase,
-    filtreIpAutorisees,
     interdisLaMiseEnCache,
     positionneCanonical,
     positionneHeaders,

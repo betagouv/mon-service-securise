@@ -21,11 +21,6 @@ const journalMSS = () => ({
     ),
 });
 
-const filtrageIp = () => ({
-  ipAutorisees: () => process.env.ADRESSES_IP_AUTORISEES?.split(',') ?? [],
-  activerFiltrageIp: () => filtrageIp().ipAutorisees().length > 0,
-});
-
 const matomo = () => ({
   urlTagManager: () => process.env.MATOMO_URL_TAG_MANAGER,
 });
@@ -148,7 +143,6 @@ export {
   crisp,
   emailMemoire,
   featureFlag,
-  filtrageIp,
   JWT,
   journalMSS,
   matomo,
