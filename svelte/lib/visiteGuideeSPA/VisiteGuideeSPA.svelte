@@ -214,6 +214,7 @@
         avecGestionOrganisations={false}
         modeVisiteGuidee={true}
         profilUtilisateurComplet={true}
+        aDejaVuEntierementVisiteGuidee={false}
       />
     </div>
   {:else if pageFondVisiteGuidee === 'mesures' || pageFondVisiteGuidee === 'dossiers' || pageFondVisiteGuidee === 'risques'}

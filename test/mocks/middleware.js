@@ -149,6 +149,7 @@ const middlewareFantaisie = {
     reponse.locals.etatVisiteGuidee = {
       toJSON: () => ({}),
       nombreEtapesRestantes: () => 2,
+      dejaTerminee: false,
     };
     etatVisiteGuideeCharge = true;
     suite();
