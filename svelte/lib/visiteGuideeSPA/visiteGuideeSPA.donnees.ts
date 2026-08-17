@@ -52,13 +52,15 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     description:
       "Remplissez le modèle XLSX fourni et importez jusqu'à 250 services, homologués ou non. Un rapport vous signale ligne par ligne ce qui doit être corrigé avant validation. ",
   },
-  /*
   organisations: {
     pageFond: 'statistiques',
     titre: 'Suivez tous les services de votre entité',
     description:
       "Les services créés sous le SIRET de vos entités vous sont rattachés automatiquement. Vous suivez leur avancement, les personnes qui y contribuent, et la sécurisation de l'ensemble depuis un tableau de bord statistique.",
-  },*/
+    ouverture: () => ciblage().statistiques().el(),
+    positionModale: 'bas',
+    decalageModale: 200,
+  },
 };
 
 export const donneesEtapesVisiteGuidee: Record<

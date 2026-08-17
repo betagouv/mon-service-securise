@@ -1,4 +1,5 @@
 import type { ReferentielPagesService } from '../pagesService/pagesService';
+import type { ReferentielStatistiques } from '../adminStatistiques/adminStatistiques.types';
 
 declare global {
   interface HTMLElementEventMap {
@@ -7,7 +8,7 @@ declare global {
 }
 
 export type VisiteGuideeSPAProps = {
-  referentiel: ReferentielPagesService;
+  referentiel: ReferentielPagesService & ReferentielStatistiques;
   featureFlags: {
     avecRisquesV2: boolean;
   };
@@ -20,7 +21,8 @@ export type PageFondVisiteGuidee =
   | 'besoinsSecuriteV2'
   | 'risques'
   | 'mesures'
-  | 'dossiers';
+  | 'dossiers'
+  | 'statistiques';
 
 export type EtapeVisiteGuidee = 1 | 2 | 3 | 4;
 

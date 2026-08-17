@@ -23,6 +23,7 @@
     geleDefilementDuCorps,
   } from './visiteGuidee.utils';
   import type { EtapeVisiteGuideeAdditionnelle } from './visiteGuideeSPA.d';
+  import AdminStatistiques from '../adminStatistiques/AdminStatistiques.svelte';
 
   let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
 
@@ -112,6 +113,10 @@
         profilUtilisateurComplet={true}
         aDejaVuEntierementVisiteGuidee={false}
       />
+    </div>
+  {:else if pageFondVisiteGuidee === 'statistiques'}
+    <div class="avec-padding">
+      <AdminStatistiques modeVisiteGuidee={true} {referentiel} />
     </div>
   {:else if pageFondVisiteGuidee === 'mesures' || pageFondVisiteGuidee === 'dossiers' || pageFondVisiteGuidee === 'risques'}
     <PagesService

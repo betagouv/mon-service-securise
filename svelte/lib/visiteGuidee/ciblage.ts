@@ -30,6 +30,7 @@ class CibleVisiteGuidee {
 }
 
 export const ciblage = () => ({
+  statistiques: () => new CibleVisiteGuidee('admin-statistiques'),
   decrireV2: () => ({
     nomService: () => new CibleVisiteGuidee('nom-service'),
     besoinsSecurite: (id: IdNiveauDeSecurite) =>
