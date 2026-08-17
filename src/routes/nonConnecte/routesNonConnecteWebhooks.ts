@@ -1,5 +1,4 @@
 import express from 'express';
-import { valideBody } from '../../http/validePayloads.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { schemaPostConsentementPixelDeSuivi } from './routesNonConnecteWebhooks.schema.js';
@@ -23,8 +22,17 @@ const routesNonConnecteWebhooks = ({
     middleware.verificationAddresseIP(
       adaptateurEnvironnement.sendinblue().adressesIpAppelantNosWebhooks()
     ),
-    valideBody(schemaPostConsentementPixelDeSuivi),
     async (requete, reponse) => {
+      // On valide ici et pas dans `valideBody` car on ne veut pas renvoyer 400 (et polluer nos logs)
+      // sur tous les appels qui ne sont pas explicitement du pixel de suivi.
+      const concerneLePixelDeSuivi =
+        schemaPostConsentementPixelDeSuivi.safeParse(requete.body);
+
+      if (!concerneLePixelDeSuivi.success) {
+        reponse.sendStatus(204);
+        return;
+      }
+
       const { email } = requete.body;
       const pixelDeSuiviAccepte =
         requete.body.content[0].attributes._PIXEL_TRACKING_CONSENT;
