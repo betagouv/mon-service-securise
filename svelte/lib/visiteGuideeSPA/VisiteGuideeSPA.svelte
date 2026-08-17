@@ -12,9 +12,16 @@
   import CreationV2 from '../creationV2/CreationV2.svelte';
   import ModaleExplicative from './ModaleExplicative.svelte';
   import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
-  import { tick } from 'svelte';
+  import { onMount, tick } from 'svelte';
 
   let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
+
+  onMount(() => {
+    document
+      .querySelector('body')
+      ?.setAttribute('data-visite-guidee-en-cours', 'true');
+  });
+
   let etapeVisiteGuidee: EtapeVisiteGuidee = $state(1);
   let donneesEtape: DonneesEtapeVisiteGuidee = $derived(
     donneesEtapesVisiteGuidee[etapeVisiteGuidee]
@@ -259,7 +266,7 @@
     transition: none;
   }
 
-  :global(lab-anssi-centre-aide) {
+  :global(body[data-visite-guidee-en-cours] lab-anssi-centre-aide) {
     display: none;
   }
 </style>
