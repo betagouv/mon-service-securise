@@ -75,14 +75,22 @@
 
   const afficheModalesVisiteGuideeSiNecessaire = () => {
     const requete = new URLSearchParams(window.location.search);
+
     avecModaleFinVisiteGuidee = !!requete.get('avecModaleFinVisiteGuidee');
     if (avecModaleFinVisiteGuidee)
       enleveParametreDeUrl('avecModaleFinVisiteGuidee');
+
     avecModaleAccueilVisiteGuidee = !!requete.get(
       'avecModaleAccueilVisiteGuidee'
     );
     if (avecModaleAccueilVisiteGuidee)
       enleveParametreDeUrl('avecModaleAccueilVisiteGuidee');
+
+    avecModaleVisiteGuideeAvancee = !!requete.get(
+      'avecModaleVisiteGuideeAvancee'
+    );
+    if (avecModaleVisiteGuideeAvancee)
+      enleveParametreDeUrl('avecModaleVisiteGuideeAvancee');
   };
 
   const recupereServices = async () => {

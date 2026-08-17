@@ -11,7 +11,10 @@
   import TableauDeBord from '../tableauDeBord/TableauDeBord.svelte';
   import CreationV2 from '../creationV2/CreationV2.svelte';
   import ModaleExplicative from './ModaleExplicative.svelte';
-  import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
+  import {
+    donneesEtapesVisiteGuidee,
+    donneesEtapesVisiteGuideeAdditionnelle,
+  } from './visiteGuideeSPA.donnees';
   import { onMount, tick } from 'svelte';
   import {
     ajusteHauteurScroll,
@@ -19,10 +22,18 @@
     degeleDefilementDuCorps,
     geleDefilementDuCorps,
   } from './visiteGuidee.utils';
+  import type { EtapeVisiteGuideeAdditionnelle } from './visiteGuideeSPA.d';
 
   let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
 
+  let etapeAdditionnelle: EtapeVisiteGuideeAdditionnelle | undefined = $state();
+  let modeAdditionnel = $derived(!!etapeAdditionnelle);
+
   onMount(() => {
+    const requete = new URLSearchParams(window.location.search);
+    etapeAdditionnelle =
+      (requete.get('etapeAdditionnelle') as EtapeVisiteGuideeAdditionnelle) ||
+      undefined;
     document
       .querySelector('body')
       ?.setAttribute('data-visite-guidee-v2-en-cours', 'true');
@@ -30,7 +41,9 @@
 
   let etapeVisiteGuidee: EtapeVisiteGuidee = $state(1);
   let donneesEtape: DonneesEtapeVisiteGuidee = $derived(
-    donneesEtapesVisiteGuidee[etapeVisiteGuidee]
+    modeAdditionnel
+      ? donneesEtapesVisiteGuideeAdditionnelle[etapeAdditionnelle!]
+      : donneesEtapesVisiteGuidee[etapeVisiteGuidee]
   );
   let pageFondVisiteGuidee: PageFondVisiteGuidee = $derived(
     donneesEtape.pageFond
@@ -73,7 +86,8 @@
 <ModaleExplicative
   bind:etape={etapeVisiteGuidee}
   {rectCible}
-  position={donneesEtape.positionModale}
+  {modeAdditionnel}
+  {donneesEtape}
 />
 
 <div>

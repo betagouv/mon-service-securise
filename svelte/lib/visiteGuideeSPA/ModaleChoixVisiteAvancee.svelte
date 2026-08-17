@@ -16,24 +16,28 @@
         has-description
         description="Centralisez et mettez à jour vos mesures sur plusieurs services."
         size="sm"
+        href="/visiteGuidee?etapeAdditionnelle=liste-mesures"
       ></dsfr-card>
       <dsfr-card
         title="📥 Importer des services"
         has-description
         description="Importez jusqu'à 250 services en une seule fois."
         size="sm"
+        href="/visiteGuidee?etapeAdditionnelle=televersement"
       ></dsfr-card>
       <dsfr-card
         title="👥 Collaborer avec votre équipe"
         has-description
         description="Invitez des contributeurs et gérez leurs accès."
         size="sm"
+        href="/visiteGuidee?etapeAdditionnelle=contributeurs"
       ></dsfr-card>
       <dsfr-card
         title="📊 Piloter votre entité"
         has-description
         description="Suivez tous vos services depuis un tableau de bord."
         size="sm"
+        href="/visiteGuidee?etapeAdditionnelle=organisations"
       ></dsfr-card>
     </div>
     <p>

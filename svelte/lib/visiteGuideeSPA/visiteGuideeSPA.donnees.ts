@@ -2,6 +2,7 @@ import { ciblage } from '../visiteGuidee/ciblage';
 import type {
   DonneesEtapeVisiteGuidee,
   EtapeVisiteGuidee,
+  EtapeVisiteGuideeAdditionnelle,
 } from './visiteGuideeSPA.d';
 import { tiroirStore } from '../ui/stores/tiroir.store';
 
@@ -27,6 +28,37 @@ const detecteElementHTML = async (
 
     observer.observe(document.body, { childList: true, subtree: true });
   });
+};
+
+export const donneesEtapesVisiteGuideeAdditionnelle: Record<
+  EtapeVisiteGuideeAdditionnelle,
+  DonneesEtapeVisiteGuidee
+> = {
+  contributeurs: {
+    pageFond: 'mesures',
+    titre: 'Travaillez avec votre équipe',
+    description:
+      "Invitez vos contributeurs et vos prestataires, désignez un responsable par mesure et ajustez leurs droits d'accès.",
+  },
+  'liste-mesures': {
+    pageFond: 'liste-mesures',
+    titre: 'Gérez vos mesures depuis un seul endroit',
+    description:
+      "La liste centralisée rassemble toutes vos mesures, tous services confondus. Modifiez le statut ou la précision d'une mesure une fois — la modification s'applique à tous les services que vous sélectionnez.",
+  },
+  televersement: {
+    pageFond: 'tableauDeBord',
+    titre: "Jusqu'à 250 services importés en une seule fois",
+    description:
+      "Remplissez le modèle XLSX fourni et importez jusqu'à 250 services, homologués ou non. Un rapport vous signale ligne par ligne ce qui doit être corrigé avant validation. ",
+  },
+  /*
+  organisations: {
+    pageFond: 'statistiques',
+    titre: 'Suivez tous les services de votre entité',
+    description:
+      "Les services créés sous le SIRET de vos entités vous sont rattachés automatiquement. Vous suivez leur avancement, les personnes qui y contribuent, et la sécurisation de l'ensemble depuis un tableau de bord statistique.",
+  },*/
 };
 
 export const donneesEtapesVisiteGuidee: Record<
