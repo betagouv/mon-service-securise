@@ -21,6 +21,7 @@
     affichageParStatutHomologationSelectionne,
     type StatutHomologation,
   } from './stores/affichageParStatutHomologation';
+  import ModaleFinVisiteGuidee from '../visiteGuideeSPA/ModaleFinVisiteGuidee.svelte';
 
   interface Props {
     estSuperviseur: boolean;
@@ -44,6 +45,7 @@
   let nombreServicesHomologues: number | undefined = $state();
   let nombreHomologationsExpirees: number | undefined = $state();
   let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
+  let avecModaleFinVisiteGuidee = $state(false);
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -58,6 +60,8 @@
       enCoursChargement = false;
     } else {
       await rafraichisServices();
+      const requete = new URLSearchParams(window.location.search);
+      avecModaleFinVisiteGuidee = !!requete.get('avecModaleFinVisiteGuidee');
     }
   });
 
@@ -115,6 +119,8 @@
       configurationsTabs[idTabActive].id;
   };
 </script>
+
+<ModaleFinVisiteGuidee bind:estOuverte={avecModaleFinVisiteGuidee} />
 
 <svelte:body
   on:rafraichis-services={rafraichisServices}

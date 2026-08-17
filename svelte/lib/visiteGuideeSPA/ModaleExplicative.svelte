@@ -49,6 +49,14 @@
     await termineVisiteGuidee();
     window.location.href = '/tableauDeBord';
   };
+
+  const afficheEtapeSuivante = async () => {
+    if (etape === Object.keys(donneesEtapesVisiteGuidee).length) {
+      await termineVisiteGuidee();
+      window.location.href = '/tableauDeBord?avecModaleFinVisiteGuidee=true';
+    }
+    etape += 1;
+  };
 </script>
 
 <dialog
@@ -93,7 +101,11 @@
       </dsfr-button>
 
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button kind="primary" size="md" onclick={() => (etape += 1)}>
+      <dsfr-button
+        kind="primary"
+        size="md"
+        onclick={() => afficheEtapeSuivante()}
+      >
         Suivant
       </dsfr-button>
     </div>
