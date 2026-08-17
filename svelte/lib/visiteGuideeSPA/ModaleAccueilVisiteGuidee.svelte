@@ -56,7 +56,7 @@
           description="Approfondissez votre maîtrise de la plateforme : collaboration, gestion des risques, homologation et pilotage de vos services."
           has-badge
           size="sm"
-          href="/tbd"
+          href="/tableauDeBord?avecModaleVisiteGuideeAvancee=true"
         >
           <dsfr-badge
             slot="badgesgroup"

@@ -2,23 +2,26 @@
   import type {
     DonneesEtapeVisiteGuidee,
     EtapeVisiteGuidee,
-    PositionModale,
+    EtapeVisiteGuideeAdditionnelle,
     RectCible,
   } from './visiteGuideeSPA.d';
   import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
   import { termineVisiteGuidee } from './visiteGuidee.api';
 
   interface Props {
-    etape: EtapeVisiteGuidee;
+    etape: EtapeVisiteGuidee | EtapeVisiteGuideeAdditionnelle;
+    donneesEtape: DonneesEtapeVisiteGuidee;
     rectCible: RectCible | undefined;
-    position: PositionModale;
+    modeAdditionnel: boolean;
   }
 
-  let { etape = $bindable(), rectCible, position }: Props = $props();
+  let {
+    etape = $bindable(),
+    donneesEtape,
+    rectCible,
+    modeAdditionnel,
+  }: Props = $props();
 
-  let donneesEtape: DonneesEtapeVisiteGuidee = $derived(
-    donneesEtapesVisiteGuidee[etape]
-  );
   let decalageModale: number = $derived(donneesEtape.decalageModale || 0);
 
   let elementModale: HTMLElement | undefined = $state();
@@ -30,7 +33,7 @@
       elementModale.getBoundingClientRect();
 
     const { top, left } =
-      position === 'bas'
+      donneesEtape.positionModale === 'bas'
         ? {
             top: rectCible.top - hauteurModale + decalageModale,
             left: rectCible.left + rectCible.width / 2 - largeurModale / 2,
@@ -55,7 +58,7 @@
       await termineVisiteGuidee();
       window.location.href = '/tableauDeBord?avecModaleFinVisiteGuidee=true';
     }
-    etape += 1;
+    etape = (etape as number) + 1;
   };
 </script>
 
@@ -84,31 +87,42 @@
         {donneesEtape.titre}
       </h2>
       <div class="conteneur-modale">
-        <div class="etapier">
-          Étape {etape} sur {Object.keys(donneesEtapesVisiteGuidee).length}
-        </div>
+        {#if !modeAdditionnel}
+          <div class="etapier">
+            Étape {etape} sur {Object.keys(donneesEtapesVisiteGuidee).length}
+          </div>
+        {/if}
         <div>{donneesEtape.description}</div>
       </div>
     </div>
     <div class="modal_footer">
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        kind="secondary"
-        size="md"
-        onclick={() => (etape -= 1)}
-        disabled={etape === 1}
-      >
-        Précédent
-      </dsfr-button>
+      {#if modeAdditionnel}
+        <dsfr-button
+          size="md"
+          label="Revenir à la liste des fonctionnalités"
+          markup="a"
+          href="/tableauDeBord?avecModaleVisiteGuideeAvancee=true"
+        ></dsfr-button>
+      {:else}
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          kind="secondary"
+          size="md"
+          onclick={() => (etape = (etape as number) - 1)}
+          disabled={etape === 1}
+          label="Précédent"
+        >
+        </dsfr-button>
 
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        kind="primary"
-        size="md"
-        onclick={async () => await afficheEtapeSuivante()}
-      >
-        Suivant
-      </dsfr-button>
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          kind="primary"
+          size="md"
+          onclick={async () => await afficheEtapeSuivante()}
+          label="Suivant"
+        >
+        </dsfr-button>
+      {/if}
     </div>
   </div>
 </dialog>
