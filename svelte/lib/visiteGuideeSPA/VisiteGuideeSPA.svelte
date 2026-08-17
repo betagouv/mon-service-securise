@@ -19,7 +19,7 @@
   onMount(() => {
     document
       .querySelector('body')
-      ?.setAttribute('data-visite-guidee-en-cours', 'true');
+      ?.setAttribute('data-visite-guidee-v2-en-cours', 'true');
   });
 
   let etapeVisiteGuidee: EtapeVisiteGuidee = $state(1);
@@ -262,11 +262,11 @@
     padding: 32px 20px;
   }
 
-  :global(body[data-visite-guidee-en-cours] #tiroir) {
+  :global(body[data-visite-guidee-v2-en-cours] #tiroir) {
     transition: none;
   }
 
-  :global(body[data-visite-guidee-en-cours] lab-anssi-centre-aide) {
+  :global(body[data-visite-guidee-v2-en-cours] lab-anssi-centre-aide) {
     display: none;
   }
 </style>
