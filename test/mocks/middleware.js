@@ -240,9 +240,12 @@ const middlewareFantaisie = {
     suite();
   },
 
-  verificationAcceptationCGU: (requete, _reponse, suite) => {
+  verificationAcceptationCGU: (requete, reponse, suite) => {
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
+    reponse.locals.utilisateurConnecte = {
+      prenomNom: 'John Doe',
+    };
     verificationCGUMenee = true;
     // Réplique le comportement du middleware CGU de PROD,
     // qui appelle le middleware de vérification JWT.

@@ -11,6 +11,7 @@ export type TableauDeBordProps = {
   avecGestionOrganisations: boolean;
   modeVisiteGuidee: boolean;
   profilUtilisateurComplet?: boolean;
+  prenomNom?: string;
 };
 
 type Contributeur = {
