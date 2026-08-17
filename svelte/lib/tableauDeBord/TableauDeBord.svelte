@@ -24,6 +24,7 @@
   import ModaleFinVisiteGuidee from '../visiteGuideeSPA/ModaleFinVisiteGuidee.svelte';
   import ModaleAccueilVisiteGuidee from '../visiteGuideeSPA/ModaleAccueilVisiteGuidee.svelte';
   import { enleveParametreDeUrl } from '../outils/url';
+  import ModaleChoixVisiteAvancee from '../visiteGuideeSPA/ModaleChoixVisiteAvancee.svelte';
 
   interface Props {
     estSuperviseur: boolean;
@@ -53,6 +54,7 @@
   let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
   let avecModaleFinVisiteGuidee = $state(false);
   let avecModaleAccueilVisiteGuidee = $state(false);
+  let avecModaleVisiteGuideeAvancee = $state(false);
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -136,11 +138,18 @@
     $affichageParStatutHomologationSelectionne =
       configurationsTabs[idTabActive].id;
   };
+
+  const ouvreModaleAvancee = () => {
+    avecModaleFinVisiteGuidee = false;
+    avecModaleAccueilVisiteGuidee = false;
+    avecModaleVisiteGuideeAvancee = true;
+  };
 </script>
 
 <ModaleFinVisiteGuidee
   bind:estOuverte={avecModaleFinVisiteGuidee}
   utilisateurADesServices={$services.length > 0}
+  onselectionVisiteAvancee={ouvreModaleAvancee}
 />
 <ModaleAccueilVisiteGuidee
   bind:estOuverte={avecModaleAccueilVisiteGuidee}
@@ -148,6 +157,7 @@
   {profilUtilisateurComplet}
   {aDejaVuEntierementVisiteGuidee}
 />
+<ModaleChoixVisiteAvancee bind:estOuverte={avecModaleVisiteGuideeAvancee} />
 
 <svelte:body
   on:rafraichis-services={rafraichisServices}

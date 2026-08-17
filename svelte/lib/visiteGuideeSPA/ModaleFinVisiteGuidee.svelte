@@ -2,9 +2,14 @@
   interface Props {
     estOuverte: boolean;
     utilisateurADesServices: boolean;
+    onselectionVisiteAvancee: () => void;
   }
 
-  let { estOuverte = $bindable(), utilisateurADesServices }: Props = $props();
+  let {
+    estOuverte = $bindable(),
+    utilisateurADesServices,
+    onselectionVisiteAvancee,
+  }: Props = $props();
 </script>
 
 <dsfr-modal id="modale-fin-visite-guidee" has-footer opened={estOuverte}>
@@ -16,6 +21,7 @@
       Choisissez la suite : créez votre premier service, découvrez les fonctionnalités
       avancées ou formez-vous à MonServiceSécurisé.
     </p>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class="selection-etape-suivante">
       <dsfr-card
         title="Formation MonServiceSécurisé"
@@ -34,14 +40,15 @@
           accent="yellow-moutarde"
         ></dsfr-badge>
       </dsfr-card>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-card
         title="Fonctionnalités avancées"
         has-description
         description="Poursuivez la visite guidée pour explorer les fonctionnalités avancées"
         has-badge
         size="sm"
-        action-markup="a"
-        href="/tbd"
+        action-markup="button"
+        onclick={onselectionVisiteAvancee}
       >
         <dsfr-badge
           slot="badgesgroup"
