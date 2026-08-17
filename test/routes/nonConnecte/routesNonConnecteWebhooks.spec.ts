@@ -42,17 +42,14 @@ describe('Les routes non connectées des webhooks', () => {
     });
 
     it("vérifie l'adresse IP de la requête", async () => {
+      // Voir dans testeurMSS pour la définition en dur de l'IP.
       await testeur
         .middleware()
-        .verifieAdresseIP(
-          ['1.179.112.0/20', '172.246.240.0/20'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/webhooks/updateConsentementPixelDeSuivi',
-            data: bodyBrevo(),
-          }
-        );
+        .verifieAdresseIP(['1.2.3.4/20'], testeur.app(), {
+          method: 'post',
+          url: '/webhooks/updateConsentementPixelDeSuivi',
+          data: bodyBrevo(),
+        });
     });
 
     it("ne fait rien et renvoie une 204 s'il ne s'agit pas d'une mise à jour du pixel de suivi", async () => {

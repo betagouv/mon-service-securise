@@ -35,6 +35,10 @@ const sendinblue = () => ({
   clefAPITracking: () => process.env.SENDINBLUE_TRACKING_CLEF_API,
   logEvenementsTrackingEnConsole: () =>
     process.env.AVEC_TRACKING_SENDINGBLUE_QUI_LOG_CONSOLE === 'true',
+  adressesIpAppelantNosWebhooks: () =>
+    (
+      process.env.SENDINBLUE_ADRESSES_IP_APPELANT_NOS_WEBHOOKS?.split(',') ?? []
+    ).map((a) => a.trim()),
 });
 
 const sentry = () => ({

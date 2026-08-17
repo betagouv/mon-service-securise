@@ -134,6 +134,7 @@ const creeServeur = ({
       depotDonnees,
       serviceAnnuaire,
       adaptateurGestionErreur,
+      adaptateurEnvironnement,
       adaptateurJWT,
       inscriptionUtilisateur,
       serviceCgu,
@@ -142,7 +143,11 @@ const creeServeur = ({
   app.use(
     '/webhooks',
     middleware.chargeTypeRequete(TYPES_REQUETES.API),
-    routesNonConnecteWebhooks({ middleware, depotDonnees })
+    routesNonConnecteWebhooks({
+      adaptateurEnvironnement,
+      middleware,
+      depotDonnees,
+    })
   );
   app.use(
     '/oidc',

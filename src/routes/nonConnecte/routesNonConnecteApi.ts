@@ -21,6 +21,7 @@ import {
 } from '../../modeles/utilisateur.types.js';
 
 import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
+import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -29,6 +30,7 @@ const routesNonConnecteApi = ({
   adaptateurJWT,
   inscriptionUtilisateur,
   adaptateurGestionErreur,
+  adaptateurEnvironnement,
   serviceCgu,
 }: {
   middleware: Middleware;
@@ -37,6 +39,7 @@ const routesNonConnecteApi = ({
   adaptateurJWT: AdaptateurJWT;
   inscriptionUtilisateur: InscriptionUtilisateur;
   adaptateurGestionErreur: AdaptateurGestionErreur;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
   serviceCgu: ServiceCgu;
 }) => {
   const routes = express.Router();
@@ -98,7 +101,9 @@ const routesNonConnecteApi = ({
 
   routes.post(
     '/desinscriptionInfolettre',
-    middleware.verificationAddresseIP(['1.179.112.0/20', '172.246.240.0/20']),
+    middleware.verificationAddresseIP(
+      adaptateurEnvironnement.sendinblue().adressesIpAppelantNosWebhooks()
+    ),
     valideBody(z.looseObject(reglesValidationDesinscriptionInfolettre)),
     async (requete, reponse) => {
       const { email } = requete.body;
