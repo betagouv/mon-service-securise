@@ -13,6 +13,7 @@
     donneesEtape: DonneesEtapeVisiteGuidee;
     rectCible: RectCible | undefined;
     modeAdditionnel: boolean;
+    elementModale?: HTMLElement;
   }
 
   let {
@@ -20,11 +21,10 @@
     donneesEtape,
     rectCible,
     modeAdditionnel,
+    elementModale = $bindable(),
   }: Props = $props();
 
   let decalageModale: number = $derived(donneesEtape.decalageModale || 0);
-
-  let elementModale: HTMLElement | undefined = $state();
 
   $effect(() => {
     if (!rectCible || !elementModale) return;

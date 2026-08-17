@@ -1,3 +1,5 @@
+import type { PositionModale } from './visiteGuideeSPA.d';
+
 const decoupeParDefaut = { marge: 24, rayon: 8 };
 
 export const geleDefilementDuCorps = () => {
@@ -45,50 +47,96 @@ export const rectEgaux = (a: DOMRect, b: DOMRect) =>
   a.right === b.right &&
   a.bottom === b.bottom;
 
-const estEntierementVisible = (element: HTMLElement) => {
-  const { top, bottom } = element.getBoundingClientRect();
-  return top >= 0 && bottom <= window.innerHeight;
-};
+type EtendueVerticale = { top: number; bottom: number; height: number };
+
+const estEntierementVisible = (etendue: EtendueVerticale) =>
+  etendue.top >= 0 && etendue.bottom <= window.innerHeight;
 
 const seraitEntierementVisibleEnHautDePage = (
-  element: HTMLElement,
+  etendue: EtendueVerticale,
   defilementActuel: number
 ) => {
-  const { top, height } = element.getBoundingClientRect();
-  const topDepuisHautDocument = top + defilementActuel;
+  const topDepuisHautDocument = etendue.top + defilementActuel;
   return (
     topDepuisHautDocument >= 0 &&
-    topDepuisHautDocument + height <= window.innerHeight
+    topDepuisHautDocument + etendue.height <= window.innerHeight
   );
+};
+
+const englobe = (
+  a: EtendueVerticale,
+  b: EtendueVerticale
+): EtendueVerticale => {
+  const top = Math.min(a.top, b.top);
+  const bottom = Math.max(a.bottom, b.bottom);
+  return { top, bottom, height: bottom - top };
+};
+
+const etendueModaleProjetee = (
+  rectCible: EtendueVerticale,
+  hauteurModale: number,
+  positionModale: PositionModale,
+  decalageModale: number
+): EtendueVerticale => {
+  if (positionModale === 'bas') {
+    const bottom = rectCible.top + decalageModale;
+    return { top: bottom - hauteurModale, bottom, height: hauteurModale };
+  }
+  const top = rectCible.top + rectCible.height / 2 - hauteurModale / 2;
+  return { top, bottom: top + hauteurModale, height: hauteurModale };
 };
 
 const scrolleSansBloquerLeCorps = (
   declencheScroll: () => void,
   scrollGele: number
-) => {
+): number => {
   degeleDefilementDuCorps(scrollGele);
   declencheScroll();
-  geleDefilementDuCorps();
+  return geleDefilementDuCorps();
 };
 
 export const ajusteHauteurScroll = (
   ouverture: HTMLElement,
   defilementActuel: number,
-  scrollGele: number
-) => {
-  if (seraitEntierementVisibleEnHautDePage(ouverture, defilementActuel)) {
+  scrollGele: number,
+  modale?: {
+    element: HTMLElement;
+    position: PositionModale;
+    decalage: number;
+  }
+): number => {
+  const rectCible = ouverture.getBoundingClientRect();
+  const etendueAVerifier = modale
+    ? englobe(
+        rectCible,
+        etendueModaleProjetee(
+          rectCible,
+          modale.element.getBoundingClientRect().height,
+          modale.position,
+          modale.decalage
+        )
+      )
+    : rectCible;
+
+  if (
+    seraitEntierementVisibleEnHautDePage(etendueAVerifier, defilementActuel)
+  ) {
     if (defilementActuel !== 0) {
-      scrolleSansBloquerLeCorps(
+      return scrolleSansBloquerLeCorps(
         () => window.scrollTo({ top: 0, behavior: 'instant' }),
         scrollGele
       );
     }
-  } else if (!estEntierementVisible(ouverture)) {
-    scrolleSansBloquerLeCorps(
-      () => ouverture.scrollIntoView({ behavior: 'instant', block: 'center' }),
+  } else if (!estEntierementVisible(etendueAVerifier)) {
+    const centreEtendue = (etendueAVerifier.top + etendueAVerifier.bottom) / 2;
+    const nouveauDefilement =
+      defilementActuel + centreEtendue - window.innerHeight / 2;
+    return scrolleSansBloquerLeCorps(
+      () => window.scrollTo({ top: nouveauDefilement, behavior: 'instant' }),
       scrollGele
     );
   }
+  return scrollGele;
 };
 
 const attendStabiliteRect = (
