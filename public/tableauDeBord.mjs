@@ -11,9 +11,7 @@ $(() => {
   const avecGestionOrganisations = lisDonneesPartagees(
     'avec-gestion-organisations'
   );
-  const visiteGuideeActive =
-    etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
-  const modeVisiteGuidee = visiteGuideeActive;
+  const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
   const profilUtilisateurComplet =
     etatVisiteGuidee.utilisateurCourant.profilComplet;
 
@@ -25,7 +23,6 @@ $(() => {
         prenomNom,
         aDejaVuEntierementVisiteGuidee,
         avecGestionOrganisations,
-        modeVisiteGuidee,
         profilUtilisateurComplet,
       },
     })
