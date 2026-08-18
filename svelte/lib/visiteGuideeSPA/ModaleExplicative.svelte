@@ -57,8 +57,9 @@
     if (etape === Object.keys(donneesEtapesVisiteGuidee).length) {
       await termineVisiteGuidee();
       window.location.href = '/tableauDeBord?avecModaleFinVisiteGuidee=true';
+    } else {
+      etape = (etape as number) + 1;
     }
-    etape = (etape as number) + 1;
   };
 </script>
 
