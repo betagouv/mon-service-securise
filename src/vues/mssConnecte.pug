@@ -12,6 +12,7 @@ block append scripts
   +composantSvelte('tiroir.js')
 
 block header
+  +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
   +header(avertissementMaintenance, featureFlags, true, '/tableauDeBord', "Retour au tableau de bord", false, ongletActif)
 
 block tiroir
@@ -45,13 +46,3 @@ block centre-aide
     
 block footer
   +footer(true)
-
-block visite-guidee
-  +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
-
-  if etatVisiteGuidee && etatVisiteGuidee.dejaTerminee === false
-    if etatVisiteGuidee.enPause === false
-      #visite-guidee-rideau
-      #visite-guidee-cadre-blanc
-      #visite-guidee
-    #visite-guidee-menu-navigation

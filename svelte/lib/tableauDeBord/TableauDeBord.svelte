@@ -31,7 +31,7 @@
     estSuperviseur: boolean;
     estAdmin: boolean;
     avecGestionOrganisations: boolean;
-    modeVisiteGuidee: boolean;
+    modeVisiteGuidee?: boolean;
     profilUtilisateurComplet?: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
@@ -41,7 +41,7 @@
     estSuperviseur,
     estAdmin,
     avecGestionOrganisations,
-    modeVisiteGuidee,
+    modeVisiteGuidee = false,
     prenomNom,
     profilUtilisateurComplet = true,
     aDejaVuEntierementVisiteGuidee,
@@ -60,7 +60,7 @@
   let utilisateurADesServices = derived(services, ($s) => $s.length > 0);
 
   onMount(async () => {
-    if (modeVisiteGuidee && profilUtilisateurComplet) {
+    if (modeVisiteGuidee) {
       services.reinitialise(donneesVisiteGuidee.services);
       nombreServices = donneesVisiteGuidee.resume.nombreServices;
       nombreServicesHomologues =
@@ -94,6 +94,14 @@
     );
     if (avecModaleVisiteGuideeAvancee)
       enleveParametreDeUrl('avecModaleVisiteGuideeAvancee');
+
+    if (
+      !aDejaVuEntierementVisiteGuidee &&
+      !avecModaleFinVisiteGuidee &&
+      !avecModaleAccueilVisiteGuidee &&
+      !avecModaleVisiteGuideeAvancee
+    )
+      avecModaleAccueilVisiteGuidee = true;
   };
 
   const recupereServices = async () => {
