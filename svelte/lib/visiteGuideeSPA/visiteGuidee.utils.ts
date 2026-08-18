@@ -1,4 +1,5 @@
 import type { PositionModale } from './visiteGuideeSPA.d';
+import type { DonneesEtapeVisiteGuidee } from './visiteGuideeSPA.d';
 
 const decoupeParDefaut = { marge: 24, rayon: 8 };
 
@@ -155,30 +156,47 @@ const attendStabiliteRect = (
     });
   });
 
+const cheminsDecoupe = (
+  element: HTMLElement,
+  { marge, rayon }: { marge: number; rayon: number }
+) => {
+  const { left, top, right, bottom } = element.getBoundingClientRect();
+  return {
+    cheminElement: cheminRectangleArrondi(
+      left,
+      top,
+      right - left,
+      bottom - top,
+      0
+    ),
+    cheminMarge: cheminRectangleArrondi(
+      left - marge,
+      top - marge,
+      right - left + marge * 2,
+      bottom - top + marge * 2,
+      rayon
+    ),
+  };
+};
+
 const calculeDecoupe = (
   ouverture: HTMLElement,
   rideau: HTMLElement,
   cadreBlanc: HTMLElement,
-  { marge, rayon } = decoupeParDefaut
+  decoupe = decoupeParDefaut,
+  ouvertureSecondaire?: HTMLElement
 ) => {
-  const { left, top, right, bottom } = ouverture.getBoundingClientRect();
-  const cheminElement = cheminRectangleArrondi(
-    left,
-    top,
-    right - left,
-    bottom - top,
-    0
-  );
-  const cheminMarge = cheminRectangleArrondi(
-    left - marge,
-    top - marge,
-    right - left + marge * 2,
-    bottom - top + marge * 2,
-    rayon
-  );
+  const principale = cheminsDecoupe(ouverture, decoupe);
+  const secondaire = ouvertureSecondaire
+    ? cheminsDecoupe(ouvertureSecondaire, decoupeParDefaut)
+    : undefined;
 
-  rideau.style.clipPath = `path(evenodd, "M0 0 H${window.innerWidth} V${window.innerHeight} H0 Z ${cheminMarge}")`;
-  cadreBlanc.style.clipPath = `path(evenodd, "${cheminMarge} ${cheminElement}")`;
+  const cheminsMarge = [principale.cheminMarge, secondaire?.cheminMarge]
+    .filter(Boolean)
+    .join(' ');
+
+  rideau.style.clipPath = `path(evenodd, "M0 0 H${window.innerWidth} V${window.innerHeight} H0 Z ${cheminsMarge}")`;
+  cadreBlanc.style.clipPath = `path(evenodd, "${principale.cheminMarge} ${principale.cheminElement}${secondaire ? ` ${secondaire.cheminMarge} ${secondaire.cheminElement}` : ''}")`;
 };
 
 const desactiveTransition = (element: HTMLElement) => {
@@ -191,14 +209,21 @@ const desactiveTransition = (element: HTMLElement) => {
 };
 
 export const calculeRectangleOuverture = async (
-  ouverture: HTMLElement,
+  donneesEtape: DonneesEtapeVisiteGuidee,
   rideau: HTMLElement,
-  cadreBlanc: HTMLElement,
-  decoupe: { marge: number; rayon: number } = decoupeParDefaut
+  cadreBlanc: HTMLElement
 ) => {
+  const decoupe = donneesEtape.decoupe || decoupeParDefaut;
+  const ouverture = donneesEtape.ouverture();
   const restaureTransition = desactiveTransition(ouverture);
   await attendStabiliteRect(ouverture);
-  calculeDecoupe(ouverture, rideau, cadreBlanc, decoupe);
+  calculeDecoupe(
+    ouverture,
+    rideau,
+    cadreBlanc,
+    decoupe,
+    donneesEtape.ouvertureSecondaire?.()
+  );
   const rectCible = ouverture.getBoundingClientRect();
   restaureTransition();
   return rectCible;

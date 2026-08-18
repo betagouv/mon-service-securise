@@ -72,10 +72,9 @@
 
   const recalculeDecoupe = async () => {
     rectCible = await calculeRectangleOuverture(
-      donneesEtape.ouverture(),
+      donneesEtape,
       rideau,
-      cadreBlanc,
-      donneesEtape.decoupe
+      cadreBlanc
     );
   };
 
