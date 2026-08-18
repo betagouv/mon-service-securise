@@ -43,7 +43,6 @@
       await rafraichisStatistiques();
       entites = await apiEntites.entitesDansMonPerimetre();
     } else {
-      console.log(referentiel);
       statistiques = donneesVisiteGuidee.statistiques;
       entites = donneesVisiteGuidee.entites;
     }
@@ -180,7 +179,7 @@
   let filtreNiveauxSecurite = $state<IdNiveauDeSecurite[]>([]);
   let filtreEntites = $state<string[]>([]);
   $effect(() => {
-    rafraichisStatistiques();
+    if (!modeVisiteGuidee) rafraichisStatistiques();
   });
 </script>
 
