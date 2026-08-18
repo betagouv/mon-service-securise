@@ -51,6 +51,7 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
       await detecteElementHTML(ciblage().tiroir().query());
     },
     ouverture: () => ciblage().tiroir().el(),
+    ouvertureSecondaire: () => ciblage().securiser().gererContributeurs().el(),
     decoupe: { marge: 0, rayon: 0 },
     positionModale: 'droite',
     decalageModale: 24,
