@@ -60,6 +60,13 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     titre: 'Gérez vos mesures depuis un seul endroit',
     description:
       "La liste centralisée rassemble toutes vos mesures, tous services confondus. Modifiez le statut ou la précision d'une mesure une fois — la modification s'applique à tous les services que vous sélectionnez.",
+    ouverture: () => ciblage().listeMesures().el(),
+    callbackAvantOuverture: async () => {
+      await tick();
+      await detecteElementHTML(ciblage().listeMesures().query());
+    },
+    positionModale: 'bas',
+    decalageModale: 14,
   },
   televersement: {
     pageFond: 'tableauDeBord',

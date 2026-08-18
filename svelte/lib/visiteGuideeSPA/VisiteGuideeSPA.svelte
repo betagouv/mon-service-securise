@@ -24,6 +24,7 @@
   } from './visiteGuidee.utils';
   import type { EtapeVisiteGuideeAdditionnelle } from './visiteGuideeSPA.d';
   import AdminStatistiques from '../adminStatistiques/AdminStatistiques.svelte';
+  import ListeMesures from '../listeMesures/ListeMesures.svelte';
 
   let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
 
@@ -144,6 +145,23 @@
     <div class="avec-padding">
       <AdminStatistiques modeVisiteGuidee={true} {referentiel} />
     </div>
+  {:else if pageFondVisiteGuidee === 'liste-mesures'}
+    <lab-anssi-bandeau-titre
+      titre="Liste de mesures"
+      description="Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l’ensemble des mesures de sécurité. L’ajout de mesures spécifiques est limité à 40 pour favoriser une mise en œuvre efficace. "
+    >
+    </lab-anssi-bandeau-titre>
+    <div class="contenu-centre">
+      <ListeMesures
+        capaciteAjoutDeMesure={{ nombreMaximum: 40 }}
+        modeVisiteGuidee={true}
+        statuts={referentiel.mesures.statuts}
+        categories={Object.entries(referentiel.mesures.categories).map(
+          ([cle, valeur]) => ({ id: cle, label: valeur as string })
+        )}
+        typesService={referentiel.typesService}
+      />
+    </div>
   {:else if pageFondVisiteGuidee === 'mesures' || pageFondVisiteGuidee === 'dossiers' || pageFondVisiteGuidee === 'risques'}
     <PagesService
       etapeActive={pageFondVisiteGuidee}
@@ -188,6 +206,12 @@
 
   .avec-padding {
     padding: 32px 20px;
+  }
+
+  .contenu-centre {
+    width: 100%;
+    max-width: 1200px;
+    margin: 32px auto;
   }
 
   :global(body[data-visite-guidee-v2-en-cours] #tiroir) {

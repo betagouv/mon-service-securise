@@ -22,7 +22,8 @@ export type PageFondVisiteGuidee =
   | 'risques'
   | 'mesures'
   | 'dossiers'
-  | 'statistiques';
+  | 'statistiques'
+  | 'liste-mesures';
 
 export type EtapeVisiteGuidee = 1 | 2 | 3 | 4;
 

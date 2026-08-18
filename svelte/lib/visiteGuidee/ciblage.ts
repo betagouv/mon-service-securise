@@ -29,7 +29,21 @@ class CibleVisiteGuidee {
   }
 }
 
+class CibleVisiteGuideeDirecteDom extends CibleVisiteGuidee {
+  private readonly queryDom: string;
+
+  constructor(queryDom: string) {
+    super('', 0);
+    this.queryDom = queryDom;
+  }
+
+  public query(): string {
+    return this.queryDom;
+  }
+}
+
 export const ciblage = () => ({
+  listeMesures: () => new CibleVisiteGuideeDirecteDom('table tr:nth-child(3)'),
   statistiques: () => new CibleVisiteGuidee('admin-statistiques'),
   decrireV2: () => ({
     nomService: () => new CibleVisiteGuidee('nom-service'),
