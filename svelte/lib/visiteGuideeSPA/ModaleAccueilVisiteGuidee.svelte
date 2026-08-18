@@ -42,6 +42,7 @@
           has-badge
           size="sm"
           href="/visiteGuidee"
+          enlarge
         >
           <dsfr-badge
             slot="badgesgroup"
@@ -57,6 +58,7 @@
           has-badge
           size="sm"
           href="/tableauDeBord?avecModaleVisiteGuideeAvancee=true"
+          enlarge
         >
           <dsfr-badge
             slot="badgesgroup"
@@ -70,9 +72,8 @@
   {:else}
     <div>
       <h4>
-        Bonjour{profilUtilisateurComplet && prenomNom
-          ? ` ${prenomNom}`
-          : ''},<br /> Bienvenue sur MonServiceSécurisé !
+        Bonjour{profilUtilisateurComplet && prenomNom ? ` ${prenomNom}` : ''},
+        bienvenue sur MonServiceSécurisé !
       </h4>
       <p>
         Pilotez la sécurité de vos services numériques et homologuez-les
