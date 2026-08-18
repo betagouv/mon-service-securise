@@ -69,32 +69,45 @@
     document.body.style.position === 'fixed' ? scrollGele : window.scrollY
   );
 
+  const recalculeDecoupe = async () => {
+    rectCible = await calculeRectangleOuverture(
+      donneesEtape.ouverture(),
+      rideau,
+      cadreBlanc,
+      donneesEtape.decoupe
+    );
+  };
+
+  const recalculeScroll = () => {
+    scrollGele = ajusteHauteurScroll(
+      donneesEtape.ouverture(),
+      defilementActuel,
+      scrollGele,
+      elementModaleExplicative
+        ? {
+            element: elementModaleExplicative,
+            position: donneesEtape.positionModale,
+            decalage: donneesEtape.decalageModale || 0,
+          }
+        : undefined
+    );
+  };
+
+  const positionneOuverture = async () => {
+    recalculeScroll();
+    await recalculeDecoupe();
+  };
+
   $effect(() => {
     (async () => {
       await donneesEtape.callbackAvantOuverture?.();
       await tick();
-      const ouverture = donneesEtape.ouverture();
-      scrollGele = ajusteHauteurScroll(
-        ouverture,
-        defilementActuel,
-        scrollGele,
-        elementModaleExplicative
-          ? {
-              element: elementModaleExplicative,
-              position: donneesEtape.positionModale,
-              decalage: donneesEtape.decalageModale || 0,
-            }
-          : undefined
-      );
-      rectCible = await calculeRectangleOuverture(
-        ouverture,
-        rideau,
-        cadreBlanc,
-        donneesEtape.decoupe
-      );
+      await positionneOuverture();
     })();
   });
 </script>
+
+<svelte:window onresize={positionneOuverture} />
 
 <ModaleExplicative
   bind:etape={etapeVisiteGuidee}
