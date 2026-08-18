@@ -92,7 +92,12 @@
             Étape {etape} sur {Object.keys(donneesEtapesVisiteGuidee).length}
           </div>
         {/if}
-        <div>{donneesEtape.description}</div>
+        <p>{donneesEtape.description}</p>
+        {#if donneesEtape.descriptionAdditionnelle}
+          <p class="description-additionnelle">
+            {donneesEtape.descriptionAdditionnelle}
+          </p>
+        {/if}
       </div>
     </div>
     <div class="modal_footer">
@@ -170,19 +175,30 @@
     margin-bottom: 4rem;
     font-size: 1rem;
     line-height: 1.5rem;
-  }
 
-  .conteneur-modale {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+    .conteneur-modale {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
 
-    .etapier {
-      font-size: 0.875rem;
-      font-weight: 700;
-      line-height: 1.5rem;
-      text-transform: uppercase;
-      color: #09416a;
+      .etapier {
+        font-size: 0.875rem;
+        font-weight: 700;
+        line-height: 1.5rem;
+        text-transform: uppercase;
+        color: #09416a;
+        margin-bottom: 12px;
+      }
+
+      p {
+        padding: 0;
+        margin: 0;
+
+        &.description-additionnelle {
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+        }
+      }
     }
   }
 
