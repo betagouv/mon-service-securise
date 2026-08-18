@@ -117,6 +117,7 @@
   .actions {
     display: flex;
     justify-content: flex-end;
+    width: 100%;
     gap: 16px;
   }
 
