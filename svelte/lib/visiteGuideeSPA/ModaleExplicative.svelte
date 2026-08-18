@@ -74,8 +74,9 @@
         preset="close"
         aria-controls="modale-visite-guidee"
         title="Fermer la visite guidée"
-        onclick={() => ferme()}
-        >Fermer
+        onclick={async () => await ferme()}
+      >
+        Fermer
       </dsfr-button>
     </div>
     <div class="modal_content">
@@ -104,7 +105,7 @@
       <dsfr-button
         kind="primary"
         size="md"
-        onclick={() => afficheEtapeSuivante()}
+        onclick={async () => await afficheEtapeSuivante()}
       >
         Suivant
       </dsfr-button>
