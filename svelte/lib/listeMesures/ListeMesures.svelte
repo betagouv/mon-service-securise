@@ -56,13 +56,23 @@
     categories: ListeMesuresProps['categories'];
     typesService: ReferentielTypesService;
     capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+    modeVisiteGuidee?: boolean;
   }
 
-  let { statuts, categories, typesService, capaciteAjoutDeMesure }: Props =
-    $props();
+  let {
+    statuts,
+    categories,
+    typesService,
+    capaciteAjoutDeMesure,
+    modeVisiteGuidee = false,
+  }: Props = $props();
 
   onMount(async () => {
-    await servicesAvecMesuresAssociees.rafraichis();
+    if (!modeVisiteGuidee) {
+      await servicesAvecMesuresAssociees.rafraichis();
+    } else {
+      servicesAvecMesuresAssociees.set([]);
+    }
   });
 
   const requete = new URLSearchParams(window.location.search);
@@ -124,12 +134,19 @@
     configurationFiltrage: ConfigurationFiltrage;
   };
 
+  const idsServicesAssociesAleatoires = () =>
+    Array.from({ length: Math.floor(Math.random() * 4) + 1 }, () =>
+      crypto.randomUUID()
+    );
+
   const listeModeleMesuresGenerales = derived(
     [modelesMesureGenerale, mesuresAvecServicesAssociesStore],
     ([$mMG, $mASAS]) =>
       Object.values($mMG).map((m) => ({
         ...m,
-        idsServicesAssocies: $mASAS[m.id],
+        idsServicesAssocies: modeVisiteGuidee
+          ? idsServicesAssociesAleatoires()
+          : $mASAS[m.id],
         type: 'generale' as ModeleDeMesure['type'],
       }))
   );
