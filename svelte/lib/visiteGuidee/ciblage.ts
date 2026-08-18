@@ -42,8 +42,40 @@ class CibleVisiteGuideeDirecteDom extends CibleVisiteGuidee {
   }
 }
 
+const rectangleEnglobant = (elements: HTMLElement[]): DOMRect => {
+  const rects = elements.map((e) => e.getBoundingClientRect());
+  const top = Math.min(...rects.map((r) => r.top));
+  const left = Math.min(...rects.map((r) => r.left));
+  const bottom = Math.max(...rects.map((r) => r.bottom));
+  const right = Math.max(...rects.map((r) => r.right));
+  return new DOMRect(left, top, right - left, bottom - top);
+};
+
+class CibleVisiteGuideeEnglobante extends CibleVisiteGuideeDirecteDom {
+  constructor(
+    private readonly queryElements: string,
+    queryDetection: string
+  ) {
+    super(queryDetection);
+  }
+
+  public el(): HTMLElement {
+    return {
+      getBoundingClientRect: () =>
+        rectangleEnglobant(
+          Array.from(document.querySelectorAll<HTMLElement>(this.queryElements))
+        ),
+      style: {} as CSSStyleDeclaration,
+    } as HTMLElement;
+  }
+}
+
 export const ciblage = () => ({
-  listeMesures: () => new CibleVisiteGuideeDirecteDom('table tr:nth-child(3)'),
+  listeMesures: () =>
+    new CibleVisiteGuideeEnglobante(
+      'table tr:nth-child(3), table tr:nth-child(4)',
+      'table tr:nth-child(4)'
+    ),
   statistiques: () => new CibleVisiteGuidee('admin-statistiques'),
   decrireV2: () => ({
     nomService: () => new CibleVisiteGuidee('nom-service'),
