@@ -160,5 +160,9 @@ export const donneesEtapesVisiteGuidee: Record<
     },
     positionModale: 'droite',
     decalageModale: 160,
+    ouvertureSuivante: {
+      delai: 4000,
+      ouverture: () => ciblage().securiser().lignesRisques([1, 2, 3]).el(),
+    },
   },
 };

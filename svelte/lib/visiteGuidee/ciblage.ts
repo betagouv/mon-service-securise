@@ -85,6 +85,15 @@ export const ciblage = () => ({
   securiser: () => ({
     deuxiemeLigneMesure: () => new CibleVisiteGuidee('ligne-de-mesure', 1),
     matriceRisquesV2: () => new CibleVisiteGuidee('matrice-risques-v2'),
+    ligneRisque: (index: number) =>
+      new CibleVisiteGuidee(`ligne-risque-${index}`),
+    lignesRisques: (indices: number[]) =>
+      new CibleVisiteGuideeEnglobante(
+        indices
+          .map((index) => `[data-visite-guidee-id="ligne-risque-${index}"]`)
+          .join(', '),
+        `[data-visite-guidee-id="ligne-risque-${Math.max(...indices)}"]`
+      ),
     premiereMesure: () => new CibleVisiteGuidee('titre-mesure'),
     onglets: () => new CibleVisiteGuidee('onglets-securiser'),
     gererContributeurs: () => new CibleVisiteGuidee('gerer-contributeurs'),
