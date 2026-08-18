@@ -18,6 +18,7 @@
     ReferentielVraisemblances,
   } from '../risques/risques.d';
   import CartoucheIdentifiantRisqueSpecifiqueV2 from './kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
 
   interface Props {
     idService?: string;
@@ -86,6 +87,7 @@
       class="colonne-identifiant colonne"
       class:inactif={donnee.desactive}
       class:avec-risques-specifiques={risques.risquesSpecifiques.length}
+      {@attach cibleDeVisiteGuidee(ciblage().securiser().ligneRisque(i).id())}
     >
       {#if estRisqueGeneral(donnee)}
         <CartoucheIdentifiantRisque risque={donnee} />
@@ -122,7 +124,11 @@
     >
       <Niveau niveau={donnee.vraisemblance} desactive={donnee.desactive} />
     </div>
-    <div slot="cell:actions:{i}" class="colonne colonne-actions">
+    <div
+      slot="cell:actions:{i}"
+      class="colonne colonne-actions"
+      {@attach cibleDeVisiteGuidee(ciblage().securiser().ligneRisque(i).id())}
+    >
       {#if estRisqueGeneral(donnee)}
         <dsfr-toggle
           state

@@ -52,6 +52,7 @@ export type DonneesEtapeVisiteGuidee = {
   titre: string;
   description: string;
   ouverture: () => HTMLElement;
+  ouvertureSuivante?: { delai: number; ouverture: () => HTMLElement };
   ouvertureSecondaire?: () => HTMLElement;
   callbackAvantOuverture?: () => Promise<void>;
   decoupe?: DecoupeVisiteGuidee;

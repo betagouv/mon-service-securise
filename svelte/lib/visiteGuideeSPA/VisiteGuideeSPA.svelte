@@ -70,9 +70,16 @@
     document.body.style.position === 'fixed' ? scrollGele : window.scrollY
   );
 
+  let ouvertureSuivanteActive = $state(false);
+  let donneesEtapeActive = $derived(
+    ouvertureSuivanteActive && donneesEtape.ouvertureSuivante
+      ? { ...donneesEtape, ouverture: donneesEtape.ouvertureSuivante.ouverture }
+      : donneesEtape
+  );
+
   const recalculeDecoupe = async () => {
     rectCible = await calculeRectangleOuverture(
-      donneesEtape,
+      donneesEtapeActive,
       rideau,
       cadreBlanc
     );
@@ -80,14 +87,14 @@
 
   const recalculeScroll = () => {
     scrollGele = ajusteHauteurScroll(
-      donneesEtape.ouverture(),
+      donneesEtapeActive.ouverture(),
       defilementActuel,
       scrollGele,
       elementModaleExplicative
         ? {
             element: elementModaleExplicative,
-            position: donneesEtape.positionModale,
-            decalage: donneesEtape.decalageModale || 0,
+            position: donneesEtapeActive.positionModale,
+            decalage: donneesEtapeActive.decalageModale || 0,
           }
         : undefined
     );
@@ -104,6 +111,17 @@
       await tick();
       await positionneOuverture();
     })();
+  });
+
+  $effect(() => {
+    ouvertureSuivanteActive = false;
+    const { ouvertureSuivante } = donneesEtape;
+    if (!ouvertureSuivante) return;
+    const minuteur = setTimeout(async () => {
+      ouvertureSuivanteActive = true;
+      await positionneOuverture();
+    }, ouvertureSuivante.delai);
+    return () => clearTimeout(minuteur);
   });
 </script>
 
