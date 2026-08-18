@@ -1,9 +1,10 @@
 <script lang="ts">
   interface Props {
     estOuverte: boolean;
+    utilisateurADesServices: boolean;
   }
 
-  let { estOuverte = $bindable() }: Props = $props();
+  let { estOuverte = $bindable(), utilisateurADesServices }: Props = $props();
 </script>
 
 <dsfr-modal id="modale-choix-visite-avancee" has-footer opened={estOuverte}>
@@ -51,8 +52,19 @@
     </p>
   </div>
   <div slot="footer" class="actions">
-    <dsfr-button label="Créer un service" markup="a" href="/service/v2/creation"
-    ></dsfr-button>
+    {#if utilisateurADesServices}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Retourner à mon tableau de bord"
+        onclick={() => (estOuverte = false)}
+      ></dsfr-button>
+    {:else}
+      <dsfr-button
+        label="Créer un service"
+        markup="a"
+        href="/service/v2/creation"
+      ></dsfr-button>
+    {/if}
   </div>
 </dsfr-modal>
 

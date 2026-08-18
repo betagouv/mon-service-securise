@@ -25,6 +25,7 @@
   import ModaleAccueilVisiteGuidee from '../visiteGuideeSPA/ModaleAccueilVisiteGuidee.svelte';
   import { enleveParametreDeUrl } from '../outils/url';
   import ModaleChoixVisiteAvancee from '../visiteGuideeSPA/ModaleChoixVisiteAvancee.svelte';
+  import { derived } from 'svelte/store';
 
   interface Props {
     estSuperviseur: boolean;
@@ -55,6 +56,8 @@
   let avecModaleFinVisiteGuidee = $state(false);
   let avecModaleAccueilVisiteGuidee = $state(false);
   let avecModaleVisiteGuideeAvancee = $state(false);
+
+  let utilisateurADesServices = derived(services, ($s) => $s.length > 0);
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -156,7 +159,7 @@
 
 <ModaleFinVisiteGuidee
   bind:estOuverte={avecModaleFinVisiteGuidee}
-  utilisateurADesServices={$services.length > 0}
+  utilisateurADesServices={$utilisateurADesServices}
   onselectionVisiteAvancee={ouvreModaleAvancee}
 />
 <ModaleAccueilVisiteGuidee
@@ -165,7 +168,10 @@
   {profilUtilisateurComplet}
   {aDejaVuEntierementVisiteGuidee}
 />
-<ModaleChoixVisiteAvancee bind:estOuverte={avecModaleVisiteGuideeAvancee} />
+<ModaleChoixVisiteAvancee
+  bind:estOuverte={avecModaleVisiteGuideeAvancee}
+  utilisateurADesServices={$utilisateurADesServices}
+/>
 
 <svelte:body
   on:rafraichis-services={rafraichisServices}
