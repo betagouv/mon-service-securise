@@ -127,6 +127,8 @@
 
 <svelte:window onresize={positionneOuverture} />
 
+<div class="bloqueur-clics" aria-hidden="true"></div>
+
 <ModaleExplicative
   bind:etape={etapeVisiteGuidee}
   bind:elementModale={elementModaleExplicative}
@@ -237,5 +239,12 @@
 
   :global(body[data-visite-guidee-v2-en-cours] lab-anssi-centre-aide) {
     display: none;
+  }
+
+  .bloqueur-clics {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    cursor: default;
   }
 </style>
