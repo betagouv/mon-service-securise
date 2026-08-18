@@ -6,6 +6,7 @@
     profilUtilisateurComplet: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
+    onselectionVisiteAvancee: () => void;
   }
 
   let {
@@ -13,6 +14,7 @@
     profilUtilisateurComplet,
     prenomNom,
     aDejaVuEntierementVisiteGuidee,
+    onselectionVisiteAvancee,
   }: Props = $props();
 
   const ignore = async () => {
@@ -34,6 +36,7 @@
         Découvrez MonServiceSécurisé à votre rythme. Commencez par l'essentiel
         ou explorez les fonctionnalités avancées.
       </p>
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <div class="selection-etape-suivante">
         <dsfr-card
           title="Découvrez les fonctionnalités essentielles"
@@ -51,13 +54,15 @@
             accent="yellow-moutarde"
           ></dsfr-badge>
         </dsfr-card>
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <dsfr-card
           title="Explorez les fonctionnalités avancées"
           has-description
           description="Approfondissez votre maîtrise de la plateforme : collaboration, gestion des risques, homologation et pilotage de vos services."
           has-badge
           size="sm"
-          href="/tableauDeBord?avecModaleVisiteGuideeAvancee=true"
+          action-markup="button"
+          onclick={onselectionVisiteAvancee}
           enlarge
         >
           <dsfr-badge

@@ -175,6 +175,7 @@
   {prenomNom}
   {profilUtilisateurComplet}
   {aDejaVuEntierementVisiteGuidee}
+  onselectionVisiteAvancee={ouvreModaleAvancee}
 />
 <ModaleChoixVisiteAvancee
   bind:estOuverte={avecModaleVisiteGuideeAvancee}
