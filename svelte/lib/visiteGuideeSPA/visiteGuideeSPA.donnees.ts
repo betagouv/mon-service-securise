@@ -61,6 +61,8 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     titre: 'Gérez vos mesures depuis un seul endroit',
     description:
       "La liste centralisée rassemble toutes vos mesures, tous services confondus. Modifiez le statut ou la précision d'une mesure une fois — la modification s'applique à tous les services que vous sélectionnez.",
+    descriptionAdditionnelle:
+      "Vous pouvez aussi importer jusqu'à 40 mesures propres à votre organisation et les gérer de la même façon.",
     ouverture: () => ciblage().listeMesures().el(),
     callbackAvantOuverture: async () => {
       await tick();
@@ -89,6 +91,8 @@ export const donneesEtapesVisiteGuideeAdditionnelle: Record<
     titre: 'Suivez tous les services de votre entité',
     description:
       "Les services créés sous le SIRET de vos entités vous sont rattachés automatiquement. Vous suivez leur avancement, les personnes qui y contribuent, et la sécurisation de l'ensemble depuis un tableau de bord statistique.",
+    descriptionAdditionnelle:
+      "Accès réservé aux admins. Contactez l'équipe MonServiceSécurisé pour en savoir plus.",
     ouverture: () => ciblage().statistiques().el(),
     positionModale: 'bas',
     decalageModale: 200,

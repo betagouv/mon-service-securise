@@ -51,6 +51,7 @@ export type DonneesEtapeVisiteGuidee = {
   pageFond: PageFondVisiteGuidee;
   titre: string;
   description: string;
+  descriptionAdditionnelle?: string;
   ouverture: () => HTMLElement;
   ouvertureSuivante?: { delai: number; ouverture: () => HTMLElement };
   ouvertureSecondaire?: () => HTMLElement;
