@@ -124,5 +124,9 @@
     display: flex;
     gap: 24px;
     margin-bottom: 24px;
+
+    & > * {
+      flex: 1;
+    }
   }
 </style>
