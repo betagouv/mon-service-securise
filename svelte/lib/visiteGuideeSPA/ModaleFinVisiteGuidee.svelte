@@ -32,6 +32,7 @@
         action-markup="a"
         href="https://app.livestorm.co/lab-anssi/formation-monservicesecurise-declarer-son-premier-service-numerique"
         blank
+        enlarge
       >
         <dsfr-badge
           slot="badgesgroup"
@@ -49,6 +50,7 @@
         size="sm"
         action-markup="button"
         onclick={onselectionVisiteAvancee}
+        enlarge
       >
         <dsfr-badge
           slot="badgesgroup"
