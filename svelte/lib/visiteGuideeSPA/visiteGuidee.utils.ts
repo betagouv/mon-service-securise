@@ -1,7 +1,23 @@
-import type { PositionModale } from './visiteGuideeSPA.d';
+import type { PositionModale, RectCible } from './visiteGuideeSPA.d';
 import type { DonneesEtapeVisiteGuidee } from './visiteGuideeSPA.d';
 
 const decoupeParDefaut = { marge: 24, rayon: 8 };
+
+export const calculePositionModale = (
+  rectCible: RectCible,
+  tailleModale: { width: number; height: number },
+  positionModale: PositionModale,
+  decalageModale: number
+) =>
+  positionModale === 'bas'
+    ? {
+        top: rectCible.top - tailleModale.height + decalageModale,
+        left: rectCible.left + rectCible.width / 2 - tailleModale.width / 2,
+      }
+    : {
+        top: rectCible.top + rectCible.height / 2 - tailleModale.height / 2,
+        left: rectCible.left - tailleModale.width + decalageModale,
+      };
 
 export const geleDefilementDuCorps = () => {
   const scrollGele = window.scrollY;
