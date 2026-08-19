@@ -78,7 +78,6 @@ export const ciblage = () => ({
     ),
   statistiques: () => new CibleVisiteGuidee('admin-statistiques'),
   decrireV2: () => ({
-    nomService: () => new CibleVisiteGuidee('nom-service'),
     besoinsSecurite: (id: IdNiveauDeSecurite) =>
       new CibleVisiteGuidee(`besoins-securite-${id}`),
   }),
@@ -95,26 +94,7 @@ export const ciblage = () => ({
         `[data-visite-guidee-id="ligne-risque-${Math.max(...indices)}"]`
       ),
     premiereMesure: () => new CibleVisiteGuidee('titre-mesure'),
-    onglets: () => new CibleVisiteGuidee('onglets-securiser'),
     gererContributeurs: () => new CibleVisiteGuidee('gerer-contributeurs'),
-    indiceCyber: () => new CibleVisiteGuidee('incide-cyber'),
-    planAction: () => new CibleVisiteGuidee('plan-action'),
-    activite: () => new CibleVisiteGuidee('activite'),
-  }),
-  homologuer: () => ({
-    creerHomologation: () => new CibleVisiteGuidee('creer-homologation'),
-    voirTelechargement: () => new CibleVisiteGuidee('voir-telechargement'),
-  }),
-  piloter: () => ({
-    nomService: () => new CibleVisiteGuidee('piloter-nom-service'),
-    centreNotifications: () => new CibleVisiteGuidee('centre-notifications'),
-    nouveauService: () => new CibleVisiteGuidee('nouveau-service'),
-    premierService: () => ({
-      el: () =>
-        (document
-          .querySelector('dsfr-table')
-          ?.shadowRoot?.querySelector('tbody tr') as HTMLElement) ?? undefined,
-    }),
   }),
   tiroir: () => new CibleVisiteGuidee('tiroir'),
 });

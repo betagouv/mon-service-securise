@@ -24,7 +24,6 @@
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
   import { encode } from 'html-entities';
-  import { ciblage } from '../visiteGuideeSPA/ciblage';
   import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
   import EnteteTiroir from './entete/EnteteTiroir.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
@@ -210,7 +209,6 @@
           bind:ongletActif
           cetOnglet="planAction"
           labelOnglet="Plan d'action"
-          idVisiteGuidee={ciblage().securiser().planAction().id()}
           sansBordureEnBas
           badge={!planDActionDisponible($store.mesureEditee.mesure.statut)
             ? 'info'
@@ -220,7 +218,6 @@
           bind:ongletActif
           cetOnglet="activite"
           labelOnglet="Activité"
-          idVisiteGuidee={ciblage().securiser().activite().id()}
           sansBordureEnBas
         />
         {#if avecOngletReferentielsExterne}

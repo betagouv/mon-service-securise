@@ -8,14 +8,11 @@
 </script>
 
 <script lang="ts">
-  import { cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
-
   interface Props {
     titre: string;
     options: OptionBoutonListeDeroulante[];
     disabled?: boolean;
     aligneADroite?: boolean;
-    idVisiteGuidee?: string;
   }
 
   let {
@@ -23,7 +20,6 @@
     options,
     disabled = false,
     aligneADroite = false,
-    idVisiteGuidee = '',
   }: Props = $props();
 
   let optionsPourDropdown = $derived(
@@ -53,6 +49,5 @@
   items={optionsPourDropdown}
   onitemclicked={executeAction}
   {disabled}
-  {@attach idVisiteGuidee !== '' && cibleDeVisiteGuidee(idVisiteGuidee)}
 >
 </dsfr-dropdown>
