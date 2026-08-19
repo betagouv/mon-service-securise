@@ -9,8 +9,7 @@ describe('Le serveur MSS des routes privées /api/explicationRisquesV2/*', () =>
     testeur.depotDonnees().lisParcoursUtilisateur = () =>
       new ParcoursUtilisateur(
         // @ts-expect-error On ne se concentre que sur cette propriété
-        { aVuExplicationRisquesV2: false },
-        testeur.referentiel()
+        { aVuExplicationRisquesV2: false }
       );
   });
 

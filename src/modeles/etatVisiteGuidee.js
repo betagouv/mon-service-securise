@@ -1,13 +1,11 @@
 import Base from './base.js';
-import * as Referentiel from '../referentiel.js';
 
 class EtatVisiteGuidee extends Base {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: ['dejaTerminee'],
     });
     this.renseigneProprietes(donnees);
-    this.referentiel = referentiel;
   }
 
   finalise() {
