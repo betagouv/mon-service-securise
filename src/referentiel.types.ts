@@ -26,7 +26,6 @@ export type EtapeHomologation =
   (typeof donnees.etapesParcoursHomologation)[number];
 export type IdTacheCompletudeProfil =
   (typeof donnees.tachesCompletudeProfil)[number]['id'];
-export type IdEtapeVisiteGuidee = keyof typeof donnees.etapesVisiteGuidee;
 export type IdNatureTacheService = keyof typeof donnees.naturesTachesService;
 export type IdNatureSuggestionAction =
   keyof typeof donnees.naturesSuggestionsActions;

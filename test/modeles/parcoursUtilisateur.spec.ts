@@ -10,7 +10,7 @@ const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
   aVuTableauDeBordDepuisConnexion: false,
   idUtilisateur: unUUID('1'),
   dateDerniereConnexion: '2023-01-01',
-  etatVisiteGuidee: { dejaTerminee: false, enPause: true },
+  etatVisiteGuidee: { dejaTerminee: false },
   explicationNouveauReferentiel: { dejaTermine: false },
   aVuExplicationRisquesV2: false,
 });
@@ -23,7 +23,7 @@ describe('Un parcours utilisateur', () => {
       aVuTableauDeBordDepuisConnexion: false,
       idUtilisateur: unUUID('1'),
       dateDerniereConnexion: '2023-01-01',
-      etatVisiteGuidee: { dejaTerminee: false, enPause: true },
+      etatVisiteGuidee: { dejaTerminee: false },
       explicationNouveauReferentiel: {
         dejaTermine: false,
       },
@@ -47,7 +47,6 @@ describe('Un parcours utilisateur', () => {
     expect(etatInitial.idUtilisateur).toEqual(unUUID('1'));
     expect(etatInitial.etatVisiteGuidee).toBeInstanceOf(EtatVisiteGuidee);
     expect(etatInitial.etatVisiteGuidee.dejaTerminee).toBe(false);
-    expect(etatInitial.etatVisiteGuidee.enPause).toBe(false);
     expect(etatInitial.explicationNouveauReferentiel.estTermine()).toBe(false);
     expect(
       etatInitial.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion

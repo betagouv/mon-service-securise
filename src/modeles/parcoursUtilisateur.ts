@@ -11,8 +11,6 @@ import { Referentiel } from '../referentiel.interface.js';
 
 type DonneesEtatVisiteGuidee = {
   dejaTerminee: boolean;
-  enPause: boolean;
-  etapesVues?: string[];
 };
 
 export type DonneesParcoursUtilisateur = {
@@ -92,7 +90,7 @@ class ParcoursUtilisateur {
       {
         aVuTableauDeBordDepuisConnexion: false,
         idUtilisateur,
-        etatVisiteGuidee: { dejaTerminee: false, enPause: false },
+        etatVisiteGuidee: { dejaTerminee: false },
         explicationNouveauReferentiel: {
           dejaTermine: false,
         },

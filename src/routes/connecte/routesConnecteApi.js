@@ -368,7 +368,6 @@ const routesConnecteApi = ({
     middleware.verificationAcceptationCGU,
     routesConnecteApiVisiteGuidee({
       depotDonnees,
-      referentiel,
     })
   );
 

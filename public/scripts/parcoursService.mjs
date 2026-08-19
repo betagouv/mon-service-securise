@@ -3,9 +3,7 @@ import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 $(async () => {
   const idService = $('.page-service').data('id-service');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const modeVisiteGuidee =
-    etatVisiteGuidee.dejaTerminee === false &&
-    etatVisiteGuidee.enPause === false;
+  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   const etapeActive = lisDonneesPartagees('etape-active');
