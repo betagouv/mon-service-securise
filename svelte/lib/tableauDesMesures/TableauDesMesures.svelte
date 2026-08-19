@@ -61,7 +61,6 @@
   import ModaleExplicationRisquesV2 from '../risquesV2/modale/ModaleExplicationRisquesV2.svelte';
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
   import { rechercheParReferentielExterne } from './stores/rechercheParReferentielExterne.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
@@ -391,10 +390,7 @@
   <thead>
     <tr class="ligne-onglet">
       <th colspan="5">
-        <div
-          class="conteneur-onglet"
-          {@attach cibleDeVisiteGuidee(ciblage().securiser().onglets().id())}
-        >
+        <div class="conteneur-onglet">
           {#if $volumetrieMesures.totalSansStatut}
             <Onglet
               bind:ongletActif={$rechercheParAvancement}

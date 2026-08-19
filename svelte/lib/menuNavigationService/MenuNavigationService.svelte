@@ -89,9 +89,6 @@
           <li>
             <button
               id="voir-telechargement"
-              {@attach cibleDeVisiteGuidee(
-                ciblage().homologuer().voirTelechargement().id()
-              )}
               class="lien-navigation"
               onclick={() => {
                 if (service)
