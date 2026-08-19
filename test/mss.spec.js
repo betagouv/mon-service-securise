@@ -37,6 +37,17 @@ describe('Le serveur MSS', () => {
       expect(reponse.headers['surrogate-control']).to.equal('no-store');
       expect(reponse.headers.pragma).to.equal('no-cache');
     });
+
+    it('référence les ressources statiques avec la version de build', async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.text).to.contain(
+        '/statique/assets/styles/mss.css?v=version-de-test'
+      );
+      expect(reponse.text).to.contain(
+        '<script type="module" src="/statique/header.js?v=version-de-test">'
+      );
+    });
   });
 
   describe('quand un fichier statique est servi', () => {
