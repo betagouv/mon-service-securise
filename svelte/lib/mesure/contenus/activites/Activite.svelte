@@ -8,7 +8,7 @@
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
   import Initiales from '../../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
-  import { formatteDateHeureFr } from '../../../formatDate/formatDate';
+  import { formatteDateHeureFr } from '../../../ui/formatDate';
   import { obtientVisualisation } from './visualisation';
   import { derived, type Readable } from 'svelte/store';
 

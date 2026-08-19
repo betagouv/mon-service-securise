@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Notification } from '../../ui/types.d';
-  import { formatteDifferenceDateRelative } from '../../formatDate/formatDate';
+  import { formatteDifferenceDateRelative } from '../../ui/formatDate';
   import { storeNotifications } from '../../ui/stores/notifications.store';
 
   interface Props {
