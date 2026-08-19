@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
-  import { cibleDeVisiteGuidee } from '../../../visiteGuidee/ciblage';
+  import { cibleDeVisiteGuidee } from '../../../visiteGuideeSPA/ciblage';
 
   interface Props {
     estComplete: boolean;

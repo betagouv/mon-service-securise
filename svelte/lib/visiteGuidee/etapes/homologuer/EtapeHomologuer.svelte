@@ -5,7 +5,7 @@
   import TiroirTelechargementDocumentsService from '../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import { donneesVisiteGuidee } from '../../../tableauDeBord/donneesVisiteGuidee';
-  import { ciblage } from '../../ciblage';
+  import { ciblage } from '../../../visiteGuideeSPA/ciblage';
 
   let cibleNouvelleHomologation: HTMLElement | undefined = $state();
   let cibleTelechargement: HTMLElement | undefined = $state();

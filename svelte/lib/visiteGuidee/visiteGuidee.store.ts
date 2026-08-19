@@ -11,7 +11,7 @@ import {
   termineEtape,
 } from './visiteGuidee.api';
 import EtapeDecrireV2 from './etapes/decrire/EtapeDecrireV2.svelte';
-import { ciblage } from './ciblage';
+import { ciblage } from '../visiteGuideeSPA/ciblage';
 
 const etatParDefaut: EtatVisiteGuidee = {
   etapeCourante: 'BIENVENUE',

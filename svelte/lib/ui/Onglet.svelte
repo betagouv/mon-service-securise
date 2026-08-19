@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends string">
   import Pastille from './Pastille.svelte';
-  import { cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   interface Props {
     ongletActif: T;

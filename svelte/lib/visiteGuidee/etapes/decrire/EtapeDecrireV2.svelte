@@ -2,7 +2,7 @@
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount, tick } from 'svelte';
   import { navigationStore } from '../../../creationV2/etapes/navigation.store';
-  import { ciblage } from '../../ciblage';
+  import { ciblage } from '../../../visiteGuideeSPA/ciblage';
 
   let cibleNomService: HTMLElement | undefined = $state();
   let cibleBesoinsSecurite: HTMLElement | undefined = $state();

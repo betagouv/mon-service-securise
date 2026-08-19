@@ -19,7 +19,7 @@
   import BarChart from './charts/BarChart.svelte';
   import type { StatutMesure } from '../modeles/modeleMesure';
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   interface Props {
     referentiel: ReferentielStatistiques;

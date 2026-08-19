@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import { utilisateurCourant } from '../../visiteGuidee.store';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
-  import { ciblage } from '../../ciblage';
+  import { ciblage } from '../../../visiteGuideeSPA/ciblage';
 
   let cibleNomService: HTMLElement | undefined = $state();
   let cibleCentreNotifications: HTMLElement | undefined = $state();

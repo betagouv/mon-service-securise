@@ -2,7 +2,7 @@
   import type { EntetePageServiceProps } from './entetePageService.d';
   import IndiceCyber from '../indiceCyber/IndiceCyber.svelte';
   import IndiceCyberPersonnalise from '../indiceCyberPersonnalise/IndiceCyberPersonnalise.svelte';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   let {
     nomService,

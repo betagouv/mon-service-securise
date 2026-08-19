@@ -61,7 +61,7 @@
   import ModaleExplicationRisquesV2 from '../risquesV2/modale/ModaleExplicationRisquesV2.svelte';
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
   import { rechercheParReferentielExterne } from './stores/rechercheParReferentielExterne.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;

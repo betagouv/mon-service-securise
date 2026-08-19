@@ -4,7 +4,7 @@
   import type { SousEtape } from '../../kit/ModaleSousEtape';
   import TiroirGestionContributeurs from '../../../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
-  import { ciblage } from '../../ciblage';
+  import { ciblage } from '../../../visiteGuideeSPA/ciblage';
 
   let ciblePremiereMesure: HTMLDivElement | undefined = $state();
   let cibleOnglets: HTMLDivElement | undefined = $state();

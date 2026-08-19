@@ -8,7 +8,10 @@
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { routeurStore } from '../../store/routeur.store';
   import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
-  import { ciblage, cibleDeVisiteGuidee } from '../../../visiteGuidee/ciblage';
+  import {
+    ciblage,
+    cibleDeVisiteGuidee,
+  } from '../../../visiteGuideeSPA/ciblage';
 
   interface Props {
     dossiers: DossiersHomologation;

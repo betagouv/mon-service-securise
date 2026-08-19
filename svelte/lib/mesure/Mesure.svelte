@@ -24,7 +24,7 @@
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
   import { encode } from 'html-entities';
-  import { ciblage } from '../visiteGuidee/ciblage';
+  import { ciblage } from '../visiteGuideeSPA/ciblage';
   import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
   import EnteteTiroir from './entete/EnteteTiroir.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
