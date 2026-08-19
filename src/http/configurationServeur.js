@@ -17,10 +17,4 @@ const ENDPOINTS_SANS_CSRF = [
   { path: '/bibliotheques/evenementMatomo', type: 'exact' },
 ];
 
-const { CACHE_CONTROL_FICHIERS_STATIQUES } = process.env;
-
-export {
-  TYPES_REQUETES,
-  CACHE_CONTROL_FICHIERS_STATIQUES,
-  ENDPOINTS_SANS_CSRF,
-};
+export { TYPES_REQUETES, ENDPOINTS_SANS_CSRF };

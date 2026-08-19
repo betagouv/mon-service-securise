@@ -397,7 +397,13 @@ const middlewareFantaisie = {
       ...params
     ),
 
-  interdisLaMiseEnCache: (_requete, _reponse, suite) => {
+  interdisLaMiseEnCache: (_requete, reponse, suite) => {
+    reponse.set({
+      'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      pragma: 'no-cache',
+      expires: '0',
+      'surrogate-control': 'no-store',
+    });
     suite();
   },
 
