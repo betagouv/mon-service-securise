@@ -1,7 +1,7 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig, createLogger } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { glob } from 'glob';
 
 const loggerPersonnalise = createLogger();
@@ -39,9 +39,12 @@ export default defineConfig({
     // on build vers le dossier de fichiers statiques /public pour servir les bundles depuis le pug
     outDir: resolve(__dirname, '../public/composants-svelte'),
     lib: {
+      // Seuls les points de montage `lib/<nom>/<nom>.ts` sont des entrées :
+      // tout le reste devient des chunks hashés par contenu, compatibles
+      // avec le cache `immutable` de /statique/composants-svelte
       entry: glob
-        .sync(resolve(__dirname, './lib/**/*.ts'))
-        .filter((file) => !file.includes('.d.ts')),
+        .sync(resolve(__dirname, './lib/*/*.ts'))
+        .filter((file) => basename(dirname(file)) === basename(file, '.ts')),
       fileName: (_, entryname) => `${entryname}.js`,
       formats: ['es'],
       cssFileName: 'style',
