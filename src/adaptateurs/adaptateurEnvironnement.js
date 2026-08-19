@@ -75,6 +75,11 @@ const featureFlag = () => ({
     process.env.FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS === 'true',
 });
 
+const statique = () => ({
+  politiqueCache: () =>
+    process.env.CACHE_CONTROL_FICHIERS_STATIQUES || 'no-store',
+});
+
 const versionDeBuild = () => {
   const versionCommit =
     process.env.CONTAINER_VERSION || process.env.CC_COMMIT_ID || '1';
@@ -161,6 +166,7 @@ export {
   oidc,
   sendinblue,
   sentry,
+  statique,
   trustProxy,
   versionDeBuild,
 };
