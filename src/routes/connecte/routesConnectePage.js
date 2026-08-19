@@ -1,11 +1,8 @@
 import express from 'express';
 import { z } from 'zod';
-import Utilisateur from '../../modeles/utilisateur.js';
-import Service from '../../modeles/service.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
-import { adaptateurJWT } from '../../adaptateurs/adaptateurJWT.js';
 import { routesConnectePageAdmin } from './routesConnectePageAdmin.js';
 import { valideQuery } from '../../http/validePayloads.js';
 
@@ -88,62 +85,6 @@ const routesConnectePage = ({
       reponse.locals.etatVisiteGuidee.enPause = false;
       reponse.locals.etatVisiteGuidee.dejaTerminee = false;
       reponse.render('visiteGuidee/spa', { referentiel, referentielV2 });
-    }
-  );
-
-  routes.get(
-    '/visiteGuidee/:idEtape',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeExplicationNouveauReferentiel,
-    middleware.chargeExplicationUtilisationMFA,
-    middleware.chargeExplicationRisquesV2,
-    middleware.chargeEtatVisiteGuidee,
-    (requete, reponse) => {
-      const utilisateurVisiteGuidee = new Utilisateur(
-        { email: 'visite-guidee@cyber.gouv.fr' },
-        { adaptateurJWT }
-      );
-      const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
-      service.id = 'ID-SERVICE-VISITE-GUIDEE';
-
-      const { idEtape } = requete.params;
-      const idEtapeCourante = idEtape.toUpperCase();
-      const idEtapePrecedente =
-        referentiel.etapePrecedenteVisiteGuidee(idEtapeCourante);
-      const etapePrecedente = referentiel.etapeVisiteGuidee(idEtapePrecedente);
-      reponse.locals.etatVisiteGuidee = {
-        ...reponse.locals.etatVisiteGuidee,
-        etapeCourante: idEtapeCourante,
-        urlEtapePrecedente: etapePrecedente?.urlEtape,
-        dejaTerminee: false,
-      };
-
-      reponse.locals.autorisationsService = {
-        DECRIRE: { estMasque: false },
-        SECURISER: { estMasque: false, estLectureSeule: false },
-        HOMOLOGUER: { estMasque: false },
-        RISQUES: { estMasque: false },
-        CONTACTS: { estMasque: false },
-        peutHomologuer: false,
-      };
-
-      if (idEtape === 'decrire') {
-        reponse.render('visiteGuidee/creationService');
-      } else if (idEtape === 'mesures') {
-        reponse.render('service/pagesService', {
-          referentiel,
-          service,
-          etapeActive: 'mesures',
-        });
-      } else if (idEtape === 'dossiers') {
-        reponse.render('service/pagesService', {
-          service,
-          etapeActive: 'dossiers',
-          referentiel,
-        });
-      } else if (idEtape === 'piloter') {
-        reponse.render('tableauDeBord');
-      }
     }
   );
 

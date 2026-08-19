@@ -13,84 +13,40 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
   beforeEach(() => testeur.initialise());
 
-  [
-    '/profil',
-    '/tableauDeBord',
-    '/visiteGuidee',
-    '/visiteGuidee/decrire',
-    '/visiteGuidee/mesures',
-    '/visiteGuidee/dossiers',
-    '/visiteGuidee/piloter',
-    '/mesures',
-  ].forEach((route) => {
-    describe(`quand GET sur ${route}`, () => {
-      beforeEach(() => {
-        const utilisateur = unUtilisateur().construis();
-        testeur.depotDonnees().utilisateur = async () => utilisateur;
-        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
-          async () => {};
-        testeur.referentiel().recharge({
-          etapesParcoursHomologation: [{ numero: 1 }],
+  ['/profil', '/tableauDeBord', '/visiteGuidee', '/mesures'].forEach(
+    (route) => {
+      describe(`quand GET sur ${route}`, () => {
+        beforeEach(() => {
+          const utilisateur = unUtilisateur().construis();
+          testeur.depotDonnees().utilisateur = async () => utilisateur;
+          testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+            async () => {};
+          testeur.referentiel().recharge({
+            etapesParcoursHomologation: [{ numero: 1 }],
+          });
+        });
+
+        it("vérifie que l'utilisateur a accepté les CGU", async () => {
+          await testeur
+            .middleware()
+            .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
+        });
+
+        it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
+          await testeur
+            .middleware()
+            .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `${route}`);
+        });
+
+        it('sert le contenu HTML de la page', async () => {
+          const reponse = await testeur.get(`${route}`);
+
+          expect(reponse.status).to.equal(200);
+          expect(reponse.headers['content-type']).to.contain('text/html');
         });
       });
-
-      it("vérifie que l'utilisateur a accepté les CGU", async () => {
-        await testeur
-          .middleware()
-          .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
-      });
-
-      it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
-        await testeur
-          .middleware()
-          .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `${route}`);
-      });
-
-      it('sert le contenu HTML de la page', async () => {
-        const reponse = await testeur.get(`${route}`);
-
-        expect(reponse.status).to.equal(200);
-        expect(reponse.headers['content-type']).to.contain('text/html');
-      });
-    });
-  });
-
-  describe('quand requête GET sur /visiteGuidee/:idEtape', () => {
-    it("charge l'explication du nouveau référentiel, car c'est nécessaire au tableau de bord", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteChargeExplicationNouveauReferentiel(
-          testeur.app(),
-          '/visiteGuidee/piloter'
-        );
-    });
-
-    it("charge l'explication de l'utilisation du MFA, car c'est nécessaire au tableau de bord", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteChargeExplicationUtilisationMFA(
-          testeur.app(),
-          '/visiteGuidee/piloter'
-        );
-    });
-
-    it("charge l'explication des risques V2, car c'est nécessaire sur la page Sécuriser", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDeLExplicationDesRisquesV2(
-          testeur.app(),
-          '/visiteGuidee/mesures'
-        );
-    });
-
-    describe("pour l'étape 'Décrire'", () => {
-      it("affiche l'étape 'Décrire V2'", async () => {
-        const reponse = await testeur.get('/visiteGuidee/decrire');
-
-        expect(reponse.text).to.contain('id="visite-guidee-creation-service"');
-      });
-    });
-  });
+    }
+  );
 
   describe('quand requête GET sur /deconnexion', () => {
     it("révoque la session de l'utilisateur", async () => {
