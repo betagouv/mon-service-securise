@@ -7,6 +7,7 @@
   } from './visiteGuideeSPA.d';
   import { donneesEtapesVisiteGuidee } from './visiteGuideeSPA.donnees';
   import { termineVisiteGuidee } from './visiteGuidee.api';
+  import { calculePositionModale } from './visiteGuidee.utils';
 
   interface Props {
     etape: EtapeVisiteGuidee | EtapeVisiteGuideeAdditionnelle;
@@ -29,23 +30,14 @@
   $effect(() => {
     if (!rectCible || !elementModale) return;
 
-    const { width: largeurModale, height: hauteurModale } =
-      elementModale.getBoundingClientRect();
+    const { top, left } = calculePositionModale(
+      rectCible,
+      elementModale.getBoundingClientRect(),
+      donneesEtape.positionModale,
+      decalageModale
+    );
 
-    const { top, left } =
-      donneesEtape.positionModale === 'bas'
-        ? {
-            top: rectCible.top - hauteurModale + decalageModale,
-            left: rectCible.left + rectCible.width / 2 - largeurModale / 2,
-          }
-        : {
-            top: rectCible.top + rectCible.height / 2 - hauteurModale / 2,
-            left: rectCible.left - largeurModale + decalageModale,
-          };
-
-    elementModale.style.top = `${top}px`;
-    elementModale.style.left = `${left}px`;
-    elementModale.style.transform = 'none';
+    elementModale.style.transform = `translate3d(${left}px, ${top}px, 0)`;
   });
 
   const ferme = async () => {
@@ -147,16 +139,16 @@
     padding: 0;
     margin: 0;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    transform: translate(calc(50vw - 50%), calc(50vh - 50%));
+    will-change: transform;
     visibility: inherit;
     opacity: 1;
     transition:
       opacity 0.3s,
       visibility 0.3s,
-      top 0.3s ease-in-out,
-      left 0.3s ease-in-out;
+      transform 0.3s ease-in-out;
   }
 
   .modal_body {
