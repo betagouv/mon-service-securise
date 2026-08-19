@@ -2,8 +2,6 @@ import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(async () => {
   const idService = $('.page-service').data('id-service');
-  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   const etapeActive = lisDonneesPartagees('etape-active');
@@ -12,7 +10,7 @@ $(async () => {
       detail: {
         idService,
         etapeActive,
-        modeVisiteGuidee,
+        modeVisiteGuidee: false,
         visible: {
           rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
@@ -33,7 +31,7 @@ $(async () => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-entete-page-service', {
       detail: {
-        idService: modeVisiteGuidee ? undefined : idService,
+        idService,
         nomService,
         organisationResponsable: nomOrganisationResponsable,
         indiceCyber,

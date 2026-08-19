@@ -32,12 +32,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
             .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
         });
 
-        it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
-          await testeur
-            .middleware()
-            .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `${route}`);
-        });
-
         it('sert le contenu HTML de la page', async () => {
           const reponse = await testeur.get(`${route}`);
 
@@ -147,6 +141,12 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand GET sur /tableauDeBord', () => {
+    it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), '/tableauDeBord');
+    });
+
     it("vérifie que l'état de l'explication du nouveau référentiel est chargé", async () => {
       await testeur
         .middleware()

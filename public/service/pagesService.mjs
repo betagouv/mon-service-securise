@@ -3,8 +3,6 @@ import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 $(() => {
   const idService = $('#pages-service').data('id-service');
   const referentiel = lisDonneesPartagees('referentiel');
-  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
   const etapeActive = lisDonneesPartagees('etape-active');
   const featureFlags = lisDonneesPartagees('feature-flags');
   const preferencesUtilisateur = lisDonneesPartagees('preferences-utilisateur');
@@ -18,7 +16,7 @@ $(() => {
         idService,
         referentiel,
         etapeActive,
-        modeVisiteGuidee,
+        modeVisiteGuidee: false,
         featureFlags,
         preferencesUtilisateur,
         suggestionsService,

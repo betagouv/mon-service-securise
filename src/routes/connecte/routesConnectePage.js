@@ -34,7 +34,6 @@ const routesConnectePage = ({
   routes.get(
     '/profil',
     middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
     async (requete, reponse) => {
       const departements = referentiel.departements();
       const estimationNombreServices = referentiel.estimationNombreServices();
@@ -80,7 +79,6 @@ const routesConnectePage = ({
   routes.get(
     '/visiteGuidee',
     middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
     (_requete, reponse) => {
       reponse.render('visiteGuidee/spa', { referentiel, referentielV2 });
     }
@@ -89,7 +87,6 @@ const routesConnectePage = ({
   routes.get(
     '/mesures',
     middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
     async (_, reponse) => {
       const typesV1 = referentiel.typesService();
       const typesV2 = Object.fromEntries(
@@ -155,7 +152,6 @@ const routesConnectePage = ({
   routes.use(
     '/service',
     middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
     routesConnectePageService({
       middleware,
       referentiel,
