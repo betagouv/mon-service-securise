@@ -57,18 +57,10 @@
     document.getElementById('visite-guidee-cadre-blanc')!
   );
 
-  let scrollGele = $state(0);
-
   $effect(() => {
-    scrollGele = geleDefilementDuCorps();
-    return () => {
-      degeleDefilementDuCorps(scrollGele);
-    };
+    geleDefilementDuCorps();
+    return degeleDefilementDuCorps;
   });
-
-  const defilementActuel = $derived(
-    document.body.style.position === 'fixed' ? scrollGele : window.scrollY
-  );
 
   let ouvertureSuivanteActive = $state(false);
   let donneesEtapeActive = $derived(
@@ -86,10 +78,8 @@
   };
 
   const recalculeScroll = () => {
-    scrollGele = ajusteHauteurScroll(
+    ajusteHauteurScroll(
       donneesEtapeActive.ouverture(),
-      defilementActuel,
-      scrollGele,
       elementModaleExplicative
         ? {
             element: elementModaleExplicative,

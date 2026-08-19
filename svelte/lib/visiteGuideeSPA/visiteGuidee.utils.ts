@@ -20,20 +20,11 @@ export const calculePositionModale = (
       };
 
 export const geleDefilementDuCorps = () => {
-  const scrollGele = window.scrollY;
-  document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.top = `-${scrollGele}px`;
-  document.body.style.width = '100%';
-  return scrollGele;
+  document.documentElement.style.overflow = 'hidden';
 };
 
-export const degeleDefilementDuCorps = (scrollGele: number) => {
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.width = '';
-  document.body.style.overflow = '';
-  window.scrollTo({ top: scrollGele, behavior: 'instant' });
+export const degeleDefilementDuCorps = () => {
+  document.documentElement.style.overflow = '';
 };
 
 export const cheminRectangleArrondi = (
@@ -103,25 +94,17 @@ const etendueModaleProjetee = (
   return { top, bottom: top + hauteurModale, height: hauteurModale };
 };
 
-const scrolleSansBloquerLeCorps = (
-  declencheScroll: () => void,
-  scrollGele: number
-): number => {
-  degeleDefilementDuCorps(scrollGele);
-  declencheScroll();
-  return geleDefilementDuCorps();
-};
+const defileVers = (top: number) =>
+  window.scrollTo({ top, behavior: 'instant' });
 
 export const ajusteHauteurScroll = (
   ouverture: HTMLElement,
-  defilementActuel: number,
-  scrollGele: number,
   modale?: {
     element: HTMLElement;
     position: PositionModale;
     decalage: number;
   }
-): number => {
+) => {
   const rectCible = ouverture.getBoundingClientRect();
   const etendueAVerifier = modale
     ? englobe(
@@ -135,25 +118,16 @@ export const ajusteHauteurScroll = (
       )
     : rectCible;
 
+  const defilementActuel = window.scrollY;
+
   if (
     seraitEntierementVisibleEnHautDePage(etendueAVerifier, defilementActuel)
   ) {
-    if (defilementActuel !== 0) {
-      return scrolleSansBloquerLeCorps(
-        () => window.scrollTo({ top: 0, behavior: 'instant' }),
-        scrollGele
-      );
-    }
+    if (defilementActuel !== 0) defileVers(0);
   } else if (!estEntierementVisible(etendueAVerifier)) {
     const centreEtendue = (etendueAVerifier.top + etendueAVerifier.bottom) / 2;
-    const nouveauDefilement =
-      defilementActuel + centreEtendue - window.innerHeight / 2;
-    return scrolleSansBloquerLeCorps(
-      () => window.scrollTo({ top: nouveauDefilement, behavior: 'instant' }),
-      scrollGele
-    );
+    defileVers(defilementActuel + centreEtendue - window.innerHeight / 2);
   }
-  return scrollGele;
 };
 
 const attendStabiliteRect = (
