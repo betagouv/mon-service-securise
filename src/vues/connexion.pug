@@ -2,8 +2,8 @@ extends ./mss
 include ./fragments/header
 
 block append styles
-    link(href = '/statique/assets/styles/connexion.css', rel = 'stylesheet')
-    link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/connexion.css')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/formulaire.css')
 
 block append scripts
     +composantSvelte('connexion.js')
@@ -15,4 +15,4 @@ block header
 block main
     #conteneur-connexion
 
-    script(type = 'module', src = '/statique/connexion.mjs')
+    +moduleAvecVersion('/statique/connexion.mjs')

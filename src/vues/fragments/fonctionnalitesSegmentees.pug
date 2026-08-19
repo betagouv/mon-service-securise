@@ -1,8 +1,8 @@
 block append scripts
-    script(type = 'module', src = '/statique/fonctionnalitesSegmentees.js')
+    +moduleAvecVersion('/statique/fonctionnalitesSegmentees.js')
 
 block append styles
-  link(href='/statique/assets/styles/fonctionnalitesSegmentees.css', rel='stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/fonctionnalitesSegmentees.css')
 
 mixin fonctionnalitesSegmentees(labels, contenu, baliseSousTitre = "p")
   -

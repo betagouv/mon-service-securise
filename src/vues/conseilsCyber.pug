@@ -8,11 +8,11 @@ block title
   title= 'Conseils Cyber | MonServiceSécurisé'
 
 block append styles
-  link(href = '/statique/assets/styles/conseilsCyber.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/conseilsCyber.css')
 
 block append scripts
   +donneesPartagees('donnees-conseils-cyber', {articles, sections})
-  script(type = 'module', src='/statique/scripts/conseilsCyber.mjs')
+  +moduleAvecVersion('/statique/scripts/conseilsCyber.mjs')
   +composantSvelte('conseilsCyber.js')
 
 block main

@@ -2,7 +2,7 @@ extends ./mss
 include ./fragments/header
 
 block append styles
-    link(href = '/statique/assets/styles/accueilInscription.css', rel = 'stylesheet')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/accueilInscription.css')
 
 block append scripts
     +composantSvelte('accueilInscription.js')
@@ -14,4 +14,4 @@ block header
 block main
     #conteneur-accueil-inscription
 
-    script(type = 'module', src = '/statique/accueilInscription.mjs')
+    +moduleAvecVersion('/statique/accueilInscription.mjs')

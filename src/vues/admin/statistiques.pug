@@ -7,7 +7,7 @@ block variables
   - const ongletActif = "admin-statistiques"
 
 block append scripts
-  script(type = 'module', src = '/statique/adminStatistiques.mjs')
+  +moduleAvecVersion('/statique/adminStatistiques.mjs')
   +composantSvelte('adminStatistiques.js')
   +donneesPartagees('referentiel', {
     categoriesMesures: referentiel.categoriesMesures(),

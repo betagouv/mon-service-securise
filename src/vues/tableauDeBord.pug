@@ -6,9 +6,9 @@ block title
   title #{estAdminOuSuperviseur ? 'Services' : 'Tableau de bord'} | MonServiceSécurisé
 
 block append styles
-  link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/tiroir.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/formulaire.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/modules/selectize.css')
 
 block append scripts
   +composantSvelte('tableauDeBord.js')
@@ -18,7 +18,7 @@ block append scripts
   +donneesPartagees('avec-gestion-organisations', featureFlags.avecGestionDesOrganisations)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)
   +donneesPartagees('affiche-explication-utilisation-mfa', afficheExplicationUtilisationMFA)
-  script(type = 'module', src = '/statique/tableauDeBord.mjs')
+  +moduleAvecVersion('/statique/tableauDeBord.mjs')
 
 block main
   #tableau-de-bord
