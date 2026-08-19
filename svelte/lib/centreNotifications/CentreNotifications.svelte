@@ -6,7 +6,7 @@
   import ListeNotifications from './kit/ListeNotifications.svelte';
   import Onglet from '../ui/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   let ouvert = $state(false);
   let elementCentreNotifications: HTMLDivElement | undefined = $state();

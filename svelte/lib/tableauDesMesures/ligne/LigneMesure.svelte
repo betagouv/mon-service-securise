@@ -27,7 +27,7 @@
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
-  import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuideeSPA/ciblage';
   import EncartReferentielsExternes from '../../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
   import CartouchesMesure from '../../ui/CartouchesMesure.svelte';
 

@@ -18,7 +18,7 @@
     ReferentielVraisemblances,
   } from '../risques/risques.d';
   import CartoucheIdentifiantRisqueSpecifiqueV2 from './kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   interface Props {
     idService?: string;

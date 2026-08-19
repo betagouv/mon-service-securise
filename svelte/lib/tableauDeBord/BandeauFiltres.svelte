@@ -9,7 +9,7 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { brouillonsService } from './stores/brouillonsService.store';
   import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
-  import { ciblage } from '../visiteGuidee/ciblage';
+  import { ciblage } from '../visiteGuideeSPA/ciblage';
 </script>
 
 <div class="conteneur-filtres">

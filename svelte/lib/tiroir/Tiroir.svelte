@@ -4,7 +4,7 @@
     tiroirStore,
   } from '../ui/stores/tiroir.store';
   import type { SvelteComponent } from 'svelte';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   let composant: SvelteComponent | undefined = $state();
   let configuration: ConfigurationTiroir = $derived(

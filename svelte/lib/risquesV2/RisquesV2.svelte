@@ -27,7 +27,7 @@
     enRisquesBrutsAAfficher,
     enRisquesCiblesAAfficher,
   } from './matrice/matrice';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
 
   interface Props {

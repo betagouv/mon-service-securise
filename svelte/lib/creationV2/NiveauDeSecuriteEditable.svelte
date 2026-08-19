@@ -4,7 +4,7 @@
   import type { IdNiveauDeSecurite } from '../ui/types';
   import { ordreDesNiveaux } from '../niveauxDeSecurite/niveauxDeSecurite.d';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   interface Props {
     niveauSelectionne: IdNiveauDeSecurite | '';

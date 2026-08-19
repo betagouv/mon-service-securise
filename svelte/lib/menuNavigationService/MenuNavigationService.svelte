@@ -8,7 +8,7 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
   import { donneesServiceVisiteGuidee } from '../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
-  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   let {
     visible,

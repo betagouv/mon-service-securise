@@ -1,4 +1,4 @@
-import { ciblage } from '../visiteGuidee/ciblage';
+import { ciblage } from './ciblage';
 import type {
   DonneesEtapeVisiteGuidee,
   EtapeVisiteGuidee,

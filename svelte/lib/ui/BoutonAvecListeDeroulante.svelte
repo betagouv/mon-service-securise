@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import { cibleDeVisiteGuidee } from '../visiteGuidee/ciblage';
+  import { cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
 
   interface Props {
     titre: string;
