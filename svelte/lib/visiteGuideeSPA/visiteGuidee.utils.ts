@@ -49,12 +49,6 @@ export const cheminRectangleArrondi = (
   );
 };
 
-export const rectEgaux = (a: DOMRect, b: DOMRect) =>
-  a.top === b.top &&
-  a.left === b.left &&
-  a.right === b.right &&
-  a.bottom === b.bottom;
-
 type EtendueVerticale = { top: number; bottom: number; height: number };
 
 const estEntierementVisible = (etendue: EtendueVerticale) =>
@@ -130,22 +124,6 @@ export const ajusteHauteurScroll = (
   }
 };
 
-const attendStabiliteRect = (
-  element: HTMLElement,
-  essaisRestants = 60
-): Promise<void> =>
-  new Promise((resolve) => {
-    const precedent = element.getBoundingClientRect();
-    requestAnimationFrame(() => {
-      const actuel = element.getBoundingClientRect();
-      if (rectEgaux(precedent, actuel) || essaisRestants <= 0) {
-        resolve();
-      } else {
-        resolve(attendStabiliteRect(element, essaisRestants - 1));
-      }
-    });
-  });
-
 const cheminsDecoupe = (
   element: HTMLElement,
   { marge, rayon }: { marge: number; rayon: number }
@@ -198,23 +176,33 @@ const desactiveTransition = (element: HTMLElement) => {
   };
 };
 
-export const calculeRectangleOuverture = async (
+export const suitOuverture = (
   donneesEtape: DonneesEtapeVisiteGuidee,
   rideau: HTMLElement,
-  cadreBlanc: HTMLElement
+  cadreBlanc: HTMLElement,
+  surRectCible: (rect: DOMRect) => void
 ) => {
   const decoupe = donneesEtape.decoupe || decoupeParDefaut;
   const ouverture = donneesEtape.ouverture();
+
+  const decoupeSurOuverture = () => {
+    calculeDecoupe(
+      ouverture,
+      rideau,
+      cadreBlanc,
+      decoupe,
+      donneesEtape.ouvertureSecondaire?.()
+    );
+    surRectCible(ouverture.getBoundingClientRect());
+  };
+
   const restaureTransition = desactiveTransition(ouverture);
-  await attendStabiliteRect(ouverture);
-  calculeDecoupe(
-    ouverture,
-    rideau,
-    cadreBlanc,
-    decoupe,
-    donneesEtape.ouvertureSecondaire?.()
-  );
-  const rectCible = ouverture.getBoundingClientRect();
+  decoupeSurOuverture();
   restaureTransition();
-  return rectCible;
+
+  const observateur = new ResizeObserver(decoupeSurOuverture);
+  if (ouverture instanceof Element) observateur.observe(ouverture);
+  observateur.observe(document.body);
+
+  return () => observateur.disconnect();
 };

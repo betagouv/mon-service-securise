@@ -18,7 +18,7 @@
   import { onMount, tick } from 'svelte';
   import {
     ajusteHauteurScroll,
-    calculeRectangleOuverture,
+    suitOuverture,
     degeleDefilementDuCorps,
     geleDefilementDuCorps,
   } from './visiteGuidee.utils';
@@ -69,11 +69,17 @@
       : donneesEtape
   );
 
-  const recalculeDecoupe = async () => {
-    rectCible = await calculeRectangleOuverture(
+  let arreteSuiviOuverture: (() => void) | undefined;
+
+  const recalculeDecoupe = () => {
+    arreteSuiviOuverture?.();
+    arreteSuiviOuverture = suitOuverture(
       donneesEtapeActive,
       rideau,
-      cadreBlanc
+      cadreBlanc,
+      (rect) => {
+        rectCible = rect;
+      }
     );
   };
 
@@ -90,26 +96,27 @@
     );
   };
 
-  const positionneOuverture = async () => {
+  const positionneOuverture = () => {
     recalculeScroll();
-    await recalculeDecoupe();
+    recalculeDecoupe();
   };
 
   $effect(() => {
     (async () => {
       await donneesEtape.callbackAvantOuverture?.();
       await tick();
-      await positionneOuverture();
+      positionneOuverture();
     })();
+    return () => arreteSuiviOuverture?.();
   });
 
   $effect(() => {
     ouvertureSuivanteActive = false;
     const { ouvertureSuivante } = donneesEtape;
     if (!ouvertureSuivante) return;
-    const minuteur = setTimeout(async () => {
+    const minuteur = setTimeout(() => {
       ouvertureSuivanteActive = true;
-      await positionneOuverture();
+      positionneOuverture();
     }, ouvertureSuivante.delai);
     return () => clearTimeout(minuteur);
   });
