@@ -24,7 +24,7 @@
     supprimeRisqueSpecifique,
   } from './risque.api';
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
-  import { intituleRisque } from './risques';
+  import { intituleRisque } from './risques.utils';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';

@@ -2,7 +2,7 @@ import type { Risque } from './risques.d';
 import {
   convertisDonneesRisqueGeneral,
   convertisDonneesRisqueSpecifique,
-} from './risques';
+} from './risques.utils';
 
 export const enregistreRisque = async (
   idService: string,

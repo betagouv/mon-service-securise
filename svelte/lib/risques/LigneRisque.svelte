@@ -8,7 +8,7 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { intituleRisque, risqueAMettreAJour } from './risques';
+  import { intituleRisque, risqueAMettreAJour } from './risques.utils';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';

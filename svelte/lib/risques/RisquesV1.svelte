@@ -18,7 +18,7 @@
   import TiroirLegendeGravite from './TiroirLegendeGravite.svelte';
   import TiroirLegendeVraisemblance from './TiroirLegendeVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
-  import { risqueAMettreAJour } from './risques';
+  import { risqueAMettreAJour } from './risques.utils';
   import MatriceRisques from './MatriceRisques.svelte';
   import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
   import BoutonIcone from '../ui/BoutonIcone.svelte';
