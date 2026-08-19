@@ -59,15 +59,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           .verifieRequeteExigeAcceptationCGU(testeur.app(), `/service${url}`);
       });
 
-      it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
-        await testeur
-          .middleware()
-          .verifieRequeteChargeEtatVisiteGuidee(
-            testeur.app(),
-            `/service${url}`
-          );
-      });
-
       it('sert le contenu HTML de la page', async () => {
         const reponse = await testeur.get(`/service${url}`);
 

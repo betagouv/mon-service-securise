@@ -14,6 +14,7 @@ block append scripts
   +composantSvelte('tableauDeBord.js')
   +composantSvelte('explicationNouveauReferentiel.js')
   +composantSvelte('explicationUtilisationMFA.js')
+  +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
   +donneesPartagees('utilisateur-connecte', {estSuperviseur: utilisateurConnecte && utilisateurConnecte.estSuperviseur, estAdmin: utilisateurConnecte && utilisateurConnecte.estAdmin, prenomNom: utilisateurConnecte.prenomNom, aDejaVuEntierementVisiteGuidee: etatVisiteGuidee.dejaTerminee})
   +donneesPartagees('avec-gestion-organisations', featureFlags.avecGestionDesOrganisations)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)

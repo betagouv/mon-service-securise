@@ -49,14 +49,6 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
-const estEnVisiteGuidee = () => {
-  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
-  return (
-    visiteGuideeActive && etatVisiteGuidee.utilisateurCourant.profilComplet
-  );
-};
-
 const brancheComportementNavigationEtapes = () => {
   const donneesEtapes = {
     1: {
@@ -109,19 +101,17 @@ const brancheComportementNavigationEtapes = () => {
         );
         const idService = $('.page-service').data('id-service');
 
-        if (!estEnVisiteGuidee()) {
-          document.body.dispatchEvent(
-            new CustomEvent('svelte-recharge-niveaux-de-securite', {
-              detail: {
-                niveauDeSecuriteMinimal,
-                niveauSecuriteExistant,
-                lectureSeule,
-                avecSuggestionBesoinsSecuriteRetrogrades,
-                idService,
-              },
-            })
-          );
-        }
+        document.body.dispatchEvent(
+          new CustomEvent('svelte-recharge-niveaux-de-securite', {
+            detail: {
+              niveauDeSecuriteMinimal,
+              niveauSecuriteExistant,
+              lectureSeule,
+              avecSuggestionBesoinsSecuriteRetrogrades,
+              idService,
+            },
+          })
+        );
       },
     },
   };
@@ -164,9 +154,7 @@ const brancheComportementNavigationEtapes = () => {
       cacheBouton($conteneurBoutonFinaliser());
     }
 
-    if (!estEnVisiteGuidee()) {
-      $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    $hautDePage[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   $boutonPrecedent().on('click', () => {

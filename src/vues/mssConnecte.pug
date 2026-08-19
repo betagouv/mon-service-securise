@@ -12,7 +12,6 @@ block append scripts
   +composantSvelte('tiroir.js')
 
 block header
-  +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
   +header(avertissementMaintenance, featureFlags, true, '/tableauDeBord', "Retour au tableau de bord", false, ongletActif)
 
 block tiroir
