@@ -2,7 +2,6 @@ import ParcoursUtilisateur, {
   DonneesParcoursUtilisateur,
 } from '../modeles/parcoursUtilisateur.js';
 import EvenementNouvelleConnexionUtilisateur from '../bus/evenementNouvelleConnexionUtilisateur.js';
-import { Referentiel } from '../referentiel.interface.js';
 import BusEvenements from '../bus/busEvenements.js';
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from '../modeles/versionService.js';
@@ -23,10 +22,9 @@ export type PersistanceParcoursUtilisateur = {
 
 const creeDepot = (config: {
   adaptateurPersistance: PersistanceParcoursUtilisateur;
-  referentiel: Referentiel;
   busEvenements: BusEvenements;
 }) => {
-  const { adaptateurPersistance, referentiel, busEvenements } = config;
+  const { adaptateurPersistance, busEvenements } = config;
 
   const lisParcoursUtilisateur = async (idUtilisateur: UUID) => {
     const parcoursConnu =
@@ -36,15 +34,8 @@ const creeDepot = (config: {
         idUtilisateur
       );
     return parcoursConnu
-      ? new ParcoursUtilisateur(
-          { ...parcoursConnu, versionsService },
-          referentiel
-        )
-      : ParcoursUtilisateur.pourUtilisateur(
-          idUtilisateur,
-          referentiel,
-          versionsService
-        );
+      ? new ParcoursUtilisateur({ ...parcoursConnu, versionsService })
+      : ParcoursUtilisateur.pourUtilisateur(idUtilisateur, versionsService);
   };
 
   const sauvegardeParcoursUtilisateur = async (

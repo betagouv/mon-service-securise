@@ -112,7 +112,6 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const depotParcoursUtilisateurs = depotDonneesParcoursUtilisateurs.creeDepot({
     adaptateurPersistance,
-    referentiel,
     busEvenements,
   });
 

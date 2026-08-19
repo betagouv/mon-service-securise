@@ -7,12 +7,9 @@ describe('Le serveur MSS des routes privées /api/explicationNouveauReferentiel/
   beforeEach(async () => {
     await testeur.initialise();
     testeur.depotDonnees().lisParcoursUtilisateur = () =>
-      new ParcoursUtilisateur(
-        {
-          explicationNouveauReferentiel: { dejaTermine: false },
-        },
-        testeur.referentiel()
-      );
+      new ParcoursUtilisateur({
+        explicationNouveauReferentiel: { dejaTermine: false },
+      });
   });
 
   it("vérifie que l'utilisateur est authentifié sur toutes les routes", async () => {

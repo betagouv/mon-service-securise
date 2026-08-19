@@ -6,7 +6,6 @@ import {
 } from '../../src/erreurs.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
-import { creeReferentiel } from '../../src/referentiel.js';
 import Utilisateur from '../../src/modeles/utilisateur.js';
 import { TYPES_REQUETES } from '../../src/http/configurationServeur.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
@@ -842,17 +841,12 @@ describe('Le middleware MSS', () => {
     let middleware;
 
     beforeEach(() => {
-      const referentiel = creeReferentiel();
-
       depotDonnees.lisParcoursUtilisateur = async () =>
-        new ParcoursUtilisateur(
-          {
-            idUtilisateur: '1234',
-            etatVisiteGuidee: { dejaTerminee: true },
-            explicationNouveauReferentiel: { dejaTermine: false },
-          },
-          referentiel
-        );
+        new ParcoursUtilisateur({
+          idUtilisateur: '1234',
+          etatVisiteGuidee: { dejaTerminee: true },
+          explicationNouveauReferentiel: { dejaTermine: false },
+        });
 
       middleware = leMiddleware({ depotDonnees });
     });
@@ -895,7 +889,7 @@ describe('Le middleware MSS', () => {
       it("demande l'affichage de l'explication si le MFA n'a pas été utilisé", async () => {
         let doitAfficher;
         depotDonnees.lisParcoursUtilisateur = async () =>
-          ParcoursUtilisateur.pourUtilisateur(unUUID('1'), creeReferentiel());
+          ParcoursUtilisateur.pourUtilisateur(unUUID('1'));
 
         const middleware = leMiddleware();
         requete.session.sourceAuthentification =
@@ -917,8 +911,7 @@ describe('Le middleware MSS', () => {
         let doitAfficher;
         depotDonnees.lisParcoursUtilisateur = async () => {
           const aNavigueSurTDB = ParcoursUtilisateur.pourUtilisateur(
-            unUUID('1'),
-            creeReferentiel()
+            unUUID('1')
           );
           aNavigueSurTDB.marqueTableauDeBordVu();
           return aNavigueSurTDB;

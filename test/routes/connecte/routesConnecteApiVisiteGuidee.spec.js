@@ -22,12 +22,9 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   describe('quand requête POST sur /visiteGuidee/termine', () => {
     it("sauvegarde l'état 'finalisé' de la visite guidée", async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
-        new ParcoursUtilisateur(
-          {
-            etatVisiteGuidee: { dejaTerminee: false, etapeCourante: 'DECRIRE' },
-          },
-          testeur.referentiel()
-        );
+        new ParcoursUtilisateur({
+          etatVisiteGuidee: { dejaTerminee: false },
+        });
       let parcoursUtilisateurPasse;
       testeur.depotDonnees().sauvegardeParcoursUtilisateur = (
         parcoursUtilisateur

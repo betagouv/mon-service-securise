@@ -1,8 +1,6 @@
 import ParcoursUtilisateur, {
   DonneesParcoursUtilisateur,
 } from '../../src/modeles/parcoursUtilisateur.ts';
-import * as Referentiel from '../../src/referentiel.js';
-import { creeReferentielVide } from '../../src/referentiel.js';
 import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 
@@ -38,10 +36,7 @@ describe('Un parcours utilisateur', () => {
   });
 
   it('sait se créer pour un utilisateur avec des valeurs par défaut', () => {
-    const etatInitial = ParcoursUtilisateur.pourUtilisateur(
-      unUUID('1'),
-      creeReferentielVide()
-    );
+    const etatInitial = ParcoursUtilisateur.pourUtilisateur(unUUID('1'));
 
     expect(etatInitial.dateDerniereConnexion).toBe(undefined);
     expect(etatInitial.idUtilisateur).toEqual(unUUID('1'));
@@ -59,7 +54,6 @@ describe('Un parcours utilisateur', () => {
     const adaptateurHorloge = { maintenant: () => dateDeConnexion };
     const unParcours = new ParcoursUtilisateur(
       donneesParcoursUtilisateur(),
-      Referentiel.creeReferentielVide(),
       adaptateurHorloge
     );
 

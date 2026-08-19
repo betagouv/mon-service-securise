@@ -13,9 +13,7 @@ import EvenementNouvelleConnexionUtilisateur from '../../src/bus/evenementNouvel
 import { unService } from '../constructeurs/constructeurService.js';
 import { VersionService } from '../../src/modeles/versionService.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
-import { creeReferentielVide } from '../../src/referentiel.js';
 import BusEvenements from '../../src/bus/busEvenements.js';
-import { Referentiel } from '../../src/referentiel.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
 
@@ -23,7 +21,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
   let adaptateurPersistance: PersistanceParcoursUtilisateur;
   let depot: DepotDonneesParcoursUtilisateurs;
   let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
-  let referentiel: Referentiel;
 
   const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
     idUtilisateur: unUUID('1'),
@@ -37,7 +34,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
   });
 
   beforeEach(() => {
-    referentiel = creeReferentielVide();
     adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       parcoursUtilisateurs: [],
     });
@@ -45,7 +41,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
     depot = DepotDonneesParcoursUtilisateur.creeDepot({
       adaptateurPersistance,
       busEvenements: busEvenements as unknown as BusEvenements,
-      referentiel,
     });
   });
 
@@ -166,7 +161,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       depot = DepotDonneesParcoursUtilisateur.creeDepot({
         adaptateurPersistance,
         busEvenements: busEvenements as unknown as BusEvenements,
-        referentiel,
       });
 
       const parcours = await depot.lisParcoursUtilisateur(unUUID('1'));
@@ -189,7 +183,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       depot = DepotDonneesParcoursUtilisateur.creeDepot({
         adaptateurPersistance,
         busEvenements: busEvenements as unknown as BusEvenements,
-        referentiel,
       });
 
       const parcours = await depot.lisParcoursUtilisateur(unUUID('1'));

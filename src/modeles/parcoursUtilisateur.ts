@@ -6,8 +6,6 @@ import {
 import { ExplicationNouveauReferentiel } from './explicationNouveauReferentiel.js';
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
-import { creeReferentielVide } from '../referentiel.js';
-import { Referentiel } from '../referentiel.interface.js';
 
 type DonneesEtatVisiteGuidee = {
   dejaTerminee: boolean;
@@ -34,17 +32,13 @@ class ParcoursUtilisateur {
 
   constructor(
     donnees: DonneesParcoursUtilisateur,
-    referentiel = creeReferentielVide(),
     adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     this.aVuTableauDeBordDepuisConnexion =
       donnees.aVuTableauDeBordDepuisConnexion;
     this.idUtilisateur = donnees.idUtilisateur;
     this.dateDerniereConnexion = donnees.dateDerniereConnexion;
-    this.etatVisiteGuidee = new EtatVisiteGuidee(
-      donnees.etatVisiteGuidee,
-      referentiel
-    );
+    this.etatVisiteGuidee = new EtatVisiteGuidee(donnees.etatVisiteGuidee);
     this.explicationNouveauReferentiel = new ExplicationNouveauReferentiel({
       dejaTermine: donnees.explicationNouveauReferentiel?.dejaTermine || false,
       aVuTableauDeBordDepuisConnexion: this.aVuTableauDeBordDepuisConnexion,
@@ -83,21 +77,17 @@ class ParcoursUtilisateur {
 
   static pourUtilisateur(
     idUtilisateur: UUID,
-    referentiel: Referentiel,
     versionsService: VersionService[] = []
   ) {
-    return new ParcoursUtilisateur(
-      {
-        aVuTableauDeBordDepuisConnexion: false,
-        idUtilisateur,
-        etatVisiteGuidee: { dejaTerminee: false },
-        explicationNouveauReferentiel: {
-          dejaTermine: false,
-        },
-        versionsService,
+    return new ParcoursUtilisateur({
+      aVuTableauDeBordDepuisConnexion: false,
+      idUtilisateur,
+      etatVisiteGuidee: { dejaTerminee: false },
+      explicationNouveauReferentiel: {
+        dejaTermine: false,
       },
-      referentiel
-    );
+      versionsService,
+    });
   }
 
   toJSON(): DonneesParcoursUtilisateur {
