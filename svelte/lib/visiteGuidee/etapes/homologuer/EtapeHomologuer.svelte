@@ -4,7 +4,7 @@
   import type { SousEtape } from '../../kit/ModaleSousEtape';
   import TiroirTelechargementDocumentsService from '../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
-  import { donneesVisiteGuidee } from '../../../tableauDeBord/tableauDeBord';
+  import { donneesVisiteGuidee } from '../../../tableauDeBord/donneesVisiteGuidee';
   import { ciblage } from '../../ciblage';
 
   let cibleNouvelleHomologation: HTMLElement | undefined = $state();

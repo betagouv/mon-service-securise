@@ -7,7 +7,7 @@
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import TableauDesServices from './TableauDesServices.svelte';
-  import { donneesVisiteGuidee } from './tableauDeBord';
+  import { donneesVisiteGuidee } from './donneesVisiteGuidee';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
   import BandeauBlog from './BandeauBlog.svelte';
