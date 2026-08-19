@@ -30,6 +30,39 @@ describe('Le serveur MSS', () => {
 
       expect(reponse.headers).to.not.have.property('x-powered-by');
     });
+
+    it('interdit la mise en cache', async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.headers['surrogate-control']).to.equal('no-store');
+      expect(reponse.headers.pragma).to.equal('no-cache');
+    });
+  });
+
+  describe('quand un fichier statique est servi', () => {
+    it("n'applique pas l'interdiction de mise en cache", async () => {
+      const reponse = await testeur.get('/statique/assets/styles/mss.css');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers).to.not.have.property('surrogate-control');
+      expect(reponse.headers).to.not.have.property('pragma');
+    });
+
+    it("utilise la politique de cache donnée par l'adaptateur environnement", async () => {
+      testeur.adaptateurEnvironnement().statique = () => ({
+        politiqueCache: () => 'public, max-age=600',
+      });
+
+      const reponse = await testeur.get('/statique/assets/styles/mss.css');
+
+      expect(reponse.headers['cache-control']).to.equal('public, max-age=600');
+    });
+
+    it('rend une 404 pour un fichier inexistant', async () => {
+      const reponse = await testeur.get('/statique/fichier-inexistant.js');
+
+      expect(reponse.status).to.equal(404);
+    });
   });
 
   describe('sur configuration des types de requête', () => {

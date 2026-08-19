@@ -2,10 +2,10 @@ import cookieSession from 'cookie-session';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import {
-  CACHE_CONTROL_FICHIERS_STATIQUES,
   ENDPOINTS_SANS_CSRF,
   TYPES_REQUETES,
 } from './http/configurationServeur.js';
+import { enTeteCachePourFichierStatique } from './http/cacheStatique.js';
 import routesConnecteApi from './routes/connecte/routesConnecteApi.js';
 import routesNonConnecteApi from './routes/nonConnecte/routesNonConnecteApi.js';
 import { routesNonConnecteApiBibliotheques } from './routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
@@ -61,7 +61,7 @@ const creeServeur = ({
   app.use(middleware.filtreIpAutorisees());
   app.use(middleware.redirigeVersUrlBase);
 
-  app.use(middleware.interdisLaMiseEnCache);
+  app.use(/\/((?!statique).)*/, middleware.interdisLaMiseEnCache);
 
   app.use(express.json());
 
@@ -209,8 +209,14 @@ const creeServeur = ({
   app.use(
     '/statique',
     express.static('public', {
-      setHeaders: (reponse) =>
-        reponse.setHeader('cache-control', CACHE_CONTROL_FICHIERS_STATIQUES),
+      setHeaders: (reponse, chemin) =>
+        reponse.setHeader(
+          'cache-control',
+          enTeteCachePourFichierStatique(
+            chemin,
+            adaptateurEnvironnement.statique().politiqueCache()
+          )
+        ),
     })
   );
 
