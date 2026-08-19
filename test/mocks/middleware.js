@@ -116,8 +116,9 @@ const middlewareFantaisie = {
     typeRequeteCharge = null;
   },
 
-  ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
+  ajouteVersionFichierCompiles: (_requete, reponse, suite) => {
     versionBuildeeChargee = true;
+    reponse.locals.version = 'version-de-test';
     suite();
   },
 

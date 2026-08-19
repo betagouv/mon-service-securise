@@ -1,0 +1,9 @@
+//- `version` est pris dans `reponse.locals`
+mixin scriptAvecVersion(chemin)
+  script(src=`${chemin}?v=${version}`)&attributes(attributes)
+
+mixin moduleAvecVersion(chemin)
+  script(type='module', src=`${chemin}?v=${version}`)&attributes(attributes)
+
+mixin feuilleDeStyleAvecVersion(chemin)
+  link(href=`${chemin}?v=${version}`, rel='stylesheet')&attributes(attributes)
