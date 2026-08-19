@@ -1,5 +1,8 @@
 import expect from 'expect.js';
-import { chiffrement } from '../../src/adaptateurs/adaptateurEnvironnement.js';
+import {
+  chiffrement,
+  statique,
+} from '../../src/adaptateurs/adaptateurEnvironnement.js';
 
 describe("L'adaptateur environnement", () => {
   let envActuel;
@@ -63,5 +66,21 @@ describe("L'adaptateur environnement", () => {
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
     expect(tousLesSelsDeHachage[0].version === 1).to.be(true);
+  });
+
+  describe('sur demande de la politique de cache des fichiers statiques', () => {
+    it("utilise la valeur de la variable d'environnement", () => {
+      process.env = {
+        CACHE_CONTROL_FICHIERS_STATIQUES: 'public, max-age=86400',
+      };
+
+      expect(statique().politiqueCache()).to.equal('public, max-age=86400');
+    });
+
+    it("interdit le stockage quand la variable d'environnement est absente", () => {
+      process.env = {};
+
+      expect(statique().politiqueCache()).to.equal('no-store');
+    });
   });
 });

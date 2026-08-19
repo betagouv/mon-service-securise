@@ -134,6 +134,9 @@ const testeurMss = () => {
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
       }),
+      statique: () => ({
+        politiqueCache: () => 'no-store',
+      }),
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
