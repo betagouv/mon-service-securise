@@ -40,13 +40,13 @@ mixin carrousel(id)
       dsfr-button(label='Suivant' has-icon icon='arrow-right-s-line' icon-place='right' kind='inverted-primary').suivant
 
 block append styles
-  link(href='/statique/assets/styles/home.css', rel='stylesheet')
-  link(href='/statique/assets/styles/home.tablette.css', rel='stylesheet')
-  link(href='/statique/assets/styles/home.desktop.css', rel='stylesheet')
-  link(href="/statique/assets/styles/landing.css", rel="stylesheet")
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/home.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/home.tablette.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/home.desktop.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/landing.css')
 
 block append scripts
-  script(type = 'module', src = '/statique/home.js')
+  +moduleAvecVersion('/statique/home.js')
 
 block main
   #home(data-themeable="true")

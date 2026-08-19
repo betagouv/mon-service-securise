@@ -6,7 +6,7 @@ block title
 block append scripts
   +composantSvelte('simulationV2.js')
   +donneesPartagees('donnees-id-service', { idService })
-  script(type = 'module', src = '/statique/simulationV2.mjs')
+  +moduleAvecVersion('/statique/simulationV2.mjs')
 
 block main
   #simulation-v2

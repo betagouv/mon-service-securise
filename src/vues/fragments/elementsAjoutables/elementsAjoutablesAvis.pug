@@ -69,4 +69,4 @@ mixin elementsAjoutablesAvis(donneesAvis = [], lectureSeule = false)
     each donneesUnAvis, index in donneesAvis 
       +unAvis(donneesUnAvis, index, lectureSeule)
 
-  script(type = 'module', src = '/statique/modules/elementsAjoutables.js')
+  +moduleAvecVersion('/statique/modules/elementsAjoutables.js')

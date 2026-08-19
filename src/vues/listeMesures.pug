@@ -14,10 +14,10 @@ block append scripts
   +donneesPartagees('referentiel-categories-mesures', categoriesMesures)
   +donneesPartagees('referentiel-types-service', typesService)
   +donneesPartagees('referentiel-nombre-maximum-modeles-mesure-specifique', nombreMaximumDeModelesMesureSpecifiqueParUtilisateur)
-  script(type = 'module', src = '/statique/listeMesures.mjs')
+  +moduleAvecVersion('/statique/listeMesures.mjs')
 
 block append styles
-  link(href = '/statique/assets/styles/fond-blanc.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/fond-blanc.css')
 
 block bandeau-titre
   -

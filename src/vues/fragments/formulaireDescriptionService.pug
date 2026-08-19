@@ -3,14 +3,14 @@ include ./elementsAjoutables/elementsAjoutablesDescription
 include ./donneesPartagees
 
 block append styles
-  link(href = '/statique/assets/styles/homologation/descriptionService.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/homologation/descriptionService.css')
   link(href = '/styles/selectize.default.min.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/modules/selectize.css')
 
 block append scripts
   +donneesPartagees('donnees-departements', departements || [])
-  script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
-  script(type="module", src = "/statique/modules/suggestion/suggestionEntite.mjs")
+  script(src='/statique/bibliotheques/selectize-0.15.2.min.js')
+  +moduleAvecVersion('/statique/modules/suggestion/suggestionEntite.mjs')
 
 mixin formulaireDescriptionService(idService)
   - const estLectureSeule = autorisationsService.DECRIRE.estLectureSeule;
@@ -250,7 +250,7 @@ mixin formulaireDescriptionService(idService)
         if !estLectureSeule
           button.bouton#diagnostic(idService = idService, disabled) Enregistrer les modifications
 
-  script(type = 'module', src = '/statique/service/descriptionService.mjs')
+  +moduleAvecVersion('/statique/service/descriptionService.mjs')
   +donneesPartagees('niveau-securite-existant', service.descriptionService.niveauSecurite)
   +donneesPartagees('niveau-securite-recommande-lecture-seule', niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)
   +donneesPartagees('decrire-lecture-seule', estLectureSeule)

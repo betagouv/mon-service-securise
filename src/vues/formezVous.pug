@@ -8,11 +8,11 @@ block variables
   - const ongletActif = 'formez-vous'
 
 block append styles
-  link(href="/statique/assets/styles/landing.css", rel="stylesheet")
-  link(href="/statique/assets/styles/formezVous.css", rel="stylesheet")
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/landing.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/formezVous.css')
 
 block append scripts
-  script(type="module", src="/statique/scripts/formezVous.mjs")
+  +moduleAvecVersion('/statique/scripts/formezVous.mjs')
 
 mixin etapeProgramme(numero, titre)
   li.etape

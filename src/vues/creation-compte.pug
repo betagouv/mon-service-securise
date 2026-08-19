@@ -2,8 +2,8 @@ extends ./mss
 include ./fragments/header
 
 block append styles
-    link(href = '/statique/assets/styles/creation-compte.css', rel = 'stylesheet')
-    link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/creation-compte.css')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/formulaire.css')
 
 block append scripts
     +composantSvelte('inscription.js')
@@ -19,4 +19,4 @@ block header
 block main
     #conteneur-inscription
 
-    script(type = 'module', src = '/statique/creation-compte.mjs')
+    +moduleAvecVersion('/statique/creation-compte.mjs')

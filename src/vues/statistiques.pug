@@ -8,7 +8,7 @@ block title
   title Statistiques | MonServiceSécurisé
 
 block append styles
-  link(href='/statique/assets/styles/statistiques.css', rel='stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/statistiques.css')
 
 mixin uneCarteDeStats(illustration, chiffre, label, evolution, avecSuffixe = true)
   .carte

@@ -1,19 +1,19 @@
 extends ../mssConnecte
 
 block append styles
-  link(href = '/statique/assets/styles/pagesService.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/pagesService.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/tiroir.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/modules/selectize.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/formulaire.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/homologation/formulaire.css')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/homologation/mesures.css')
 
 block title
   title Visite guidée | MonServiceSécurisé
 
 block append scripts
   +composantSvelte('visiteGuideeSPA.js')
-  script(type = 'module', src = '/statique/visiteGuideeSPA.mjs')
+  +moduleAvecVersion('/statique/visiteGuideeSPA.mjs')
   +donneesPartagees('referentiel', {
     indiceCyber: {
       noteMax: referentiel.indiceCyberNoteMax()

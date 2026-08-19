@@ -32,4 +32,4 @@ mixin elementsAjoutables({ identifiantConteneur, nom, donneesElements = [], text
       id = 'ajout-element-' + nom
     )= texteLienAjouter
 
-  script(type = 'module', src = '/statique/modules/elementsAjoutables.js')
+  +moduleAvecVersion('/statique/modules/elementsAjoutables.js')

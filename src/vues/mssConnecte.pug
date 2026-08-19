@@ -5,10 +5,10 @@ block variables
   - const ongletActif = "services"
 
 block append styles
-  link(href = '/statique/assets/styles/modale.css', rel = 'stylesheet')
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/modale.css')
 
 block append scripts
-  script(type = 'module', src = '/statique/scripts/intercepteurAxios.mjs')
+  +moduleAvecVersion('/statique/scripts/intercepteurAxios.mjs')
   +composantSvelte('tiroir.js')
 
 block header
@@ -25,7 +25,7 @@ block append session
       p Veuillez vous reconnecter.
       a.bouton#reconnexion(href = '/connexion') Reconnexion
 
-  script(type = 'module', src = '/statique/mssConnecte.mjs')
+  +moduleAvecVersion('/statique/mssConnecte.mjs')
   +composantSvelte('visiteGuidee.js')
 
 block centre-aide

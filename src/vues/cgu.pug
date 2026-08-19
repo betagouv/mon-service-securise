@@ -7,10 +7,10 @@ block variables
     - const sousTitrePage = `En vigueur à partir du ${dateMiseEnVigueur}`
 
 block append styles
-    link(href = '/statique/assets/styles/cgu.css', rel = 'stylesheet')
+    +feuilleDeStyleAvecVersion('/statique/assets/styles/cgu.css')
 
 block append scripts
-    script(type = 'module', src='/statique/scripts/cgu.js')
+    +moduleAvecVersion('/statique/scripts/cgu.js')
 
 block contenu-documentation
     h2 Article 1 - Champ d’application
