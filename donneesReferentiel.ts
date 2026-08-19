@@ -1698,26 +1698,6 @@ const donnees = {
     autre: 'Autre',
   },
   departements,
-  etapesVisiteGuidee: {
-    DECRIRE: {
-      idEtapeSuivante: 'MESURES',
-      urlEtape: '/visiteGuidee/decrire',
-    },
-    MESURES: {
-      idEtapePrecedente: 'DECRIRE',
-      idEtapeSuivante: 'DOSSIERS',
-      urlEtape: '/visiteGuidee/mesures',
-    },
-    DOSSIERS: {
-      idEtapePrecedente: 'MESURES',
-      idEtapeSuivante: 'PILOTER',
-      urlEtape: '/visiteGuidee/dossiers',
-    },
-    PILOTER: {
-      idEtapePrecedente: 'DOSSIERS',
-      urlEtape: '/visiteGuidee/piloter',
-    },
-  },
   versionActuelleCgu: 'v2_2024-10-30',
   optionsFiltrageDate: {
     aujourdhui: "Aujourd'hui",

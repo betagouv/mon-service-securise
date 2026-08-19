@@ -33,7 +33,6 @@ describe('Le dépôt de données Parcours utilisateur', () => {
     aVuTableauDeBordDepuisConnexion: true,
     etatVisiteGuidee: {
       dejaTerminee: false,
-      enPause: false,
     },
   });
 

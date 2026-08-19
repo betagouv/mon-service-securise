@@ -284,8 +284,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
         profilComplet: utilisateur.completudeProfil().estComplet,
         dateInscription: utilisateur.dateCreation,
       },
-      nombreEtapesRestantes:
-        parcoursUtilisateur.etatVisiteGuidee.nombreEtapesRestantes(),
     };
 
     suite();

@@ -12,7 +12,6 @@ import {
   IdDonneeCaracterePersonnel,
   IdEcheanceRenouvellement,
   IdEtapeHomologation,
-  IdEtapeVisiteGuidee,
   IdFonctionnalite,
   IdLocalisationDonnees,
   IdMesure,
@@ -57,7 +56,6 @@ const donneesReferentielVide = {
   tranchesIndicesCybers: [],
   nombreOrganisationsUtilisatrices: [],
   estimationNombreServices: [],
-  etapesVisiteGuidee: [],
   naturesSuggestionsActions: {},
   niveauxDeSecurite: [],
 };
@@ -380,22 +378,6 @@ const creeReferentiel = (
     valideDonnees();
   };
 
-  const etapeVisiteGuidee = (idEtape: IdEtapeVisiteGuidee) =>
-    donnees.etapesVisiteGuidee[idEtape];
-  const etapeSuivanteVisiteGuidee = (idEtapeCourante: IdEtapeVisiteGuidee) => {
-    const etape = donnees.etapesVisiteGuidee[idEtapeCourante];
-    if (etape && 'idEtapeSuivante' in etape) return etape.idEtapeSuivante;
-    return null;
-  };
-  const etapePrecedenteVisiteGuidee = (
-    idEtapeCourante: IdEtapeVisiteGuidee
-  ) => {
-    const etape = donnees.etapesVisiteGuidee[idEtapeCourante];
-    if (etape && 'idEtapePrecedente' in etape) return etape.idEtapePrecedente;
-    return null;
-  };
-  const nbEtapesVisiteGuidee = () =>
-    Object.keys(donnees.etapesVisiteGuidee || {}).length;
   const natureTachesService = (nature: IdNatureTacheService) =>
     (donnees.naturesTachesService || {})[nature];
   const natureSuggestionAction = (nature: IdNatureSuggestionAction) => {
@@ -673,10 +655,6 @@ const creeReferentiel = (
     typesService,
     verifieCategoriesMesuresSontRepertoriees,
     versionServiceParDefaut,
-    etapePrecedenteVisiteGuidee,
-    etapeSuivanteVisiteGuidee,
-    etapeVisiteGuidee,
-    nbEtapesVisiteGuidee,
     natureTachesService,
     natureSuggestionAction,
     versionActuelleCgu,

@@ -787,15 +787,11 @@ describe('Le middleware MSS', () => {
       let middleware;
 
       beforeEach(() => {
-        const referentiel = creeReferentiel({
-          etapesVisiteGuidee: { DECRIRE: {} },
-        });
-
         depotDonnees.lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur(
-            { idUtilisateur: '1234', etatVisiteGuidee: { dejaTerminee: true } },
-            referentiel
-          );
+          new ParcoursUtilisateur({
+            idUtilisateur: '1234',
+            etatVisiteGuidee: { dejaTerminee: true },
+          });
 
         depotDonnees.utilisateur = async () =>
           new Utilisateur(
@@ -831,10 +827,6 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
           expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
-
-          expect(
-            reponse.locals.etatVisiteGuidee.nombreEtapesRestantes
-          ).to.equal(1);
 
           expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).to.eql({
             prenom: 'Jeanne',

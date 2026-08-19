@@ -51,11 +51,10 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
 
 const estEnVisiteGuidee = () => {
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const visiteGuideeActive =
-    etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
-  const modeVisiteGuidee =
-    visiteGuideeActive && etatVisiteGuidee.utilisateurCourant.profilComplet;
-  return modeVisiteGuidee;
+  const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
+  return (
+    visiteGuideeActive && etatVisiteGuidee.utilisateurCourant.profilComplet
+  );
 };
 
 const brancheComportementNavigationEtapes = () => {

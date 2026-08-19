@@ -4,9 +4,7 @@ $(() => {
   const idService = $('#pages-service').data('id-service');
   const referentiel = lisDonneesPartagees('referentiel');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const modeVisiteGuidee =
-    etatVisiteGuidee.dejaTerminee === false &&
-    etatVisiteGuidee.enPause === false;
+  const modeVisiteGuidee = etatVisiteGuidee.dejaTerminee === false;
   const etapeActive = lisDonneesPartagees('etape-active');
   const featureFlags = lisDonneesPartagees('feature-flags');
   const preferencesUtilisateur = lisDonneesPartagees('preferences-utilisateur');

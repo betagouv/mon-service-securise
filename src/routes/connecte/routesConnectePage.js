@@ -82,8 +82,6 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     (_requete, reponse) => {
-      reponse.locals.etatVisiteGuidee.enPause = false;
-      reponse.locals.etatVisiteGuidee.dejaTerminee = false;
       reponse.render('visiteGuidee/spa', { referentiel, referentielV2 });
     }
   );
