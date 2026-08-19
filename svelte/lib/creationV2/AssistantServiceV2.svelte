@@ -205,12 +205,7 @@
     margin-bottom: 8px;
   }
 
-  :global(
-    #creation-v2,
-    #simulation-v2,
-    #visite-guidee-creation-service,
-    #visite-guidee-spa
-  ) {
+  :global(#creation-v2, #simulation-v2, #visite-guidee-spa) {
     background: white;
     width: 100%;
     height: 100%;
