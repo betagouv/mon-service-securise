@@ -12,7 +12,7 @@
   import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
   import { VersionService } from '../../../src/modeles/versionService';
   import RisquesV2 from '../risquesV2/RisquesV2.svelte';
-  import { tousRisques } from './risques';
+  import { tousRisques } from './risques.utils';
   import RisquesV1 from './RisquesV1.svelte';
 
   interface Props {
