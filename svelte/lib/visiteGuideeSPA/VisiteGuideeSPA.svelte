@@ -25,6 +25,7 @@
   import type { EtapeVisiteGuideeAdditionnelle } from './visiteGuideeSPA.d';
   import AdminStatistiques from '../adminStatistiques/AdminStatistiques.svelte';
   import ListeMesures from '../listeMesures/ListeMesures.svelte';
+  import { trackDansMatomo } from '../ui/matomo';
 
   let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
 
@@ -119,6 +120,21 @@
       positionneOuverture();
     }, ouvertureSuivante.delai);
     return () => clearTimeout(minuteur);
+  });
+
+  $effect(() => {
+    if (!modeAdditionnel)
+      trackDansMatomo(
+        `/visiteGuidee`,
+        `/visiteGuidee`,
+        `Visite guidée | Étape ${etapeVisiteGuidee}`
+      );
+    else
+      trackDansMatomo(
+        `/visiteGuidee`,
+        `/visiteGuidee`,
+        `Visite guidée | Étape additionnelle ${etapeAdditionnelle}`
+      );
   });
 </script>
 
