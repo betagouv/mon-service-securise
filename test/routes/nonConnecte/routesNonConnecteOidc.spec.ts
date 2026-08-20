@@ -89,6 +89,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
+        acr: 'eidas2',
       });
       testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
         email: 'jean.dujardin@beta.gouv.fr',
@@ -168,6 +169,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     it("enrichit la session avec l'`id_token`", async () => {
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
+        acr: 'eidas2',
       });
       const reponse = await testeur.get('/oidc/apres-authentification');
       const tokenDecode = decodeSessionDuCookie(reponse, 1);
@@ -179,6 +181,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         let donneesRecues;
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         testeur.adaptateurOidc().recupereInformationsUtilisateur = async (
           accessToken: string
@@ -263,6 +266,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             : undefined;
         testeur.adaptateurOidc().recupereJeton = async () => ({
           connexionAvecMFA: true,
+          acr: 'eidas2',
         });
 
         const reponse = await testeur.get('/oidc/apres-authentification');
@@ -371,6 +375,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       it("retourne la page `apresAuthentification` avec le jeton signé de l'invité dans les données", async () => {
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         let donneesRecuesPourCreationTokenSigne;
         testeur.adaptateurJWT().signeDonnees = (
@@ -414,6 +419,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       it("utilise les informations ProConnect pour le jeton signé de l'invité s'il n'existe pas dans MPA", async () => {
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         let donneesRecuesPourCreationTokenSigne;
         testeur.adaptateurJWT().signeDonnees = (
@@ -453,6 +459,30 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).toEqual({
           tokenDonneesInvite: 'unJetonSigne',
         });
+      });
+    });
+
+    describe('quand ProConnect n’a pas garanti la présence d’un MFA', () => {
+      beforeEach(() => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          idToken: 'unIdToken',
+          acr: 'eidas1',
+        });
+      });
+
+      it('refuse l’accès au service', async () => {
+        const reponse = await testeur.get('/oidc/apres-authentification');
+
+        expect(reponse.status).toBe(403);
+        expect(reponse.text).toContain('double authentification');
+      });
+
+      it('supprime le cookie ProConnect', async () => {
+        const reponse = await testeur.get('/oidc/apres-authentification');
+
+        expect(reponse.headers['set-cookie'][0]).toContain(
+          'AgentConnectInfo=;'
+        );
       });
     });
   });
