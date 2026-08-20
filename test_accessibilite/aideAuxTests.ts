@@ -105,6 +105,17 @@ export const fermeModale2FASiPresente = async (page: Page) => {
   if (popin2FAEstVisible) await page.click('text=Me le rappeler plus tard');
 };
 
+export const fermeModaleNouveauReferentielSiPresente = async (page: Page) => {
+  const popinNouveauReferentielEstVisible = await page
+    .locator(':text("Mise en place d’un nouveau référentiel de mesures")')
+    .isVisible();
+  if (popinNouveauReferentielEstVisible) {
+    await page.click('text=Suivant');
+    await page.click('text=Suivant');
+    await page.click('text=J’ai compris 👍');
+  }
+};
+
 export const fermeModaleVisiteGuideeSiPresente = async (page: Page) => {
   const popinVisiteGuideeeEstVisible = await page
     .locator(':text("Ignorer la visite guidée")')
@@ -116,12 +127,14 @@ export const fermeModaleVisiteGuideeSiPresente = async (page: Page) => {
 export const navigueSurTableauDeBordAvecConnexion = async (page: Page) => {
   await navigueSurPageConnectee('/tableauDeBord', page);
   await fermeModale2FASiPresente(page);
+  await fermeModaleNouveauReferentielSiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
 
 export const navigueSurTableauDeBordSansConnexion = async (page: Page) => {
   await page.goto('/tableauDeBord');
   await fermeModale2FASiPresente(page);
+  await fermeModaleNouveauReferentielSiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
 
