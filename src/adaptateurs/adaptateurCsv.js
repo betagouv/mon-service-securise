@@ -102,6 +102,10 @@ const genereCsvMesures = async (
       id: 'mesuresAssocieesAE',
       title: 'Exigences Annexe au Règlement d’exécution 2024/2690 associées',
     });
+    colonnes.push({
+      id: 'mesuresAssocieesCyFun',
+      title: 'Exigences CyberFundamentals Framework 2023 (Belgique) associées',
+    });
   }
 
   const formatteResponsables = (responsables) =>
@@ -136,6 +140,7 @@ const genereCsvMesures = async (
       mesuresAssocieesReCyf: mesuresAssociees(idMesure, 'ReCyf'),
       mesuresAssocieesISO: mesuresAssociees(idMesure, 'ISO2700X'),
       mesuresAssocieesAE: mesuresAssociees(idMesure, 'AE2690'),
+      mesuresAssocieesCyFun: mesuresAssociees(idMesure, 'CyFun23'),
     }))
     .concat(
       mesuresSpecifiques.map((m) => ({
