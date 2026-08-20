@@ -11,12 +11,38 @@ const EVENEMENT_FORMULAIRE_MULTIPLE_VALIDE =
 // Au moment de la validation du formulaire, on ajoute la classe `.touche` sur tous les champs,
 // afin de forcer l'affichage des champs en erreur.
 
+const renseigneLongueurActuelle = (champ, longueurActuelle) => {
+  const $message = $(champ).siblings('.message-erreur[data-gabarit]');
+  if (!$message.length) return;
+
+  $message.text(
+    $message.data('gabarit').replace('{longueur}', longueurActuelle)
+  );
+};
+
+const valideMaxLength = (champ) => {
+  const longueurMaximale = champ.maxLength;
+  if (longueurMaximale < 0) return;
+
+  const longueurActuelle = champ.value.length;
+  champ.setCustomValidity(
+    longueurActuelle > longueurMaximale ? 'Erreur de saisie' : ''
+  );
+  renseigneLongueurActuelle(champ, longueurActuelle);
+};
+
 const brancheConteneur = (selecteurConteneur) => {
   $('input, select, textarea', selecteurConteneur).each((_index, champ) => {
-    $(champ).on('input', () => $(champ).addClass('touche'));
+    valideMaxLength(champ);
+    $(champ).on('input', () => {
+      $(champ).addClass('touche');
+      valideMaxLength(champ);
+    });
+
     if (champ.type === 'radio' || champ.type === 'checkbox') {
       $(champ).on('change', (e) => $(e.target).siblings().addClass('touche'));
     }
+
     $(champ).on('invalid', (e) => e.preventDefault());
   });
 };
@@ -28,7 +54,7 @@ const brancheValidation = (selecteurFormulaire) => {
 
 const declencheScrollSurErreur = (selecteurFormulaire) => {
   const champAvecErreur = $(
-    'input:invalid, select:invalid',
+    'input:invalid, select:invalid, textarea:invalid',
     selecteurFormulaire
   );
   if (champAvecErreur.length) {

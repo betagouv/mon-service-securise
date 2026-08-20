@@ -151,14 +151,18 @@ mixin formulaireDescriptionService(idService)
             lectureSeule: estLectureSeule
           })
 
+        - const longueurMaximalePresentation = 2_000
         label Présentation
           textarea(
             id = 'presentation',
             name = 'presentation',
             placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
             readonly = estLectureSeule
-            maxlength = 2000
+            maxlength = longueurMaximalePresentation
           )= service.descriptionService.presentation
+          .message-erreur(
+            data-gabarit = `La présentation ne doit pas dépasser ${longueurMaximalePresentation} caractères. Elle en contient actuellement {longueur}. Veuillez la raccourcir.`
+          )
 
         label(id='label-acces') Accès
           br
