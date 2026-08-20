@@ -130,7 +130,6 @@ const testeurMss = () => {
         avecRisquesV2: () => true,
         avecGestionDesOrganisations: () => true,
       }),
-      oidc: () => ({ fournisseursAvecMFA: () => [] }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
       }),
@@ -148,11 +147,7 @@ const testeurMss = () => {
     adaptateurJournal = {
       consigneEvenement: async () => {},
     };
-    adaptateurOidc = {
-      genereDemandeAutorisation: {
-        quiForceLeMFA: async () => ({ url: 'https://url-dans-testeur-mss.fr' }),
-      },
-    };
+    adaptateurOidc = {};
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };

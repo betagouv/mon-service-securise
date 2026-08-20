@@ -19,13 +19,11 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {
-      testeur.adaptateurOidc().genereDemandeAutorisation = {
-        sansForcerLeMFA: async () => ({
-          nonce: 'unNonce',
-          state: 'unState',
-          url: 'http',
-        }),
-      };
+      testeur.adaptateurOidc().genereDemandeAutorisation = async () => ({
+        nonce: 'unNonce',
+        state: 'unState',
+        url: 'http',
+      });
     });
 
     it("déconnecte l'utilisateur courant", async () => {
@@ -91,6 +89,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
+        acr: 'eidas2',
       });
       testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
         email: 'jean.dujardin@beta.gouv.fr',
@@ -170,6 +169,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     it("enrichit la session avec l'`id_token`", async () => {
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
+        acr: 'eidas2',
       });
       const reponse = await testeur.get('/oidc/apres-authentification');
       const tokenDecode = decodeSessionDuCookie(reponse, 1);
@@ -181,6 +181,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         let donneesRecues;
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         testeur.adaptateurOidc().recupereInformationsUtilisateur = async (
           accessToken: string
@@ -265,6 +266,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             : undefined;
         testeur.adaptateurOidc().recupereJeton = async () => ({
           connexionAvecMFA: true,
+          acr: 'eidas2',
         });
 
         const reponse = await testeur.get('/oidc/apres-authentification');
@@ -373,6 +375,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       it("retourne la page `apresAuthentification` avec le jeton signé de l'invité dans les données", async () => {
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         let donneesRecuesPourCreationTokenSigne;
         testeur.adaptateurJWT().signeDonnees = (
@@ -416,6 +419,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       it("utilise les informations ProConnect pour le jeton signé de l'invité s'il n'existe pas dans MPA", async () => {
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
+          acr: 'eidas2',
         });
         let donneesRecuesPourCreationTokenSigne;
         testeur.adaptateurJWT().signeDonnees = (
@@ -458,33 +462,27 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
     });
 
-    describe('concernant le MFA obligatoire', () => {
-      describe('quand il doit rediriger vers ProConnect car le MFA est supporté par le fournisseur', () => {
-        it('redirige le navigateur vers ProConnect en ayant posé un cookie', async () => {
-          testeur.adaptateurEnvironnement().oidc = () => ({
-            fournisseursAvecMFA: () => ['F-1'],
-          });
-          testeur.adaptateurOidc().recupereInformationsUtilisateur = () => ({
-            idFournisseurIdentite: 'F-1',
-          });
-
-          testeur.adaptateurOidc().genereDemandeAutorisation = {
-            quiForceLeMFA: async () => ({
-              url: 'https://proconnect.fr',
-              state: 'state-pour-mfa',
-              nonce: 'nonce-pour-mfa',
-            }),
-          };
-
-          const reponse = await testeur.get('/oidc/apres-authentification');
-
-          expect(reponse.status).toBe(302);
-          expect(reponse.headers.location).toBe('https://proconnect.fr');
-          const cookieProConnect = reponse.headers['set-cookie'][1];
-          expect(cookieProConnect).toContain('AgentConnectInfo=');
-          expect(cookieProConnect).toContain('state-pour-mfa');
-          expect(cookieProConnect).toContain('nonce-pour-mfa');
+    describe('quand ProConnect n’a pas garanti la présence d’un MFA', () => {
+      beforeEach(() => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          idToken: 'unIdToken',
+          acr: 'eidas1',
         });
+      });
+
+      it('refuse l’accès au service', async () => {
+        const reponse = await testeur.get('/oidc/apres-authentification');
+
+        expect(reponse.status).toBe(403);
+        expect(reponse.text).toContain('double authentification');
+      });
+
+      it('supprime le cookie ProConnect', async () => {
+        const reponse = await testeur.get('/oidc/apres-authentification');
+
+        expect(reponse.headers['set-cookie'][0]).toContain(
+          'AgentConnectInfo=;'
+        );
       });
     });
   });
