@@ -233,6 +233,9 @@
         disabled-row-keys={JSON.stringify(siretsSeulAdmin)}
       >
         {#each toutesEntites as entite, i (entite.siret)}
+          <div slot="cell:nom:{i}" class="statut-actuel">
+            <span>{entite.nom ?? '-'}</span>
+          </div>
           <div slot="cell:statutActuel:{i}" class="statut-actuel">
             {#if siretsSelectionnesInitialement.includes(entite.siret)}
               <BadgeAdmin />
@@ -264,9 +267,9 @@
       {#each toutesEntitesModifiees as entite, i (entite.siret)}
         <div slot="cell:nom:{i}">
           {#if recapitulatif.retirees.includes(entite.siret)}
-            <span><s>{entite.nom}</s></span>
+            <span><s>{entite.nom ?? '-'}</s></span>
           {:else}
-            <span>{entite.nom}</span>
+            <span>{entite.nom ?? '-'}</span>
           {/if}
         </div>
         <div slot="cell:action:{i}">
