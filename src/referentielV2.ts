@@ -38,6 +38,11 @@ import {
   mesuresAE2690,
 } from './mesures/referentielsExternes/donneesReferentielMesuresAE2690.js';
 import { correspondanceMesuresReCyfVersAE2690 } from './mesures/referentielsExternes/correspondanceMesuresReCyfVersAE2690.js';
+import {
+  IdMesureCyFun23,
+  mesuresCyFun23,
+} from './mesures/referentielsExternes/donneesReferentielMesuresCyFun23.js';
+import { correspondanceMesuresReCyfVersCyFun23 } from './mesures/referentielsExternes/correspondanceMesuresReCyfVersCyFun23.js';
 
 export type EntiteConcernee = 'EI' | 'EE';
 
@@ -68,6 +73,10 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
     AE2690: {
       mesures: Record<string, DonneesReferentielsMesuresAE2690>;
       liens: Partial<Record<IdMesureReCyf, IdMesureAE2690[]>>;
+    };
+    CyFun23: {
+      mesures: Record<string, DonneesReferentielsMesuresCyFun23>;
+      liens: Partial<Record<IdMesureReCyf, IdMesureCyFun23[]>>;
     };
     ISO2700X: {
       mesures: Record<string, DonneesReferentielsMesuresISO2700X>;
@@ -126,6 +135,11 @@ type MethodesSpecifiquesReferentielV2 = {
         id: IdMesureAE2690;
       }
     >;
+    CyFun23: Array<
+      DonneesReferentielsMesuresCyFun23 & {
+        id: IdMesureCyFun23;
+      }
+    >;
   };
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
   typeService: (type: TypeDeService) => { nom: string; exemple: string };
@@ -144,6 +158,10 @@ export const creeReferentielV2 = (
       AE2690: {
         mesures: mesuresAE2690,
         liens: correspondanceMesuresReCyfVersAE2690,
+      },
+      CyFun23: {
+        mesures: mesuresCyFun23,
+        liens: correspondanceMesuresReCyfVersCyFun23,
       },
       ReCyf: { mesures: mesuresReCyf, liens: correspondanceMesuresV2VersReCyf },
       ISO2700X: {
@@ -233,6 +251,16 @@ export const creeReferentielV2 = (
         )
       ),
     ];
+    const idsMesuresCyFun: Array<IdMesureCyFun23> = [
+      ...new Set(
+        idsMesuresRecyf.flatMap(
+          (idMesureRecyf) =>
+            donnees.donneesReferentielsExternesMesures.CyFun23.liens[
+              idMesureRecyf
+            ] || []
+        )
+      ),
+    ];
     return {
       ReCyf: idsMesuresRecyf.map((idMesureReCyf: IdMesureReCyf) => ({
         id: idMesureReCyf,
@@ -250,6 +278,12 @@ export const creeReferentielV2 = (
         id: idMesureAE,
         ...donnees.donneesReferentielsExternesMesures.AE2690.mesures[
           idMesureAE
+        ],
+      })),
+      CyFun23: idsMesuresCyFun.map((idMesureCyFun: IdMesureCyFun23) => ({
+        id: idMesureCyFun,
+        ...donnees.donneesReferentielsExternesMesures.CyFun23.mesures[
+          idMesureCyFun
         ],
       })),
     };

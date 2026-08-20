@@ -1283,7 +1283,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ...mesuresV2['RECENSEMENT.1'],
       thematique: 'Gouvernance et gestion des risques',
       porteursSinguliers: ['Chef de projet numérique', 'Chef de projet métier'],
-      referentielsExternes: { AE2690: [], ISO2700X: [], ReCyf: [] },
+      referentielsExternes: {
+        AE2690: [],
+        ISO2700X: [],
+        ReCyf: [],
+        CyFun23: [],
+      },
       versionReferentiel: 'v2',
     };
 
