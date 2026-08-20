@@ -3,6 +3,15 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 import svelte from 'eslint-plugin-svelte';
 import js from '@eslint/js';
+import { interditImportEntrypoint } from './eslint/regles/interditImportEntrypoint.js';
+import { entrypointConforme } from './eslint/regles/entrypointConforme.js';
+
+const mss = {
+  rules: {
+    'interdit-import-entrypoint': interditImportEntrypoint,
+    'entrypoint-conforme': entrypointConforme,
+  },
+};
 
 export default defineConfig(
   js.configs.recommended,
@@ -27,12 +36,17 @@ export default defineConfig(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    plugins: {
+      mss,
+    },
     rules: {
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-deprecated': 'error',
+      'mss/interdit-import-entrypoint': 'error',
+      'mss/entrypoint-conforme': 'error',
     },
     settings: {
       svelte: {
