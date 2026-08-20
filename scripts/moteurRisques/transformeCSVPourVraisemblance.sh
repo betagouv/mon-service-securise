@@ -9,6 +9,7 @@ set -euo pipefail
 # Miller : https://miller.readthedocs.io/en/6.15.0/
 
 # Utilisation : `./transformeCSVPourVraisemblance.sh <chemin vers .csv> <identifiant du risque>`
+# Exemple : `./transformeCSVPourVraisemblance.sh ./Moteur\ de\ risque-vF.1-V11_Reduction.csv V11`
 
 
 FICHIER_CSV="${1:-}"

@@ -21,7 +21,7 @@ export const V11: ConfigurationVraisemblancePourUnVecteur = {
     groupes: {
       a: { poids: 1, idsMesures: ['PHYS.1'] },
       b: { poids: 1, idsMesures: ['CONFIG.8'] },
-      c: { poids: 2, idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1'] },
+      c: { poids: 1, idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1'] },
       d: { poids: 1, idsMesures: ['MCO_MCS.11', 'MCO_MCS.12'] },
     },
     formules: [
@@ -46,7 +46,7 @@ export const V11: ConfigurationVraisemblancePourUnVecteur = {
     groupes: {
       a: { poids: 1, idsMesures: ['PHYS.1', 'PHYS.2'] },
       b: { poids: 1, idsMesures: ['CONFIG.8'] },
-      c: { poids: 2, idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1'] },
+      c: { poids: 1, idsMesures: ['CONTRAT.1', 'CONTRAT.2', 'ECOSYSTEME.1'] },
       d: { poids: 1, idsMesures: ['MCO_MCS.11', 'MCO_MCS.12'] },
     },
     formules: [
