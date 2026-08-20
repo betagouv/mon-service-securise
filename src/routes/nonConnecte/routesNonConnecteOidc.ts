@@ -16,6 +16,7 @@ import {
 } from '../../session/serviceGestionnaireSession.js';
 import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
 import { cookieProConnect } from '../../oidc/cookies.js';
+import { garantitUnMFA } from '../../oidc/acr.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -69,11 +70,20 @@ const routesNonConnecteOidc = ({
       return;
     }
     try {
-      const { idToken, accessToken, connexionAvecMFA } =
+      const { idToken, accessToken, connexionAvecMFA, acr } =
         await adaptateurOidc.recupereJeton(requete);
 
       const { urlRedirection } = cookieProConnect.recupere(requete);
       cookieProConnect.supprime(reponse);
+
+      if (!garantitUnMFA(acr)) {
+        reponse
+          .status(403)
+          .send(
+            'Vous ne pouvez pas accéder à MonServiceSécurisé sans double authentification. Veuillez en activer une auprès de votre fournisseur d’identité, puis vous connecter à nouveau.'
+          );
+        return;
+      }
 
       const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
