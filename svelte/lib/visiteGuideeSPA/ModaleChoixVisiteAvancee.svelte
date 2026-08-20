@@ -7,7 +7,12 @@
   let { estOuverte = $bindable(), utilisateurADesServices }: Props = $props();
 </script>
 
-<dsfr-modal id="modale-choix-visite-avancee" has-footer opened={estOuverte}>
+<dsfr-modal
+  id="modale-choix-visite-avancee"
+  has-footer
+  opened={estOuverte}
+  title="Choix de la visite avancée"
+>
   <div>
     <h4>Que souhaitez-vous découvrir ?</h4>
     <p>Choisissez la fonctionnalité qui vous intéresse.</p>
