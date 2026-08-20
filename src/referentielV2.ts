@@ -56,6 +56,10 @@ export type DonneesReferentielsMesuresAE2690 = {
   description: string;
 };
 
+export type DonneesReferentielsMesuresCyFun23 = {
+  description: string;
+};
+
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
