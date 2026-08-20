@@ -26,6 +26,7 @@
 <dsfr-modal
   id="modale-accueil-visite-guidee"
   has-footer
+  title="Accueil de la visite guidée"
   opened={estOuverte}
   onclose={() => ignore()}
 >

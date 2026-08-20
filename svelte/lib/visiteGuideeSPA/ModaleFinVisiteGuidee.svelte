@@ -12,7 +12,12 @@
   }: Props = $props();
 </script>
 
-<dsfr-modal id="modale-fin-visite-guidee" has-footer opened={estOuverte}>
+<dsfr-modal
+  id="modale-fin-visite-guidee"
+  has-footer
+  opened={estOuverte}
+  title="Choix après la visite guidée"
+>
   <div>
     <h4>À vous de jouer !</h4>
     <p>
