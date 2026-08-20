@@ -5,6 +5,7 @@ import { pagesServiceGerees } from '../pagesServiceGerees';
 import { tiroirStore } from '../../ui/stores/tiroir.store';
 import { pageDepuisURL } from './pageDepuisURL';
 import { titresPages } from '../titresPages.donnees';
+import { trackDansMatomo } from '../../ui/matomo';
 
 type CommandePaq = [string, ...unknown[]];
 
@@ -38,25 +39,6 @@ window.addEventListener('popstate', () => {
 
 type NavExterne = (url: string) => void;
 
-const trackMatomo = (url: string, titrePage: string) => {
-  const sansIdService = (u: string) =>
-    u.replace(
-      /\/service\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\//,
-      '/service/{ID}/'
-    );
-  const urlCompleteSansId = (u: string) =>
-    window.location.origin + sansIdService(u) + window.location.search;
-
-  window._paq = window._paq || [];
-  const { _paq } = window;
-
-  _paq.push(['setReferrerUrl', urlCompleteSansId(get(routeurStore).location)]);
-  _paq.push(['setCustomUrl', urlCompleteSansId(url)]);
-  _paq.push(['setDocumentTitle', titrePage]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-};
-
 const navigue = (
   url: string,
   navigueHorsSPA: NavExterne = (url) => {
@@ -82,7 +64,7 @@ const navigue = (
   ) {
     const titrePage = `${titresPages[pageDemandee]} | MonServiceSécurisé`;
     document.title = titrePage;
-    trackMatomo(url, titrePage);
+    trackDansMatomo(url, get(routeurStore).location, titrePage);
 
     history.pushState({}, '', url);
     update((etat) => {
