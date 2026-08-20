@@ -162,6 +162,31 @@
         </div>
       {/each}
     {/if}
+    {#if mesuresReferentielsExternes.CyFun23.length > 0 && doitAfficherMesuresDe('CyFun23')}
+      {#each mesuresReferentielsExternes.CyFun23 as mesure (mesure.id)}
+        <div class="bloc-mesure">
+          <div class="conteneur-entete-referentiels-externes">
+            <h4>
+              {singulierPluriel(
+                'Exigence',
+                'Exigences',
+                mesuresReferentielsExternes.CyFun23.length
+              )}
+              {LIBELLES_REFERENTIELS_EXTERNES['CyFun23']}
+            </h4>
+            <div class="tags">
+              <dsfr-tag label={mesure.id} size="sm"></dsfr-tag>
+            </div>
+          </div>
+          <p>{@html mesure.description}</p>
+          <dsfr-link
+            label="Voir les exigences et comparaison sur MesServicesCyber"
+            href="https://messervices.cyber.gouv.fr/nis2#exigences"
+            blank
+          ></dsfr-link>
+        </div>
+      {/each}
+    {/if}
   </div>
 {/if}
 

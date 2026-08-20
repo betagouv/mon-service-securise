@@ -52,6 +52,7 @@ export type MesureGenerale = {
     ReCyf: Array<{ id: string }>;
     ISO2700X: Array<{ id: string }>;
     AE2690: Array<{ id: string }>;
+    CyFun23: Array<{ id: string }>;
   };
 };
 
