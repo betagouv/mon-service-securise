@@ -201,11 +201,13 @@
     const mesuresRecyf = d?.ReCyf ?? [];
     const mesuresISO = d?.ISO2700X ?? [];
     const mesuresAE = d?.AE2690 ?? [];
+    const mesuresCyFun = d?.CyFun23 ?? [];
     return (
       (mesuresRecyf.length > 0 && referentielsSelectionnes.includes('ReCyf')) ||
       (mesuresISO.length > 0 &&
         referentielsSelectionnes.includes('ISO2700X')) ||
-      (mesuresAE.length > 0 && referentielsSelectionnes.includes('AE2690'))
+      (mesuresAE.length > 0 && referentielsSelectionnes.includes('AE2690')) ||
+      (mesuresCyFun.length > 0 && referentielsSelectionnes.includes('CyFun23'))
     );
   };
 
