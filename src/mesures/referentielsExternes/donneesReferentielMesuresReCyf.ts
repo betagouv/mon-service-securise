@@ -814,7 +814,7 @@ export const mesuresReCyf = {
       'L’entité, pour chacun de ses activités et services, définit et documente la durée maximale d’interruption admissible (DMIA) et le point de rétablissement des données (PRD).',
     entitesConcernees: ['EE'],
   },
-  '13.5-EE': {
+  '13.5-EI/EE': {
     objectif: "Objectif de sécurité 13: Continuité et reprise d'activité",
     thematique: "Continuité et reprise d'activité",
     description:

@@ -42,7 +42,7 @@ export const correspondanceMesuresV2VersReCyf: Partial<
   'CONFIG.2': ['18.3-EE'],
   'CONFIG.3': ['18.4-EE'],
   'CONFORMITE.1': ['2.C.1-EI/EE'],
-  'CONTINU.1': ['13.1-EI/EE', '13.2-EI/EE', '13.5-EE'],
+  'CONTINU.1': ['13.1-EI/EE', '13.2-EI/EE', '13.5-EI/EE'],
   'CONTINU.2': ['13.3-EI/EE'],
   'CONTINU.3': ['13.4-EE'],
   'CONTRAT.1': ['3.B.1-EI/EE'],
