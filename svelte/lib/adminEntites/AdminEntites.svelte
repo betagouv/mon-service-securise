@@ -12,6 +12,7 @@
   import { chaineNormalisee } from '../outils/string';
   import ChampRecherche from '../ui/ChampRecherche.svelte';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
+  import NomEntite from '../ui/NomEntite.svelte';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let recherche = $state('');
@@ -62,7 +63,7 @@
   >
     {#each mesEntitesFiltrees as entite, i (entite.siret)}
       <div slot="cell:nom:{i}">
-        <span><b>{entite.nom}</b></span>
+        <span><b><NomEntite {entite} /></b></span>
       </div>
       <div slot="cell:admins:{i}" class="conteneur-admins">
         {#each entite.administrateurs as { prenomNom }, j (j)}

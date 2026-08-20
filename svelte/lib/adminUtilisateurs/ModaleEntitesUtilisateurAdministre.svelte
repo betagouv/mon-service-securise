@@ -11,6 +11,7 @@
   import { onMount } from 'svelte';
   import { api } from './adminUtilisateurs.api';
   import { singulierPluriel } from '../outils/string';
+  import NomEntite from '../ui/NomEntite.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre | undefined;
@@ -87,7 +88,7 @@
     >
       {#each entitesDeUtilisateur as entite, i (entite.siret)}
         <div slot="cell:nom:{i}">
-          <span><b>{entite.nom}</b></span>
+          <span><b><NomEntite {entite} /></b></span>
         </div>
         <div slot="cell:admins:{i}" class="conteneur-admins">
           {#each entite.administrateurs as { prenomNom }, j (j)}

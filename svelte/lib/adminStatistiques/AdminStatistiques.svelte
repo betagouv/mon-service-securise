@@ -228,7 +228,7 @@
       options={entites.map((entite) => ({
         id: entite.siret,
         value: entite.siret,
-        label: entite.nom,
+        label: entite.nom ?? entite.siret,
       }))}
       placeholder="Sélectionner une/des entités"
       values={filtreEntites}

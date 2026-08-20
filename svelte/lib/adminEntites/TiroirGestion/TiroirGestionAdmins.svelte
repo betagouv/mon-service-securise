@@ -46,7 +46,7 @@
       await api.envoieInvitations([...listeAdminsAInviter], entite.siret);
       toasterStore.succes(
         'Invitation envoyée',
-        `${listeAdminsAInviter.size} administrateur(s) nommé(s) sur l'entité ${entite.nom}`
+        `${listeAdminsAInviter.size} administrateur(s) nommé(s) sur l'entité ${entite.nom ?? entite.siret}`
       );
       document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
       tiroirStore.ferme();
@@ -68,7 +68,7 @@
         etatAffichage = 'LISTE';
         toasterStore.succes(
           'Admin supprimé avec succès',
-          `L'administrateur a bien été supprimé de l'entité ${entite.nom}`
+          `L'administrateur a bien été supprimé de l'entité ${entite.nom ?? entite.siret}`
         );
         document.dispatchEvent(new CustomEvent('admins-entites-modifiees'));
         tiroirStore.ferme();
@@ -77,7 +77,7 @@
         if (erreurAxios?.response?.status === 422) {
           toasterStore.erreur(
             "Impossible de supprimer l'admin",
-            `L'administrateur est seul contributeur d'un service de ${entite.nom} : il ne peut pas être supprimé`
+            `L'administrateur est seul contributeur d'un service de ${entite.nom ?? entite.siret} : il ne peut pas être supprimé`
           );
           etatAffichage = 'LISTE';
         }
