@@ -1,6 +1,10 @@
 name: Déploiement vers un environnement de DEV
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: false
+
 on:
   workflow_dispatch: # Pour activer le déclenchement manuel
 

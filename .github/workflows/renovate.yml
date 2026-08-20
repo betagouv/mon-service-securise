@@ -1,6 +1,10 @@
 name: Renovate
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
   schedule:
