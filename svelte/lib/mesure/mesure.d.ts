@@ -32,10 +32,16 @@ type MesureAE2690 = {
   description: string;
 };
 
+type MesureCyFun23 = {
+  id: string;
+  description: string;
+};
+
 export type MesuresReferentielsExternes = {
   ReCyf: Array<MesureReCyf>;
   ISO2700X: Array<MesureISO2700X>;
   AE2690: Array<MesureAE2690>;
+  CyFun23: Array<MesureCyFun23>;
 };
 
 export type MesureGeneraleEnrichie = MesureGenerale & {

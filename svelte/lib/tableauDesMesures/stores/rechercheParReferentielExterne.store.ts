@@ -16,9 +16,12 @@ export const appliqueFiltreParReferentielExterne = (
     (mesure as MesureGenerale)?.mesuresReferentielsExternes?.ISO2700X ?? [];
   const mesuresAE =
     (mesure as MesureGenerale)?.mesuresReferentielsExternes?.AE2690 ?? [];
+  const mesuresCyFun =
+    (mesure as MesureGenerale)?.mesuresReferentielsExternes?.CyFun23 ?? [];
   return (
     (mesuresRecyf.length > 0 && selection.includes('ReCyf')) ||
     (mesuresISO.length > 0 && selection.includes('ISO2700X')) ||
-    (mesuresAE.length > 0 && selection.includes('AE2690'))
+    (mesuresAE.length > 0 && selection.includes('AE2690')) ||
+    (mesuresCyFun.length > 0 && selection.includes('CyFun23'))
   );
 };
