@@ -26,6 +26,7 @@
   import { enleveParametreDeUrl } from '../outils/url';
   import ModaleChoixVisiteAvancee from '../visiteGuideeSPA/ModaleChoixVisiteAvancee.svelte';
   import { derived } from 'svelte/store';
+  import { trackDansMatomo } from '../ui/matomo';
 
   interface Props {
     estSuperviseur: boolean;
@@ -162,6 +163,11 @@
     avecModaleFinVisiteGuidee = false;
     avecModaleAccueilVisiteGuidee = false;
     avecModaleVisiteGuideeAvancee = true;
+    trackDansMatomo(
+      '/tableauDeBord',
+      '/tableauDeBord',
+      'Visite guidée | Modale choix avancée'
+    );
   };
 </script>
 
