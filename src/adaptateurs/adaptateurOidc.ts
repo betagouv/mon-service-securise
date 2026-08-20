@@ -25,7 +25,7 @@ const genereDemandeAutorisation = async () => {
   const nonce = generators.nonce(32);
   const state = generators.state(32);
   const url = client.authorizationUrl({
-    scope: 'openid email given_name usual_name siret idp_id',
+    scope: 'openid email given_name usual_name siret',
     nonce,
     state,
     // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
@@ -92,7 +92,6 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
     usual_name: nom,
     email,
     siret,
-    idp_id: idFournisseurIdentite,
   } = await client.userinfo(accessToken);
 
   return {
@@ -100,7 +99,6 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
     nom: nom as string,
     email: email as string,
     siret: siret as string | undefined,
-    idFournisseurIdentite: idFournisseurIdentite as string,
   };
 };
 

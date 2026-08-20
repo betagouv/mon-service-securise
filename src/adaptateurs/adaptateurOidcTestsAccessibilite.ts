@@ -29,7 +29,6 @@ export const recupereInformationsUtilisateur = async (accessToken: string) => ({
   prenom: 'Utilisateur',
   email: accessToken,
   siret: '13000766900018',
-  idFournisseurIdentite: 'FAKE_IDP',
 });
 
 type MethodeAuthentification = 'totp' | 'pop' | 'mfa' | 'pwd' | 'mail';
