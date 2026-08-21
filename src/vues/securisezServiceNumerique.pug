@@ -1,6 +1,5 @@
 extends mssDeconnecte
 include ./fragments/entites
-include ./fragments/fonctionnalitesSegmentees
 include ./fragments/blocCommunaute
 
 block title
@@ -157,25 +156,35 @@ block main
         .conteneur
           h2.titre Les avantages MonServiceSécurisé
           p.description Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
-          +fonctionnalitesSegmentees(
-            ["Sécuriser mon service", "Collaborer efficacement", "Obtenir une homologation"],
-            [
+          -
+            const categoriesDAvantages = [
+              "Sécuriser mon service",
+              "Collaborer efficacement",
+              "Obtenir une homologation",
+            ].map((label, index) => ({ label, id: `categorie-avantage-${index + 1}` }))
+            const avantagesParCategorie = [
               [
-                { titre: "Évaluation des besoins de sécurité", description: "Décrivez votre service en 5 minutes pour obtenir son besoin de sécurité (basique, modéré ou avancé) et la démarche d'homologation adaptée.", img: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_besoins.png" },
-                { titre: "Les mesures spécifiques applicables à plusieurs services à la fois.", description: "Découvrez les mesures indispensables et recommandées à mettre en oeuvre. Chaque mesure est détaillée avec le porteur et son responsable indicatif.", img: "/statique/assets/images/landing/fonctionnalites/illustration_liste_de_mesures.png" },
-                { titre: "Plan d’action", description: "Organisez-vous au mieux grâce au plan d'action (priorité, échéance, responsable) et ne ratez aucune information avec l'historique !", img: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
-                { titre: "L’indice cyber", description: "Evaluez le niveau de sécurisation du service, visualisez simplement grâce au radar et obtenez une recommandation de l'ANSSI en cas de décision d'homologation", img: "/statique/assets/images/landing/fonctionnalites/illustration_indice_cyber.png" },
+                { titre: "Évaluation des besoins de sécurité", description: "Décrivez votre service en 5 minutes pour obtenir son besoin de sécurité (basique, modéré ou avancé) et la démarche d'homologation adaptée.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_besoins.png" },
+                { titre: "Les mesures spécifiques applicables à plusieurs services à la fois.", description: "Découvrez les mesures indispensables et recommandées à mettre en oeuvre. Chaque mesure est détaillée avec le porteur et son responsable indicatif.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_liste_de_mesures.png" },
+                { titre: "Plan d’action", description: "Organisez-vous au mieux grâce au plan d'action (priorité, échéance, responsable) et ne ratez aucune information avec l'historique !", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
+                { titre: "L’indice cyber", description: "Evaluez le niveau de sécurisation du service, visualisez simplement grâce au radar et obtenez une recommandation de l'ANSSI en cas de décision d'homologation", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_indice_cyber.png" },
               ],
               [
-                { titre: "Le collaboratif", description: "Sur chaque service, ajoutez des contributeurs puis échangez avec eux et le RSSI pour sécuriser en équipe.", img: "/statique/assets/images/landing/fonctionnalites/illustration_collaboratif.png" },
-                { titre: "Le plan d’action et l’historique d’activité", description: "Définissez un plan d’action avec le RSSI, attribuez des responsables sur chaque mesure et ne perdez pas une information grâce à l’historique !", img: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
+                { titre: "Le collaboratif", description: "Sur chaque service, ajoutez des contributeurs puis échangez avec eux et le RSSI pour sécuriser en équipe.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_collaboratif.png" },
+                { titre: "Le plan d’action et l’historique d’activité", description: "Définissez un plan d’action avec le RSSI, attribuez des responsables sur chaque mesure et ne perdez pas une information grâce à l’historique !", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
               ],
               [
-                { titre: "Le dossier d’homologation clé-en-main", description: "Créer un dossier d’homologation en quelques étapes et faites le approuvez par votre autorité d’homologation", img: "/statique/assets/images/landing/fonctionnalites/illustration_dossier_homologation.png" },
-                { titre: "L’encart d’homologation", description: "Valorisez vos efforts d’homologation et soyez transparents avec les usagers de vos SIs en partageant l’encart d’homologation.", img: "/statique/assets/images/landing/fonctionnalites/illustration_encart_homologation.png" },
+                { titre: "Le dossier d’homologation clé-en-main", description: "Créer un dossier d’homologation en quelques étapes et faites le approuvez par votre autorité d’homologation", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_dossier_homologation.png" },
+                { titre: "L’encart d’homologation", description: "Valorisez vos efforts d’homologation et soyez transparents avec les usagers de vos SIs en partageant l’encart d’homologation.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_encart_homologation.png" },
               ],
-            ],
-            'h3'
+            ]
+          lab-anssi-fonctionnalites(
+            titre=""
+            avec-controle-segmente
+            elements-du-controle-segmente=JSON.stringify(categoriesDAvantages)
+            fonctionnalites=JSON.stringify(avantagesParCategorie)
+            cliquable
+            active-defilement
           )
 
     .bloc-contenu.bloc-equipe
