@@ -1,5 +1,4 @@
 extends mssDeconnecte
-include ./fragments/fonctionnalitesSegmentees
 include ./fragments/entites
 include ./fragments/blocCommunaute
 
@@ -106,22 +105,32 @@ block main
     .bloc-contenu.alignement-gauche
       h3.alignement-gauche.moyenne-marge-basse Les fonctionnalités clés
       p.grande-marge-basse Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
-      +fonctionnalitesSegmentees(
-        ['Pour toutes les équipes', 'Pour les FSSI & les RSSI'],
-        [
+      -
+        const categoriesDeFonctionnalites = [
+          'Pour toutes les équipes',
+          'Pour les FSSI & les RSSI',
+        ].map((label, index) => ({ label, id: `categorie-fonctionnalite-${index + 1}` }))
+        const fonctionnalitesParCategorie = [
           [
-            { titre: 'Plan d’action cyber collaboratif', description: 'Collaborez avec vos équipes, assignez les mesures de sécurité et suivez leur avancement.', img: '/statique/assets/images/home/fonctionnalites/plan_collaboratif.png' },
-            { titre: 'Indice cyber', description: 'Obtenez une évaluation indicative du niveau de sécurisation du service et sa  durée d’homologation recommandée', img: '/statique/assets/images/home/fonctionnalites/indice_cyber.png' },
-            { titre: 'Tableau de bord', description: 'Visualisez vos services, priorités et échéances en un coup d’œil.', img: '/statique/assets/images/home/fonctionnalites/tableau_de_bord.png' },
-            { titre: 'Matrice de risques', description: 'Identifiez et suivez vos risques en temps réel, au fil de la complétion de votre plan d’action cyber.', img: '/statique/assets/images/home/fonctionnalites/risques.png' },
+            { titre: 'Plan d’action cyber collaboratif', description: 'Collaborez avec vos équipes, assignez les mesures de sécurité et suivez leur avancement.', illustration: '/statique/assets/images/home/fonctionnalites/plan_collaboratif.png' },
+            { titre: 'Indice cyber', description: 'Obtenez une évaluation indicative du niveau de sécurisation du service et sa  durée d’homologation recommandée', illustration: '/statique/assets/images/home/fonctionnalites/indice_cyber.png' },
+            { titre: 'Tableau de bord', description: 'Visualisez vos services, priorités et échéances en un coup d’œil.', illustration: '/statique/assets/images/home/fonctionnalites/tableau_de_bord.png' },
+            { titre: 'Matrice de risques', description: 'Identifiez et suivez vos risques en temps réel, au fil de la complétion de votre plan d’action cyber.', illustration: '/statique/assets/images/home/fonctionnalites/risques.png' },
           ],
           [
-            { titre: 'Supervision', description: 'Vision globale de vos systèmes d’information avec des indicateurs clés pour piloter la sécurisation de votre entité.', img: '/statique/assets/images/home/fonctionnalites/supervision.png' },
-            { titre: 'Téléversement des systèmes d’information', description: 'Importez tous vos systèmes d’information en une seule fois pour les centraliser.', img: '/statique/assets/images/home/fonctionnalites/televersement.png' },
-            { titre: 'Import des mesures', description: 'Intégrez des mesures de sécurité spécifiques et réutilisez-les sur vos systèmes d’information.', img: '/statique/assets/images/home/fonctionnalites/import_des_mesures.png' },
-            { titre: 'Gestion des droits', description: 'Gérez finement les accès de chaque utilisateur invité (équipes métier, prestataires, etc.)', img: '/statique/assets/images/home/fonctionnalites/gestions_des_droits.png' },
+            { titre: 'Supervision', description: 'Vision globale de vos systèmes d’information avec des indicateurs clés pour piloter la sécurisation de votre entité.', illustration: '/statique/assets/images/home/fonctionnalites/supervision.png' },
+            { titre: 'Téléversement des systèmes d’information', description: 'Importez tous vos systèmes d’information en une seule fois pour les centraliser.', illustration: '/statique/assets/images/home/fonctionnalites/televersement.png' },
+            { titre: 'Import des mesures', description: 'Intégrez des mesures de sécurité spécifiques et réutilisez-les sur vos systèmes d’information.', illustration: '/statique/assets/images/home/fonctionnalites/import_des_mesures.png' },
+            { titre: 'Gestion des droits', description: 'Gérez finement les accès de chaque utilisateur invité (équipes métier, prestataires, etc.)', illustration: '/statique/assets/images/home/fonctionnalites/gestions_des_droits.png' },
           ],
         ]
+      lab-anssi-fonctionnalites(
+        titre=""
+        avec-controle-segmente
+        elements-du-controle-segmente=JSON.stringify(categoriesDeFonctionnalites)
+        fonctionnalites=JSON.stringify(fonctionnalitesParCategorie)
+        cliquable
+        active-defilement
       )
 
     .bloc-contenu.fond-couleur-principale-attenuee
