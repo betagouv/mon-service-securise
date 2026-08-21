@@ -158,44 +158,43 @@ block main
 
     .bloc-contenu.bloc-avantages
       dsfr-container
-        .conteneur
-          h2.titre Les avantages MonServiceSécurisé
-          p.description Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
-          -
-            const categoriesDAvantages = [
-              "Pilotage des homologations et conformité",
-              "Proportionner mes démarches de sécurisation",
-              "Collaborer avec son équipe",
-              "Faire approuver une homologation",
-            ].map((label, index) => ({ label, id: `categorie-avantage-${index + 1}` }))
-            const avantagesParCategorie = [
-              [
-                { titre: "Le tableau de bord", description: "Pilotez en équipe vos systèmes d'information et obtenez des actions recommandées à chaque étape.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_bord.png" },
-                { titre: "Les mesures spécifiques applicables à plusieurs services à la fois.", description: "Accédez au socle de mesures ANSSI, importez vos mesures spécifiques et modifiez les mesures sur plusieurs SI simultanément", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_mesures_specifiques.png" },
-                { titre: "Le tableau de supervision", description: "Supervisez l'ensemble de votre périmètre grâce aux SIRETs. Présentez les chiffres en comité de direction (nombre de SIs sécurisés, statut des homologations, évolution de l'indice cyber, ...).", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_supervision.png" },
-              ],
-              [
-                { titre: "Évaluation des besoins de sécurité", description: "Décrivez les caractéristiques de chaque SI, puis évaluez l’exposition et la criticité pour que l’outil vous indique quel besoin de sécurité est associé (basique, modéré, avancé)", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_besoins.png" },
-                { titre: "Évaluation de la démarche d’homologation adaptée", description: "À chaque besoin de sécurité, sa démarche d’homologation. Proportionnez vos efforts et mettez-vous en conformité avec “l’homologation simplifiée”", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_demarche_homologation.png" },
-                { titre: "Une liste de mesures de sécurité personnalisée", description: "Notre outil sélectionne la liste de mesure de sécurité adaptées aux enjeux de sécurité de votre SI. Le socle de mesures proposée vous assure un niveau de sécurité optimal.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_liste_de_mesures.png" },
-              ],
-              [
-                { titre: "Le collaboratif", description: "Sur chaque service, ajoutez des contributeurs et attribuez leurs des droits en fonction de leurs rôles.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_collaboratif.png" },
-                { titre: "Le plan d’action et l’historique d’activité", description: "Définissez un plan d’action, attribuez des responsables sur chaque mesure et contrôler l’activité des mesures !", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
-              ],
-              [
-                { titre: "Un dossier d’homologation clé-en main", description: "Standardisez vos démarches d’homologation grâce à la création d’un dossier d’homologation clé en main.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_dossier_homologation.png" },
-                { titre: "L’encart d’homologation", description: "Valorisez vos efforts d’homologation et soyez transparents avec les usagers de vos SIs en partageant l’encart d’homologation.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_encart_homologation.png" },
-              ],
-            ]
-          lab-anssi-fonctionnalites(
-            titre=""
-            avec-controle-segmente
-            elements-du-controle-segmente=JSON.stringify(categoriesDAvantages)
-            fonctionnalites=JSON.stringify(avantagesParCategorie)
-            cliquable
-            active-defilement
-          )
+        -
+          const categoriesDAvantages = [
+            "Pilotage des homologations et conformité",
+            "Proportionner mes démarches de sécurisation",
+            "Collaborer avec son équipe",
+            "Faire approuver une homologation",
+          ].map((label, index) => ({ label, id: `categorie-avantage-${index + 1}` }))
+          const avantagesParCategorie = [
+            [
+              { titre: "Le tableau de bord", description: "Pilotez en équipe vos systèmes d'information et obtenez des actions recommandées à chaque étape.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_bord.png" },
+              { titre: "Les mesures spécifiques applicables à plusieurs services à la fois.", description: "Accédez au socle de mesures ANSSI, importez vos mesures spécifiques et modifiez les mesures sur plusieurs SI simultanément", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_mesures_specifiques.png" },
+              { titre: "Le tableau de supervision", description: "Supervisez l'ensemble de votre périmètre grâce aux SIRETs. Présentez les chiffres en comité de direction (nombre de SIs sécurisés, statut des homologations, évolution de l'indice cyber, ...).", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_tableau_de_supervision.png" },
+            ],
+            [
+              { titre: "Évaluation des besoins de sécurité", description: "Décrivez les caractéristiques de chaque SI, puis évaluez l’exposition et la criticité pour que l’outil vous indique quel besoin de sécurité est associé (basique, modéré, avancé)", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_besoins.png" },
+              { titre: "Évaluation de la démarche d’homologation adaptée", description: "À chaque besoin de sécurité, sa démarche d’homologation. Proportionnez vos efforts et mettez-vous en conformité avec “l’homologation simplifiée”", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_evaluation_demarche_homologation.png" },
+              { titre: "Une liste de mesures de sécurité personnalisée", description: "Notre outil sélectionne la liste de mesure de sécurité adaptées aux enjeux de sécurité de votre SI. Le socle de mesures proposée vous assure un niveau de sécurité optimal.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_liste_de_mesures.png" },
+            ],
+            [
+              { titre: "Le collaboratif", description: "Sur chaque service, ajoutez des contributeurs et attribuez leurs des droits en fonction de leurs rôles.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_collaboratif.png" },
+              { titre: "Le plan d’action et l’historique d’activité", description: "Définissez un plan d’action, attribuez des responsables sur chaque mesure et contrôler l’activité des mesures !", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_plan_action.png" },
+            ],
+            [
+              { titre: "Un dossier d’homologation clé-en main", description: "Standardisez vos démarches d’homologation grâce à la création d’un dossier d’homologation clé en main.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_dossier_homologation.png" },
+              { titre: "L’encart d’homologation", description: "Valorisez vos efforts d’homologation et soyez transparents avec les usagers de vos SIs en partageant l’encart d’homologation.", illustration: "/statique/assets/images/landing/fonctionnalites/illustration_encart_homologation.png" },
+            ],
+          ]
+        lab-anssi-fonctionnalites(
+          titre="Les avantages MonServiceSécurisé"
+          balise-titre="h3"
+          description="Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée."
+          avec-controle-segmente
+          elements-du-controle-segmente=JSON.stringify(categoriesDAvantages)
+          fonctionnalites=JSON.stringify(avantagesParCategorie)
+          cliquable
+          active-defilement
+        )
 
     .bloc-contenu.bloc-equipe
       dsfr-container

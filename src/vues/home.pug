@@ -103,8 +103,6 @@ block main
       dsfr-button(label='Commencer à sécuriser'  has-icon icon='arrow-right-line' icon-place="right" markup="a" type="button" href="/inscription" centered)
 
     .bloc-contenu.alignement-gauche
-      h3.alignement-gauche.moyenne-marge-basse Les fonctionnalités clés
-      p.grande-marge-basse Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée.
       -
         const categoriesDeFonctionnalites = [
           'Pour toutes les équipes',
@@ -125,7 +123,9 @@ block main
           ],
         ]
       lab-anssi-fonctionnalites(
-        titre=""
+        titre="Les fonctionnalités clés"
+        balise-titre="h3"
+        description="Une plateforme pensée pour les équipes DSI, RSSI, DPO, chefs de projet avec les mesures ANSSI et CNIL intégrées d'emblée."
         avec-controle-segmente
         elements-du-controle-segmente=JSON.stringify(categoriesDeFonctionnalites)
         fonctionnalites=JSON.stringify(fonctionnalitesParCategorie)

@@ -355,10 +355,6 @@ dsfr-button[centered] {
 
 .bloc-avantages {
   --padding-block: 72px;
-
-  .description {
-    margin-block: 0;
-  }
 }
 
 .bloc-equipe {
