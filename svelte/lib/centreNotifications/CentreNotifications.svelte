@@ -28,6 +28,7 @@
 
   const configurationsTabs = [
     { id: 'toutes', label: 'Toutes' },
+    { id: 'activites', label: 'Activités' },
     { id: 'nouveautes', label: 'Nouveautés' },
   ];
   let idTabActive = $state(0);
@@ -98,6 +99,15 @@
           active={idTabActive === 1}
           libelle={configurationsTabs[1].label}
           libellePastille={calculNbNonLue(
+            notificationsParOnglet.aFaire
+          ).toString()}
+        />
+      </div>
+      <div slot="tab-3">
+        <TitreOngletDSFR
+          active={idTabActive === 2}
+          libelle={configurationsTabs[2].label}
+          libellePastille={calculNbNonLue(
             notificationsParOnglet.nouveautes
           ).toString()}
         />
@@ -106,6 +116,9 @@
         <ListeNotifications notifications={notificationsParOnglet.toutes} />
       </div>
       <div slot="panel-2" class="conteneur-onglet">
+        <ListeNotifications notifications={notificationsParOnglet.aFaire} />
+      </div>
+      <div slot="panel-3" class="conteneur-onglet">
         <ListeNotifications notifications={notificationsParOnglet.nouveautes} />
       </div>
     </dsfr-tabs>
