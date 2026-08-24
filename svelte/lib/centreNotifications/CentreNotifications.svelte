@@ -72,9 +72,12 @@
   <div class="conteneur-notifications">
     <div class="entete-centre-notifications">
       <p class="titre-centre-notifications">Notifications</p>
-      <button id="masque-notifications" onclick={() => (ouvert = false)}>
-        Fermer
-      </button>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Fermer"
+        preset="close"
+        onclick={() => (ouvert = false)}
+      ></dsfr-button>
     </div>
     <dsfr-tabs
       tabs={configurationsTabs}
@@ -157,38 +160,19 @@
   }
 
   .entete-centre-notifications {
-    padding: 18px 24px;
+    padding: 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 
-  #masque-notifications {
-    font-size: 0.9rem;
-    background: none;
-    border: none;
-    color: var(--bleu-anssi);
-    display: flex;
-    gap: 8px;
-    cursor: pointer;
-  }
-
-  #masque-notifications::after {
-    content: '';
-    background: url('/statique/assets/images/icone_fermeture_modale.svg');
-    width: 24px;
-    height: 24px;
-    display: flex;
-  }
-
-  #masque-notifications:hover {
-    background: var(--systeme-design-etat-gris-survol);
-  }
-
   .titre-centre-notifications {
-    font-size: 20px;
-    font-weight: bold;
+    color: #161616;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.75rem;
     margin: 0;
   }
 
