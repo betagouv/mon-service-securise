@@ -31,6 +31,9 @@
     overflow-y: auto;
     font-size: 0.9rem;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .conteneur-aucune-notification {
