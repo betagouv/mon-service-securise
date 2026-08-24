@@ -160,7 +160,6 @@
   }
 
   .entete-centre-notifications {
-    padding: 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -185,12 +184,16 @@
     background: white;
     z-index: 1000;
     flex-direction: column;
-    border-radius: 8px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
     border: 1px solid #eff6ff;
+    padding: 16px;
   }
 
   .centre-notifications.ouvert .conteneur-notifications {
     display: flex;
+  }
+
+  dsfr-tabs {
+    margin-top: 32px;
   }
 </style>
