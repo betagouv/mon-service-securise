@@ -319,6 +319,22 @@ describe('Le centre de notifications', () => {
       expect(notifs[0].lien).to.be('/service/S1/page');
     });
 
+    it('ne conserve pas les données du service', async () => {
+      referentiel.enrichis({
+        naturesTachesService: {
+          natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
+        },
+      });
+
+      depotDonnees.tachesDesServices = async (_) => [
+        uneTacheDeService().avecUnServiceId('S1').construis(),
+      ];
+
+      const notifs = await centreDeNotification().toutesNotifications('U1');
+
+      expect(notifs[0].service).to.be(undefined);
+    });
+
     it('indique que la tache doit être notifiée de sa lecture', async () => {
       depotDonnees.tachesDesServices = async (_) => [
         uneTacheDeService().construis(),

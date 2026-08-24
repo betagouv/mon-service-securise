@@ -45,12 +45,12 @@ class CentreNotifications {
         date: () => new Date(t.dateDeDeploiement),
         horodatage: new Date(t.dateDeDeploiement),
       })),
-      ...tachesDesServices.map((t) => ({
-        ...t,
+      ...tachesDesServices.map(({ service, ...donneesTache }) => ({
+        ...donneesTache,
         type: 'tache',
         doitNotifierLecture: true,
-        date: () => t.dateCreation,
-        horodatage: t.dateCreation,
+        date: () => donneesTache.dateCreation,
+        horodatage: donneesTache.dateCreation,
       })),
     ].sort((a, b) => b.date() - a.date());
   }
