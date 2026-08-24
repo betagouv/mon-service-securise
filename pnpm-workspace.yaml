@@ -7,5 +7,5 @@ onlyBuiltDependencies:
   - bcrypt@6.0.0
 
 minimumReleaseAgeExclude:
-  - '@lab-anssi/ui-kit@1.60.4'
+  - '@lab-anssi/ui-kit@1.60.5'
   - '@lab-anssi/lib@2.2.1'
