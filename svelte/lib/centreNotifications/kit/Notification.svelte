@@ -55,7 +55,7 @@
         />
         <div>
           <p class="sous-titre">{notification.sousTitre}</p>
-          <div class="cta">Découvrir</div>
+          <div class="cta">{notification.titreCta}</div>
         </div>
       </div>
     {:else}
