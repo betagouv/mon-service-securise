@@ -21,9 +21,9 @@ const donnees = {
       id: 'televersementServices',
       dateDeDeploiement: '2025-06-03 07:00:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-televerser-de-nombreux-services-a-securiser-en-une-seule-fois-13wset2/',
-      titre: 'Téléversez tous vos services à sécuriser en une seule fois !',
+      titre: 'Ajoutez tous vos services en une fois',
       sousTitre:
-        "Visualisez tous vos services sur votre tableau de bord et pilotez plus facilement leur sécurisation grâce aux notifications, mails de rappel concernant l'homologation, etc.",
+        "Importez un fichier avec la liste de vos services à sécuriser. Ils apparaissent d'un coup sur votre tableau de bord, prêts à être homologués.",
       image: 'televersementServices.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment téléverser',
@@ -32,10 +32,9 @@ const donnees = {
       id: 'listeMesure',
       dateDeDeploiement: '2025-07-04 07:00:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-modifier-le-statut-et-la-precision-dune-mesure-sur-plusieurs-services-a-la-fois-1eb70y9/',
-      titre:
-        'Gagnez du temps, modifiez vos mesures sur plusieurs services en quelques clics !',
+      titre: 'Modifiez une mesure sur plusieurs services',
       sousTitre:
-        'Il est maintenant possible de modifier le statut et les précisions d’une mesure sur plusieurs services à la fois !',
+        "Changez le statut et les précisions d'une mesure sur tous les services concernés, sans avoir à les ouvrir un par un.",
       image: 'listeMesure.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment ça marche',
@@ -44,10 +43,9 @@ const donnees = {
       id: 'televersementMesures',
       dateDeDeploiement: '2025-08-21 07:00:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-televerser-ses-mesures-specifiques-et-les-appliquer-a-des-services-1ybcpcf/',
-      titre:
-        'Téléversez vos mesures spécifiques et utilisez-les sur les services de votre choix !',
+      titre: 'Importez vos mesures spécifiques',
       sousTitre:
-        'Téléversez vos mesures spécifiques en une seule fois, appliquez-les aux services de votre choix et changez leur statut et précision sur plusieurs services à la fois !',
+        'Téléversez vos mesures maison en une seule fois, appliquez-les aux services de votre choix, puis modifiez-les sur plusieurs services à la fois.',
       image: 'televersementMesures.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment téléverser',
@@ -56,9 +54,9 @@ const donnees = {
       id: 'risquesV2',
       dateDeDeploiement: '2026-07-01 07:00:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/le-moteur-de-risques-comment-ca-fonctionne-1q6lnhb/',
-      titre: 'Le moteur de risques a été complètement repensé !',
+      titre: 'Un nouveau moteur de risques',
       sousTitre:
-        "Des risques adaptés à votre service, une vraisemblance qui se met à jour avec l'avancement de votre plan d'action et 3 cartographies pour suivre votre progression !",
+        "Des risques adaptés à votre service, une vraisemblance qui évolue avec votre plan d'action, et trois cartographies pour suivre votre progression.",
       image: 'risquesV2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comprendre le moteur',
@@ -67,10 +65,9 @@ const donnees = {
       id: 'referentielsExternes',
       dateDeDeploiement: '2026-07-08 12:00:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-liens-entre-les-mesures-monservicesecurise-et-les-autres-referentiels-de-mesures-cyber-9jz5pm/',
-      titre:
-        'Visualisez les correspondances entre les mesures de MonServiceSécurisé et les autres éférentiels cyber standards !',
+      titre: 'Vos mesures, reliées aux référentiels cyber',
       sousTitre:
-        'Référentiels proposés à date : ReCyF (NIS2), ISO 27001/27002, Annexe au Règlement d’exécution 2024/2690.',
+        "Chaque mesure affiche désormais ses correspondances avec ReCyF (NIS2), ISO 27001/27002 et l'annexe au règlement d'exécution 2024/2690.",
       image: 'referentielsExternes.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Voir les correspondances',
@@ -83,23 +80,23 @@ const donnees = {
       lien: '/profil',
       entete: 'Complétez votre profil',
       titre:
-        'Nous vous invitons à mettre à jour les informations de votre profil.',
+        "Vos informations nous permettent d'adapter les recommandations et les ressources qui vous sont proposées.",
       titreCta: 'Compléter mon profil',
     },
     {
       id: 'siret',
       lien: '/profil#siret',
-      entete: 'Mettez à jour votre SIRET',
+      entete: 'Renseignez votre SIRET',
       titre:
-        'Nous vous invitons à renseigner le numéro de SIRET de votre organisation.',
+        'Le SIRET identifie votre organisation et permet de rattacher vos services à la bonne entité.',
       titreCta: 'Mettre à jour le SIRET',
     },
     {
       id: 'estimationNombreServices',
       lien: '/profil#estimation-nombre-services',
-      entete: 'Estimez les services publics à sécuriser',
+      entete: 'Estimez vos services à sécuriser',
       titre:
-        'Nous vous invitons à estimer le nombre de services publics à sécuriser.',
+        "Une estimation, même approximative, du nombre de services publics dont vous avez la charge. Vous pourrez l'ajuster plus tard.",
       titreCta: 'Estimer le nombre de service',
     },
   ],
