@@ -27,7 +27,7 @@
 
 <style>
   .contenu-notifications {
-    max-height: 626px;
+    max-height: 322px;
     overflow-y: auto;
     font-size: 0.9rem;
     text-align: left;

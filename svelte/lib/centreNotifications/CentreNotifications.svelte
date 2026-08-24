@@ -2,14 +2,12 @@
   import { onMount } from 'svelte';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
   import type { Notification } from '../ui/types.d';
-  import type { TypeOnglet } from './centreNotifications.d';
   import ListeNotifications from './kit/ListeNotifications.svelte';
-  import Onglet from '../ui/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
+  import TitreOngletDSFR from '../ui/TitreOngletDSFR.svelte';
 
   let ouvert = $state(false);
   let elementCentreNotifications: HTMLDivElement | undefined = $state();
-  let ongletActif: TypeOnglet = $state('aFaire');
 
   const calculNbNonLue = (notifications: Notification[]) =>
     notifications.filter((n) => n.statutLecture === 'nonLue').length;
@@ -27,6 +25,15 @@
     ),
     toutes: $storeNotifications.pourCentreNotifications,
   });
+
+  const configurationsTabs = [
+    { id: 'toutes', label: 'Toutes' },
+    { id: 'nouveautes', label: 'Nouveautés' },
+  ];
+  let idTabActive = $state(0);
+  const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
+    idTabActive = e.detail.index;
+  };
 
   onMount(async () => {
     await storeNotifications.rafraichis();
@@ -69,27 +76,36 @@
         Fermer
       </button>
     </div>
-    <div class="conteneur-onglets">
-      <Onglet
-        bind:ongletActif
-        cetOnglet="aFaire"
-        labelOnglet="À faire"
-        badge={calculNbNonLue(notificationsParOnglet.aFaire)}
-      />
-      <Onglet
-        bind:ongletActif
-        cetOnglet="nouveautes"
-        labelOnglet="Nouveautés"
-        badge={calculNbNonLue(notificationsParOnglet.nouveautes)}
-      />
-      <Onglet
-        bind:ongletActif
-        cetOnglet="toutes"
-        labelOnglet="Toutes"
-        badge={calculNbNonLue(notificationsParOnglet.toutes)}
-      />
-    </div>
-    <ListeNotifications notifications={notificationsParOnglet[ongletActif]} />
+    <dsfr-tabs
+      tabs={configurationsTabs}
+      active-tab-index={idTabActive}
+      ontabchanged={gereChangementTab}
+    >
+      <div slot="tab-1">
+        <TitreOngletDSFR
+          active={idTabActive === 0}
+          libelle={configurationsTabs[0].label}
+          libellePastille={calculNbNonLue(
+            notificationsParOnglet.toutes
+          ).toString()}
+        />
+      </div>
+      <div slot="tab-2">
+        <TitreOngletDSFR
+          active={idTabActive === 1}
+          libelle={configurationsTabs[1].label}
+          libellePastille={calculNbNonLue(
+            notificationsParOnglet.nouveautes
+          ).toString()}
+        />
+      </div>
+      <div slot="panel-1" class="conteneur-onglet">
+        <ListeNotifications notifications={notificationsParOnglet.toutes} />
+      </div>
+      <div slot="panel-2" class="conteneur-onglet">
+        <ListeNotifications notifications={notificationsParOnglet.nouveautes} />
+      </div>
+    </dsfr-tabs>
   </div>
 </div>
 
@@ -178,7 +194,7 @@
 
   .conteneur-notifications {
     display: none;
-    width: 470px;
+    width: 588px;
     position: absolute;
     right: 0;
     top: 42px;
@@ -192,12 +208,5 @@
 
   .centre-notifications.ouvert .conteneur-notifications {
     display: flex;
-  }
-
-  .conteneur-onglets {
-    display: flex;
-    justify-content: space-evenly;
-    transform: translateY(1px);
-    font-size: 0.9rem;
   }
 </style>
