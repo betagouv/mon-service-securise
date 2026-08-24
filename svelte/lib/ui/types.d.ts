@@ -22,6 +22,7 @@ type NotificationBase = {
   doitNotifierLecture: boolean;
   horodatage?: string;
   canalDiffusion: 'centreNotifications' | 'page';
+  titreCta: string;
 };
 
 export type NotificationNouveaute = NotificationBase & {
@@ -32,7 +33,6 @@ export type NotificationNouveaute = NotificationBase & {
 
 export type NotificationTache = NotificationBase & {
   type: 'tache';
-  titreCta: string;
   entete: string;
 };
 
