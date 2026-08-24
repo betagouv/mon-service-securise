@@ -26,6 +26,7 @@ const donnees = {
         "Visualisez tous vos services sur votre tableau de bord et pilotez plus facilement leur sécurisation grâce aux notifications, mails de rappel concernant l'homologation, etc.",
       image: 'televersementServices.png',
       canalDiffusion: 'centreNotifications',
+      titreCta: 'Comment téléverser',
     },
     {
       id: 'listeMesure',
@@ -37,6 +38,7 @@ const donnees = {
         'Il est maintenant possible de modifier le statut et les précisions d’une mesure sur plusieurs services à la fois !',
       image: 'listeMesure.png',
       canalDiffusion: 'centreNotifications',
+      titreCta: 'Comment ça marche',
     },
     {
       id: 'televersementMesures',
@@ -48,6 +50,7 @@ const donnees = {
         'Téléversez vos mesures spécifiques en une seule fois, appliquez-les aux services de votre choix et changez leur statut et précision sur plusieurs services à la fois !',
       image: 'televersementMesures.png',
       canalDiffusion: 'centreNotifications',
+      titreCta: 'Comment téléverser',
     },
     {
       id: 'risquesV2',
@@ -58,6 +61,7 @@ const donnees = {
         "Des risques adaptés à votre service, une vraisemblance qui se met à jour avec l'avancement de votre plan d'action et 3 cartographies pour suivre votre progression !",
       image: 'risquesV2.png',
       canalDiffusion: 'centreNotifications',
+      titreCta: 'Comprendre le moteur',
     },
     {
       id: 'referentielsExternes',
@@ -69,6 +73,7 @@ const donnees = {
         'Référentiels proposés à date : ReCyF (NIS2), ISO 27001/27002, Annexe au Règlement d’exécution 2024/2690.',
       image: 'referentielsExternes.png',
       canalDiffusion: 'centreNotifications',
+      titreCta: 'Voir les correspondances',
     },
   ],
 
