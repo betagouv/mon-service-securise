@@ -186,46 +186,6 @@
         />
       </div>
     </div>
-
-    <div class="bloc" id="consentements">
-      <h3>Mes consentements</h3>
-
-      <div class="case-a-cocher">
-        <input
-          id="infolettreAcceptee"
-          type="checkbox"
-          bind:checked={$utilisateur.infolettreAcceptee}
-          name="infolettreAcceptee"
-        />
-        <label for="infolettreAcceptee">
-          J'accepte de recevoir la lettre d'information MonServiceSécurisé
-        </label>
-      </div>
-      <div class="case-a-cocher">
-        <input
-          id="transactionnelAccepte"
-          type="checkbox"
-          bind:checked={$utilisateur.transactionnelAccepte}
-          name="transactionnelAccepte"
-        />
-        <label for="transactionnelAccepte">
-          J'accepte de recevoir des informations relatives à l'utilisation de
-          MonServiceSécurisé
-        </label>
-      </div>
-      <div class="case-a-cocher">
-        <input
-          id="pixelDeSuiviAccepte"
-          type="checkbox"
-          bind:checked={$utilisateur.pixelDeSuiviAccepte}
-          name="pixelDeSuiviAccepte"
-        />
-        <label for="pixelDeSuiviAccepte">
-          J'accepte que l'ouverture des emails qui me sont adressés puisse être
-          mesurée afin d'en améliorer la pertinence.
-        </label>
-      </div>
-    </div>
   </Formulaire>
 
   <div class="actions">
@@ -317,20 +277,6 @@
     font-size: 0.75rem;
     line-height: 1.25rem;
     margin-bottom: 5px;
-  }
-
-  .case-a-cocher {
-    background-color: #eff6ff;
-    border-radius: 6px;
-    padding: 16px;
-  }
-
-  .case-a-cocher label {
-    font-weight: normal;
-  }
-
-  input[type='checkbox'] {
-    transform: none;
   }
 
   .actions {
