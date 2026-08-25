@@ -31,58 +31,112 @@
   Les notifications dans MonServiceSécurisé sont toujours actives. Vous
   choisissez ici ce qui vous est envoyé par e-mail.
 </p>
-<div class="bloc-preferences">
-  <div class="entete-preferences">
-    <div class="titre-preferences">
-      <h2>Mes consentements</h2>
-      <p>
-        Gérez vos préférences concernant les communications et l’utilisation de
-        vos données.
-      </p>
+<div class="conteneur-blocs">
+  <div class="bloc-preferences">
+    <div class="entete-preferences">
+      <div class="titre-preferences">
+        <h2>Notifications par e-mail</h2>
+        <p>
+          Ces alertes sont envoyées par e-mail. Vous ne pouvez pas les
+          désactiver.
+        </p>
+      </div>
+      <dsfr-toggle
+        id="notifications-emails"
+        label="Désactiver les notifications par email"
+        hide-label
+        checked
+        disabled
+      ></dsfr-toggle>
     </div>
-    <dsfr-toggle
-      id="tous-consentements"
-      label="{tousLesConsentements
-        ? 'Désactiver'
-        : 'Activer'} tous les consentements"
-      hide-label
-      checked={tousLesConsentements}
-      onvaluechanged={basculeTousConsentements}
-    ></dsfr-toggle>
+    <div class="contenu-preferences">
+      <LignePreference
+        titre="Invitations"
+        sousTitre="Recevoir un e-mail lorsqu’un utilisateur vous invite à rejoindre un service."
+        icone="mail-line"
+        valeur={true}
+        avecBordure
+        inactif
+      />
+      <LignePreference
+        titre="Homologation bientôt expirée"
+        sousTitre="Recevoir un e-mail lorsqu’une homologation arrive prochainement à expiration. La fréquence des rappels par e-mail dépend de la durée de l’homologation. En savoir plus"
+        icone="alarm-warning-line"
+        valeur={true}
+        avecBordure
+        inactif
+      />
+      <LignePreference
+        titre="Homologation expirée"
+        sousTitre="Recevoir un e-mail lorsqu’une homologation arrive à échéance."
+        icone="warning-line"
+        valeur={true}
+        avecBordure
+        inactif
+      />
+      <LignePreference
+        titre="Nouvelles fonctionnalités"
+        sousTitre="Recevoir un e-mail pour être informé des nouvelles fonctionnalités de MonServiceSécurisé."
+        icone="computer-line"
+        valeur={true}
+        inactif
+      />
+    </div>
   </div>
-  <div class="contenu-preferences">
-    <LignePreference
-      titre="Lettre d'information"
-      sousTitre="Recevoir la lettre d’information MonServiceSécurisé."
-      icone="newspaper-line"
-      valeur={infolettreAcceptee}
-      avecBordure
-      onvaleurmodifiee={async (valeur) => {
-        infolettreAcceptee = valeur;
-        await api.sauvegardePreferences({ infolettreAcceptee });
-      }}
-    />
-    <LignePreference
-      titre="Informations sur le service"
-      sousTitre="Recevoir des informations sur l’utilisation et les évolutions de MonServiceSécurisé."
-      icone="information-line"
-      valeur={transactionnelAccepte}
-      avecBordure
-      onvaleurmodifiee={async (valeur) => {
-        transactionnelAccepte = valeur;
-        await api.sauvegardePreferences({ transactionnelAccepte });
-      }}
-    />
-    <LignePreference
-      titre="Mesurer l’ouverture de mes e-mails"
-      sousTitre="Autoriser la mesure de l’ouverture des e-mails afin d’améliorer la pertinence des communications."
-      icone="mail-line"
-      valeur={pixelDeSuiviAccepte}
-      onvaleurmodifiee={async (valeur) => {
-        pixelDeSuiviAccepte = valeur;
-        await api.sauvegardePreferences({ pixelDeSuiviAccepte });
-      }}
-    />
+  <hr />
+  <div class="bloc-preferences">
+    <div class="entete-preferences">
+      <div class="titre-preferences">
+        <h2>Mes consentements</h2>
+        <p>
+          Gérez vos préférences concernant les communications et l’utilisation
+          de vos données.
+        </p>
+      </div>
+      <dsfr-toggle
+        id="tous-consentements"
+        label="{tousLesConsentements
+          ? 'Désactiver'
+          : 'Activer'} tous les consentements"
+        hide-label
+        checked={tousLesConsentements}
+        onvaluechanged={basculeTousConsentements}
+      ></dsfr-toggle>
+    </div>
+    <div class="contenu-preferences">
+      <LignePreference
+        titre="Lettre d'information"
+        sousTitre="Recevoir la lettre d’information MonServiceSécurisé."
+        icone="newspaper-line"
+        valeur={infolettreAcceptee}
+        avecBordure
+        onvaleurmodifiee={async (valeur) => {
+          infolettreAcceptee = valeur;
+          await api.sauvegardePreferences({ infolettreAcceptee });
+        }}
+      />
+      <LignePreference
+        titre="Informations sur le service"
+        sousTitre="Recevoir des informations sur l’utilisation et les évolutions de MonServiceSécurisé."
+        icone="information-line"
+        valeur={transactionnelAccepte}
+        avecBordure
+        onvaleurmodifiee={async (valeur) => {
+          transactionnelAccepte = valeur;
+          await api.sauvegardePreferences({ transactionnelAccepte });
+        }}
+      />
+      <LignePreference
+        titre="Mesurer l’ouverture de mes e-mails"
+        sousTitre="Autoriser la mesure de l’ouverture des e-mails afin d’améliorer la pertinence des communications."
+        icone="mail-line"
+        valeur={pixelDeSuiviAccepte}
+        onvaleurmodifiee={async (valeur) => {
+          pixelDeSuiviAccepte = valeur;
+          await api.sauvegardePreferences({ pixelDeSuiviAccepte });
+        }}
+      />
+    </div>
   </div>
 </div>
 
@@ -94,6 +148,13 @@
 
   :global(#conteneur-preferences) {
     width: 792px;
+  }
+
+  .conteneur-blocs {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 56px 0;
   }
 
   h1 {
@@ -114,8 +175,6 @@
   }
 
   .bloc-preferences {
-    margin-top: 56px;
-
     .contenu-preferences {
       padding: 32px 0;
     }
@@ -139,5 +198,11 @@
       line-height: 1.5rem;
       margin: 8px 0 0;
     }
+  }
+
+  hr {
+    border-top: none;
+    border-bottom: 1px solid #dddddd;
+    width: 100%;
   }
 </style>
