@@ -9,3 +9,9 @@ export type PreferencesProps = {
   transactionnelAccepte: boolean;
   pixelDeSuiviAccepte: boolean;
 };
+
+export type Consentements = {
+  infolettreAcceptee: boolean;
+  transactionnelAccepte: boolean;
+  pixelDeSuiviAccepte: boolean;
+};
