@@ -569,16 +569,78 @@ describe('Un utilisateur', () => {
       );
     });
 
-    it('sait dire si un utilisateur a toutes les informations fournies par AgentConnect', () => {
-      const utilisateurComplet = unUtilisateur()
-        .avecEmail('jean.dujardin@beta.gouv.fr')
-        .quiSAppelle('Jean Dujardin')
-        .quiTravaillePourUneEntiteAvecSiret('unSIRET')
+    it('sauvegarde les acceptations de préférences dans le modèle utilisateur', async () => {
+      const refuseTout = jeanDupont()
+        .quiRefuseInfolettre()
+        .quiRefusePixelDeSuivi()
+        .quiRefuseEmailsTransactionnels()
         .construis();
-      const utilisateurIncomplet = unUtilisateur().construis();
 
-      expect(utilisateurComplet.aLesInformationsAgentConnect()).toBe(true);
-      expect(utilisateurIncomplet.aLesInformationsAgentConnect()).toBe(false);
+      await refuseTout.changePreferencesCommunication(
+        {
+          pixelDeSuiviAccepte: true,
+          transactionnelAccepte: true,
+          infolettreAcceptee: true,
+        },
+        adaptateurEmail
+      );
+
+      expect(refuseTout.consentements()).toEqual({
+        pixelDeSuiviAccepte: true,
+        transactionnelAccepte: true,
+        infolettreAcceptee: true,
+      });
     });
+
+    it('sauvegarde les refus de préférences dans le modèle utilisateur', async () => {
+      const refuseTout = jeanDupont()
+        .quiAccepteInfolettre()
+        .quiAcceptePixelDeSuivi()
+        .quiAccepteEmailsTransactionnels()
+        .construis();
+
+      await refuseTout.changePreferencesCommunication(
+        {
+          pixelDeSuiviAccepte: false,
+          transactionnelAccepte: false,
+          infolettreAcceptee: false,
+        },
+        adaptateurEmail
+      );
+
+      expect(refuseTout.consentements()).toEqual({
+        pixelDeSuiviAccepte: false,
+        transactionnelAccepte: false,
+        infolettreAcceptee: false,
+      });
+    });
+
+    it('ne modifie pas les préférences non ciblées dans le modèle utilisateur', async () => {
+      const refuseTout = jeanDupont()
+        .quiAccepteInfolettre()
+        .quiAcceptePixelDeSuivi()
+        .quiAccepteEmailsTransactionnels()
+        .construis();
+
+      await refuseTout.changePreferencesCommunication({}, adaptateurEmail);
+
+      expect(refuseTout.consentements()).toEqual({
+        pixelDeSuiviAccepte: true,
+        transactionnelAccepte: true,
+        infolettreAcceptee: true,
+      });
+    });
+  });
+
+  it('sait dire si un utilisateur a toutes les informations fournies par AgentConnect', () => {
+    const utilisateurComplet = unUtilisateur()
+      .avecEmail('jean.dujardin@beta.gouv.fr')
+      .quiSAppelle('Jean Dujardin')
+      .quiTravaillePourUneEntiteAvecSiret('unSIRET')
+      .construis();
+    const utilisateurIncomplet = unUtilisateur().construis();
+
+    expect(utilisateurComplet.aLesInformationsAgentConnect()).toBe(true);
+    expect(utilisateurIncomplet.aLesInformationsAgentConnect()).toBe(false);
   });
 });
