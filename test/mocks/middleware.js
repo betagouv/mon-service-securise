@@ -66,7 +66,6 @@ let listeAdressesIPsAutorisee = [];
 let etatExplicationRisquesV2Charge = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
-let etatExplicationUtilisationMFA = false;
 let rechercheDossierCourantEffectuee = false;
 let suppressionCookieEffectuee = false;
 let traficProtege = false;
@@ -101,7 +100,6 @@ const middlewareFantaisie = {
     etatExplicationRisquesV2Charge = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
-    etatExplicationUtilisationMFA = false;
     rechercheDossierCourantEffectuee = false;
     suppressionCookieEffectuee = false;
     traficProtege = false;
@@ -163,11 +161,6 @@ const middlewareFantaisie = {
   chargeExplicationRisquesV2: (_requete, reponse, suite) => {
     reponse.locals.afficheExplicationRisquesV2 = true;
     etatExplicationRisquesV2Charge = true;
-    suite();
-  },
-
-  chargeExplicationUtilisationMFA: (_requete, _reponse, suite) => {
-    etatExplicationUtilisationMFA = true;
     suite();
   },
 
@@ -334,13 +327,6 @@ const middlewareFantaisie = {
   verifieRequeteChargeExplicationNouveauReferentiel: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatExplicationNouveauReferentielCharge },
-      app,
-      ...params
-    ),
-
-  verifieRequeteChargeExplicationUtilisationMFA: async (app, ...params) =>
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => etatExplicationUtilisationMFA },
       app,
       ...params
     ),
