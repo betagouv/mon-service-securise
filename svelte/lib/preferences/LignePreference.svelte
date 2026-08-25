@@ -5,7 +5,8 @@
     sousTitre: string;
     valeur: boolean;
     avecBordure?: boolean;
-    onvaleurmodifiee: (valeur: boolean) => Promise<void>;
+    onvaleurmodifiee?: (valeur: boolean) => Promise<void>;
+    inactif?: boolean;
   }
 
   let {
@@ -14,6 +15,7 @@
     sousTitre,
     valeur,
     avecBordure = false,
+    inactif = false,
     onvaleurmodifiee,
   }: Props = $props();
 
@@ -28,9 +30,10 @@
     hint={sousTitre}
     hint-id="{id}-hint"
     checked={valeur}
-    onvaluechanged={(e: CustomEvent<boolean>) => onvaleurmodifiee(e.detail)}
+    onvaluechanged={(e: CustomEvent<boolean>) => onvaleurmodifiee?.(e.detail)}
     left
     border={avecBordure}
+    disabled={inactif}
   ></dsfr-toggle>
 </div>
 
