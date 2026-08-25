@@ -24,7 +24,7 @@ const donnees = {
       titre: 'Ajoutez tous vos services en une fois',
       sousTitre:
         "Importez un fichier avec la liste de vos services à sécuriser. Ils apparaissent d'un coup sur votre tableau de bord, prêts à être homologués.",
-      image: 'televersementServices.png',
+      image: 'televersementServices-v2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment téléverser',
     },
@@ -35,7 +35,7 @@ const donnees = {
       titre: 'Modifiez une mesure sur plusieurs services',
       sousTitre:
         "Changez le statut et les précisions d'une mesure sur tous les services concernés, sans avoir à les ouvrir un par un.",
-      image: 'listeMesure.png',
+      image: 'listeMesure-v2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment ça marche',
     },
@@ -46,7 +46,7 @@ const donnees = {
       titre: 'Importez vos mesures spécifiques',
       sousTitre:
         'Téléversez vos mesures maison en une seule fois, appliquez-les aux services de votre choix, puis modifiez-les sur plusieurs services à la fois.',
-      image: 'televersementMesures.png',
+      image: 'televersementMesures-v2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comment téléverser',
     },
@@ -57,7 +57,7 @@ const donnees = {
       titre: 'Un nouveau moteur de risques',
       sousTitre:
         "Des risques adaptés à votre service, une vraisemblance qui évolue avec votre plan d'action, et trois cartographies pour suivre votre progression.",
-      image: 'risquesV2.png',
+      image: 'risquesV2-v2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Comprendre le moteur',
     },
@@ -68,7 +68,7 @@ const donnees = {
       titre: 'Vos mesures, reliées aux référentiels cyber',
       sousTitre:
         "Chaque mesure affiche désormais ses correspondances avec ReCyF (NIS2), ISO 27001/27002 et l'annexe au règlement d'exécution 2024/2690.",
-      image: 'referentielsExternes.png',
+      image: 'referentielsExternes-v2.png',
       canalDiffusion: 'centreNotifications',
       titreCta: 'Voir les correspondances',
     },
