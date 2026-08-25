@@ -309,29 +309,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
-  const chargeExplicationUtilisationMFA = async (
-    requete: RequeteMSS,
-    reponse: Response,
-    suite: NextFunction
-  ) => {
-    if (!requete.idUtilisateurCourant)
-      throw new ErreurChainageMiddleware(
-        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-      );
-
-    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
-      requete.idUtilisateurCourant
-    );
-
-    const doitAfficher =
-      !parcoursUtilisateur.aVuTableauDeBord() &&
-      !requete.session?.connexionAvecMFA;
-
-    reponse.locals.afficheExplicationUtilisationMFA = doitAfficher;
-
-    suite();
-  };
-
   const chargeExplicationRisquesV2 = async (
     requete: RequeteMSS,
     reponse: Response,
@@ -501,7 +478,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeEtatVisiteGuidee,
     chargeExplicationNouveauReferentiel,
     chargeExplicationRisquesV2,
-    chargeExplicationUtilisationMFA,
     chargeFeatureFlags,
     chargeTypeRequete,
     chargeUtilisateurConnecte,

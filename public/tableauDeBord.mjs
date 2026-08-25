@@ -31,21 +31,10 @@ $(() => {
   const afficheExplicationNouveauReferentiel = lisDonneesPartagees(
     'affiche-explication-nouveau-referentiel'
   );
-  const afficheExplicationUtilisationMFA = lisDonneesPartagees(
-    'affiche-explication-utilisation-mfa'
-  );
-  if (!visiteGuideeActive) {
-    // On donne priorité à la modale de l'utilisation du MFA
-    if (afficheExplicationUtilisationMFA)
-      document.body.dispatchEvent(
-        new CustomEvent('svelte-recharge-explication-utilisation-mfa')
-      );
-    // Et enfin, au nouveau référentiel
-    else if (afficheExplicationNouveauReferentiel)
-      document.body.dispatchEvent(
-        new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
-      );
-  }
+  if (!visiteGuideeActive && afficheExplicationNouveauReferentiel)
+    document.body.dispatchEvent(
+      new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
+    );
 
   const requete = new URLSearchParams(window.location.search);
 

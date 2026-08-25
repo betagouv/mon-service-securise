@@ -56,7 +56,6 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     middleware.chargeExplicationNouveauReferentiel,
-    middleware.chargeExplicationUtilisationMFA,
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
       await depotDonnees.marqueTableauDeBordVuDansParcoursUtilisateur(

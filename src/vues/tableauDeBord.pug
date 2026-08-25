@@ -18,7 +18,6 @@ block append scripts
   +donneesPartagees('utilisateur-connecte', {estSuperviseur: utilisateurConnecte && utilisateurConnecte.estSuperviseur, estAdmin: utilisateurConnecte && utilisateurConnecte.estAdmin, prenomNom: utilisateurConnecte.prenomNom, aDejaVuEntierementVisiteGuidee: etatVisiteGuidee.dejaTerminee})
   +donneesPartagees('avec-gestion-organisations', featureFlags.avecGestionDesOrganisations)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)
-  +donneesPartagees('affiche-explication-utilisation-mfa', afficheExplicationUtilisationMFA)
   +moduleAvecVersion('/statique/tableauDeBord.mjs')
 
 block main
