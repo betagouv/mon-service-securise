@@ -95,6 +95,7 @@ const oidc = () => ({
   urlBase: () => process.env.OIDC_URL_BASE,
   clientId: () => process.env.OIDC_CLIENT_ID,
   clientSecret: () => process.env.OIDC_CLIENT_SECRET,
+  desactiveMFA: () => process.env.OIDC_DESACTIVE_MFA === 'true',
 });
 
 const trustProxy = () => {
