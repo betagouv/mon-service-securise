@@ -13,34 +13,38 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
   beforeEach(() => testeur.initialise());
 
-  ['/profil', '/tableauDeBord', '/visiteGuidee', '/mesures'].forEach(
-    (route) => {
-      describe(`quand GET sur ${route}`, () => {
-        beforeEach(() => {
-          const utilisateur = unUtilisateur().construis();
-          testeur.depotDonnees().utilisateur = async () => utilisateur;
-          testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
-            async () => {};
-          testeur.referentiel().recharge({
-            etapesParcoursHomologation: [{ numero: 1 }],
-          });
-        });
-
-        it("vérifie que l'utilisateur a accepté les CGU", async () => {
-          await testeur
-            .middleware()
-            .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
-        });
-
-        it('sert le contenu HTML de la page', async () => {
-          const reponse = await testeur.get(`${route}`);
-
-          expect(reponse.status).to.equal(200);
-          expect(reponse.headers['content-type']).to.contain('text/html');
+  [
+    '/profil',
+    '/tableauDeBord',
+    '/visiteGuidee',
+    '/mesures',
+    '/preferences',
+  ].forEach((route) => {
+    describe(`quand GET sur ${route}`, () => {
+      beforeEach(() => {
+        const utilisateur = unUtilisateur().construis();
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+          async () => {};
+        testeur.referentiel().recharge({
+          etapesParcoursHomologation: [{ numero: 1 }],
         });
       });
-    }
-  );
+
+      it("vérifie que l'utilisateur a accepté les CGU", async () => {
+        await testeur
+          .middleware()
+          .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
+      });
+
+      it('sert le contenu HTML de la page', async () => {
+        const reponse = await testeur.get(`${route}`);
+
+        expect(reponse.status).to.equal(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
+      });
+    });
+  });
 
   describe('quand requête GET sur /deconnexion', () => {
     it("révoque la session de l'utilisateur", async () => {
@@ -137,6 +141,42 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
       await testeur.get(`/profil`);
       expect(depotAppele).to.be(true);
+    });
+  });
+
+  describe(`quand GET sur /preferences`, () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+        async () => ({});
+      testeur.depotDonnees().utilisateur = () =>
+        unUtilisateur()
+          .avecId('U1')
+          .quiAccepteEmailsTransactionnels()
+          .quiAccepteInfolettre()
+          .quiAcceptePixelDeSuivi()
+          .construis();
+    });
+
+    it("délègue au dépôt de données la lecture des informations de l'utilisateur", async () => {
+      let idRecu;
+      testeur.depotDonnees().utilisateur = (idUtilisateur) => {
+        idRecu = idUtilisateur;
+        return unUtilisateur().construis();
+      };
+
+      await testeur.get(`/preferences`);
+      expect(idRecu).to.be('U1');
+    });
+
+    it('passe les préférences de communication au rendu de la page', async () => {
+      const reponse = await testeur.get(`/preferences`);
+
+      expect(donneesPartagees(reponse.text, 'donnees-preferences')).to.eql({
+        infolettreAcceptee: true,
+        pixelDeSuiviAccepte: true,
+        transactionnelAccepte: true,
+      });
     });
   });
 
