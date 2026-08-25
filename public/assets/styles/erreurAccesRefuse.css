@@ -12,7 +12,8 @@
   margin-bottom: 0;
 }
 
-.contenu-erreur .bouton {
+.contenu-erreur .bouton,
+.contenu-erreur dsfr-button {
   padding: 0.4em 1em;
   margin-top: 2.5em;
   margin-bottom: 1em;

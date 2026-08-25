@@ -1,0 +1,15 @@
+extends mssDeconnecte
+
+block title
+  title Erreur | MonServiceSécurisé
+
+block append styles
+  +feuilleDeStyleAvecVersion('/statique/assets/styles/erreurAccesRefuse.css')
+
+block main
+  .marges-fixes.contenu-erreur
+    img(src='/statique/assets/images/acces_refuse.svg')
+    h1 Vous ne pouvez pas accéder à MonServiceSécurisé sans double authentification.
+    p Veuillez en activer une auprès de votre fournisseur d’identité, puis vous connecter à nouveau.
+
+    dsfr-button(label="Support ProConnect", markup="a", href='https://proconnect.crisp.help/fr/', target="_blank")

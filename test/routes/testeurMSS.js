@@ -136,6 +136,9 @@ const testeurMss = () => {
       statique: () => ({
         politiqueCache: () => 'no-store',
       }),
+      oidc: () => ({
+        desactiveMFA: () => true,
+      }),
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
