@@ -60,7 +60,7 @@
       />
       <LignePreference
         titre="Homologation bientôt expirée"
-        sousTitre="Recevoir un e-mail lorsqu’une homologation arrive prochainement à expiration. La fréquence des rappels par e-mail dépend de la durée de l’homologation. En savoir plus"
+        sousTitre="Recevoir un e-mail lorsqu’une homologation arrive prochainement à expiration. La fréquence des rappels par e-mail dépend de la durée de l’homologation."
         icone="alarm-warning-line"
         valeur={true}
         avecBordure
