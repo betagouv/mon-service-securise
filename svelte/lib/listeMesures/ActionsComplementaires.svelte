@@ -18,7 +18,6 @@
     capaciteAjoutDeMesure,
     onajouterunemesureclick,
     onteleverserdesmesuresclick,
-    // eslint-disable-next-line no-useless-assignment
     afficherReferentielsExternes = $bindable(),
   }: Props = $props();
 
