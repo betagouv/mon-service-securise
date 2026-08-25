@@ -5,14 +5,16 @@
     sousTitre: string;
     valeur: boolean;
     avecBordure?: boolean;
+    onvaleurmodifiee: (valeur: boolean) => Promise<void>;
   }
 
   let {
     icone,
     titre,
     sousTitre,
-    valeur = $bindable(),
+    valeur,
     avecBordure = false,
+    onvaleurmodifiee,
   }: Props = $props();
 
   let id = $derived(`toggle-${titre.toLowerCase().replace(' ', '-')}`);
@@ -26,7 +28,7 @@
     hint={sousTitre}
     hint-id="{id}-hint"
     checked={valeur}
-    onvaluechanged={(e: CustomEvent<boolean>) => (valeur = e.detail)}
+    onvaluechanged={(e: CustomEvent<boolean>) => onvaleurmodifiee(e.detail)}
     left
     border={avecBordure}
   ></dsfr-toggle>

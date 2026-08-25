@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PreferencesProps } from './preferences.types';
   import LignePreference from './LignePreference.svelte';
+  import { api } from './preferences.api';
 
   let {
     infolettreAcceptee,
@@ -12,11 +13,16 @@
     infolettreAcceptee || transactionnelAccepte || pixelDeSuiviAccepte
   );
 
-  const basculeTousConsentements = (e: CustomEvent<boolean>) => {
+  const basculeTousConsentements = async (e: CustomEvent<boolean>) => {
     const valeurConsentement = e.detail;
     infolettreAcceptee = valeurConsentement;
     transactionnelAccepte = valeurConsentement;
     pixelDeSuiviAccepte = valeurConsentement;
+    await api.sauvegardePreferences({
+      infolettreAcceptee,
+      transactionnelAccepte,
+      pixelDeSuiviAccepte,
+    });
   };
 </script>
 
@@ -49,21 +55,33 @@
       titre="Lettre d'information"
       sousTitre="Recevoir la lettre d’information MonServiceSécurisé."
       icone="newspaper-line"
-      bind:valeur={infolettreAcceptee}
+      valeur={infolettreAcceptee}
       avecBordure
+      onvaleurmodifiee={async (valeur) => {
+        infolettreAcceptee = valeur;
+        await api.sauvegardePreferences({ infolettreAcceptee });
+      }}
     />
     <LignePreference
       titre="Informations sur le service"
       sousTitre="Recevoir des informations sur l’utilisation et les évolutions de MonServiceSécurisé."
       icone="information-line"
-      bind:valeur={transactionnelAccepte}
+      valeur={transactionnelAccepte}
       avecBordure
+      onvaleurmodifiee={async (valeur) => {
+        transactionnelAccepte = valeur;
+        await api.sauvegardePreferences({ transactionnelAccepte });
+      }}
     />
     <LignePreference
       titre="Mesurer l’ouverture de mes e-mails"
       sousTitre="Autoriser la mesure de l’ouverture des e-mails afin d’améliorer la pertinence des communications."
       icone="mail-line"
-      bind:valeur={pixelDeSuiviAccepte}
+      valeur={pixelDeSuiviAccepte}
+      onvaleurmodifiee={async (valeur) => {
+        pixelDeSuiviAccepte = valeur;
+        await api.sauvegardePreferences({ pixelDeSuiviAccepte });
+      }}
     />
   </div>
 </div>
