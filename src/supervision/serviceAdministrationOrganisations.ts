@@ -211,6 +211,7 @@ export class ServiceAdministrationOrganisations {
     return {
       siret: uneEntite.siret,
       nom: uneEntite.nom,
+      departement: uneEntite.departement,
       nombreServices: services.length,
       nombreUtilisateurs: new Set(
         services.flatMap((s) =>

@@ -6,6 +6,8 @@
   }
 
   let { entite }: Props = $props();
+  console.log(entite);
 </script>
 
-{entite.nom ?? entite.siret}
+{entite.departement ? `(${entite.departement}) ` : ''}{entite.nom ??
+  entite.siret}
