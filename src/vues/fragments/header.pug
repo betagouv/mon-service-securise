@@ -100,7 +100,11 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
             collapse-id="user-menu-collapse"
             button-id="user-menu-btn"
             has-logout
-            links=JSON.stringify([{ label: "Mon tableau de bord", href: "/tableauDeBord" },{ label: "Mettre à jour mon profil", href: "/profil" }])
+            links=JSON.stringify([
+              { label: "Mon tableau de bord", href: "/tableauDeBord" },
+              { label: "Mettre à jour mon profil", href: "/profil" },
+              { label: "Préférences", href: "/preferences" }
+            ])
           )
         .conteneur-outils-entete(slot="toolLinks")
           lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
@@ -113,10 +117,11 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
             collapse-id="user-menu-collapse"
             button-id="user-menu-btn"
             has-logout
-            links=JSON.stringify([{
-              label: "Mon tableau de bord",
-              href: "/tableauDeBord"
-            }, {label: "Mettre à jour mon profil", href: "/profil"}])
+            links=JSON.stringify([
+              { label: "Mon tableau de bord", href: "/tableauDeBord" },
+              { label: "Mettre à jour mon profil", href: "/profil" },
+              { label: "Préférences", href: "/preferences" }
+            ])
           )
       else
         lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé", slot="beforetoolslinks")
