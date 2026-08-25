@@ -15,6 +15,12 @@ export const schemaPutUtilisateur = {
   token: z.string().optional(),
 };
 
+export const schemaPutPreferencesUtilisateur = {
+  infolettreAcceptee: z.boolean().optional(),
+  transactionnelAccepte: z.boolean().optional(),
+  pixelDeSuiviAccepte: z.boolean().optional(),
+};
+
 export const schemaPutMesureGenerale = (
   referentiel: Referentiel,
   referentielV2: ReferentielV2

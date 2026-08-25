@@ -2,7 +2,9 @@ import { expectContenuSessionValide } from '../../aides/cookie.js';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
-import Utilisateur from '../../../src/modeles/utilisateur.js';
+import Utilisateur, {
+  DonneesUtilisateur,
+} from '../../../src/modeles/utilisateur.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
@@ -252,7 +254,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
         testeur.depotDonnees().metsAJourUtilisateur = async (
           _: UUID,
-          donnees: Utilisateur
+          donnees: DonneesUtilisateur
         ) => {
           versionCGURecue = donnees.cguAcceptees;
           return utilisateur;
@@ -267,7 +269,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         let versionCGURecue;
         testeur.depotDonnees().metsAJourUtilisateur = async (
           _: UUID,
-          donnees: Utilisateur
+          donnees: DonneesUtilisateur
         ) => {
           versionCGURecue = donnees.cguAcceptees;
           return utilisateur;
@@ -304,6 +306,61 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         transactionnelAccepte: true,
         pixelDeSuiviAccepte: true,
       });
+    });
+  });
+
+  describe('quand requête PUT sur `/api/utilisateur/preferences`', () => {
+    let idUtilisateur: UUID;
+
+    beforeEach(async () => {
+      const u = await testeur
+        .depotDonnees()
+        .nouvelUtilisateur({ email: 'jean.dujardin@beta.gouv.fr' });
+      idUtilisateur = u.id;
+      await testeur
+        .depotDonnees()
+        .metsAJourUtilisateur(
+          idUtilisateur,
+          unUtilisateur()
+            .avecId(idUtilisateur)
+            .quiRefuseInfolettre()
+            .quiRefuseEmailsTransactionnels()
+            .quiRefusePixelDeSuivi().donnees
+        );
+      testeur.middleware().reinitialise({ idUtilisateur });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
+          method: 'put',
+          url: '/api/utilisateur/preferences',
+        });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const reponse = await testeur.put('/api/utilisateur/preferences', {
+        pasValide: 42,
+      });
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it.each([
+      'infolettreAcceptee',
+      'transactionnelAccepte',
+      'pixelDeSuiviAccepte',
+    ])('sauvegarde la nouvelle préférence `%s`', async (clePreference) => {
+      const reponse = await testeur.put('/api/utilisateur/preferences', {
+        [clePreference]: true,
+      });
+
+      expect(reponse.status).toBe(200);
+      const utilisateurAJour = await testeur
+        .depotDonnees()
+        .utilisateur(idUtilisateur);
+      expect(utilisateurAJour[clePreference]).toBeTruthy();
     });
   });
 });

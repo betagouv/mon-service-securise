@@ -1,7 +1,10 @@
 import express from 'express';
 import { z } from 'zod';
 import { valideBody } from '../../http/validePayloads.js';
-import { schemaPutUtilisateur } from './routesConnecteApi.schema.js';
+import {
+  schemaPutPreferencesUtilisateur,
+  schemaPutUtilisateur,
+} from './routesConnecteApi.schema.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import {
@@ -18,17 +21,20 @@ import {
   PartieModifiableProfilUtilisateur,
 } from '../../modeles/utilisateur.types.js';
 import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
+import { Middleware } from '../../http/middleware.interface.js';
 
 export const routesConnecteApiUtilisateur = ({
   adaptateurJWT,
   adaptateurMail,
   depotDonnees,
+  middleware,
   serviceCgu,
   serviceGestionnaireSession,
 }: {
   adaptateurJWT: AdaptateurJWT;
   adaptateurMail: AdaptateurMail;
   depotDonnees: DepotDonnees;
+  middleware: Middleware;
   serviceCgu: ServiceCgu;
   serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
@@ -91,6 +97,32 @@ export const routesConnecteApiUtilisateur = ({
         .then(() => depotDonnees.metsAJourUtilisateur(idUtilisateur, donnees))
         .then(() => reponse.json({ idUtilisateur }))
         .catch(suite);
+    }
+  );
+
+  routes.put(
+    '/utilisateur/preferences',
+    middleware.verificationAcceptationCGU,
+    valideBody(z.strictObject(schemaPutPreferencesUtilisateur)),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
+      const utilisateur = (await depotDonnees.utilisateur(
+        idUtilisateur
+      )) as Utilisateur;
+
+      const { infolettreAcceptee, transactionnelAccepte, pixelDeSuiviAccepte } =
+        requete.body;
+      await utilisateur.changePreferencesCommunication(
+        { infolettreAcceptee, transactionnelAccepte, pixelDeSuiviAccepte },
+        adaptateurMail
+      );
+
+      await depotDonnees.metsAJourUtilisateur(
+        utilisateur.id,
+        utilisateur.donneesSerialisees()
+      );
+
+      reponse.sendStatus(200);
     }
   );
 
