@@ -76,7 +76,10 @@ const routesNonConnecteOidc = ({
       const { urlRedirection } = cookieProConnect.recupere(requete);
       cookieProConnect.supprime(reponse);
 
-      if (!garantitUnMFA(acr)) {
+      if (
+        !adaptateurEnvironnement.oidc().desactiveMFA() &&
+        !garantitUnMFA(acr)
+      ) {
         reponse
           .status(403)
           .send(

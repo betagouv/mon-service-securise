@@ -32,7 +32,9 @@ const genereDemandeAutorisation = async () => {
     claims: {
       id_token: {
         amr: null,
-        acr: { essential: true, values: [...ACR_GARANTISSANT_MFA] },
+        ...(!configurationOidc.desactiveMFA() && {
+          acr: { essential: true, values: [...ACR_GARANTISSANT_MFA] },
+        }),
       },
     },
   });
