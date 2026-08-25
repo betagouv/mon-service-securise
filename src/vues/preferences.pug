@@ -7,7 +7,11 @@ block variables
   - const ongletActif = "preferences"
 
 block append scripts
+  +composantSvelte('preferences.js')
   +donneesPartagees('donnees-preferences',{infolettreAcceptee, pixelDeSuiviAccepte, transactionnelAccepte})
+
 
 block main
   #conteneur-preferences
+
+  +moduleAvecVersion('/statique/preferences.mjs')
