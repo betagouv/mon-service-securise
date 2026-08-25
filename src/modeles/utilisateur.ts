@@ -45,9 +45,9 @@ class Utilisateur extends Base {
   readonly email!: string;
   private readonly telephone?: string;
   private readonly cguAcceptees!: string;
-  private readonly infolettreAcceptee!: boolean;
-  private readonly transactionnelAccepte!: boolean;
-  private readonly pixelDeSuiviAccepte!: boolean;
+  private infolettreAcceptee!: boolean;
+  private transactionnelAccepte!: boolean;
+  private pixelDeSuiviAccepte!: boolean;
   private readonly estimationNombreServices!: EstimationNombreServices;
   readonly postes!: Array<string>;
   readonly entite: Entite;
@@ -184,6 +184,14 @@ class Utilisateur extends Base {
     return !!this.transactionnelAccepte;
   }
 
+  consentements() {
+    return {
+      infolettreAcceptee: this.accepteInfolettre(),
+      transactionnelAccepte: this.accepteTransactionnel(),
+      pixelDeSuiviAccepte: !!this.pixelDeSuiviAccepte,
+    };
+  }
+
   genereToken(source: SourceAuthentification) {
     return this.adaptateurJWT.genereToken(this.id, source, this.estUnInvite());
   }
@@ -266,6 +274,19 @@ class Utilisateur extends Base {
       await adaptateurEmail.changeConsentementPixelDeSuivi(this.email, true);
     if (refusePixel)
       await adaptateurEmail.changeConsentementPixelDeSuivi(this.email, false);
+
+    this.infolettreAcceptee =
+      nouvellesPreferences.infolettreAcceptee === undefined
+        ? this.infolettreAcceptee
+        : nouvellesPreferences.infolettreAcceptee;
+    this.transactionnelAccepte =
+      nouvellesPreferences.transactionnelAccepte === undefined
+        ? this.transactionnelAccepte
+        : nouvellesPreferences.transactionnelAccepte;
+    this.pixelDeSuiviAccepte =
+      nouvellesPreferences.pixelDeSuiviAccepte === undefined
+        ? this.pixelDeSuiviAccepte
+        : nouvellesPreferences.pixelDeSuiviAccepte;
   }
 }
 
