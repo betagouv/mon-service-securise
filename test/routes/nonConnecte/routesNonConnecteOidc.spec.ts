@@ -464,16 +464,20 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
     describe('quand ProConnect n’a pas garanti la présence d’un MFA', () => {
       beforeEach(() => {
+        testeur.adaptateurEnvironnement().oidc = () => ({
+          desactiveMFA: () => false,
+        });
         testeur.adaptateurOidc().recupereJeton = async () => ({
           idToken: 'unIdToken',
           acr: 'eidas1',
         });
       });
 
-      it('refuse l’accès au service', async () => {
+      it("refuse l’accès au service avec une page d'erreur", async () => {
         const reponse = await testeur.get('/oidc/apres-authentification');
 
         expect(reponse.status).toBe(403);
+        expect(reponse.headers['content-type']).toContain('text/html');
         expect(reponse.text).toContain('double authentification');
       });
 

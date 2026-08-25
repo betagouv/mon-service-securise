@@ -80,11 +80,7 @@ const routesNonConnecteOidc = ({
         !adaptateurEnvironnement.oidc().desactiveMFA() &&
         !garantitUnMFA(acr)
       ) {
-        reponse
-          .status(403)
-          .send(
-            'Vous ne pouvez pas accéder à MonServiceSécurisé sans double authentification. Veuillez en activer une auprès de votre fournisseur d’identité, puis vous connecter à nouveau.'
-          );
+        reponse.status(403).render('erreurEchecAuthentification');
         return;
       }
 
