@@ -141,7 +141,7 @@
 </div>
 
 <style lang="scss">
-  :global(main) {
+  :global(main:has(#conteneur-preferences)) {
     background: white;
     text-align: left;
   }
