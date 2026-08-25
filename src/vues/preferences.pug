@@ -1,0 +1,13 @@
+extends ./mssConnecte
+
+block title
+  title Préférences | MonServiceSécurisé
+
+block variables
+  - const ongletActif = "preferences"
+
+block append scripts
+  +donneesPartagees('donnees-preferences',{infolettreAcceptee, pixelDeSuiviAccepte, transactionnelAccepte})
+
+block main
+  #conteneur-preferences

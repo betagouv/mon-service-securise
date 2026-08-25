@@ -52,6 +52,21 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/preferences',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const { infolettreAcceptee, pixelDeSuiviAccepte, transactionnelAccepte } =
+        await depotDonnees.utilisateur(idUtilisateur);
+      reponse.render('preferences', {
+        infolettreAcceptee,
+        pixelDeSuiviAccepte,
+        transactionnelAccepte,
+      });
+    }
+  );
+
+  routes.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
