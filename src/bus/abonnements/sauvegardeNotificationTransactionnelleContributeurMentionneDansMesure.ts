@@ -17,21 +17,29 @@ export const sauvegardeNotificationTransactionnelleContributeurMentionneDansMesu
       depotDonnees: DepotDonneesNotificationsTransactionnelles;
     }) =>
     async ({ activiteMesure }: { activiteMesure: ActiviteMesure }) => {
+      if (activiteMesure.type !== 'ajoutCommentaire') return;
+
       const mentions = extraireMentions(
         activiteMesure.details.contenu as string
       );
 
-      await depotDonnees.sauvegardeNotificationTransactionnelle(
-        NotificationTransactionnelle.nouveau({
-          idActeur: activiteMesure.idActeur,
-          idDestinataire: mentions[0],
-          date: activiteMesure.date,
-          type: 'mentionDansMesure',
-          metadonnees: {
-            idService: activiteMesure.idService,
-            idMesure: activiteMesure.idMesure,
-            typeMesure: activiteMesure.typeMesure,
-          },
-        })
+      await Promise.all(
+        [...new Set(mentions)]
+          .filter((mention) => mention !== activiteMesure.idActeur)
+          .map((mention) =>
+            depotDonnees.sauvegardeNotificationTransactionnelle(
+              NotificationTransactionnelle.nouveau({
+                idActeur: activiteMesure.idActeur,
+                idDestinataire: mention,
+                date: activiteMesure.date,
+                type: 'mentionDansMesure',
+                metadonnees: {
+                  idService: activiteMesure.idService,
+                  idMesure: activiteMesure.idMesure,
+                  typeMesure: activiteMesure.typeMesure,
+                },
+              })
+            )
+          )
       );
     };

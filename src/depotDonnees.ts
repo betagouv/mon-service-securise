@@ -128,6 +128,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const depotActivitesMesure = depotDonneesActivitesMesure.creeDepot({
     adaptateurPersistance,
+    busEvenements,
   });
 
   const depotEvolutionsIndiceCyber =
