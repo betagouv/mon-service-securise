@@ -69,13 +69,30 @@
     icon-place="right"
     label={notification.titreCta}
   ></dsfr-button>
-  <dsfr-badge
-    slot="badgesgroup"
-    size="sm"
-    label={configurationCarte.badge.libelle}
-    type="accent"
-    accent={configurationCarte.badge.couleur}
-    has-icon={!!configurationCarte.badge.icone}
-    icon={configurationCarte.badge.icone}
-  ></dsfr-badge>
+  <div class="conteneur-badges" slot="badgesgroup">
+    <dsfr-badge
+      size="sm"
+      label={configurationCarte.badge.libelle}
+      type="accent"
+      accent={configurationCarte.badge.couleur}
+      has-icon={!!configurationCarte.badge.icone}
+      icon={configurationCarte.badge.icone}
+    ></dsfr-badge>
+    {#if notification.statutLecture === 'nonLue'}
+      <dsfr-badge
+        size="sm"
+        label="Non lue"
+        type="accent"
+        accent="purple-glycine"
+      ></dsfr-badge>
+    {/if}
+  </div>
 </dsfr-card>
+
+<style>
+  .conteneur-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+</style>
