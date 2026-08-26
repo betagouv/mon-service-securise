@@ -7,16 +7,36 @@ import ActiviteMesure, {
 import { PersistanceActiviteMesure } from '../../src/depots/depotDonneesActivitesMesure.js';
 import { unUUID } from '../constructeurs/UUID.js';
 import { SimulationMigrationReferentiel } from '../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.ts';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import { EvenementActiviteMesureAjoutee } from '../../src/bus/evenementActiviteMesureAjoutee.ts';
 
 describe('Le dépôt de données des activités de mesure', () => {
   let adaptateurPersistance: PersistanceActiviteMesure;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   const depot = () =>
-    DepotDonneesActivitesMesure.creeDepot({ adaptateurPersistance });
+    DepotDonneesActivitesMesure.creeDepot({
+      adaptateurPersistance,
+      busEvenements: busEvenements as unknown as BusEvenements,
+    });
 
   describe('sur ajout d’une activité', () => {
-    it("ajoute l'activité", async () => {
+    const activite: DonneesCreationActiviteMesure = {
+      idService: unUUID('1'),
+      idActeur: unUUID('A'),
+      type: 'miseAJourStatut',
+      typeMesure: 'generale',
+      details: { nouveauStatut: 'fait' },
+      idMesure: 'audit',
+    };
+
+    beforeEach(() => {
+      busEvenements = fabriqueBusPourLesTests();
       adaptateurPersistance = unePersistanceMemoire().construis();
+    });
+
+    it("ajoute l'activité", async () => {
       let activiteAjouteeAPersistance = false;
       let idServiceActivite;
       let idActeurActivite;
@@ -43,14 +63,6 @@ describe('Le dépôt de données des activités de mesure', () => {
         detailsActivite = details;
         dateActivite = date;
       };
-      const activite: DonneesCreationActiviteMesure = {
-        idService: unUUID('1'),
-        idActeur: unUUID('A'),
-        type: 'miseAJourStatut',
-        typeMesure: 'generale',
-        details: { nouveauStatut: 'fait' },
-        idMesure: 'audit',
-      };
 
       await depot().ajouteActiviteMesure(activite);
 
@@ -63,6 +75,22 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(idMesureActivite).toEqual('audit');
       expect(typeMesureActivite).toEqual('generale');
       expect(dateActivite).toBeInstanceOf(Date);
+    });
+
+    it("publie un évènement d'activité ajoutée sur le bus", async () => {
+      await depot().ajouteActiviteMesure(activite);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementActiviteMesureAjoutee)
+      ).toBe(true);
+      expect(
+        busEvenements.recupereEvenement(EvenementActiviteMesureAjoutee)
+      ).toEqual(
+        new EvenementActiviteMesureAjoutee({
+          ...activite,
+          date: expect.any(Date),
+        })
+      );
     });
   });
 
