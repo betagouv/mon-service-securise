@@ -2,16 +2,19 @@ import { UUID } from '../typesBasiques.js';
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
+import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
   superviseurs: DonneesSuperviseur[];
+  notificationsTransactionnelles: DonneesNotificationTransactionnelle[];
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   private readonly donnees: DonneesPersistanceMemoire = {
     adminsOrganisations: [],
     superviseurs: [],
+    notificationsTransactionnelles: [],
   };
 
   constructor(donnees?: Partial<DonneesPersistanceMemoire>) {
@@ -19,6 +22,8 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       this.donnees = {
         adminsOrganisations: donnees.adminsOrganisations ?? [],
         superviseurs: donnees.superviseurs ?? [],
+        notificationsTransactionnelles:
+          donnees.notificationsTransactionnelles ?? [],
       };
   }
 
@@ -74,5 +79,17 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     this.donnees.superviseurs = this.donnees.superviseurs.filter(
       (s) => s.idUtilisateur !== idUtilisateur
     );
+  }
+
+  async lisNotificationsDe(
+    idDestinataire: UUID
+  ): Promise<DonneesNotificationTransactionnelle[]> {
+    return this.donnees.notificationsTransactionnelles;
+  }
+
+  async sauvegardeNotificationTransactionnelle(
+    donnees: DonneesNotificationTransactionnelle
+  ) {
+    this.donnees.notificationsTransactionnelles.push(donnees);
   }
 }
