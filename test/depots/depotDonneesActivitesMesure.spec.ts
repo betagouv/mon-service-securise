@@ -24,13 +24,15 @@ describe('Le dépôt de données des activités de mesure', () => {
       let typeActivite;
       let typeMesureActivite;
       let detailsActivite;
+      let dateActivite;
       adaptateurPersistance.ajouteActiviteMesure = async (
         idActeur,
         idService,
         idMesure,
         type,
         typeMesure,
-        details
+        details,
+        date
       ) => {
         activiteAjouteeAPersistance = true;
         idServiceActivite = idService;
@@ -39,6 +41,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         typeActivite = type;
         typeMesureActivite = typeMesure;
         detailsActivite = details;
+        dateActivite = date;
       };
       const activite: DonneesCreationActiviteMesure = {
         idService: unUUID('1'),
@@ -59,6 +62,7 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(detailsActivite).toEqual({ nouveauStatut: 'fait' });
       expect(idMesureActivite).toEqual('audit');
       expect(typeMesureActivite).toEqual('generale');
+      expect(dateActivite).toBeInstanceOf(Date);
     });
   });
 

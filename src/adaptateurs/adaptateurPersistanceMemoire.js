@@ -404,7 +404,8 @@ const nouvelAdaptateur = (
     idMesure,
     type,
     typeMesure,
-    details
+    details,
+    date
   ) =>
     donnees.activitesMesure.push({
       idActeur,
@@ -413,6 +414,7 @@ const nouvelAdaptateur = (
       type,
       typeMesure,
       details,
+      date,
     });
 
   const ajouteActivitesMesure = async (activites) =>

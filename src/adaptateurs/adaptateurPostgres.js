@@ -101,7 +101,8 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     idMesure,
     type,
     typeMesure,
-    details
+    details,
+    date
   ) =>
     knex('activites_mesure').insert({
       id_acteur: idActeur,
@@ -110,6 +111,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
       type_mesure: typeMesure,
       type,
       details,
+      date,
     });
 
   const ajouteActivitesMesure = async (activites) => {
