@@ -17,6 +17,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
 
   it('sauvegarde la notification transactionnelle via le dépôt', async () => {
     const idDestinataire = unUUIDRandom();
+    const dateCommentaire = new Date();
     const unCommentaire = new ActiviteMesure({
       type: 'ajoutCommentaire',
       idMesure: 'M1',
@@ -24,7 +25,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
       idService: unUUID('S1'),
       typeMesure: 'generale',
       details: { contenu: `Je mentionne @[${idDestinataire}]` },
-      date: new Date(),
+      date: dateCommentaire,
     });
 
     await sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure(
@@ -34,8 +35,16 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
     const notifications = await depotDonnees.lisNotifications(idDestinataire);
     expect(notifications).toHaveLength(1);
     expect(notifications[0]).toEqual({
+      id: expect.any(String),
       idActeur: unUUID('U1'),
       idDestinataire,
+      metadonnees: {
+        idService: unUUID('S1'),
+        idMesure: 'M1',
+        typeMesure: 'generale',
+      },
+      date: dateCommentaire,
+      type: 'mentionDansMesure',
     });
   });
 
