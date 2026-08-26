@@ -362,7 +362,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const { estJwtRevoque, revoqueJwt } = depotSession;
 
-  const tousLesDepotsLegacy = {
+  return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
     acquitteSuggestionAction,
@@ -490,21 +490,18 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotNotificationsTransactionnelles.sauvegardeNotificationTransactionnelle.bind(
         depotNotificationsTransactionnelles
       ),
+    lisAdminOrganisations: depotAdminsOrganisations.lisAdminOrganisations.bind(
+      depotAdminsOrganisations
+    ),
+    lisAdminsPour: depotAdminsOrganisations.lisAdminsPour.bind(
+      depotAdminsOrganisations
+    ),
+    sauvegardeAdminOrganisations:
+      depotAdminsOrganisations.sauvegardeAdminOrganisations.bind(
+        depotAdminsOrganisations
+      ),
+    estAdmin: depotAdminsOrganisations.estAdmin.bind(depotAdminsOrganisations),
   };
-  type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
-
-  // le proxy sert d'aiguillage entre les dépôts en mode classe et les dépôts en mode procédural
-  return new Proxy(depotAdminsOrganisations, {
-    get(target, prop) {
-      if (prop in target)
-        return target[prop as keyof DepotDonneesAdminsOrganisations];
-      const legacy =
-        tousLesDepotsLegacy[prop as keyof typeof tousLesDepotsLegacy];
-      return typeof legacy === 'function'
-        ? legacy.bind(tousLesDepotsLegacy)
-        : legacy;
-    },
-  }) as TousLesDepotsLegacy & DepotDonneesAdminsOrganisations;
 };
 
 export { creeDepot };
