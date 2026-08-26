@@ -6,6 +6,8 @@ import ActiviteMesure, {
 } from '../modeles/activiteMesure.js';
 import { UUID } from '../typesBasiques.js';
 import { SimulationMigrationReferentiel } from '../moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementActiviteMesureAjoutee } from '../bus/evenementActiviteMesureAjoutee.js';
 
 export type PersistanceActiviteMesure = {
   ajouteActiviteMesure: (
@@ -30,21 +32,33 @@ export type PersistanceActiviteMesure = {
 
 const creeDepot = (config: {
   adaptateurPersistance: PersistanceActiviteMesure;
+  busEvenements: BusEvenements;
 }) => {
-  const { adaptateurPersistance } = config;
+  const { adaptateurPersistance, busEvenements } = config;
 
   const ajouteActiviteMesure = async (
     activite: DonneesCreationActiviteMesure
-  ) =>
-    adaptateurPersistance.ajouteActiviteMesure(
+  ) => {
+    const date = new Date();
+    await adaptateurPersistance.ajouteActiviteMesure(
       activite.idActeur,
       activite.idService,
       activite.idMesure,
       activite.type,
       activite.typeMesure,
       activite.details,
-      new Date()
+      date
     );
+
+    await busEvenements.publie(
+      new EvenementActiviteMesureAjoutee(
+        new ActiviteMesure({
+          ...activite,
+          date,
+        })
+      )
+    );
+  };
 
   const lisActivitesMesure = async (idService: UUID, idMesure: IdMesure) => {
     const activitesMesure = await adaptateurPersistance.activitesMesure(
