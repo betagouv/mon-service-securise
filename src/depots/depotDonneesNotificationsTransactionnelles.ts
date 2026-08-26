@@ -13,30 +13,25 @@ export type PersistanceNotificationTransactionnelle = {
   ): Promise<void>;
 };
 
-const creeDepot = (config: {
-  adaptateurPersistance: PersistanceNotificationTransactionnelle;
-}) => {
-  const { adaptateurPersistance } = config;
+export class DepotDonneesNotificationsTransactionnelles {
+  private readonly persistance: PersistanceNotificationTransactionnelle;
 
-  const lisNotifications = async (idDestinataire: UUID) =>
-    adaptateurPersistance.lisNotificationsDe(idDestinataire);
+  constructor({
+    adaptateurPersistanceTS,
+  }: {
+    adaptateurPersistanceTS: PersistanceNotificationTransactionnelle;
+  }) {
+    this.persistance = adaptateurPersistanceTS;
+  }
+  async lisNotifications(idDestinataire: UUID) {
+    return this.persistance.lisNotificationsDe(idDestinataire);
+  }
 
-  const sauvegardeNotificationTransactionnelle = async (
+  async sauvegardeNotificationTransactionnelle(
     notification: NotificationTransactionnelle
-  ) => {
-    await adaptateurPersistance.sauvegardeNotificationTransactionnelle(
+  ) {
+    await this.persistance.sauvegardeNotificationTransactionnelle(
       notification.donnees()
     );
-  };
-
-  return {
-    lisNotifications,
-    sauvegardeNotificationTransactionnelle,
-  };
-};
-
-export type DepotDonneesNotificationsTransactionnelles = ReturnType<
-  typeof creeDepot
->;
-
-export { creeDepot };
+  }
+}
