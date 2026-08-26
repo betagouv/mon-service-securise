@@ -1,5 +1,5 @@
 import ActiviteMesure from '../../../src/modeles/activiteMesure.ts';
-import { unUUID } from '../../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure } from '../../../src/bus/abonnements/sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure.ts';
 import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 import {
@@ -16,7 +16,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
   });
 
   it('sauvegarde la notification transactionnelle via le dépôt', async () => {
-    const idDestinataire = unUUID('U2');
+    const idDestinataire = unUUIDRandom();
     const unCommentaire = new ActiviteMesure({
       type: 'ajoutCommentaire',
       idMesure: 'M1',
@@ -35,6 +35,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
     expect(notifications).toHaveLength(1);
     expect(notifications[0]).toEqual({
       idActeur: unUUID('U1'),
+      idDestinataire,
     });
   });
 
