@@ -1,14 +1,16 @@
 import Knex from 'knex';
-import { UUID } from 'node:crypto';
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { DonneesEntite } from '../modeles/entite.js';
 import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
+import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import { UUID } from '../typesBasiques.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
   SUPERVISEURS = 'superviseurs',
+  NOTIFICATIONS_TRANSACTIONNELLES = 'notifications_transactionnelles',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -150,5 +152,33 @@ export class AdaptateurPostgresTS implements PersistanceTS {
           ) as unknown as DonneesAdminOrganisations
       )
     );
+  }
+
+  async lisNotificationsDe(
+    idDestinataire: UUID
+  ): Promise<DonneesNotificationTransactionnelle[]> {
+    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+      .select({
+        id: 'id',
+        idActeur: 'id_acteur',
+        idDestinataire: 'id_destinataire',
+        metadonnees: 'metadonnees',
+        type: 'type',
+        date: 'date',
+      })
+      .where({ id_destinataire: idDestinataire });
+  }
+
+  async sauvegardeNotificationTransactionnelle(
+    donnees: DonneesNotificationTransactionnelle
+  ): Promise<void> {
+    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES).insert({
+      id: donnees.id,
+      id_acteur: donnees.idActeur,
+      id_destinataire: donnees.idDestinataire,
+      metadonnees: donnees.metadonnees,
+      type: donnees.type,
+      date: donnees.date,
+    });
   }
 }

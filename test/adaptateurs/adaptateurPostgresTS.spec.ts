@@ -5,6 +5,7 @@ import { unUUIDRandom } from '../constructeurs/UUID.ts';
 import { AdaptateurPostgresTS } from '../../src/adaptateurs/adaptateurPostgresTS.ts';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.js';
+import { DonneesNotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -368,6 +369,63 @@ describe("L'adaptateur persistance Postgres", () => {
 
       const adminSauvegarde = await persistance.lisAdminOrganisations(idAdmin1);
       expect(adminSauvegarde).toBeDefined();
+    });
+  });
+
+  describe("sur demande de lecture des notifications d'un utilisateur", () => {
+    it('retourne uniquement les notifications de cet utilisateur', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const id = unUUIDRandom();
+      const idActeur = unUUIDRandom();
+      const date = new Date();
+      await trx.table('notifications_transactionnelles').insert({
+        id,
+        id_acteur: idActeur,
+        id_destinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date,
+      });
+      await trx.table('notifications_transactionnelles').insert({
+        id: unUUIDRandom(),
+        id_acteur: unUUIDRandom(),
+        id_destinataire: unUUIDRandom(),
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date: new Date(),
+      });
+
+      const notifications = await persistance.lisNotificationsDe(idUtilisateur);
+
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0]).toEqual({
+        id,
+        idActeur,
+        idDestinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date,
+      });
+    });
+  });
+
+  describe("sur demande de sauvegarde d'une notification", () => {
+    it('persiste la notification', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const donnees: DonneesNotificationTransactionnelle = {
+        id: unUUIDRandom(),
+        idActeur: unUUIDRandom(),
+        idDestinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date: new Date(),
+      };
+
+      await persistance.sauvegardeNotificationTransactionnelle(donnees);
+
+      const notifications = await persistance.lisNotificationsDe(idUtilisateur);
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0]).toEqual(donnees);
     });
   });
 });
