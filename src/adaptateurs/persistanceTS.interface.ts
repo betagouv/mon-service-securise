@@ -1,6 +1,7 @@
 import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { UUID } from '../typesBasiques.js';
+import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 
 export interface PersistanceTS {
   lisAdminOrganisations: (
@@ -20,4 +21,10 @@ export interface PersistanceTS {
     siret: string
   ) => Promise<Array<DonneesSuperviseur>>;
   supprimeSuperviseur: (idUtilisateur: UUID) => Promise<void>;
+  lisNotificationsDe: (
+    idDestinataire: UUID
+  ) => Promise<DonneesNotificationTransactionnelle[]>;
+  sauvegardeNotificationTransactionnelle: (
+    donnees: DonneesNotificationTransactionnelle
+  ) => Promise<void>;
 }
