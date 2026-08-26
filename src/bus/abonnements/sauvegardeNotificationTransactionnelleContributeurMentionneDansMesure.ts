@@ -22,9 +22,16 @@ export const sauvegardeNotificationTransactionnelleContributeurMentionneDansMesu
       );
 
       await depotDonnees.sauvegardeNotificationTransactionnelle(
-        new NotificationTransactionnelle({
+        NotificationTransactionnelle.nouveau({
           idActeur: activiteMesure.idActeur,
           idDestinataire: mentions[0],
+          date: activiteMesure.date,
+          type: 'mentionDansMesure',
+          metadonnees: {
+            idService: activiteMesure.idService,
+            idMesure: activiteMesure.idMesure,
+            typeMesure: activiteMesure.typeMesure,
+          },
         })
       );
     };

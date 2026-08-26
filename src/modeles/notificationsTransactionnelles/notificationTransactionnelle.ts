@@ -1,22 +1,33 @@
 import { UUID } from '../../typesBasiques.js';
 
-export type DonneesNotificationTransactionnelle = {
+export type DonneesNotificationTransactionnelle =
+  DonneesCreationNotificationTransactionnelle & {
+    id: UUID;
+  };
+
+export type DonneesCreationNotificationTransactionnelle = {
   idActeur: UUID;
   idDestinataire: UUID;
+  metadonnees: Record<string, unknown>;
+  type: 'mentionDansMesure';
+  date: Date;
 };
 
 export class NotificationTransactionnelle {
-  private readonly idActeur: UUID;
-  private readonly idDestinataire: UUID;
-  constructor({
-    idActeur,
-    idDestinataire,
-  }: DonneesNotificationTransactionnelle) {
-    this.idActeur = idActeur;
-    this.idDestinataire = idDestinataire;
+  private constructor(
+    private readonly donneesNotification: DonneesNotificationTransactionnelle
+  ) {}
+
+  static nouveau(
+    donneesNotification: DonneesCreationNotificationTransactionnelle
+  ) {
+    return new NotificationTransactionnelle({
+      id: crypto.randomUUID(),
+      ...donneesNotification,
+    });
   }
 
   donnees(): DonneesNotificationTransactionnelle {
-    return { idActeur: this.idActeur, idDestinataire: this.idDestinataire };
+    return this.donneesNotification;
   }
 }
