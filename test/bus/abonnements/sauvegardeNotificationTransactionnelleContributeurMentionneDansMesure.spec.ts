@@ -3,12 +3,9 @@ import ActiviteMesure, {
 } from '../../../src/modeles/activiteMesure.ts';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure } from '../../../src/bus/abonnements/sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure.ts';
-import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
-import {
-  creeDepot,
-  DepotDonneesNotificationsTransactionnelles,
-} from '../../../src/depots/depotDonneesNotificationsTransactionnelles.ts';
+import { DepotDonneesNotificationsTransactionnelles } from '../../../src/depots/depotDonneesNotificationsTransactionnelles.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
+import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 
 describe("L'abonné qui sauvegarde les notifications transactionnelles d'un contributeur mentionné dans une mesure", () => {
   let depotDonnees: DepotDonneesNotificationsTransactionnelles;
@@ -28,8 +25,10 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
     });
 
   beforeEach(() => {
-    const adaptateurPersistance = unePersistanceMemoireTS().construis();
-    depotDonnees = creeDepot({ adaptateurPersistance });
+    const adaptateurPersistanceTS = unePersistanceMemoireTS().construis();
+    depotDonnees = new DepotDonneesNotificationsTransactionnelles({
+      adaptateurPersistanceTS,
+    });
     idDestinataire = unUUIDRandom();
   });
 
