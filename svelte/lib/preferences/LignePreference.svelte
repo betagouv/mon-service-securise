@@ -1,12 +1,15 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
     icone: string;
     titre: string;
-    sousTitre: string;
+    sousTitre?: string;
     valeur: boolean;
     avecBordure?: boolean;
     onvaleurmodifiee?: (valeur: boolean) => Promise<void>;
     inactif?: boolean;
+    contenuRicheSousTitre?: Snippet;
   }
 
   let {
@@ -17,6 +20,7 @@
     avecBordure = false,
     inactif = false,
     onvaleurmodifiee,
+    contenuRicheSousTitre,
   }: Props = $props();
 
   let id = $derived(`toggle-${titre.toLowerCase().replace(' ', '-')}`);
@@ -34,7 +38,13 @@
     left
     border={avecBordure}
     disabled={inactif}
-  ></dsfr-toggle>
+  >
+    {#if contenuRicheSousTitre}
+      <span slot="hint">
+        {@render contenuRicheSousTitre()}
+      </span>
+    {/if}
+  </dsfr-toggle>
 </div>
 
 <style lang="scss">
