@@ -38,7 +38,6 @@ import { AdaptateurRechercheEntreprise } from './adaptateurs/adaptateurRecherche
 import BusEvenements from './bus/busEvenements.js';
 import { ServiceCgu } from './serviceCgu.interface.js';
 import { DepotDonneesNotificationsTransactionnelles } from './depots/depotDonneesNotificationsTransactionnelles.js';
-import { UUID } from './typesBasiques.js';
 
 export type ConfigDepotDonnees = {
   adaptateurChiffrement?: AdaptateurChiffrement;
