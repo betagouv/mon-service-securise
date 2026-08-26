@@ -14,7 +14,8 @@ export type PersistanceActiviteMesure = {
     idMesure: IdMesure,
     type: TypeActiviteMesure,
     typeMesure: 'generale' | 'specifique',
-    details: Record<string, unknown>
+    details: Record<string, unknown>,
+    date: Date
   ) => Promise<void>;
   ajouteActivitesMesure: (activitesMesure: ActiviteMesure[]) => Promise<void>;
   activitesMesure: (
@@ -41,7 +42,8 @@ const creeDepot = (config: {
       activite.idMesure,
       activite.type,
       activite.typeMesure,
-      activite.details
+      activite.details,
+      new Date()
     );
 
   const lisActivitesMesure = async (idService: UUID, idMesure: IdMesure) => {
