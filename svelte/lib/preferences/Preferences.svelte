@@ -60,12 +60,23 @@
       />
       <LignePreference
         titre="Homologation bientôt expirée"
-        sousTitre="Recevoir un e-mail lorsqu’une homologation arrive prochainement à expiration. La fréquence des rappels par e-mail dépend de la durée de l’homologation."
         icone="alarm-warning-line"
         valeur={true}
         avecBordure
         inactif
-      />
+      >
+        {#snippet contenuRicheSousTitre()}
+          Recevoir un e-mail lorsqu’une homologation arrive prochainement à
+          expiration. <br /> La fréquence des rappels par e-mail dépend de la
+          durée de l’homologation.
+          <dsfr-link
+            blank
+            neutral
+            label="En savoir plus"
+            href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-mails-de-rappel-concernant-lexpiration-homologation-1wwnztj/"
+          ></dsfr-link>
+        {/snippet}
+      </LignePreference>
       <LignePreference
         titre="Homologation expirée"
         sousTitre="Recevoir un e-mail lorsqu’une homologation arrive à échéance."
