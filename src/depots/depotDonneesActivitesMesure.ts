@@ -32,7 +32,9 @@ const creeDepot = (config: {
 }) => {
   const { adaptateurPersistance } = config;
 
-  const ajouteActiviteMesure = (activite: DonneesCreationActiviteMesure) =>
+  const ajouteActiviteMesure = async (
+    activite: DonneesCreationActiviteMesure
+  ) =>
     adaptateurPersistance.ajouteActiviteMesure(
       activite.idActeur,
       activite.idService,

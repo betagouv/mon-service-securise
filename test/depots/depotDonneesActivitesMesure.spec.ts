@@ -15,7 +15,7 @@ describe('Le dépôt de données des activités de mesure', () => {
     DepotDonneesActivitesMesure.creeDepot({ adaptateurPersistance });
 
   describe('sur ajout d’une activité', () => {
-    it("ajoute l'activité", () => {
+    it("ajoute l'activité", async () => {
       adaptateurPersistance = unePersistanceMemoire().construis();
       let activiteAjouteeAPersistance = false;
       let idServiceActivite;
@@ -49,7 +49,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         idMesure: 'audit',
       };
 
-      depot().ajouteActiviteMesure(activite);
+      await depot().ajouteActiviteMesure(activite);
 
       expect(activiteAjouteeAPersistance).toBe(true);
       expect(idServiceActivite).toBe(unUUID('1'));
