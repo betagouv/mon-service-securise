@@ -14,13 +14,20 @@
           titre: notification.titre,
           description: notification.sousTitre,
           src: `/statique/assets/images/notifications/illustrations/${notification.image}`,
-          hasHeaderBadge: true,
           blank: true,
+          badge: {
+            couleur: 'yellow-moutarde',
+            icone: 'flashlight-fill',
+            libelle: 'Nouveauté',
+          },
         }
       : {
           titre: notification.entete,
           description: notification.titre,
-          hasBadge: true,
+          badge: {
+            couleur: 'blue-cumulus',
+            libelle: 'À faire',
+          },
         }
   );
 
@@ -49,8 +56,7 @@
   enlarge
   no-icon
   onclick={actionClick}
-  has-badge={configurationCarte.hasBadge}
-  has-header-badge={configurationCarte.hasHeaderBadge}
+  has-badge
   src={configurationCarte.src}
   image-ratio="1x1"
 >
@@ -63,24 +69,13 @@
     icon-place="right"
     label={notification.titreCta}
   ></dsfr-button>
-  {#if configurationCarte.hasBadge}
-    <dsfr-badge
-      slot="badgesgroup"
-      size="sm"
-      label="À faire"
-      type="accent"
-      accent="blue-cumulus"
-    ></dsfr-badge>
-  {/if}
-  {#if configurationCarte.hasHeaderBadge}
-    <dsfr-badge
-      slot="headerbadges"
-      size="sm"
-      label="Nouveautés"
-      type="accent"
-      accent="yellow-moutarde"
-      has-icon
-      icon="flashlight-fill"
-    ></dsfr-badge>
-  {/if}
+  <dsfr-badge
+    slot="badgesgroup"
+    size="sm"
+    label={configurationCarte.badge.libelle}
+    type="accent"
+    accent={configurationCarte.badge.couleur}
+    has-icon={!!configurationCarte.badge.icone}
+    icon={configurationCarte.badge.icone}
+  ></dsfr-badge>
 </dsfr-card>
