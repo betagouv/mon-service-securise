@@ -77,6 +77,8 @@ import { consigneAdminNommeSurOrganisationDansJournal } from './abonnements/cons
 import { consigneAdminRetireDeOrganisationDansJournal } from './abonnements/consigneAdminRetireDeOrganisationDansJournal.js';
 import { EvenementRisquesV2ServiceModifies } from './evenementRisquesV2ServiceModifies.js';
 import { consigneRisquesV2DansJournal } from './abonnements/consigneRisquesV2DansJournal.js';
+import { EvenementActiviteMesureAjoutee } from './evenementActiviteMesureAjoutee.ts';
+import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure } from './abonnements/sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure.ts';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -297,6 +299,13 @@ const cableTousLesAbonnes = (
       adaptateurAuditAdminOrganisations,
     }),
   ]);
+
+  busEvenements.abonne(
+    EvenementActiviteMesureAjoutee,
+    sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure({
+      depotDonnees,
+    })
+  );
 };
 
 export { cableTousLesAbonnes };

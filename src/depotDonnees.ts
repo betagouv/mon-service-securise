@@ -37,6 +37,8 @@ import { creeReferentiel } from './referentiel.js';
 import { AdaptateurRechercheEntreprise } from './adaptateurs/adaptateurRechercheEntreprise.interface.js';
 import BusEvenements from './bus/busEvenements.js';
 import { ServiceCgu } from './serviceCgu.interface.js';
+import { DepotDonneesNotificationsTransactionnelles } from './depots/depotDonneesNotificationsTransactionnelles.js';
+import { UUID } from './typesBasiques.js';
 
 export type ConfigDepotDonnees = {
   adaptateurChiffrement?: AdaptateurChiffrement;
@@ -200,6 +202,9 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const depotSuperviseurs = new DepotDonneesSuperviseurs({
     persistance: adaptateurPersistanceTS,
   });
+
+  const depotNotificationsTransactionnelles =
+    new DepotDonneesNotificationsTransactionnelles({ adaptateurPersistanceTS });
 
   const {
     ajouteDescriptionService,
@@ -478,6 +483,13 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotSuperviseurs.lisSuperviseursPour.bind(depotSuperviseurs),
     supprimeSuperviseur:
       depotSuperviseurs.supprimeSuperviseur.bind(depotSuperviseurs),
+    lisNotifications: depotNotificationsTransactionnelles.lisNotifications.bind(
+      depotNotificationsTransactionnelles
+    ),
+    sauvegardeNotificationTransactionnelle:
+      depotNotificationsTransactionnelles.sauvegardeNotificationTransactionnelle.bind(
+        depotNotificationsTransactionnelles
+      ),
   };
   type TousLesDepotsLegacy = typeof tousLesDepotsLegacy;
 
