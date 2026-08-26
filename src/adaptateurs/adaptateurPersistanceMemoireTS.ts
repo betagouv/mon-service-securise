@@ -84,7 +84,9 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   async lisNotificationsDe(
     idDestinataire: UUID
   ): Promise<DonneesNotificationTransactionnelle[]> {
-    return this.donnees.notificationsTransactionnelles;
+    return this.donnees.notificationsTransactionnelles.filter(
+      (n) => n.idDestinataire === idDestinataire
+    );
   }
 
   async sauvegardeNotificationTransactionnelle(
