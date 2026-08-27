@@ -203,4 +203,12 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       .onConflict('id')
       .merge();
   }
+
+  async supprimeNotificationTransactionnelle(
+    idNotification: UUID
+  ): Promise<void> {
+    await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+      .where({ id: idNotification })
+      .delete();
+  }
 }

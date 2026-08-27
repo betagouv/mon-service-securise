@@ -110,4 +110,11 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       this.donnees.notificationsTransactionnelles[indiceExistant] = donnees;
     else this.donnees.notificationsTransactionnelles.push(donnees);
   }
+
+  async supprimeNotificationTransactionnelle(idNotification: UUID) {
+    this.donnees.notificationsTransactionnelles =
+      this.donnees.notificationsTransactionnelles.filter(
+        (n) => n.id !== idNotification
+      );
+  }
 }

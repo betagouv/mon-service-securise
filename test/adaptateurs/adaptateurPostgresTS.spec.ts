@@ -456,4 +456,26 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications[0].lue).toBeTruthy();
     });
   });
+
+  describe("sur demande de suppression d'une notification", () => {
+    it('la supprime', async () => {
+      const id = unUUIDRandom();
+      const idDestinataire = unUUIDRandom();
+      await trx.table('notifications_transactionnelles').insert({
+        id,
+        lue: false,
+        id_acteur: unUUIDRandom(),
+        id_destinataire: idDestinataire,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date: new Date(),
+      });
+
+      await persistance.supprimeNotificationTransactionnelle(id);
+
+      const notifications =
+        await persistance.lisNotificationsDe(idDestinataire);
+      expect(notifications).toHaveLength(0);
+    });
+  });
 });

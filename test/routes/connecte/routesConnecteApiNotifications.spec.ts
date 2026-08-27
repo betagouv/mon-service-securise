@@ -152,4 +152,47 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       expect(reponse.status).toBe(404);
     });
   });
+
+  describe('quand requête DELETE sur `/api/notifications/transactionnelles/:id`', () => {
+    it("jette une erreur si l'identifiant n'est pas un uuid", async () => {
+      const reponse = await testeur.delete(
+        '/api/notifications/transactionnelles/PAS_UN_UUID'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('supprime la notification transactionnelle', async () => {
+      const idUtilisateur = unUUID('D');
+      testeur.middleware().reinitialise({ idUtilisateur });
+      const notification = NotificationTransactionnelle.nouveau({
+        idActeur: unUUID('A'),
+        idDestinataire: idUtilisateur,
+        type: 'mentionDansMesure',
+        date: new Date(),
+        metadonnees: { proprietes: 42 },
+      });
+      await testeur
+        .depotDonnees()
+        .sauvegardeNotificationTransactionnelle(notification);
+
+      const reponse = await testeur.delete(
+        `/api/notifications/transactionnelles/${notification.donnees().id}`
+      );
+
+      expect(reponse.status).toBe(200);
+      const notifications = await testeur
+        .depotDonnees()
+        .lisNotifications(unUUID('D'));
+      expect(notifications).toHaveLength(0);
+    });
+
+    it("jette une erreur si la notification n'existe pas", async () => {
+      const reponse = await testeur.delete(
+        `/api/notifications/transactionnelles/${unUUIDRandom()}`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+  });
 });

@@ -493,6 +493,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotNotificationsTransactionnelles.sauvegardeNotificationTransactionnelle.bind(
         depotNotificationsTransactionnelles
       ),
+    supprimeNotificationTransactionnelle:
+      depotNotificationsTransactionnelles.supprimeNotificationTransactionnelle.bind(
+        depotNotificationsTransactionnelles
+      ),
     lisAdminOrganisations: depotAdminsOrganisations.lisAdminOrganisations.bind(
       depotAdminsOrganisations
     ),
