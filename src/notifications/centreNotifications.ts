@@ -109,6 +109,7 @@ class CentreNotifications {
       })),
 
       ...tachesDesServices.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ service: _service, ...donneesTache }: TacheService) => ({
           ...donneesTache,
           type: 'tache',

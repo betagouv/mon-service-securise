@@ -82,7 +82,7 @@ const routesConnecteApiNotifications = ({
       try {
         await centreNotifications.marqueTacheDeServiceLue(
           idUtilisateurCourant,
-          requete.params.id
+          requete.params.id as UUID
         );
         reponse.sendStatus(200);
       } catch (e) {
