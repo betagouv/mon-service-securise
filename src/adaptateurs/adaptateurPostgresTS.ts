@@ -160,6 +160,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
       .select({
         id: 'id',
+        lue: 'lue',
         idActeur: 'id_acteur',
         idDestinataire: 'id_destinataire',
         metadonnees: 'metadonnees',
@@ -174,6 +175,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
   ): Promise<void> {
     return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES).insert({
       id: donnees.id,
+      lue: donnees.lue,
       id_acteur: donnees.idActeur,
       id_destinataire: donnees.idDestinataire,
       metadonnees: donnees.metadonnees,
