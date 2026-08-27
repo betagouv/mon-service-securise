@@ -1,4 +1,3 @@
-import { TousReferentiels } from '../../../src/referentiel.interface.ts';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { creeDepot } from '../../../src/depotDonnees.ts';
 import * as adaptateurEnvironnement from '../../../src/adaptateurs/adaptateurEnvironnement.js';
@@ -6,18 +5,14 @@ import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import fauxAdaptateurRechercheEntreprise from '../../mocks/adaptateurRechercheEntreprise.js';
 import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
 import BusEvenements from '../../../src/bus/busEvenements.js';
-import * as Referentiel from '../../../src/referentiel.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { SourceNotificationsTransactionnelles } from '../../../src/notifications/sources/sourceNotificationsTransactionnelles.ts';
 import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Les notifications de nouveautés', () => {
-  let referentiel: TousReferentiels;
   let depotDonnees: DepotDonnees;
-
-  const unReferentiel = (donnees: Record<string, unknown>) =>
-    // @ts-expect-error On force des valeurs de test
-    Referentiel.creeReferentiel(donnees);
 
   beforeEach(() => {
     depotDonnees = creeDepot({
@@ -27,18 +22,17 @@ describe('Les notifications de nouveautés', () => {
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
-    referentiel = unReferentiel({});
   });
 
-  const laSource = () =>
-    new SourceNotificationsTransactionnelles(referentiel, depotDonnees);
+  const laSource = () => new SourceNotificationsTransactionnelles(depotDonnees);
 
   describe("concernant les notifications 'mentionDansMesure'", () => {
     const idUtilisateur = unUUID('U1');
     const dateNotif = new Date();
     const idService = unUUID('S1');
+    const idActeur = unUUID('A');
     const notificationTransactionnelle = NotificationTransactionnelle.nouveau({
-      idActeur: unUUID('A'),
+      idActeur,
       idDestinataire: idUtilisateur,
       type: 'mentionDansMesure',
       date: dateNotif,
@@ -49,6 +43,16 @@ describe('Les notifications de nouveautés', () => {
       await depotDonnees.sauvegardeNotificationTransactionnelle(
         notificationTransactionnelle
       );
+
+      depotDonnees.services = async () => [
+        unServiceV2()
+          .avecNomService('Mairie de Bordeaux')
+          .avecId(idService)
+          .ajouteUnContributeur(
+            unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur').donnees
+          )
+          .construis(),
+      ];
     });
 
     it("mets en forme la notification 'mentionDansMesure'", async () => {
@@ -77,7 +81,18 @@ describe('Les notifications de nouveautés', () => {
         `/service/${idService}/mesures?idMesure=RECENSEMENT.1&onglet=activite`
       );
     });
+
+    it('met en forme le sous-titre', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].sousTitre).toBe(
+        "Jean Acteur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
+      );
+    });
   });
 
-  // 'Acteur vous a mentionné sur la mesure « mesure » de [service]'
+  it.skip("n'inclue pas une notif si je n'ai plus accès au service");
+  it.skip("masque le nom d'un admin");
+  it.skip('fonctionne pour des mesures spécifiques');
+  // Déplacer les templates de notifs dans le referentiel
 });
