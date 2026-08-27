@@ -138,11 +138,10 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       );
 
       expect(reponse.status).toBe(200);
-      const notificationsAJour = await testeur
+      const notificationAJour = await testeur
         .depotDonnees()
-        .lisNotifications(unUUID('D'));
-      expect(notificationsAJour).toHaveLength(1);
-      expect(notificationsAJour[0].donnees().lue).toBeTruthy();
+        .lisNotificationDe(notification.donnees().id, unUUID('D'));
+      expect(notificationAJour.donnees().lue).toBeTruthy();
     });
 
     it("jette une erreur si la notification n'existe pas", async () => {

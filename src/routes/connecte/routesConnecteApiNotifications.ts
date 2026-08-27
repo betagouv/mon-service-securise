@@ -15,6 +15,7 @@ import {
   schemaPutTache,
 } from './routesConnecteApiNotifications.schema.js';
 import { valideParams } from '../../http/validePayloads.js';
+import { UUID } from '../../typesBasiques.js';
 
 const routesConnecteApiNotifications = ({
   adaptateurHorloge,
@@ -101,18 +102,17 @@ const routesConnecteApiNotifications = ({
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
 
-      const notifications =
-        await depotDonnees.lisNotifications(idUtilisateurCourant);
-
-      const cible = notifications.find(
-        (n) => n.donnees().id === requete.params.id
+      const notification = await depotDonnees.lisNotificationDe(
+        requete.params.id as UUID,
+        idUtilisateurCourant
       );
-      if (!cible) {
+
+      if (!notification) {
         return reponse.sendStatus(404);
       }
 
-      cible.marqueCommeLue();
-      await depotDonnees.sauvegardeNotificationTransactionnelle(cible);
+      notification.marqueCommeLue();
+      await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
 
       return reponse.sendStatus(200);
     }
