@@ -1,6 +1,6 @@
 import {
   CanalDiffusion,
-  NotificationDuCentre,
+  Notification,
   SourceNotifications,
   StatutLecture,
 } from '../notification.types.js';
@@ -28,9 +28,7 @@ export class SourceNouveautes implements SourceNotifications {
     private readonly adaptateurHorloge: AdaptateurHorloge
   ) {}
 
-  async notificationsPour(
-    idUtilisateur: UUID
-  ): Promise<NotificationDuCentre[]> {
+  async notificationsPour(idUtilisateur: UUID): Promise<Notification[]> {
     const avant: Readonly<DonneesNouveaute[]> =
       this.referentiel.nouvellesFonctionnalites();
 

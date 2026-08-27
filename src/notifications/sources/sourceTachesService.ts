@@ -1,6 +1,6 @@
 import {
   CanalDiffusion,
-  NotificationDuCentre,
+  Notification,
   SourceNotifications,
   StatutLecture,
   TypeNotification,
@@ -34,9 +34,7 @@ export class SourceTachesService implements SourceNotifications {
     private readonly depotDonnees: DepotDonnees
   ) {}
 
-  async notificationsPour(
-    idUtilisateur: UUID
-  ): Promise<NotificationDuCentre[]> {
+  async notificationsPour(idUtilisateur: UUID): Promise<Notification[]> {
     const tachesPersistees: DonneesUtilisateurTacheService[] =
       await this.depotDonnees.tachesDesServices(idUtilisateur);
 
