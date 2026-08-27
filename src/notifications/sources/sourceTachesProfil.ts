@@ -1,5 +1,5 @@
 import {
-  NotificationDuCentre,
+  Notification,
   SourceNotifications,
   StatutLecture,
 } from '../notification.types.js';
@@ -24,9 +24,7 @@ export class SourceTachesProfil implements SourceNotifications {
     private readonly adaptateurHorloge: AdaptateurHorloge
   ) {}
 
-  async notificationsPour(
-    idUtilisateur: UUID
-  ): Promise<NotificationDuCentre[]> {
+  async notificationsPour(idUtilisateur: UUID): Promise<Notification[]> {
     const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
     if (!utilisateur) return [];
 

@@ -9,7 +9,7 @@ export type TypeNotification = 'nouveaute' | 'tache';
 
 export type CanalDiffusion = 'centreNotifications' | 'page';
 
-export type NotificationDuCentre = {
+export type Notification = {
   id: string;
   type: TypeNotification;
   titre: string;
@@ -24,5 +24,5 @@ export type NotificationDuCentre = {
 };
 
 export interface SourceNotifications {
-  notificationsPour(idUtilisateur: UUID): Promise<NotificationDuCentre[]>;
+  notificationsPour(idUtilisateur: UUID): Promise<Notification[]>;
 }

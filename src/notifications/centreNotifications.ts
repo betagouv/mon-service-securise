@@ -7,37 +7,15 @@ import { AdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
-import {
-  IdNatureTacheService,
-  IdNouvelleFonctionnalite,
-} from '../referentiel.types.js';
-import Service from '../modeles/service.js';
-import { SourceNotifications, StatutLecture } from './notification.types.js';
+import { IdNouvelleFonctionnalite } from '../referentiel.types.js';
+import { SourceNotifications } from './notification.types.js';
 import { SourceNouveautes } from './sources/sourceNouveautes.js';
 import { SourceTachesProfil } from './sources/sourceTachesProfil.js';
 import { SourceTachesService } from './sources/sourceTachesService.js';
 
-type Notification = {
-  lien: string;
-  dateFaite: Date;
-  service: Service;
-  donnees: Record<string, string>;
-  titre: string;
-};
-
-type TacheService = {
-  id: UUID;
-  service: Service;
-  dateCreation: Date;
-  dateFaite?: Date;
-  nature: IdNatureTacheService;
-  statutLecture?: StatutLecture;
-};
-
 class CentreNotifications {
   private readonly referentiel: TousReferentiels;
   private readonly depotDonnees: DepotDonnees;
-  private readonly adaptateurHorloge: AdaptateurHorloge;
   private readonly sources: SourceNotifications[];
 
   constructor({
@@ -56,7 +34,6 @@ class CentreNotifications {
     }
     this.referentiel = referentiel;
     this.depotDonnees = depotDonnees;
-    this.adaptateurHorloge = adaptateurHorloge;
     this.sources = [
       new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesProfil(referentiel, depotDonnees, adaptateurHorloge),
@@ -89,7 +66,7 @@ class CentreNotifications {
 
   async marqueTacheDeServiceLue(idUtilisateur: UUID, idTache: UUID) {
     const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
-    if (!taches.find((t: TacheService) => t.id)) {
+    if (!taches.find(({ id }: { id: UUID }) => id === idTache)) {
       throw new ErreurIdentifiantTacheInconnu();
     }
     await this.depotDonnees.marqueTacheDeServiceLue(idTache);
