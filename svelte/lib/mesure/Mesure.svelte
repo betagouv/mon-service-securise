@@ -33,6 +33,7 @@
     MesuresReferentielsExternes,
   } from './mesure';
   import ContenuOngletReferentielsExternes from './contenus/ContenuOngletReferentielsExternes.svelte';
+  import { untrack } from 'svelte';
 
   interface Props {
     idService: IdService;
@@ -44,6 +45,7 @@
     modeVisiteGuidee: boolean;
     nonce: string;
     versionService: VersionService;
+    onglet?: string;
   }
 
   let {
@@ -56,6 +58,7 @@
     modeVisiteGuidee,
     nonce,
     versionService,
+    onglet,
   }: Props = $props();
 
   export const titre =
@@ -111,7 +114,7 @@
 
   let retourUtilisateur: string = $state('');
   let commentaireRetourUtilisateur: string = $state('');
-  let ongletActif: string = $state('mesure');
+  let ongletActif: string = $state(untrack(() => onglet) || 'mesure');
 
   const activeOngletMesure = () => {
     ongletActif = 'mesure';
