@@ -50,9 +50,14 @@ export class SourceTachesService implements SourceNotifications {
 
     return (
       taches
-        .map((tache) => ({
+        .map(({ entete, ...tache }) => ({
           ...tache,
-          titre: SourceTachesService.titreFusionne(tache),
+          titre: entete,
+          sousTitre: SourceTachesService.remplaceDonnees(
+            tache.titre,
+            tache.service,
+            tache.donnees
+          ),
           lien: tache.lien.replace('%ID_SERVICE%', tache.service.id),
           statutLecture: tache.dateFaite
             ? StatutLecture.lue
@@ -67,16 +72,20 @@ export class SourceTachesService implements SourceNotifications {
     );
   }
 
-  static titreFusionne(tache: DonneesTacheService) {
-    const champsDonnees = Object.keys(tache.donnees || {});
+  static remplaceDonnees(
+    contenu: string,
+    service: Service,
+    donnees: Record<string, unknown>
+  ): string {
+    const champsDonnees = Object.keys(donnees || {});
     const valeurReelle = (champ: string): string => {
-      if (champ === 'NOM_SERVICE') return tache.service?.nomService();
-      return tache.donnees?.[champ] as string;
+      if (champ === 'NOM_SERVICE') return service?.nomService();
+      return donnees?.[champ] as string;
     };
 
     return ['NOM_SERVICE', ...champsDonnees].reduce(
       (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
-      tache.titre
+      contenu
     );
   }
 }

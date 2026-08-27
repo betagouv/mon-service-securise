@@ -13,6 +13,7 @@ export type NotificationDuCentre = {
   id: string;
   type: TypeNotification;
   titre: string;
+  sousTitre: string;
   titreCta: string;
   lien: string;
   canalDiffusion: CanalDiffusion;
