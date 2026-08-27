@@ -1,7 +1,7 @@
-import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { ErreurIdentifiantTacheInconnu } from '../../../src/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { UUID } from '../../../src/typesBasiques.ts';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
@@ -37,8 +37,8 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     it('retourne les notifications', async () => {
       const reponse = await testeur.get('/api/notifications');
 
-      expect(reponse.status).to.be(200);
-      expect(reponse.body.notifications.length).to.be(2);
+      expect(reponse.status).toBe(200);
+      expect(reponse.body.notifications.length).toBe(2);
     });
   });
 
@@ -46,40 +46,42 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     it('délègue au centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
       testeur.depotDonnees().marqueNouveauteLue = async (
-        idUtilisateur,
-        idNouveaute
+        idUtilisateur: UUID,
+        idNouveaute: UUID
       ) => {
         donneesRecues = { idUtilisateur, idNouveaute };
       };
 
       const reponse = await testeur.put('/api/notifications/nouveautes/N1');
 
-      expect(reponse.status).to.be(200);
-      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(reponse.status).toBe(200);
+      expect(donneesRecues!.idUtilisateur).toBe('U1');
     });
 
     it("reste robuste en cas d'erreur", async () => {
       const reponse = await testeur.put(
         '/api/notifications/nouveautes/ID_INCONNU'
       );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('Identifiant de nouveauté inconnu');
+      expect(reponse.status).toBe(400);
+      expect(reponse.text).toBe('Identifiant de nouveauté inconnu');
     });
   });
 
   describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
     it('délègue au dépôt via le centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
-      testeur.depotDonnees().tachesDesServices = async (_) => [{ id: 'T1' }];
-      testeur.depotDonnees().marqueTacheDeServiceLue = async (idTache) => {
+      testeur.depotDonnees().tachesDesServices = async () => [{ id: 'T1' }];
+      testeur.depotDonnees().marqueTacheDeServiceLue = async (
+        idTache: UUID
+      ) => {
         donneesRecues = { idTache };
       };
 
       const reponse = await testeur.put('/api/notifications/taches/T1');
 
-      expect(reponse.status).to.be(200);
-      expect(donneesRecues).to.be.an('object');
-      expect(donneesRecues.idTache).to.be('T1');
+      expect(reponse.status).toBe(200);
+      expect(donneesRecues).toBeDefined();
+      expect(donneesRecues!.idTache).toBe('T1');
     });
 
     it("reste robuste en cas d'erreur", async () => {
@@ -87,8 +89,8 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         throw new ErreurIdentifiantTacheInconnu();
       };
       const reponse = await testeur.put('/api/notifications/taches/ID_INCONNU');
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('Identifiant de tâche inconnu');
+      expect(reponse.status).toBe(400);
+      expect(reponse.text).toBe('Identifiant de tâche inconnu');
     });
   });
 });
