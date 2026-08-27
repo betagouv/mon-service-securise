@@ -3,7 +3,8 @@ import { ErreurIdentifiantTacheInconnu } from '../../../src/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { creeReferentiel } from '../../../src/referentiel.ts';
-import { unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
@@ -106,6 +107,50 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       );
       expect(reponse.status).toBe(400);
       expect(reponse.text).toBe('Identifiant de tâche inconnu');
+    });
+  });
+
+  describe('quand requête PUT sur `/api/notifications/transactionnelles/:id`', () => {
+    it("jette une erreur si l'identifiant n'est pas un uuid", async () => {
+      const reponse = await testeur.put(
+        '/api/notifications/transactionnelles/PAS_UN_UUID'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('marque la notification transactionnelle lue et la persiste', async () => {
+      const idUtilisateur = unUUID('D');
+      testeur.middleware().reinitialise({ idUtilisateur });
+      const notification = NotificationTransactionnelle.nouveau({
+        idActeur: unUUID('A'),
+        idDestinataire: idUtilisateur,
+        type: 'mentionDansMesure',
+        date: new Date(),
+        metadonnees: { proprietes: 42 },
+      });
+      await testeur
+        .depotDonnees()
+        .sauvegardeNotificationTransactionnelle(notification);
+
+      const reponse = await testeur.put(
+        `/api/notifications/transactionnelles/${notification.donnees().id}`
+      );
+
+      expect(reponse.status).toBe(200);
+      const notificationsAJour = await testeur
+        .depotDonnees()
+        .lisNotifications(unUUID('D'));
+      expect(notificationsAJour).toHaveLength(1);
+      expect(notificationsAJour[0].donnees().lue).toBeTruthy();
+    });
+
+    it("jette une erreur si la notification n'existe pas", async () => {
+      const reponse = await testeur.put(
+        `/api/notifications/transactionnelles/${unUUIDRandom()}`
+      );
+
+      expect(reponse.status).toBe(404);
     });
   });
 });

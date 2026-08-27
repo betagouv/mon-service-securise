@@ -173,14 +173,17 @@ export class AdaptateurPostgresTS implements PersistanceTS {
   async sauvegardeNotificationTransactionnelle(
     donnees: DonneesNotificationTransactionnelle
   ): Promise<void> {
-    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES).insert({
-      id: donnees.id,
-      lue: donnees.lue,
-      id_acteur: donnees.idActeur,
-      id_destinataire: donnees.idDestinataire,
-      metadonnees: donnees.metadonnees,
-      type: donnees.type,
-      date: donnees.date,
-    });
+    await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+      .insert({
+        id: donnees.id,
+        lue: donnees.lue,
+        id_acteur: donnees.idActeur,
+        id_destinataire: donnees.idDestinataire,
+        metadonnees: donnees.metadonnees,
+        type: donnees.type,
+        date: donnees.date,
+      })
+      .onConflict('id')
+      .merge();
   }
 }

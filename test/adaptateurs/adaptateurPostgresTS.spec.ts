@@ -431,5 +431,29 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications).toHaveLength(1);
       expect(notifications[0]).toEqual(donnees);
     });
+
+    it('met à jour une notification existante', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const idNotification = unUUIDRandom();
+      const donnees: DonneesNotificationTransactionnelle = {
+        id: idNotification,
+        lue: false,
+        idActeur: unUUIDRandom(),
+        idDestinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date: new Date(),
+      };
+      await persistance.sauvegardeNotificationTransactionnelle(donnees);
+
+      await persistance.sauvegardeNotificationTransactionnelle({
+        ...donnees,
+        lue: true,
+      });
+
+      const notifications = await persistance.lisNotificationsDe(idUtilisateur);
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0].lue).toBeTruthy();
+    });
   });
 });
