@@ -380,6 +380,7 @@ describe("L'adaptateur persistance Postgres", () => {
       const date = new Date();
       await trx.table('notifications_transactionnelles').insert({
         id,
+        lue: false,
         id_acteur: idActeur,
         id_destinataire: idUtilisateur,
         metadonnees: { proprietes: 42 },
@@ -388,6 +389,7 @@ describe("L'adaptateur persistance Postgres", () => {
       });
       await trx.table('notifications_transactionnelles').insert({
         id: unUUIDRandom(),
+        lue: false,
         id_acteur: unUUIDRandom(),
         id_destinataire: unUUIDRandom(),
         metadonnees: { proprietes: 42 },
@@ -400,6 +402,7 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications).toHaveLength(1);
       expect(notifications[0]).toEqual({
         id,
+        lue: false,
         idActeur,
         idDestinataire: idUtilisateur,
         metadonnees: { proprietes: 42 },
@@ -414,6 +417,7 @@ describe("L'adaptateur persistance Postgres", () => {
       const idUtilisateur = unUUIDRandom();
       const donnees: DonneesNotificationTransactionnelle = {
         id: unUUIDRandom(),
+        lue: true,
         idActeur: unUUIDRandom(),
         idDestinataire: idUtilisateur,
         metadonnees: { proprietes: 42 },
