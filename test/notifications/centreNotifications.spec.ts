@@ -1,5 +1,4 @@
-import expect from 'expect.js';
-import CentreNotifications from '../../src/notifications/centreNotifications.js';
+import CentreNotifications from '../../src/notifications/centreNotifications.ts';
 import * as Referentiel from '../../src/referentiel.js';
 import { creeDepot } from '../../src/depotDonnees.js';
 import {
@@ -13,13 +12,21 @@ import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntre
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
+import { TousReferentiels } from '../../src/referentiel.interface.ts';
+import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { unUUID } from '../constructeurs/UUID.ts';
 
 describe('Le centre de notifications', () => {
-  let referentiel;
-  let depotDonnees;
+  let referentiel: TousReferentiels;
+  let depotDonnees: DepotDonnees;
+
+  const unReferentiel = (donnees: Record<string, unknown>) =>
+    // @ts-expect-error On force des valeurs de test
+    Referentiel.creeReferentiel(donnees);
 
   beforeEach(() => {
-    referentiel = Referentiel.creeReferentiel({
+    referentiel = unReferentiel({
       nouvellesFonctionnalites: [
         { id: 'N1', dateDeDeploiement: '2024-01-01' },
         { id: 'N2', dateDeDeploiement: '2024-02-02' },
@@ -32,7 +39,7 @@ describe('Le centre de notifications', () => {
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
-      busEvenements: fabriqueBusPourLesTests(),
+      busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
 
     depotDonnees.utilisateur = async () =>
@@ -50,16 +57,16 @@ describe('Le centre de notifications', () => {
     });
 
   it("jette une erreur s'il n'est pas instancié avec les bonnes dépendances", () => {
-    expect(() => new CentreNotifications({})).to.throwError((e) => {
-      expect(e.message).to.be(
-        "Impossible d'instancier le centre de notifications sans ses dépendances"
-      );
-    });
+    // @ts-expect-error On force une mauvaise instanciation
+    expect(() => new CentreNotifications({})).toThrow(
+      "Impossible d'instancier le centre de notifications sans ses dépendances"
+    );
   });
 
   it('trie toutes les notifications retournées', async () => {
     const enJanvier = '2024-01-01';
     referentiel.enrichis({
+      // @ts-expect-error On force des valeurs de test
       nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: enJanvier }],
     });
 
@@ -71,20 +78,22 @@ describe('Le centre de notifications', () => {
         .construis(),
     ];
 
-    const notifications =
-      await centreDeNotification().toutesNotifications('U1');
+    const notifications = await centreDeNotification().toutesNotifications(
+      unUUID('U1')
+    );
 
-    expect(notifications[0].id).to.be('T1');
-    expect(notifications[1].id).to.be('N1');
+    expect(notifications[0].id).toBe('T1');
+    expect(notifications[1].id).toBe('N1');
   });
 
   describe('concernant les nouveautés', () => {
     it("retourne les nouveautés, dans l'ordre antéchronologique", async () => {
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications.length).to.be(2);
-      expect(notifications[0].id).to.be('N2');
+      expect(notifications.length).toBe(2);
+      expect(notifications[0].id).toBe('N2');
     });
 
     it("ajoute le statut 'lu' à la notification si elle l'est", async () => {
@@ -94,19 +103,20 @@ describe('Le centre de notifications', () => {
         return ['N2'];
       };
 
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues!.idUtilisateur).toBe(unUUID('U1'));
 
-      expect(notifications[0].id).to.be('N2');
-      expect(notifications[0].statutLecture).to.be('lue');
-      expect(notifications[1].id).to.be('N1');
-      expect(notifications[1].statutLecture).to.be('nonLue');
+      expect(notifications[0].id).toBe('N2');
+      expect(notifications[0].statutLecture).toBe('lue');
+      expect(notifications[1].id).toBe('N1');
+      expect(notifications[1].statutLecture).toBe('nonLue');
     });
 
     it('ne retourne pas les nouveautés du futur', async () => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = unReferentiel({
         nouvellesFonctionnalites: [
           { id: 'N1', dateDeDeploiement: '2024-01-01' },
         ],
@@ -119,13 +129,15 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge: decembre2023,
       });
 
-      const notifications = await centreNotifications.toutesNotifications('U1');
+      const notifications = await centreNotifications.toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications.length).to.be(0);
+      expect(notifications.length).toBe(0);
     });
 
     it("ne retourne pas les nouveautés antécédentes à la création de l'utilisateur", async () => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = unReferentiel({
         nouvellesFonctionnalites: [
           { id: 'N1', dateDeDeploiement: '2023-01-01' },
         ],
@@ -142,29 +154,34 @@ describe('Le centre de notifications', () => {
         adaptateurHorloge: fabriqueAdaptateurHorloge(),
       });
 
-      const notifications = await centreNotifications.toutesNotifications('U1');
+      const notifications = await centreNotifications.toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications.length).to.be(0);
+      expect(notifications.length).toBe(0);
     });
 
     it('indique que la nouveaute doit être notifiée de sa lecture', async () => {
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications[0].doitNotifierLecture).to.be(true);
+      expect(notifications[0].doitNotifierLecture).toBe(true);
     });
 
     it('utilise la date de déploiement comme horodatage', async () => {
       referentiel.enrichis({
         nouvellesFonctionnalites: [
+          // @ts-expect-error On force des valeurs de test
           { id: 'N1', dateDeDeploiement: '2024-07-15' },
         ],
       });
 
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications[0].horodatage).to.eql(new Date('2024-07-15'));
+      expect(notifications[0].horodatage).toEqual(new Date('2024-07-15'));
     });
   });
 
@@ -172,12 +189,13 @@ describe('Le centre de notifications', () => {
     it("jette une erreur si l'identifiant de nouveauté n'est pas présent dans le référentiel", async () => {
       try {
         await centreDeNotification().marqueNouveauteLue(
-          'idUtilisateur',
+          unUUID('U1'),
+          // @ts-expect-error On force un ID inconnu
           'ID_NOUVEAUTE_INCONNU'
         );
-        expect().fail("L'appel aurait dû lever une exception.");
+        expect.fail("L'appel aurait dû lever une exception.");
       } catch (e) {
-        expect(e).to.be.an(ErreurIdentifiantNouveauteInconnu);
+        expect(e).toBeInstanceOf(ErreurIdentifiantNouveauteInconnu);
       }
     });
 
@@ -187,10 +205,11 @@ describe('Le centre de notifications', () => {
         donneesRecues = { idUtilisateur, idNouveaute };
       };
 
-      await centreDeNotification().marqueNouveauteLue('U1', 'N1');
+      // @ts-expect-error On utilise un idenfitiant de test
+      await centreDeNotification().marqueNouveauteLue(unUUID('U1'), 'N1');
 
-      expect(donneesRecues.idUtilisateur).to.be('U1');
-      expect(donneesRecues.idNouveaute).to.be('N1');
+      expect(donneesRecues!.idUtilisateur).toBe(unUUID('U1'));
+      expect(donneesRecues!.idNouveaute).toBe('N1');
     });
   });
 
@@ -198,22 +217,25 @@ describe('Le centre de notifications', () => {
     beforeEach(() => {
       referentiel.enrichis({
         nouvellesFonctionnalites: [],
+        // @ts-expect-error On force des valeurs de test
         naturesTachesService: { natureDeTest: { titre: '', lien: '/…' } },
       });
     });
 
     it('retourne les tâches', async () => {
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
-        idUtilisateur === 'U1'
+        idUtilisateur === unUUID('U1')
           ? [uneTacheDeService().avecId('T1').construis()]
           : [];
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs.length).to.be(1);
-      expect(notifs[0].id).to.be('T1');
-      expect(notifs[0].type).to.be('tache');
-      expect(notifs[0].canalDiffusion).to.be('centreNotifications');
+      expect(notifs.length).toBe(1);
+      expect(notifs[0].id).toBe('T1');
+      expect(notifs[0].type).toBe('tache');
+      expect(notifs[0].canalDiffusion).toBe('centreNotifications');
     });
 
     it('retourne uniquement les tâches non lues', async () => {
@@ -221,16 +243,18 @@ describe('Le centre de notifications', () => {
         uneTacheDeService().avecId('T1').faiteMaintenant().construis(),
       ];
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs.length).to.be(0);
+      expect(notifs.length).toBe(0);
     });
 
     it('complète les informations depuis le référentiel', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService().avecNature('niveauRetrograde').construis(),
       ];
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = unReferentiel({
         nouvellesFonctionnalites: [],
         naturesTachesService: {
           niveauRetrograde: {
@@ -244,11 +268,13 @@ describe('Le centre de notifications', () => {
         tachesCompletudeProfil: [],
       });
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].entete).to.be('Le besoin de sécurité a été modifié');
-      expect(notifs[0].titreCta).to.be('Voir le changement');
-      expect(notifs[0].titre).to.be(
+      expect(notifs[0].entete).toBe('Le besoin de sécurité a été modifié');
+      expect(notifs[0].titreCta).toBe('Voir le changement');
+      expect(notifs[0].titre).toBe(
         'Votre service [XXX] a désormais des besoins de sécurité modérés.'
       );
     });
@@ -256,107 +282,124 @@ describe('Le centre de notifications', () => {
     it('complète le titre avec les informations liées au service', async () => {
       referentiel.enrichis({
         naturesTachesService: {
+          // @ts-expect-error On force des valeurs de test
           natureDeTest: { titre: '--%NOM_SERVICE%--', lien: '' },
         },
       });
 
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService().avecUnServiceNomme('toto').construis(),
       ];
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].titre).to.be('--toto--');
+      expect(notifs[0].titre).toBe('--toto--');
     });
 
     it('complète le titre avec les informations des données de la tâche', async () => {
       referentiel.enrichis({
         naturesTachesService: {
+          // @ts-expect-error On force des valeurs de test
           natureDeTest: { titre: '--%nouveauxBesoins%--', lien: '' },
         },
       });
 
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService()
           .avecLesDonnees({ nouveauxBesoins: 'petits' })
           .construis(),
       ];
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].titre).to.be('--petits--');
+      expect(notifs[0].titre).toBe('--petits--');
     });
 
     it("peut utiliser n'importe quelle donnée de la tâche pour complèter le titre", async () => {
       referentiel.enrichis({
         naturesTachesService: {
+          // @ts-expect-error On force des valeurs de test
           natureDeTest: { titre: '--%nimportequoi%--', lien: '' },
         },
       });
 
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService()
           .avecLesDonnees({ nimportequoi: 'nimportequi' })
           .construis(),
       ];
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].titre).to.be('--nimportequi--');
+      expect(notifs[0].titre).toBe('--nimportequi--');
     });
 
     it("complète le lien avec l'ID du service", async () => {
       referentiel.enrichis({
         naturesTachesService: {
+          // @ts-expect-error On force des valeurs de test
           natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
         },
       });
 
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService().avecUnServiceId('S1').construis(),
       ];
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].lien).to.be('/service/S1/page');
+      expect(notifs[0].lien).toBe('/service/S1/page');
     });
 
     it('ne conserve pas les données du service', async () => {
       referentiel.enrichis({
         naturesTachesService: {
+          // @ts-expect-error On force des valeurs de test
           natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
         },
       });
 
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService().avecUnServiceId('S1').construis(),
       ];
 
-      const notifs = await centreDeNotification().toutesNotifications('U1');
+      const notifs = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifs[0].service).to.be(undefined);
+      expect(notifs[0].service).toBe(undefined);
     });
 
     it('indique que la tache doit être notifiée de sa lecture', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService().construis(),
       ];
 
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications[0].doitNotifierLecture).to.be(true);
+      expect(notifications[0].doitNotifierLecture).toBe(true);
     });
 
     it('utilise la date de création comme horodatage', async () => {
-      depotDonnees.tachesDesServices = async (_) => [
+      depotDonnees.tachesDesServices = async () => [
         uneTacheDeService()
           .avecDateDeCreation(new Date('2024-09-13'))
           .construis(),
       ];
 
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications[0].horodatage).to.eql(new Date('2024-09-13'));
+      expect(notifications[0].horodatage).toEqual(new Date('2024-09-13'));
     });
   });
 
@@ -365,23 +408,26 @@ describe('Le centre de notifications', () => {
       let idRecu;
       depotDonnees.utilisateur = async (idUtilisateur) => {
         idRecu = idUtilisateur;
+        return unUtilisateur().avecId(idUtilisateur).construis();
       };
 
-      await centreDeNotification().toutesNotifications('U1');
+      await centreDeNotification().toutesNotifications(unUUID('U1'));
 
-      expect(idRecu).to.be('U1');
+      expect(idRecu).toBe(unUUID('U1'));
     });
 
     it("reste robuste si l'utilisateur est introuvable", async () => {
       depotDonnees.utilisateur = async () => undefined;
 
-      const taches = await centreDeNotification().toutesNotifications('U1');
+      const taches = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(taches).to.be.an(Array);
+      expect(taches).toBeInstanceOf(Array);
     });
 
     it("renvoie un tableau vide si le profil de l'utilisateur est complet", async () => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = unReferentiel({
         nouvellesFonctionnalites: [],
       });
 
@@ -391,9 +437,11 @@ describe('Le centre de notifications', () => {
           .quiTravaillePourUneEntiteAvecSiret('12345')
           .construis();
 
-      const taches = await centreDeNotification().toutesNotifications('U1');
+      const taches = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(taches.length).to.be(0);
+      expect(taches.length).toBe(0);
     });
 
     describe("lorsque le SIRET de l'utilisateur est manquant", () => {
@@ -406,26 +454,30 @@ describe('Le centre de notifications', () => {
       });
 
       it('renvoie la notification correspondant au champ non renseigné du profil', async () => {
-        referentiel = Referentiel.creeReferentiel({
+        referentiel = unReferentiel({
           tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
         });
 
-        const taches = await centreDeNotification().toutesNotifications('U1');
+        const taches = await centreDeNotification().toutesNotifications(
+          unUUID('U1')
+        );
 
-        expect(taches.length).to.be(1);
-        expect(taches[0].titre).to.be('Titre tâche');
-        expect(taches[0].statutLecture).to.be('nonLue');
-        expect(taches[0].canalDiffusion).to.be('centreNotifications');
+        expect(taches.length).toBe(1);
+        expect(taches[0].titre).toBe('Titre tâche');
+        expect(taches[0].statutLecture).toBe('nonLue');
+        expect(taches[0].canalDiffusion).toBe('centreNotifications');
       });
 
       it("reste robuste si les données d'une tâche sont absentes du référentiel", async () => {
-        referentiel = Referentiel.creeReferentiel({
+        referentiel = unReferentiel({
           tachesCompletudeProfil: [],
         });
 
-        const taches = await centreDeNotification().toutesNotifications('U1');
+        const taches = await centreDeNotification().toutesNotifications(
+          unUUID('U1')
+        );
 
-        expect(taches.length).to.be(0);
+        expect(taches.length).toBe(0);
       });
     });
 
@@ -433,18 +485,20 @@ describe('Le centre de notifications', () => {
       it('renvoie uniquement la notification « globale » de profil à mettre à jour', async () => {
         depotDonnees.utilisateur = async () =>
           unUtilisateur().quiNAPasRempliSonProfil().construis();
-        referentiel = Referentiel.creeReferentiel({
+        referentiel = unReferentiel({
           tachesCompletudeProfil: [
             { id: 'profil', titre: 'Titre tâche' },
             { id: 'siret', titre: 'Titre tâche' },
           ],
         });
 
-        const taches = await centreDeNotification().toutesNotifications('U1');
+        const taches = await centreDeNotification().toutesNotifications(
+          unUUID('U1')
+        );
 
-        expect(taches.length).to.be(1);
-        expect(taches[0].id).to.be('profil');
-        expect(taches[0].canalDiffusion).to.be('centreNotifications');
+        expect(taches.length).toBe(1);
+        expect(taches[0].id).toBe('profil');
+        expect(taches[0].canalDiffusion).toBe('centreNotifications');
       });
     });
   });
@@ -456,7 +510,7 @@ describe('Le centre de notifications', () => {
           .quiSAppelle('Jean Valjean')
           .quiSEstInscritLe('2024-01-01')
           .construis();
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = unReferentiel({
         tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
         nouvellesFonctionnalites: [
           { id: 'N1', dateDeDeploiement: '2024-01-01' },
@@ -465,49 +519,55 @@ describe('Le centre de notifications', () => {
     });
 
     it('renvoie les tâches en attente en premier, puis les nouveautés', async () => {
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications.length).to.be(2);
-      expect(notifications[0].id).to.be('siret');
-      expect(notifications[1].id).to.be('N1');
+      expect(notifications.length).toBe(2);
+      expect(notifications[0].id).toBe('siret');
+      expect(notifications[1].id).toBe('N1');
     });
 
     it('ajoute le "type" de notifications', async () => {
-      const notifications =
-        await centreDeNotification().toutesNotifications('U1');
+      const notifications = await centreDeNotification().toutesNotifications(
+        unUUID('U1')
+      );
 
-      expect(notifications[0].type).to.be('tache');
-      expect(notifications[1].type).to.be('nouveaute');
+      expect(notifications[0].type).toBe('tache');
+      expect(notifications[1].type).toBe('nouveaute');
     });
   });
 
   describe('sur marquage de tâche de service lue', () => {
     it("jette une erreur si l'identifiant de tâche n'est pas présent dans le dépôt", async () => {
-      depotDonnees.tachesDesServices = async (_) => [];
+      depotDonnees.tachesDesServices = async () => [];
 
       try {
         await centreDeNotification().marqueTacheDeServiceLue(
-          'idUtilisateur',
+          unUUID('U1'),
+          // @ts-expect-error On force un ID inconnu
           'ID_INCONNU'
         );
-        expect().fail("L'appel aurait dû lever une exception.");
+        expect.fail("L'appel aurait dû lever une exception.");
       } catch (e) {
-        expect(e).to.be.an(ErreurIdentifiantTacheInconnu);
+        expect(e).toBeInstanceOf(ErreurIdentifiantTacheInconnu);
       }
     });
 
     it("délègue au dépôt de données le marquage à 'lu' de la tâche", async () => {
       let donneesRecues;
       depotDonnees.tachesDesServices = async (idUtilisateur) =>
-        idUtilisateur === 'U1' ? [{ id: 'T1' }] : [];
+        idUtilisateur === unUUID('U1') ? [{ id: unUUID('T1') }] : [];
       depotDonnees.marqueTacheDeServiceLue = async (idTache) => {
         donneesRecues = { idTache };
       };
 
-      await centreDeNotification().marqueTacheDeServiceLue('U1', 'T1');
+      await centreDeNotification().marqueTacheDeServiceLue(
+        unUUID('U1'),
+        unUUID('T1')
+      );
 
-      expect(donneesRecues.idTache).to.be('T1');
+      expect(donneesRecues!.idTache).toBe(unUUID('T1'));
     });
   });
 });
