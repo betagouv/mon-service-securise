@@ -18,7 +18,7 @@ export type NotificationDuCentre = {
   canalDiffusion: CanalDiffusion;
   statutLecture: StatutLecture;
   doitNotifierLecture: boolean;
-  horodatage: Date;
+  horodatage?: Date;
 };
 
 export interface SourceNotifications {
