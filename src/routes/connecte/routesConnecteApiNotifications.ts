@@ -4,28 +4,37 @@ import {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
 } from '../../erreurs.js';
+import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
+import { RequestRouteConnecte } from './routesConnecte.types.js';
 
 const routesConnecteApiNotifications = ({
   adaptateurHorloge,
   depotDonnees,
   referentiel,
+}: {
+  adaptateurHorloge: AdaptateurHorloge;
+  depotDonnees: DepotDonnees;
+  referentiel: TousReferentiels;
 }) => {
   const routes = express.Router();
 
   routes.get('/', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
       adaptateurHorloge,
     });
     reponse.json({
-      notifications: await centreNotifications.toutesNotifications(
-        requete.idUtilisateurCourant
-      ),
+      notifications:
+        await centreNotifications.toutesNotifications(idUtilisateurCourant),
     });
   });
 
   routes.put('/nouveautes/:id', async (requete, reponse, suite) => {
+    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
@@ -33,7 +42,7 @@ const routesConnecteApiNotifications = ({
     });
     try {
       await centreNotifications.marqueNouveauteLue(
-        requete.idUtilisateurCourant,
+        idUtilisateurCourant,
         requete.params.id
       );
       reponse.sendStatus(200);
@@ -47,6 +56,7 @@ const routesConnecteApiNotifications = ({
   });
 
   routes.put('/taches/:id', async (requete, reponse, suite) => {
+    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
     const centreNotifications = new CentreNotifications({
       depotDonnees,
       referentiel,
@@ -54,7 +64,7 @@ const routesConnecteApiNotifications = ({
     });
     try {
       await centreNotifications.marqueTacheDeServiceLue(
-        requete.idUtilisateurCourant,
+        idUtilisateurCourant,
         requete.params.id
       );
       reponse.sendStatus(200);
