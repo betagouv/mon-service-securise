@@ -111,6 +111,19 @@ const donnees = {
     },
   },
 
+  notificationsTransactionnelles: {
+    mentionDansMesure: {
+      type: 'activite',
+      titre: 'Mention',
+      sousTitre: (nomActeur: string, titreMesure: string, nomService: string) =>
+        `${nomActeur} vous a mentionné sur la mesure « ${titreMesure} » de [${nomService}]`,
+      titreCta: 'Voir le commentaire',
+      lien: (idService: string, idMesure: string) =>
+        `/service/${idService}/mesures?idMesure=${idMesure}&onglet=activite`,
+      canalDiffusion: 'centreNotifications',
+    },
+  },
+
   naturesSuggestionsActions: {
     miseAJourSiret: {
       lien: '/descriptionService',

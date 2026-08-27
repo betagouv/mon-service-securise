@@ -39,14 +39,17 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
           ? 'Un administrateur'
           : contributeur.prenomNom();
 
+        const { type, titre, sousTitre, titreCta, lien, canalDiffusion } =
+          service.referentiel.notificationTransactionnelle(n.donnees().type);
+
         return {
           id: n.donnees().id,
-          type: 'activite',
-          titre: 'Mention',
-          sousTitre: `${nomActeur} vous a mentionné sur la mesure « ${titreMesure} » de [${service.nomService()}]`,
-          titreCta: 'Voir le commentaire',
-          lien: `/service/${idService}/mesures?idMesure=${idMesure}&onglet=activite`,
-          canalDiffusion: 'centreNotifications',
+          type,
+          titre,
+          sousTitre: sousTitre(nomActeur, titreMesure, service.nomService()),
+          titreCta,
+          lien: lien(idService, idMesure),
+          canalDiffusion,
           statutLecture: n.donnees().lue
             ? StatutLecture.lue
             : StatutLecture.nonLue,
