@@ -19,6 +19,7 @@ export type NotificationDuCentre = {
   statutLecture: StatutLecture;
   doitNotifierLecture: boolean;
   horodatage?: Date;
+  date: () => Date;
 };
 
 export interface SourceNotifications {
