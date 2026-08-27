@@ -98,10 +98,12 @@
   let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined =
     $state();
 
-  $effect(() => {
+  const rafraichisComposant = () => {
     const requete = new URLSearchParams(window.location.search);
     const idModele = requete.get('idModele');
     const idMesure = requete.get('idMesure');
+    const onglet = requete.get('onglet') || undefined;
+
     if (idModele) {
       const mesureAssociee = $mesures.mesuresSpecifiques.find(
         (m) => m.idModele === idModele
@@ -109,10 +111,13 @@
       if (mesureAssociee) {
         $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
         const index = $mesures.mesuresSpecifiques.indexOf(mesureAssociee);
-        ouvreTiroirMesure({
-          mesure: { ...mesureAssociee },
-          metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
-        });
+        ouvreTiroirMesure(
+          {
+            mesure: { ...mesureAssociee },
+            metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
+          },
+          onglet
+        );
         enleveParametreDeUrl('idModele');
       }
     }
@@ -120,14 +125,20 @@
       const mesureAssociee = $mesures.mesuresGenerales[idMesure];
       if (mesureAssociee) {
         $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
-        ouvreTiroirMesure({
-          mesure: { ...mesureAssociee },
-          metadonnees: { typeMesure: 'GENERALE', idMesure: idMesure },
-        });
+        ouvreTiroirMesure(
+          {
+            mesure: { ...mesureAssociee },
+            metadonnees: { typeMesure: 'GENERALE', idMesure: idMesure },
+          },
+          onglet
+        );
         enleveParametreDeUrl('idMesure');
       }
     }
-  });
+    if (onglet) {
+      enleveParametreDeUrl('onglet');
+    }
+  };
 
   const rafraichisMesures = async () => {
     mesures.reinitialise(
@@ -137,7 +148,10 @@
       await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
-  const ouvreTiroirMesure = (mesureAEditer?: MesureAEditer) => {
+  const ouvreTiroirMesure = (
+    mesureAEditer?: MesureAEditer,
+    onglet?: string
+  ) => {
     mesureStore.reinitialise(mesureAEditer as MesureEditee | undefined);
     tiroirStore.afficheContenu(Mesure, {
       idService,
@@ -149,6 +163,7 @@
       modeVisiteGuidee,
       nonce,
       versionService,
+      onglet,
     });
   };
 
@@ -208,6 +223,8 @@
 
     if (!$nombreResultats.nombreParAvancement.statutADefinir)
       $rechercheParAvancement = 'enAction';
+
+    rafraichisComposant();
   });
 
   let afficheLaModaleExplicationRisquesV2 = $derived.by(() => {
