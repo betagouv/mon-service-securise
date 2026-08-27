@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import express from 'express';
 import CentreNotifications from '../../notifications/centreNotifications.js';
 import {
@@ -8,6 +9,11 @@ import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
+import {
+  schemaPutNouveaute,
+  schemaPutTache,
+} from './routesConnecteApiNotifications.schema.js';
+import { valideParams } from '../../http/validePayloads.js';
 
 const routesConnecteApiNotifications = ({
   adaptateurHorloge,
@@ -33,49 +39,59 @@ const routesConnecteApiNotifications = ({
     });
   });
 
-  routes.put('/nouveautes/:id', async (requete, reponse, suite) => {
-    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
-    const centreNotifications = new CentreNotifications({
-      depotDonnees,
-      referentiel,
-      adaptateurHorloge,
-    });
-    try {
-      await centreNotifications.marqueNouveauteLue(
-        idUtilisateurCourant,
-        requete.params.id
-      );
-      reponse.sendStatus(200);
-    } catch (e) {
-      if (e instanceof ErreurIdentifiantNouveauteInconnu) {
-        reponse.status(400).send('Identifiant de nouveauté inconnu');
-        return;
+  routes.put(
+    '/nouveautes/:id',
+    valideParams(z.strictObject(schemaPutNouveaute(referentiel))),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const centreNotifications = new CentreNotifications({
+        depotDonnees,
+        referentiel,
+        adaptateurHorloge,
+      });
+      try {
+        await centreNotifications.marqueNouveauteLue(
+          idUtilisateurCourant,
+          requete.params.id
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurIdentifiantNouveauteInconnu) {
+          reponse.status(400).send('Identifiant de nouveauté inconnu');
+          return;
+        }
+        suite(e);
       }
-      suite(e);
     }
-  });
+  );
 
-  routes.put('/taches/:id', async (requete, reponse, suite) => {
-    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
-    const centreNotifications = new CentreNotifications({
-      depotDonnees,
-      referentiel,
-      adaptateurHorloge,
-    });
-    try {
-      await centreNotifications.marqueTacheDeServiceLue(
-        idUtilisateurCourant,
-        requete.params.id
-      );
-      reponse.sendStatus(200);
-    } catch (e) {
-      if (e instanceof ErreurIdentifiantTacheInconnu) {
-        reponse.status(400).send('Identifiant de tâche inconnu');
-        return;
+  routes.put(
+    '/taches/:id',
+    valideParams(z.strictObject(schemaPutTache())),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const centreNotifications = new CentreNotifications({
+        depotDonnees,
+        referentiel,
+        adaptateurHorloge,
+      });
+      try {
+        await centreNotifications.marqueTacheDeServiceLue(
+          idUtilisateurCourant,
+          requete.params.id
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurIdentifiantTacheInconnu) {
+          reponse.status(400).send('Identifiant de tâche inconnu');
+          return;
+        }
+        suite(e);
       }
-      suite(e);
     }
-  });
+  );
 
   return routes;
 };

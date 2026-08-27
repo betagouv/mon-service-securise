@@ -2,21 +2,26 @@ import testeurMSS from '../testeurMSS.js';
 import { ErreurIdentifiantTacheInconnu } from '../../../src/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { UUID } from '../../../src/typesBasiques.ts';
+import { creeReferentiel } from '../../../src/referentiel.ts';
+import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
 
-  beforeEach(() => testeur.initialise());
-
-  beforeEach(() => {
-    testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-    testeur.referentiel().recharge({
+  beforeEach(async () => {
+    const referentiel = creeReferentiel();
+    referentiel.recharge({
       nouvellesFonctionnalites: [
+        // @ts-expect-error on charge partiellement
         { id: 'N1', dateDeDeploiement: '2024-01-01' },
+        // @ts-expect-error on charge partiellement
         { id: 'N2', dateDeDeploiement: '2024-02-02' },
       ],
       tachesCompletudeProfil: [],
     });
+    await testeur.initialise(referentiel);
+    testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+
     testeur.depotDonnees().utilisateur = async () =>
       unUtilisateur()
         .quiSAppelle('Jean Dujardin')
@@ -63,32 +68,42 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         '/api/notifications/nouveautes/ID_INCONNU'
       );
       expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('Identifiant de nouveauté inconnu');
     });
   });
 
   describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
     it('délègue au dépôt via le centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
-      testeur.depotDonnees().tachesDesServices = async () => [{ id: 'T1' }];
+      const id = unUUIDRandom();
+      testeur.depotDonnees().tachesDesServices = async () => [{ id }];
       testeur.depotDonnees().marqueTacheDeServiceLue = async (
         idTache: UUID
       ) => {
         donneesRecues = { idTache };
       };
 
-      const reponse = await testeur.put('/api/notifications/taches/T1');
+      const reponse = await testeur.put(`/api/notifications/taches/${id}`);
 
       expect(reponse.status).toBe(200);
       expect(donneesRecues).toBeDefined();
-      expect(donneesRecues!.idTache).toBe('T1');
+      expect(donneesRecues!.idTache).toBe(id);
+    });
+
+    it("jette une erreur si l'identifiant n'est pas un uuid", async () => {
+      testeur.depotDonnees().marqueTacheDeServiceLue = async () => {
+        throw new ErreurIdentifiantTacheInconnu();
+      };
+      const reponse = await testeur.put('/api/notifications/taches/ID_INCONNU');
+      expect(reponse.status).toBe(400);
     });
 
     it("reste robuste en cas d'erreur", async () => {
       testeur.depotDonnees().marqueTacheDeServiceLue = async () => {
         throw new ErreurIdentifiantTacheInconnu();
       };
-      const reponse = await testeur.put('/api/notifications/taches/ID_INCONNU');
+      const reponse = await testeur.put(
+        `/api/notifications/taches/${unUUIDRandom()}`
+      );
       expect(reponse.status).toBe(400);
       expect(reponse.text).toBe('Identifiant de tâche inconnu');
     });
