@@ -3,6 +3,7 @@ import { UUID } from '../../typesBasiques.js';
 export type DonneesNotificationTransactionnelle =
   DonneesCreationNotificationTransactionnelle & {
     id: UUID;
+    lue: boolean;
   };
 
 export type DonneesCreationNotificationTransactionnelle = {
@@ -23,11 +24,16 @@ export class NotificationTransactionnelle {
   ) {
     return new NotificationTransactionnelle({
       id: crypto.randomUUID(),
+      lue: false,
       ...donneesNotification,
     });
   }
 
   donnees(): DonneesNotificationTransactionnelle {
     return this.donneesNotification;
+  }
+
+  marqueCommeLue() {
+    this.donneesNotification.lue = true;
   }
 }
