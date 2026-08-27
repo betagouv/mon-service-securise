@@ -8,28 +8,39 @@
 
   let { notification }: Props = $props();
 
-  let configurationCarte = $derived(
-    notification.type === 'nouveaute'
-      ? {
-          titre: notification.titre,
-          description: notification.sousTitre,
-          src: `/statique/assets/images/notifications/illustrations/${notification.image}`,
-          blank: true,
-          badge: {
-            couleur: 'yellow-moutarde',
-            icone: 'flashlight-fill',
-            libelle: 'Nouveauté',
-          },
-        }
-      : {
-          titre: notification.titre,
-          description: notification.sousTitre,
-          badge: {
-            couleur: 'blue-cumulus',
-            libelle: 'À faire',
-          },
-        }
-  );
+  let configurationCarte = $derived.by(() => {
+    if (notification.type === 'nouveaute') {
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        src: `/statique/assets/images/notifications/illustrations/${notification.image}`,
+        blank: true,
+        badge: {
+          couleur: 'yellow-moutarde',
+          icone: 'flashlight-fill',
+          libelle: 'Nouveauté',
+        },
+      };
+    }
+    if (notification.type === 'tache') {
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'blue-cumulus',
+          libelle: 'À faire',
+        },
+      };
+    }
+    return {
+      titre: notification.titre,
+      description: notification.sousTitre,
+      badge: {
+        couleur: 'green-emeraude',
+        libelle: 'Activités',
+      },
+    };
+  });
 
   let actionClick = $derived(
     notification.doitNotifierLecture
