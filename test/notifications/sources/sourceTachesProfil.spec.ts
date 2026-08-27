@@ -89,13 +89,20 @@ describe('Les notifications de tâche profil', () => {
 
     it('renvoie la notification correspondant au champ non renseigné du profil', async () => {
       referentiel = unReferentiel({
-        tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
+        tachesCompletudeProfil: [
+          {
+            id: 'siret',
+            entete: 'Complétez votre profil',
+            titre: 'Des Explications',
+          },
+        ],
       });
 
       const taches = await laSource().notificationsPour(unUUID('U1'));
 
       expect(taches.length).toBe(1);
-      expect(taches[0].titre).toBe('Titre tâche');
+      expect(taches[0].titre).toBe('Complétez votre profil');
+      expect(taches[0].sousTitre).toBe('Des Explications');
       expect(taches[0].statutLecture).toBe('nonLue');
       expect(taches[0].canalDiffusion).toBe('centreNotifications');
     });

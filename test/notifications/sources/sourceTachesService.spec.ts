@@ -83,14 +83,14 @@ describe('Les notifications de tâche service', () => {
 
     const notifs = await laSource().notificationsPour(unUUID('U1'));
 
-    expect(notifs[0].entete).toBe('Le besoin de sécurité a été modifié');
+    expect(notifs[0].titre).toBe('Le besoin de sécurité a été modifié');
     expect(notifs[0].titreCta).toBe('Voir le changement');
-    expect(notifs[0].titre).toBe(
+    expect(notifs[0].sousTitre).toBe(
       'Votre service [XXX] a désormais des besoins de sécurité modérés.'
     );
   });
 
-  it('complète le titre avec les informations liées au service', async () => {
+  it('complète le sous-titre avec les informations liées au service', async () => {
     referentiel.enrichis({
       naturesTachesService: {
         // @ts-expect-error On force des valeurs de test
@@ -104,10 +104,10 @@ describe('Les notifications de tâche service', () => {
 
     const notifs = await laSource().notificationsPour(unUUID('U1'));
 
-    expect(notifs[0].titre).toBe('--toto--');
+    expect(notifs[0].sousTitre).toBe('--toto--');
   });
 
-  it('complète le titre avec les informations des données de la tâche', async () => {
+  it('complète le sous-titre avec les informations des données de la tâche', async () => {
     referentiel.enrichis({
       naturesTachesService: {
         // @ts-expect-error On force des valeurs de test
@@ -122,10 +122,10 @@ describe('Les notifications de tâche service', () => {
     ];
     const notifs = await laSource().notificationsPour(unUUID('U1'));
 
-    expect(notifs[0].titre).toBe('--petits--');
+    expect(notifs[0].sousTitre).toBe('--petits--');
   });
 
-  it("peut utiliser n'importe quelle donnée de la tâche pour complèter le titre", async () => {
+  it("peut utiliser n'importe quelle donnée de la tâche pour complèter le sous-titre", async () => {
     referentiel.enrichis({
       naturesTachesService: {
         // @ts-expect-error On force des valeurs de test
@@ -140,7 +140,7 @@ describe('Les notifications de tâche service', () => {
     ];
     const notifs = await laSource().notificationsPour(unUUID('U1'));
 
-    expect(notifs[0].titre).toBe('--nimportequi--');
+    expect(notifs[0].sousTitre).toBe('--nimportequi--');
   });
 
   it("complète le lien avec l'ID du service", async () => {
@@ -174,6 +174,7 @@ describe('Les notifications de tâche service', () => {
 
     const notifs = await laSource().notificationsPour(unUUID('U1'));
 
+    // @ts-expect-error on teste justement qu'on n'a pas de service
     expect(notifs[0].service).toBe(undefined);
   });
 

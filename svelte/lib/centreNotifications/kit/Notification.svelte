@@ -22,8 +22,8 @@
           },
         }
       : {
-          titre: notification.entete,
-          description: notification.titre,
+          titre: notification.titre,
+          description: notification.sousTitre,
           badge: {
             couleur: 'blue-cumulus',
             libelle: 'À faire',

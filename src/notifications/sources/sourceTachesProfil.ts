@@ -35,18 +35,24 @@ export class SourceTachesProfil implements SourceNotifications {
 
     const profilDeInvite = completudeProfil.champsNonRenseignes.includes('nom');
 
-    const tachesAFaire = profilDeInvite
-      ? [this.referentiel.tacheCompletudeProfil('profil') as DonneesTacheProfil]
-      : (completudeProfil.champsNonRenseignes
-          .map((champ) =>
+    const tachesAFaire = (
+      profilDeInvite
+        ? [
+            this.referentiel.tacheCompletudeProfil(
+              'profil'
+            ) as DonneesTacheProfil,
+          ]
+        : completudeProfil.champsNonRenseignes.map((champ) =>
             this.referentiel.tacheCompletudeProfil(
               champ as IdTacheCompletudeProfil
             )
           )
-          .filter((t) => t !== undefined) as DonneesTacheProfil[]);
+    ).filter((t) => t !== undefined) as DonneesTacheProfil[];
 
-    return tachesAFaire.map((t) => ({
+    return tachesAFaire.map(({ entete, ...t }) => ({
       ...t,
+      titre: entete,
+      sousTitre: t.titre,
       statutLecture: StatutLecture.nonLue,
       canalDiffusion: 'centreNotifications',
       type: 'tache',
