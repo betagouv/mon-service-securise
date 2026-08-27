@@ -41,4 +41,29 @@ describe('Le modèle de notification transactionnelle', () => {
 
     expect(notification.donnees().lue).toBe(true);
   });
+
+  it('peut être hydratée avec des données', () => {
+    const date = new Date();
+
+    const notification = NotificationTransactionnelle.hydrate({
+      id: unUUID('I'),
+      lue: true,
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'mentionDansMesure',
+      date,
+      metadonnees: { proprietes: 42 },
+    });
+
+    expect(notification).toBeInstanceOf(NotificationTransactionnelle);
+    expect(notification.donnees()).toEqual({
+      id: unUUID('I'),
+      lue: true,
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'mentionDansMesure',
+      date,
+      metadonnees: { proprietes: 42 },
+    });
+  });
 });

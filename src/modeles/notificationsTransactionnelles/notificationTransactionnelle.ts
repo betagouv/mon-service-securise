@@ -29,6 +29,10 @@ export class NotificationTransactionnelle {
     });
   }
 
+  static hydrate(donnees: DonneesNotificationTransactionnelle) {
+    return new NotificationTransactionnelle(donnees);
+  }
+
   donnees(): DonneesNotificationTransactionnelle {
     return this.donneesNotification;
   }
