@@ -51,6 +51,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
     expect(notifications).toHaveLength(1);
     expect(notifications[0]).toEqual({
       id: expect.any(String),
+      lue: false,
       idActeur: unUUID('U1'),
       idDestinataire,
       metadonnees: {

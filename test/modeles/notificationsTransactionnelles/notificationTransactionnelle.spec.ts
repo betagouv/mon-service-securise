@@ -2,7 +2,16 @@ import { NotificationTransactionnelle } from '../../../src/modeles/notifications
 import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('Le modèle de notification transactionnelle', () => {
-  it('peut être créée en insérant un `id`', () => {
+  const uneNotification = () =>
+    NotificationTransactionnelle.nouveau({
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'mentionDansMesure',
+      date: new Date(),
+      metadonnees: {},
+    });
+
+  it('peut être créée en insérant un `id`, non lue par défaut', () => {
     const date = new Date();
 
     const notification = NotificationTransactionnelle.nouveau({
@@ -16,11 +25,20 @@ describe('Le modèle de notification transactionnelle', () => {
     expect(notification).toBeInstanceOf(NotificationTransactionnelle);
     expect(notification.donnees()).toEqual({
       id: expect.any(String),
+      lue: false,
       idActeur: unUUID('A'),
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
       metadonnees: {},
     });
+  });
+
+  it('peut être marqué comme lue', () => {
+    const notification = uneNotification();
+
+    notification.marqueCommeLue();
+
+    expect(notification.donnees().lue).toBe(true);
   });
 });
