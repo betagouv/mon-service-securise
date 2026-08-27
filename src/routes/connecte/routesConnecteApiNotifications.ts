@@ -2,6 +2,7 @@ import { z } from 'zod';
 import express from 'express';
 import CentreNotifications from '../../notifications/centreNotifications.js';
 import {
+  ErreurIdentifiantNotificationTransactionnelleInconnu,
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
 } from '../../erreurs.js';
@@ -98,23 +99,28 @@ const routesConnecteApiNotifications = ({
   routes.put(
     '/transactionnelles/:id',
     valideParams(z.strictObject(schemaPutNotificationTransactionnelle())),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
 
-      const notification = await depotDonnees.lisNotificationDe(
-        requete.params.id as UUID,
-        idUtilisateurCourant
-      );
-
-      if (!notification) {
-        return reponse.sendStatus(404);
+      const centreNotifications = new CentreNotifications({
+        depotDonnees,
+        referentiel,
+        adaptateurHorloge,
+      });
+      try {
+        await centreNotifications.marqueNotificationTransactionnelleLue(
+          requete.params.id as UUID,
+          idUtilisateurCourant
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurIdentifiantNotificationTransactionnelleInconnu) {
+          reponse.sendStatus(404);
+          return;
+        }
+        suite(e);
       }
-
-      notification.marqueCommeLue();
-      await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
-
-      return reponse.sendStatus(200);
     }
   );
 
