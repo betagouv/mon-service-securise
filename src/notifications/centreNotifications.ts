@@ -12,6 +12,7 @@ import { SourceNotifications } from './notification.types.js';
 import { SourceNouveautes } from './sources/sourceNouveautes.js';
 import { SourceTachesProfil } from './sources/sourceTachesProfil.js';
 import { SourceTachesService } from './sources/sourceTachesService.js';
+import { SourceNotificationsTransactionnelles } from './sources/sourceNotificationsTransactionnelles.js';
 
 class CentreNotifications {
   private readonly referentiel: TousReferentiels;
@@ -38,6 +39,7 @@ class CentreNotifications {
       new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesProfil(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesService(referentiel, depotDonnees),
+      new SourceNotificationsTransactionnelles(depotDonnees),
     ];
   }
 
