@@ -20,6 +20,7 @@ import {
   IdNiveauGravite,
   IdNiveauRisque,
   IdNiveauSecurite,
+  IdNotificationTransactionnelle,
   IdReferentielMesure,
   IdRisque,
   IdStatutAvis,
@@ -524,6 +525,9 @@ const creeReferentiel = (
     };
   };
 
+  const notificationTransactionnelle = (id: IdNotificationTransactionnelle) =>
+    donnees.notificationsTransactionnelles[id];
+
   const estStatutMesureConnu = (statut: IdStatutMesure) =>
     identifiantsStatutsMesures().includes(statut);
 
@@ -625,6 +629,7 @@ const creeReferentiel = (
     nombreMaximumDeModelesMesureSpecifiqueParUtilisateur,
     nombreOrganisationsUtilisatrices,
     nombreOrganisationsUtilisatricesParLabel,
+    notificationTransactionnelle,
     nouvellesFonctionnalites,
     numeroEtape,
     optionsFiltrageDate,

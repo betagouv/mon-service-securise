@@ -34,6 +34,8 @@ export type IdNiveauSecurite = (typeof donnees.niveauxDeSecurite)[number];
 export type IdStatutAvis = keyof typeof donnees.statutsAvisDossierHomologation;
 export type IdNouvelleFonctionnalite =
   (typeof donnees.nouvellesFonctionnalites)[number]['id'];
+export type IdNotificationTransactionnelle =
+  keyof typeof donnees.notificationsTransactionnelles;
 
 export type DonneesReferentiel = {
   indiceCyber: {

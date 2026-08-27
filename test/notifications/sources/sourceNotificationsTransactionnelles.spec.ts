@@ -155,6 +155,7 @@ describe('Les notifications de nouveautés', () => {
         );
       });
     });
+
     describe('pour une notification de mention dans une mesure spécifique', async () => {
       beforeEach(async () => {
         await depotDonnees.sauvegardeNotificationTransactionnelle(
