@@ -49,7 +49,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
 
     const notifications = await depotDonnees.lisNotifications(idDestinataire);
     expect(notifications).toHaveLength(1);
-    expect(notifications[0]).toEqual({
+    expect(notifications[0].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
       idActeur: unUUID('U1'),
