@@ -13,6 +13,8 @@ import {
   IdTacheCompletudeProfil,
 } from '../referentiel.types.js';
 import Service from '../modeles/service.js';
+import { SourceNotifications, StatutLecture } from './notification.types.js';
+import { SourceNouveautes } from './sources/sourceNouveautes.js';
 
 type Notification = {
   lien: string;
@@ -22,29 +24,12 @@ type Notification = {
   titre: string;
 };
 
-enum StatutLecture {
-  lue = 'lue',
-  nonLue = 'nonLue',
-}
-
 type TacheProfil = {
   id: IdTacheCompletudeProfil;
   lien: string;
   entete: string;
   titre: string;
   titreCta: string;
-};
-
-type Nouveaute = {
-  id: IdNouvelleFonctionnalite;
-  dateDeDeploiement: string;
-  lien: string;
-  titre: string;
-  sousTitre: string;
-  image: string;
-  canalDiffusion: string;
-  titreCta: string;
-  statutLecture?: StatutLecture;
 };
 
 type TacheService = {
@@ -68,6 +53,7 @@ class CentreNotifications {
   private readonly referentiel: TousReferentiels;
   private readonly depotDonnees: DepotDonnees;
   private readonly adaptateurHorloge: AdaptateurHorloge;
+  private readonly sources: SourceNotifications[];
 
   constructor({
     referentiel,
@@ -86,12 +72,14 @@ class CentreNotifications {
     this.referentiel = referentiel;
     this.depotDonnees = depotDonnees;
     this.adaptateurHorloge = adaptateurHorloge;
+    this.sources = [
+      new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
+    ];
   }
 
   async toutesNotifications(idUtilisateur: UUID) {
-    const [tachesProfil, nouveautes, tachesDesServices] = await Promise.all([
+    const [tachesProfil, tachesDesServices] = await Promise.all([
       this.toutesTachesProfilUtilisateur(idUtilisateur),
-      this.toutesNouveautes(idUtilisateur),
       this.toutesTachesDeServiceNonLues(idUtilisateur),
     ]);
 
@@ -101,14 +89,7 @@ class CentreNotifications {
         type: 'tache',
         date: () => this.adaptateurHorloge.maintenant(),
       })),
-      ...nouveautes.map((t: Nouveaute) => ({
-        ...t,
-        type: 'nouveaute',
-        doitNotifierLecture: true,
-        date: () => new Date(t.dateDeDeploiement),
-        horodatage: new Date(t.dateDeDeploiement),
-      })),
-
+      ...(await this.sources[0].notificationsPour(idUtilisateur)),
       ...tachesDesServices.map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ service: _service, ...donneesTache }: TacheService) => ({
@@ -153,30 +134,6 @@ class CentreNotifications {
       (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
       notification.titre
     );
-  }
-
-  async toutesNouveautes(idUtilisateur: UUID) {
-    const avant = this.referentiel.nouvellesFonctionnalites();
-
-    const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
-
-    const toutesNouveautes = avant.filter(
-      (n) =>
-        new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant() &&
-        new Date(n.dateDeDeploiement) >=
-          new Date(utilisateur?.dateCreation ?? 0)
-    );
-
-    const etatLectureNouveautes =
-      await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);
-
-    return toutesNouveautes.map((n: Nouveaute) => {
-      // eslint-disable-next-line no-param-reassign
-      n.statutLecture = etatLectureNouveautes.includes(n.id)
-        ? StatutLecture.lue
-        : StatutLecture.nonLue;
-      return n;
-    });
   }
 
   async marqueNouveauteLue(
