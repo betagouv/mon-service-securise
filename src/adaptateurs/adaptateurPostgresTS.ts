@@ -169,6 +169,23 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       })
       .where({ id_destinataire: idDestinataire });
   }
+  async lisNotificationDe(
+    idNotification: UUID,
+    idDestinataire: UUID
+  ): Promise<DonneesNotificationTransactionnelle | undefined> {
+    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+      .select({
+        id: 'id',
+        lue: 'lue',
+        idActeur: 'id_acteur',
+        idDestinataire: 'id_destinataire',
+        metadonnees: 'metadonnees',
+        type: 'type',
+        date: 'date',
+      })
+      .where({ id_destinataire: idDestinataire, id: idNotification })
+      .first();
+  }
 
   async sauvegardeNotificationTransactionnelle(
     donnees: DonneesNotificationTransactionnelle

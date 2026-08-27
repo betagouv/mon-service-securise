@@ -21,6 +21,10 @@ export interface PersistanceTS {
     siret: string
   ) => Promise<Array<DonneesSuperviseur>>;
   supprimeSuperviseur: (idUtilisateur: UUID) => Promise<void>;
+  lisNotificationDe: (
+    idNotification: UUID,
+    idDestinataire: UUID
+  ) => Promise<DonneesNotificationTransactionnelle | undefined>;
   lisNotificationsDe: (
     idDestinataire: UUID
   ) => Promise<DonneesNotificationTransactionnelle[]>;
