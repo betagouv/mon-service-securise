@@ -11,6 +11,7 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import {
+  schemaDeleteNotificationTransactionnelle,
   schemaPutNotificationTransactionnelle,
   schemaPutNouveaute,
   schemaPutTache,
@@ -110,6 +111,34 @@ const routesConnecteApiNotifications = ({
       });
       try {
         await centreNotifications.marqueNotificationTransactionnelleLue(
+          requete.params.id as UUID,
+          idUtilisateurCourant
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurIdentifiantNotificationTransactionnelleInconnu) {
+          reponse.sendStatus(404);
+          return;
+        }
+        suite(e);
+      }
+    }
+  );
+
+  routes.delete(
+    '/transactionnelles/:id',
+    valideParams(z.strictObject(schemaDeleteNotificationTransactionnelle())),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
+      const centreNotifications = new CentreNotifications({
+        depotDonnees,
+        referentiel,
+        adaptateurHorloge,
+      });
+      try {
+        await centreNotifications.supprimeNotificationTransactionnelle(
           requete.params.id as UUID,
           idUtilisateurCourant
         );

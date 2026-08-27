@@ -12,3 +12,7 @@ export const schemaPutTache = () => ({
 export const schemaPutNotificationTransactionnelle = () => ({
   id: z.uuid(),
 });
+
+export const schemaDeleteNotificationTransactionnelle = () => ({
+  id: z.uuid(),
+});

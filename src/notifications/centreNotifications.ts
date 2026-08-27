@@ -242,6 +242,24 @@ class CentreNotifications {
       notification
     );
   }
+
+  async supprimeNotificationTransactionnelle(
+    idNotification: UUID,
+    idUtilisateur: UUID
+  ) {
+    const notification = await this.depotDonnees.lisNotificationDe(
+      idNotification,
+      idUtilisateur
+    );
+
+    if (!notification) {
+      throw new ErreurIdentifiantNotificationTransactionnelleInconnu();
+    }
+
+    await this.depotDonnees.supprimeNotificationTransactionnelle(
+      idNotification
+    );
+  }
 }
 
 export default CentreNotifications;
