@@ -15,6 +15,7 @@ import Service from '../modeles/service.js';
 import { SourceNotifications, StatutLecture } from './notification.types.js';
 import { SourceNouveautes } from './sources/sourceNouveautes.js';
 import { SourceTachesProfil } from './sources/sourceTachesProfil.js';
+import { SourceTachesService } from './sources/sourceTachesService.js';
 
 type Notification = {
   lien: string;
@@ -59,61 +60,18 @@ class CentreNotifications {
     this.sources = [
       new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesProfil(referentiel, depotDonnees, adaptateurHorloge),
+      new SourceTachesService(referentiel, depotDonnees),
     ];
   }
 
   async toutesNotifications(idUtilisateur: UUID) {
-    const [tachesDesServices] = await Promise.all([
-      this.toutesTachesDeServiceNonLues(idUtilisateur),
-    ]);
-
-    return [
-      ...(await this.sources[0].notificationsPour(idUtilisateur)),
-      ...(await this.sources[1].notificationsPour(idUtilisateur)),
-      ...tachesDesServices.map(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ({ service: _service, ...donneesTache }: TacheService) => ({
-          ...donneesTache,
-          type: 'tache',
-          doitNotifierLecture: true,
-          date: () => donneesTache.dateCreation,
-          horodatage: donneesTache.dateCreation,
-        })
-      ),
-    ].sort((a, b) => b.date() - a.date());
-  }
-
-  async toutesTachesDeServiceNonLues(idUtilisateur: UUID) {
-    const taches = await this.depotDonnees.tachesDesServices(idUtilisateur);
-    const notifications = taches
-      .filter((tache: TacheService) => !tache.dateFaite)
-      .map((tache: TacheService) => ({
-        ...tache,
-        ...this.referentiel.natureTachesService(tache.nature),
-        canalDiffusion: 'centreNotifications',
-      }));
-
-    return notifications.map((notification: Notification) => ({
-      ...notification,
-      titre: CentreNotifications.titreFusionne(notification),
-      lien: notification.lien.replace('%ID_SERVICE%', notification.service.id),
-      statutLecture: notification.dateFaite
-        ? StatutLecture.lue
-        : StatutLecture.nonLue,
-    }));
-  }
-
-  static titreFusionne(notification: Notification) {
-    const champsDonnees = Object.keys(notification.donnees || {});
-    const valeurReelle = (champ: string): string => {
-      if (champ === 'NOM_SERVICE') return notification.service?.nomService();
-      return notification.donnees?.[champ] as string;
-    };
-
-    return ['NOM_SERVICE', ...champsDonnees].reduce(
-      (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
-      notification.titre
+    const toutes = await Promise.all(
+      this.sources.map((s) => s.notificationsPour(idUtilisateur))
     );
+
+    return toutes
+      .flat()
+      .sort((a, b) => b.date().getTime() - a.date().getTime());
   }
 
   async marqueNouveauteLue(
