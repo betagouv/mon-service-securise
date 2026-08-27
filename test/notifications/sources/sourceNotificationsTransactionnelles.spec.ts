@@ -10,6 +10,7 @@ import { SourceNotificationsTransactionnelles } from '../../../src/notifications
 import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import Mesures from '../../../src/modeles/mesures.js';
 
 describe('Les notifications de nouveautés', () => {
   let depotDonnees: DepotDonnees;
@@ -31,19 +32,30 @@ describe('Les notifications de nouveautés', () => {
     const dateNotif = new Date();
     const idService = unUUID('S1');
     const idActeur = unUUID('A');
-    const notificationTransactionnelle = NotificationTransactionnelle.nouveau({
+    const notificationMesureGenerale = NotificationTransactionnelle.nouveau({
       idActeur,
       idDestinataire: idUtilisateur,
       type: 'mentionDansMesure',
       date: dateNotif,
-      metadonnees: { idService, idMesure: 'RECENSEMENT.1' },
+      metadonnees: {
+        idService,
+        idMesure: 'RECENSEMENT.1',
+        typeMesure: 'generale',
+      },
+    });
+    const notificationMesureSpecifique = NotificationTransactionnelle.nouveau({
+      idActeur,
+      idDestinataire: idUtilisateur,
+      type: 'mentionDansMesure',
+      date: dateNotif,
+      metadonnees: {
+        idService,
+        idMesure: unUUID('M'),
+        typeMesure: 'specifique',
+      },
     });
 
     beforeEach(async () => {
-      await depotDonnees.sauvegardeNotificationTransactionnelle(
-        notificationTransactionnelle
-      );
-
       depotDonnees.services = async () => [
         unServiceV2()
           .avecNomService('Mairie de Bordeaux')
@@ -51,48 +63,112 @@ describe('Les notifications de nouveautés', () => {
           .ajouteUnContributeur(
             unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur').donnees
           )
+          .avecMesures(
+            new Mesures(
+              {
+                mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'fait' }],
+                mesuresSpecifiques: [
+                  {
+                    id: unUUID('M'),
+                    statut: 'fait',
+                    description: 'Spécifique',
+                  },
+                ],
+              },
+              // @ts-expect-error il infère sur du js un référentiel v1
+              creeReferentielV2(),
+              {
+                'RECENSEMENT.1': { categorie: 'gouvernance' },
+              }
+            )
+          )
           .construis(),
       ];
     });
 
-    it("mets en forme la notification 'mentionDansMesure'", async () => {
-      const notifications = await laSource().notificationsPour(idUtilisateur);
+    describe('pour une notification de mention dans une mesure générale', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureGenerale
+        );
+      });
 
-      expect(notifications).toHaveLength(1);
-      expect(notifications[0]).toEqual({
-        id: notificationTransactionnelle.donnees().id,
-        type: 'activite',
-        titre: 'Mention',
-        sousTitre: expect.any(String),
-        titreCta: 'Voir le commentaire',
-        lien: expect.any(String),
-        canalDiffusion: 'centreNotifications',
-        statutLecture: 'nonLue',
-        doitNotifierLecture: true,
-        horodatage: dateNotif,
-        date: expect.any(Function),
+      it("mets en forme la notification 'mentionDansMesure'", async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0]).toEqual({
+          id: notificationMesureGenerale.donnees().id,
+          type: 'activite',
+          titre: 'Mention',
+          sousTitre: expect.any(String),
+          titreCta: 'Voir le commentaire',
+          lien: expect.any(String),
+          canalDiffusion: 'centreNotifications',
+          statutLecture: 'nonLue',
+          doitNotifierLecture: true,
+          horodatage: dateNotif,
+          date: expect.any(Function),
+        });
+      });
+
+      it('met en forme le lien', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].lien).toBe(
+          `/service/${idService}/mesures?idMesure=RECENSEMENT.1&onglet=activite`
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "Jean Acteur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
+        );
+      });
+
+      it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+        depotDonnees.services = async () => [];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(0);
+      });
+      it("masque le nom d'un admin", async () => {
+        depotDonnees.services = async () => [
+          unServiceV2()
+            .avecNomService('Mairie de Bordeaux')
+            .avecId(idService)
+            .ajouteUnContributeur({
+              ...unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur')
+                .donnees,
+              estAdmin: true,
+            })
+            .construis(),
+        ];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "Un administrateur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
+        );
       });
     });
+    describe('pour une notification de mention dans une mesure spécifique', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureSpecifique
+        );
+      });
 
-    it('met en forme le lien', async () => {
-      const notifications = await laSource().notificationsPour(idUtilisateur);
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
 
-      expect(notifications[0].lien).toBe(
-        `/service/${idService}/mesures?idMesure=RECENSEMENT.1&onglet=activite`
-      );
-    });
-
-    it('met en forme le sous-titre', async () => {
-      const notifications = await laSource().notificationsPour(idUtilisateur);
-
-      expect(notifications[0].sousTitre).toBe(
-        "Jean Acteur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
-      );
+        expect(notifications[0].sousTitre).toBe(
+          'Jean Acteur vous a mentionné sur la mesure « Spécifique » de [Mairie de Bordeaux]'
+        );
+      });
     });
   });
-
-  it.skip("n'inclue pas une notif si je n'ai plus accès au service");
-  it.skip("masque le nom d'un admin");
-  it.skip('fonctionne pour des mesures spécifiques');
-  // Déplacer les templates de notifs dans le referentiel
 });
