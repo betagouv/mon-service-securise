@@ -10,6 +10,7 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import {
+  schemaPutNotificationTransactionnelle,
   schemaPutNouveaute,
   schemaPutTache,
 } from './routesConnecteApiNotifications.schema.js';
@@ -90,6 +91,30 @@ const routesConnecteApiNotifications = ({
         }
         suite(e);
       }
+    }
+  );
+
+  routes.put(
+    '/transactionnelles/:id',
+    valideParams(z.strictObject(schemaPutNotificationTransactionnelle())),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
+      const notifications =
+        await depotDonnees.lisNotifications(idUtilisateurCourant);
+
+      const cible = notifications.find(
+        (n) => n.donnees().id === requete.params.id
+      );
+      if (!cible) {
+        return reponse.sendStatus(404);
+      }
+
+      cible.marqueCommeLue();
+      await depotDonnees.sauvegardeNotificationTransactionnelle(cible);
+
+      return reponse.sendStatus(200);
     }
   );
 

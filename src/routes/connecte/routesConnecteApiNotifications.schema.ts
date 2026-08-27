@@ -8,3 +8,7 @@ export const schemaPutNouveaute = (referentiel: TousReferentiels) => ({
 export const schemaPutTache = () => ({
   id: z.uuid(),
 });
+
+export const schemaPutNotificationTransactionnelle = () => ({
+  id: z.uuid(),
+});

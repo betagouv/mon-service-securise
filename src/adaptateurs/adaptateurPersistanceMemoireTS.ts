@@ -92,6 +92,13 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   async sauvegardeNotificationTransactionnelle(
     donnees: DonneesNotificationTransactionnelle
   ) {
-    this.donnees.notificationsTransactionnelles.push(donnees);
+    const indiceExistant =
+      this.donnees.notificationsTransactionnelles.findIndex(
+        (n) => n.id === donnees.id
+      );
+
+    if (indiceExistant !== -1)
+      this.donnees.notificationsTransactionnelles[indiceExistant] = donnees;
+    else this.donnees.notificationsTransactionnelles.push(donnees);
   }
 }
