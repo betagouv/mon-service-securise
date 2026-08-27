@@ -1,4 +1,5 @@
 import { UUID } from '../../typesBasiques.js';
+import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
 
 export type DonneesNotificationTransactionnelle =
   DonneesCreationNotificationTransactionnelle & {
@@ -10,7 +11,7 @@ export type DonneesCreationNotificationTransactionnelle = {
   idActeur: UUID;
   idDestinataire: UUID;
   metadonnees: Record<string, unknown>;
-  type: 'mentionDansMesure';
+  type: IdNotificationTransactionnelle;
   date: Date;
 };
 
