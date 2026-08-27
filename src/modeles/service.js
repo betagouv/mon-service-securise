@@ -164,6 +164,10 @@ class Service {
     };
   }
 
+  contributeurParId(idUtilisateur) {
+    return this.contributeurs.find((c) => c.idUtilisateur === idUtilisateur);
+  }
+
   delegueProtectionDonnees() {
     return this.rolesResponsabilites.delegueProtectionDonnees;
   }
