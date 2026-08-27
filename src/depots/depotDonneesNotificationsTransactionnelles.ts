@@ -24,7 +24,8 @@ export class DepotDonneesNotificationsTransactionnelles {
     this.persistance = adaptateurPersistanceTS;
   }
   async lisNotifications(idDestinataire: UUID) {
-    return this.persistance.lisNotificationsDe(idDestinataire);
+    const donnees = await this.persistance.lisNotificationsDe(idDestinataire);
+    return donnees.map((d) => NotificationTransactionnelle.hydrate(d));
   }
 
   async sauvegardeNotificationTransactionnelle(
