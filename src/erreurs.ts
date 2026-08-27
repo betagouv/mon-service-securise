@@ -91,6 +91,7 @@ class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 class ErreurIdentifiantNouveauteInconnu extends ErreurModele {}
 class ErreurIdentifiantTacheInconnu extends ErreurModele {}
+class ErreurIdentifiantNotificationTransactionnelleInconnu extends ErreurModele {}
 class ErreurIntituleRisqueManquant extends ErreurModele {}
 class ErreurCategoriesRisqueManquantes extends ErreurModele {}
 class ErreurCategorieRisqueInconnue extends ErreurModele {}
@@ -151,6 +152,7 @@ export {
   ErreurEntiteNonAdministre,
   ErreurEmailManquant,
   ErreurHashDeSelInvalide,
+  ErreurIdentifiantNotificationTransactionnelleInconnu,
   ErreurIdentifiantNouveauteInconnu,
   ErreurIntituleRisqueManquant,
   ErreurJWTInvalide,

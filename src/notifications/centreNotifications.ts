@@ -1,4 +1,5 @@
 import {
+  ErreurIdentifiantNotificationTransactionnelleInconnu,
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
 } from '../erreurs.js';
@@ -221,6 +222,25 @@ class CentreNotifications {
     return tachesAFaire
       .map((t: TacheProfil) => ({ ...t, statutLecture: StatutLecture.nonLue }))
       .map((t: TacheProfil) => avecCanalDiffusion(t, 'centreNotifications'));
+  }
+
+  async marqueNotificationTransactionnelleLue(
+    idNotification: UUID,
+    idUtilisateur: UUID
+  ) {
+    const notification = await this.depotDonnees.lisNotificationDe(
+      idNotification,
+      idUtilisateur
+    );
+
+    if (!notification) {
+      throw new ErreurIdentifiantNotificationTransactionnelleInconnu();
+    }
+
+    notification.marqueCommeLue();
+    await this.depotDonnees.sauvegardeNotificationTransactionnelle(
+      notification
+    );
   }
 }
 
