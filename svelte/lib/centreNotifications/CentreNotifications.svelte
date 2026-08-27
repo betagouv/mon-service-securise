@@ -17,8 +17,8 @@
   );
 
   let notificationsParOnglet = $derived({
-    aFaire: $storeNotifications.pourCentreNotifications.filter(
-      (n) => n.type === 'tache'
+    activite: $storeNotifications.pourCentreNotifications.filter(
+      (n) => n.type === 'tache' || n.type === 'activite'
     ),
     nouveautes: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'nouveaute'
@@ -99,7 +99,7 @@
           active={idTabActive === 1}
           libelle={configurationsTabs[1].label}
           libellePastille={calculNbNonLue(
-            notificationsParOnglet.aFaire
+            notificationsParOnglet.activite
           ).toString()}
         />
       </div>
@@ -116,7 +116,7 @@
         <ListeNotifications notifications={notificationsParOnglet.toutes} />
       </div>
       <div slot="panel-2" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.aFaire} />
+        <ListeNotifications notifications={notificationsParOnglet.activite} />
       </div>
       <div slot="panel-3" class="conteneur-onglet">
         <ListeNotifications notifications={notificationsParOnglet.nouveautes} />
