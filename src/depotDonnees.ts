@@ -485,6 +485,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     lisNotifications: depotNotificationsTransactionnelles.lisNotifications.bind(
       depotNotificationsTransactionnelles
     ),
+    lisNotificationDe:
+      depotNotificationsTransactionnelles.lisNotificationDe.bind(
+        depotNotificationsTransactionnelles
+      ),
     sauvegardeNotificationTransactionnelle:
       depotNotificationsTransactionnelles.sauvegardeNotificationTransactionnelle.bind(
         depotNotificationsTransactionnelles
