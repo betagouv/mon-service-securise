@@ -10,11 +10,11 @@ import { UUID } from '../typesBasiques.js';
 import {
   IdNatureTacheService,
   IdNouvelleFonctionnalite,
-  IdTacheCompletudeProfil,
 } from '../referentiel.types.js';
 import Service from '../modeles/service.js';
 import { SourceNotifications, StatutLecture } from './notification.types.js';
 import { SourceNouveautes } from './sources/sourceNouveautes.js';
+import { SourceTachesProfil } from './sources/sourceTachesProfil.js';
 
 type Notification = {
   lien: string;
@@ -22,14 +22,6 @@ type Notification = {
   service: Service;
   donnees: Record<string, string>;
   titre: string;
-};
-
-type TacheProfil = {
-  id: IdTacheCompletudeProfil;
-  lien: string;
-  entete: string;
-  titre: string;
-  titreCta: string;
 };
 
 type TacheService = {
@@ -40,14 +32,6 @@ type TacheService = {
   nature: IdNatureTacheService;
   statutLecture?: StatutLecture;
 };
-
-const avecCanalDiffusion = (
-  notification: TacheProfil,
-  canalDiffusion: string
-) => ({
-  ...notification,
-  canalDiffusion,
-});
 
 class CentreNotifications {
   private readonly referentiel: TousReferentiels;
@@ -74,22 +58,18 @@ class CentreNotifications {
     this.adaptateurHorloge = adaptateurHorloge;
     this.sources = [
       new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
+      new SourceTachesProfil(referentiel, depotDonnees, adaptateurHorloge),
     ];
   }
 
   async toutesNotifications(idUtilisateur: UUID) {
-    const [tachesProfil, tachesDesServices] = await Promise.all([
-      this.toutesTachesProfilUtilisateur(idUtilisateur),
+    const [tachesDesServices] = await Promise.all([
       this.toutesTachesDeServiceNonLues(idUtilisateur),
     ]);
 
     return [
-      ...tachesProfil.map((t: TacheProfil) => ({
-        ...t,
-        type: 'tache',
-        date: () => this.adaptateurHorloge.maintenant(),
-      })),
       ...(await this.sources[0].notificationsPour(idUtilisateur)),
+      ...(await this.sources[1].notificationsPour(idUtilisateur)),
       ...tachesDesServices.map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ service: _service, ...donneesTache }: TacheService) => ({
@@ -155,30 +135,6 @@ class CentreNotifications {
       throw new ErreurIdentifiantTacheInconnu();
     }
     await this.depotDonnees.marqueTacheDeServiceLue(idTache);
-  }
-
-  async toutesTachesProfilUtilisateur(idUtilisateur: UUID) {
-    const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
-    if (!utilisateur) return [];
-
-    const completudeProfil = utilisateur.completudeProfil();
-    if (completudeProfil.estComplet) return [];
-
-    const profilDeInvite = completudeProfil.champsNonRenseignes.includes('nom');
-
-    const tachesAFaire = profilDeInvite
-      ? [this.referentiel.tacheCompletudeProfil('profil') as TacheProfil]
-      : (completudeProfil.champsNonRenseignes
-          .map((champ) =>
-            this.referentiel.tacheCompletudeProfil(
-              champ as IdTacheCompletudeProfil
-            )
-          )
-          .filter((t) => t !== undefined) as TacheProfil[]);
-
-    return tachesAFaire
-      .map((t: TacheProfil) => ({ ...t, statutLecture: StatutLecture.nonLue }))
-      .map((t: TacheProfil) => avecCanalDiffusion(t, 'centreNotifications'));
   }
 
   async marqueNotificationTransactionnelleLue(
