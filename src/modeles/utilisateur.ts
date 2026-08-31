@@ -15,6 +15,14 @@ export type EstimationNombreServices = {
   borneHaute: string;
 };
 
+type PreferencesRecapitulatif = {
+  mentionDansMesure: boolean;
+};
+
+const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
+  mentionDansMesure: true,
+};
+
 export type DonneesUtilisateur = {
   dateCreation: Date;
   id: UUID;
@@ -29,6 +37,7 @@ export type DonneesUtilisateur = {
   estimationNombreServices: EstimationNombreServices;
   postes: Array<string>;
   entite: Partial<DonneesEntite>;
+  preferencesRecapitulatifHebdomadaire?: PreferencesRecapitulatif;
 };
 
 const valide = (donnees: { email?: string | undefined }) => {
@@ -54,6 +63,7 @@ class Utilisateur extends Base {
   private readonly identite: Identite;
   private readonly adaptateurJWT: AdaptateurJWT;
   private readonly cguActuelles: string;
+  private readonly preferencesRecapitulatifHebdomadaire: PreferencesRecapitulatif;
 
   constructor(
     donnees: DonneesUtilisateur,
@@ -76,6 +86,7 @@ class Utilisateur extends Base {
         'pixelDeSuiviAccepte',
         'estimationNombreServices',
       ],
+      proprietesAtomiquesFacultatives: ['preferencesRecapitulatifHebdomadaire'],
       proprietesListes: ['postes'],
     });
     valide(donnees);
@@ -84,6 +95,8 @@ class Utilisateur extends Base {
     this.adaptateurJWT = adaptateurJWT;
     this.cguActuelles = cguActuelles;
     this.identite = new Identite(donnees);
+    this.preferencesRecapitulatifHebdomadaire =
+      Utilisateur.preferencesCompletes(donnees);
   }
 
   static valideDonnees(
@@ -168,6 +181,15 @@ class Utilisateur extends Base {
     ];
   }
 
+  private static preferencesCompletes(
+    donnees: DonneesUtilisateur
+  ): PreferencesRecapitulatif {
+    return {
+      ...PREFERENCES_RECAPITULATIF_PAR_DEFAUT,
+      ...donnees.preferencesRecapitulatifHebdomadaire,
+    };
+  }
+
   accepteCGU() {
     return this.cguAcceptees === this.cguActuelles;
   }
@@ -202,6 +224,10 @@ class Utilisateur extends Base {
 
   posteDetaille() {
     return this.identite.posteDetaille();
+  }
+
+  preferencesRecapitulatif() {
+    return this.preferencesRecapitulatifHebdomadaire;
   }
 
   prenomNom() {
@@ -287,6 +313,14 @@ class Utilisateur extends Base {
       nouvellesPreferences.pixelDeSuiviAccepte === undefined
         ? this.pixelDeSuiviAccepte
         : nouvellesPreferences.pixelDeSuiviAccepte;
+  }
+
+  metAJourPreferencesRecapitulatif(
+    nouvellesPreferences: Partial<PreferencesRecapitulatif>
+  ) {
+    if (nouvellesPreferences.mentionDansMesure !== undefined)
+      this.preferencesRecapitulatifHebdomadaire.mentionDansMesure =
+        nouvellesPreferences.mentionDansMesure;
   }
 }
 

@@ -1,6 +1,6 @@
 import {
-  ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
+  ErreurEmailManquant,
 } from '../../src/erreurs.js';
 import Utilisateur, {
   DonneesUtilisateur,
@@ -628,6 +628,67 @@ describe('Un utilisateur', () => {
         pixelDeSuiviAccepte: true,
         transactionnelAccepte: true,
         infolettreAcceptee: true,
+      });
+    });
+  });
+
+  describe("concernant ses préférences de communication pour l'email hebdomadaire", () => {
+    it('par défaut, consent à tous les sujets du récapitulatif', () => {
+      const utilisateur = unUtilisateur().construis();
+
+      expect(utilisateur.preferencesRecapitulatif()).toEqual({
+        mentionDansMesure: true,
+      });
+    });
+
+    it('peut désactiver un sujet du récapitulatif', () => {
+      const utilisateur = unUtilisateur().construis();
+
+      utilisateur.metAJourPreferencesRecapitulatif({
+        mentionDansMesure: false,
+      });
+
+      expect(utilisateur.preferencesRecapitulatif()).toEqual({
+        mentionDansMesure: false,
+      });
+    });
+
+    it('ne met pas à jour un champ absent', () => {
+      const utilisateur = unUtilisateur().construis();
+
+      utilisateur.metAJourPreferencesRecapitulatif({});
+
+      expect(utilisateur.preferencesRecapitulatif()).toEqual({
+        mentionDansMesure: true,
+      });
+    });
+
+    it('sérialise les préférences de récapitulatif', () => {
+      const utilisateur = unUtilisateur().construis();
+
+      expect(
+        // @ts-expect-error `donneesSerialisees` est trop générique
+        utilisateur.donneesSerialisees().preferencesRecapitulatifHebdomadaire
+      ).toEqual({
+        mentionDansMesure: true,
+      });
+    });
+
+    it('fusionne les préférences par défaut avec celles présentes dans les données', () => {
+      const utilisateur = new Utilisateur(
+        {
+          ...unUtilisateur().donnees,
+          preferencesRecapitulatifHebdomadaire: {
+            // @ts-expect-error On force explicitement une préférence qui n'existe pas
+            unePreference: false,
+          },
+        },
+        {}
+      );
+
+      expect(utilisateur.preferencesRecapitulatif()).toEqual({
+        mentionDansMesure: true,
+        unePreference: false,
       });
     });
   });
