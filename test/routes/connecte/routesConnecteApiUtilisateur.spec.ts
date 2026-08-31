@@ -309,7 +309,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/utilisateur/preferences`', () => {
+  describe('quand requête PUT sur `/api/utilisateur/preferences/consentements`', () => {
     let idUtilisateur: UUID;
 
     beforeEach(async () => {
@@ -335,14 +335,17 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         .middleware()
         .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
-          url: '/api/utilisateur/preferences',
+          url: '/api/utilisateur/preferences/consentements',
         });
     });
 
     it('jette une erreur si la payload est invalide', async () => {
-      const reponse = await testeur.put('/api/utilisateur/preferences', {
-        pasValide: 42,
-      });
+      const reponse = await testeur.put(
+        '/api/utilisateur/preferences/consentements',
+        {
+          pasValide: 42,
+        }
+      );
 
       expect(reponse.status).toBe(400);
     });
@@ -352,9 +355,12 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       'transactionnelAccepte',
       'pixelDeSuiviAccepte',
     ])('sauvegarde la nouvelle préférence `%s`', async (clePreference) => {
-      const reponse = await testeur.put('/api/utilisateur/preferences', {
-        [clePreference]: true,
-      });
+      const reponse = await testeur.put(
+        '/api/utilisateur/preferences/consentements',
+        {
+          [clePreference]: true,
+        }
+      );
 
       expect(reponse.status).toBe(200);
       const utilisateurAJour = await testeur

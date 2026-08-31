@@ -5,9 +5,7 @@ declare global {
 }
 
 export type PreferencesProps = {
-  infolettreAcceptee: boolean;
-  transactionnelAccepte: boolean;
-  pixelDeSuiviAccepte: boolean;
+  consentements: Consentements;
 };
 
 export type Consentements = {

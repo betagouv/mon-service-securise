@@ -15,7 +15,7 @@ export const schemaPutUtilisateur = {
   token: z.string().optional(),
 };
 
-export const schemaPutPreferencesUtilisateur = {
+export const schemaPutPreferencesConsentementsUtilisateur = {
   infolettreAcceptee: z.boolean().optional(),
   transactionnelAccepte: z.boolean().optional(),
   pixelDeSuiviAccepte: z.boolean().optional(),

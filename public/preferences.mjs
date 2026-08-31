@@ -6,9 +6,11 @@ $(() => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-preferences', {
       detail: {
-        infolettreAcceptee,
-        pixelDeSuiviAccepte,
-        transactionnelAccepte,
+        consentements: {
+          infolettreAcceptee,
+          pixelDeSuiviAccepte,
+          transactionnelAccepte,
+        },
       },
     })
   );
