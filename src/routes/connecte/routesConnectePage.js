@@ -56,12 +56,14 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
+      const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
       const { infolettreAcceptee, pixelDeSuiviAccepte, transactionnelAccepte } =
-        await depotDonnees.utilisateur(idUtilisateur);
+        utilisateur;
       reponse.render('preferences', {
         infolettreAcceptee,
         pixelDeSuiviAccepte,
         transactionnelAccepte,
+        preferencesRecapitulatif: utilisateur.preferencesRecapitulatif(),
       });
     }
   );

@@ -2,8 +2,9 @@
   import type { PreferencesProps } from './preferences.types';
   import PreferencesNotificationsParEmail from './blocsPreferences/PreferencesNotificationsParEmail.svelte';
   import PreferencesConsentements from './blocsPreferences/PreferencesConsentements.svelte';
+  import PreferencesRecapitulatifHebdomadaire from './blocsPreferences/PreferencesRecapitulatifHebdomadaire.svelte';
 
-  let { consentements }: PreferencesProps = $props();
+  let { consentements, recapitulatifHebdomadaire }: PreferencesProps = $props();
 </script>
 
 <h1>Préférences</h1>
@@ -12,6 +13,8 @@
   choisissez ici ce qui vous est envoyé par e-mail.
 </p>
 <div class="conteneur-blocs">
+  <PreferencesRecapitulatifHebdomadaire {recapitulatifHebdomadaire} />
+  <hr />
   <PreferencesNotificationsParEmail />
   <hr />
   <PreferencesConsentements {consentements} />
