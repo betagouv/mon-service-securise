@@ -16,10 +16,9 @@
   id="modale-fin-visite-guidee"
   has-footer
   opened={estOuverte}
-  title="Choix après la visite guidée"
+  title="À vous de jouer !"
 >
   <div>
-    <h4>À vous de jouer !</h4>
     <p>
       <b>Retrouvez ici une vision synthétique de tous vos services.</b>
       <br /><br />
@@ -84,14 +83,6 @@
 </dsfr-modal>
 
 <style lang="scss">
-  h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    margin: 0 0 16px;
-    padding: 0;
-  }
-
   p {
     font-size: 1rem;
     font-weight: 400;

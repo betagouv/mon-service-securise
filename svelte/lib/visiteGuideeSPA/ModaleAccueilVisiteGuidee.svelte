@@ -21,18 +21,23 @@
     await termineVisiteGuidee();
     estOuverte = false;
   };
+
+  const titreModale = $derived(
+    aDejaVuEntierementVisiteGuidee
+      ? 'Choisissez votre visite guidée'
+      : `Bonjour${profilUtilisateurComplet && prenomNom ? ` ${prenomNom}` : ''}, bienvenue sur MonServiceSécurisé !`
+  );
 </script>
 
 <dsfr-modal
   id="modale-accueil-visite-guidee"
   has-footer
-  title="Accueil de la visite guidée"
+  title={titreModale}
   opened={estOuverte}
   onclose={() => ignore()}
 >
   {#if aDejaVuEntierementVisiteGuidee}
     <div>
-      <h4>Choisissez votre visite guidée</h4>
       <p>
         Découvrez MonServiceSécurisé à votre rythme. Commencez par l'essentiel
         ou explorez les fonctionnalités avancées.
@@ -77,10 +82,6 @@
     </div>
   {:else}
     <div>
-      <h4>
-        Bonjour{profilUtilisateurComplet && prenomNom ? ` ${prenomNom}` : ''},
-        bienvenue sur MonServiceSécurisé !
-      </h4>
       <p>
         Pilotez la sécurité de vos services numériques et homologuez-les
         rapidement. MonServiceSécurisé est gratuit, 100 % en ligne et
@@ -105,14 +106,6 @@
 </dsfr-modal>
 
 <style lang="scss">
-  h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    margin: 0 0 16px;
-    padding: 0;
-  }
-
   p {
     font-size: 1rem;
     font-weight: 400;

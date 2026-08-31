@@ -11,10 +11,9 @@
   id="modale-choix-visite-avancee"
   has-footer
   opened={estOuverte}
-  title="Choix de la visite avancée"
+  title="Que souhaitez-vous découvrir ?"
 >
   <div>
-    <h4>Que souhaitez-vous découvrir ?</h4>
     <p>Choisissez la fonctionnalité qui vous intéresse.</p>
     <div class="selection-etape-suivante">
       <dsfr-card
@@ -78,14 +77,6 @@
 </dsfr-modal>
 
 <style lang="scss">
-  h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    margin: 0 0 16px;
-    padding: 0;
-  }
-
   p {
     font-size: 1rem;
     font-weight: 400;
