@@ -176,6 +176,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         infolettreAcceptee: true,
         pixelDeSuiviAccepte: true,
         transactionnelAccepte: true,
+        preferencesRecapitulatif: { mentionDansMesure: true },
       });
     });
   });
