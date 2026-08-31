@@ -62,6 +62,7 @@ export class SourceTachesService implements SourceNotifications {
             : StatutLecture.nonLue,
           type: 'tache' as TypeNotification,
           doitNotifierLecture: true,
+          supprimable: false,
           date: () => tache.dateCreation,
           horodatage: tache.dateCreation,
         }))

@@ -107,6 +107,7 @@ describe('Les notifications de nouveautés', () => {
           canalDiffusion: 'centreNotifications',
           statutLecture: 'nonLue',
           doitNotifierLecture: true,
+          supprimable: true,
           horodatage: dateNotif,
           date: expect.any(Function),
         });

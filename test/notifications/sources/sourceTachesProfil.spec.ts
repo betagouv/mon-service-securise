@@ -112,6 +112,22 @@ describe('Les notifications de tâche profil', () => {
 
       expect(taches.length).toBe(0);
     });
+
+    it("indique qu'une tâche de profil n'est pas supprimable", async () => {
+      referentiel = unReferentiel({
+        tachesCompletudeProfil: [
+          {
+            id: 'siret',
+            entete: 'Complétez votre profil',
+            titre: 'Des Explications',
+          },
+        ],
+      });
+
+      const taches = await laSource().notificationsPour(unUUID('U1'));
+
+      expect(taches[0].supprimable).toBe(false);
+    });
   });
 
   describe("lorsque l'utilisateur vient d'être invité, donc son profil a plein de champs non renseignés", () => {

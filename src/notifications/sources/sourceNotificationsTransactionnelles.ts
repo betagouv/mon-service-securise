@@ -54,6 +54,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
             ? StatutLecture.lue
             : StatutLecture.nonLue,
           doitNotifierLecture: true,
+          supprimable: true,
           horodatage: n.donnees().date,
           date: () => n.donnees().date,
         };

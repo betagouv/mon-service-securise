@@ -66,6 +66,12 @@ describe('Les notifications de nouveautés', () => {
     expect(notifications[1].statutLecture).toBe('lue');
   });
 
+  it("indique qu'une nouveauté n'est pas supprimable", async () => {
+    const notifications = await laSource().notificationsPour(unUUID('U1'));
+
+    expect(notifications[0].supprimable).toBe(false);
+  });
+
   it('ne retourne pas les nouveautés du futur', async () => {
     referentiel = unReferentiel({
       nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: '2024-01-01' }],
