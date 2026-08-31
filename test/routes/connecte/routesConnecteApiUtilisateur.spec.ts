@@ -369,4 +369,62 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       expect(utilisateurAJour[clePreference]).toBeTruthy();
     });
   });
+
+  describe('quand requête PUT sur `/api/utilisateur/preferences/recapitulatif`', () => {
+    let idUtilisateur: UUID;
+
+    beforeEach(async () => {
+      const u = await testeur
+        .depotDonnees()
+        .nouvelUtilisateur({ email: 'jean.dujardin@beta.gouv.fr' });
+      idUtilisateur = u.id;
+      await testeur
+        .depotDonnees()
+        .metsAJourUtilisateur(
+          idUtilisateur,
+          unUtilisateur().avecId(idUtilisateur).donnees
+        );
+      testeur.middleware().reinitialise({ idUtilisateur });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
+          method: 'put',
+          url: '/api/utilisateur/preferences/recapitulatif',
+        });
+    });
+
+    it('jette une erreur si la payload est invalide', async () => {
+      const reponse = await testeur.put(
+        '/api/utilisateur/preferences/recapitulatif',
+        {
+          pasValide: 42,
+        }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it.each(['mentionDansMesure'])(
+      'sauvegarde la nouvelle préférence de récapitulatif `%s`',
+      async (clePreference) => {
+        const reponse = await testeur.put(
+          '/api/utilisateur/preferences/recapitulatif',
+          {
+            [clePreference]: true,
+          }
+        );
+
+        expect(reponse.status).toBe(200);
+        const utilisateurAJour = await testeur
+          .depotDonnees()
+          .utilisateur(idUtilisateur);
+        expect(
+          utilisateurAJour.preferencesRecapitulatif()[clePreference]
+        ).toBeTruthy();
+      }
+    );
+  });
 });
