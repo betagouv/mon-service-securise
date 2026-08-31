@@ -21,6 +21,10 @@ export const schemaPutPreferencesConsentementsUtilisateur = {
   pixelDeSuiviAccepte: z.boolean().optional(),
 };
 
+export const schemaPutPreferencesRecapitulatifUtilisateur = {
+  mentionDansMesure: z.boolean().optional(),
+};
+
 export const schemaPutMesureGenerale = (
   referentiel: Referentiel,
   referentielV2: ReferentielV2

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { valideBody } from '../../http/validePayloads.js';
 import {
   schemaPutPreferencesConsentementsUtilisateur,
+  schemaPutPreferencesRecapitulatifUtilisateur,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
@@ -116,6 +117,28 @@ export const routesConnecteApiUtilisateur = ({
         { infolettreAcceptee, transactionnelAccepte, pixelDeSuiviAccepte },
         adaptateurMail
       );
+
+      await depotDonnees.metsAJourUtilisateur(
+        utilisateur.id,
+        utilisateur.donneesSerialisees()
+      );
+
+      reponse.sendStatus(200);
+    }
+  );
+
+  routes.put(
+    '/utilisateur/preferences/recapitulatif',
+    middleware.verificationAcceptationCGU,
+    valideBody(z.strictObject(schemaPutPreferencesRecapitulatifUtilisateur)),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
+      const utilisateur = (await depotDonnees.utilisateur(
+        idUtilisateur
+      )) as Utilisateur;
+
+      const { mentionDansMesure } = requete.body;
+      utilisateur.metAJourPreferencesRecapitulatif({ mentionDansMesure });
 
       await depotDonnees.metsAJourUtilisateur(
         utilisateur.id,
