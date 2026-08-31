@@ -2,12 +2,19 @@
   import type { PreferencesProps } from './preferences.types';
   import LignePreference from './LignePreference.svelte';
   import { api } from './preferences.api';
+  import { untrack } from 'svelte';
 
-  let {
-    infolettreAcceptee,
-    pixelDeSuiviAccepte,
-    transactionnelAccepte,
-  }: PreferencesProps = $props();
+  let { consentements }: PreferencesProps = $props();
+
+  let infolettreAcceptee = $state(
+    untrack(() => consentements.infolettreAcceptee)
+  );
+  let transactionnelAccepte = $state(
+    untrack(() => consentements.transactionnelAccepte)
+  );
+  let pixelDeSuiviAccepte = $state(
+    untrack(() => consentements.pixelDeSuiviAccepte)
+  );
 
   let tousLesConsentements = $derived(
     infolettreAcceptee || transactionnelAccepte || pixelDeSuiviAccepte
@@ -18,7 +25,7 @@
     infolettreAcceptee = valeurConsentement;
     transactionnelAccepte = valeurConsentement;
     pixelDeSuiviAccepte = valeurConsentement;
-    await api.sauvegardePreferences({
+    await api.sauvegardePreferencesConsentements({
       infolettreAcceptee,
       transactionnelAccepte,
       pixelDeSuiviAccepte,
@@ -123,7 +130,7 @@
         avecBordure
         onvaleurmodifiee={async (valeur) => {
           infolettreAcceptee = valeur;
-          await api.sauvegardePreferences({ infolettreAcceptee });
+          await api.sauvegardePreferencesConsentements({ infolettreAcceptee });
         }}
       />
       <LignePreference
@@ -134,7 +141,9 @@
         avecBordure
         onvaleurmodifiee={async (valeur) => {
           transactionnelAccepte = valeur;
-          await api.sauvegardePreferences({ transactionnelAccepte });
+          await api.sauvegardePreferencesConsentements({
+            transactionnelAccepte,
+          });
         }}
       />
       <LignePreference
@@ -144,7 +153,7 @@
         valeur={pixelDeSuiviAccepte}
         onvaleurmodifiee={async (valeur) => {
           pixelDeSuiviAccepte = valeur;
-          await api.sauvegardePreferences({ pixelDeSuiviAccepte });
+          await api.sauvegardePreferencesConsentements({ pixelDeSuiviAccepte });
         }}
       />
     </div>

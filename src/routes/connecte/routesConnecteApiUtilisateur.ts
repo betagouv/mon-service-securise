@@ -2,7 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { valideBody } from '../../http/validePayloads.js';
 import {
-  schemaPutPreferencesUtilisateur,
+  schemaPutPreferencesConsentementsUtilisateur,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
@@ -101,9 +101,9 @@ export const routesConnecteApiUtilisateur = ({
   );
 
   routes.put(
-    '/utilisateur/preferences',
+    '/utilisateur/preferences/consentements',
     middleware.verificationAcceptationCGU,
-    valideBody(z.strictObject(schemaPutPreferencesUtilisateur)),
+    valideBody(z.strictObject(schemaPutPreferencesConsentementsUtilisateur)),
     async (requete, reponse) => {
       const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
       const utilisateur = (await depotDonnees.utilisateur(
