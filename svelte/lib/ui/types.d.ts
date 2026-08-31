@@ -21,6 +21,7 @@ type NotificationBase = {
   lien: string;
   type: TypeNotification;
   doitNotifierLecture: boolean;
+  supprimable: boolean;
   horodatage?: string;
   canalDiffusion: 'centreNotifications' | 'page';
   titreCta: string;
