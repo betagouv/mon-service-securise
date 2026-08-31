@@ -19,6 +19,7 @@ export type Notification = {
   canalDiffusion: CanalDiffusion;
   statutLecture: StatutLecture;
   doitNotifierLecture: boolean;
+  supprimable: boolean;
   horodatage?: Date;
   date: () => Date;
 };

@@ -90,6 +90,17 @@ describe('Les notifications de tâche service', () => {
     );
   });
 
+  it("indique qu'une tâche de service n'est pas supprimable", async () => {
+    depotDonnees.tachesDesServices = async (idUtilisateur) =>
+      idUtilisateur === unUUID('U1')
+        ? [uneTacheDeService().avecId('T1').construis()]
+        : [];
+
+    const notifs = await laSource().notificationsPour(unUUID('U1'));
+
+    expect(notifs[0].supprimable).toBe(false);
+  });
+
   it('complète le sous-titre avec les informations liées au service', async () => {
     referentiel.enrichis({
       naturesTachesService: {

@@ -56,6 +56,7 @@ export class SourceTachesProfil implements SourceNotifications {
       type: 'tache',
       date: () => this.adaptateurHorloge.maintenant(),
       doitNotifierLecture: false,
+      supprimable: false,
     }));
   }
 }
