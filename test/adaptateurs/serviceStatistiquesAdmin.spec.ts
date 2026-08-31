@@ -526,10 +526,21 @@ describe("L'adaptateur des statistiques admin", () => {
 
     it('génère les mois sans nouveau dossier entre deux dates avec dossier', async () => {
       const aujourdhui = new Date();
-      const ilYA1Mois = new Date();
-      ilYA1Mois.setMonth(ilYA1Mois.getMonth() - 1);
-      const ilYA2Mois = new Date();
-      ilYA2Mois.setMonth(ilYA2Mois.getMonth() - 2);
+      const ceDebutDeMois = new Date(
+        aujourdhui.getFullYear(),
+        aujourdhui.getMonth(),
+        2
+      );
+      const ilYA1MoisDebutMois = new Date(
+        aujourdhui.getFullYear(),
+        aujourdhui.getMonth() - 1,
+        2
+      );
+      const ilYA2MoisDebutMois = new Date(
+        aujourdhui.getFullYear(),
+        aujourdhui.getMonth() - 2,
+        2
+      );
       const adaptateur = new ServiceStatistiquesAdmin(
         adaptateurChiffrement,
         adaptateurJournal,
@@ -538,23 +549,23 @@ describe("L'adaptateur des statistiques admin", () => {
 
       const resultat = await adaptateur.statistiques(
         [
-          unServiceV2AvecDossierHomologueLe(aujourdhui),
-          unServiceV2AvecDossierHomologueLe(ilYA2Mois),
+          unServiceV2AvecDossierHomologueLe(ceDebutDeMois),
+          unServiceV2AvecDossierHomologueLe(ilYA2MoisDebutMois),
         ],
         sansFiltre
       );
 
       expect(resultat.evolutionNombreHomologations).toEqual([
         {
-          mois: `${ilYA2Mois.getFullYear()}-${moisAvecRemplissage(ilYA2Mois)}`,
+          mois: `${ilYA2MoisDebutMois.getFullYear()}-${moisAvecRemplissage(ilYA2MoisDebutMois)}`,
           total: 1,
         },
         {
-          mois: `${ilYA1Mois.getFullYear()}-${moisAvecRemplissage(ilYA1Mois)}`,
+          mois: `${ilYA1MoisDebutMois.getFullYear()}-${moisAvecRemplissage(ilYA1MoisDebutMois)}`,
           total: 1,
         },
         {
-          mois: `${aujourdhui.getFullYear()}-${moisAvecRemplissage(aujourdhui)}`,
+          mois: `${ceDebutDeMois.getFullYear()}-${moisAvecRemplissage(ceDebutDeMois)}`,
           total: 2,
         },
       ]);
