@@ -42,44 +42,54 @@
     };
   });
 
-  let actionClick = $derived(
-    notification.doitNotifierLecture
-      ? async () => {
-          await storeNotifications.marqueLue(
-            notification.type,
-            notification.id
-          );
-        }
-      : () => {}
-  );
+  const actionVoirNotification = async () => {
+    if (notification.doitNotifierLecture)
+      await storeNotifications.marqueLue(notification.type, notification.id);
+  };
+
+  const actionSupprimeNotification = () => {
+    storeNotifications.supprime(notification.type, notification.id);
+  };
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 <dsfr-card
   title={configurationCarte.titre}
   description={configurationCarte.description}
   has-description
   size="sm"
   horizontal
-  href={notification.lien}
   blank={configurationCarte.blank}
   has-buttons
-  enlarge
+  no-link
   no-icon
-  onclick={actionClick}
   has-badge
   src={configurationCarte.src}
   image-ratio="1x1"
 >
-  <dsfr-button
-    slot="buttonsgroup"
-    kind="tertiary"
-    size="sm"
-    has-icon
-    icon="arrow-right-line"
-    icon-place="right"
-    label={notification.titreCta}
-  ></dsfr-button>
+  <div class="boutons" slot="buttonsgroup">
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      kind="secondary"
+      size="sm"
+      has-icon
+      href={notification.lien}
+      markup="a"
+      target="_blank"
+      onclick={actionVoirNotification}
+      icon="arrow-right-line"
+      icon-place="right"
+      label={notification.titreCta}
+    ></dsfr-button>
+    {#if notification.supprimable}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="tertiary-no-outline"
+        size="sm"
+        label="Supprimer"
+        onclick={actionSupprimeNotification}
+      ></dsfr-button>
+    {/if}
+  </div>
   <div class="conteneur-badges" slot="badgesgroup">
     <dsfr-badge
       size="sm"

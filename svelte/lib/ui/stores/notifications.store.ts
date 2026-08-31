@@ -34,4 +34,8 @@ export const storeNotifications = {
     await axios.put(`/api/notifications/${routes[type]}/${id}`);
     await storeNotifications.rafraichis();
   },
+  supprime: async (type: TypeNotification, id: string) => {
+    await axios.delete(`/api/notifications/${routes[type]}/${id}`);
+    await storeNotifications.rafraichis();
+  },
 };
