@@ -5,7 +5,7 @@ import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
-import { UUID } from '../typesBasiques.js';
+import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
@@ -152,6 +152,60 @@ export class AdaptateurPostgresTS implements PersistanceTS {
           ) as unknown as DonneesAdminOrganisations
       )
     );
+  }
+
+  async lisAdminsOrganisations(
+    sirets: string[]
+  ): Promise<Map<string, Array<DonneesAdminOrganisations>>> {
+    const siretParHash = new Map(
+      sirets.map((siret) => [this.chiffrement.hacheSha256(siret), siret])
+    );
+
+    const parSiret = new Map<string, Array<DonneesAdminOrganisations>>(
+      sirets.map((siret) => [siret, []])
+    );
+    if (sirets.length === 0) return parSiret;
+
+    const lignesDesSirets: { idUtilisateur: UUID; siretHash: string }[] =
+      await this.knex(TABLES.ADMINS_ORGANISATIONS)
+        .select({ idUtilisateur: 'id_utilisateur', siretHash: 'siret_hash' })
+        .whereIn('siret_hash', [...siretParHash.keys()]);
+
+    const idsDesAdmins = [
+      ...new Set(lignesDesSirets.map((l) => l.idUtilisateur)),
+    ];
+    const entitesParAdmin = await this.lisEntitesAdministreesPar(idsDesAdmins);
+
+    lignesDesSirets.forEach(({ idUtilisateur, siretHash }) => {
+      const siret = siretParHash.get(siretHash)!;
+      parSiret.get(siret)!.push({
+        idUtilisateur,
+        entitesAdministrees: entitesParAdmin.get(idUtilisateur) ?? [],
+      });
+    });
+
+    return parSiret;
+  }
+
+  private async lisEntitesAdministreesPar(idsDesAdmins: UUID[]) {
+    const entitesParAdmin = new Map<UUID, DonneesEntite[]>();
+    if (idsDesAdmins.length === 0) return entitesParAdmin;
+
+    const lignes: { idUtilisateur: UUID; donnees: DonneesChiffrees }[] =
+      await this.knex(TABLES.ADMINS_ORGANISATIONS)
+        .select({ idUtilisateur: 'id_utilisateur', donnees: 'donnees' })
+        .whereIn('id_utilisateur', idsDesAdmins);
+
+    await Promise.all(
+      lignes.map(async ({ idUtilisateur, donnees }) => {
+        const entite: DonneesEntite = await this.chiffrement.dechiffre(donnees);
+        if (!entitesParAdmin.has(idUtilisateur))
+          entitesParAdmin.set(idUtilisateur, []);
+        entitesParAdmin.get(idUtilisateur)!.push(entite);
+      })
+    );
+
+    return entitesParAdmin;
   }
 
   async lisNotificationsDe(
