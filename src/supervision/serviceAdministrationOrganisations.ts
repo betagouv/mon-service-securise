@@ -178,53 +178,66 @@ export class ServiceAdministrationOrganisations {
   ): Promise<Array<DonneesEntiteSupervisee>> {
     const admin = await this.depotDonnees.lisAdminOrganisations(idUtilisateur);
     if (admin) {
-      const toutesEntites = admin.donnees().entitesAdministrees;
-      return Promise.all(
-        toutesEntites.map((e) => this.enrichisEntiteSupervisee(e))
+      return this.enrichisEntitesSupervisees(
+        admin.donnees().entitesAdministrees
       );
     }
 
     const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
     if (superviseur) {
-      const toutesEntites = superviseur.donnees().entitesSupervisees;
-      return Promise.all(
-        toutesEntites.map((e) => this.enrichisEntiteSupervisee(e))
+      return this.enrichisEntitesSupervisees(
+        superviseur.donnees().entitesSupervisees
       );
     }
 
     return [];
   }
 
-  private async enrichisEntiteSupervisee(
-    uneEntite: DonneesEntite
-  ): Promise<DonneesEntiteSupervisee> {
-    const admins = await this.depotDonnees.lisAdminsPour(uneEntite.siret);
-    const enUtilisateurs = await Promise.all(
-      admins.map((a) =>
-        this.depotDonnees.utilisateur(a.donnees().idUtilisateur)
-      )
-    );
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(
-      uneEntite.siret
-    );
+  private async enrichisEntitesSupervisees(
+    entites: DonneesEntite[]
+  ): Promise<Array<DonneesEntiteSupervisee>> {
+    const sirets = entites.map((e) => e.siret);
 
-    return {
-      siret: uneEntite.siret,
-      nom: uneEntite.nom,
-      departement: uneEntite.departement,
-      nombreServices: services.length,
-      nombreUtilisateurs: new Set(
-        services.flatMap((s) =>
-          s.contributeurs.map((c: Contributeur) => c.idUtilisateur)
-        )
-      ).size,
-      administrateurs: enUtilisateurs.map((u) => ({
-        id: u!.id,
-        prenomNom: u!.prenomNom(),
-        initiales: u!.initiales(),
-        postes: u!.posteDetaille(),
-      })),
-    };
+    const [adminsParSiret, servicesParSiret] = await Promise.all([
+      this.depotDonnees.lisAdminsPourSirets(sirets),
+      this.depotDonnees.tousLesServicesAvecSirets(sirets),
+    ]);
+
+    const idsDesAdmins = [
+      ...new Set(
+        [...adminsParSiret.values()]
+          .flat()
+          .map((a) => a.donnees().idUtilisateur)
+      ),
+    ];
+    const lesAdmins = await this.depotDonnees.utilisateurs(idsDesAdmins);
+    const adminParId = new Map(lesAdmins.map((u) => [u.id, u]));
+
+    return entites.map((uneEntite) => {
+      const services = servicesParSiret.get(uneEntite.siret) ?? [];
+      const admins = adminsParSiret.get(uneEntite.siret) ?? [];
+
+      return {
+        siret: uneEntite.siret,
+        nom: uneEntite.nom,
+        departement: uneEntite.departement,
+        nombreServices: services.length,
+        nombreUtilisateurs: new Set(
+          services.flatMap((s: Service) =>
+            s.contributeurs.map((c: Contributeur) => c.idUtilisateur)
+          )
+        ).size,
+        administrateurs: admins.map((a) => {
+          const u = adminParId.get(a.donnees().idUtilisateur)!;
+          return {
+            id: u.id,
+            prenomNom: u.prenomNom(),
+            initiales: u.initiales(),
+            postes: u.posteDetaille(),
+          };
+        }),
+      };
+    });
   }
 
   async utilisateursDansLePerimetreDe(
