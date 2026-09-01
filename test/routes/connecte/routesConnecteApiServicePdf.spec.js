@@ -227,6 +227,32 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       ]);
       expect(donneesDossier.documents).to.eql(['unDocument']);
     });
+
+    it("utilise le siret si l'organisation n'a pas de nom", async () => {
+      let donneesDossier;
+      const serviceARenvoyer = new Service(
+        {
+          id: '456',
+          descriptionService: {
+            nomService: 'un service',
+            organisationResponsable: { siret: 'UN_SIRET', nom: undefined },
+          },
+          dossiers: [unDossier(referentiel).donnees],
+        },
+        referentiel
+      );
+      serviceARenvoyer.mesures.indiceCyber = () => 3.5;
+      testeur.middleware().reinitialise({ serviceARenvoyer });
+
+      testeur.adaptateurPdf().genereDossierDecision = async (donnees) => {
+        donneesDossier = donnees;
+        return 'Pdf dossier décision';
+      };
+
+      await testeur.get('/api/service/456/pdf/dossierDecision.pdf');
+
+      expect(donneesDossier.organisationResponsable).to.be('UN_SIRET');
+    });
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/syntheseSecurite.pdf`', () => {
