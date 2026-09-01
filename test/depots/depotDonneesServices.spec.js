@@ -2396,28 +2396,10 @@ describe('Le dépôt de données des services', () => {
       });
     });
 
-    it('délègue à la persistance la lecture de ces services', async () => {
-      let hashSiretRecu;
-      depot = DepotDonneesServices.creeDepot({
-        adaptateurChiffrement: {
-          hacheSha256: (chaine) => `${chaine}-SHA256`,
-        },
-        adaptateurPersistance: {
-          servicesComplets: async ({ hashSiret }) => {
-            hashSiretRecu = hashSiret;
-            return [];
-          },
-        },
-      });
-
-      await depot.tousLesServicesAvecSiret('unSIRET');
-
-      expect(hashSiretRecu).to.be('unSIRET-SHA256');
-    });
-
-    it('enrichis les services récupérés', async () => {
+    it('retourne les services enrichis de ce SIRET', async () => {
       const services = await depot.tousLesServicesAvecSiret('unSIRET');
 
+      expect(services.map((s) => s.id)).to.eql(['S1']);
       expect(services[0].contributeurs.length).to.be(1);
     });
   });

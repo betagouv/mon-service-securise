@@ -179,8 +179,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     )[0].count >= 1;
 
   const servicesComplets = async (configurationDuWhere) => {
-    const { idUtilisateur, idService, hashSiret, hashSirets, tous } =
-      configurationDuWhere;
+    const { idUtilisateur, idService, hashSirets, tous } = configurationDuWhere;
 
     const erreurDeConfiguration = () => {
       const json = JSON.stringify(configurationDuWhere);
@@ -199,8 +198,6 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
             )`;
 
       if (idService) return `WHERE s.id = :idService`;
-
-      if (hashSiret) return `WHERE s.siret_hash = :hashSiret`;
 
       if (hashSirets) return `WHERE s.siret_hash = ANY(:hashSirets)`;
 
@@ -241,7 +238,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
                           GROUP BY id_service) modeles_de_mesure_specifique ON modeles_de_mesure_specifique.id_service = s.id
           ${where()};
       `,
-      { idUtilisateur, idService, hashSiret, hashSirets }
+      { idUtilisateur, idService, hashSirets }
     );
 
     return requete.rows.map((s) => ({
