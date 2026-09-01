@@ -51,6 +51,68 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
     expect(admins[1].donnees().idUtilisateur).toBe(unUUID('A3'));
   });
 
+  describe('sur demande des admins de plusieurs entités', () => {
+    it('associe à chaque SIRET ses admins', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
+        .ajouteAdminSurPerimetre(unUUID('A2'), [{ siret: 'siret-B' }])
+        .ajouteAdminSurPerimetre(unUUID('A3'), [
+          { siret: 'siret-B' },
+          { siret: 'siret-A' },
+        ])
+        .construis();
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+      const parSiret = await depot.lisAdminsPourSirets(['siret-A', 'siret-B']);
+
+      expect(
+        parSiret.get('siret-A')!.map((a) => a.donnees().idUtilisateur)
+      ).toEqual([unUUID('A1'), unUUID('A3')]);
+      expect(
+        parSiret.get('siret-B')!.map((a) => a.donnees().idUtilisateur)
+      ).toEqual([unUUID('A2'), unUUID('A3')]);
+    });
+
+    it('instancie bien des admins du domaine', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
+        .construis();
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+      const parSiret = await depot.lisAdminsPourSirets(['siret-A']);
+
+      expect(parSiret.get('siret-A')![0]).toBeInstanceOf(AdminOrganisations);
+    });
+
+    it('associe une liste vide à une entité sans admin', async () => {
+      const persistanceVide = unePersistanceMemoireTS().construis();
+      const depot = new DepotDonneesAdminsOrganisations({
+        persistance: persistanceVide,
+      });
+
+      const parSiret = await depot.lisAdminsPourSirets(['siret-A']);
+
+      expect(parSiret.get('siret-A')).toEqual([]);
+    });
+
+    it('renvoie la même chose que la lecture entité par entité', async () => {
+      const persistance = unePersistanceMemoireTS()
+        .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
+        .ajouteAdminSurPerimetre(unUUID('A3'), [
+          { siret: 'siret-B' },
+          { siret: 'siret-A' },
+        ])
+        .construis();
+      const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+      const parSiret = await depot.lisAdminsPourSirets(['siret-A']);
+
+      expect(parSiret.get('siret-A')).toEqual(
+        await depot.lisAdminsPour('siret-A')
+      );
+    });
+  });
+
   it('sauvegarde un admin', async () => {
     const persistance = unePersistanceMemoireTS()
       .ajouteAdminSurPerimetre(idAdmin, [

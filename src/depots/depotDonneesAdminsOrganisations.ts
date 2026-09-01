@@ -24,6 +24,20 @@ export class DepotDonneesAdminsOrganisations {
     return donnees.map((d) => AdminOrganisations.hydrate(d));
   }
 
+  async lisAdminsPourSirets(
+    sirets: string[]
+  ): Promise<Map<string, Array<AdminOrganisations>>> {
+    const donneesParSiret =
+      await this.persistance.lisAdminsOrganisations(sirets);
+
+    return new Map(
+      [...donneesParSiret.entries()].map(([siret, donnees]) => [
+        siret,
+        donnees.map((d) => AdminOrganisations.hydrate(d)),
+      ])
+    );
+  }
+
   async sauvegardeAdminOrganisations(admin: AdminOrganisations) {
     await this.persistance.sauvegardeAdminOrganisations(admin.donnees());
   }

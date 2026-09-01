@@ -149,6 +149,88 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe('sur demande de lecture des admins de plusieurs organisations', () => {
+    const entiteA = { nom: 'entiteA', siret: 'SIRET-A', departement: '75' };
+    const entiteB = { nom: 'entiteB', siret: 'SIRET-B', departement: '44' };
+
+    const ajouteAdminSur = async (idAdmin: string, entite: typeof entiteA) => {
+      await trx.table('admins_organisations').insert({
+        id_utilisateur: idAdmin,
+        siret_hash: chiffrement.hacheSha256(entite.siret),
+        donnees: await chiffrement.chiffre(entite),
+      });
+    };
+
+    it('associe à chaque SIRET demandé ses admins', async () => {
+      const idAdmin1 = unUUIDRandom();
+      const idAdmin2 = unUUIDRandom();
+      await ajouteAdminSur(idAdmin1, entiteA);
+      await ajouteAdminSur(idAdmin2, entiteB);
+
+      const parSiret = await persistance.lisAdminsOrganisations([
+        'SIRET-A',
+        'SIRET-B',
+      ]);
+
+      expect(parSiret.get('SIRET-A')).toEqual([
+        { idUtilisateur: idAdmin1, entitesAdministrees: [entiteA] },
+      ]);
+      expect(parSiret.get('SIRET-B')).toEqual([
+        { idUtilisateur: idAdmin2, entitesAdministrees: [entiteB] },
+      ]);
+    });
+
+    it("donne tout le périmètre d'un admin, pas seulement les SIRET demandés", async () => {
+      const idAdmin = unUUIDRandom();
+      await ajouteAdminSur(idAdmin, entiteA);
+      await ajouteAdminSur(idAdmin, entiteB);
+
+      const parSiret = await persistance.lisAdminsOrganisations(['SIRET-A']);
+
+      expect(parSiret.get('SIRET-A')![0].entitesAdministrees).toEqual([
+        entiteA,
+        entiteB,
+      ]);
+    });
+
+    it('associe une liste vide à un SIRET sans admin', async () => {
+      const parSiret = await persistance.lisAdminsOrganisations([
+        'SIRET-INCONNU',
+      ]);
+
+      expect(parSiret.get('SIRET-INCONNU')).toEqual([]);
+    });
+
+    it('ne lit rien si aucun SIRET est demandé', async () => {
+      const idAdmin = unUUIDRandom();
+      await ajouteAdminSur(idAdmin, entiteA);
+
+      const parSiret = await persistance.lisAdminsOrganisations([]);
+
+      expect(parSiret.size).toBe(0);
+    });
+
+    it('renvoie la même chose que la lecture SIRET par SIRET', async () => {
+      const idAdmin1 = unUUIDRandom();
+      const idAdmin2 = unUUIDRandom();
+      await ajouteAdminSur(idAdmin1, entiteA);
+      await ajouteAdminSur(idAdmin2, entiteA);
+      await ajouteAdminSur(idAdmin2, entiteB);
+
+      const parSiret = await persistance.lisAdminsOrganisations([
+        'SIRET-A',
+        'SIRET-B',
+      ]);
+
+      expect(parSiret.get('SIRET-A')).toEqual(
+        await persistance.lisAdminsOrganisation('SIRET-A')
+      );
+      expect(parSiret.get('SIRET-B')).toEqual(
+        await persistance.lisAdminsOrganisation('SIRET-B')
+      );
+    });
+  });
+
   describe("sur demande de lecture d'un superviseur", () => {
     it("retourne `undefined` s'il n'existe pas", async () => {
       const superviseur = await persistance.lisSuperviseur(unUUIDRandom());
