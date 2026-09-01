@@ -108,7 +108,9 @@ function fabriquePersistance({
         },
       },
       un: async (idUtilisateur) => {
-        const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
+        const [donnees] = await adaptateurPersistance.utilisateursAvecIds([
+          idUtilisateur,
+        ]);
         return dechiffreUtilisateur(donnees);
       },
       plusieurs: async (idsUtilisateurs) => {

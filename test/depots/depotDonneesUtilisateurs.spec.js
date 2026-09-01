@@ -512,6 +512,44 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.dateCreation).to.eql(date);
   });
 
+  describe("sur demande d'un utilisateur", () => {
+    it("retourne l'utilisateur déchiffré", async () => {
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            {
+              id: '123',
+              donnees: { prenom: 'Jean', nom: 'Dupont', email: 'jean@mail.fr' },
+              emailHash: 'jean@mail.fr-haché256',
+            },
+          ],
+        }),
+      });
+
+      const utilisateur = await depot.utilisateur('123');
+
+      expect(utilisateur).to.be.an(Utilisateur);
+      expect(utilisateur.id).to.equal('123');
+      expect(utilisateur.prenom).to.equal('Jean');
+    });
+
+    it("ne retourne rien si l'utilisateur n'existe pas", async () => {
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [],
+        }),
+      });
+
+      const utilisateur = await depot.utilisateur('inconnu');
+
+      expect(utilisateur).to.be(undefined);
+    });
+  });
+
   describe('sur demande de plusieurs utilisateurs', () => {
     const troisUtilisateurs = () =>
       AdaptateurPersistanceMemoire.nouvelAdaptateur({
