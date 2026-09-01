@@ -117,7 +117,6 @@ const nouvelAdaptateur = (
   const servicesComplets = async ({
     idUtilisateur,
     idService,
-    hashSiret,
     hashSirets,
     tous,
   }) => {
@@ -129,9 +128,6 @@ const nouvelAdaptateur = (
     } else if (idUtilisateur) {
       const deUtilisateur = await services(idUtilisateur);
       servicesRetenus.push(...deUtilisateur);
-    } else if (hashSiret) {
-      const duSiret = donnees.services.filter((s) => s.siretHash === hashSiret);
-      servicesRetenus.push(...duSiret);
     } else if (hashSirets) {
       const desSirets = donnees.services.filter((s) =>
         hashSirets.includes(s.siretHash)

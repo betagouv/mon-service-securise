@@ -122,15 +122,8 @@ const fabriquePersistance = (
 
         return parSiret;
       },
-      ceuxAvecSiret: async (siret) => {
-        const hashSiret = adaptateurChiffrement.hacheSha256(siret);
-
-        const donnees = await adaptateurPersistance.servicesComplets({
-          hashSiret,
-        });
-
-        return Promise.all(donnees.map((d) => mappeDonneesVersDomaine(d)));
-      },
+      ceuxAvecSiret: async (siret) =>
+        (await persistance.lis.ceuxAvecSirets([siret])).get(siret),
       ceuxDeUtilisateur: async (idUtilisateur) => {
         const donnees = await adaptateurPersistance.servicesComplets({
           idUtilisateur,
