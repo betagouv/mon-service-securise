@@ -438,6 +438,151 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(entitesDe[0].nombreUtilisateurs).toBe(1);
     });
 
+    const mairieDeY = { siret: 'SIRET-456', nom: 'Une autre entité' };
+
+    const superviseLesDeuxEntites = async () => {
+      await adaptateurPersistanceTS.sauvegardeSuperviseur({
+        idUtilisateur: unUUID('S'),
+        entitesSupervisees: [
+          { siret: 'SIRET-123', nom: 'Mon entité' },
+          mairieDeY,
+        ],
+      });
+    };
+
+    const ajouteUnServiceSur = async (
+      idNouveauService: string,
+      siretHache: string,
+      idProprietaire: string
+    ) => {
+      await adaptateurPersistance.sauvegardeService(
+        idNouveauService,
+        unServiceV2().donnees,
+        '',
+        siretHache
+      );
+      await adaptateurPersistance.ajouteAutorisation(
+        unUUIDRandom(),
+        uneAutorisation().deProprietaire(idProprietaire, idNouveauService)
+          .donnees
+      );
+      await adaptateurPersistance.ajouteUtilisateur(
+        idProprietaire,
+        unUtilisateur().donnees
+      );
+    };
+
+    it('associe à chaque entité ses propres services', async () => {
+      await superviseLesDeuxEntites();
+      await ajouteUnServiceSur(
+        unUUID('S3'),
+        'SIRET-456-haché256',
+        unUUID('P2')
+      );
+      await ajouteUnServiceSur(
+        unUUID('S4'),
+        'SIRET-456-haché256',
+        unUUID('P3')
+      );
+
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
+
+      expect(entitesDe).toHaveLength(2);
+      expect(entitesDe[0].siret).toBe('SIRET-123');
+      expect(entitesDe[0].nombreServices).toBe(1);
+      expect(entitesDe[0].nombreUtilisateurs).toBe(1);
+      expect(entitesDe[1].siret).toBe('SIRET-456');
+      expect(entitesDe[1].nombreServices).toBe(2);
+      expect(entitesDe[1].nombreUtilisateurs).toBe(2);
+    });
+
+    it('associe à chaque entité ses propres admins', async () => {
+      await superviseLesDeuxEntites();
+      await adaptateurPersistanceTS.sauvegardeAdminOrganisations({
+        idUtilisateur: unUUID('A2'),
+        entitesAdministrees: [mairieDeY],
+      });
+      await adaptateurPersistance.ajouteUtilisateur(
+        unUUID('A2'),
+        unUtilisateur().quiSAppelle('Alice Martin').avecPostes(['DPO']).donnees
+      );
+
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
+
+      expect(entitesDe[0].administrateurs).toEqual([
+        {
+          id: unUUID('A'),
+          prenomNom: 'Jean Dujardin',
+          initiales: 'JD',
+          postes: 'RSSI',
+        },
+      ]);
+      expect(entitesDe[1].administrateurs).toEqual([
+        {
+          id: unUUID('A2'),
+          prenomNom: 'Alice Martin',
+          initiales: 'AM',
+          postes: 'DPO',
+        },
+      ]);
+    });
+
+    it("fait apparaître un admin de plusieurs entités dans chacune d'elles", async () => {
+      await superviseLesDeuxEntites();
+      await adaptateurPersistanceTS.sauvegardeAdminOrganisations({
+        idUtilisateur: unUUID('A'),
+        entitesAdministrees: [
+          { siret: 'SIRET-123', nom: 'Mon entité' },
+          mairieDeY,
+        ],
+      });
+
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
+
+      expect(entitesDe[0].administrateurs.map((a) => a.id)).toEqual([
+        unUUID('A'),
+      ]);
+      expect(entitesDe[1].administrateurs.map((a) => a.id)).toEqual([
+        unUUID('A'),
+      ]);
+    });
+
+    it("renvoie une entité sans service ni admin plutôt que de l'omettre", async () => {
+      await superviseLesDeuxEntites();
+
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
+
+      expect(entitesDe[1].siret).toBe('SIRET-456');
+      expect(entitesDe[1].nom).toBe('Une autre entité');
+      expect(entitesDe[1].nombreServices).toBe(0);
+      expect(entitesDe[1].nombreUtilisateurs).toBe(0);
+      expect(entitesDe[1].administrateurs).toEqual([]);
+    });
+
+    it("conserve l'ordre des entités du périmètre", async () => {
+      await adaptateurPersistanceTS.sauvegardeSuperviseur({
+        idUtilisateur: unUUID('S'),
+        entitesSupervisees: [
+          mairieDeY,
+          { siret: 'SIRET-123', nom: 'Mon entité' },
+        ],
+      });
+
+      const entitesDe = await serviceAdministrationOrganisations.entitesDe(
+        unUUID('S')
+      );
+
+      expect(entitesDe.map((e) => e.siret)).toEqual(['SIRET-456', 'SIRET-123']);
+    });
+
     it("renvoie un tableau vide s'il n'est ni admin ni superviseur", async () => {
       const service = leServiceDAdministrationDesOrgas();
 
