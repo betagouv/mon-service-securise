@@ -111,6 +111,11 @@ function fabriquePersistance({
         const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
         return dechiffreUtilisateur(donnees);
       },
+      plusieurs: async (idsUtilisateurs) => {
+        const donnees =
+          await adaptateurPersistance.utilisateursAvecIds(idsUtilisateurs);
+        return Promise.all(donnees.map((d) => dechiffreUtilisateur(d)));
+      },
       celuiAvecEmail: async (email) => {
         const emailMinuscule = email.toLowerCase();
         const emailHash = adaptateurChiffrement.hacheSha256(emailMinuscule);
@@ -210,6 +215,8 @@ const creeDepot = (config = {}) => {
     p.dechiffreDonneesContributeur(donneesUtilisateur);
 
   const utilisateur = async (identifiant) => p.lis.un(identifiant);
+
+  const utilisateurs = async (identifiants) => p.lis.plusieurs(identifiants);
 
   const nouvelUtilisateur = async (donneesUtilisateur) => {
     const { email } = donneesUtilisateur;
@@ -372,6 +379,7 @@ const creeDepot = (config = {}) => {
     supprimeUtilisateur,
     tousUtilisateurs,
     utilisateur,
+    utilisateurs,
     utilisateurExiste,
     utilisateurAvecEmail,
     utilisateursAdministresPar,

@@ -224,6 +224,55 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe('concernant la lecture de plusieurs utilisateurs', () => {
+    it('sait lire en une fois les utilisateurs demandés', async () => {
+      const idUtilisateur1 = await insereUtilisateur();
+      const idUtilisateur2 = await insereUtilisateur();
+      await insereUtilisateur();
+
+      const utilisateurs = await persistance.utilisateursAvecIds([
+        idUtilisateur1,
+        idUtilisateur2,
+      ]);
+
+      expect(utilisateurs.length).to.be(2);
+      expect(utilisateurs.map((u) => u.id).sort()).to.eql(
+        [idUtilisateur1, idUtilisateur2].sort()
+      );
+    });
+
+    it('laisse les données chiffrées, comme la lecture unitaire', async () => {
+      const idUtilisateur = await insereUtilisateur();
+
+      const [utilisateur] = await persistance.utilisateursAvecIds([
+        idUtilisateur,
+      ]);
+
+      expect(utilisateur.donnees).to.eql({ email: 'unEmail' });
+      expect(utilisateur.emailHash).to.be('email');
+    });
+
+    it("ne lit aucun utilisateur si la liste d'identifiants est vide", async () => {
+      await insereUtilisateur();
+
+      const utilisateurs = await persistance.utilisateursAvecIds([]);
+
+      expect(utilisateurs.length).to.be(0);
+    });
+
+    it('ignore les identifiants qui ne correspondent à aucun utilisateur', async () => {
+      const idUtilisateur = await insereUtilisateur();
+
+      const utilisateurs = await persistance.utilisateursAvecIds([
+        idUtilisateur,
+        genereUUID(),
+      ]);
+
+      expect(utilisateurs.length).to.be(1);
+      expect(utilisateurs[0].id).to.be(idUtilisateur);
+    });
+  });
+
   describe('concernant la lecture des modèles de mesure spécifique', () => {
     it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
       const idModele1 = await insereModeleMesureSpecifique({
