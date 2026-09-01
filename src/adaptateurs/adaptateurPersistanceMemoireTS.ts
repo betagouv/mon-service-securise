@@ -35,24 +35,17 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     );
   }
 
-  async lisAdminsOrganisation(
-    siret: string
-  ): Promise<Array<DonneesAdminOrganisations>> {
-    return this.donnees.adminsOrganisations.filter((a) =>
-      a.entitesAdministrees.map((e) => e.siret).includes(siret)
-    );
-  }
-
   async lisAdminsOrganisations(
     sirets: string[]
   ): Promise<Map<string, Array<DonneesAdminOrganisations>>> {
-    const parSiret = new Map<string, Array<DonneesAdminOrganisations>>();
-    await Promise.all(
-      sirets.map(async (siret) => {
-        parSiret.set(siret, await this.lisAdminsOrganisation(siret));
-      })
+    return new Map(
+      sirets.map((siret) => [
+        siret,
+        this.donnees.adminsOrganisations.filter((a) =>
+          a.entitesAdministrees.map((e) => e.siret).includes(siret)
+        ),
+      ])
     );
-    return parSiret;
   }
 
   async sauvegardeAdminOrganisations(

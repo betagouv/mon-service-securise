@@ -103,52 +103,6 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
-  describe("sur demande de lecture des admins d'une organisation", () => {
-    it("retourne une liste vide s'il n'en existe pas", async () => {
-      const admin = await persistance.lisAdminsOrganisation('siret-inconnu');
-
-      expect(admin).toEqual([]);
-    });
-
-    it('peut lire des admins chiffrés', async () => {
-      const idAdmin1 = unUUIDRandom();
-      const idAdmin2 = unUUIDRandom();
-      const donneesEntite1 = { nom: 'nom', siret: 'SIRET', departement: '75' };
-      const donneesEntite2 = {
-        nom: 'nom2',
-        siret: 'SIRET2',
-        departement: '75',
-      };
-      const siretHash = chiffrement.hacheSha256('SIRET');
-      await trx.table('admins_organisations').insert({
-        id_utilisateur: idAdmin1,
-        siret_hash: siretHash,
-        donnees: await chiffrement.chiffre(donneesEntite1),
-      });
-      await trx.table('admins_organisations').insert({
-        id_utilisateur: idAdmin2,
-        siret_hash: siretHash,
-        donnees: await chiffrement.chiffre(donneesEntite1),
-      });
-      await trx.table('admins_organisations').insert({
-        id_utilisateur: idAdmin2,
-        siret_hash: chiffrement.hacheSha256('SIRET2'),
-        donnees: await chiffrement.chiffre(donneesEntite2),
-      });
-
-      const [admin, admin2] = await persistance.lisAdminsOrganisation('SIRET');
-
-      expect(admin).toEqual({
-        idUtilisateur: idAdmin1,
-        entitesAdministrees: [donneesEntite1],
-      });
-      expect(admin2).toEqual({
-        idUtilisateur: idAdmin2,
-        entitesAdministrees: [donneesEntite1, donneesEntite2],
-      });
-    });
-  });
-
   describe('sur demande de lecture des admins de plusieurs organisations', () => {
     const entiteA = { nom: 'entiteA', siret: 'SIRET-A', departement: '75' };
     const entiteB = { nom: 'entiteB', siret: 'SIRET-B', departement: '44' };
@@ -210,24 +164,19 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(parSiret.size).toBe(0);
     });
 
-    it('renvoie la même chose que la lecture SIRET par SIRET', async () => {
+    it('associe à un même SIRET tous ses admins', async () => {
       const idAdmin1 = unUUIDRandom();
       const idAdmin2 = unUUIDRandom();
       await ajouteAdminSur(idAdmin1, entiteA);
       await ajouteAdminSur(idAdmin2, entiteA);
       await ajouteAdminSur(idAdmin2, entiteB);
 
-      const parSiret = await persistance.lisAdminsOrganisations([
-        'SIRET-A',
-        'SIRET-B',
-      ]);
+      const parSiret = await persistance.lisAdminsOrganisations(['SIRET-A']);
 
-      expect(parSiret.get('SIRET-A')).toEqual(
-        await persistance.lisAdminsOrganisation('SIRET-A')
-      );
-      expect(parSiret.get('SIRET-B')).toEqual(
-        await persistance.lisAdminsOrganisation('SIRET-B')
-      );
+      expect(parSiret.get('SIRET-A')).toEqual([
+        { idUtilisateur: idAdmin1, entitesAdministrees: [entiteA] },
+        { idUtilisateur: idAdmin2, entitesAdministrees: [entiteA, entiteB] },
+      ]);
     });
   });
 

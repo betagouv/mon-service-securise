@@ -134,26 +134,6 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       .delete();
   }
 
-  async lisAdminsOrganisation(
-    siret: string
-  ): Promise<Array<DonneesAdminOrganisations>> {
-    const siretHache = this.chiffrement.hacheSha256(siret);
-    const chaqueLigne: { idUtilisateur: UUID }[] = await this.knex(
-      TABLES.ADMINS_ORGANISATIONS
-    )
-      .select({ idUtilisateur: 'id_utilisateur' })
-      .where({ siret_hash: siretHache });
-
-    return Promise.all(
-      chaqueLigne.map(
-        ({ idUtilisateur }) =>
-          this.lisAdminOrganisations(
-            idUtilisateur
-          ) as unknown as DonneesAdminOrganisations
-      )
-    );
-  }
-
   async lisAdminsOrganisations(
     sirets: string[]
   ): Promise<Map<string, Array<DonneesAdminOrganisations>>> {
