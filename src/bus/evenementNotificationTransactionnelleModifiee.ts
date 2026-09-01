@@ -1,6 +1,7 @@
-import { NotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
-
-export type EtatNotificationTransactionnelle = 'cree' | 'lu' | 'supprime';
+import {
+  EtatNotificationTransactionnelle,
+  NotificationTransactionnelle,
+} from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 
 export class EvenementNotificationTransactionnelleModifiee {
   readonly notification: NotificationTransactionnelle;

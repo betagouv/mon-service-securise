@@ -1,6 +1,8 @@
 import { UUID } from '../../typesBasiques.js';
 import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
 
+export type EtatNotificationTransactionnelle = 'cree' | 'lu' | 'supprime';
+
 export type DonneesNotificationTransactionnelle =
   DonneesCreationNotificationTransactionnelle & {
     id: UUID;
