@@ -16,11 +16,13 @@
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
   import ModaleEntitesUtilisateurAdministre from './ModaleEntitesUtilisateurAdministre.svelte';
   import Bouton from '../ui/Bouton.svelte';
+  import Loader from '../ui/Loader.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let recherche = $state('');
   let utilisateurSelectionne: UtilisateurAdministre | undefined = $state();
+  let enCoursChargement = $state(false);
 
   let modale: ModaleEntitesUtilisateurAdministre | undefined;
 
@@ -29,8 +31,10 @@
   });
 
   const rafraichis = async () => {
+    enCoursChargement = true;
     mesUtilisateurs = await api.utilisateursDansMonPerimetre();
     mesEntites = await apiEntites.entitesDansMonPerimetre();
+    enCoursChargement = false;
   };
 
   const unAdminExisteAutreQueUtilisateurCourant = $derived(
@@ -62,9 +66,17 @@
 
 <h1>Utilisateurs</h1>
 
-<Tuiles nombreUtilisateurs={mesUtilisateurs.length} {mesEntites} />
+<Tuiles
+  nombreUtilisateurs={mesUtilisateurs.length}
+  {mesEntites}
+  {enCoursChargement}
+/>
 
-{#if mesUtilisateurs.length === 0}
+{#if enCoursChargement}
+  <div class="conteneur-loader">
+    <Loader />
+  </div>
+{:else if mesUtilisateurs.length === 0}
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
     {#if unAdminExisteAutreQueUtilisateurCourant}
@@ -196,6 +208,13 @@
     width: 100%;
     padding: 32px 20px;
     overflow: auto;
+  }
+
+  .conteneur-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
   h1 {
