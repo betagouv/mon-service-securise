@@ -13,11 +13,13 @@
   import ChampRecherche from '../ui/ChampRecherche.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import ModaleEntitesUtilisateurAdministre from '../adminUtilisateurs/ModaleEntitesUtilisateurAdministre.svelte';
+  import Loader from '../ui/Loader.svelte';
 
   let mesUtilisateurs: UtilisateurAdministre[] = $state([]);
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let recherche = $state('');
   let utilisateurSelectionne: UtilisateurAdministre | undefined = $state();
+  let enCoursChargement = $state(false);
 
   let modale: ModaleEntitesUtilisateurAdministre | undefined;
 
@@ -26,10 +28,12 @@
   });
 
   const rafraichis = async () => {
+    enCoursChargement = true;
     mesUtilisateurs = (await api.utilisateursDansMonPerimetre()).filter(
       (u) => u.estAdmin
     );
     mesEntites = await apiEntites.entitesDansMonPerimetre();
+    enCoursChargement = false;
   };
 
   let rechercheNormalisee = $derived(chaineNormalisee(recherche));
@@ -55,9 +59,17 @@
 
 <h1>Admins</h1>
 
-<Tuiles nombreAdministrateurs={mesUtilisateurs.length} {mesEntites} />
+<Tuiles
+  nombreAdministrateurs={mesUtilisateurs.length}
+  {mesEntites}
+  {enCoursChargement}
+/>
 
-{#if mesUtilisateurs.length === 0}
+{#if enCoursChargement}
+  <div class="conteneur-loader">
+    <Loader />
+  </div>
+{:else if mesUtilisateurs.length === 0}
   <div class="aucun-resultat">
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
     <h2>Aucun admin sur vos entités</h2>
@@ -159,6 +171,13 @@
     width: 100%;
     padding: 32px 20px;
     overflow: auto;
+  }
+
+  .conteneur-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
   h1 {
