@@ -2422,6 +2422,114 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
+  describe('sur demande de tous les services associés à plusieurs SIRET', () => {
+    let depot;
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = creeReferentielVide();
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S2')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S3')
+            .avecOrganisationResponsable({ siret: 'SIRET-B' }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('moi', 'S1').donnees
+        )
+        .construis();
+      const depotDonneesUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      });
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        depotDonneesUtilisateurs,
+        referentiel,
+      });
+    });
+
+    it('délègue à la persistance la lecture de ces services, en une fois', async () => {
+      let hashSiretsRecus;
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: {
+          hacheSha256: (chaine) => `${chaine}-SHA256`,
+        },
+        adaptateurPersistance: {
+          servicesComplets: async ({ hashSirets }) => {
+            hashSiretsRecus = hashSirets;
+            return [];
+          },
+        },
+      });
+
+      await depot.tousLesServicesAvecSirets(['SIRET-A', 'SIRET-B']);
+
+      expect(hashSiretsRecus).to.eql(['SIRET-A-SHA256', 'SIRET-B-SHA256']);
+    });
+
+    it('associe à chaque SIRET ses services', async () => {
+      const parSiret = await depot.tousLesServicesAvecSirets([
+        'SIRET-A',
+        'SIRET-B',
+      ]);
+
+      expect(parSiret.get('SIRET-A').map((s) => s.id)).to.eql(['S1', 'S2']);
+      expect(parSiret.get('SIRET-B').map((s) => s.id)).to.eql(['S3']);
+    });
+
+    it('associe une liste vide à un SIRET sans service', async () => {
+      const parSiret = await depot.tousLesServicesAvecSirets(['SIRET-INCONNU']);
+
+      expect(parSiret.get('SIRET-INCONNU')).to.eql([]);
+    });
+
+    it('enrichis les services récupérés', async () => {
+      const parSiret = await depot.tousLesServicesAvecSirets(['SIRET-A']);
+
+      expect(parSiret.get('SIRET-A')[0].contributeurs.length).to.be(1);
+    });
+
+    it('ne lit pas la persistance si aucun SIRET est demandé', async () => {
+      let persistanceLue = false;
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance: {
+          servicesComplets: async () => {
+            persistanceLue = true;
+            return [];
+          },
+        },
+      });
+
+      const parSiret = await depot.tousLesServicesAvecSirets([]);
+
+      expect(persistanceLue).to.be(false);
+      expect(parSiret.size).to.be(0);
+    });
+
+    it('renvoie les mêmes services que la lecture SIRET par SIRET', async () => {
+      const parSiret = await depot.tousLesServicesAvecSirets(['SIRET-A']);
+      const unParUn = await depot.tousLesServicesAvecSiret('SIRET-A');
+
+      expect(parSiret.get('SIRET-A').map((s) => s.id)).to.eql(
+        unParUn.map((s) => s.id)
+      );
+    });
+  });
+
   describe("sur demande d'ajout de mesure spécifique", () => {
     let depot;
     let adaptateurPersistance;

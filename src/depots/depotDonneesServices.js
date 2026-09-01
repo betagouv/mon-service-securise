@@ -94,6 +94,34 @@ const fabriquePersistance = (
         if (!s) return undefined;
         return mappeDonneesVersDomaine(s);
       },
+      ceuxAvecSirets: async (sirets) => {
+        const siretParHash = new Map(
+          sirets.map((siret) => [
+            adaptateurChiffrement.hacheSha256(siret),
+            siret,
+          ])
+        );
+
+        const parSiret = new Map(sirets.map((siret) => [siret, []]));
+        if (sirets.length === 0) return parSiret;
+
+        const donnees = await adaptateurPersistance.servicesComplets({
+          hashSirets: [...siretParHash.keys()],
+        });
+
+        const services = await Promise.all(
+          donnees.map(async (d) => ({
+            siret: siretParHash.get(d.siretHash),
+            service: await mappeDonneesVersDomaine(d),
+          }))
+        );
+
+        services.forEach(({ siret, service }) => {
+          if (siret) parSiret.get(siret).push(service);
+        });
+
+        return parSiret;
+      },
       ceuxAvecSiret: async (siret) => {
         const hashSiret = adaptateurChiffrement.hacheSha256(siret);
 
@@ -329,6 +357,8 @@ const creeDepot = (config = {}) => {
   const tousLesServices = () => p.lis.tous();
 
   const tousLesServicesAvecSiret = (siret) => p.lis.ceuxAvecSiret(siret);
+
+  const tousLesServicesAvecSirets = (sirets) => p.lis.ceuxAvecSirets(sirets);
 
   const enregistreDossier = (idService, dossier) =>
     ajouteAItemsDuService('dossiers', idService, dossier);
@@ -836,6 +866,7 @@ const creeDepot = (config = {}) => {
     supprimeService,
     tousLesServices,
     tousLesServicesAvecSiret,
+    tousLesServicesAvecSirets,
     trouveIndexDisponible,
     versionsServiceUtiliseesParUtilisateur,
   };

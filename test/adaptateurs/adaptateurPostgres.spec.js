@@ -222,6 +222,39 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(services[0].aUneSimulationMigrationReferentiel).to.be(false);
     });
+
+    it('sait lire en une fois les services de plusieurs SIRET', async () => {
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-2');
+      await insereService('siret-3');
+
+      const services = await persistance.servicesComplets({
+        hashSirets: ['siret-1', 'siret-2'],
+      });
+
+      expect(services.length).to.be(2);
+      expect(services.map((s) => s.id).sort()).to.eql(
+        [idService1, idService2].sort()
+      );
+    });
+
+    it('donne le hash du SIRET de chaque service lu, pour pouvoir les regrouper', async () => {
+      await insereService('siret-1');
+
+      const services = await persistance.servicesComplets({
+        hashSirets: ['siret-1'],
+      });
+
+      expect(services[0].siretHash).to.be('siret-1');
+    });
+
+    it('ne lit aucun service si la liste de SIRET est vide', async () => {
+      await insereService('siret-1');
+
+      const services = await persistance.servicesComplets({ hashSirets: [] });
+
+      expect(services.length).to.be(0);
+    });
   });
 
   describe('concernant la lecture de plusieurs utilisateurs', () => {
