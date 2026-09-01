@@ -203,7 +203,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   });
 
   const depotNotificationsTransactionnelles =
-    new DepotDonneesNotificationsTransactionnelles({ adaptateurPersistanceTS });
+    new DepotDonneesNotificationsTransactionnelles({
+      adaptateurPersistanceTS,
+      busEvenements,
+    });
 
   const {
     ajouteDescriptionService,

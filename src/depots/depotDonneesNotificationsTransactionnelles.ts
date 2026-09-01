@@ -3,6 +3,8 @@ import {
   DonneesNotificationTransactionnelle,
   NotificationTransactionnelle,
 } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementNotificationTransactionnelleModifiee } from '../bus/evenementNotificationTransactionnelleModifiee.js';
 
 export type PersistanceNotificationTransactionnelle = {
   lisNotificationsDe(
@@ -20,13 +22,17 @@ export type PersistanceNotificationTransactionnelle = {
 
 export class DepotDonneesNotificationsTransactionnelles {
   private readonly persistance: PersistanceNotificationTransactionnelle;
+  private readonly busEvenements: BusEvenements;
 
   constructor({
     adaptateurPersistanceTS,
+    busEvenements,
   }: {
     adaptateurPersistanceTS: PersistanceNotificationTransactionnelle;
+    busEvenements: BusEvenements;
   }) {
     this.persistance = adaptateurPersistanceTS;
+    this.busEvenements = busEvenements;
   }
   async lisNotifications(idDestinataire: UUID) {
     const donnees = await this.persistance.lisNotificationsDe(idDestinataire);
@@ -49,9 +55,27 @@ export class DepotDonneesNotificationsTransactionnelles {
     await this.persistance.sauvegardeNotificationTransactionnelle(
       notification.donnees()
     );
+
+    await this.busEvenements.publie(
+      new EvenementNotificationTransactionnelleModifiee({
+        notification,
+        etat: notification.donnees().lue ? 'lu' : 'cree',
+      })
+    );
   }
 
-  async supprimeNotificationTransactionnelle(idNotification: UUID) {
-    await this.persistance.supprimeNotificationTransactionnelle(idNotification);
+  async supprimeNotificationTransactionnelle(
+    notification: NotificationTransactionnelle
+  ) {
+    await this.persistance.supprimeNotificationTransactionnelle(
+      notification.donnees().id
+    );
+
+    await this.busEvenements.publie(
+      new EvenementNotificationTransactionnelleModifiee({
+        notification,
+        etat: 'supprime',
+      })
+    );
   }
 }

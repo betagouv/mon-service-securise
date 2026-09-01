@@ -106,9 +106,7 @@ class CentreNotifications {
       throw new ErreurIdentifiantNotificationTransactionnelleInconnu();
     }
 
-    await this.depotDonnees.supprimeNotificationTransactionnelle(
-      idNotification
-    );
+    await this.depotDonnees.supprimeNotificationTransactionnelle(notification);
   }
 }
 
