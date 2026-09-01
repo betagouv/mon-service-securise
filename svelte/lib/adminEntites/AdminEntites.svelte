@@ -13,16 +13,20 @@
   import ChampRecherche from '../ui/ChampRecherche.svelte';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
   import NomEntite from '../ui/NomEntite.svelte';
+  import Loader from '../ui/Loader.svelte';
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let recherche = $state('');
+  let enCoursChargement = $state(false);
 
   onMount(async () => {
     await rafraichis();
   });
 
   const rafraichis = async () => {
+    enCoursChargement = true;
     mesEntites = await api.entitesDansMonPerimetre();
+    enCoursChargement = false;
   };
 
   let rechercheNormalisee = $derived(chaineNormalisee(recherche));
@@ -42,11 +46,17 @@
 
 <h1>Entités</h1>
 
-<Tuiles {mesEntites} />
+<Tuiles {mesEntites} {enCoursChargement} />
 
-<ChampRecherche bind:valeur={recherche} />
+{#if !enCoursChargement}
+  <ChampRecherche bind:valeur={recherche} />
+{/if}
 
-{#if recherche.length > 0 && mesEntitesFiltrees.length === 0}
+{#if enCoursChargement}
+  <div class="conteneur-loader">
+    <Loader />
+  </div>
+{:else if recherche.length > 0 && mesEntitesFiltrees.length === 0}
   <AucunResultatRecherche onclick={() => (recherche = '')} />
 {:else}
   <dsfr-table
@@ -98,6 +108,13 @@
 
   :global(main) {
     background: white;
+  }
+
+  .conteneur-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
   h1 {

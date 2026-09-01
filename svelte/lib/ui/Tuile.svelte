@@ -3,13 +3,14 @@
     nomSvg: string;
     titre: string;
     description: string;
+    enCoursChargement?: boolean;
   }
 
-  let { nomSvg, titre, description }: Props = $props();
+  let { nomSvg, titre, description, enCoursChargement }: Props = $props();
 </script>
 
 <dsfr-tile
-  title={titre}
+  title={enCoursChargement ? '⏳' : titre}
   has-description
   {description}
   horizontal
