@@ -4,9 +4,10 @@
 
   interface Props {
     mesEntites: Array<EntiteSupervisee>;
+    enCoursChargement: boolean;
   }
 
-  let { mesEntites }: Props = $props();
+  let { mesEntites, enCoursChargement }: Props = $props();
 
   let nombreEntites = $derived(mesEntites.length);
   let nombreServicesTotal = $derived(
@@ -27,21 +28,25 @@
     nomSvg="illustration_teacher"
     titre={nombreEntites.toString()}
     description="Entités dans votre périmètre"
+    {enCoursChargement}
   />
   <Tuile
     nomSvg="illustration_data_security"
     titre={nombreServicesTotal.toString()}
     description="Services enregistrés"
+    {enCoursChargement}
   />
   <Tuile
     nomSvg="illustration_avatar"
     titre={nombreAdmins.toString()}
     description="Admins"
+    {enCoursChargement}
   />
   <Tuile
     nomSvg="illustration_warning"
     titre={nombreSansAdmins.toString()}
     description="Entités sans admins"
+    {enCoursChargement}
   />
 </div>
 
