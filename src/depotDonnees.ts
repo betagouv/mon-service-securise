@@ -237,6 +237,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     supprimeRisqueSpecifiqueV2,
     tousLesServices,
     tousLesServicesAvecSiret,
+    tousLesServicesAvecSirets,
     versionsServiceUtiliseesParUtilisateur,
   } = depotServices;
 
@@ -247,6 +248,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     supprimeUtilisateur,
     tousUtilisateurs,
     utilisateur,
+    utilisateurs,
     utilisateurExiste,
     utilisateurAvecEmail,
     utilisateursAdministresPar,
@@ -466,7 +468,9 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     tousUtilisateurs,
     tousLesServices,
     tousLesServicesAvecSiret,
+    tousLesServicesAvecSirets,
     utilisateur,
+    utilisateurs,
     utilisateurExiste,
     utilisateurAvecEmail,
     utilisateursAdministresPar,
@@ -501,6 +505,9 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotAdminsOrganisations
     ),
     lisAdminsPour: depotAdminsOrganisations.lisAdminsPour.bind(
+      depotAdminsOrganisations
+    ),
+    lisAdminsPourSirets: depotAdminsOrganisations.lisAdminsPourSirets.bind(
       depotAdminsOrganisations
     ),
     sauvegardeAdminOrganisations:
