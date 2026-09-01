@@ -5,17 +5,32 @@ import {
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { NotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { EvenementNotificationTransactionnelleModifiee } from '../../src/bus/evenementNotificationTransactionnelleModifiee.ts';
 
 describe('Le dépôt de données des notifications transactionnelles', () => {
   let persistance: PersistanceNotificationTransactionnelle;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   beforeEach(() => {
     persistance = unePersistanceMemoireTS().construis();
+    busEvenements = fabriqueBusPourLesTests();
   });
 
   const unDepot = () =>
     new DepotDonneesNotificationsTransactionnelles({
       adaptateurPersistanceTS: persistance,
+      busEvenements: busEvenements as unknown as BusEvenements,
+    });
+
+  const uneNotification = () =>
+    NotificationTransactionnelle.nouveau({
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'mentionDansMesure',
+      date: new Date(),
+      metadonnees: { idService: unUUID('S') },
     });
 
   it('retourne des modèles métier lors de la lecture', async () => {
@@ -65,7 +80,7 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       );
 
       expect(notification).toBeInstanceOf(NotificationTransactionnelle);
-      expect(notification.donnees().id).toBe(unUUID('I'));
+      expect(notification!.donnees().id).toBe(unUUID('I'));
     });
 
     it("reste robuste si la notification n'existe pas", async () => {
@@ -77,6 +92,78 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       );
 
       expect(notification).toBeUndefined();
+    });
+  });
+
+  describe("sur demande de sauvegarde d'une notification", () => {
+    it('publie un évènement de notification créée sur le bus', async () => {
+      const notification = uneNotification();
+
+      await unDepot().sauvegardeNotificationTransactionnelle(notification);
+
+      expect(
+        busEvenements.aRecuUnEvenement(
+          EvenementNotificationTransactionnelleModifiee
+        )
+      ).toBe(true);
+      expect(
+        busEvenements.recupereEvenement(
+          EvenementNotificationTransactionnelleModifiee
+        )
+      ).toEqual(
+        new EvenementNotificationTransactionnelleModifiee({
+          notification,
+          etat: 'cree',
+        })
+      );
+    });
+
+    it('publie un évènement de notification lue lorsque la notification est lue', async () => {
+      const notification = uneNotification();
+      notification.marqueCommeLue();
+
+      await unDepot().sauvegardeNotificationTransactionnelle(notification);
+
+      expect(
+        busEvenements.recupereEvenement(
+          EvenementNotificationTransactionnelleModifiee
+        )
+      ).toEqual(
+        new EvenementNotificationTransactionnelleModifiee({
+          notification,
+          etat: 'lu',
+        })
+      );
+    });
+  });
+
+  describe("sur demande de suppression d'une notification", () => {
+    it('supprime la notification de la persistance', async () => {
+      const notification = uneNotification();
+      await persistance.sauvegardeNotificationTransactionnelle(
+        notification.donnees()
+      );
+
+      await unDepot().supprimeNotificationTransactionnelle(notification);
+
+      expect(await persistance.lisNotificationsDe(unUUID('D'))).toHaveLength(0);
+    });
+
+    it('publie un évènement de notification supprimée sur le bus', async () => {
+      const notification = uneNotification();
+
+      await unDepot().supprimeNotificationTransactionnelle(notification);
+
+      expect(
+        busEvenements.recupereEvenement(
+          EvenementNotificationTransactionnelleModifiee
+        )
+      ).toEqual(
+        new EvenementNotificationTransactionnelleModifiee({
+          notification,
+          etat: 'supprime',
+        })
+      );
     });
   });
 });
