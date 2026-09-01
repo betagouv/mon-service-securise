@@ -118,6 +118,7 @@ const nouvelAdaptateur = (
     idUtilisateur,
     idService,
     hashSiret,
+    hashSirets,
     tous,
   }) => {
     const servicesRetenus = [];
@@ -131,6 +132,11 @@ const nouvelAdaptateur = (
     } else if (hashSiret) {
       const duSiret = donnees.services.filter((s) => s.siretHash === hashSiret);
       servicesRetenus.push(...duSiret);
+    } else if (hashSirets) {
+      const desSirets = donnees.services.filter((s) =>
+        hashSirets.includes(s.siretHash)
+      );
+      servicesRetenus.push(...desSirets);
     } else if (tous) {
       const tousServices = await Promise.all(
         donnees.services.map((s) => s.id).map(serviceParId)
