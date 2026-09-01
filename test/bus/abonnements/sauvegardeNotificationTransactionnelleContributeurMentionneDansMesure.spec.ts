@@ -6,6 +6,8 @@ import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure }
 import { DepotDonneesNotificationsTransactionnelles } from '../../../src/depots/depotDonneesNotificationsTransactionnelles.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
+import { fabriqueBusPourLesTests } from '../aides/busPourLesTests.js';
+import BusEvenements from '../../../src/bus/busEvenements.ts';
 
 describe("L'abonné qui sauvegarde les notifications transactionnelles d'un contributeur mentionné dans une mesure", () => {
   let depotDonnees: DepotDonneesNotificationsTransactionnelles;
@@ -28,6 +30,7 @@ describe("L'abonné qui sauvegarde les notifications transactionnelles d'un cont
     const adaptateurPersistanceTS = unePersistanceMemoireTS().construis();
     depotDonnees = new DepotDonneesNotificationsTransactionnelles({
       adaptateurPersistanceTS,
+      busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
     idDestinataire = unUUIDRandom();
   });
