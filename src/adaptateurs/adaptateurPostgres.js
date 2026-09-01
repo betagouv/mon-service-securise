@@ -320,6 +320,11 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
       tous.map(convertisLigneEnObjetSansMiseAPlatDonnees)
     );
 
+  const utilisateursAvecIds = (ids) =>
+    knex('utilisateurs')
+      .whereIn('id', ids)
+      .then((lignes) => lignes.map(convertisLigneEnObjetSansMiseAPlatDonnees));
+
   const autorisation = (id) => elementDeTable('autorisations', id);
 
   const autorisationPour = (idUtilisateur, idService) =>
@@ -1106,6 +1111,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     sauvegardeSimulationMigrationReferentiel,
     serviceExisteAvecHashNom,
     servicesComplets,
+    utilisateursAvecIds,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,

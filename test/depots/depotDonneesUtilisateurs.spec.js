@@ -512,6 +512,71 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.dateCreation).to.eql(date);
   });
 
+  describe('sur demande de plusieurs utilisateurs', () => {
+    const troisUtilisateurs = () =>
+      AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [
+          {
+            id: '1',
+            donnees: { prenom: 'Jean', nom: 'Dupont', email: 'jean@mail.fr' },
+            emailHash: 'jean@mail.fr-haché256',
+          },
+          {
+            id: '2',
+            donnees: { prenom: 'Alice', nom: 'Martin', email: 'alice@mail.fr' },
+            emailHash: 'alice@mail.fr-haché256',
+          },
+          {
+            id: '3',
+            donnees: { prenom: 'Bob', nom: 'Durand', email: 'bob@mail.fr' },
+            emailHash: 'bob@mail.fr-haché256',
+          },
+        ],
+      });
+
+    const depotAvecTroisUtilisateurs = () =>
+      DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance: troisUtilisateurs(),
+      });
+
+    it('retourne les utilisateurs demandés', async () => {
+      const depot = depotAvecTroisUtilisateurs();
+
+      const utilisateurs = await depot.utilisateurs(['1', '3']);
+
+      expect(utilisateurs.length).to.be(2);
+      expect(utilisateurs.map((u) => u.id)).to.eql(['1', '3']);
+    });
+
+    it('déchiffre les utilisateurs comme la lecture unitaire', async () => {
+      const depot = depotAvecTroisUtilisateurs();
+
+      const [utilisateur] = await depot.utilisateurs(['1']);
+
+      expect(utilisateur).to.be.an(Utilisateur);
+      expect(utilisateur.prenom).to.equal('Jean');
+      expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+    });
+
+    it("retourne une liste vide si aucun identifiant n'est demandé", async () => {
+      const depot = depotAvecTroisUtilisateurs();
+
+      const utilisateurs = await depot.utilisateurs([]);
+
+      expect(utilisateurs).to.eql([]);
+    });
+
+    it('ignore les identifiants inconnus', async () => {
+      const depot = depotAvecTroisUtilisateurs();
+
+      const utilisateurs = await depot.utilisateurs(['1', 'inconnu']);
+
+      expect(utilisateurs.map((u) => u.id)).to.eql(['1']);
+    });
+  });
+
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
     let depot;
 

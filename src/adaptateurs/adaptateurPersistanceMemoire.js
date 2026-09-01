@@ -265,6 +265,9 @@ const nouvelAdaptateur = (
 
   const tousUtilisateurs = async () => donnees.utilisateurs;
 
+  const utilisateursAvecIds = async (ids) =>
+    donnees.utilisateurs.filter((u) => ids.includes(u.id));
+
   const autorisation = async (id) =>
     donnees.autorisations.find((a) => a.id === id);
 
@@ -797,6 +800,7 @@ const nouvelAdaptateur = (
     sauvegardeSimulationMigrationReferentiel,
     serviceExisteAvecHashNom,
     servicesComplets,
+    utilisateursAvecIds,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,
