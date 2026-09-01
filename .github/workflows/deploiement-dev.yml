@@ -7,7 +7,7 @@ on:
 jobs:
   deploiement-dev:
     name: Déploiement
-    uses: ./.github/workflows/deploiement-clever-cloud.yml
+    uses: $/.github/workflows/deploiement-clever-cloud.yml
     with:
       nom: Déploiement de branche de DEV
       environment: DEV
