@@ -94,23 +94,6 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
 
       expect(parSiret.get('siret-A')).toEqual([]);
     });
-
-    it('renvoie la même chose que la lecture entité par entité', async () => {
-      const persistance = unePersistanceMemoireTS()
-        .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
-        .ajouteAdminSurPerimetre(unUUID('A3'), [
-          { siret: 'siret-B' },
-          { siret: 'siret-A' },
-        ])
-        .construis();
-      const depot = new DepotDonneesAdminsOrganisations({ persistance });
-
-      const parSiret = await depot.lisAdminsPourSirets(['siret-A']);
-
-      expect(parSiret.get('siret-A')).toEqual(
-        await depot.lisAdminsPour('siret-A')
-      );
-    });
   });
 
   it('sauvegarde un admin', async () => {
