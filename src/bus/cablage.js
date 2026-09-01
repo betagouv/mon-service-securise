@@ -79,6 +79,8 @@ import { EvenementRisquesV2ServiceModifies } from './evenementRisquesV2ServiceMo
 import { consigneRisquesV2DansJournal } from './abonnements/consigneRisquesV2DansJournal.js';
 import { EvenementActiviteMesureAjoutee } from './evenementActiviteMesureAjoutee.js';
 import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure } from './abonnements/sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure.js';
+import { EvenementNotificationTransactionnelleModifiee } from './evenementNotificationTransactionnelleModifiee.js';
+import { consigneNotificationTransactionnelleModifieeDansJournal } from './abonnements/consigneNotificationTransactionnelleModifieeDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -304,6 +306,13 @@ const cableTousLesAbonnes = (
     EvenementActiviteMesureAjoutee,
     sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure({
       depotDonnees,
+    })
+  );
+
+  busEvenements.abonne(
+    EvenementNotificationTransactionnelleModifiee,
+    consigneNotificationTransactionnelleModifieeDansJournal({
+      adaptateurJournal,
     })
   );
 };
