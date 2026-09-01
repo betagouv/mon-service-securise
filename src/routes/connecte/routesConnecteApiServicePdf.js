@@ -48,7 +48,8 @@ const routesConnecteApiServicePdf = ({
       fonctionAutorite: dossierCourant.autorite.fonction,
       indiceCyberTotal: service.indiceCyber().total,
       organisationResponsable:
-        service.descriptionService.organisationResponsable.nom,
+        service.descriptionService.organisationResponsable.nom ??
+        service.descriptionService.organisationResponsable.siret,
       referentiel,
       ...dossierCourant.avis.toJSON(),
       ...dossierCourant.documents.toJSON(),

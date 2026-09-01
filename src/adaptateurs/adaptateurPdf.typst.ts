@@ -168,7 +168,9 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
 
     const donnees: DonneesPdfSyntheseSecurite = {
       nomService: service.nomService(),
-      nomEntite: service.descriptionService.organisationResponsable.nom!,
+      nomEntite:
+        service.descriptionService.organisationResponsable.nom ??
+        service.descriptionService.organisationResponsable.siret,
       typeService: service.descriptionTypeService() ?? '',
       localisationDonnees: service.descriptionLocalisationDonnees() ?? '',
       statutDeploiement: service.descriptionStatutDeploiement() ?? '',
