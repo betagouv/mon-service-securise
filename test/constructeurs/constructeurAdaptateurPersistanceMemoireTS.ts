@@ -3,14 +3,17 @@ import { DonneesAdminOrganisations } from '../../src/modeles/gestionOrganisation
 import { DonneesSuperviseur } from '../../src/modeles/superviseur.js';
 import { UUID } from '../../src/typesBasiques.js';
 import { DonneesEntite } from '../../src/modeles/entite.js';
+import { DonneesNotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 
 class ConstructeurAdaptateurPersistanceMemoireTS {
   private readonly adminsOrganisations: DonneesAdminOrganisations[];
   private readonly superviseurs: DonneesSuperviseur[];
+  private readonly notificationsTransactionnelles: DonneesNotificationTransactionnelle[];
 
   constructor() {
     this.adminsOrganisations = [];
     this.superviseurs = [];
+    this.notificationsTransactionnelles = [];
   }
 
   ajouteAdminSurPerimetre(idAdmin: UUID, entitesDuPerimetre: DonneesEntite[]) {
@@ -34,10 +37,19 @@ class ConstructeurAdaptateurPersistanceMemoireTS {
     return this;
   }
 
+  ajouteNotificationTransactionnelle(
+    notification: DonneesNotificationTransactionnelle
+  ) {
+    this.notificationsTransactionnelles.push(notification);
+
+    return this;
+  }
+
   construis() {
     return new AdaptateurPersistanceMemoireTS({
       adminsOrganisations: this.adminsOrganisations,
       superviseurs: this.superviseurs,
+      notificationsTransactionnelles: this.notificationsTransactionnelles,
     });
   }
 }
