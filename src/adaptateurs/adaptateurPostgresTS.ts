@@ -5,6 +5,8 @@ import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import { IdNotificationTransactionnelle } from '../referentiel.types.js';
+import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 
 enum TABLES {
@@ -203,6 +205,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       })
       .where({ id_destinataire: idDestinataire });
   }
+
   async lisNotificationDe(
     idNotification: UUID,
     idDestinataire: UUID
@@ -219,6 +222,28 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       })
       .where({ id_destinataire: idDestinataire, id: idNotification })
       .first();
+  }
+
+  async lisRapportNotifications(): Promise<
+    Map<UUID, NombreNotificationsParType>
+  > {
+    const lignes = await this.knex
+      .select('idDestinataire')
+      .select(this.knex.raw('json_object_agg(type, nombre) as compteurs'))
+      .from(
+        this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+          .select({ idDestinataire: 'id_destinataire', type: 'type' })
+          .count('* as nombre')
+          .where('lue', false)
+          .where('date', '>', this.knex.raw("now() - interval '7 days'"))
+          .groupBy('id_destinataire', 'type')
+          .as('parType')
+      )
+      .groupBy('idDestinataire');
+
+    return new Map<UUID, Record<IdNotificationTransactionnelle, number>>(
+      lignes.map((l) => [l.idDestinataire, l.compteurs])
+    );
   }
 
   async sauvegardeNotificationTransactionnelle(

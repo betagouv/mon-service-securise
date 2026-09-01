@@ -3,6 +3,7 @@ import {
   DonneesNotificationTransactionnelle,
   NotificationTransactionnelle,
 } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import BusEvenements from '../bus/busEvenements.js';
 import { EvenementNotificationTransactionnelleModifiee } from '../bus/evenementNotificationTransactionnelleModifiee.js';
 
@@ -14,6 +15,7 @@ export type PersistanceNotificationTransactionnelle = {
     idNotification: UUID,
     idDestinataire: UUID
   ): Promise<DonneesNotificationTransactionnelle | undefined>;
+  lisRapportNotifications(): Promise<Map<UUID, NombreNotificationsParType>>;
   sauvegardeNotificationTransactionnelle(
     donnees: DonneesNotificationTransactionnelle
   ): Promise<void>;
@@ -47,6 +49,10 @@ export class DepotDonneesNotificationsTransactionnelles {
     if (!donnees) return undefined;
 
     return NotificationTransactionnelle.hydrate(donnees);
+  }
+
+  async lisRapportNotifications() {
+    return this.persistance.lisRapportNotifications();
   }
 
   async sauvegardeNotificationTransactionnelle(

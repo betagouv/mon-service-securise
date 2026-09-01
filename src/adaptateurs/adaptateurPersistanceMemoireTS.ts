@@ -3,6 +3,8 @@ import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/admin
 import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { PersistanceTS } from './persistanceTS.interface.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
+import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
@@ -100,6 +102,36 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   ): Promise<DonneesNotificationTransactionnelle | undefined> {
     return this.donnees.notificationsTransactionnelles.find(
       (n) => n.idDestinataire === idDestinataire && n.id === idNotification
+    );
+  }
+
+  async lisRapportNotifications(): Promise<
+    Map<UUID, NombreNotificationsParType>
+  > {
+    const ilYA7Jours = new Date();
+    ilYA7Jours.setDate(ilYA7Jours.getDate() - 7);
+
+    const toutesNotifications =
+      this.donnees.notificationsTransactionnelles.filter(
+        (n) => !n.lue && ilYA7Jours < n.date
+      );
+
+    const parDestinataire = Map.groupBy(
+      toutesNotifications,
+      (n) => n.idDestinataire
+    );
+
+    return new Map<UUID, Record<IdNotificationTransactionnelle, number>>(
+      [...parDestinataire].map(([idDestinataire, notifications]) => [
+        idDestinataire,
+        notifications.reduce(
+          (compteurs, n) => ({
+            ...compteurs,
+            [n.type]: (compteurs[n.type] ?? 0) + 1,
+          }),
+          {} as Record<IdNotificationTransactionnelle, number>
+        ),
+      ])
     );
   }
 

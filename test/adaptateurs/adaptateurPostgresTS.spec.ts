@@ -509,4 +509,94 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications).toHaveLength(0);
     });
   });
+
+  describe('sur demande de lecture du rapport de notifications', () => {
+    const insereUneNotification = async (
+      donnees: Partial<DonneesNotificationTransactionnelle>
+    ) => {
+      await trx.table('notifications_transactionnelles').insert({
+        id: donnees.id ?? unUUIDRandom(),
+        lue: donnees.lue ?? false,
+        id_acteur: donnees.idActeur ?? unUUIDRandom(),
+        id_destinataire: donnees.idDestinataire ?? unUUIDRandom(),
+        metadonnees: donnees.metadonnees ?? { proprietes: 42 },
+        type: donnees.type ?? 'mentionDansMesure',
+        date: donnees.date ?? new Date(),
+      });
+    };
+
+    it('ne considère que les notifications datant des 7 derniers jours', async () => {
+      const idDestinataire = unUUIDRandom();
+      const date = new Date();
+      const ilYA30Jours = new Date();
+      ilYA30Jours.setDate(ilYA30Jours.getDate() - 30);
+
+      await insereUneNotification({
+        idDestinataire,
+        date,
+      });
+      await insereUneNotification({
+        idDestinataire,
+        date: ilYA30Jours,
+      });
+
+      const notifications = await persistance.lisRapportNotifications();
+
+      expect(notifications.get(idDestinataire)?.mentionDansMesure).toBe(1);
+    });
+
+    it('ne considère que les notifications non lue', async () => {
+      const idDestinataire = unUUIDRandom();
+      await insereUneNotification({
+        idDestinataire,
+        lue: false,
+      });
+      await insereUneNotification({
+        idDestinataire,
+        lue: true,
+      });
+
+      const notifications = await persistance.lisRapportNotifications();
+
+      expect(notifications.get(idDestinataire)).toEqual({
+        mentionDansMesure: 1,
+      });
+    });
+
+    it('groupe par destinataire, et compte par type de notification', async () => {
+      const idDestinataire1 = unUUIDRandom();
+      const idDestinataire2 = unUUIDRandom();
+
+      await insereUneNotification({
+        idDestinataire: idDestinataire1,
+        // @ts-expect-error On force un type inexistant pour les compter
+        type: 'TYPE_A',
+      });
+      await insereUneNotification({
+        idDestinataire: idDestinataire1,
+        // @ts-expect-error On force un type inexistant pour les compter
+        type: 'TYPE_A',
+      });
+      await insereUneNotification({
+        idDestinataire: idDestinataire1,
+        // @ts-expect-error On force un type inexistant pour les compter
+        type: 'TYPE_B',
+      });
+      await insereUneNotification({
+        idDestinataire: idDestinataire2,
+        // @ts-expect-error On force un type inexistant pour les compter
+        type: 'TYPE_A',
+      });
+
+      const notifications = await persistance.lisRapportNotifications();
+
+      expect(notifications.get(idDestinataire1)).toEqual({
+        TYPE_A: 2,
+        TYPE_B: 1,
+      });
+      expect(notifications.get(idDestinataire2)).toEqual({
+        TYPE_A: 1,
+      });
+    });
+  });
 });
