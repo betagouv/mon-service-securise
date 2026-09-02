@@ -498,29 +498,39 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
       .where({ id_service: idService })
       .del();
 
-  const marqueNouveauteLue = async (idUtilisateur, idNouveaute) => {
-    const nouveauteDejaLue =
-      (await knex('notifications_nouveaute')
-        .where('id_utilisateur', idUtilisateur)
-        .where('id_nouveaute', idNouveaute)
-        .select()
-        .first()) !== undefined;
-
-    if (!nouveauteDejaLue)
-      await knex('notifications_nouveaute').insert({
+  const marqueNouveauteLue = async (idUtilisateur, idNouveaute) =>
+    knex('notifications_nouveaute')
+      .insert({
         id_utilisateur: idUtilisateur,
         id_nouveaute: idNouveaute,
-      });
-  };
+        date_lecture: new Date(),
+      })
+      .onConflict(['id_utilisateur', 'id_nouveaute'])
+      .merge();
+
+  const marqueNouveauteSupprimee = async (idUtilisateur, idNouveaute) =>
+    knex('notifications_nouveaute')
+      .insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: idNouveaute,
+        date_suppression: new Date(),
+      })
+      .onConflict(['id_utilisateur', 'id_nouveaute'])
+      .merge();
 
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
     (
       await knex('notifications_nouveaute')
         .where('id_utilisateur', idUtilisateur)
-        .select({ id: 'id_nouveaute', dateLecture: 'date_lecture' })
-    ).map(({ id, dateLecture }) => ({
+        .select({
+          id: 'id_nouveaute',
+          dateLecture: 'date_lecture',
+          dateSuppression: 'date_suppression',
+        })
+    ).map(({ id, dateLecture, dateSuppression }) => ({
       id,
       lue: !!dateLecture,
+      supprimee: !!dateSuppression,
     }));
 
   const tachesDeServicePour = async (idUtilisateur) => {
@@ -1090,6 +1100,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     lisTeleversementServices,
     lisToutesActivitesMesures,
     marqueNouveauteLue,
+    marqueNouveauteSupprimee,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourModeleMesureSpecifique,
