@@ -24,6 +24,7 @@ type DonneesNouveaute = {
 type NotificationNouveaute = {
   id: IdNouvelleFonctionnalite;
   lue: boolean;
+  supprimee: boolean;
 };
 
 export class SourceNouveautes implements SourceNotifications {
@@ -46,19 +47,24 @@ export class SourceNouveautes implements SourceNotifications {
           new Date(utilisateur?.dateCreation ?? 0)
     );
 
-    const etatLectureNouveautes: NotificationNouveaute[] =
+    const toutesNouveautesPersistees: NotificationNouveaute[] =
       await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);
+    const etatLectureNouveautes = new Map(
+      toutesNouveautesPersistees.map((n) => [n.id, n])
+    );
 
-    return toutesNouveautes.map((n) => ({
-      ...n,
-      statutLecture: etatLectureNouveautes.find((etat) => etat.id === n.id)?.lue
-        ? StatutLecture.lue
-        : StatutLecture.nonLue,
-      type: 'nouveaute',
-      doitNotifierLecture: true,
-      supprimable: false,
-      date: () => new Date(n.dateDeDeploiement),
-      horodatage: new Date(n.dateDeDeploiement),
-    }));
+    return toutesNouveautes
+      .filter((n) => !etatLectureNouveautes.get(n.id)?.supprimee)
+      .map((n) => ({
+        ...n,
+        statutLecture: etatLectureNouveautes.get(n.id)?.lue
+          ? StatutLecture.lue
+          : StatutLecture.nonLue,
+        type: 'nouveaute',
+        doitNotifierLecture: true,
+        supprimable: false,
+        date: () => new Date(n.dateDeDeploiement),
+        horodatage: new Date(n.dateDeDeploiement),
+      }));
   }
 }

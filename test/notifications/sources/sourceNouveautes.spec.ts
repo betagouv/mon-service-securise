@@ -104,6 +104,15 @@ describe('Les notifications de nouveautés', () => {
     expect(notifications.length).toBe(0);
   });
 
+  it("ne retourne pas les nouveautés marquées comme 'supprimée'", async () => {
+    await depotDonnees.marqueNouveauteSupprimee(unUUID('U1'), 'N2');
+
+    const notifications = await laSource().notificationsPour(unUUID('U1'));
+
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0].id).toBe('N1');
+  });
+
   it('indique que la nouveaute doit être notifiée de sa lecture', async () => {
     const notifications = await laSource().notificationsPour(unUUID('U1'));
 
