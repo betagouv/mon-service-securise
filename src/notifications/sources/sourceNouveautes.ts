@@ -62,7 +62,7 @@ export class SourceNouveautes implements SourceNotifications {
           : StatutLecture.nonLue,
         type: 'nouveaute',
         doitNotifierLecture: true,
-        supprimable: false,
+        supprimable: true,
         date: () => new Date(n.dateDeDeploiement),
         horodatage: new Date(n.dateDeDeploiement),
       }));
