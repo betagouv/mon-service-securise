@@ -290,6 +290,16 @@ const envoieMessageNominationAdmin = (destinataire: string) =>
     parseInt(process.env.SENDINBLUE_TEMPLATE_NOUVEL_ADMIN as string, 10)
   );
 
+const envoieRapportHebdomadaire = (destinataire: string, contenu: string) =>
+  envoieEmail(
+    destinataire,
+    parseInt(
+      process.env.SENDINBLUE_TEMPLATE_RAPPORT_HEBDOMADAIRE as string,
+      10
+    ),
+    { contenu }
+  );
+
 const recupereIdentifiantContact = async (email: string) => {
   const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
   const idContact = reponse?.data?.id;
@@ -460,6 +470,7 @@ export const adaptateurMailSendinblue = {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageNominationAdmin,
+  envoieRapportHebdomadaire,
   envoieNotificationExpirationHomologation:
     envoieNotificationExpirationHomologationCadencee,
   recupereEntreprise,
