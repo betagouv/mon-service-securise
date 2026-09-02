@@ -60,10 +60,10 @@ describe('Les notifications de nouveautés', () => {
     expect(notifications[1].statutLecture).toBe('lue');
   });
 
-  it("indique qu'une nouveauté n'est pas supprimable", async () => {
+  it("indique qu'une nouveauté est supprimable", async () => {
     const notifications = await laSource().notificationsPour(unUUID('U1'));
 
-    expect(notifications[0].supprimable).toBe(false);
+    expect(notifications[0].supprimable).toBe(true);
   });
 
   it('ne retourne pas les nouveautés du futur', async () => {
