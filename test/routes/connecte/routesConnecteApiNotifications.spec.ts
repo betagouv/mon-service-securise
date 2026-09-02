@@ -49,6 +49,14 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
   });
 
   describe('quand requête PUT sur `/api/notifications/nouveautes/:id`', () => {
+    it("jette une erreur si l'identifiant n'est pas connu", async () => {
+      const reponse = await testeur.put(
+        '/api/notifications/nouveautes/PAS_UN_ID_NOUVEAUTE'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
     it('délègue au centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
       testeur.depotDonnees().marqueNouveauteLue = async (
