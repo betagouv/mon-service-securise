@@ -12,6 +12,7 @@ import { TousReferentiels } from '../../referentiel.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import {
   schemaDeleteNotificationTransactionnelle,
+  schemaDeleteNouveaute,
   schemaPutNotificationTransactionnelle,
   schemaPutNouveaute,
   schemaPutTache,
@@ -67,6 +68,22 @@ const routesConnecteApiNotifications = ({
         }
         suite(e);
       }
+    }
+  );
+
+  routes.delete(
+    '/nouveautes/:id',
+    valideParams(z.strictObject(schemaDeleteNouveaute(referentiel))),
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
+      await depotDonnees.marqueNouveauteSupprimee(
+        idUtilisateurCourant,
+        requete.params.id
+      );
+
+      reponse.sendStatus(200);
     }
   );
 
