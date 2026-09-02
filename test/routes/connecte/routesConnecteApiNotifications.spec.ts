@@ -72,6 +72,30 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
     });
   });
 
+  describe('quand requête DELETE sur `/api/notifications/nouveautes/:id`', () => {
+    it("jette une erreur si l'identifiant n'est pas connu", async () => {
+      const reponse = await testeur.delete(
+        '/api/notifications/nouveautes/PAS_UN_ID_NOUVEAUTE'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('supprime la notification de nouveauté', async () => {
+      const idUtilisateur = unUUID('D');
+      testeur.middleware().reinitialise({ idUtilisateur });
+
+      const reponse = await testeur.delete(`/api/notifications/nouveautes/N1`);
+
+      expect(reponse.status).toBe(200);
+      const notifications = await testeur
+        .depotDonnees()
+        .nouveautesPourUtilisateur(unUUID('D'));
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0].supprimee).toBeTruthy();
+    });
+  });
+
   describe('quand requête PUT sur `/api/notifications/taches/:id`', () => {
     it('délègue au dépôt via le centre de notification le marquage à "lue"', async () => {
       let donneesRecues;
