@@ -26,7 +26,7 @@ const donnees = {
         "Importez un fichier avec la liste de vos services à sécuriser. Ils apparaissent d'un coup sur votre tableau de bord, prêts à être homologués.",
       image: 'televersementServices-v2.png',
       canalDiffusion: 'centreNotifications',
-      titreCta: 'Comment téléverser',
+      titreCta: 'Découvrir',
     },
     {
       id: 'listeMesure',
@@ -37,7 +37,7 @@ const donnees = {
         "Changez le statut et les précisions d'une mesure sur tous les services concernés, sans avoir à les ouvrir un par un.",
       image: 'listeMesure-v2.png',
       canalDiffusion: 'centreNotifications',
-      titreCta: 'Comment ça marche',
+      titreCta: 'Découvrir',
     },
     {
       id: 'televersementMesures',
@@ -48,7 +48,7 @@ const donnees = {
         'Téléversez vos mesures maison en une seule fois, appliquez-les aux services de votre choix, puis modifiez-les sur plusieurs services à la fois.',
       image: 'televersementMesures-v2.png',
       canalDiffusion: 'centreNotifications',
-      titreCta: 'Comment téléverser',
+      titreCta: 'Découvrir',
     },
     {
       id: 'risquesV2',
@@ -59,7 +59,7 @@ const donnees = {
         "Des risques adaptés à votre service, une vraisemblance qui évolue avec votre plan d'action, et trois cartographies pour suivre votre progression.",
       image: 'risquesV2-v2.png',
       canalDiffusion: 'centreNotifications',
-      titreCta: 'Comprendre le moteur',
+      titreCta: 'Découvrir',
     },
     {
       id: 'referentielsExternes',
@@ -70,7 +70,7 @@ const donnees = {
         "Chaque mesure affiche désormais ses correspondances avec ReCyF (NIS2), ISO 27001/27002 et l'annexe au règlement d'exécution 2024/2690.",
       image: 'referentielsExternes-v2.png',
       canalDiffusion: 'centreNotifications',
-      titreCta: 'Voir les correspondances',
+      titreCta: 'Découvrir',
     },
   ],
 
