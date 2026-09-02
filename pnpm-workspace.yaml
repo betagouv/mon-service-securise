@@ -9,3 +9,5 @@ onlyBuiltDependencies:
 minimumReleaseAgeExclude:
   - '@lab-anssi/ui-kit@1.60.9'
   - '@lab-anssi/lib@2.2.1'
+  # Renovate security update: @tiptap/core@3.30.4
+  - "@tiptap/core@3.30.4"
