@@ -691,4 +691,26 @@ describe("L'adaptateur persistance Postgres", () => {
       });
     });
   });
+
+  describe('concernant la lecture des notifications de nouveauté', () => {
+    it('indique si une nouveauté est lue', async () => {
+      const idUtilisateur = genereUUID();
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N1',
+        date_lecture: new Date(),
+      });
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N2',
+        date_lecture: null,
+      });
+
+      const nouveautes =
+        await persistance.nouveautesPourUtilisateur(idUtilisateur);
+
+      expect(nouveautes.find((n) => n.id === 'N1').lue).to.be(true);
+      expect(nouveautes.find((n) => n.id === 'N2').lue).to.be(false);
+    });
+  });
 });

@@ -21,6 +21,11 @@ type DonneesNouveaute = {
   titreCta: string;
 };
 
+type NotificationNouveaute = {
+  id: IdNouvelleFonctionnalite;
+  lue: boolean;
+};
+
 export class SourceNouveautes implements SourceNotifications {
   constructor(
     private readonly referentiel: TousReferentiels,
@@ -41,12 +46,12 @@ export class SourceNouveautes implements SourceNotifications {
           new Date(utilisateur?.dateCreation ?? 0)
     );
 
-    const etatLectureNouveautes =
+    const etatLectureNouveautes: NotificationNouveaute[] =
       await this.depotDonnees.nouveautesPourUtilisateur(idUtilisateur);
 
     return toutesNouveautes.map((n) => ({
       ...n,
-      statutLecture: etatLectureNouveautes.includes(n.id)
+      statutLecture: etatLectureNouveautes.find((etat) => etat.id === n.id)?.lue
         ? StatutLecture.lue
         : StatutLecture.nonLue,
       type: 'nouveaute',
