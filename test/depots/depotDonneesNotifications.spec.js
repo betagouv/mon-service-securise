@@ -51,6 +51,22 @@ describe('Le dépôt de données des notifications', () => {
     });
   });
 
+  describe("sur demande de marquage d'une nouveauté comme supprimée", () => {
+    it("délègue à l'adaptateur persistance le marquage", async () => {
+      let donneesRecues;
+      adaptateurPersistance.marqueNouveauteSupprimee = async (
+        idUtilisateur,
+        idNouveaute
+      ) => {
+        donneesRecues = { idUtilisateur, idNouveaute };
+      };
+      await depotNotifications.marqueNouveauteSupprimee('U1', 'N1');
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.idNouveaute).to.be('N1');
+    });
+  });
+
   describe("sur demande de marquage d'une tâche de service comme 'lue'", () => {
     it("délègue à l'adaptateur persistance le marquage", async () => {
       let donneesRecues;

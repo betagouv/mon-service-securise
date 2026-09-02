@@ -283,6 +283,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
 
   const {
     marqueNouveauteLue,
+    marqueNouveauteSupprimee,
     marqueTacheDeServiceLue,
     nouveautesPourUtilisateur,
     tachesDesServices,
@@ -414,6 +415,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     marqueNouveauteLue,
+    marqueNouveauteSupprimee,
     marqueTableauDeBordVuDansParcoursUtilisateur,
     marqueTacheDeServiceLue,
     metsAJourModeleMesureSpecifique,

@@ -712,5 +712,69 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(nouveautes.find((n) => n.id === 'N1').lue).to.be(true);
       expect(nouveautes.find((n) => n.id === 'N2').lue).to.be(false);
     });
+
+    it('indique si une nouveauté est supprimée', async () => {
+      const idUtilisateur = genereUUID();
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N1',
+        date_suppression: new Date(),
+      });
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N2',
+        date_suppression: null,
+      });
+
+      const nouveautes =
+        await persistance.nouveautesPourUtilisateur(idUtilisateur);
+
+      expect(nouveautes.find((n) => n.id === 'N1').supprimee).to.be(true);
+      expect(nouveautes.find((n) => n.id === 'N2').supprimee).to.be(false);
+    });
+
+    it('conserve une ligne existante en ajoutant la date de lecture', async () => {
+      const idUtilisateur = genereUUID();
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N1',
+        date_suppression: new Date(),
+      });
+
+      await persistance.marqueNouveauteLue(idUtilisateur, 'N1');
+
+      const nouveautes =
+        await persistance.nouveautesPourUtilisateur(idUtilisateur);
+      expect(nouveautes[0].supprimee).to.be(true);
+      expect(nouveautes[0].lue).to.be(true);
+    });
+  });
+
+  describe('concernant la suppression des notifications de nouveauté', () => {
+    it('enregistre la date de suppression', async () => {
+      const idUtilisateur = genereUUID();
+
+      await persistance.marqueNouveauteSupprimee(idUtilisateur, 'N1');
+
+      const nouveautes =
+        await persistance.nouveautesPourUtilisateur(idUtilisateur);
+      expect(nouveautes[0].supprimee).to.be(true);
+    });
+
+    it('conserve une ligne existante en ajoutant la date de suppression', async () => {
+      const idUtilisateur = genereUUID();
+      await knex('notifications_nouveaute').insert({
+        id_utilisateur: idUtilisateur,
+        id_nouveaute: 'N1',
+        date_lecture: new Date(),
+      });
+
+      await persistance.marqueNouveauteSupprimee(idUtilisateur, 'N1');
+
+      const nouveautes =
+        await persistance.nouveautesPourUtilisateur(idUtilisateur);
+      expect(nouveautes[0].supprimee).to.be(true);
+      expect(nouveautes[0].lue).to.be(true);
+    });
   });
 });

@@ -377,19 +377,40 @@ const nouvelAdaptateur = (
   };
 
   const marqueNouveauteLue = async (idUtilisateur, idNouveaute) => {
-    donnees.notifications.push({
-      idUtilisateur,
-      idNouveaute,
-      dateLecture: new Date(),
-    });
+    const indexExistante = donnees.notifications.findIndex(
+      (n) => n.idUtilisateur === idUtilisateur && n.idNouveaute === idNouveaute
+    );
+    if (indexExistante !== -1)
+      donnees.notifications[indexExistante].dateLecture = new Date();
+    else
+      donnees.notifications.push({
+        idUtilisateur,
+        idNouveaute,
+        dateLecture: new Date(),
+      });
+  };
+
+  const marqueNouveauteSupprimee = async (idUtilisateur, idNouveaute) => {
+    const indexExistante = donnees.notifications.findIndex(
+      (n) => n.idUtilisateur === idUtilisateur && n.idNouveaute === idNouveaute
+    );
+    if (indexExistante !== -1)
+      donnees.notifications[indexExistante].dateSuppression = new Date();
+    else
+      donnees.notifications.push({
+        idUtilisateur,
+        idNouveaute,
+        dateSuppression: new Date(),
+      });
   };
 
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
     donnees.notifications
       .filter(({ idUtilisateur: u }) => u === idUtilisateur)
-      .map(({ idNouveaute, dateLecture }) => ({
+      .map(({ idNouveaute, dateLecture, dateSuppression }) => ({
         id: idNouveaute,
         lue: !!dateLecture,
+        supprimee: !!dateSuppression,
       }));
 
   const tachesDeServicePour = async () => [];
@@ -787,6 +808,7 @@ const nouvelAdaptateur = (
     lisTeleversementServices,
     lisToutesActivitesMesures,
     marqueNouveauteLue,
+    marqueNouveauteSupprimee,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourModeleMesureSpecifique,

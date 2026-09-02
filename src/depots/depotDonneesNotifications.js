@@ -9,6 +9,9 @@ const creeDepot = (config = {}) => {
   const marqueNouveauteLue = async (idUtilisateur, idNouveaute) =>
     adaptateurPersistance.marqueNouveauteLue(idUtilisateur, idNouveaute);
 
+  const marqueNouveauteSupprimee = async (idUtilisateur, idNouveaute) =>
+    adaptateurPersistance.marqueNouveauteSupprimee(idUtilisateur, idNouveaute);
+
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
     adaptateurPersistance.nouveautesPourUtilisateur(idUtilisateur);
 
@@ -30,6 +33,7 @@ const creeDepot = (config = {}) => {
 
   return {
     marqueNouveauteLue,
+    marqueNouveauteSupprimee,
     marqueTacheDeServiceLue,
     nouveautesPourUtilisateur,
     tachesDesServices,
