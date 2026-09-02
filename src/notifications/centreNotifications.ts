@@ -39,7 +39,7 @@ class CentreNotifications {
       new SourceNouveautes(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesProfil(referentiel, depotDonnees, adaptateurHorloge),
       new SourceTachesService(referentiel, depotDonnees),
-      new SourceNotificationsTransactionnelles(depotDonnees),
+      new SourceNotificationsTransactionnelles(depotDonnees, adaptateurHorloge),
     ];
   }
 

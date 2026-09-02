@@ -7,9 +7,13 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { UUID } from '../../typesBasiques.js';
 import { Contributeur } from '../../modeles/contributeur.js';
 import MesureSpecifique from '../../modeles/mesureSpecifique.js';
+import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 
 export class SourceNotificationsTransactionnelles implements SourceNotifications {
-  constructor(private readonly depotDonnees: DepotDonnees) {}
+  constructor(
+    private readonly depotDonnees: DepotDonnees,
+    private readonly adaptateurHorloge: AdaptateurHorloge
+  ) {}
 
   async notificationsPour(idUtilisateur: UUID): Promise<Notification[]> {
     const notifications =
@@ -18,6 +22,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
     const lesServices = await this.depotDonnees.services(idUtilisateur);
 
     return notifications
+      .filter((n) => n.donnees().date <= this.adaptateurHorloge.maintenant())
       .map((n) => {
         const { idService, idMesure, typeMesure } = n.donnees().metadonnees;
         const service = lesServices.find((s) => s.id === idService);
