@@ -236,6 +236,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
           .count('* as nombre')
           .where('lue', false)
           .where('date', '>', this.knex.raw("now() - interval '7 days'"))
+          .where('date', '<=', this.knex.raw('clock_timestamp()'))
           .groupBy('id_destinataire', 'type')
           .as('parType')
       )
