@@ -25,7 +25,10 @@ describe('Les notifications de nouveautés', () => {
     });
   });
 
-  const laSource = () => new SourceNotificationsTransactionnelles(depotDonnees);
+  const laSource = () =>
+    new SourceNotificationsTransactionnelles(depotDonnees, {
+      maintenant: () => new Date(),
+    });
 
   describe("concernant les notifications 'mentionDansMesure'", () => {
     const idUtilisateur = unUUID('U1');
@@ -136,6 +139,7 @@ describe('Les notifications de nouveautés', () => {
 
         expect(notifications).toHaveLength(0);
       });
+
       it("masque le nom d'un admin", async () => {
         depotDonnees.services = async () => [
           unServiceV2()
@@ -171,6 +175,18 @@ describe('Les notifications de nouveautés', () => {
           'Jean Acteur vous a mentionné sur la mesure « Spécifique » de [Mairie de Bordeaux]'
         );
       });
+    });
+
+    it('filtre les notifications du futur', async () => {
+      const notification = NotificationTransactionnelle.nouveau({
+        ...notificationMesureGenerale.donnees(),
+        date: new Date('3600-01-01'),
+      });
+      await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
+
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(0);
     });
   });
 });
