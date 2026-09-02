@@ -545,6 +545,26 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications.get(idDestinataire)?.mentionDansMesure).toBe(1);
     });
 
+    it('ne considère pas les notifications du futur', async () => {
+      const idDestinataire = unUUIDRandom();
+      const date = new Date();
+      const dans30Jours = new Date();
+      dans30Jours.setDate(dans30Jours.getDate() + 30);
+
+      await insereUneNotification({
+        idDestinataire,
+        date,
+      });
+      await insereUneNotification({
+        idDestinataire,
+        date: dans30Jours,
+      });
+
+      const notifications = await persistance.lisRapportNotifications();
+
+      expect(notifications.get(idDestinataire)?.mentionDansMesure).toBe(1);
+    });
+
     it('ne considère que les notifications non lue', async () => {
       const idDestinataire = unUUIDRandom();
       await insereUneNotification({

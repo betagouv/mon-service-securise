@@ -113,7 +113,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
 
     const toutesNotifications =
       this.donnees.notificationsTransactionnelles.filter(
-        (n) => !n.lue && ilYA7Jours < n.date
+        (n) => !n.lue && ilYA7Jours < n.date && n.date < new Date()
       );
 
     const parDestinataire = Map.groupBy(
