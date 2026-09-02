@@ -377,16 +377,20 @@ const nouvelAdaptateur = (
   };
 
   const marqueNouveauteLue = async (idUtilisateur, idNouveaute) => {
-    donnees.notifications[`${idUtilisateur}-${idNouveaute}`] = {
+    donnees.notifications.push({
       idUtilisateur,
       idNouveaute,
-    };
+      dateLecture: new Date(),
+    });
   };
 
   const nouveautesPourUtilisateur = async (idUtilisateur) =>
-    Object.entries(donnees.notifications)
-      .filter(([_cle, valeur]) => valeur.idUtilisateur === idUtilisateur)
-      .map((_cle, valeur) => valeur.idNouveaute);
+    donnees.notifications
+      .filter(({ idUtilisateur: u }) => u === idUtilisateur)
+      .map(({ idNouveaute, dateLecture }) => ({
+        id: idNouveaute,
+        lue: !!dateLecture,
+      }));
 
   const tachesDeServicePour = async () => [];
 

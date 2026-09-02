@@ -50,15 +50,9 @@ describe('Les notifications de nouveautés', () => {
     );
 
   it("ajoute le statut 'lu' à la notification si elle l'est", async () => {
-    let donneesRecues;
-    depotDonnees.nouveautesPourUtilisateur = async (idUtilisateur) => {
-      donneesRecues = { idUtilisateur };
-      return ['N2'];
-    };
+    await depotDonnees.marqueNouveauteLue(unUUID('U1'), 'N2');
 
     const notifications = await laSource().notificationsPour(unUUID('U1'));
-
-    expect(donneesRecues!.idUtilisateur).toBe(unUUID('U1'));
 
     expect(notifications[0].id).toBe('N1');
     expect(notifications[0].statutLecture).toBe('nonLue');

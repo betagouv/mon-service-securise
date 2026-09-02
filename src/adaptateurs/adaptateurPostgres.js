@@ -517,10 +517,11 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     (
       await knex('notifications_nouveaute')
         .where('id_utilisateur', idUtilisateur)
-        .select('id_nouveaute')
-    )
-      // eslint-disable-next-line camelcase
-      .map(({ id_nouveaute }) => id_nouveaute);
+        .select({ id: 'id_nouveaute', dateLecture: 'date_lecture' })
+    ).map(({ id, dateLecture }) => ({
+      id,
+      lue: !!dateLecture,
+    }));
 
   const tachesDeServicePour = async (idUtilisateur) => {
     const requete = await knex.raw(
