@@ -53,6 +53,11 @@ export interface AdaptateurMail {
 
   envoieMessageNominationAdmin(destinataire: string): Promise<void>;
 
+  envoieRapportHebdomadaire(
+    destinataire: string,
+    contenu: string
+  ): Promise<void>;
+
   inscrisEmailsTransactionnels(destinataire: string): Promise<void>;
 
   inscrisInfolettre(destinataire: string): Promise<void>;

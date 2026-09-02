@@ -60,6 +60,13 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer("Envoie de l'email qui informe l'admin nouvellement nommé", args);
   };
 
+  const envoieRapportHebdomadaire = async (
+    destinataire: string,
+    contenu: string
+  ) => {
+    envoyer(`Envoi du rapport hebdomadaire pour ${destinataire}`, contenu);
+  };
+
   const envoieNotificationExpirationHomologation = async (
     ...args: unknown[]
   ) => {
@@ -144,6 +151,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieMessageInvitationInscription,
     envoieNotificationExpirationHomologation,
     envoieMessageNominationAdmin,
+    envoieRapportHebdomadaire,
     recupereEntreprise,
     recupereEntrepriseDuContact,
     recupereIdentifiantContact,
