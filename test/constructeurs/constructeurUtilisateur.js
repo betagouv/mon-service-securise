@@ -49,6 +49,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  avecPreferencesRapportHebdomadaire(preferences) {
+    this.donnees.preferencesRecapitulatifHebdomadaire = preferences;
+    return this;
+  }
+
   avecTelephone(telephone) {
     this.donnees.telephone = telephone;
     return this;

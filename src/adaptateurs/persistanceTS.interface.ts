@@ -2,7 +2,6 @@ import { DonneesAdminOrganisations } from '../modeles/gestionOrganisations/admin
 import { DonneesSuperviseur } from '../modeles/superviseur.js';
 import { UUID } from '../typesBasiques.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
-import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 
 export interface PersistanceTS {
