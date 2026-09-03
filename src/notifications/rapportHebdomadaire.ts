@@ -34,21 +34,54 @@ export class RapportHebdomadaire {
     const formatteMentionDansMesure = (
       nombresParType: NombreNotificationsParType
     ) =>
-      `Vous avez reçu ${nombresParType.mentionDansMesure} ${singulierPluriel('mention dans un commentaire.', 'mentions dans des commentaires.', nombresParType.mentionDansMesure || 0)}`;
+      singulierPluriel(
+        'Vous avez reçu <b>une mention</b> dans un commentaire.',
+        `Vous avez reçu <b>${nombresParType.mentionDansMesure} mentions</b> dans des commentaires.`,
+        nombresParType.mentionDansMesure || 0
+      );
+
+    const formatteResponsableMesure = (
+      nombresParType: NombreNotificationsParType
+    ) =>
+      singulierPluriel(
+        "Vous êtes désormais responsable d'<b>une mesure</b>.",
+        `Vous êtes désormais responsable de <b>${nombresParType.responsableMesure} mesures</b>.`,
+        nombresParType.responsableMesure || 0
+      );
+
+    const genereContenuPourUtilisateur = (
+      idUtilisateur: UUID,
+      nombresParType: NombreNotificationsParType
+    ): string[] =>
+      Object.entries(nombresParType)
+        .map(([typeNotification]) => {
+          if (
+            tousUtilisateurs.get(idUtilisateur)!.preferencesRecapitulatif()[
+              typeNotification as IdNotificationTransactionnelle
+            ]
+          ) {
+            if (typeNotification === 'mentionDansMesure') {
+              return formatteMentionDansMesure(nombresParType);
+            }
+            if (typeNotification === 'responsableMesure') {
+              return formatteResponsableMesure(nombresParType);
+            }
+          }
+          return undefined;
+        })
+        .filter(Boolean) as string[];
 
     return Object.fromEntries(
       toutesNotifications
         .entries()
         .filter(([idUtilisateur]) => tousUtilisateurs.has(idUtilisateur))
-        .filter(
-          ([idUtilisateur]) =>
-            tousUtilisateurs.get(idUtilisateur)!.preferencesRecapitulatif()
-              .mentionDansMesure
-        )
         .map(([idUtilisateur, nombresParType]) => [
           tousUtilisateurs.get(idUtilisateur)!.email,
-          formatteMentionDansMesure(nombresParType),
+          genereContenuPourUtilisateur(idUtilisateur, nombresParType).join(
+            '<br>'
+          ),
         ])
+        .filter(([, contenu]) => contenu.length > 0)
     );
   }
 }
