@@ -48,7 +48,11 @@ describe('Le service de rapport hebdomadaire', () => {
       idActeur: unUUID('A'),
       idDestinataire,
       type: 'mentionDansMesure',
-      metadonnees: {},
+      metadonnees: {
+        idMesure: 'M1',
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+      },
       date: hier,
       ...donnees,
     });
@@ -64,6 +68,13 @@ describe('Le service de rapport hebdomadaire', () => {
       type: 'responsableMesure',
       messageSingulier: "Vous êtes désormais responsable d'<b>une mesure</b>.",
       messagePluriel: 'Vous êtes désormais responsable de <b>2 mesures</b>.',
+    },
+    {
+      type: 'echeanceMesureBientotExpiree',
+      messageSingulier:
+        '<b>Une mesure</b> arrive à échéance dans les deux prochaines semaines.',
+      messagePluriel:
+        '<b>2 mesures</b> arrivent à échéance dans les deux prochaines semaines.',
     },
   ] as Array<{
     type: IdNotificationTransactionnelle;
@@ -203,6 +214,9 @@ describe('Le service de rapport hebdomadaire', () => {
       .ajouteNotificationTransactionnelle(
         uneNotification({ type: 'responsableMesure' }).donnees()
       )
+      .ajouteNotificationTransactionnelle(
+        uneNotification({ type: 'echeanceMesureBientotExpiree' }).donnees()
+      )
       .construis();
     depotDonnees = leDepot();
     rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
@@ -211,7 +225,7 @@ describe('Le service de rapport hebdomadaire', () => {
 
     expect(donnees).toEqual({
       'jeanne.dujardin@beta.gouv.fr':
-        "Vous avez reçu <b>une mention</b> dans un commentaire.<br>Vous êtes désormais responsable d'<b>une mesure</b>.",
+        "Vous avez reçu <b>une mention</b> dans un commentaire.<br>Vous êtes désormais responsable d'<b>une mesure</b>.<br><b>Une mesure</b> arrive à échéance dans les deux prochaines semaines.",
     });
   });
 
@@ -229,6 +243,12 @@ describe('Le service de rapport hebdomadaire', () => {
           type: 'mentionDansMesure',
         }).donnees()
       )
+      .ajouteNotificationTransactionnelle(
+        uneNotification({
+          idDestinataire: unUUID('U'),
+          type: 'echeanceMesureBientotExpiree',
+        }).donnees()
+      )
       .construis();
     adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnUtilisateur(
@@ -238,6 +258,7 @@ describe('Le service de rapport hebdomadaire', () => {
           .avecPreferencesRapportHebdomadaire({
             responsableMesure: false,
             mentionDansMesure: false,
+            echeanceMesureBientotExpiree: false,
           }).donnees
       )
       .construis() as unknown as AdaptateurPersistance;
