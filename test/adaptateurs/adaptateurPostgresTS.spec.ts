@@ -13,6 +13,20 @@ describe("L'adaptateur persistance Postgres", () => {
   let persistance: PersistanceTS;
   const chiffrement = unAdaptateurChiffrementQuiWrap();
 
+  const insereUneNotification = async (
+    donnees: Partial<DonneesNotificationTransactionnelle>
+  ) => {
+    await trx.table('notifications_transactionnelles').insert({
+      id: donnees.id ?? unUUIDRandom(),
+      lue: donnees.lue ?? false,
+      id_acteur: donnees.idActeur ?? unUUIDRandom(),
+      id_destinataire: donnees.idDestinataire ?? unUUIDRandom(),
+      metadonnees: donnees.metadonnees ?? { proprietes: 42 },
+      type: donnees.type ?? 'mentionDansMesure',
+      date: donnees.date ?? new Date(),
+    });
+  };
+
   beforeAll(async () => {
     knex = Knex({ client: ClientPgLite, dialect: 'postgres', connection: {} });
     await knex.migrate.latest();
@@ -451,7 +465,11 @@ describe("L'adaptateur persistance Postgres", () => {
         lue: true,
         idActeur: unUUIDRandom(),
         idDestinataire: idUtilisateur,
-        metadonnees: { proprietes: 42 },
+        metadonnees: {
+          idMesure: 'analyseProtectionDonnees',
+          idService: unUUIDRandom(),
+          typeMesure: 'generale',
+        },
         type: 'mentionDansMesure',
         date: new Date(),
       };
@@ -471,7 +489,11 @@ describe("L'adaptateur persistance Postgres", () => {
         lue: false,
         idActeur: unUUIDRandom(),
         idDestinataire: idUtilisateur,
-        metadonnees: { proprietes: 42 },
+        metadonnees: {
+          idMesure: 'analyseProtectionDonnees',
+          idService: unUUIDRandom(),
+          typeMesure: 'generale',
+        },
         type: 'mentionDansMesure',
         date: new Date(),
       };
@@ -511,20 +533,6 @@ describe("L'adaptateur persistance Postgres", () => {
   });
 
   describe('sur demande de lecture du rapport de notifications', () => {
-    const insereUneNotification = async (
-      donnees: Partial<DonneesNotificationTransactionnelle>
-    ) => {
-      await trx.table('notifications_transactionnelles').insert({
-        id: donnees.id ?? unUUIDRandom(),
-        lue: donnees.lue ?? false,
-        id_acteur: donnees.idActeur ?? unUUIDRandom(),
-        id_destinataire: donnees.idDestinataire ?? unUUIDRandom(),
-        metadonnees: donnees.metadonnees ?? { proprietes: 42 },
-        type: donnees.type ?? 'mentionDansMesure',
-        date: donnees.date ?? new Date(),
-      });
-    };
-
     it('ne considère que les notifications datant des 7 derniers jours', async () => {
       const idDestinataire = unUUIDRandom();
       const date = new Date();
@@ -617,6 +625,37 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(notifications.get(idDestinataire2)).toEqual({
         TYPE_A: 1,
       });
+    });
+  });
+
+  describe("sur demande de suppression des notifications d'un service", () => {
+    it('ne supprime que les notifications le concernant', async () => {
+      const idServiceASupprimer = unUUIDRandom();
+      const idServiceAConserver = unUUIDRandom();
+      await insereUneNotification({
+        metadonnees: {
+          idService: idServiceASupprimer,
+          idMesure: 'analyseProtectionDonnees',
+          typeMesure: 'generale',
+        },
+      });
+      await insereUneNotification({
+        metadonnees: {
+          idService: idServiceAConserver,
+          idMesure: 'analyseProtectionDonnees',
+          typeMesure: 'generale',
+        },
+      });
+
+      await persistance.supprimeNotificationsTransactionnellesDuService(
+        idServiceASupprimer
+      );
+
+      const notifications = await trx
+        .table('notifications_transactionnelles')
+        .select();
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0].metadonnees.idService).toBe(idServiceAConserver);
     });
   });
 });
