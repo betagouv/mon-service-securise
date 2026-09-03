@@ -17,6 +17,7 @@ import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { IdNotificationTransactionnelle } from '../../src/referentiel.types.ts';
 
 describe('Le service de rapport hebdomadaire', () => {
   const idDestinataire = unUUID('D');
@@ -52,245 +53,147 @@ describe('Le service de rapport hebdomadaire', () => {
       ...donnees,
     });
 
-  beforeEach(() => {
-    const notification = uneNotification().donnees();
-    adaptateurPersistanceTS = unePersistanceMemoireTS()
-      .ajouteNotificationTransactionnelle(notification)
-      .construis();
-    adaptateurPersistance = unePersistanceMemoire()
-      .ajouteUnUtilisateur(
-        unUtilisateur()
-          .avecId(unUUID('D'))
-          .avecEmail('jeanne.dujardin@beta.gouv.fr').donnees
-      )
-      .construis() as unknown as AdaptateurPersistance;
-    depotDonnees = leDepot();
+  describe.each([
+    {
+      type: 'mentionDansMesure',
+      messageSingulier:
+        'Vous avez reçu <b>une mention</b> dans un commentaire.',
+      messagePluriel: 'Vous avez reçu <b>2 mentions</b> dans des commentaires.',
+    },
+    {
+      type: 'responsableMesure',
+      messageSingulier: "Vous êtes désormais responsable d'<b>une mesure</b>.",
+      messagePluriel: 'Vous êtes désormais responsable de <b>2 mesures</b>.',
+    },
+  ] as Array<{
+    type: IdNotificationTransactionnelle;
+    messageSingulier: string;
+    messagePluriel: string;
+  }>)(
+    "concernant le message de contenu à envoyer pour une notification '$type'",
+    ({ type, messageSingulier, messagePluriel }) => {
+      beforeEach(() => {
+        const notification = uneNotification({
+          type,
+        }).donnees();
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteNotificationTransactionnelle(notification)
+          .construis();
+        adaptateurPersistance = unePersistanceMemoire()
+          .ajouteUnUtilisateur(
+            unUtilisateur()
+              .avecId(unUUID('D'))
+              .avecEmail('jeanne.dujardin@beta.gouv.fr').donnees
+          )
+          .construis() as unknown as AdaptateurPersistance;
+        depotDonnees = leDepot();
 
-    rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-  });
-
-  describe("concernant le message de contenu à envoyer pour une notification 'mentionDansMesure'", () => {
-    it("ne conserve pas les notifications pour lesquelles l'utilisateur ne souhaite pas recevoir d'email", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ idDestinataire: unUUID('U') }).donnees()
-        )
-        .construis();
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(
-          unUtilisateur()
-            .avecId(unUUID('U'))
-            .avecEmail('jean.valjean@mail.fr')
-            .avecPreferencesRapportHebdomadaire({ mentionDansMesure: false })
-            .donnees
-        )
-        .construis() as unknown as AdaptateurPersistance;
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({});
-    });
-
-    it('met en forme le nombre de mentions dans des mesures', async () => {
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({
-        'jeanne.dujardin@beta.gouv.fr':
-          'Vous avez reçu <b>une mention</b> dans un commentaire.',
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
       });
-    });
 
-    it('gère le pluriel', async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(uneNotification().donnees())
-        .ajouteNotificationTransactionnelle(uneNotification().donnees())
-        .construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it("ne conserve pas les notifications pour lesquelles l'utilisateur ne souhaite pas recevoir d'email", async () => {
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteNotificationTransactionnelle(
+            uneNotification({
+              idDestinataire: unUUID('U'),
+              type,
+            }).donnees()
+          )
+          .construis();
+        adaptateurPersistance = unePersistanceMemoire()
+          .ajouteUnUtilisateur(
+            unUtilisateur()
+              .avecId(unUUID('U'))
+              .avecEmail('jean.valjean@mail.fr')
+              .avecPreferencesRapportHebdomadaire({ [type]: false }).donnees
+          )
+          .construis() as unknown as AdaptateurPersistance;
+        depotDonnees = leDepot();
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
 
-      const donnees = await rapportHebdomadaire.donnees();
+        const donnees = await rapportHebdomadaire.donnees();
 
-      expect(donnees).toEqual({
-        'jeanne.dujardin@beta.gouv.fr':
-          'Vous avez reçu <b>2 mentions</b> dans des commentaires.',
+        expect(donnees).toEqual({});
       });
-    });
 
-    it("reste robuste s'il n'y a pas de type de notification", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS().construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it('met en forme le message au singulier', async () => {
+        const donnees = await rapportHebdomadaire.donnees();
 
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({});
-    });
-
-    it("retourne l'email de l'utilisateur concerné", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ idDestinataire: unUUID('U') }).donnees()
-        )
-        .construis();
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(
-          unUtilisateur().avecId(unUUID('U')).avecEmail('jean.valjean@mail.fr')
-            .donnees
-        )
-        .construis() as unknown as AdaptateurPersistance;
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({
-        'jean.valjean@mail.fr':
-          'Vous avez reçu <b>une mention</b> dans un commentaire.',
+        expect(donnees).toEqual({
+          'jeanne.dujardin@beta.gouv.fr': messageSingulier,
+        });
       });
-    });
 
-    it("reste robuste si l'utilisateur est introuvable", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ idDestinataire: unUUID('X') }).donnees()
-        )
-        .construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it('gère le pluriel', async () => {
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteNotificationTransactionnelle(
+            uneNotification({ type }).donnees()
+          )
+          .ajouteNotificationTransactionnelle(
+            uneNotification({ type }).donnees()
+          )
+          .construis();
+        depotDonnees = leDepot();
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
 
-      const donnees = await rapportHebdomadaire.donnees();
+        const donnees = await rapportHebdomadaire.donnees();
 
-      expect(donnees).toEqual({});
-    });
-  });
-
-  describe("concernant le message de contenu à envoyer pour une notification 'responsableMesure'", () => {
-    beforeEach(() => {
-      const notification = uneNotification({
-        type: 'responsableMesure',
-      }).donnees();
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(notification)
-        .construis();
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(
-          unUtilisateur()
-            .avecId(unUUID('D'))
-            .avecEmail('jeanne.dujardin@beta.gouv.fr').donnees
-        )
-        .construis() as unknown as AdaptateurPersistance;
-      depotDonnees = leDepot();
-
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-    });
-
-    it("ne conserve pas les notifications pour lesquelles l'utilisateur ne souhaite pas recevoir d'email", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({
-            idDestinataire: unUUID('U'),
-            type: 'responsableMesure',
-          }).donnees()
-        )
-        .construis();
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(
-          unUtilisateur()
-            .avecId(unUUID('U'))
-            .avecEmail('jean.valjean@mail.fr')
-            .avecPreferencesRapportHebdomadaire({ responsableMesure: false })
-            .donnees
-        )
-        .construis() as unknown as AdaptateurPersistance;
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({});
-    });
-
-    it('met en forme le nombre de mentions dans des mesures', async () => {
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({
-        'jeanne.dujardin@beta.gouv.fr':
-          "Vous êtes désormais responsable d'<b>une mesure</b>.",
+        expect(donnees).toEqual({
+          'jeanne.dujardin@beta.gouv.fr': messagePluriel,
+        });
       });
-    });
 
-    it('gère le pluriel', async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ type: 'responsableMesure' }).donnees()
-        )
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ type: 'responsableMesure' }).donnees()
-        )
-        .construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it("reste robuste s'il n'y a pas de notification de ce type", async () => {
+        adaptateurPersistanceTS = unePersistanceMemoireTS().construis();
+        depotDonnees = leDepot();
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
 
-      const donnees = await rapportHebdomadaire.donnees();
+        const donnees = await rapportHebdomadaire.donnees();
 
-      expect(donnees).toEqual({
-        'jeanne.dujardin@beta.gouv.fr':
-          'Vous êtes désormais responsable de <b>2 mesures</b>.',
+        expect(donnees).toEqual({});
       });
-    });
 
-    it("reste robuste s'il n'y a pas de type de notification", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS().construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it("retourne l'email de l'utilisateur concerné", async () => {
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteNotificationTransactionnelle(
+            uneNotification({
+              idDestinataire: unUUID('U'),
+              type,
+            }).donnees()
+          )
+          .construis();
+        adaptateurPersistance = unePersistanceMemoire()
+          .ajouteUnUtilisateur(
+            unUtilisateur()
+              .avecId(unUUID('U'))
+              .avecEmail('jean.valjean@mail.fr').donnees
+          )
+          .construis() as unknown as AdaptateurPersistance;
+        depotDonnees = leDepot();
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
 
-      const donnees = await rapportHebdomadaire.donnees();
+        const donnees = await rapportHebdomadaire.donnees();
 
-      expect(donnees).toEqual({});
-    });
-
-    it("retourne l'email de l'utilisateur concerné", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({
-            idDestinataire: unUUID('U'),
-            type: 'responsableMesure',
-          }).donnees()
-        )
-        .construis();
-      adaptateurPersistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(
-          unUtilisateur().avecId(unUUID('U')).avecEmail('jean.valjean@mail.fr')
-            .donnees
-        )
-        .construis() as unknown as AdaptateurPersistance;
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
-
-      const donnees = await rapportHebdomadaire.donnees();
-
-      expect(donnees).toEqual({
-        'jean.valjean@mail.fr':
-          "Vous êtes désormais responsable d'<b>une mesure</b>.",
+        expect(donnees).toEqual({
+          'jean.valjean@mail.fr': messageSingulier,
+        });
       });
-    });
 
-    it("reste robuste si l'utilisateur est introuvable", async () => {
-      adaptateurPersistanceTS = unePersistanceMemoireTS()
-        .ajouteNotificationTransactionnelle(
-          uneNotification({ idDestinataire: unUUID('X') }).donnees()
-        )
-        .construis();
-      depotDonnees = leDepot();
-      rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+      it("reste robuste si l'utilisateur est introuvable", async () => {
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteNotificationTransactionnelle(
+            uneNotification({ idDestinataire: unUUID('X'), type }).donnees()
+          )
+          .construis();
+        depotDonnees = leDepot();
+        rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
 
-      const donnees = await rapportHebdomadaire.donnees();
+        const donnees = await rapportHebdomadaire.donnees();
 
-      expect(donnees).toEqual({});
-    });
-  });
+        expect(donnees).toEqual({});
+      });
+    }
+  );
 
   it('aggrège tous les messages', async () => {
     adaptateurPersistanceTS = unePersistanceMemoireTS()
