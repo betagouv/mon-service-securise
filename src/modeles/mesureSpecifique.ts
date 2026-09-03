@@ -26,11 +26,6 @@ class MesureSpecifique extends Mesure {
   readonly description!: string;
   readonly descriptionLongue?: string;
   readonly categorie!: string;
-  readonly echeance?: Date;
-  readonly modalites?: string;
-  readonly priorite?: string;
-  readonly statut!: string;
-  responsables!: Array<UUID>;
   private readonly referentiel: TousReferentiels;
 
   static proprietesObligatoires() {
