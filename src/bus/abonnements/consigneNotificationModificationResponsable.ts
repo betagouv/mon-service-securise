@@ -55,7 +55,10 @@ export const consigneNotificationModificationResponsable =
     };
 
     await Promise.all(
-      comparateur.responsablesAjoutes().map(consigneNotification)
+      comparateur
+        .responsablesAjoutes()
+        .filter((idDestinataire) => idDestinataire !== utilisateur.id)
+        .map(consigneNotification)
     );
     await Promise.all(
       comparateur.responsablesRetires().map(supprimeNotification)
