@@ -42,6 +42,11 @@ class ConstructeurMesureGenerale {
     return this;
   }
 
+  sansEcheance() {
+    this.avecEcheance(undefined);
+    return this;
+  }
+
   sansResponsable() {
     this.donnees.responsables = [];
     return this;
