@@ -82,7 +82,8 @@ import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure }
 import { EvenementNotificationTransactionnelleModifiee } from './evenementNotificationTransactionnelleModifiee.js';
 import { consigneNotificationTransactionnelleModifieeDansJournal } from './abonnements/consigneNotificationTransactionnelleModifieeDansJournal.js';
 import { consigneNotificationModificationResponsable } from './abonnements/consigneNotificationModificationResponsable.js';
-import { consigneNotificationEcheanceMesureBientotExpiree } from './abonnements/consigneNotificationEcheanceMesureBientotExpiree.ts';
+import { consigneNotificationEcheanceMesureBientotExpiree } from './abonnements/consigneNotificationEcheanceMesureBientotExpiree.js';
+import { supprimeNotificationsTransactionnelles } from './abonnements/supprimeNotificationsTransactionnellesService.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -240,6 +241,7 @@ const cableTousLesAbonnes = (
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
     delieServiceEtSuperviseurs({ serviceSupervision }),
     supprimeSuggestionsActions({ depotDonnees }),
+    supprimeNotificationsTransactionnelles({ depotDonnees }),
   ]);
 
   busEvenements.abonne(
