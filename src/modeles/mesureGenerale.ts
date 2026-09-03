@@ -1,6 +1,5 @@
 import Mesure from './mesure.js';
 import { ErreurMesureInconnue } from '../erreurs.js';
-import { IdStatutMesure } from '../referentiel.types.js';
 import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
 import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
 import { TousReferentiels } from '../referentiel.interface.js';
@@ -9,12 +8,7 @@ import { DonneesMesureGenerale } from './mesureGenerale.type.js';
 
 class MesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> extends Mesure {
   readonly id!: TVersion;
-  readonly statut!: IdStatutMesure;
-  readonly modalites?: string;
-  readonly priorite?: string;
-  readonly echeance?: Date;
   readonly rendueIndispensable?: boolean;
-  responsables!: UUID[];
   private readonly referentiel: TousReferentiels;
 
   constructor(
