@@ -81,6 +81,7 @@ import { EvenementActiviteMesureAjoutee } from './evenementActiviteMesureAjoutee
 import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure } from './abonnements/sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure.js';
 import { EvenementNotificationTransactionnelleModifiee } from './evenementNotificationTransactionnelleModifiee.js';
 import { consigneNotificationTransactionnelleModifieeDansJournal } from './abonnements/consigneNotificationTransactionnelleModifieeDansJournal.js';
+import { consigneNotificationModificationResponsable } from './abonnements/consigneNotificationModificationResponsable.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -142,6 +143,7 @@ const cableTousLesAbonnes = (
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     consigneActiviteMesure({ depotDonnees }),
     sauvegardeEvolutionIndiceCyber({ depotDonnees }),
+    consigneNotificationModificationResponsable({ depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceSupprimee, [
