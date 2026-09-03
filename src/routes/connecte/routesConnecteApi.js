@@ -359,6 +359,7 @@ const routesConnecteApi = ({
       adaptateurMail,
       depotDonnees,
       middleware,
+      referentiel,
       serviceCgu,
       serviceGestionnaireSession,
     })

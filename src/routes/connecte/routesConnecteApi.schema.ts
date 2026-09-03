@@ -1,7 +1,11 @@
 import { z } from 'zod';
 import { schemaCommunPutPostUtilisateur } from '../nonConnecte/routesNonConnecteApi.schema.js';
 import { VersionService } from '../../modeles/versionService.js';
-import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import {
+  Referentiel,
+  ReferentielV2,
+  TousReferentiels,
+} from '../../referentiel.interface.js';
 import {
   schemaMesureGenerale,
   schemaMesureSpecifique,
@@ -21,9 +25,14 @@ export const schemaPutPreferencesConsentementsUtilisateur = {
   pixelDeSuiviAccepte: z.boolean().optional(),
 };
 
-export const schemaPutPreferencesRecapitulatifUtilisateur = {
-  mentionDansMesure: z.boolean().optional(),
-};
+export const schemaPutPreferencesRecapitulatifUtilisateur = (
+  referentiel: TousReferentiels
+) =>
+  Object.fromEntries(
+    referentiel
+      .identifiantsNotificationsTransactionnelles()
+      .map((id) => [id, z.boolean().optional()])
+  );
 
 export const schemaPutMesureGenerale = (
   referentiel: Referentiel,
