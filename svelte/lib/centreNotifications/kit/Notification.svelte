@@ -32,12 +32,22 @@
         },
       };
     }
+    if (notification.type === 'activite') {
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'green-emeraude',
+          libelle: 'Activités',
+        },
+      };
+    }
     return {
       titre: notification.titre,
       description: notification.sousTitre,
       badge: {
-        couleur: 'green-emeraude',
-        libelle: 'Activités',
+        couleur: 'yellow-tournesol',
+        libelle: 'Échéance proche',
       },
     };
   });
