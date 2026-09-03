@@ -82,6 +82,7 @@ import { sauvegardeNotificationTransactionnelleContributeurMentionneDansMesure }
 import { EvenementNotificationTransactionnelleModifiee } from './evenementNotificationTransactionnelleModifiee.js';
 import { consigneNotificationTransactionnelleModifieeDansJournal } from './abonnements/consigneNotificationTransactionnelleModifieeDansJournal.js';
 import { consigneNotificationModificationResponsable } from './abonnements/consigneNotificationModificationResponsable.js';
+import { consigneNotificationEcheanceMesureBientotExpiree } from './abonnements/consigneNotificationEcheanceMesureBientotExpiree.ts';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -144,6 +145,7 @@ const cableTousLesAbonnes = (
     consigneActiviteMesure({ depotDonnees }),
     sauvegardeEvolutionIndiceCyber({ depotDonnees }),
     consigneNotificationModificationResponsable({ depotDonnees }),
+    consigneNotificationEcheanceMesureBientotExpiree({ depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceSupprimee, [
