@@ -1,21 +1,43 @@
 import { UUID } from '../../typesBasiques.js';
 import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
+import { IdMesureV1 } from '../../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
 export type EtatNotificationTransactionnelle = 'cree' | 'lu' | 'supprime';
+
+type IdMesure = IdMesureV1 | IdMesureV2 | UUID;
+
+type MetadonneesParType = {
+  mentionDansMesure: {
+    idMesure: IdMesure;
+    idService: UUID;
+    typeMesure: 'generale' | 'specifique';
+  };
+  responsableMesure: {
+    idMesure: IdMesure;
+    idService: UUID;
+    typeMesure: 'generale' | 'specifique';
+  };
+};
+
+type BaseNotificationTransactionnelle = {
+  idActeur: UUID;
+  idDestinataire: UUID;
+  date: Date;
+};
+
+export type DonneesCreationNotificationTransactionnelle = {
+  [K in IdNotificationTransactionnelle]: BaseNotificationTransactionnelle & {
+    type: K;
+    metadonnees: MetadonneesParType[K];
+  };
+}[IdNotificationTransactionnelle];
 
 export type DonneesNotificationTransactionnelle =
   DonneesCreationNotificationTransactionnelle & {
     id: UUID;
     lue: boolean;
   };
-
-export type DonneesCreationNotificationTransactionnelle = {
-  idActeur: UUID;
-  idDestinataire: UUID;
-  metadonnees: Record<string, unknown>;
-  type: IdNotificationTransactionnelle;
-  date: Date;
-};
 
 export class NotificationTransactionnelle {
   private constructor(

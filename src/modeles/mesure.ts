@@ -11,6 +11,7 @@ import {
 } from '../erreurs.js';
 import { TousReferentiels } from '../referentiel.interface.js';
 import { IdCategorieMesure, IdStatutMesure } from '../referentiel.types.js';
+import { UUID } from '../typesBasiques.js';
 
 export type StatutMesure = 'fait' | 'enCours' | 'nonFait' | 'aLancer';
 
@@ -29,6 +30,13 @@ export type MesuresParStatutEtCategorie = Record<
 const STATUTS: StatutMesure[] = ['fait', 'enCours', 'nonFait', 'aLancer'];
 
 abstract class Mesure extends InformationsService {
+  readonly id!: string;
+  readonly statut!: IdStatutMesure;
+  readonly modalites?: string;
+  readonly priorite?: string;
+  echeance?: Date;
+  responsables!: UUID[];
+
   estIndispensable() {
     return false;
   }

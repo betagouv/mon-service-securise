@@ -115,11 +115,45 @@ const donnees = {
     mentionDansMesure: {
       type: 'activite',
       titre: 'Mention',
-      sousTitre: (nomActeur: string, titreMesure: string, nomService: string) =>
+      sousTitre: ({
+        nomActeur,
+        titreMesure,
+        nomService,
+      }: {
+        nomActeur: string;
+        titreMesure: string;
+        nomService: string;
+      }) =>
         `${nomActeur} vous a mentionné sur la mesure « ${titreMesure} » de [${nomService}]`,
       titreCta: 'Voir le commentaire',
-      lien: (idService: string, idMesure: string) =>
+      lien: ({
+        idService,
+        idMesure,
+      }: {
+        idService: string;
+        idMesure: string;
+      }) =>
         `/service/${idService}/mesures?idMesure=${idMesure}&onglet=activite`,
+      canalDiffusion: 'centreNotifications',
+    },
+    responsableMesure: {
+      type: 'activite',
+      titre: 'Nouvelle responsabilitié',
+      sousTitre: ({
+        titreMesure,
+        nomService,
+      }: {
+        titreMesure: string;
+        nomService: string;
+      }) => `Vous êtes responsable de « ${titreMesure} » sur [${nomService}]`,
+      titreCta: 'Voir la mesure',
+      lien: ({
+        idService,
+        idMesure,
+      }: {
+        idService: string;
+        idMesure: string;
+      }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
       canalDiffusion: 'centreNotifications',
     },
   },

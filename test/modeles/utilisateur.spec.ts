@@ -638,6 +638,7 @@ describe('Un utilisateur', () => {
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: true,
+        responsableMesure: true,
       });
     });
 
@@ -650,6 +651,7 @@ describe('Un utilisateur', () => {
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: false,
+        responsableMesure: true,
       });
     });
 
@@ -660,6 +662,7 @@ describe('Un utilisateur', () => {
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: true,
+        responsableMesure: true,
       });
     });
 
@@ -671,6 +674,7 @@ describe('Un utilisateur', () => {
         utilisateur.donneesSerialisees().preferencesRecapitulatifHebdomadaire
       ).toEqual({
         mentionDansMesure: true,
+        responsableMesure: true,
       });
     });
 
@@ -688,6 +692,7 @@ describe('Un utilisateur', () => {
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: true,
+        responsableMesure: true,
         unePreference: false,
       });
     });

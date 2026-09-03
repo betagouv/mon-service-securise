@@ -51,9 +51,13 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
           id: n.donnees().id,
           type,
           titre,
-          sousTitre: sousTitre(nomActeur, titreMesure, service.nomService()),
+          sousTitre: sousTitre({
+            nomActeur,
+            titreMesure,
+            nomService: service.nomService(),
+          }),
           titreCta,
-          lien: lien(idService, idMesure),
+          lien: lien({ idService, idMesure }),
           canalDiffusion,
           statutLecture: n.donnees().lue
             ? StatutLecture.lue

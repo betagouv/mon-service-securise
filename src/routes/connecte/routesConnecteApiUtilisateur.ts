@@ -23,12 +23,14 @@ import {
 } from '../../modeles/utilisateur.types.js';
 import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
 import { Middleware } from '../../http/middleware.interface.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
 
 export const routesConnecteApiUtilisateur = ({
   adaptateurJWT,
   adaptateurMail,
   depotDonnees,
   middleware,
+  referentiel,
   serviceCgu,
   serviceGestionnaireSession,
 }: {
@@ -36,6 +38,7 @@ export const routesConnecteApiUtilisateur = ({
   adaptateurMail: AdaptateurMail;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
+  referentiel: TousReferentiels;
   serviceCgu: ServiceCgu;
   serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
@@ -130,15 +133,17 @@ export const routesConnecteApiUtilisateur = ({
   routes.put(
     '/utilisateur/preferences/recapitulatif',
     middleware.verificationAcceptationCGU,
-    valideBody(z.strictObject(schemaPutPreferencesRecapitulatifUtilisateur)),
+    valideBody(
+      z.strictObject(schemaPutPreferencesRecapitulatifUtilisateur(referentiel))
+    ),
     async (requete, reponse) => {
       const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
       const utilisateur = (await depotDonnees.utilisateur(
         idUtilisateur
       )) as Utilisateur;
 
-      const { mentionDansMesure } = requete.body;
-      utilisateur.metAJourPreferencesRecapitulatif({ mentionDansMesure });
+      const preferences = requete.body;
+      utilisateur.metAJourPreferencesRecapitulatif(preferences);
 
       await depotDonnees.metsAJourUtilisateur(
         utilisateur.id,
