@@ -21,6 +21,7 @@ type PreferencesRecapitulatif = Record<IdNotificationTransactionnelle, boolean>;
 const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   mentionDansMesure: true,
   responsableMesure: true,
+  echeanceMesureBientotExpiree: true,
 };
 
 export type DonneesUtilisateur = {
