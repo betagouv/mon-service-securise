@@ -408,7 +408,11 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       expect(reponse.status).toBe(400);
     });
 
-    it.each(['mentionDansMesure', 'responsableMesure'])(
+    it.each([
+      'mentionDansMesure',
+      'responsableMesure',
+      'echeanceMesureBientotExpiree',
+    ])(
       'sauvegarde la nouvelle préférence de récapitulatif `%s`',
       async (clePreference) => {
         const referentiel = creeReferentiel();
