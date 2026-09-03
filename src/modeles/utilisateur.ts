@@ -318,9 +318,11 @@ class Utilisateur extends Base {
   metAJourPreferencesRecapitulatif(
     nouvellesPreferences: Partial<PreferencesRecapitulatif>
   ) {
-    if (nouvellesPreferences.mentionDansMesure !== undefined)
-      this.preferencesRecapitulatifHebdomadaire.mentionDansMesure =
-        nouvellesPreferences.mentionDansMesure;
+    Object.entries(nouvellesPreferences).forEach(([cle, valeur]) => {
+      this.preferencesRecapitulatifHebdomadaire[
+        cle as IdNotificationTransactionnelle
+      ] = valeur;
+    });
   }
 }
 
