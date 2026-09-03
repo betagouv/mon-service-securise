@@ -17,4 +17,5 @@ export type Consentements = {
 
 export type RecapitulatifHebdomadaire = {
   mentionDansMesure: boolean;
+  responsableMesure: boolean;
 };
