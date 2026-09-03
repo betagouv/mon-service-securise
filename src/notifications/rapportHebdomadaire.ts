@@ -2,6 +2,7 @@ import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import Utilisateur from '../modeles/utilisateur.js';
 import { UUID } from '../typesBasiques.js';
+import { formatteursNotifications } from './formatteursNotifications.js';
 
 export type NombreNotificationsParType = Partial<
   Record<IdNotificationTransactionnelle, number>
@@ -23,65 +24,42 @@ export class RapportHebdomadaire {
   async donnees(): Promise<Record<string, string>> {
     const toutesNotifications =
       await this.configuration.depotDonnees.lisRapportNotifications();
-    const utilisateurs: Utilisateur[] =
-      await this.configuration.depotDonnees.utilisateurs(
-        toutesNotifications.keys().toArray()
-      );
-    const tousUtilisateurs: Map<UUID, Utilisateur> = new Map(
-      utilisateurs.map((u) => [u.id, u])
+
+    const utilisateurs = await this.configuration.depotDonnees.utilisateurs(
+      toutesNotifications.keys().toArray()
+    );
+    const utilisateursParId = new Map<UUID, Utilisateur>(
+      utilisateurs.map((utilisateur) => [utilisateur.id, utilisateur])
     );
 
-    const formatteMentionDansMesure = (
-      nombresParType: NombreNotificationsParType
-    ) =>
-      singulierPluriel(
-        'Vous avez reçu <b>une mention</b> dans un commentaire.',
-        `Vous avez reçu <b>${nombresParType.mentionDansMesure} mentions</b> dans des commentaires.`,
-        nombresParType.mentionDansMesure || 0
-      );
-
-    const formatteResponsableMesure = (
-      nombresParType: NombreNotificationsParType
-    ) =>
-      singulierPluriel(
-        "Vous êtes désormais responsable d'<b>une mesure</b>.",
-        `Vous êtes désormais responsable de <b>${nombresParType.responsableMesure} mesures</b>.`,
-        nombresParType.responsableMesure || 0
-      );
-
     const genereContenuPourUtilisateur = (
-      idUtilisateur: UUID,
+      utilisateur: Utilisateur,
       nombresParType: NombreNotificationsParType
-    ): string[] =>
-      Object.entries(nombresParType)
-        .map(([typeNotification]) => {
-          if (
-            tousUtilisateurs.get(idUtilisateur)!.preferencesRecapitulatif()[
-              typeNotification as IdNotificationTransactionnelle
-            ]
-          ) {
-            if (typeNotification === 'mentionDansMesure') {
-              return formatteMentionDansMesure(nombresParType);
-            }
-            if (typeNotification === 'responsableMesure') {
-              return formatteResponsableMesure(nombresParType);
-            }
-          }
-          return undefined;
-        })
-        .filter(Boolean) as string[];
+    ): string[] => {
+      const preferences = utilisateur.preferencesRecapitulatif();
+
+      return Object.keys(nombresParType).flatMap((type) => {
+        const typeNotification = type as IdNotificationTransactionnelle;
+        if (!preferences[typeNotification]) return [];
+
+        return [formatteursNotifications[typeNotification](nombresParType)];
+      });
+    };
 
     return Object.fromEntries(
       toutesNotifications
         .entries()
-        .filter(([idUtilisateur]) => tousUtilisateurs.has(idUtilisateur))
-        .map(([idUtilisateur, nombresParType]) => [
-          tousUtilisateurs.get(idUtilisateur)!.email,
-          genereContenuPourUtilisateur(idUtilisateur, nombresParType).join(
-            '<br>'
-          ),
-        ])
-        .filter(([, contenu]) => contenu.length > 0)
+        .flatMap(([idUtilisateur, nombresParType]) => {
+          const utilisateur = utilisateursParId.get(idUtilisateur);
+          if (!utilisateur) return [];
+
+          const contenu = genereContenuPourUtilisateur(
+            utilisateur,
+            nombresParType
+          ).join('<br>');
+
+          return contenu ? [[utilisateur.email, contenu]] : [];
+        })
     );
   }
 }
