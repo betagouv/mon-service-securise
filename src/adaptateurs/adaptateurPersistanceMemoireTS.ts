@@ -154,4 +154,13 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
         (n) => n.id !== idNotification
       );
   }
+
+  async supprimeNotificationsTransactionnellesDuService(
+    idService: UUID
+  ): Promise<void> {
+    this.donnees.notificationsTransactionnelles =
+      this.donnees.notificationsTransactionnelles.filter(
+        (n) => n.metadonnees.idService !== idService
+      );
+  }
 }

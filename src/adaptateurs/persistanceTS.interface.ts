@@ -34,4 +34,7 @@ export interface PersistanceTS {
     donnees: DonneesNotificationTransactionnelle
   ) => Promise<void>;
   supprimeNotificationTransactionnelle: (idNotification: UUID) => Promise<void>;
+  supprimeNotificationsTransactionnellesDuService: (
+    idService: UUID
+  ) => Promise<void>;
 }

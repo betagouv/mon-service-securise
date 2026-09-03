@@ -271,4 +271,12 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       .where({ id: idNotification })
       .delete();
   }
+
+  async supprimeNotificationsTransactionnellesDuService(
+    idService: UUID
+  ): Promise<void> {
+    await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+      .whereRaw("metadonnees->>'idService' = ?", [idService])
+      .delete();
+  }
 }
