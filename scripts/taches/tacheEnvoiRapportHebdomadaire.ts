@@ -10,9 +10,16 @@ import { fabriqueReferentiel } from '../../src/fabriqueReferentiel.js';
 import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
 import { enCadence } from '../../src/utilitaires/pThrottle.js';
 import { adaptateurMailSendinblue } from '../../src/adaptateurs/adaptateurMailSendinblue.js';
+import { fabriqueReporting } from '../../src/adaptateurs/adaptateurReporting.interface.js';
 
-const main = async () => {
-  console.log("Démarrage de l'envoi du rapport hebdomadaire");
+const maintenant = () =>
+  new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'full',
+    timeStyle: 'long',
+  }).format(new Date());
+
+const tache = async () => {
+  const trace: string[] = [];
 
   const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
   const adaptateurJWT = fabriqueAdaptateurJWT();
@@ -35,7 +42,7 @@ const main = async () => {
   const serviceRapport = new RapportHebdomadaire({ depotDonnees });
   const rapport = await serviceRapport.donnees();
 
-  console.log(`${Object.keys(rapport).length} email(s) envoyé(s)`);
+  trace.push(`✉️ ${Object.keys(rapport).length} email(s) à envoyer`);
 
   const envoieUnRapport = async (destinataire: string, contenu: string) =>
     adaptateurMailSendinblue.envoieRapportHebdomadaire(destinataire, contenu);
@@ -46,8 +53,33 @@ const main = async () => {
       await envoieEnCadence(destinataire, contenu);
     })
   );
-  console.log("Fin de l'envoi du rapport hebdomadaire");
-  process.exit(0);
+
+  trace.push('✅ Tout a été envoyé');
+
+  return trace;
 };
 
-await main();
+const main = async () => {
+  const reporting = fabriqueReporting();
+  const rapport: string[] = [];
+  let codeRetour = 0;
+
+  try {
+    rapport.push("#### 🗒️ Reporting de l'envoi du rapport hebdomadaire\n---");
+    rapport.push(`⏰ Début : ${maintenant()}`);
+
+    const rapportTache = await tache();
+    rapport.push(...rapportTache);
+  } catch (error: unknown) {
+    const e = error as Error;
+    rapport.push(`💥 Erreur ! Elle a été envoyée dans Sentry… : ${e.message}`);
+    codeRetour = 1;
+  } finally {
+    rapport.push(`⏰ Fin : ${maintenant()}`);
+    await reporting.envoie(rapport);
+  }
+
+  return codeRetour;
+};
+
+main().then((code) => process.exit(code));
