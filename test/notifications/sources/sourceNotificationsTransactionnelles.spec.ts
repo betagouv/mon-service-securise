@@ -39,12 +39,15 @@ describe('Les notifications transactionnelles', () => {
         .avecMesures(
           new Mesures(
             {
-              mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'fait' }],
+              mesuresGenerales: [
+                { id: 'RECENSEMENT.1', statut: 'fait', echeance: '2026-01-01' },
+              ],
               mesuresSpecifiques: [
                 {
                   id: unUUID('M'),
                   statut: 'fait',
                   description: 'Spécifique',
+                  echeance: '2026-02-02',
                 },
               ],
             },
@@ -245,6 +248,76 @@ describe('Les notifications transactionnelles', () => {
 
         expect(notifications[0].sousTitre).toBe(
           'Vous êtes responsable de « Spécifique » sur [Mairie de Bordeaux]'
+        );
+      });
+    });
+  });
+
+  describe("concernant les notifications 'echeanceMesureBientotExpiree'", () => {
+    describe('pour une notification dans une mesure générale', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureGenerale('echeanceMesureBientotExpiree')
+        );
+      });
+
+      it('mets en forme la notification', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0]).toEqual({
+          id: expect.any(String),
+          type: 'echeanceProche',
+          titre: 'Échéance dans 2 semaines',
+          sousTitre: expect.any(String),
+          titreCta: 'Mettre à jour',
+          lien: expect.any(String),
+          canalDiffusion: 'centreNotifications',
+          statutLecture: 'nonLue',
+          doitNotifierLecture: true,
+          supprimable: true,
+          horodatage: dateNotif,
+          date: expect.any(Function),
+        });
+      });
+
+      it('met en forme le lien', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].lien).toBe(
+          `/service/${idService}/mesures?idMesure=RECENSEMENT.1`
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "« Etablir la liste de l'ensemble des services et données à protéger » arrive à échéance le 01/01/2026 sur [Mairie de Bordeaux]"
+        );
+      });
+
+      it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+        depotDonnees.services = async () => [];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(0);
+      });
+    });
+
+    describe('pour une notification de mention dans une mesure spécifique', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureSpecifique('echeanceMesureBientotExpiree')
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          '« Spécifique » arrive à échéance le 02/02/2026 sur [Mairie de Bordeaux]'
         );
       });
     });

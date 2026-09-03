@@ -156,6 +156,29 @@ const donnees = {
       }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
       canalDiffusion: 'centreNotifications',
     },
+    echeanceMesureBientotExpiree: {
+      type: 'echeanceProche',
+      titre: 'Échéance dans 2 semaines',
+      sousTitre: ({
+        titreMesure,
+        nomService,
+        dateEcheanceMesure,
+      }: {
+        titreMesure: string;
+        nomService: string;
+        dateEcheanceMesure: Date;
+      }) =>
+        `« ${titreMesure} » arrive à échéance le ${Intl.DateTimeFormat('fr', { dateStyle: 'short' }).format(dateEcheanceMesure)} sur [${nomService}]`,
+      titreCta: 'Mettre à jour',
+      lien: ({
+        idService,
+        idMesure,
+      }: {
+        idService: string;
+        idMesure: string;
+      }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {
