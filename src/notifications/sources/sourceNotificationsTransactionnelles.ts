@@ -37,6 +37,11 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
             .toutes()
             .find((m: MesureSpecifique) => m.id === idMesure)?.description;
 
+        const dateEcheanceMesure =
+          typeMesure === 'generale'
+            ? service.mesures.mesuresGenerales.avecId(idMesure).echeance
+            : service.mesures.mesuresSpecifiques.avecId(idMesure).echeance;
+
         const contributeur: Contributeur = service.contributeurParId(
           n.donnees().idActeur
         );
@@ -55,6 +60,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
             nomActeur,
             titreMesure,
             nomService: service.nomService(),
+            dateEcheanceMesure,
           }),
           titreCta,
           lien: lien({ idService, idMesure }),
