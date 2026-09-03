@@ -122,6 +122,16 @@ const donnees = {
         `/service/${idService}/mesures?idMesure=${idMesure}&onglet=activite`,
       canalDiffusion: 'centreNotifications',
     },
+    responsableMesure: {
+      type: 'activite',
+      titre: 'Nouvelle responsabilitié',
+      sousTitre: (titreMesure: string, nomService: string) =>
+        `Vous êtes responsable de « ${titreMesure} » sur [${nomService}]`,
+      titreCta: 'Voir le commentaire',
+      lien: (idService: string, idMesure: string) =>
+        `/service/${idService}/mesures?idMesure=${idMesure}`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {
