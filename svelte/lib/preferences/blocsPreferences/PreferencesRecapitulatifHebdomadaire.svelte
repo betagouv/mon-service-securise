@@ -15,13 +15,19 @@
     untrack(() => recapitulatifHebdomadaire.mentionDansMesure)
   );
 
-  let tousLesRecapitulatifs = $derived(mentionDansMesure);
+  let responsableMesure = $state(
+    untrack(() => recapitulatifHebdomadaire.responsableMesure)
+  );
+
+  let tousLesRecapitulatifs = $derived(mentionDansMesure || responsableMesure);
 
   const basculeTousRecapitulatifs = async (e: CustomEvent<boolean>) => {
     const valeurConsentement = e.detail;
     mentionDansMesure = valeurConsentement;
+    responsableMesure = valeurConsentement;
     await api.sauvegardePreferencesRecapitulatif({
       mentionDansMesure,
+      responsableMesure,
     });
   };
 </script>
@@ -50,6 +56,18 @@
       mentionDansMesure = valeur;
       await api.sauvegardePreferencesRecapitulatif({
         mentionDansMesure,
+      });
+    }}
+  />
+  <LignePreference
+    titre="On me nomme responsable d’une mesure"
+    sousTitre="Lorsqu’un utilisateur vous désigne comme responsable d’une mesure de sécurité sur un service."
+    icone="user-star-line"
+    valeur={responsableMesure}
+    onvaleurmodifiee={async (valeur) => {
+      responsableMesure = valeur;
+      await api.sauvegardePreferencesRecapitulatif({
+        responsableMesure,
       });
     }}
   />
