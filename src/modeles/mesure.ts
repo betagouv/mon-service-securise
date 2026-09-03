@@ -30,6 +30,7 @@ export type MesuresParStatutEtCategorie = Record<
 const STATUTS: StatutMesure[] = ['fait', 'enCours', 'nonFait', 'aLancer'];
 
 abstract class Mesure extends InformationsService {
+  readonly id!: string;
   readonly statut!: IdStatutMesure;
   readonly modalites?: string;
   readonly priorite?: string;
