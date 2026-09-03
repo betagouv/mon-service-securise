@@ -139,6 +139,17 @@ const consoleAdmin = () => ({
   idConsoleAdmin: () => process.env.GESTION_ORGANISATIONS_ID_CONSOLE_ADMIN,
 });
 
+const mattermost = () => ({
+  urlWebhookCanalReporting: () => {
+    if (!process.env.MATTERMOST_URL_WEBHOOK_CANAL_REPORTING)
+      throw new Error(
+        "La variable d'environnement de l'URL du webhook Mattermost de reporting est absente."
+      );
+
+    return new URL(process.env.MATTERMOST_URL_WEBHOOK_CANAL_REPORTING);
+  },
+});
+
 export {
   baseDeDonnees,
   chiffrement,
@@ -149,6 +160,7 @@ export {
   JWT,
   journalMSS,
   matomo,
+  mattermost,
   modeMaintenance,
   mss,
   oidc,
