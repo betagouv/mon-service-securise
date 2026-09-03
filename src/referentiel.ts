@@ -50,6 +50,7 @@ const donneesReferentielVide = {
   niveauxGravite: {},
   niveauxRisques: {},
   nouvellesFonctionnalites: [],
+  notificationsTransactionnelles: {},
   provenancesService: {},
   statutsDeploiement: {},
   statutsMesures: {},
@@ -525,6 +526,9 @@ const creeReferentiel = (
     };
   };
 
+  const identifiantsNotificationsTransactionnelles = () =>
+    Object.keys(donnees.notificationsTransactionnelles);
+
   const notificationTransactionnelle = (id: IdNotificationTransactionnelle) =>
     donnees.notificationsTransactionnelles[id];
 
@@ -600,6 +604,7 @@ const creeReferentiel = (
     identifiantsLocalisationsDonnees,
     identifiantsNiveauxGravite,
     identifiantsNiveauxVraisemblance,
+    identifiantsNotificationsTransactionnelles,
     identifiantNumeriqueRisque,
     identifiantsRisques,
     identifiantsStatutsMesures,

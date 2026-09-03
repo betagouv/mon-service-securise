@@ -8,6 +8,7 @@ import Utilisateur, {
 import { uneChaineDeCaracteres } from '../../constructeurs/String.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
+import { creeReferentiel } from '../../../src/referentiel.ts';
 
 describe("Les routes connectées d'API pour l'utilisateur", () => {
   const testeur = testeurMSS();
@@ -407,23 +408,35 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       expect(reponse.status).toBe(400);
     });
 
-    it.each(['mentionDansMesure'])(
+    it.each(['mentionDansMesure', 'responsableMesure'])(
       'sauvegarde la nouvelle préférence de récapitulatif `%s`',
       async (clePreference) => {
+        const referentiel = creeReferentiel();
+        referentiel.recharge({
+          notificationsTransactionnelles: { [clePreference]: {} },
+        });
+        await testeur.initialise(referentiel);
+        const u = await testeur
+          .depotDonnees()
+          .nouvelUtilisateur(
+            unUtilisateur()
+              .quiSAppelle('Jean Dujardin')
+              .quiSEstInscritLe('2020-01-01').donnees
+          );
+        testeur.middleware().reinitialise({ idUtilisateur: u.id });
+
         const reponse = await testeur.put(
           '/api/utilisateur/preferences/recapitulatif',
           {
-            [clePreference]: true,
+            [clePreference]: false,
           }
         );
 
         expect(reponse.status).toBe(200);
-        const utilisateurAJour = await testeur
-          .depotDonnees()
-          .utilisateur(idUtilisateur);
+        const utilisateurAJour = await testeur.depotDonnees().utilisateur(u.id);
         expect(
           utilisateurAJour.preferencesRecapitulatif()[clePreference]
-        ).toBeTruthy();
+        ).toBeFalsy();
       }
     );
   });
