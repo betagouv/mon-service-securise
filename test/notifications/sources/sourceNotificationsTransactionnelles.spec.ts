@@ -11,9 +11,14 @@ import { NotificationTransactionnelle } from '../../../src/modeles/notifications
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { IdNotificationTransactionnelle } from '../../../src/referentiel.types.ts';
 
-describe('Les notifications de nouveautés', () => {
+describe('Les notifications transactionnelles', () => {
   let depotDonnees: DepotDonnees;
+  const idUtilisateur = unUUID('U1');
+  const dateNotif = new Date();
+  const idService = unUUID('S1');
+  const idActeur = unUUID('A');
 
   beforeEach(() => {
     depotDonnees = creeDepot({
@@ -23,6 +28,35 @@ describe('Les notifications de nouveautés', () => {
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
+
+    depotDonnees.services = async () => [
+      unServiceV2()
+        .avecNomService('Mairie de Bordeaux')
+        .avecId(idService)
+        .ajouteUnContributeur(
+          unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur').donnees
+        )
+        .avecMesures(
+          new Mesures(
+            {
+              mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'fait' }],
+              mesuresSpecifiques: [
+                {
+                  id: unUUID('M'),
+                  statut: 'fait',
+                  description: 'Spécifique',
+                },
+              ],
+            },
+            // @ts-expect-error il infère sur du js un référentiel v1
+            creeReferentielV2(),
+            {
+              'RECENSEMENT.1': { categorie: 'gouvernance' },
+            }
+          )
+        )
+        .construis(),
+    ];
   });
 
   const laSource = () =>
@@ -30,15 +64,11 @@ describe('Les notifications de nouveautés', () => {
       maintenant: () => new Date(),
     });
 
-  describe("concernant les notifications 'mentionDansMesure'", () => {
-    const idUtilisateur = unUUID('U1');
-    const dateNotif = new Date();
-    const idService = unUUID('S1');
-    const idActeur = unUUID('A');
-    const notificationMesureGenerale = NotificationTransactionnelle.nouveau({
+  const notificationMesureGenerale = (type: IdNotificationTransactionnelle) =>
+    NotificationTransactionnelle.nouveau({
       idActeur,
       idDestinataire: idUtilisateur,
-      type: 'mentionDansMesure',
+      type,
       date: dateNotif,
       metadonnees: {
         idService,
@@ -46,10 +76,12 @@ describe('Les notifications de nouveautés', () => {
         typeMesure: 'generale',
       },
     });
-    const notificationMesureSpecifique = NotificationTransactionnelle.nouveau({
+
+  const notificationMesureSpecifique = (type: IdNotificationTransactionnelle) =>
+    NotificationTransactionnelle.nouveau({
       idActeur,
       idDestinataire: idUtilisateur,
-      type: 'mentionDansMesure',
+      type,
       date: dateNotif,
       metadonnees: {
         idService,
@@ -58,41 +90,11 @@ describe('Les notifications de nouveautés', () => {
       },
     });
 
-    beforeEach(async () => {
-      depotDonnees.services = async () => [
-        unServiceV2()
-          .avecNomService('Mairie de Bordeaux')
-          .avecId(idService)
-          .ajouteUnContributeur(
-            unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur').donnees
-          )
-          .avecMesures(
-            new Mesures(
-              {
-                mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'fait' }],
-                mesuresSpecifiques: [
-                  {
-                    id: unUUID('M'),
-                    statut: 'fait',
-                    description: 'Spécifique',
-                  },
-                ],
-              },
-              // @ts-expect-error il infère sur du js un référentiel v1
-              creeReferentielV2(),
-              {
-                'RECENSEMENT.1': { categorie: 'gouvernance' },
-              }
-            )
-          )
-          .construis(),
-      ];
-    });
-
-    describe('pour une notification de mention dans une mesure générale', async () => {
+  describe("concernant les notifications 'mentionDansMesure'", () => {
+    describe('pour une notification dans une mesure générale', async () => {
       beforeEach(async () => {
         await depotDonnees.sauvegardeNotificationTransactionnelle(
-          notificationMesureGenerale
+          notificationMesureGenerale('mentionDansMesure')
         );
       });
 
@@ -101,7 +103,7 @@ describe('Les notifications de nouveautés', () => {
 
         expect(notifications).toHaveLength(1);
         expect(notifications[0]).toEqual({
-          id: notificationMesureGenerale.donnees().id,
+          id: expect.any(String),
           type: 'activite',
           titre: 'Mention',
           sousTitre: expect.any(String),
@@ -161,10 +163,10 @@ describe('Les notifications de nouveautés', () => {
       });
     });
 
-    describe('pour une notification de mention dans une mesure spécifique', async () => {
+    describe('pour une notification dans une mesure spécifique', async () => {
       beforeEach(async () => {
         await depotDonnees.sauvegardeNotificationTransactionnelle(
-          notificationMesureSpecifique
+          notificationMesureSpecifique('mentionDansMesure')
         );
       });
 
@@ -176,17 +178,87 @@ describe('Les notifications de nouveautés', () => {
         );
       });
     });
+  });
 
-    it('filtre les notifications du futur', async () => {
-      const notification = NotificationTransactionnelle.nouveau({
-        ...notificationMesureGenerale.donnees(),
-        date: new Date('3600-01-01'),
+  describe("concernant les notifications 'responsableMesure'", () => {
+    describe('pour une notification dans une mesure générale', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureGenerale('responsableMesure')
+        );
       });
-      await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
 
-      const notifications = await laSource().notificationsPour(idUtilisateur);
+      it('mets en forme la notification', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
 
-      expect(notifications).toHaveLength(0);
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0]).toEqual({
+          id: expect.any(String),
+          type: 'activite',
+          titre: 'Nouvelle responsabilitié',
+          sousTitre: expect.any(String),
+          titreCta: 'Voir la mesure',
+          lien: expect.any(String),
+          canalDiffusion: 'centreNotifications',
+          statutLecture: 'nonLue',
+          doitNotifierLecture: true,
+          supprimable: true,
+          horodatage: dateNotif,
+          date: expect.any(Function),
+        });
+      });
+
+      it('met en forme le lien', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].lien).toBe(
+          `/service/${idService}/mesures?idMesure=RECENSEMENT.1`
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "Vous êtes responsable de « Etablir la liste de l'ensemble des services et données à protéger » sur [Mairie de Bordeaux]"
+        );
+      });
+
+      it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+        depotDonnees.services = async () => [];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(0);
+      });
     });
+
+    describe('pour une notification de mention dans une mesure spécifique', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureSpecifique('responsableMesure')
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          'Vous êtes responsable de « Spécifique » sur [Mairie de Bordeaux]'
+        );
+      });
+    });
+  });
+
+  it('filtre les notifications du futur', async () => {
+    const notification = NotificationTransactionnelle.nouveau({
+      ...notificationMesureGenerale('mentionDansMesure').donnees(),
+      date: new Date('3600-01-01'),
+    });
+    await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
+
+    const notifications = await laSource().notificationsPour(idUtilisateur);
+
+    expect(notifications).toHaveLength(0);
   });
 });
