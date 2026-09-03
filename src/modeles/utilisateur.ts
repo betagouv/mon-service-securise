@@ -9,18 +9,18 @@ import { UUID } from '../typesBasiques.js';
 import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
 import { SourceAuthentification } from './sourceAuthentification.js';
 import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
+import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 
 export type EstimationNombreServices = {
   borneBasse: string;
   borneHaute: string;
 };
 
-type PreferencesRecapitulatif = {
-  mentionDansMesure: boolean;
-};
+type PreferencesRecapitulatif = Record<IdNotificationTransactionnelle, boolean>;
 
 const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   mentionDansMesure: true,
+  responsableMesure: true,
 };
 
 export type DonneesUtilisateur = {
