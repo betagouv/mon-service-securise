@@ -104,6 +104,24 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
     });
   });
 
+  it("ne crée pas de notification si l'acteur se nomme lui-même responable", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecId('MG1')
+        .sansResponsable()
+        .construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecId('MG1')
+        .avecResponsable(idActeur)
+        .construis(),
+    });
+
+    await abonnement(evenement);
+
+    const notifications = await depotDonnees.lisNotifications(idActeur);
+    expect(notifications).toHaveLength(0);
+  });
+
   describe("sur suppression d'un responsable", () => {
     let evenement: EvenementMesureServiceModifiee;
 
