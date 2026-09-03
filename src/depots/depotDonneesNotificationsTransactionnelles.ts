@@ -20,6 +20,9 @@ export type PersistanceNotificationTransactionnelle = {
     donnees: DonneesNotificationTransactionnelle
   ): Promise<void>;
   supprimeNotificationTransactionnelle(idNotification: UUID): Promise<void>;
+  supprimeNotificationsTransactionnellesDuService(
+    idService: UUID
+  ): Promise<void>;
 };
 
 export class DepotDonneesNotificationsTransactionnelles {
@@ -82,6 +85,12 @@ export class DepotDonneesNotificationsTransactionnelles {
         notification,
         etat: 'supprime',
       })
+    );
+  }
+
+  async supprimeNotificationsTransactionnellesDuService(idService: UUID) {
+    await this.persistance.supprimeNotificationsTransactionnellesDuService(
+      idService
     );
   }
 }
