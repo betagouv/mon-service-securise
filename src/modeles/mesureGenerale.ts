@@ -7,7 +7,7 @@ import { UUID } from '../typesBasiques.js';
 import { DonneesMesureGenerale } from './mesureGenerale.type.js';
 
 class MesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> extends Mesure {
-  readonly id!: TVersion;
+  declare readonly id: TVersion;
   readonly rendueIndispensable?: boolean;
   private readonly referentiel: TousReferentiels;
 

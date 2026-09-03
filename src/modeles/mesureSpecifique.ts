@@ -21,7 +21,7 @@ export type DonneesMesureSpecifique = {
 };
 
 class MesureSpecifique extends Mesure {
-  readonly id!: UUID;
+  declare readonly id: UUID;
   idModele?: UUID;
   readonly description!: string;
   readonly descriptionLongue?: string;
