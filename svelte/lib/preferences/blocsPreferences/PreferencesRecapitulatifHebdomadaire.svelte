@@ -19,15 +19,23 @@
     untrack(() => recapitulatifHebdomadaire.responsableMesure)
   );
 
-  let tousLesRecapitulatifs = $derived(mentionDansMesure || responsableMesure);
+  let echeanceMesureBientotExpiree = $state(
+    untrack(() => recapitulatifHebdomadaire.echeanceMesureBientotExpiree)
+  );
+
+  let tousLesRecapitulatifs = $derived(
+    mentionDansMesure || responsableMesure || echeanceMesureBientotExpiree
+  );
 
   const basculeTousRecapitulatifs = async (e: CustomEvent<boolean>) => {
     const valeurConsentement = e.detail;
     mentionDansMesure = valeurConsentement;
     responsableMesure = valeurConsentement;
+    echeanceMesureBientotExpiree = valeurConsentement;
     await api.sauvegardePreferencesRecapitulatif({
       mentionDansMesure,
       responsableMesure,
+      echeanceMesureBientotExpiree,
     });
   };
 </script>
@@ -68,6 +76,18 @@
       responsableMesure = valeur;
       await api.sauvegardePreferencesRecapitulatif({
         responsableMesure,
+      });
+    }}
+  />
+  <LignePreference
+    titre="Une mesure arrive bientôt à échéance"
+    sousTitre="Deux semaines avant la date d’échéance d’une mesure."
+    icone="alarm-warning-line"
+    valeur={echeanceMesureBientotExpiree}
+    onvaleurmodifiee={async (valeur) => {
+      echeanceMesureBientotExpiree = valeur;
+      await api.sauvegardePreferencesRecapitulatif({
+        echeanceMesureBientotExpiree,
       });
     }}
   />
