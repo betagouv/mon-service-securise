@@ -17,8 +17,11 @@
   );
 
   let notificationsParOnglet = $derived({
-    activite: $storeNotifications.pourCentreNotifications.filter(
+    activites: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'tache' || n.type === 'activite'
+    ),
+    echeances: $storeNotifications.pourCentreNotifications.filter(
+      (n) => n.type === 'echeanceProche'
     ),
     nouveautes: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'nouveaute'
@@ -29,6 +32,7 @@
   const configurationsTabs = [
     { id: 'toutes', label: 'Toutes' },
     { id: 'activites', label: 'Activités' },
+    { id: 'echeance', label: 'Échéances' },
     { id: 'nouveautes', label: 'Nouveautés' },
   ];
   let idTabActive = $state(0);
@@ -99,7 +103,7 @@
           active={idTabActive === 1}
           libelle={configurationsTabs[1].label}
           libellePastille={calculNbNonLue(
-            notificationsParOnglet.activite
+            notificationsParOnglet.activites
           ).toString()}
         />
       </div>
@@ -107,6 +111,15 @@
         <TitreOngletDSFR
           active={idTabActive === 2}
           libelle={configurationsTabs[2].label}
+          libellePastille={calculNbNonLue(
+            notificationsParOnglet.echeances
+          ).toString()}
+        />
+      </div>
+      <div slot="tab-4">
+        <TitreOngletDSFR
+          active={idTabActive === 3}
+          libelle={configurationsTabs[3].label}
           libellePastille={calculNbNonLue(
             notificationsParOnglet.nouveautes
           ).toString()}
@@ -116,9 +129,12 @@
         <ListeNotifications notifications={notificationsParOnglet.toutes} />
       </div>
       <div slot="panel-2" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.activite} />
+        <ListeNotifications notifications={notificationsParOnglet.activites} />
       </div>
       <div slot="panel-3" class="conteneur-onglet">
+        <ListeNotifications notifications={notificationsParOnglet.echeances} />
+      </div>
+      <div slot="panel-4" class="conteneur-onglet">
         <ListeNotifications notifications={notificationsParOnglet.nouveautes} />
       </div>
     </dsfr-tabs>
@@ -190,7 +206,6 @@
 
   .conteneur-notifications {
     display: none;
-    width: 588px;
     position: absolute;
     right: 0;
     top: 42px;

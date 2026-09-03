@@ -11,7 +11,11 @@ export enum Referentiel {
 
 export type ReferentielStatut = Record<StatutMesure, string>;
 
-export type TypeNotification = 'nouveaute' | 'tache' | 'activite';
+export type TypeNotification =
+  | 'nouveaute'
+  | 'tache'
+  | 'activite'
+  | 'echeanceProche';
 
 type NotificationBase = {
   id: string;
@@ -40,10 +44,15 @@ export type NotificationActivite = NotificationBase & {
   type: 'activite';
 };
 
+export type NotificationEcheanceProche = NotificationBase & {
+  type: 'echeanceProche';
+};
+
 export type Notification =
   | NotificationNouveaute
   | NotificationTache
-  | NotificationActivite;
+  | NotificationActivite
+  | NotificationEcheanceProche;
 
 export type PrioriteMesure = 'p1' | 'p2' | 'p3';
 
