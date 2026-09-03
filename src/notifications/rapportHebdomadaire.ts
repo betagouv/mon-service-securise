@@ -49,6 +49,15 @@ export class RapportHebdomadaire {
         nombresParType.responsableMesure || 0
       );
 
+    const formatteEcheanceMesureBientotExpiree = (
+      nombresParType: NombreNotificationsParType
+    ) =>
+      singulierPluriel(
+        '<b>Une mesure</b> arrive à échéance dans les deux prochaines semaines.',
+        `<b>${nombresParType.echeanceMesureBientotExpiree} mesures</b> arrivent à échéance dans les deux prochaines semaines.`,
+        nombresParType.echeanceMesureBientotExpiree || 0
+      );
+
     const genereContenuPourUtilisateur = (
       idUtilisateur: UUID,
       nombresParType: NombreNotificationsParType
@@ -65,6 +74,9 @@ export class RapportHebdomadaire {
             }
             if (typeNotification === 'responsableMesure') {
               return formatteResponsableMesure(nombresParType);
+            }
+            if (typeNotification === 'echeanceMesureBientotExpiree') {
+              return formatteEcheanceMesureBientotExpiree(nombresParType);
             }
           }
           return undefined;
