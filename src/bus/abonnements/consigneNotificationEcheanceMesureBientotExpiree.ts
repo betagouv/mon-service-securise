@@ -6,6 +6,7 @@ import Mesure from '../../modeles/mesure.js';
 import { NotificationTransactionnelle } from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import { UUID } from '../../typesBasiques.js';
 import { Contributeur } from '../../modeles/contributeur.js';
+import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
 
 export const consigneNotificationEcheanceMesureBientotExpiree =
   ({ depotDonnees }: { depotDonnees: DepotDonnees }) =>
@@ -28,35 +29,50 @@ export const consigneNotificationEcheanceMesureBientotExpiree =
       const deuxSemainesAvant = new Date(nouvelleMesure.echeance!);
       deuxSemainesAvant.setDate(deuxSemainesAvant.getDate() - 14);
 
-      return depotDonnees.sauvegardeNotificationTransactionnelle(
-        NotificationTransactionnelle.nouveau({
-          date: deuxSemainesAvant,
-          type: 'echeanceMesureBientotExpiree',
-          idActeur: utilisateur.id,
-          idDestinataire,
-          metadonnees: {
-            idMesure: nouvelleMesure.id,
-            idService: service.id,
-            typeMesure,
+      return Promise.all(
+        [
+          {
+            date: deuxSemainesAvant,
+            type: 'echeanceMesureBientotExpiree' as IdNotificationTransactionnelle,
           },
-        })
+          {
+            date: nouvelleMesure.echeance!,
+            type: 'echeanceMesureExpiree' as IdNotificationTransactionnelle,
+          },
+        ].map(({ date, type }) =>
+          depotDonnees.sauvegardeNotificationTransactionnelle(
+            NotificationTransactionnelle.nouveau({
+              date,
+              type,
+              idActeur: utilisateur.id,
+              idDestinataire,
+              metadonnees: {
+                idMesure: nouvelleMesure.id,
+                idService: service.id,
+                typeMesure,
+              },
+            })
+          )
+        )
       );
     };
 
     const supprimeNotification = async (idDestinataire: UUID) => {
       const notificationsUtilisateur =
         await depotDonnees.lisNotifications(idDestinataire);
-      const existante = notificationsUtilisateur.find((n) => {
+      const existantes = notificationsUtilisateur.filter((n) => {
         const donnees = n.donnees();
         return (
-          donnees.type === 'echeanceMesureBientotExpiree' &&
+          (donnees.type === 'echeanceMesureBientotExpiree' ||
+            donnees.type === 'echeanceMesureExpiree') &&
           donnees.metadonnees.idMesure === nouvelleMesure.id &&
           donnees.metadonnees.idService === service.id
         );
       });
 
-      if (existante)
-        await depotDonnees.supprimeNotificationTransactionnelle(existante);
+      await Promise.all(
+        existantes.map(depotDonnees.supprimeNotificationTransactionnelle)
+      );
     };
 
     const destinataires: UUID[] = nouvelleMesure.responsables.length
