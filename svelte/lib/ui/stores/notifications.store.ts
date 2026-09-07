@@ -13,7 +13,8 @@ const { subscribe, set } = writable<Notifications>({
 const routes: Record<TypeNotification, string> = {
   nouveaute: 'nouveautes',
   tache: 'taches',
-  activite: 'transactionnelles',
+  mention: 'transactionnelles',
+  assignation: 'transactionnelles',
   echeanceProche: 'transactionnelles',
 };
 

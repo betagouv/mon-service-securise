@@ -32,13 +32,23 @@
         },
       };
     }
-    if (notification.type === 'activite') {
+    if (notification.type === 'mention') {
       return {
         titre: notification.titre,
         description: notification.sousTitre,
         badge: {
           couleur: 'green-emeraude',
-          libelle: 'Activités',
+          libelle: 'Mention',
+        },
+      };
+    }
+    if (notification.type === 'assignation') {
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'green-archipel',
+          libelle: 'Assignation',
         },
       };
     }
