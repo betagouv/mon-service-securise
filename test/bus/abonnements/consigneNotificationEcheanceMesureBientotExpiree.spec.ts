@@ -112,6 +112,7 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         },
         type: 'echeanceMesureBientotExpiree',
         date: new Date('2026-08-18T00:00:00.000Z'),
+        dateExpiration: new Date('2026-09-01T00:00:00.000Z'),
       });
       expect(notifications[1].donnees()).toEqual({
         id: expect.any(String),
@@ -310,6 +311,7 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         },
         type: 'echeanceMesureBientotExpiree',
         date: new Date('2026-08-18T00:00:00.000Z'),
+        dateExpiration: new Date('2026-09-01T00:00:00.000Z'),
       });
       expect(notifications[1].donnees()).toEqual({
         id: expect.any(String),
