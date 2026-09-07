@@ -412,6 +412,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       'mentionDansMesure',
       'responsableMesure',
       'echeanceMesureBientotExpiree',
+      'echeanceMesureExpiree',
     ])(
       'sauvegarde la nouvelle préférence de récapitulatif `%s`',
       async (clePreference) => {

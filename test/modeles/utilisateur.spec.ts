@@ -640,6 +640,7 @@ describe('Un utilisateur', () => {
         echeanceMesureBientotExpiree: true,
         mentionDansMesure: true,
         responsableMesure: true,
+        echeanceMesureExpiree: true,
       });
     });
 
@@ -654,6 +655,7 @@ describe('Un utilisateur', () => {
         mentionDansMesure: false,
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
+        echeanceMesureExpiree: true,
       });
     });
 
@@ -666,6 +668,7 @@ describe('Un utilisateur', () => {
         mentionDansMesure: true,
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
+        echeanceMesureExpiree: true,
       });
     });
 
@@ -679,6 +682,7 @@ describe('Un utilisateur', () => {
         mentionDansMesure: true,
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
+        echeanceMesureExpiree: true,
       });
     });
 
@@ -698,6 +702,7 @@ describe('Un utilisateur', () => {
         mentionDansMesure: true,
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
+        echeanceMesureExpiree: true,
         unePreference: false,
       });
     });
