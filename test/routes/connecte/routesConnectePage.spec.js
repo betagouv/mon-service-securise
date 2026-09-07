@@ -179,6 +179,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         preferencesRecapitulatif: {
           mentionDansMesure: true,
           responsableMesure: true,
+          echeanceMesureBientotExpiree: true,
         },
       });
     });

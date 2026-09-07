@@ -39,8 +39,8 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
 
         const dateEcheanceMesure =
           typeMesure === 'generale'
-            ? service.mesures.mesuresGenerales.avecId(idMesure).echeance
-            : service.mesures.mesuresSpecifiques.avecId(idMesure).echeance;
+            ? service.mesures.mesuresGenerales.avecId(idMesure)?.echeance
+            : service.mesures.mesuresSpecifiques.avecId(idMesure)?.echeance;
 
         const contributeur: Contributeur = service.contributeurParId(
           n.donnees().idActeur
