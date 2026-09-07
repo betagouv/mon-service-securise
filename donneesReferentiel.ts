@@ -179,6 +179,29 @@ const donnees = {
       }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
       canalDiffusion: 'centreNotifications',
     },
+    echeanceMesureExpiree: {
+      type: 'echeanceAtteinte',
+      titre: 'Échéance dépassée',
+      sousTitre: ({
+        titreMesure,
+        nomService,
+        dateEcheanceMesure,
+      }: {
+        titreMesure: string;
+        nomService: string;
+        dateEcheanceMesure: Date;
+      }) =>
+        `« ${titreMesure} » arrive à échéance (${Intl.DateTimeFormat('fr', { dateStyle: 'short' }).format(dateEcheanceMesure)}) sur [${nomService}]`,
+      titreCta: 'Mettre à jour',
+      lien: ({
+        idService,
+        idMesure,
+      }: {
+        idService: string;
+        idMesure: string;
+      }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {

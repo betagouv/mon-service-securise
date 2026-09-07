@@ -16,6 +16,7 @@ const routes: Record<TypeNotification, string> = {
   mention: 'transactionnelles',
   assignation: 'transactionnelles',
   echeanceProche: 'transactionnelles',
+  echeanceAtteinte: 'transactionnelles',
 };
 
 export const storeNotifications = {
