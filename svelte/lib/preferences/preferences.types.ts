@@ -19,4 +19,5 @@ export type RecapitulatifHebdomadaire = {
   mentionDansMesure: boolean;
   responsableMesure: boolean;
   echeanceMesureBientotExpiree: boolean;
+  echeanceMesureExpiree: boolean;
 };
