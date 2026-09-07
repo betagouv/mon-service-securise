@@ -22,6 +22,7 @@ const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   mentionDansMesure: true,
   responsableMesure: true,
   echeanceMesureBientotExpiree: true,
+  echeanceMesureExpiree: true,
 };
 
 export type DonneesUtilisateur = {
