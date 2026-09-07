@@ -32,4 +32,11 @@ export const formatteursNotifications: Record<
       `<b>${nombres.echeanceMesureBientotExpiree} mesures</b> arrivent à échéance dans les deux prochaines semaines.`,
       nombres.echeanceMesureBientotExpiree ?? 0
     ),
+
+  echeanceMesureExpiree: (nombres) =>
+    singulierPluriel(
+      '<b>Une mesure</b> a atteint son échéance cette semaine.',
+      `<b>${nombres.echeanceMesureExpiree} mesures</b> ont atteint leur échéance cette semaine.`,
+      nombres.echeanceMesureExpiree ?? 0
+    ),
 };
