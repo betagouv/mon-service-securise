@@ -239,6 +239,11 @@ export class AdaptateurPostgresTS implements PersistanceTS {
           .where('lue', false)
           .where('date', '>', this.knex.raw("now() - interval '7 days'"))
           .where('date', '<=', this.knex.raw('clock_timestamp()'))
+          .where((qb) =>
+            qb
+              .where('date_expiration', '>', this.knex.raw('now()'))
+              .orWhereNull('date_expiration')
+          )
           .groupBy('id_destinataire', 'type')
           .as('parType')
       )

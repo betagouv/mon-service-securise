@@ -24,6 +24,7 @@ describe("L'adaptateur persistance Postgres", () => {
       metadonnees: donnees.metadonnees ?? { proprietes: 42 },
       type: donnees.type ?? 'mentionDansMesure',
       date: donnees.date ?? new Date(),
+      date_expiration: donnees.dateExpiration,
     });
   };
 
@@ -453,6 +454,7 @@ describe("L'adaptateur persistance Postgres", () => {
         metadonnees: { proprietes: 42 },
         type: 'mentionDansMesure',
         date,
+        dateExpiration: null,
       });
     });
   });
@@ -572,6 +574,21 @@ describe("L'adaptateur persistance Postgres", () => {
       const notifications = await persistance.lisRapportNotifications();
 
       expect(notifications.get(idDestinataire)?.mentionDansMesure).toBe(1);
+    });
+
+    it('ne considère pas les notifications expirées', async () => {
+      const idDestinataire = unUUIDRandom();
+      const ilYA1Jour = new Date();
+      ilYA1Jour.setDate(ilYA1Jour.getDate() - 1);
+
+      await insereUneNotification({
+        idDestinataire,
+        dateExpiration: ilYA1Jour,
+      });
+
+      const notifications = await persistance.lisRapportNotifications();
+
+      expect(notifications.get(idDestinataire)).toBe(undefined);
     });
 
     it('ne considère que les notifications non lue', async () => {
