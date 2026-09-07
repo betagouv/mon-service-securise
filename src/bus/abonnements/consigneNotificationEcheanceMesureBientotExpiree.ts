@@ -34,12 +34,13 @@ export const consigneNotificationEcheanceMesureBientotExpiree =
           {
             date: deuxSemainesAvant,
             type: 'echeanceMesureBientotExpiree' as IdNotificationTransactionnelle,
+            dateExpiration: nouvelleMesure.echeance!,
           },
           {
             date: nouvelleMesure.echeance!,
             type: 'echeanceMesureExpiree' as IdNotificationTransactionnelle,
           },
-        ].map(({ date, type }) =>
+        ].map(({ date, type, dateExpiration }) =>
           depotDonnees.sauvegardeNotificationTransactionnelle(
             NotificationTransactionnelle.nouveau({
               date,
@@ -51,6 +52,7 @@ export const consigneNotificationEcheanceMesureBientotExpiree =
                 idService: service.id,
                 typeMesure,
               },
+              dateExpiration,
             })
           )
         )
