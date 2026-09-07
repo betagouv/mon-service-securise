@@ -323,6 +323,76 @@ describe('Les notifications transactionnelles', () => {
     });
   });
 
+  describe("concernant les notifications 'echeanceMesureExpiree'", () => {
+    describe('pour une notification dans une mesure générale', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureGenerale('echeanceMesureExpiree')
+        );
+      });
+
+      it('mets en forme la notification', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0]).toEqual({
+          id: expect.any(String),
+          type: 'echeanceAtteinte',
+          titre: 'Échéance dépassée',
+          sousTitre: expect.any(String),
+          titreCta: 'Mettre à jour',
+          lien: expect.any(String),
+          canalDiffusion: 'centreNotifications',
+          statutLecture: 'nonLue',
+          doitNotifierLecture: true,
+          supprimable: true,
+          horodatage: dateNotif,
+          date: expect.any(Function),
+        });
+      });
+
+      it('met en forme le lien', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].lien).toBe(
+          `/service/${idService}/mesures?idMesure=RECENSEMENT.1`
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "« Etablir la liste de l'ensemble des services et données à protéger » arrive à échéance (01/01/2026) sur [Mairie de Bordeaux]"
+        );
+      });
+
+      it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+        depotDonnees.services = async () => [];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(0);
+      });
+    });
+
+    describe('pour une notification de mention dans une mesure spécifique', async () => {
+      beforeEach(async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          notificationMesureSpecifique('echeanceMesureExpiree')
+        );
+      });
+
+      it('met en forme le sous-titre', async () => {
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          '« Spécifique » arrive à échéance (02/02/2026) sur [Mairie de Bordeaux]'
+        );
+      });
+    });
+  });
+
   it('filtre les notifications du futur', async () => {
     const notification = NotificationTransactionnelle.nouveau({
       ...notificationMesureGenerale('mentionDansMesure').donnees(),

@@ -16,7 +16,8 @@ export type TypeNotification =
   | 'tache'
   | 'mention'
   | 'assignation'
-  | 'echeanceProche';
+  | 'echeanceProche'
+  | 'echeanceAtteinte';
 
 type NotificationBase = {
   id: string;
@@ -53,11 +54,16 @@ export type NotificationEcheanceProche = NotificationBase & {
   type: 'echeanceProche';
 };
 
+export type NotificationEcheanceAtteinte = NotificationBase & {
+  type: 'echeanceAtteinte';
+};
+
 export type Notification =
   | NotificationNouveaute
   | NotificationTache
   | NotificationMention
   | NotificationAssignation
+  | NotificationEcheanceAtteinte
   | NotificationEcheanceProche;
 
 export type PrioriteMesure = 'p1' | 'p2' | 'p3';

@@ -52,12 +52,23 @@
         },
       };
     }
+    if (notification.type === 'echeanceProche') {
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'yellow-tournesol',
+          libelle: 'Échéance proche',
+        },
+      };
+    }
     return {
       titre: notification.titre,
       description: notification.sousTitre,
       badge: {
-        couleur: 'yellow-tournesol',
-        libelle: 'Échéance proche',
+        couleur: 'pink-tuile',
+        libelle: 'Échéance atteinte',
+        icone: 'warning-fill',
       },
     };
   });

@@ -23,6 +23,11 @@ type MetadonneesParType = {
     idService: UUID;
     typeMesure: 'generale' | 'specifique';
   };
+  echeanceMesureExpiree: {
+    idMesure: IdMesure;
+    idService: UUID;
+    typeMesure: 'generale' | 'specifique';
+  };
 };
 
 type BaseNotificationTransactionnelle = {
