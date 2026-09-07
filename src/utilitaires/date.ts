@@ -46,6 +46,14 @@ const secondesJusqua23h59m59s = (moment: Date) => {
   return Math.ceil((finDuJour.valueOf() - moment.valueOf()) / 1_000);
 };
 
+const MS_PAR_JOUR = 1000 * 60 * 60 * 24;
+
+const aMinuitUTC = (date: Date): number =>
+  Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+
+const nombreDeJoursCalendaires = (debut: Date, fin: Date): number =>
+  (aMinuitUTC(fin) - aMinuitUTC(debut)) / MS_PAR_JOUR;
+
 export {
   ajouteMoisADate,
   dateEnFrancais,
@@ -53,5 +61,6 @@ export {
   chaineDateFrEnChaineDateISO,
   dateInvalide,
   dateYYYYMMDD,
+  nombreDeJoursCalendaires,
   secondesJusqua23h59m59s,
 };

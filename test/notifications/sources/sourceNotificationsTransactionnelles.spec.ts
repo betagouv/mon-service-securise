@@ -12,6 +12,7 @@ import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { IdNotificationTransactionnelle } from '../../../src/referentiel.types.ts';
+import { AdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
 
 describe('Les notifications transactionnelles', () => {
   let depotDonnees: DepotDonnees;
@@ -19,6 +20,7 @@ describe('Les notifications transactionnelles', () => {
   const dateNotif = new Date();
   const idService = unUUID('S1');
   const idActeur = unUUID('A');
+  let adaptateurHorloge: AdaptateurHorloge;
 
   beforeEach(() => {
     depotDonnees = creeDepot({
@@ -28,6 +30,9 @@ describe('Les notifications transactionnelles', () => {
       adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
+    adaptateurHorloge = {
+      maintenant: () => new Date(),
+    };
 
     depotDonnees.services = async () => [
       unServiceV2()
@@ -63,16 +68,17 @@ describe('Les notifications transactionnelles', () => {
   });
 
   const laSource = () =>
-    new SourceNotificationsTransactionnelles(depotDonnees, {
-      maintenant: () => new Date(),
-    });
+    new SourceNotificationsTransactionnelles(depotDonnees, adaptateurHorloge);
 
-  const notificationMesureGenerale = (type: IdNotificationTransactionnelle) =>
+  const notificationMesureGenerale = (
+    type: IdNotificationTransactionnelle,
+    date = dateNotif
+  ) =>
     NotificationTransactionnelle.nouveau({
       idActeur,
       idDestinataire: idUtilisateur,
       type,
-      date: dateNotif,
+      date,
       metadonnees: {
         idService,
         idMesure: 'RECENSEMENT.1',
@@ -80,12 +86,15 @@ describe('Les notifications transactionnelles', () => {
       },
     });
 
-  const notificationMesureSpecifique = (type: IdNotificationTransactionnelle) =>
+  const notificationMesureSpecifique = (
+    type: IdNotificationTransactionnelle,
+    date = dateNotif
+  ) =>
     NotificationTransactionnelle.nouveau({
       idActeur,
       idDestinataire: idUtilisateur,
       type,
-      date: dateNotif,
+      date,
       metadonnees: {
         idService,
         idMesure: unUUID('M'),
@@ -257,18 +266,23 @@ describe('Les notifications transactionnelles', () => {
     describe('pour une notification dans une mesure générale', async () => {
       beforeEach(async () => {
         await depotDonnees.sauvegardeNotificationTransactionnelle(
-          notificationMesureGenerale('echeanceMesureBientotExpiree')
+          notificationMesureGenerale(
+            'echeanceMesureBientotExpiree',
+            new Date('2025-12-20')
+          )
         );
       });
 
       it('mets en forme la notification', async () => {
+        adaptateurHorloge.maintenant = () => new Date('2025-12-29');
+
         const notifications = await laSource().notificationsPour(idUtilisateur);
 
         expect(notifications).toHaveLength(1);
         expect(notifications[0]).toEqual({
           id: expect.any(String),
           type: 'echeanceProche',
-          titre: 'Échéance dans 2 semaines',
+          titre: 'Échéance dans 3 jours',
           sousTitre: expect.any(String),
           titreCta: 'Mettre à jour',
           lien: expect.any(String),
@@ -276,7 +290,29 @@ describe('Les notifications transactionnelles', () => {
           statutLecture: 'nonLue',
           doitNotifierLecture: true,
           supprimable: true,
-          horodatage: dateNotif,
+          horodatage: new Date('2025-12-20'),
+          date: expect.any(Function),
+        });
+      });
+
+      it('mets en forme la notification dans 1 jour', async () => {
+        adaptateurHorloge.maintenant = () => new Date('2025-12-31');
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0]).toEqual({
+          id: expect.any(String),
+          type: 'echeanceProche',
+          titre: 'Échéance dans 1 jour',
+          sousTitre: expect.any(String),
+          titreCta: 'Mettre à jour',
+          lien: expect.any(String),
+          canalDiffusion: 'centreNotifications',
+          statutLecture: 'nonLue',
+          doitNotifierLecture: true,
+          supprimable: true,
+          horodatage: new Date('2025-12-20'),
           date: expect.any(Function),
         });
       });
