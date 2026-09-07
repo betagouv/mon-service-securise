@@ -34,6 +34,7 @@ type BaseNotificationTransactionnelle = {
   idActeur: UUID;
   idDestinataire: UUID;
   date: Date;
+  dateExpiration?: Date;
 };
 
 export type DonneesCreationNotificationTransactionnelle = {

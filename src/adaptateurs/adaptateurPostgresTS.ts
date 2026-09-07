@@ -202,6 +202,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         metadonnees: 'metadonnees',
         type: 'type',
         date: 'date',
+        dateExpiration: 'date_expiration',
       })
       .where({ id_destinataire: idDestinataire });
   }
@@ -219,6 +220,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         metadonnees: 'metadonnees',
         type: 'type',
         date: 'date',
+        dateExpiration: 'date_expiration',
       })
       .where({ id_destinataire: idDestinataire, id: idNotification })
       .first();
@@ -259,6 +261,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         metadonnees: donnees.metadonnees,
         type: donnees.type,
         date: donnees.date,
+        date_expiration: donnees.dateExpiration,
       })
       .onConflict('id')
       .merge();
