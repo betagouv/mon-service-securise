@@ -14,7 +14,8 @@ export type ReferentielStatut = Record<StatutMesure, string>;
 export type TypeNotification =
   | 'nouveaute'
   | 'tache'
-  | 'activite'
+  | 'mention'
+  | 'assignation'
   | 'echeanceProche';
 
 type NotificationBase = {
@@ -40,8 +41,12 @@ export type NotificationTache = NotificationBase & {
   type: 'tache';
 };
 
-export type NotificationActivite = NotificationBase & {
-  type: 'activite';
+export type NotificationMention = NotificationBase & {
+  type: 'mention';
+};
+
+export type NotificationAssignation = NotificationBase & {
+  type: 'assignation';
 };
 
 export type NotificationEcheanceProche = NotificationBase & {
@@ -51,7 +56,8 @@ export type NotificationEcheanceProche = NotificationBase & {
 export type Notification =
   | NotificationNouveaute
   | NotificationTache
-  | NotificationActivite
+  | NotificationMention
+  | NotificationAssignation
   | NotificationEcheanceProche;
 
 export type PrioriteMesure = 'p1' | 'p2' | 'p3';

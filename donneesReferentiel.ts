@@ -113,7 +113,7 @@ const donnees = {
 
   notificationsTransactionnelles: {
     mentionDansMesure: {
-      type: 'activite',
+      type: 'mention',
       titre: 'Mention',
       sousTitre: ({
         nomActeur,
@@ -137,7 +137,7 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
     },
     responsableMesure: {
-      type: 'activite',
+      type: 'assignation',
       titre: 'Nouvelle responsabilitié',
       sousTitre: ({
         titreMesure,

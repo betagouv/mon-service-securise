@@ -107,7 +107,7 @@ describe('Les notifications transactionnelles', () => {
         expect(notifications).toHaveLength(1);
         expect(notifications[0]).toEqual({
           id: expect.any(String),
-          type: 'activite',
+          type: 'mention',
           titre: 'Mention',
           sousTitre: expect.any(String),
           titreCta: 'Voir le commentaire',
@@ -197,7 +197,7 @@ describe('Les notifications transactionnelles', () => {
         expect(notifications).toHaveLength(1);
         expect(notifications[0]).toEqual({
           id: expect.any(String),
-          type: 'activite',
+          type: 'assignation',
           titre: 'Nouvelle responsabilitié',
           sousTitre: expect.any(String),
           titreCta: 'Voir la mesure',
