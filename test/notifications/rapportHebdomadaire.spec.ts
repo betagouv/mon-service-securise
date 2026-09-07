@@ -76,6 +76,13 @@ describe('Le service de rapport hebdomadaire', () => {
       messagePluriel:
         '<b>2 mesures</b> arrivent à échéance dans les deux prochaines semaines.',
     },
+    {
+      type: 'echeanceMesureExpiree',
+      messageSingulier:
+        '<b>Une mesure</b> a atteint son échéance cette semaine.',
+      messagePluriel:
+        '<b>2 mesures</b> ont atteint leur échéance cette semaine.',
+    },
   ] as Array<{
     type: IdNotificationTransactionnelle;
     messageSingulier: string;
