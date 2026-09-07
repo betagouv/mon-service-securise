@@ -637,6 +637,7 @@ describe('Un utilisateur', () => {
       const utilisateur = unUtilisateur().construis();
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
+        echeanceMesureBientotExpiree: true,
         mentionDansMesure: true,
         responsableMesure: true,
       });
@@ -652,6 +653,7 @@ describe('Un utilisateur', () => {
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: false,
         responsableMesure: true,
+        echeanceMesureBientotExpiree: true,
       });
     });
 
@@ -663,6 +665,7 @@ describe('Un utilisateur', () => {
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: true,
         responsableMesure: true,
+        echeanceMesureBientotExpiree: true,
       });
     });
 
@@ -675,6 +678,7 @@ describe('Un utilisateur', () => {
       ).toEqual({
         mentionDansMesure: true,
         responsableMesure: true,
+        echeanceMesureBientotExpiree: true,
       });
     });
 
@@ -693,6 +697,7 @@ describe('Un utilisateur', () => {
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
         mentionDansMesure: true,
         responsableMesure: true,
+        echeanceMesureBientotExpiree: true,
         unePreference: false,
       });
     });
