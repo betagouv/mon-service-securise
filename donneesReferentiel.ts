@@ -114,7 +114,7 @@ const donnees = {
   notificationsTransactionnelles: {
     mentionDansMesure: {
       type: 'mention',
-      titre: 'Mention',
+      titre: () => 'Mention',
       sousTitre: ({
         nomActeur,
         titreMesure,
@@ -138,7 +138,7 @@ const donnees = {
     },
     responsableMesure: {
       type: 'assignation',
-      titre: 'Nouvelle responsabilitié',
+      titre: () => 'Nouvelle responsabilitié',
       sousTitre: ({
         titreMesure,
         nomService,
@@ -158,7 +158,12 @@ const donnees = {
     },
     echeanceMesureBientotExpiree: {
       type: 'echeanceProche',
-      titre: 'Échéance dans 2 semaines',
+      titre: ({
+        nombreJoursDiciEcheance,
+      }: {
+        nombreJoursDiciEcheance: number;
+      }) =>
+        `Échéance dans ${nombreJoursDiciEcheance} jour${nombreJoursDiciEcheance > 1 ? 's' : ''}`,
       sousTitre: ({
         titreMesure,
         nomService,
@@ -181,7 +186,7 @@ const donnees = {
     },
     echeanceMesureExpiree: {
       type: 'echeanceAtteinte',
-      titre: 'Échéance dépassée',
+      titre: () => 'Échéance dépassée',
       sousTitre: ({
         titreMesure,
         nomService,

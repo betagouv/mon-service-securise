@@ -8,6 +8,7 @@ import { UUID } from '../../typesBasiques.js';
 import { Contributeur } from '../../modeles/contributeur.js';
 import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
+import { nombreDeJoursCalendaires } from '../../utilitaires/date.js';
 
 export class SourceNotificationsTransactionnelles implements SourceNotifications {
   constructor(
@@ -47,6 +48,13 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
             ? service.mesures.mesuresGenerales.avecId(idMesure)?.echeance
             : service.mesures.mesuresSpecifiques.avecId(idMesure)?.echeance;
 
+        const nombreJoursDiciEcheance = dateEcheanceMesure
+          ? nombreDeJoursCalendaires(
+              this.adaptateurHorloge.maintenant(),
+              dateEcheanceMesure
+            )
+          : 0;
+
         const contributeur: Contributeur = service.contributeurParId(
           n.donnees().idActeur
         );
@@ -60,7 +68,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
         return {
           id: n.donnees().id,
           type,
-          titre,
+          titre: titre({ nombreJoursDiciEcheance }),
           sousTitre: sousTitre({
             nomActeur,
             titreMesure,
