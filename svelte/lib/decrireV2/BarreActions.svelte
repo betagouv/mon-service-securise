@@ -25,7 +25,7 @@
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Modifier le service"
-        variante="tertiaire"
+        variante="primaire"
         taille="md"
         icone="edit-line"
         positionIcone="droite"
