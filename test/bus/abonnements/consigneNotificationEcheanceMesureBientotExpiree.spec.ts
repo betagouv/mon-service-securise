@@ -81,7 +81,7 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
   });
 
   describe('quand une échéance est ajoutée', () => {
-    it('notifie les responsables 2 semaines avant', async () => {
+    it('notifie les responsables 2 semaines avant et le jour même', async () => {
       const evenement = creeEvenement({
         ancienneMesure: uneMesureGenerale()
           .avecId('MG1')
@@ -99,7 +99,7 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
 
       const notifications =
         await depotDonnees.lisNotifications(idUtilisateurNomme);
-      expect(notifications).toHaveLength(1);
+      expect(notifications).toHaveLength(2);
       expect(notifications[0].donnees()).toEqual({
         id: expect.any(String),
         lue: false,
@@ -112,6 +112,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         },
         type: 'echeanceMesureBientotExpiree',
         date: new Date('2026-08-18T00:00:00.000Z'),
+      });
+      expect(notifications[1].donnees()).toEqual({
+        id: expect.any(String),
+        lue: false,
+        idActeur,
+        idDestinataire: idUtilisateurNomme,
+        metadonnees: {
+          idMesure: 'MG1',
+          idService,
+          typeMesure: 'generale',
+        },
+        type: 'echeanceMesureExpiree',
+        date: new Date('2026-09-01T00:00:00.000Z'),
       });
     });
 
@@ -132,10 +145,10 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
       await abonnement(evenement);
 
       expect(await depotDonnees.lisNotifications(idProprietaire1)).toHaveLength(
-        1
+        2
       );
       expect(await depotDonnees.lisNotifications(idProprietaire2)).toHaveLength(
-        1
+        2
       );
     });
   });
@@ -146,6 +159,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         NotificationTransactionnelle.nouveau({
           date: new Date(),
           type: 'echeanceMesureBientotExpiree',
+          idActeur,
+          idDestinataire: idUtilisateurNomme,
+          metadonnees: {
+            idMesure: 'MG1',
+            idService,
+            typeMesure: 'generale',
+          },
+        })
+      );
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: new Date(),
+          type: 'echeanceMesureExpiree',
           idActeur,
           idDestinataire: idUtilisateurNomme,
           metadonnees: {
@@ -181,6 +207,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         NotificationTransactionnelle.nouveau({
           date: new Date(),
           type: 'echeanceMesureBientotExpiree',
+          idActeur,
+          idDestinataire: idProprietaire1,
+          metadonnees: {
+            idMesure: 'MG1',
+            idService,
+            typeMesure: 'generale',
+          },
+        })
+      );
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: new Date(),
+          type: 'echeanceMesureExpiree',
           idActeur,
           idDestinataire: idProprietaire1,
           metadonnees: {
@@ -227,6 +266,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
           },
         })
       );
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: new Date(),
+          type: 'echeanceMesureExpiree',
+          idActeur,
+          idDestinataire: idUtilisateurNomme,
+          metadonnees: {
+            idMesure: 'MG1',
+            idService,
+            typeMesure: 'generale',
+          },
+        })
+      );
 
       const evenement = creeEvenement({
         ancienneMesure: uneMesureGenerale()
@@ -245,7 +297,7 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
 
       const notifications =
         await depotDonnees.lisNotifications(idUtilisateurNomme);
-      expect(notifications).toHaveLength(1);
+      expect(notifications).toHaveLength(2);
       expect(notifications[0].donnees()).toEqual({
         id: expect.any(String),
         lue: false,
@@ -259,6 +311,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         type: 'echeanceMesureBientotExpiree',
         date: new Date('2026-08-18T00:00:00.000Z'),
       });
+      expect(notifications[1].donnees()).toEqual({
+        id: expect.any(String),
+        lue: false,
+        idActeur,
+        idDestinataire: idUtilisateurNomme,
+        metadonnees: {
+          idMesure: 'MG1',
+          idService,
+          typeMesure: 'generale',
+        },
+        type: 'echeanceMesureExpiree',
+        date: new Date('2026-09-01T00:00:00.000Z'),
+      });
     });
 
     it("supprime les notifications des propriétaires pour en créer des nouvelles s'il n'y a pas de responsables", async () => {
@@ -266,6 +331,19 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
         NotificationTransactionnelle.nouveau({
           date: new Date(),
           type: 'echeanceMesureBientotExpiree',
+          idActeur,
+          idDestinataire: idProprietaire1,
+          metadonnees: {
+            idMesure: 'MG1',
+            idService,
+            typeMesure: 'generale',
+          },
+        })
+      );
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: new Date(),
+          type: 'echeanceMesureExpiree',
           idActeur,
           idDestinataire: idProprietaire1,
           metadonnees: {
@@ -293,9 +371,12 @@ describe("L'abonnement qui consigne les notifications d'échéance de mesure bie
 
       const notifications =
         await depotDonnees.lisNotifications(idProprietaire1);
-      expect(notifications).toHaveLength(1);
+      expect(notifications).toHaveLength(2);
       expect(notifications[0].donnees().date).toEqual(
         new Date('2026-08-18T00:00:00.000Z')
+      );
+      expect(notifications[1].donnees().date).toEqual(
+        new Date('2026-09-01T00:00:00.000Z')
       );
     });
   });
