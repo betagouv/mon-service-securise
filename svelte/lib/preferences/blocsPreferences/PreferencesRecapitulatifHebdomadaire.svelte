@@ -68,6 +68,7 @@
     titre="On me mentionne dans un commentaire"
     sousTitre="Lorsqu'un utilisateur vous mentionne dans un commentaire de mesure."
     icone="message-2-line"
+    avecBordure
     valeur={mentionDansMesure}
     onvaleurmodifiee={async (valeur) => {
       mentionDansMesure = valeur;
@@ -80,6 +81,7 @@
     titre="On me nomme responsable d’une mesure"
     sousTitre="Lorsqu’un utilisateur vous désigne comme responsable d’une mesure de sécurité sur un service."
     icone="user-star-line"
+    avecBordure
     valeur={responsableMesure}
     onvaleurmodifiee={async (valeur) => {
       responsableMesure = valeur;
@@ -92,6 +94,7 @@
     titre="Une mesure arrive bientôt à échéance"
     sousTitre="Deux semaines avant la date d’échéance d’une mesure."
     icone="alarm-warning-line"
+    avecBordure
     valeur={echeanceMesureBientotExpiree}
     onvaleurmodifiee={async (valeur) => {
       echeanceMesureBientotExpiree = valeur;
@@ -112,7 +115,17 @@
       });
     }}
   />
+  <dsfr-callout
+    text="Si vous avez déjà lu toutes vos notifications dans MonServiceSécurisé, aucun e-mail ne vous est envoyé."
+    has-icon
+    icon="info-line"
+    accent="blue-cumulus"
+  ></dsfr-callout>
 </BlocPreferences>
 
 <style lang="scss">
+  dsfr-callout {
+    margin-top: 16px;
+    margin-bottom: -56px;
+  }
 </style>
