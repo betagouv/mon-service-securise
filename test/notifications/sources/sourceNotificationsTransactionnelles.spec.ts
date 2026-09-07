@@ -404,4 +404,16 @@ describe('Les notifications transactionnelles', () => {
 
     expect(notifications).toHaveLength(0);
   });
+
+  it('filtre les notifications expirées', async () => {
+    const notification = NotificationTransactionnelle.nouveau({
+      ...notificationMesureGenerale('echeanceMesureBientotExpiree').donnees(),
+      dateExpiration: new Date('2025-01-01'),
+    });
+    await depotDonnees.sauvegardeNotificationTransactionnelle(notification);
+
+    const notifications = await laSource().notificationsPour(idUtilisateur);
+
+    expect(notifications).toHaveLength(0);
+  });
 });

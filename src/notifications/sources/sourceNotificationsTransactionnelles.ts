@@ -23,6 +23,11 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
 
     return notifications
       .filter((n) => n.donnees().date <= this.adaptateurHorloge.maintenant())
+      .filter(
+        (n) =>
+          !n.donnees().dateExpiration ||
+          n.donnees().dateExpiration! > this.adaptateurHorloge.maintenant()
+      )
       .map((n) => {
         const { idService, idMesure, typeMesure } = n.donnees().metadonnees;
         const service = lesServices.find((s) => s.id === idService);
