@@ -472,6 +472,7 @@ describe("L'adaptateur persistance Postgres", () => {
         },
         type: 'mentionDansMesure',
         date: new Date(),
+        dateExpiration: new Date('2021-08-01T00:00:00.000Z'),
       };
 
       await persistance.sauvegardeNotificationTransactionnelle(donnees);
