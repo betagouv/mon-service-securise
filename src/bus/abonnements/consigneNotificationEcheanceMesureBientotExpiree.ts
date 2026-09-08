@@ -6,7 +6,6 @@ import Mesure from '../../modeles/mesure.js';
 import { NotificationTransactionnelle } from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import { UUID } from '../../typesBasiques.js';
 import { Contributeur } from '../../modeles/contributeur.js';
-import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
 
 export const consigneNotificationEcheanceMesureBientotExpiree =
   ({ depotDonnees }: { depotDonnees: DepotDonnees }) =>
@@ -29,33 +28,33 @@ export const consigneNotificationEcheanceMesureBientotExpiree =
       const deuxSemainesAvant = new Date(nouvelleMesure.echeance!);
       deuxSemainesAvant.setDate(deuxSemainesAvant.getDate() - 14);
 
-      return Promise.all(
-        [
-          {
-            date: deuxSemainesAvant,
-            type: 'echeanceMesureBientotExpiree' as IdNotificationTransactionnelle,
-            dateExpiration: nouvelleMesure.echeance!,
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: deuxSemainesAvant,
+          type: 'echeanceMesureBientotExpiree',
+          dateExpiration: nouvelleMesure.echeance!,
+          idActeur: utilisateur.id,
+          idDestinataire,
+          metadonnees: {
+            idMesure: nouvelleMesure.id,
+            idService: service.id,
+            typeMesure,
           },
-          {
-            date: nouvelleMesure.echeance!,
-            type: 'echeanceMesureExpiree' as IdNotificationTransactionnelle,
+        })
+      );
+
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        NotificationTransactionnelle.nouveau({
+          date: nouvelleMesure.echeance!,
+          type: 'echeanceMesureExpiree',
+          idActeur: utilisateur.id,
+          idDestinataire,
+          metadonnees: {
+            idMesure: nouvelleMesure.id,
+            idService: service.id,
+            typeMesure,
           },
-        ].map(({ date, type, dateExpiration }) =>
-          depotDonnees.sauvegardeNotificationTransactionnelle(
-            NotificationTransactionnelle.nouveau({
-              date,
-              type,
-              idActeur: utilisateur.id,
-              idDestinataire,
-              metadonnees: {
-                idMesure: nouvelleMesure.id,
-                idService: service.id,
-                typeMesure,
-              },
-              dateExpiration,
-            })
-          )
-        )
+        })
       );
     };
 

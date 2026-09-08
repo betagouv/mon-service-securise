@@ -55,7 +55,7 @@ describe('Le service de rapport hebdomadaire', () => {
       },
       date: hier,
       ...donnees,
-    });
+    } as DonneesNotificationTransactionnelle);
 
   describe.each([
     {
@@ -268,6 +268,23 @@ describe('Le service de rapport hebdomadaire', () => {
             echeanceMesureBientotExpiree: false,
           }).donnees
       )
+      .construis() as unknown as AdaptateurPersistance;
+    depotDonnees = leDepot();
+    rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
+
+    const donnees = await rapportHebdomadaire.donnees();
+
+    expect(donnees).toEqual({});
+  });
+
+  it("ne prend pas en compte les notifications 'homologationExpiree'", async () => {
+    adaptateurPersistanceTS = unePersistanceMemoireTS()
+      .ajouteNotificationTransactionnelle(
+        uneNotification({ type: 'homologationExpiree' }).donnees()
+      )
+      .construis();
+    adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur(unUtilisateur().avecId(idDestinataire).donnees)
       .construis() as unknown as AdaptateurPersistance;
     depotDonnees = leDepot();
     rapportHebdomadaire = new RapportHebdomadaire({ depotDonnees });
