@@ -8,7 +8,11 @@ describe('Le modèle de notification transactionnelle', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date: new Date(),
-      metadonnees: {},
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
 
   it('peut être créée en insérant un `id`, non lue par défaut', () => {
@@ -19,7 +23,11 @@ describe('Le modèle de notification transactionnelle', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: {},
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
 
     expect(notification).toBeInstanceOf(NotificationTransactionnelle);
@@ -30,7 +38,11 @@ describe('Le modèle de notification transactionnelle', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: {},
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
   });
 
@@ -52,7 +64,11 @@ describe('Le modèle de notification transactionnelle', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: { proprietes: 42 },
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
 
     expect(notification).toBeInstanceOf(NotificationTransactionnelle);
@@ -63,7 +79,11 @@ describe('Le modèle de notification transactionnelle', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: { proprietes: 42 },
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
   });
 });

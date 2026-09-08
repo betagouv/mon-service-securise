@@ -30,7 +30,11 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date: new Date(),
-      metadonnees: { idService: unUUID('S') },
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
 
   it('retourne des modèles métier lors de la lecture', async () => {
@@ -42,7 +46,11 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: { proprietes: 42 },
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
     const depot = unDepot();
 
@@ -57,7 +65,11 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       idDestinataire: unUUID('D'),
       type: 'mentionDansMesure',
       date,
-      metadonnees: { proprietes: 42 },
+      metadonnees: {
+        idService: unUUID('S'),
+        typeMesure: 'generale',
+        idMesure: 'RECENSEMENT.1',
+      },
     });
   });
 
@@ -70,7 +82,11 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
         idDestinataire: unUUID('D'),
         type: 'mentionDansMesure',
         date: new Date(),
-        metadonnees: { proprietes: 42 },
+        metadonnees: {
+          idService: unUUID('S'),
+          typeMesure: 'generale',
+          idMesure: 'RECENSEMENT.1',
+        },
       });
       const depot = unDepot();
 
