@@ -108,6 +108,42 @@ class CentreNotifications {
 
     await this.depotDonnees.supprimeNotificationTransactionnelle(notification);
   }
+
+  async marqueToutesNotificationsLues(idUtilisateur: UUID) {
+    const toutes = await this.toutesNotifications(idUtilisateur);
+
+    const nouveautesNonLues = toutes.filter(
+      (n) => n.type === 'nouveaute' && n.statutLecture === 'nonLue'
+    );
+    await Promise.all(
+      nouveautesNonLues.map((n) =>
+        this.marqueNouveauteLue(idUtilisateur, n.id as IdNouvelleFonctionnalite)
+      )
+    );
+
+    const tachesService = toutes.filter(
+      (n) => n.type === 'tache' && n.doitNotifierLecture
+    );
+    await Promise.all(
+      tachesService.map((t) =>
+        this.marqueTacheDeServiceLue(idUtilisateur, t.id as UUID)
+      )
+    );
+
+    const notificationsTransactionnelles = toutes.filter(
+      (n) => n.type !== 'tache' && n.type !== 'nouveaute'
+    );
+    await Promise.all(
+      notificationsTransactionnelles
+        .filter((n) => n.statutLecture === 'nonLue')
+        .map((n) =>
+          this.marqueNotificationTransactionnelleLue(
+            n.id as UUID,
+            idUtilisateur
+          )
+        )
+    );
+  }
 }
 
 export default CentreNotifications;

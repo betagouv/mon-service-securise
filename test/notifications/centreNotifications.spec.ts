@@ -15,7 +15,11 @@ import { creeReferentielV2 } from '../../src/referentielV2.js';
 import { TousReferentiels } from '../../src/referentiel.interface.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import BusEvenements from '../../src/bus/busEvenements.js';
-import { unUUID } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
+import { IdNouvelleFonctionnalite } from '../../src/referentiel.types.ts';
+import { unServiceV2 } from '../constructeurs/constructeurService.js';
+import { UUID } from '../../src/typesBasiques.ts';
+import { NotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 
 describe('Le centre de notifications', () => {
   let referentiel: TousReferentiels;
@@ -179,6 +183,156 @@ describe('Le centre de notifications', () => {
       );
 
       expect(donneesRecues!.idTache).toBe(unUUID('T1'));
+    });
+  });
+
+  describe('sur marquage de toutes les notifications comme lues', () => {
+    const idUtilisateur = unUUIDRandom();
+
+    describe('pour les nouveautés', () => {
+      it('marque toutes les nouveautés comme lues', async () => {
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        const nouveautes =
+          await centreNotification.toutesNotifications(idUtilisateur);
+        expect(nouveautes).toHaveLength(2);
+        expect(nouveautes.map((n) => n.statutLecture)).toEqual(['lue', 'lue']);
+      });
+
+      it('ne met pas à jour une nouveauté déjà lue', async () => {
+        await depotDonnees.marqueNouveauteLue(idUtilisateur, 'N1');
+
+        const idNouveauteAMarquerCommeLues: IdNouvelleFonctionnalite[] = [];
+        depotDonnees.marqueNouveauteLue = async (_, idNouveaute) => {
+          idNouveauteAMarquerCommeLues.push(idNouveaute);
+        };
+
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        expect(idNouveauteAMarquerCommeLues).toEqual(['N2']);
+      });
+    });
+
+    describe('pour les tâches de services', () => {
+      let tachesLues: UUID[];
+
+      beforeEach(() => {
+        tachesLues = [];
+        depotDonnees.tachesDesServices = async () => [
+          {
+            id: unUUID('TS1'),
+            nature: 'natureDeTest',
+            service: unServiceV2().avecId('S1').construis(),
+            dateCreation: new Date('2026-01-01'),
+          },
+          {
+            id: unUUID('TS2'),
+            nature: 'natureDeTest',
+            service: unServiceV2().avecId('S2').construis(),
+            dateCreation: new Date('2026-02-02'),
+          },
+        ];
+        depotDonnees.marqueTacheDeServiceLue = async (idTache) => {
+          tachesLues.push(idTache);
+        };
+      });
+
+      it('marque toutes les tâches de services comme lues', async () => {
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        expect(tachesLues).toEqual([unUUID('TS2'), unUUID('TS1')]);
+      });
+
+      it('ne met pas à jour une tâche déjà lue', async () => {
+        depotDonnees.tachesDesServices = async () => [
+          {
+            id: unUUID('TS1'),
+            nature: 'natureDeTest',
+            service: unServiceV2().avecId('S1').construis(),
+            dateCreation: new Date('2026-01-01'),
+            dateFaite: new Date(),
+          },
+          {
+            id: unUUID('TS2'),
+            nature: 'natureDeTest',
+            service: unServiceV2().avecId('S2').construis(),
+            dateCreation: new Date('2026-02-02'),
+          },
+        ];
+
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        expect(tachesLues).toEqual([unUUID('TS2')]);
+      });
+    });
+
+    describe('pour les notifications transactionnelles', () => {
+      it('marque toutes les notifications comme lues', async () => {
+        const idService = unUUID('S');
+        const idActeur = unUUIDRandom();
+        depotDonnees.services = async () => [
+          unServiceV2()
+            .avecNContributeurs(1, [idActeur])
+            .avecId(idService)
+            .construis(),
+        ];
+
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          NotificationTransactionnelle.nouveau({
+            date: new Date(),
+            type: 'responsableMesure',
+            idActeur,
+            idDestinataire: idUtilisateur,
+            metadonnees: {
+              idMesure: 'RECENSEMENT.1',
+              idService,
+              typeMesure: 'generale',
+            },
+          })
+        );
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        const notifications =
+          await depotDonnees.lisNotifications(idUtilisateur);
+        expect(notifications).toHaveLength(1);
+        expect(notifications[0].donnees().lue).toBe(true);
+      });
+
+      it('ne met pas à jour une notification déjà lue', async () => {
+        await depotDonnees.sauvegardeNotificationTransactionnelle(
+          NotificationTransactionnelle.hydrate({
+            date: new Date(),
+            type: 'responsableMesure',
+            idActeur: unUUIDRandom(),
+            idDestinataire: idUtilisateur,
+            metadonnees: {
+              idMesure: 'analyseProtectionDonnees',
+              idService: unUUIDRandom(),
+              typeMesure: 'generale',
+            },
+            id: unUUID('N'),
+            lue: true,
+          })
+        );
+        depotDonnees.sauvegardeNotificationTransactionnelle = vi.fn();
+        const centreNotification = centreDeNotification();
+
+        await centreNotification.marqueToutesNotificationsLues(idUtilisateur);
+
+        expect(
+          depotDonnees.sauvegardeNotificationTransactionnelle
+        ).not.toHaveBeenCalled();
+      });
     });
   });
 });

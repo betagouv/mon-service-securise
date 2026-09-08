@@ -5,7 +5,13 @@ export enum StatutLecture {
   nonLue = 'nonLue',
 }
 
-export type TypeNotification = 'nouveaute' | 'tache' | 'activite';
+export type TypeNotification =
+  | 'nouveaute'
+  | 'tache'
+  | 'mention'
+  | 'assignation'
+  | 'echeanceProche'
+  | 'echeanceAtteinte';
 
 export type CanalDiffusion = 'centreNotifications' | 'page';
 
