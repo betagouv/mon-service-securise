@@ -41,6 +41,12 @@
     idTabActive = e.detail.index;
   };
 
+  let aDesNotificationsMarquablesCommeLues = $derived(
+    notificationsParOnglet.toutes.some(
+      (n) => n.doitNotifierLecture && n.statutLecture === 'nonLue'
+    )
+  );
+
   onMount(async () => {
     await storeNotifications.rafraichis();
   });
@@ -85,6 +91,18 @@
         onclick={() => (ouvert = false)}
       ></dsfr-button>
     </div>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      class="bouton-tout-marquer-lu"
+      label="Tout marquer comme lu"
+      kind="tertiary-no-outline"
+      size="sm"
+      has-icon
+      icon="check-line"
+      icon-place="left"
+      onclick={async () => await storeNotifications.marqueToutesLues()}
+      disabled={!aDesNotificationsMarquablesCommeLues}
+    ></dsfr-button>
     <dsfr-tabs
       tabs={configurationsTabs}
       active-tab-index={idTabActive}
@@ -224,5 +242,11 @@
 
   dsfr-tabs {
     margin-top: 32px;
+  }
+
+  .bouton-tout-marquer-lu {
+    margin-top: 16px;
+    margin-bottom: -22px;
+    margin-left: auto;
   }
 </style>

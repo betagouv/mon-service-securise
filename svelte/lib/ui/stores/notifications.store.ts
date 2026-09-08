@@ -33,6 +33,10 @@ export const storeNotifications = {
       ),
     });
   },
+  marqueToutesLues: async () => {
+    await axios.put(`/api/notifications/toutes-lues`);
+    await storeNotifications.rafraichis();
+  },
   marqueLue: async (type: TypeNotification, id: string) => {
     await axios.put(`/api/notifications/${routes[type]}/${id}`);
     await storeNotifications.rafraichis();
