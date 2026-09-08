@@ -72,6 +72,7 @@ const main = async () => {
     rapport.push(...rapportTache);
   } catch (error: unknown) {
     const e = error as Error;
+    fabriqueAdaptateurGestionErreur().logueErreur(e);
     rapport.push(`💥 Erreur ! Elle a été envoyée dans Sentry… : ${e.message}`);
     codeRetour = 1;
   } finally {
