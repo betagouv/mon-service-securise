@@ -24,6 +24,7 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
   let depotDonnees: DepotDonnees;
   const idActeur = unUUID('A');
   const idUtilisateurNomme = unUUID('U');
+  const idService = unUUID('S');
 
   beforeEach(() => {
     depotDonnees = creeDepotComplet({
@@ -52,7 +53,7 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
     nouvelleMesure: Mesure;
     typeMesure?: 'generale' | 'specifique';
   }) => ({
-    service: unService().avecId('S1').construis(),
+    service: unService().avecId(idService).construis(),
     utilisateur: unUtilisateur().avecId(idActeur).construis(),
     ancienneMesure,
     nouvelleMesure,
@@ -96,7 +97,7 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
       idDestinataire: idUtilisateurNomme,
       metadonnees: {
         idMesure: 'MG1',
-        idService: 'S1',
+        idService,
         typeMesure: 'generale',
       },
       type: 'responsableMesure',
@@ -147,7 +148,7 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
           idDestinataire: idUtilisateurNomme,
           metadonnees: {
             idMesure: 'MG1',
-            idService: 'S1',
+            idService,
             typeMesure: 'generale',
           },
         })
