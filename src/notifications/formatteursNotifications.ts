@@ -1,15 +1,15 @@
-import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import {
   NombreNotificationsParType,
   singulierPluriel,
 } from './rapportHebdomadaire.js';
+import { IdNotificationTransactionnelleDansRecapitulatif } from '../modeles/utilisateur.js';
 
 type FormatteNotification = (
   nombresParType: NombreNotificationsParType
 ) => string;
 
 export const formatteursNotifications: Record<
-  IdNotificationTransactionnelle,
+  IdNotificationTransactionnelleDansRecapitulatif,
   FormatteNotification
 > = {
   mentionDansMesure: (nombres) =>

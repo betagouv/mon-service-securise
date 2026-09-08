@@ -1,6 +1,9 @@
 import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
-import Utilisateur from '../modeles/utilisateur.js';
+import Utilisateur, {
+  IdNotificationTransactionnelleDansRecapitulatif,
+  idsNotificationTransactionnelleDansRecapitulatif,
+} from '../modeles/utilisateur.js';
 import { UUID } from '../typesBasiques.js';
 import { formatteursNotifications } from './formatteursNotifications.js';
 
@@ -39,7 +42,14 @@ export class RapportHebdomadaire {
       const preferences = utilisateur.preferencesRecapitulatif();
 
       return Object.keys(nombresParType).flatMap((type) => {
-        const typeNotification = type as IdNotificationTransactionnelle;
+        if (
+          !idsNotificationTransactionnelleDansRecapitulatif.includes(
+            type as IdNotificationTransactionnelleDansRecapitulatif
+          )
+        )
+          return [];
+        const typeNotification =
+          type as IdNotificationTransactionnelleDansRecapitulatif;
         if (!preferences[typeNotification]) return [];
 
         return [formatteursNotifications[typeNotification](nombresParType)];

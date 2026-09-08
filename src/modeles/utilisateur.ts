@@ -1,7 +1,7 @@
 import Base from './base.js';
 import {
-  ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
+  ErreurEmailManquant,
 } from '../erreurs.js';
 import Entite, { DonneesEntite } from './entite.js';
 import { Identite } from './identite.js';
@@ -9,14 +9,26 @@ import { UUID } from '../typesBasiques.js';
 import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
 import { SourceAuthentification } from './sourceAuthentification.js';
 import { AdaptateurMail } from '../adaptateurs/adaptateurMail.interface.js';
-import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 
 export type EstimationNombreServices = {
   borneBasse: string;
   borneHaute: string;
 };
 
-type PreferencesRecapitulatif = Record<IdNotificationTransactionnelle, boolean>;
+export const idsNotificationTransactionnelleDansRecapitulatif = [
+  'mentionDansMesure',
+  'responsableMesure',
+  'echeanceMesureBientotExpiree',
+  'echeanceMesureExpiree',
+] as const;
+
+export type IdNotificationTransactionnelleDansRecapitulatif =
+  (typeof idsNotificationTransactionnelleDansRecapitulatif)[number];
+
+type PreferencesRecapitulatif = Record<
+  IdNotificationTransactionnelleDansRecapitulatif,
+  boolean
+>;
 
 const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   mentionDansMesure: true,
@@ -322,7 +334,7 @@ class Utilisateur extends Base {
   ) {
     Object.entries(nouvellesPreferences).forEach(([cle, valeur]) => {
       this.preferencesRecapitulatifHebdomadaire[
-        cle as IdNotificationTransactionnelle
+        cle as IdNotificationTransactionnelleDansRecapitulatif
       ] = valeur;
     });
   }
