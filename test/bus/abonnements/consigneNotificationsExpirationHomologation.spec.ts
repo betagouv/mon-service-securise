@@ -15,6 +15,7 @@ import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { VersionService } from '../../../src/modeles/versionService.ts';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 
 describe("L'abonnement qui consigne les notifications d'expiration d'homologation", () => {
   let abonnement: ReturnType<
@@ -96,5 +97,31 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       type: 'homologationExpiree',
       date: new Date('2026-01-01'),
     });
+  });
+
+  it('supprime les notifications concernant les anciennes homologations', async () => {
+    await depotDonnees.sauvegardeNotificationTransactionnelle(
+      NotificationTransactionnelle.nouveau({
+        date: new Date(),
+        type: 'homologationExpiree',
+        idActeur: idProprietaire1,
+        idDestinataire: idProprietaire1,
+        metadonnees: { idService },
+      })
+    );
+
+    const evenement = {
+      dossier: unDossier(creeReferentielV2())
+        .quiEstComplet()
+        .avecDecision('2025-01-01', 'unAn')
+        .construis(),
+      idService,
+    };
+
+    await abonnement(evenement);
+
+    const notificationsP1 =
+      await depotDonnees.lisNotifications(idProprietaire1);
+    expect(notificationsP1).toHaveLength(1);
   });
 });

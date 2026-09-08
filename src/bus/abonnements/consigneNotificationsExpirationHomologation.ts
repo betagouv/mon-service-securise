@@ -11,6 +11,29 @@ export const consigneNotificationsExpirationHomologation =
     const proprietaires = service!.contributeurs.filter(
       (c: Contributeur) => c.estProprietaire
     );
+
+    const supprimeNotification = async (idDestinataire: UUID) => {
+      const notificationsUtilisateur =
+        await depotDonnees.lisNotifications(idDestinataire);
+      const existantes = notificationsUtilisateur.filter((n) => {
+        const donnees = n.donnees();
+        return (
+          donnees.type === 'homologationExpiree' &&
+          donnees.metadonnees.idService === idService
+        );
+      });
+
+      await Promise.all(
+        existantes.map(depotDonnees.supprimeNotificationTransactionnelle)
+      );
+    };
+
+    await Promise.all(
+      proprietaires.map((c: Contributeur) =>
+        supprimeNotification(c.idUtilisateur)
+      )
+    );
+
     await Promise.all(
       proprietaires.map((c: Contributeur) =>
         depotDonnees.sauvegardeNotificationTransactionnelle(
