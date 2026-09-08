@@ -28,6 +28,9 @@ type MetadonneesParType = {
     idService: UUID;
     typeMesure: 'generale' | 'specifique';
   };
+  homologationExpiree: {
+    idService: UUID;
+  };
 };
 
 type BaseNotificationTransactionnelle = {

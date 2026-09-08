@@ -207,6 +207,7 @@ const donnees = {
       }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
       canalDiffusion: 'centreNotifications',
     },
+    homologationExpiree: {},
   },
 
   naturesSuggestionsActions: {

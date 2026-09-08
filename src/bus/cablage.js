@@ -84,6 +84,7 @@ import { consigneNotificationTransactionnelleModifieeDansJournal } from './abonn
 import { consigneNotificationModificationResponsable } from './abonnements/consigneNotificationModificationResponsable.js';
 import { consigneNotificationEcheanceMesureBientotExpiree } from './abonnements/consigneNotificationEcheanceMesureBientotExpiree.js';
 import { supprimeNotificationsTransactionnelles } from './abonnements/supprimeNotificationsTransactionnellesService.js';
+import { consigneNotificationsExpirationHomologation } from './abonnements/consigneNotificationsExpirationHomologation.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -220,6 +221,7 @@ const cableTousLesAbonnes = (
       depotDonnees,
       referentiel,
     }),
+    consigneNotificationsExpirationHomologation({ depotDonnees }),
     envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }),
   ]);
 
@@ -233,6 +235,7 @@ const cableTousLesAbonnes = (
       depotDonnees,
       referentiel,
     }),
+    consigneNotificationsExpirationHomologation({ depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServiceSupprime, [
