@@ -221,7 +221,10 @@ const cableTousLesAbonnes = (
       depotDonnees,
       referentiel,
     }),
-    consigneNotificationsExpirationHomologation({ depotDonnees }),
+    consigneNotificationsExpirationHomologation({
+      depotDonnees,
+      adaptateurHorloge,
+    }),
     envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }),
   ]);
 
@@ -235,7 +238,10 @@ const cableTousLesAbonnes = (
       depotDonnees,
       referentiel,
     }),
-    consigneNotificationsExpirationHomologation({ depotDonnees }),
+    consigneNotificationsExpirationHomologation({
+      depotDonnees,
+      adaptateurHorloge,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServiceSupprime, [
