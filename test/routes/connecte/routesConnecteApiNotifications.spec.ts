@@ -159,7 +159,11 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         idDestinataire: idUtilisateur,
         type: 'mentionDansMesure',
         date: new Date(),
-        metadonnees: { proprietes: 42 },
+        metadonnees: {
+          idService: unUUID('S1'),
+          typeMesure: 'generale',
+          idMesure: 'analyseProtectionDonnees',
+        },
       });
       await testeur
         .depotDonnees()
@@ -202,7 +206,11 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         idDestinataire: idUtilisateur,
         type: 'mentionDansMesure',
         date: new Date(),
-        metadonnees: { proprietes: 42 },
+        metadonnees: {
+          idService: unUUID('S1'),
+          typeMesure: 'generale',
+          idMesure: 'analyseProtectionDonnees',
+        },
       });
       await testeur
         .depotDonnees()
