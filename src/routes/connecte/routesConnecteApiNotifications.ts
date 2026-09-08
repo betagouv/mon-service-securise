@@ -170,6 +170,20 @@ const routesConnecteApiNotifications = ({
     }
   );
 
+  routes.put('/toutes-lues', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
+
+    const centreNotifications = new CentreNotifications({
+      depotDonnees,
+      referentiel,
+      adaptateurHorloge,
+    });
+    await centreNotifications.marqueToutesNotificationsLues(
+      idUtilisateurCourant
+    );
+    reponse.sendStatus(200);
+  });
+
   return routes;
 };
 

@@ -5,6 +5,7 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import { creeReferentiel } from '../../../src/referentiel.ts';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import CentreNotifications from '../../../src/notifications/centreNotifications.ts';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
@@ -233,6 +234,43 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       );
 
       expect(reponse.status).toBe(404);
+    });
+  });
+
+  describe('quand requête PUT sur `/api/notifications/toutes-lues`', () => {
+    it('marque toutes les notifications lues', async () => {
+      const idUtilisateur = unUUID('D');
+      testeur.middleware().reinitialise({ idUtilisateur });
+      const notification = NotificationTransactionnelle.nouveau({
+        idActeur: unUUID('A'),
+        idDestinataire: idUtilisateur,
+        type: 'mentionDansMesure',
+        date: new Date(),
+        metadonnees: {
+          idService: unUUID('S1'),
+          typeMesure: 'generale',
+          idMesure: 'analyseProtectionDonnees',
+        },
+      });
+      await testeur
+        .depotDonnees()
+        .sauvegardeNotificationTransactionnelle(notification);
+
+      const reponse = await testeur.put(`/api/notifications/toutes-lues`);
+
+      expect(reponse.status).toBe(200);
+      const centreNotifications = new CentreNotifications({
+        depotDonnees: testeur.depotDonnees(),
+        referentiel: testeur.referentiel(),
+        adaptateurHorloge: { maintenant: () => new Date() },
+      });
+      const notifications =
+        await centreNotifications.toutesNotifications(idUtilisateur);
+      expect(
+        notifications
+          .filter((n) => n.doitNotifierLecture)
+          .every((n) => n.statutLecture === 'lue')
+      ).toBeTruthy();
     });
   });
 });
