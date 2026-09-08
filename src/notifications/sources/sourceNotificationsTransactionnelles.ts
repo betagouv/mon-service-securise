@@ -9,6 +9,12 @@ import { Contributeur } from '../../modeles/contributeur.js';
 import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { nombreDeJoursCalendaires } from '../../utilitaires/date.js';
+import {
+  MetadonneesNotificationMesure,
+  NotificationTransactionnelle,
+} from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
+import Service from '../../modeles/service.js';
+import { IdMesure } from '../../referentiel.types.js';
 
 export class SourceNotificationsTransactionnelles implements SourceNotifications {
   constructor(
@@ -30,53 +36,34 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
           n.donnees().dateExpiration! > this.adaptateurHorloge.maintenant()
       )
       .map((n) => {
-        const { idService, idMesure, typeMesure } = n.donnees().metadonnees;
+        const { idService } = n.donnees().metadonnees;
         const service = lesServices.find((s) => s.id === idService);
         if (!service) return undefined;
 
-        let titreMesure: string;
-        if (typeMesure === 'generale')
-          titreMesure = service.referentiel.mesure(idMesure).description;
+        let donnees;
+        const typeNotification = n.donnees().type;
+        if (
+          typeNotification === 'echeanceMesureBientotExpiree' ||
+          typeNotification === 'echeanceMesureExpiree' ||
+          typeNotification === 'responsableMesure' ||
+          typeNotification === 'mentionDansMesure'
+        )
+          donnees = this.donneesSpecifiquesNotificationMesure(n, service);
         else
-          titreMesure = service
-            .mesuresSpecifiques()
-            .toutes()
-            .find((m: MesureSpecifique) => m.id === idMesure)?.description;
+          donnees =
+            SourceNotificationsTransactionnelles.donneesSpecifiquesNotificationService(
+              n,
+              service
+            );
 
-        const dateEcheanceMesure =
-          typeMesure === 'generale'
-            ? service.mesures.mesuresGenerales.avecId(idMesure)?.echeance
-            : service.mesures.mesuresSpecifiques.avecId(idMesure)?.echeance;
-
-        const nombreJoursDiciEcheance = dateEcheanceMesure
-          ? nombreDeJoursCalendaires(
-              this.adaptateurHorloge.maintenant(),
-              dateEcheanceMesure
-            )
-          : 0;
-
-        const contributeur: Contributeur = service.contributeurParId(
-          n.donnees().idActeur
-        );
-        const nomActeur = contributeur.estAdmin
-          ? 'Un administrateur'
-          : contributeur.prenomNom();
-
-        const { type, titre, sousTitre, titreCta, lien, canalDiffusion } =
-          service.referentiel.notificationTransactionnelle(n.donnees().type);
+        const { type, titreCta, canalDiffusion } =
+          service.referentiel.notificationTransactionnelle(typeNotification);
 
         return {
+          ...donnees,
           id: n.donnees().id,
           type,
-          titre: titre({ nombreJoursDiciEcheance }),
-          sousTitre: sousTitre({
-            nomActeur,
-            titreMesure,
-            nomService: service.nomService(),
-            dateEcheanceMesure,
-          }),
           titreCta,
-          lien: lien({ idService, idMesure }),
           canalDiffusion,
           statutLecture: n.donnees().lue
             ? StatutLecture.lue
@@ -88,5 +75,79 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
         };
       })
       .filter((n) => !!n) as Notification[];
+  }
+
+  private donneesSpecifiquesNotificationMesure(
+    n: NotificationTransactionnelle,
+    service: Service
+  ) {
+    const { idMesure, typeMesure } = n.donnees()
+      .metadonnees as MetadonneesNotificationMesure;
+    let titreMesure: string | undefined;
+    if (typeMesure === 'generale')
+      titreMesure = service.referentiel.mesure(
+        idMesure as IdMesure
+      ).description;
+    else
+      titreMesure = service
+        .mesuresSpecifiques()
+        .toutes()
+        .find((m: MesureSpecifique) => m.id === idMesure)?.description;
+
+    const dateEcheanceMesure =
+      typeMesure === 'generale'
+        ? service.mesures.mesuresGenerales.avecId(idMesure)?.echeance
+        : service.mesures.mesuresSpecifiques.avecId(idMesure as UUID)?.echeance;
+
+    const nombreJoursDiciEcheance = dateEcheanceMesure
+      ? nombreDeJoursCalendaires(
+          this.adaptateurHorloge.maintenant(),
+          dateEcheanceMesure
+        )
+      : 0;
+
+    const contributeur: Contributeur = service.contributeurParId(
+      n.donnees().idActeur
+    );
+    const nomActeur = contributeur.estAdmin
+      ? 'Un administrateur'
+      : contributeur.prenomNom();
+
+    const { titre, sousTitre, lien } =
+      service.referentiel.notificationTransactionnelle(n.donnees().type);
+
+    const donneesSpecifiques = {
+      titre: titre({ nombreJoursDiciEcheance }),
+      sousTitre: sousTitre({
+        nomActeur,
+        titreMesure: titreMesure || '',
+        nomService: service.nomService(),
+        dateEcheanceMesure: dateEcheanceMesure || new Date(),
+        dateExpirationHomologation: new Date(),
+      }),
+      lien: lien({ idService: service.id, idMesure }),
+    };
+    return donneesSpecifiques;
+  }
+
+  private static donneesSpecifiquesNotificationService(
+    n: NotificationTransactionnelle,
+    service: Service
+  ) {
+    const { titre, sousTitre, lien } =
+      service.referentiel.notificationTransactionnelle(n.donnees().type);
+
+    const donneesSpecifiques = {
+      titre: titre({ nombreJoursDiciEcheance: 0 }),
+      sousTitre: sousTitre({
+        nomService: service.nomService(),
+        dateExpirationHomologation: n.donnees().date,
+        titreMesure: '',
+        dateEcheanceMesure: new Date(),
+        nomActeur: '',
+      }),
+      lien: lien({ idService: service.id, idMesure: '' }),
+    };
+    return donneesSpecifiques;
   }
 }

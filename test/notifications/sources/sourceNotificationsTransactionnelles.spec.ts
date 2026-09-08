@@ -11,7 +11,6 @@ import { NotificationTransactionnelle } from '../../../src/modeles/notifications
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
-import { IdNotificationTransactionnelle } from '../../../src/referentiel.types.ts';
 import { AdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
 
 describe('Les notifications transactionnelles', () => {
@@ -71,7 +70,11 @@ describe('Les notifications transactionnelles', () => {
     new SourceNotificationsTransactionnelles(depotDonnees, adaptateurHorloge);
 
   const notificationMesureGenerale = (
-    type: IdNotificationTransactionnelle,
+    type:
+      | 'mentionDansMesure'
+      | 'responsableMesure'
+      | 'echeanceMesureBientotExpiree'
+      | 'echeanceMesureExpiree',
     date = dateNotif
   ) =>
     NotificationTransactionnelle.nouveau({
@@ -87,7 +90,11 @@ describe('Les notifications transactionnelles', () => {
     });
 
   const notificationMesureSpecifique = (
-    type: IdNotificationTransactionnelle,
+    type:
+      | 'mentionDansMesure'
+      | 'responsableMesure'
+      | 'echeanceMesureBientotExpiree'
+      | 'echeanceMesureExpiree',
     date = dateNotif
   ) =>
     NotificationTransactionnelle.nouveau({
@@ -99,6 +106,20 @@ describe('Les notifications transactionnelles', () => {
         idService,
         idMesure: unUUID('M'),
         typeMesure: 'specifique',
+      },
+    });
+
+  const notificationExpirationHomologation = (
+    type: 'homologationExpiree',
+    date = dateNotif
+  ) =>
+    NotificationTransactionnelle.nouveau({
+      idActeur: idUtilisateur,
+      idDestinataire: idUtilisateur,
+      type,
+      date,
+      metadonnees: {
+        idService,
       },
     });
 
@@ -426,6 +447,62 @@ describe('Les notifications transactionnelles', () => {
           '« Spécifique » arrive à échéance (02/02/2026) sur [Mairie de Bordeaux]'
         );
       });
+    });
+  });
+
+  describe("concernant les notifications 'homologationExpiree'", async () => {
+    beforeEach(async () => {
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        notificationExpirationHomologation(
+          'homologationExpiree',
+          new Date('2025-12-31')
+        )
+      );
+      adaptateurHorloge.maintenant = () => new Date('2026-02-02');
+    });
+
+    it('mets en forme la notification dans 1 jour', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0]).toEqual({
+        id: expect.any(String),
+        type: 'homologationExpiree',
+        titre: 'Homologation expirée',
+        sousTitre: expect.any(String),
+        titreCta: 'Renouveler',
+        lien: expect.any(String),
+        canalDiffusion: 'centreNotifications',
+        statutLecture: 'nonLue',
+        doitNotifierLecture: true,
+        supprimable: true,
+        horodatage: new Date('2025-12-31'),
+        date: expect.any(Function),
+      });
+    });
+
+    it('met en forme le lien', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].lien).toBe(
+        `/service/${idService}/dossiers?tab=actif`
+      );
+    });
+
+    it('met en forme le sous-titre', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].sousTitre).toBe(
+        "L'homologation de [Mairie de Bordeaux] a expiré le 31/12/2025"
+      );
+    });
+
+    it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+      depotDonnees.services = async () => [];
+
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(0);
     });
   });
 
