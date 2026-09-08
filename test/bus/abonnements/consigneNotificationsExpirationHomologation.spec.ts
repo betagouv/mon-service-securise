@@ -51,6 +51,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     });
     abonnement = consigneNotificationsExpirationHomologation({
       depotDonnees,
+      adaptateurHorloge: { maintenant: () => new Date('2023-01-01') },
     });
   });
 
@@ -69,8 +70,9 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
 
     await abonnement(evenement);
 
-    const notificationsP1 =
-      await depotDonnees.lisNotifications(idProprietaire1);
+    const notificationsP1 = (
+      await depotDonnees.lisNotifications(idProprietaire1)
+    ).filter((n) => n.donnees().type === 'homologationExpiree');
     expect(notificationsP1).toHaveLength(1);
     expect(notificationsP1[0].donnees()).toEqual({
       id: expect.any(String),
@@ -83,8 +85,9 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       type: 'homologationExpiree',
       date: new Date('2026-01-01'),
     });
-    const notificationsP2 =
-      await depotDonnees.lisNotifications(idProprietaire2);
+    const notificationsP2 = (
+      await depotDonnees.lisNotifications(idProprietaire2)
+    ).filter((n) => n.donnees().type === 'homologationExpiree');
     expect(notificationsP2).toHaveLength(1);
     expect(notificationsP2[0].donnees()).toEqual({
       id: expect.any(String),
@@ -99,11 +102,77 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     });
   });
 
+  it("notifie les propriétaires de l'`homologationBientotExpiree` aux échéances prévues par le référentiel", async () => {
+    const evenement = {
+      dossier: unDossier(creeReferentielV2())
+        .quiEstComplet()
+        .avecDecision('2025-01-01', 'unAn')
+        .construis(),
+      idService,
+    };
+
+    await abonnement(evenement);
+
+    const notificationsP1 = (
+      await depotDonnees.lisNotifications(idProprietaire1)
+    ).filter((n) => n.donnees().type === 'homologationBientotExpiree');
+    expect(notificationsP1).toHaveLength(3);
+    expect(notificationsP1[2].donnees()).toEqual({
+      id: expect.any(String),
+      lue: false,
+      idActeur: idProprietaire1,
+      idDestinataire: idProprietaire1,
+      metadonnees: {
+        idService,
+      },
+      type: 'homologationBientotExpiree',
+      date: new Date('2025-12-01'),
+      dateExpiration: new Date('2026-01-01'),
+    });
+    expect(notificationsP1[1].donnees()).toEqual({
+      id: expect.any(String),
+      lue: false,
+      idActeur: idProprietaire1,
+      idDestinataire: idProprietaire1,
+      metadonnees: {
+        idService,
+      },
+      type: 'homologationBientotExpiree',
+      date: new Date('2025-09-30T23:00:00.000Z'),
+      dateExpiration: new Date('2025-12-01'),
+    });
+    expect(notificationsP1[0].donnees()).toEqual({
+      id: expect.any(String),
+      lue: false,
+      idActeur: idProprietaire1,
+      idDestinataire: idProprietaire1,
+      metadonnees: {
+        idService,
+      },
+      type: 'homologationBientotExpiree',
+      date: new Date('2025-06-30T23:00:00.000Z'),
+      dateExpiration: new Date('2025-09-30T23:00:00.000Z'),
+    });
+    const notificationsP2 = (
+      await depotDonnees.lisNotifications(idProprietaire2)
+    ).filter((n) => n.donnees().type === 'homologationBientotExpiree');
+    expect(notificationsP2).toHaveLength(3);
+  });
+
   it('supprime les notifications concernant les anciennes homologations', async () => {
     await depotDonnees.sauvegardeNotificationTransactionnelle(
       NotificationTransactionnelle.nouveau({
         date: new Date(),
         type: 'homologationExpiree',
+        idActeur: idProprietaire1,
+        idDestinataire: idProprietaire1,
+        metadonnees: { idService },
+      })
+    );
+    await depotDonnees.sauvegardeNotificationTransactionnelle(
+      NotificationTransactionnelle.nouveau({
+        date: new Date(),
+        type: 'homologationBientotExpiree',
         idActeur: idProprietaire1,
         idDestinataire: idProprietaire1,
         metadonnees: { idService },
@@ -122,6 +191,6 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
 
     const notificationsP1 =
       await depotDonnees.lisNotifications(idProprietaire1);
-    expect(notificationsP1).toHaveLength(1);
+    expect(notificationsP1).toHaveLength(4);
   });
 });

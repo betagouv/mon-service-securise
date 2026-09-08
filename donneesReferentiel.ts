@@ -223,6 +223,7 @@ const donnees = {
         `/service/${idService}/dossiers?tab=actif`,
       canalDiffusion: 'centreNotifications',
     },
+    homologationBientotExpiree: {},
   },
 
   naturesSuggestionsActions: {
