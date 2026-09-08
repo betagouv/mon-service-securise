@@ -16,6 +16,7 @@ export type TypeNotification =
   | 'tache'
   | 'mention'
   | 'assignation'
+  | 'homologationExpiree'
   | 'echeanceProche'
   | 'echeanceAtteinte';
 
@@ -58,13 +59,18 @@ export type NotificationEcheanceAtteinte = NotificationBase & {
   type: 'echeanceAtteinte';
 };
 
+export type NotificationExpirationHomologation = NotificationBase & {
+  type: 'homologationExpiree';
+};
+
 export type Notification =
   | NotificationNouveaute
   | NotificationTache
   | NotificationMention
   | NotificationAssignation
   | NotificationEcheanceAtteinte
-  | NotificationEcheanceProche;
+  | NotificationEcheanceProche
+  | NotificationExpirationHomologation;
 
 export type PrioriteMesure = 'p1' | 'p2' | 'p3';
 

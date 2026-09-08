@@ -7,30 +7,21 @@ export type EtatNotificationTransactionnelle = 'cree' | 'lu' | 'supprime';
 
 type IdMesure = IdMesureV1 | IdMesureV2 | UUID;
 
+export type MetadonneesNotificationService = {
+  idService: UUID;
+};
+
+export type MetadonneesNotificationMesure = MetadonneesNotificationService & {
+  idMesure: IdMesure;
+  typeMesure: 'generale' | 'specifique';
+};
+
 type MetadonneesParType = {
-  mentionDansMesure: {
-    idMesure: IdMesure;
-    idService: UUID;
-    typeMesure: 'generale' | 'specifique';
-  };
-  responsableMesure: {
-    idMesure: IdMesure;
-    idService: UUID;
-    typeMesure: 'generale' | 'specifique';
-  };
-  echeanceMesureBientotExpiree: {
-    idMesure: IdMesure;
-    idService: UUID;
-    typeMesure: 'generale' | 'specifique';
-  };
-  echeanceMesureExpiree: {
-    idMesure: IdMesure;
-    idService: UUID;
-    typeMesure: 'generale' | 'specifique';
-  };
-  homologationExpiree: {
-    idService: UUID;
-  };
+  mentionDansMesure: MetadonneesNotificationMesure;
+  responsableMesure: MetadonneesNotificationMesure;
+  echeanceMesureBientotExpiree: MetadonneesNotificationMesure;
+  echeanceMesureExpiree: MetadonneesNotificationMesure;
+  homologationExpiree: MetadonneesNotificationService;
 };
 
 type BaseNotificationTransactionnelle = {

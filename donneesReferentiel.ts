@@ -207,7 +207,22 @@ const donnees = {
       }) => `/service/${idService}/mesures?idMesure=${idMesure}`,
       canalDiffusion: 'centreNotifications',
     },
-    homologationExpiree: {},
+    homologationExpiree: {
+      type: 'homologationExpiree',
+      titre: () => 'Homologation expirée',
+      sousTitre: ({
+        nomService,
+        dateExpirationHomologation,
+      }: {
+        nomService: string;
+        dateExpirationHomologation: Date;
+      }) =>
+        `L'homologation de [${nomService}] a expiré le ${Intl.DateTimeFormat('fr', { dateStyle: 'short' }).format(dateExpirationHomologation)}`,
+      titreCta: 'Renouveler',
+      lien: ({ idService }: { idService: string }) =>
+        `/service/${idService}/dossiers?tab=actif`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {

@@ -22,7 +22,10 @@
         n.type === 'tache' || n.type === 'mention' || n.type === 'assignation'
     ),
     echeances: $storeNotifications.pourCentreNotifications.filter(
-      (n) => n.type === 'echeanceProche' || n.type === 'echeanceAtteinte'
+      (n) =>
+        n.type === 'echeanceProche' ||
+        n.type === 'echeanceAtteinte' ||
+        n.type === 'homologationExpiree'
     ),
     nouveautes: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'nouveaute'
