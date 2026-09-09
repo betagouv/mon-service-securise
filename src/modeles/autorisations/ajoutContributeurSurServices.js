@@ -2,6 +2,7 @@ import { EchecAutorisation, EchecEnvoiMessage } from '../../erreurs.js';
 import { fabriqueServiceTracking } from '../../tracking/serviceTracking.js';
 import { Autorisation } from './autorisation.js';
 import EvenementInvitationUtilisateurEnvoyee from '../../bus/evenementInvitationUtilisateurEnvoyee.js';
+import { EvenementContributeurAjoute } from '../../bus/evenementContributeurAjoute.js';
 
 const ajoutContributeurSurServices = ({
   depotDonnees,
@@ -153,6 +154,20 @@ const ajoutContributeurSurServices = ({
     }
   };
 
+  const publieEvenementContributeurAjoute = async (
+    emetteur,
+    utilisateur,
+    services
+  ) => {
+    await busEvenements.publie(
+      new EvenementContributeurAjoute({
+        acteur: emetteur,
+        destinataire: utilisateur,
+        services,
+      })
+    );
+  };
+
   return {
     executer: async (emailContributeur, services, droits, emetteur) => {
       await verifiePermission(emetteur.id, services);
@@ -182,6 +197,7 @@ const ajoutContributeurSurServices = ({
           emetteur
         );
       await envoieTracking(emetteur);
+      await publieEvenementContributeurAjoute(emetteur, utilisateur, cibles);
     },
   };
 };
