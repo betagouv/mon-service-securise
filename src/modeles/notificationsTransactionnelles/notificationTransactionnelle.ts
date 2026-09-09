@@ -3,8 +3,6 @@ import { IdNotificationTransactionnelle } from '../../referentiel.types.js';
 import { IdMesureV1 } from '../../../donneesConversionReferentielMesures.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
-export type EtatNotificationTransactionnelle = 'cree' | 'lu' | 'supprime';
-
 type IdMesure = IdMesureV1 | IdMesureV2 | UUID;
 
 export type MetadonneesNotificationService = {

@@ -72,7 +72,9 @@ export const consigneNotificationEcheanceMesureBientotExpiree =
       });
 
       await Promise.all(
-        existantes.map(depotDonnees.supprimeNotificationTransactionnelle)
+        existantes.map((e) =>
+          depotDonnees.supprimeNotificationTransactionnelle(e, 'systeme')
+        )
       );
     };
 

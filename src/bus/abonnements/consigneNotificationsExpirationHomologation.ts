@@ -33,7 +33,9 @@ export const consigneNotificationsExpirationHomologation =
       });
 
       await Promise.all(
-        existantes.map(depotDonnees.supprimeNotificationTransactionnelle)
+        existantes.map((e) =>
+          depotDonnees.supprimeNotificationTransactionnelle(e, 'systeme')
+        )
       );
     };
 

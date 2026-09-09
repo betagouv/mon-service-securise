@@ -74,7 +74,8 @@ export class DepotDonneesNotificationsTransactionnelles {
   }
 
   async supprimeNotificationTransactionnelle(
-    notification: NotificationTransactionnelle
+    notification: NotificationTransactionnelle,
+    source: 'utilisateur' | 'systeme' = 'utilisateur'
   ) {
     await this.persistance.supprimeNotificationTransactionnelle(
       notification.donnees().id
@@ -83,7 +84,7 @@ export class DepotDonneesNotificationsTransactionnelles {
     await this.busEvenements.publie(
       new EvenementNotificationTransactionnelleModifiee({
         notification,
-        etat: 'supprime',
+        etat: `supprime-par-${source}`,
       })
     );
   }
