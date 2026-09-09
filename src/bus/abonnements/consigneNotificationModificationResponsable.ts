@@ -51,7 +51,10 @@ export const consigneNotificationModificationResponsable =
       });
 
       if (existante)
-        await depotDonnees.supprimeNotificationTransactionnelle(existante);
+        await depotDonnees.supprimeNotificationTransactionnelle(
+          existante,
+          'systeme'
+        );
     };
 
     await Promise.all(

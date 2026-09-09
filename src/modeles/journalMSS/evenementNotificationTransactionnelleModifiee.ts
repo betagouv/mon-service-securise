@@ -1,7 +1,8 @@
 import Evenement from './evenement.js';
 import { type UUID } from '../../typesBasiques.js';
 import { type IdNotificationTransactionnelle } from '../../referentiel.types.js';
-import { type EtatNotificationTransactionnelle } from '../notificationsTransactionnelles/notificationTransactionnelle.js';
+
+import { EtatNotificationTransactionnelle } from '../../bus/evenementNotificationTransactionnelleModifiee.js';
 
 type DonneesEvenementNotificationTransactionnelleModifiee = {
   idNotification: UUID;

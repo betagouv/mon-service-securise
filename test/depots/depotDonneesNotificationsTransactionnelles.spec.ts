@@ -177,7 +177,27 @@ describe('Le dépôt de données des notifications transactionnelles', () => {
       ).toEqual(
         new EvenementNotificationTransactionnelleModifiee({
           notification,
-          etat: 'supprime',
+          etat: 'supprime-par-utilisateur',
+        })
+      );
+    });
+
+    it("indique sur l'évènement lorsque c'est une suppression 'système'", async () => {
+      const notification = uneNotification();
+
+      await unDepot().supprimeNotificationTransactionnelle(
+        notification,
+        'systeme'
+      );
+
+      expect(
+        busEvenements.recupereEvenement(
+          EvenementNotificationTransactionnelleModifiee
+        )
+      ).toEqual(
+        new EvenementNotificationTransactionnelleModifiee({
+          notification,
+          etat: 'supprime-par-systeme',
         })
       );
     });
