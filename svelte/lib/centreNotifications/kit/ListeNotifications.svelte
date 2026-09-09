@@ -5,11 +5,12 @@
 
   interface Props {
     notifications: Notification[];
+    onnotificationcliquee: () => void;
   }
 
   const UN_JOUR_EN_MILLIS = 86_400_000;
 
-  let { notifications }: Props = $props();
+  let { notifications, onnotificationcliquee }: Props = $props();
 
   let dAujourdHui = $derived(
     notifications.filter((n) => categoriserDate(n.horodatage) === 'aujourdhui')
@@ -54,7 +55,7 @@
       <div class="conteneur-par-date">
         <h2>Aujourd'hui</h2>
         {#each dAujourdHui as notification (notification.id)}
-          <ComposantNotification {notification} />
+          <ComposantNotification {onnotificationcliquee} {notification} />
         {/each}
       </div>
     {/if}
@@ -63,7 +64,7 @@
       <div class="conteneur-par-date">
         <h2>7 derniers jours</h2>
         {#each deCetteSemaine as notification (notification.id)}
-          <ComposantNotification {notification} />
+          <ComposantNotification {onnotificationcliquee} {notification} />
         {/each}
       </div>
     {/if}
@@ -72,7 +73,7 @@
       <div class="conteneur-par-date">
         <h2>Précédemment</h2>
         {#each precedentes as notification (notification.id)}
-          <ComposantNotification {notification} />
+          <ComposantNotification {onnotificationcliquee} {notification} />
         {/each}
       </div>
     {/if}

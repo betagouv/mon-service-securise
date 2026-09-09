@@ -50,6 +50,10 @@
     )
   );
 
+  const onnotificationcliquee = () => {
+    ouvert = false;
+  };
+
   onMount(async () => {
     await storeNotifications.rafraichis();
   });
@@ -148,16 +152,28 @@
         />
       </div>
       <div slot="panel-1" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.toutes} />
+        <ListeNotifications
+          {onnotificationcliquee}
+          notifications={notificationsParOnglet.toutes}
+        />
       </div>
       <div slot="panel-2" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.activites} />
+        <ListeNotifications
+          {onnotificationcliquee}
+          notifications={notificationsParOnglet.activites}
+        />
       </div>
       <div slot="panel-3" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.echeances} />
+        <ListeNotifications
+          {onnotificationcliquee}
+          notifications={notificationsParOnglet.echeances}
+        />
       </div>
       <div slot="panel-4" class="conteneur-onglet">
-        <ListeNotifications notifications={notificationsParOnglet.nouveautes} />
+        <ListeNotifications
+          {onnotificationcliquee}
+          notifications={notificationsParOnglet.nouveautes}
+        />
       </div>
     </dsfr-tabs>
   </div>
