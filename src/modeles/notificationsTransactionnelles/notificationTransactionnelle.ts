@@ -28,6 +28,7 @@ type MetadonneesParType = {
   echeanceMesureExpiree: MetadonneesNotificationMesure;
   homologationExpiree: MetadonneesNotificationExpirationHomologation;
   homologationBientotExpiree: MetadonneesNotificationExpirationHomologation;
+  invitationService: MetadonneesNotificationService;
 };
 
 type BaseNotificationTransactionnelle = {
