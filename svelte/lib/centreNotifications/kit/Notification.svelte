@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Notification } from '../../ui/types.d';
+  import { routeurStore } from '../../pagesService/store/routeur.store';
   import { storeNotifications } from '../../ui/stores/notifications.store';
 
   interface Props {
@@ -91,9 +92,19 @@
     };
   });
 
-  const actionVoirNotification = async () => {
+  const actionVoirNotification = async (
+    e: MouseEvent & { currentTarget: HTMLAnchorElement }
+  ) => {
+    const target = e.currentTarget.target;
+    const href = e.currentTarget.href;
+    if (target === '_self') {
+      e.preventDefault();
+    }
     if (notification.doitNotifierLecture)
       await storeNotifications.marqueLue(notification.type, notification.id);
+    if (target === '_self') {
+      routeurStore.navigue(href);
+    }
   };
 
   const actionSupprimeNotification = () => {
@@ -123,7 +134,7 @@
       has-icon
       href={notification.lien}
       markup="a"
-      target="_blank"
+      target={configurationCarte.blank ? '_blank' : undefined}
       onclick={actionVoirNotification}
       icon="arrow-right-line"
       icon-place="right"
