@@ -190,28 +190,50 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     return entitesParAdmin;
   }
 
+  private static mappeDonneesNotificationTransactionnelle(
+    notification: DonneesNotificationTransactionnelle
+  ): DonneesNotificationTransactionnelle {
+    return {
+      ...notification,
+      metadonnees: {
+        ...notification.metadonnees,
+        ...('dateExpirationHomologation' in notification.metadonnees &&
+          notification.metadonnees.dateExpirationHomologation && {
+            dateExpirationHomologation: new Date(
+              notification.metadonnees.dateExpirationHomologation
+            ),
+          }),
+      },
+    } as DonneesNotificationTransactionnelle;
+  }
+
   async lisNotificationsDe(
     idDestinataire: UUID
   ): Promise<DonneesNotificationTransactionnelle[]> {
-    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
-      .select({
-        id: 'id',
-        lue: 'lue',
-        idActeur: 'id_acteur',
-        idDestinataire: 'id_destinataire',
-        metadonnees: 'metadonnees',
-        type: 'type',
-        date: 'date',
-        dateExpiration: 'date_expiration',
-      })
-      .where({ id_destinataire: idDestinataire });
+    const notifications: DonneesNotificationTransactionnelle[] =
+      await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+        .select({
+          id: 'id',
+          lue: 'lue',
+          idActeur: 'id_acteur',
+          idDestinataire: 'id_destinataire',
+          metadonnees: 'metadonnees',
+          type: 'type',
+          date: 'date',
+          dateExpiration: 'date_expiration',
+        })
+        .where({ id_destinataire: idDestinataire });
+
+    return notifications.map((n) =>
+      AdaptateurPostgresTS.mappeDonneesNotificationTransactionnelle(n)
+    ) as DonneesNotificationTransactionnelle[];
   }
 
   async lisNotificationDe(
     idNotification: UUID,
     idDestinataire: UUID
   ): Promise<DonneesNotificationTransactionnelle | undefined> {
-    return this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
+    const notification = await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
       .select({
         id: 'id',
         lue: 'lue',
@@ -224,6 +246,11 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       })
       .where({ id_destinataire: idDestinataire, id: idNotification })
       .first();
+
+    if (!notification) return undefined;
+    return AdaptateurPostgresTS.mappeDonneesNotificationTransactionnelle(
+      notification
+    );
   }
 
   async lisRapportNotifications(): Promise<
