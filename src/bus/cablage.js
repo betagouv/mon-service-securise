@@ -85,6 +85,8 @@ import { consigneNotificationModificationResponsable } from './abonnements/consi
 import { consigneNotificationEcheanceMesureBientotExpiree } from './abonnements/consigneNotificationEcheanceMesureBientotExpiree.js';
 import { supprimeNotificationsTransactionnelles } from './abonnements/supprimeNotificationsTransactionnellesService.js';
 import { consigneNotificationsExpirationHomologation } from './abonnements/consigneNotificationsExpirationHomologation.js';
+import { EvenementContributeurAjoute } from './evenementContributeurAjoute.js';
+import { consigneNotificationInvitationsServices } from './abonnements/consigneNotificationInvitationsServices.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -328,6 +330,13 @@ const cableTousLesAbonnes = (
     EvenementNotificationTransactionnelleModifiee,
     consigneNotificationTransactionnelleModifieeDansJournal({
       adaptateurJournal,
+    })
+  );
+
+  busEvenements.abonne(
+    EvenementContributeurAjoute,
+    consigneNotificationInvitationsServices({
+      depotDonnees,
     })
   );
 };
