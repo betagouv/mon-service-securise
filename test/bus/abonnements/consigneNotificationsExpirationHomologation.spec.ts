@@ -142,7 +142,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationBientotExpiree',
-      date: new Date('2025-09-30T23:00:00.000Z'),
+      date: new Date('2025-10-01T00:00:00.000Z'),
       dateExpiration: new Date('2025-12-01'),
     });
     expect(notificationsP1[0].donnees()).toEqual({
@@ -155,8 +155,8 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationBientotExpiree',
-      date: new Date('2025-06-30T23:00:00.000Z'),
-      dateExpiration: new Date('2025-09-30T23:00:00.000Z'),
+      date: new Date('2025-07-01T00:00:00.000Z'),
+      dateExpiration: new Date('2025-10-01T00:00:00.000Z'),
     });
     const notificationsP2 = (
       await depotDonnees.lisNotifications(idProprietaire2)
