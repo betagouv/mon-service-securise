@@ -14,7 +14,15 @@ export const consigneNotificationsExpirationHomologation =
     depotDonnees: DepotDonnees;
     adaptateurHorloge: AdaptateurHorloge;
   }) =>
-  async ({ idService, dossier }: { idService: UUID; dossier: Dossier }) => {
+  async ({
+    idService,
+    dossier,
+    idUtilisateur,
+  }: {
+    idService: UUID;
+    dossier: Dossier;
+    idUtilisateur: UUID;
+  }) => {
     const service = await depotDonnees.service(idService);
     const proprietaires = service!.contributeurs.filter(
       (c: Contributeur) => c.estProprietaire
@@ -59,7 +67,7 @@ export const consigneNotificationsExpirationHomologation =
           const notificationSuivante = notifications[idx + 1];
           return depotDonnees.sauvegardeNotificationTransactionnelle(
             NotificationTransactionnelle.nouveau({
-              idActeur: c.idUtilisateur,
+              idActeur: idUtilisateur,
               idDestinataire: c.idUtilisateur,
               date: n.dateProchainEnvoi,
               dateExpiration: notificationSuivante?.dateProchainEnvoi,
