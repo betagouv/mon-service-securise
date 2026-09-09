@@ -11,11 +11,14 @@ import {
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../../src/modeles/autorisations/autorisation.js';
 import * as Referentiel from '../../../src/referentiel.js';
+import { creeReferentiel } from '../../../src/referentiel.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import Dossier from '../../../src/modeles/dossier.js';
-import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
-import { creeReferentiel } from '../../../src/referentiel.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import Utilisateur from '../../../src/modeles/utilisateur.ts';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -396,7 +399,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       const serviceAvecDossier = unServiceV2()
         .avecId('456')
         .avecNomService('un service')
-        .avecDossiers([unDossier().avecId('999').donnees])
+        .avecDossiers([unDossier(creeReferentielV2()).donnees])
         .construis();
       testeur
         .middleware()
@@ -604,14 +607,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         {
           id: '456',
           descriptionService: { nomService: 'un service' },
-          dossiers: [unDossier().quiEstComplet().quiEstNonFinalise().donnees],
+          dossiers: [
+            unDossier(creeReferentielV2()).quiEstComplet().quiEstNonFinalise()
+              .donnees,
+          ],
         },
         testeur.referentiel()
       );
-      testeur
-        .middleware()
-        // @ts-expect-error La méthode `reinitialise` devrait prendre des paramètres optionnels
-        .reinitialise({ serviceARenvoyer: serviceAvecDossier });
+      testeur.middleware().reinitialise({
+        idUtilisateur: unUUID('U'),
+        serviceARenvoyer: serviceAvecDossier,
+      });
       testeur.depotDonnees().finaliseDossierCourant = () => Promise.resolve();
     });
 
@@ -630,15 +636,21 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it("utilise le dépôt pour finaliser l'homologation", async () => {
       let servicePasse: Service;
+      let acteurPasse: Utilisateur;
+      testeur.depotDonnees().utilisateur = async () =>
+        unUtilisateur().avecId(unUUID('U')).construis();
       testeur.depotDonnees().finaliseDossierCourant = async (
-        service: Service
+        service: Service,
+        acteur: Utilisateur
       ) => {
         servicePasse = service;
+        acteurPasse = acteur;
       };
 
       await testeur.post('/api/service/456/homologation/finalise');
 
       expect(servicePasse!.id).toEqual('456');
+      expect(acteurPasse!.id).toBe(unUUID('U'));
     });
   });
 

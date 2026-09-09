@@ -356,7 +356,7 @@ const creeDepot = (config = {}) => {
   const enregistreDossier = (idService, dossier) =>
     ajouteAItemsDuService('dossiers', idService, dossier);
 
-  const finaliseDossierCourant = async (s) => {
+  const finaliseDossierCourant = async (s, u) => {
     const dossierAvantFinalisation = s.dossierCourant();
 
     s.finaliseDossierCourant();
@@ -368,6 +368,7 @@ const creeDepot = (config = {}) => {
       new EvenementDossierHomologationFinalise({
         idService: id,
         dossier: dossierAvantFinalisation,
+        idUtilisateur: u.id,
       })
     );
   };

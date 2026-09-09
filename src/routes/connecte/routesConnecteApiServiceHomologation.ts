@@ -20,12 +20,14 @@ import {
   schemaPutDocumentsHomologation,
 } from './routesConnecteApiServiceHomologation.schema.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
+import { UUID } from '../../typesBasiques.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
 
 type RequeteAvecService = Request & {
   service: Service;
+  idUtilisateurCourant: UUID;
 };
 
 type RequeteAvecServiceEtDossierCourant = RequeteAvecService & {
@@ -192,9 +194,11 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/finalise',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     async (requete, reponse) => {
-      const { service } = requete as unknown as RequeteAvecService;
+      const { service, idUtilisateurCourant } =
+        requete as unknown as RequeteAvecService;
+      const utilisateur = await depotDonnees.utilisateur(idUtilisateurCourant);
 
-      await depotDonnees.finaliseDossierCourant(service);
+      await depotDonnees.finaliseDossierCourant(service, utilisateur);
       reponse.sendStatus(204);
     }
   );

@@ -1552,7 +1552,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
       expect(service.dossiers.items[0].finalise).to.be(false);
 
-      await depot.finaliseDossierCourant(service);
+      await depot.finaliseDossierCourant(service, unUtilisateur().construis());
 
       expect(service.dossiers.items[0].finalise).to.be(true);
       expect(service.dossiers.items[0].indiceCyber).to.be(2.5);
@@ -1583,7 +1583,7 @@ describe('Le dépôt de données des services', () => {
         .avecMesures(mesures)
         .construis();
 
-      await depot.finaliseDossierCourant(service);
+      await depot.finaliseDossierCourant(service, unUtilisateur().construis());
 
       const { id, versionService, ...donnees } = service
         .donneesAPersister()
@@ -1604,7 +1604,10 @@ describe('Le dépôt de données des services', () => {
         ])
         .construis();
 
-      await depot.finaliseDossierCourant(service);
+      await depot.finaliseDossierCourant(
+        service,
+        unUtilisateur().avecId('U').construis()
+      );
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementDossierHomologationFinalise)
@@ -1613,6 +1616,7 @@ describe('Le dépôt de données des services', () => {
         EvenementDossierHomologationFinalise
       );
       expect(recu.idService).to.be('123');
+      expect(recu.idUtilisateur).to.be('U');
       expect(recu.dossier.decision.dateHomologation).to.be('2022-11-30');
       expect(recu.dossier.decision.dureeValidite).to.be('sixMois');
     });

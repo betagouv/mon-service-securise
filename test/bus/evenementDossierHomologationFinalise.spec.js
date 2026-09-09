@@ -17,6 +17,19 @@ describe("L'événement 'DossierHomologationFinalise'", () => {
       () =>
         new EvenementDossierHomologationFinalise({
           dossier: null,
+          idService: 'S',
+          idUtilisateur: 'U',
+        })
+    ).to.throwError();
+  });
+
+  it("lève une exception s'il est instancié sans idUtilisateur", () => {
+    expect(
+      () =>
+        new EvenementDossierHomologationFinalise({
+          idUtilisateur: null,
+          idService: 'S',
+          dossier: {},
         })
     ).to.throwError();
   });
