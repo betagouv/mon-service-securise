@@ -11,7 +11,8 @@ export type TypeNotification =
   | 'mention'
   | 'assignation'
   | 'echeanceProche'
-  | 'echeanceAtteinte';
+  | 'echeanceAtteinte'
+  | 'invitation';
 
 export type CanalDiffusion = 'centreNotifications' | 'page';
 

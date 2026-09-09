@@ -240,7 +240,15 @@ const donnees = {
         `/service/${idService}/dossiers?tab=actif`,
       canalDiffusion: 'centreNotifications',
     },
-    invitationService: {},
+    invitationService: {
+      type: 'invitation',
+      titre: () => 'Invitation sur un service',
+      sousTitre: ({ nomService }: { nomService: string }) =>
+        `Vous avez été invité à contribuer sur le service [${nomService}]`,
+      titreCta: 'Découvrir',
+      lien: ({ idService }: { idService: string }) => `/service/${idService}`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {
