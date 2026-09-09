@@ -5,5 +5,8 @@ export default defineConfig({
   test: {
     globals: true,
     exclude: ['**/node_modules/**', 'test_accessibilite/**'],
+    env: {
+      TZ: 'UTC',
+    },
   },
 });
