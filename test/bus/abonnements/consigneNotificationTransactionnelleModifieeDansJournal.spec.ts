@@ -5,7 +5,10 @@ import {
 } from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
 import { consigneNotificationTransactionnelleModifieeDansJournal } from '../../../src/bus/abonnements/consigneNotificationTransactionnelleModifieeDansJournal.ts';
 import { EvenementNotificationTransactionnelleModifiee } from '../../../src/bus/evenementNotificationTransactionnelleModifiee.ts';
-import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import {
+  MetadonneesNotificationMesure,
+  NotificationTransactionnelle,
+} from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { fabriqueAdaptateurChiffrement } from '../../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 
@@ -16,26 +19,27 @@ describe("L'abonnement qui consigne une notification transactionnelle modifiée 
     adaptateurJournal = JournalMemoire.nouvelAdaptateur();
   });
 
-  const uneNotification = () =>
-    NotificationTransactionnelle.nouveau({
-      idActeur: unUUID('A'),
-      idDestinataire: unUUID('D'),
-      type: 'mentionDansMesure',
-      date: new Date(),
-      metadonnees: {},
-    });
-
-  it("consigne un événement contenant le type et l'état de la notification", async () => {
+  it('consigne un événement contenant les données de mesure', async () => {
     let evenementRecu: EvenementJournal;
     adaptateurJournal.consigneEvenement = async (evenement) => {
       evenementRecu = evenement;
     };
-
+    const notification = NotificationTransactionnelle.nouveau({
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'mentionDansMesure',
+      date: new Date(),
+      metadonnees: {
+        idService: unUUID('S'),
+        idMesure: 'analyseProtectionDonnees',
+        typeMesure: 'generale',
+      },
+    });
     await consigneNotificationTransactionnelleModifieeDansJournal({
       adaptateurJournal,
     })(
       new EvenementNotificationTransactionnelleModifiee({
-        notification: uneNotification(),
+        notification,
         etat: 'lu',
       })
     );
@@ -43,30 +47,56 @@ describe("L'abonnement qui consigne une notification transactionnelle modifiée 
     expect(evenementRecu!.type).toEqual(
       'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE'
     );
-    expect(evenementRecu!.donnees.typeNotification).toEqual(
-      'mentionDansMesure'
-    );
-    expect(evenementRecu!.donnees.etat).toEqual('lu');
+    const donnees = notification.donnees();
+    const metadonnees = donnees.metadonnees as MetadonneesNotificationMesure;
+    const hache = fabriqueAdaptateurChiffrement().hacheSha256;
+    expect(evenementRecu!.donnees).toEqual({
+      idNotification: hache(donnees.id),
+      idActeur: hache(donnees.idActeur),
+      idDestinataire: hache(donnees.idDestinataire),
+      idService: hache(donnees.metadonnees.idService),
+      idMesure: metadonnees.idMesure,
+      typeMesure: metadonnees.typeMesure,
+      typeNotification: donnees.type,
+      etat: 'lu',
+    });
   });
 
-  it("hache l'identifiant de la notification", async () => {
+  it('consigne un événement ne contenant pas les données de mesure', async () => {
     let evenementRecu: EvenementJournal;
     adaptateurJournal.consigneEvenement = async (evenement) => {
       evenementRecu = evenement;
     };
-    const notification = uneNotification();
-
+    const notification = NotificationTransactionnelle.nouveau({
+      idActeur: unUUID('A'),
+      idDestinataire: unUUID('D'),
+      type: 'invitationService',
+      date: new Date(),
+      metadonnees: {
+        idService: unUUID('S'),
+      },
+    });
     await consigneNotificationTransactionnelleModifieeDansJournal({
       adaptateurJournal,
     })(
       new EvenementNotificationTransactionnelleModifiee({
         notification,
-        etat: 'cree',
+        etat: 'lu',
       })
     );
 
-    expect(evenementRecu!.donnees.idNotification).toEqual(
-      fabriqueAdaptateurChiffrement().hacheSha256(notification.donnees().id)
+    expect(evenementRecu!.type).toEqual(
+      'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE'
     );
+    const donnees = notification.donnees();
+    const hache = fabriqueAdaptateurChiffrement().hacheSha256;
+    expect(evenementRecu!.donnees).toEqual({
+      idNotification: hache(donnees.id),
+      idActeur: hache(donnees.idActeur),
+      idDestinataire: hache(donnees.idDestinataire),
+      idService: hache(donnees.metadonnees.idService),
+      typeNotification: donnees.type,
+      etat: 'lu',
+    });
   });
 });
