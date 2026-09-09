@@ -5,7 +5,10 @@ import { unUUIDRandom } from '../constructeurs/UUID.ts';
 import { AdaptateurPostgresTS } from '../../src/adaptateurs/adaptateurPostgresTS.ts';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.js';
-import { DonneesNotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import {
+  DonneesNotificationTransactionnelle,
+  MetadonneesNotificationExpirationHomologation,
+} from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -456,6 +459,89 @@ describe("L'adaptateur persistance Postgres", () => {
         date,
         dateExpiration: null,
       });
+    });
+
+    it('sait lire une métadonnées au format date (pour dateExpirationHomologation)', async () => {
+      const idDestinataire = unUUIDRandom();
+      await trx.table('notifications_transactionnelles').insert({
+        id: unUUIDRandom(),
+        lue: false,
+        id_acteur: unUUIDRandom(),
+        id_destinataire: idDestinataire,
+        metadonnees: { dateExpirationHomologation: new Date() },
+        type: 'homologationExpiree',
+        date: new Date(),
+      });
+
+      const notifications =
+        await persistance.lisNotificationsDe(idDestinataire);
+
+      expect(
+        (
+          notifications[0]
+            .metadonnees as MetadonneesNotificationExpirationHomologation
+        ).dateExpirationHomologation
+      ).toBeInstanceOf(Date);
+    });
+  });
+
+  describe("sur demande de lecture de la notification d'un utilisateur", () => {
+    it('retourne cette notification', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const id = unUUIDRandom();
+      const idActeur = unUUIDRandom();
+      const date = new Date();
+      await trx.table('notifications_transactionnelles').insert({
+        id,
+        lue: false,
+        id_acteur: idActeur,
+        id_destinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date,
+      });
+
+      const notification = await persistance.lisNotificationDe(
+        id,
+        idUtilisateur
+      );
+
+      expect(notification).toEqual({
+        id,
+        lue: false,
+        idActeur,
+        idDestinataire: idUtilisateur,
+        metadonnees: { proprietes: 42 },
+        type: 'mentionDansMesure',
+        date,
+        dateExpiration: null,
+      });
+    });
+
+    it('sait lire une métadonnées au format date (pour dateExpirationHomologation)', async () => {
+      const idDestinataire = unUUIDRandom();
+      const id = unUUIDRandom();
+      await trx.table('notifications_transactionnelles').insert({
+        id,
+        lue: false,
+        id_acteur: unUUIDRandom(),
+        id_destinataire: idDestinataire,
+        metadonnees: { dateExpirationHomologation: new Date() },
+        type: 'homologationExpiree',
+        date: new Date(),
+      });
+
+      const notification = await persistance.lisNotificationDe(
+        id,
+        idDestinataire
+      );
+
+      expect(
+        (
+          notification!
+            .metadonnees as MetadonneesNotificationExpirationHomologation
+        ).dateExpirationHomologation
+      ).toBeInstanceOf(Date);
     });
   });
 
