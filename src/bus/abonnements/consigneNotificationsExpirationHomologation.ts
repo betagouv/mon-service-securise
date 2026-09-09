@@ -67,6 +67,7 @@ export const consigneNotificationsExpirationHomologation =
                   : 'homologationBientotExpiree',
               metadonnees: {
                 idService,
+                dateExpirationHomologation: dossier.dateProchaineHomologation(),
               },
             })
           );

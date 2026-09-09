@@ -16,13 +16,18 @@ export type MetadonneesNotificationMesure = MetadonneesNotificationService & {
   typeMesure: 'generale' | 'specifique';
 };
 
+export type MetadonneesNotificationExpirationHomologation =
+  MetadonneesNotificationService & {
+    dateExpirationHomologation: Date;
+  };
+
 type MetadonneesParType = {
   mentionDansMesure: MetadonneesNotificationMesure;
   responsableMesure: MetadonneesNotificationMesure;
   echeanceMesureBientotExpiree: MetadonneesNotificationMesure;
   echeanceMesureExpiree: MetadonneesNotificationMesure;
-  homologationExpiree: MetadonneesNotificationService;
-  homologationBientotExpiree: MetadonneesNotificationService;
+  homologationExpiree: MetadonneesNotificationExpirationHomologation;
+  homologationBientotExpiree: MetadonneesNotificationExpirationHomologation;
 };
 
 type BaseNotificationTransactionnelle = {

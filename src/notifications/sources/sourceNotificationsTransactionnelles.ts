@@ -10,6 +10,7 @@ import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { nombreDeJoursCalendaires } from '../../utilitaires/date.js';
 import {
+  MetadonneesNotificationExpirationHomologation,
   MetadonneesNotificationMesure,
   NotificationTransactionnelle,
 } from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
@@ -50,11 +51,10 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
         )
           donnees = this.donneesSpecifiquesNotificationMesure(n, service);
         else
-          donnees =
-            SourceNotificationsTransactionnelles.donneesSpecifiquesNotificationService(
-              n,
-              service
-            );
+          donnees = this.donneesSpecifiquesNotificationExpirationHomologation(
+            n,
+            service
+          );
 
         const { type, titreCta, canalDiffusion } =
           service.referentiel.notificationTransactionnelle(typeNotification);
@@ -117,7 +117,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
       service.referentiel.notificationTransactionnelle(n.donnees().type);
 
     const donneesSpecifiques = {
-      titre: titre({ nombreJoursDiciEcheance }),
+      titre: titre({ nombreJoursDiciEcheance, nombreMoisDiciEcheance: 0 }),
       sousTitre: sousTitre({
         nomActeur,
         titreMesure: titreMesure || '',
@@ -130,23 +130,40 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
     return donneesSpecifiques;
   }
 
-  private static donneesSpecifiquesNotificationService(
-    n: NotificationTransactionnelle,
+  private donneesSpecifiquesNotificationExpirationHomologation(
+    notification: NotificationTransactionnelle,
     service: Service
   ) {
     const { titre, sousTitre, lien } =
-      service.referentiel.notificationTransactionnelle(n.donnees().type);
+      service.referentiel.notificationTransactionnelle(
+        notification.donnees().type
+      );
+    const { idService, dateExpirationHomologation } = notification.donnees()
+      .metadonnees as MetadonneesNotificationExpirationHomologation;
+
+    const moisEntre = (debut: Date, fin: Date) => {
+      const mois =
+        (fin.getFullYear() - debut.getFullYear()) * 12 +
+        (fin.getMonth() - debut.getMonth());
+
+      return Math.max(mois, 1);
+    };
+
+    const nombreMoisDiciEcheance = moisEntre(
+      this.adaptateurHorloge.maintenant(),
+      dateExpirationHomologation
+    );
 
     const donneesSpecifiques = {
-      titre: titre({ nombreJoursDiciEcheance: 0 }),
+      titre: titre({ nombreJoursDiciEcheance: 0, nombreMoisDiciEcheance }),
       sousTitre: sousTitre({
         nomService: service.nomService(),
-        dateExpirationHomologation: n.donnees().date,
+        dateExpirationHomologation,
         titreMesure: '',
         dateEcheanceMesure: new Date(),
         nomActeur: '',
       }),
-      lien: lien({ idService: service.id, idMesure: '' }),
+      lien: lien({ idService, idMesure: '' }),
     };
     return donneesSpecifiques;
   }

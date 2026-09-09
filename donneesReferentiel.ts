@@ -223,7 +223,23 @@ const donnees = {
         `/service/${idService}/dossiers?tab=actif`,
       canalDiffusion: 'centreNotifications',
     },
-    homologationBientotExpiree: {},
+    homologationBientotExpiree: {
+      type: 'homologationBientotExpiree',
+      titre: ({ nombreMoisDiciEcheance }: { nombreMoisDiciEcheance: number }) =>
+        `Expiration dans ${nombreMoisDiciEcheance} mois`,
+      sousTitre: ({
+        nomService,
+        dateExpirationHomologation,
+      }: {
+        nomService: string;
+        dateExpirationHomologation: Date;
+      }) =>
+        `L'homologation de [${nomService}] arrive à échéance le ${Intl.DateTimeFormat('fr', { dateStyle: 'short' }).format(dateExpirationHomologation)}`,
+      titreCta: 'Renouveler',
+      lien: ({ idService }: { idService: string }) =>
+        `/service/${idService}/dossiers?tab=actif`,
+      canalDiffusion: 'centreNotifications',
+    },
   },
 
   naturesSuggestionsActions: {

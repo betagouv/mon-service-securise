@@ -110,8 +110,9 @@ describe('Les notifications transactionnelles', () => {
     });
 
   const notificationExpirationHomologation = (
-    type: 'homologationExpiree',
-    date = dateNotif
+    type: 'homologationExpiree' | 'homologationBientotExpiree',
+    date = dateNotif,
+    dateExpirationHomologation = dateNotif
   ) =>
     NotificationTransactionnelle.nouveau({
       idActeur: idUtilisateur,
@@ -120,6 +121,7 @@ describe('Les notifications transactionnelles', () => {
       date,
       metadonnees: {
         idService,
+        dateExpirationHomologation,
       },
     });
 
@@ -455,6 +457,7 @@ describe('Les notifications transactionnelles', () => {
       await depotDonnees.sauvegardeNotificationTransactionnelle(
         notificationExpirationHomologation(
           'homologationExpiree',
+          new Date('2025-12-31'),
           new Date('2025-12-31')
         )
       );
@@ -494,6 +497,63 @@ describe('Les notifications transactionnelles', () => {
 
       expect(notifications[0].sousTitre).toBe(
         "L'homologation de [Mairie de Bordeaux] a expiré le 31/12/2025"
+      );
+    });
+
+    it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+      depotDonnees.services = async () => [];
+
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(0);
+    });
+  });
+
+  describe("concernant les notifications 'homologationBientotExpiree'", async () => {
+    beforeEach(async () => {
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        notificationExpirationHomologation(
+          'homologationBientotExpiree',
+          new Date('2025-12-31'),
+          new Date('2026-06-01')
+        )
+      );
+      adaptateurHorloge.maintenant = () => new Date('2026-01-01');
+    });
+
+    it('mets en forme la notification dans 6 mois', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(1);
+      expect(notifications[0]).toEqual({
+        id: expect.any(String),
+        type: 'homologationBientotExpiree',
+        titre: 'Expiration dans 5 mois',
+        sousTitre: expect.any(String),
+        titreCta: 'Renouveler',
+        lien: expect.any(String),
+        canalDiffusion: 'centreNotifications',
+        statutLecture: 'nonLue',
+        doitNotifierLecture: true,
+        supprimable: true,
+        horodatage: new Date('2025-12-31'),
+        date: expect.any(Function),
+      });
+    });
+
+    it('met en forme le lien', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].lien).toBe(
+        `/service/${idService}/dossiers?tab=actif`
+      );
+    });
+
+    it('met en forme le sous-titre', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].sousTitre).toBe(
+        "L'homologation de [Mairie de Bordeaux] arrive à échéance le 01/06/2026"
       );
     });
 

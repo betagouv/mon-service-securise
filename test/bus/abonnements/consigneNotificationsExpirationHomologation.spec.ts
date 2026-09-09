@@ -81,6 +81,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
+        dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationExpiree',
       date: new Date('2026-01-01'),
@@ -96,6 +97,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       idDestinataire: idProprietaire2,
       metadonnees: {
         idService,
+        dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationExpiree',
       date: new Date('2026-01-01'),
@@ -124,6 +126,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
+        dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationBientotExpiree',
       date: new Date('2025-12-01'),
@@ -136,6 +139,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
+        dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationBientotExpiree',
       date: new Date('2025-09-30T23:00:00.000Z'),
@@ -148,6 +152,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
+        dateExpirationHomologation: new Date('2026-01-01'),
       },
       type: 'homologationBientotExpiree',
       date: new Date('2025-06-30T23:00:00.000Z'),
@@ -166,7 +171,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         type: 'homologationExpiree',
         idActeur: idProprietaire1,
         idDestinataire: idProprietaire1,
-        metadonnees: { idService },
+        metadonnees: { idService, dateExpirationHomologation: new Date() },
       })
     );
     await depotDonnees.sauvegardeNotificationTransactionnelle(
@@ -175,7 +180,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         type: 'homologationBientotExpiree',
         idActeur: idProprietaire1,
         idDestinataire: idProprietaire1,
-        metadonnees: { idService },
+        metadonnees: { idService, dateExpirationHomologation: new Date() },
       })
     );
 
