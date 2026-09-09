@@ -208,7 +208,7 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
     },
     homologationExpiree: {
-      type: 'homologationExpiree',
+      type: 'echeanceAtteinte',
       titre: () => 'Homologation expirée',
       sousTitre: ({
         nomService,
@@ -224,7 +224,7 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
     },
     homologationBientotExpiree: {
-      type: 'homologationBientotExpiree',
+      type: 'echeanceProche',
       titre: ({ nombreMoisDiciEcheance }: { nombreMoisDiciEcheance: number }) =>
         `Expiration dans ${nombreMoisDiciEcheance} mois`,
       sousTitre: ({
@@ -245,7 +245,7 @@ const donnees = {
       titre: () => 'Invitation sur un service',
       sousTitre: ({ nomService }: { nomService: string }) =>
         `Vous avez été invité à contribuer sur le service [${nomService}]`,
-      titreCta: 'Découvrir',
+      titreCta: 'Découvrir le service',
       lien: ({ idService }: { idService: string }) => `/service/${idService}`,
       canalDiffusion: 'centreNotifications',
     },

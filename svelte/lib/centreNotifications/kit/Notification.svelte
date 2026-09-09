@@ -62,13 +62,31 @@
         },
       };
     }
+    if (notification.type === 'echeanceAtteinte')
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'pink-tuile',
+          libelle: 'Échéance atteinte',
+          icone: 'warning-fill',
+        },
+      };
+    if (notification.type === 'invitation')
+      return {
+        titre: notification.titre,
+        description: notification.sousTitre,
+        badge: {
+          couleur: 'green-bourgeon',
+          libelle: 'Invitation',
+        },
+      };
     return {
-      titre: notification.titre,
-      description: notification.sousTitre,
+      titre: '',
+      description: '',
       badge: {
-        couleur: 'pink-tuile',
-        libelle: 'Échéance atteinte',
-        icone: 'warning-fill',
+        couleur: '',
+        libelle: '',
       },
     };
   });

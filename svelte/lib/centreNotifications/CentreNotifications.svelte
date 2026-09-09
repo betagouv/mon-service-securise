@@ -19,13 +19,13 @@
   let notificationsParOnglet = $derived({
     activites: $storeNotifications.pourCentreNotifications.filter(
       (n) =>
-        n.type === 'tache' || n.type === 'mention' || n.type === 'assignation'
+        n.type === 'tache' ||
+        n.type === 'mention' ||
+        n.type === 'assignation' ||
+        n.type === 'invitation'
     ),
     echeances: $storeNotifications.pourCentreNotifications.filter(
-      (n) =>
-        n.type === 'echeanceProche' ||
-        n.type === 'echeanceAtteinte' ||
-        n.type === 'homologationExpiree'
+      (n) => n.type === 'echeanceProche' || n.type === 'echeanceAtteinte'
     ),
     nouveautes: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'nouveaute'
