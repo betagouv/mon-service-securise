@@ -146,6 +146,7 @@ const ajoutContributeurSurServices = ({
       await envoieEmailInvitation(nouvelUtilisateur, emetteur, cibles);
       await publieEvenementInvitationEnvoyee(nouvelUtilisateur, emetteur);
       await ajouteContributeur(nouvelUtilisateur, cibles, droits);
+      return nouvelUtilisateur;
     } catch (e) {
       if (e instanceof EchecEnvoiMessage) {
         await supprimeUtilisateur(nouvelUtilisateur);
@@ -171,7 +172,7 @@ const ajoutContributeurSurServices = ({
   return {
     executer: async (emailContributeur, services, droits, emetteur) => {
       await verifiePermission(emetteur.id, services);
-      const utilisateur = await recupereParEmail(emailContributeur);
+      let utilisateur = await recupereParEmail(emailContributeur);
 
       const cibles = await lesServicesSansAutorisationExistante(
         utilisateur?.id,
@@ -190,7 +191,7 @@ const ajoutContributeurSurServices = ({
           emetteur
         );
       else
-        await inviteNouveauContributeur(
+        utilisateur = await inviteNouveauContributeur(
           emailContributeur,
           cibles,
           droits,
