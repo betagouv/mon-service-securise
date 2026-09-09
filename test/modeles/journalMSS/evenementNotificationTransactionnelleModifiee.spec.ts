@@ -1,5 +1,7 @@
 import { unUUID } from '../../constructeurs/UUID.ts';
-import EvenementNotificationTransactionnelleModifiee from '../../../src/modeles/journalMSS/evenementNotificationTransactionnelleModifiee.ts';
+import EvenementNotificationTransactionnelleModifiee, {
+  DonneesEvenementNotificationTransactionnelleModifiee,
+} from '../../../src/modeles/journalMSS/evenementNotificationTransactionnelleModifiee.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de notification transactionnelle modifiée', () => {
@@ -7,26 +9,79 @@ describe('Un événement de notification transactionnelle modifiée', () => {
     hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
 
+  const uneNotification =
+    (): DonneesEvenementNotificationTransactionnelleModifiee => ({
+      idNotification: unUUID('a'),
+      idActeur: unUUID('ac'),
+      idDestinataire: unUUID('d'),
+      idService: unUUID('s'),
+      typeNotification: 'mentionDansMesure',
+      etat: 'cree',
+    });
+
   it("hache l'identifiant de la notification qui lui est donné", () => {
     const evenement = new EvenementNotificationTransactionnelleModifiee(
-      {
-        idNotification: unUUID('a'),
-        typeNotification: 'mentionDansMesure',
-        etat: 'cree',
-      },
+      uneNotification(),
       { adaptateurChiffrement: hacheEnMajuscules }
     );
 
     expect(evenement.donnees.idNotification).toBe(unUUID('A'));
   });
 
-  it('sait se convertir en JSON', () => {
+  it("hache l'identifiant de l'acteur qui lui est donné", () => {
+    const evenement = new EvenementNotificationTransactionnelleModifiee(
+      uneNotification(),
+      { adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.donnees.idActeur).toBe(unUUID('AC'));
+  });
+
+  it("hache l'identifiant du destinataire qui lui est donné", () => {
+    const evenement = new EvenementNotificationTransactionnelleModifiee(
+      uneNotification(),
+      { adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.donnees.idDestinataire).toBe(unUUID('D'));
+  });
+
+  it("hache l'identifiant du service qui lui est donné", () => {
+    const evenement = new EvenementNotificationTransactionnelleModifiee(
+      uneNotification(),
+      { adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.donnees.idService).toBe(unUUID('S'));
+  });
+
+  it('peut indiquer un id de mesure', () => {
     const evenement = new EvenementNotificationTransactionnelleModifiee(
       {
-        idNotification: unUUID('a'),
-        typeNotification: 'mentionDansMesure',
-        etat: 'lu',
+        ...uneNotification(),
+        idMesure: 'ID_MESURE',
       },
+      { adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.donnees.idMesure).toBe('ID_MESURE');
+  });
+
+  it('peut indiquer un type de mesure', () => {
+    const evenement = new EvenementNotificationTransactionnelleModifiee(
+      {
+        ...uneNotification(),
+        typeMesure: 'generale',
+      },
+      { adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.donnees.typeMesure).toBe('generale');
+  });
+
+  it('sait se convertir en JSON', () => {
+    const evenement = new EvenementNotificationTransactionnelleModifiee(
+      uneNotification(),
       { date: '27/03/2023', adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -34,41 +89,29 @@ describe('Un événement de notification transactionnelle modifiée', () => {
       date: '27/03/2023',
       donnees: {
         idNotification: unUUID('A'),
+        idActeur: unUUID('AC'),
+        idDestinataire: unUUID('D'),
+        idService: unUUID('S'),
         typeNotification: 'mentionDansMesure',
-        etat: 'lu',
+        etat: 'cree',
       },
       type: 'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE',
     });
   });
 
-  it('exige que toutes les données soient renseignées', () => {
+  it.each([
+    'idNotification',
+    'idActeur',
+    'idDestinataire',
+    'idService',
+    'typeNotification',
+    'etat',
+  ])('exige que `%s` soit renseigné', (propriete) => {
     expect(
       () =>
         new EvenementNotificationTransactionnelleModifiee({
-          // @ts-expect-error On force volontairement une valeur nulle pour provoquer l'erreur
-          idNotification: undefined,
-          typeNotification: 'mentionDansMesure',
-          etat: 'cree',
-        })
-    ).toThrow(ErreurDonneeManquante);
-
-    expect(
-      () =>
-        new EvenementNotificationTransactionnelleModifiee({
-          idNotification: unUUID('a'),
-          // @ts-expect-error On force volontairement une valeur nulle pour provoquer l'erreur
-          typeNotification: undefined,
-          etat: 'cree',
-        })
-    ).toThrow(ErreurDonneeManquante);
-
-    expect(
-      () =>
-        new EvenementNotificationTransactionnelleModifiee({
-          idNotification: unUUID('a'),
-          typeNotification: 'mentionDansMesure',
-          // @ts-expect-error On force volontairement une valeur nulle pour provoquer l'erreur
-          etat: undefined,
+          ...uneNotification(),
+          [propriete]: undefined,
         })
     ).toThrow(ErreurDonneeManquante);
   });
