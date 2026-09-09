@@ -125,6 +125,17 @@ describe('Les notifications transactionnelles', () => {
       },
     });
 
+  const notificationInvitationService = () =>
+    NotificationTransactionnelle.nouveau({
+      idActeur: idUtilisateur,
+      idDestinataire: idUtilisateur,
+      type: 'invitationService',
+      date: dateNotif,
+      metadonnees: {
+        idService,
+      },
+    });
+
   describe("concernant les notifications 'mentionDansMesure'", () => {
     describe('pour une notification dans une mesure générale', async () => {
       beforeEach(async () => {
@@ -554,6 +565,55 @@ describe('Les notifications transactionnelles', () => {
 
       expect(notifications[0].sousTitre).toBe(
         "L'homologation de [Mairie de Bordeaux] arrive à échéance le 01/06/2026"
+      );
+    });
+
+    it("n'inclue pas une notif si je n'ai plus accès au service", async () => {
+      depotDonnees.services = async () => [];
+
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications).toHaveLength(0);
+    });
+  });
+
+  describe("concernant les notifications 'invitationService'", async () => {
+    beforeEach(async () => {
+      await depotDonnees.sauvegardeNotificationTransactionnelle(
+        notificationInvitationService()
+      );
+    });
+
+    it('mets en forme la notification', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0]).toEqual({
+        id: expect.any(String),
+        type: 'invitation',
+        titre: 'Invitation sur un service',
+        sousTitre: expect.any(String),
+        titreCta: 'Découvrir',
+        lien: expect.any(String),
+        canalDiffusion: 'centreNotifications',
+        statutLecture: 'nonLue',
+        doitNotifierLecture: true,
+        supprimable: true,
+        horodatage: expect.any(Date),
+        date: expect.any(Function),
+      });
+    });
+
+    it('met en forme le lien', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].lien).toBe(`/service/${idService}`);
+    });
+
+    it('met en forme le sous-titre', async () => {
+      const notifications = await laSource().notificationsPour(idUtilisateur);
+
+      expect(notifications[0].sousTitre).toBe(
+        'Vous avez été invité à contribuer sur le service [Mairie de Bordeaux]'
       );
     });
 

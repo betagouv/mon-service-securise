@@ -12,6 +12,7 @@ import { nombreDeJoursCalendaires } from '../../utilitaires/date.js';
 import {
   MetadonneesNotificationExpirationHomologation,
   MetadonneesNotificationMesure,
+  MetadonneesNotificationService,
   NotificationTransactionnelle,
 } from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import Service from '../../modeles/service.js';
@@ -43,18 +44,14 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
 
         let donnees;
         const typeNotification = n.donnees().type;
-        if (
-          typeNotification === 'echeanceMesureBientotExpiree' ||
-          typeNotification === 'echeanceMesureExpiree' ||
-          typeNotification === 'responsableMesure' ||
-          typeNotification === 'mentionDansMesure'
+        if (typeNotification === 'invitationService')
+          donnees = this.donneesNotificationService(n, service);
+        else if (
+          typeNotification === 'homologationBientotExpiree' ||
+          typeNotification === 'homologationExpiree'
         )
-          donnees = this.donneesSpecifiquesNotificationMesure(n, service);
-        else
-          donnees = this.donneesSpecifiquesNotificationExpirationHomologation(
-            n,
-            service
-          );
+          donnees = this.donneesNotificationExpirationHomologation(n, service);
+        else donnees = this.donneesNotificationMesure(n, service);
 
         const { type, titreCta, canalDiffusion } =
           service.referentiel.notificationTransactionnelle(typeNotification);
@@ -77,7 +74,7 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
       .filter((n) => !!n) as Notification[];
   }
 
-  private donneesSpecifiquesNotificationMesure(
+  private donneesNotificationMesure(
     n: NotificationTransactionnelle,
     service: Service
   ) {
@@ -116,21 +113,21 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
     const { titre, sousTitre, lien } =
       service.referentiel.notificationTransactionnelle(n.donnees().type);
 
-    const donneesSpecifiques = {
+    return {
       titre: titre({ nombreJoursDiciEcheance, nombreMoisDiciEcheance: 0 }),
       sousTitre: sousTitre({
         nomActeur,
         titreMesure: titreMesure || '',
         nomService: service.nomService(),
-        dateEcheanceMesure: dateEcheanceMesure || new Date(),
-        dateExpirationHomologation: new Date(),
+        dateEcheanceMesure:
+          dateEcheanceMesure || this.adaptateurHorloge.maintenant(),
+        dateExpirationHomologation: this.adaptateurHorloge.maintenant(),
       }),
       lien: lien({ idService: service.id, idMesure }),
     };
-    return donneesSpecifiques;
   }
 
-  private donneesSpecifiquesNotificationExpirationHomologation(
+  private donneesNotificationExpirationHomologation(
     notification: NotificationTransactionnelle,
     service: Service
   ) {
@@ -160,11 +157,35 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
         nomService: service.nomService(),
         dateExpirationHomologation,
         titreMesure: '',
-        dateEcheanceMesure: new Date(),
+        dateEcheanceMesure: this.adaptateurHorloge.maintenant(),
         nomActeur: '',
       }),
       lien: lien({ idService, idMesure: '' }),
     };
     return donneesSpecifiques;
+  }
+
+  private donneesNotificationService(
+    notification: NotificationTransactionnelle,
+    service: Service
+  ) {
+    const { titre, sousTitre, lien } =
+      service.referentiel.notificationTransactionnelle(
+        notification.donnees().type
+      );
+    const { idService } = notification.donnees()
+      .metadonnees as MetadonneesNotificationService;
+
+    return {
+      titre: titre({ nombreJoursDiciEcheance: 0, nombreMoisDiciEcheance: 0 }),
+      sousTitre: sousTitre({
+        nomService: service.nomService(),
+        dateExpirationHomologation: this.adaptateurHorloge.maintenant(),
+        nomActeur: '',
+        dateEcheanceMesure: this.adaptateurHorloge.maintenant(),
+        titreMesure: '',
+      }),
+      lien: lien({ idService, idMesure: '' }),
+    };
   }
 }
