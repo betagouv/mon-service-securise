@@ -5,9 +5,10 @@
 
   interface Props {
     notification: Notification;
+    onnotificationcliquee: () => void;
   }
 
-  let { notification }: Props = $props();
+  let { notification, onnotificationcliquee }: Props = $props();
 
   let configurationCarte = $derived.by(() => {
     if (notification.type === 'nouveaute') {
@@ -104,6 +105,7 @@
       await storeNotifications.marqueLue(notification.type, notification.id);
     if (target === '_self') {
       routeurStore.navigue(href);
+      onnotificationcliquee();
     }
   };
 
