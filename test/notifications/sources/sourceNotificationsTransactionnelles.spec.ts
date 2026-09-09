@@ -481,7 +481,7 @@ describe('Les notifications transactionnelles', () => {
       expect(notifications).toHaveLength(1);
       expect(notifications[0]).toEqual({
         id: expect.any(String),
-        type: 'homologationExpiree',
+        type: 'echeanceAtteinte',
         titre: 'Homologation expirée',
         sousTitre: expect.any(String),
         titreCta: 'Renouveler',
@@ -538,7 +538,7 @@ describe('Les notifications transactionnelles', () => {
       expect(notifications).toHaveLength(1);
       expect(notifications[0]).toEqual({
         id: expect.any(String),
-        type: 'homologationBientotExpiree',
+        type: 'echeanceProche',
         titre: 'Expiration dans 5 mois',
         sousTitre: expect.any(String),
         titreCta: 'Renouveler',
@@ -592,7 +592,7 @@ describe('Les notifications transactionnelles', () => {
         type: 'invitation',
         titre: 'Invitation sur un service',
         sousTitre: expect.any(String),
-        titreCta: 'Découvrir',
+        titreCta: 'Découvrir le service',
         lien: expect.any(String),
         canalDiffusion: 'centreNotifications',
         statutLecture: 'nonLue',
