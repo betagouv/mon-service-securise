@@ -8,6 +8,7 @@ describe("L'événement 'DossierHomologationImporte'", () => {
         new EvenementDossierHomologationImporte({
           dossier: {},
           idService: null,
+          idUtilisateur: 'U',
         })
     ).to.throwError();
   });
@@ -18,6 +19,18 @@ describe("L'événement 'DossierHomologationImporte'", () => {
         new EvenementDossierHomologationImporte({
           dossier: null,
           idService: 'S1',
+          idUtilisateur: 'U',
+        })
+    ).to.throwError();
+  });
+
+  it("lève une exception s'il est instancié sans ID d'utilisateur", () => {
+    expect(
+      () =>
+        new EvenementDossierHomologationImporte({
+          dossier: {},
+          idService: 'S1',
+          idUtilisateur: null,
         })
     ).to.throwError();
   });

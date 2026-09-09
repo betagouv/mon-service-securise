@@ -23,7 +23,8 @@ describe('Un téléversement de services V2', () => {
       services: async () => [],
       nouveauService: async () => unUUID('1'),
       ajouteSuggestionAction: async () => {},
-      ajouteDossierCourantSiNecessaire: async () => new Dossier({ id: 'D1' }),
+      ajouteDossierCourantSiNecessaire: async () =>
+        new Dossier({ id: unUUID('D1') }),
       enregistreDossier: async () => {},
       metsAJourProgressionTeleversement: async () => {},
     };
@@ -201,7 +202,7 @@ describe('Un téléversement de services V2', () => {
               idService
             ) => {
               idRecu = idService;
-              return new Dossier({ id: 'D1' });
+              return new Dossier({ id: unUUID('D1') });
             };
 
             await televersement.creeLesServices(
@@ -213,7 +214,7 @@ describe('Un téléversement de services V2', () => {
           });
 
           it('complète le dossier avec les données du téléversement', async () => {
-            const dossierRecu = new Dossier({ id: 'D1' }, referentiel);
+            const dossierRecu = new Dossier({ id: unUUID('D1') }, referentiel);
             depotDonnees.ajouteDossierCourantSiNecessaire = async () =>
               dossierRecu;
 
@@ -224,7 +225,7 @@ describe('Un téléversement de services V2', () => {
             );
 
             expect(dossierRecu.toJSON()).toEqual({
-              id: 'D1',
+              id: unUUID('D1'),
               finalise: true,
               importe: true,
               decision: {
@@ -267,11 +268,11 @@ describe('Un téléversement de services V2', () => {
             expect(
               busEvenement.aRecuUnEvenement(EvenementDossierHomologationImporte)
             ).toBe(true);
-            expect(
-              busEvenement.recupereEvenement(
-                EvenementDossierHomologationImporte
-              ).idService
-            ).toBe(unUUID('1'));
+            const evenement = busEvenement.recupereEvenement(
+              EvenementDossierHomologationImporte
+            );
+            expect(evenement.idService).toBe(unUUID('1'));
+            expect(evenement.idUtilisateur).toBe(unUUID('2'));
           });
         });
 
@@ -279,7 +280,7 @@ describe('Un téléversement de services V2', () => {
           let depotAppele = false;
           depotDonnees.ajouteDossierCourantSiNecessaire = async () => {
             depotAppele = true;
-            return new Dossier({ id: 'D1' });
+            return new Dossier({ id: unUUID('D1') });
           };
           const ligne = structuredClone(ligneTeleverseeValide);
           delete ligne.dateHomologation;
