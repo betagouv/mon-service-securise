@@ -22,6 +22,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     typeof consigneNotificationsExpirationHomologation
   >;
   let depotDonnees: DepotDonnees;
+  const idActeur = unUUID('A');
   const idProprietaire1 = unUUID('P1');
   const idProprietaire2 = unUUID('P2');
   const idService = unUUID('S');
@@ -66,6 +67,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         .avecDecision('2025-01-01', 'unAn')
         .construis(),
       idService,
+      idUtilisateur: idActeur,
     };
 
     await abonnement(evenement);
@@ -77,7 +79,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     expect(notificationsP1[0].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
-      idActeur: idProprietaire1,
+      idActeur,
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
@@ -93,7 +95,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     expect(notificationsP2[0].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
-      idActeur: idProprietaire2,
+      idActeur,
       idDestinataire: idProprietaire2,
       metadonnees: {
         idService,
@@ -111,6 +113,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         .avecDecision('2025-01-01', 'unAn')
         .construis(),
       idService,
+      idUtilisateur: idActeur,
     };
 
     await abonnement(evenement);
@@ -122,7 +125,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     expect(notificationsP1[2].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
-      idActeur: idProprietaire1,
+      idActeur,
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
@@ -135,7 +138,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     expect(notificationsP1[1].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
-      idActeur: idProprietaire1,
+      idActeur,
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
@@ -148,7 +151,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
     expect(notificationsP1[0].donnees()).toEqual({
       id: expect.any(String),
       lue: false,
-      idActeur: idProprietaire1,
+      idActeur,
       idDestinataire: idProprietaire1,
       metadonnees: {
         idService,
@@ -169,7 +172,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       NotificationTransactionnelle.nouveau({
         date: new Date(),
         type: 'homologationExpiree',
-        idActeur: idProprietaire1,
+        idActeur,
         idDestinataire: idProprietaire1,
         metadonnees: { idService, dateExpirationHomologation: new Date() },
       })
@@ -178,7 +181,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
       NotificationTransactionnelle.nouveau({
         date: new Date(),
         type: 'homologationBientotExpiree',
-        idActeur: idProprietaire1,
+        idActeur,
         idDestinataire: idProprietaire1,
         metadonnees: { idService, dateExpirationHomologation: new Date() },
       })
@@ -190,6 +193,7 @@ describe("L'abonnement qui consigne les notifications d'expiration d'homologatio
         .avecDecision('2025-01-01', 'unAn')
         .construis(),
       idService,
+      idUtilisateur: idActeur,
     };
 
     await abonnement(evenement);
