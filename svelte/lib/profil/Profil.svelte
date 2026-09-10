@@ -1,15 +1,15 @@
 <script lang="ts">
-  import type { Departement, Utilisateur } from './profil.d';
+  import type { Utilisateur } from './profil.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import type {
     EstimationNombreServices,
     Organisation,
   } from '../inscription/inscription.d';
-  import SelectionNombreServices from '../inscription/SelectionNombreServices.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import { untrack } from 'svelte';
   import { writable } from 'svelte/store';
   import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
+  import SelectionNombreServices from './SelectionNombreServices.svelte';
   import ChampOrganisation from '../ui/ChampOrganisation.svelte';
 
   interface Props {
@@ -119,20 +119,10 @@
 
     <div class="bloc" id="estimation-nombre-services">
       <h3>Mes services numériques</h3>
-      <div class="champ">
-        <label for="estimation-nombre-services" class="info-label requis">
-          Combien de services publics numériques avez-vous à sécuriser ?
-        </label>
-        <span class="sous-titre">
-          Exemple : Systèmes d’information, site web, application mobile, API,
-          téléservices
-        </span>
-        <SelectionNombreServices
-          id="estimation-nombre-services"
-          {estimationNombreServices}
-          bind:valeur={$utilisateur.estimationNombreServices}
-        />
-      </div>
+      <SelectionNombreServices
+        {estimationNombreServices}
+        bind:valeur={$utilisateur.estimationNombreServices}
+      />
     </div>
   </Formulaire>
 
@@ -187,14 +177,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
-
-  .sous-titre {
-    display: block;
-    color: var(--texte-clair);
-    font-size: 0.75rem;
-    line-height: 1.25rem;
-    margin-bottom: 5px;
   }
 
   .actions {
