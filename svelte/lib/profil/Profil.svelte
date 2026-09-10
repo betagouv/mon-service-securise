@@ -1,52 +1,37 @@
 <script lang="ts">
-  import type { Departement, Utilisateur } from './profil.d';
-  import ChampTexte from '../ui/ChampTexte.svelte';
-  import SelectionDomaineSpecialite from '../inscription/SelectionDomaineSpecialite.svelte';
+  import type { Utilisateur } from './profil.d';
   import Formulaire from '../ui/Formulaire.svelte';
-  import SelectionDepartement from '../inscription/SelectionDepartement.svelte';
-  import SelectionOrganisation from '../inscription/SelectionOrganisation.svelte';
   import type {
     EstimationNombreServices,
     Organisation,
   } from '../inscription/inscription.d';
-  import SelectionNombreServices from '../inscription/SelectionNombreServices.svelte';
-  import Bouton from '../ui/Bouton.svelte';
   import { untrack } from 'svelte';
   import { writable } from 'svelte/store';
+  import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
+  import SelectionNombreServices from './SelectionNombreServices.svelte';
+  import ChampOrganisation from '../ui/ChampOrganisation.svelte';
 
   interface Props {
-    departements: Departement[];
     utilisateur: Utilisateur;
     entite: Organisation;
     estimationNombreServices: EstimationNombreServices[];
   }
 
-  let {
-    departements,
-    utilisateur: u,
-    entite,
-    estimationNombreServices,
-  }: Props = $props();
+  let { utilisateur: u, entite, estimationNombreServices }: Props = $props();
 
   let utilisateur = writable(untrack(() => u));
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement = $state(
-    untrack(
-      () =>
-        (entite && departements.find((d) => d.code === entite.departement)) || {
-          nom: '',
-          code: '',
-        }
-    )
-  );
 
   let formulaire: Formulaire | undefined = $state();
+  let selectionDomaine: SelectionDomaineSpecialite | undefined = $state();
   let enCoursEnvoi: boolean = $state(false);
+  let siret = $state(untrack(() => entite.siret));
 
   const valide = async () => {
     if (!formulaire) return;
-    if (formulaire.estValide()) {
+    const domaineValide = selectionDomaine?.valide() ?? false;
+    if (formulaire.estValide() && domaineValide && siret) {
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
@@ -56,7 +41,7 @@
           telephone: $utilisateur.telephone,
           transactionnelAccepte: $utilisateur.transactionnelAccepte,
           pixelDeSuiviAccepte: $utilisateur.pixelDeSuiviAccepte,
-          siretEntite: entite.siret,
+          siretEntite: siret,
         });
         window.location.href = '/tableauDeBord';
       } catch {
@@ -66,32 +51,21 @@
       }
     }
   };
-
-  let elementSelectionDepartement: SelectionDepartement | undefined = $state();
-  const modifieDepartementApresChoixOrganisation = (
-    organisation: Organisation
-  ) => {
-    if (!elementSelectionDepartement) return;
-    const d = departements.find((d) => d.code === organisation.departement);
-    if (d) {
-      elementSelectionDepartement.choisisDepartement(d);
-    }
-  };
 </script>
 
 <div class="contenu-profil">
   <div>
     <h1>Mes informations MonServiceSécurisé</h1>
-    <h2>
+    <div class="entete">
       Informations recueillies dans le cadre de votre inscription à
       MonServiceSécurisé.
-    </h2>
+    </div>
   </div>
 
   <Formulaire classe="formulaire-profil" bind:this={formulaire}>
     <div class="bloc">
       <div>
-        <h3>Mon identité</h3>
+        <h2>Mon identité</h2>
       </div>
       <dsfr-callout
         text="Pour modifier votre prénom ou votre nom, rendez-vous sur votre profil ProConnect."
@@ -107,9 +81,8 @@
           icon="external-link-line"
           icon-place="right"
           markup="a"
-          type={undefined}
           href="https://identite.proconnect.gouv.fr"
-          target="blank"
+          target="_blank"
         ></dsfr-button>
       </dsfr-callout>
       <div class="identite-lecture-seule">
@@ -117,79 +90,45 @@
         <span>Prénom : <b>{$utilisateur.prenom}</b></span>
         <span>Nom : <b>{$utilisateur.nom}</b></span>
       </div>
-      <div class="info-champ-obligatoire requis">Champ obligatoire</div>
-      <div class="champ">
-        <label class="requis" for="domaine-specialite"
-          >Domaine de spécialité</label
-        >
-        <SelectionDomaineSpecialite
-          id="domaine-specialite"
-          requis
-          bind:valeurs={$utilisateur.postes}
-        />
-      </div>
-      <div class="champ">
-        <label for="telephone">Téléphone</label>
-        <span class="sous-titre"
-          >Pour bénéficier d’un accompagnement personnalisé</span
-        >
-        <ChampTexte
-          id="telephone"
-          nom="telephone"
-          bind:valeur={$utilisateur.telephone}
-          aideSaisie="ex : 0XXXXXXXXX"
-          modele={modeleTelephone}
-          messageErreur="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
-        />
-      </div>
+      <SelectionDomaineSpecialite
+        bind:valeurs={$utilisateur.postes}
+        bind:this={selectionDomaine}
+      />
+      <dsfr-input
+        id="telephone"
+        label="Téléphone"
+        value={$utilisateur.telephone}
+        hint="ex : 0123456789"
+        pattern={modeleTelephone}
+        type="tel"
+        error-message="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
+        onvaluechanged={(e: CustomEvent<string>) =>
+          ($utilisateur.telephone = e.detail)}
+      ></dsfr-input>
     </div>
 
-    <div class="bloc" id="siret">
-      <h3>Mon organisation</h3>
-      <div class="champ">
-        <label for="departement" class="requis"
-          >Département de votre organisation</label
-        >
-        <SelectionDepartement
-          bind:valeur={departement}
-          {departements}
-          bind:this={elementSelectionDepartement}
-        />
-      </div>
-      <div class="champ">
-        <label for="nomSiret" class="requis"
-          >Nom ou SIRET de votre organisation</label
-        >
-        <SelectionOrganisation
-          id="nomSiret"
-          bind:valeur={entite}
-          filtreDepartement={departement}
-          onOrganisationChoisie={modifieDepartementApresChoixOrganisation}
-        />
-      </div>
+    <div class="bloc" id="bloc-siret">
+      <h2>Mon organisation</h2>
+      <ChampOrganisation
+        afficheLabel
+        bind:siret
+        label="Nom ou SIRET de votre organisation"
+      />
     </div>
 
     <div class="bloc" id="estimation-nombre-services">
-      <h3>Mes services numériques</h3>
-      <div class="champ">
-        <label for="estimation-nombre-services" class="info-label requis">
-          Combien de services publics numériques avez-vous à sécuriser ?
-        </label>
-        <span class="sous-titre">
-          Exemple : Systèmes d’information, site web, application mobile, API,
-          téléservices
-        </span>
-        <SelectionNombreServices
-          id="estimation-nombre-services"
-          {estimationNombreServices}
-          bind:valeur={$utilisateur.estimationNombreServices}
-        />
-      </div>
+      <h2>Mes services numériques</h2>
+      <SelectionNombreServices
+        {estimationNombreServices}
+        bind:valeur={$utilisateur.estimationNombreServices}
+      />
     </div>
   </Formulaire>
 
   <div class="actions">
-    <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button label="Valider" onclick={valide} disabled={enCoursEnvoi}
+    ></dsfr-button>
   </div>
 </div>
 
@@ -198,7 +137,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 48px;
     margin: 56px auto;
     width: 792px;
     background-color: white;
@@ -208,36 +146,23 @@
   }
 
   .contenu-profil h1 {
-    font-size: 1.625rem;
+    font-size: 2rem;
     font-weight: 700;
-    line-height: 1.75rem;
+    line-height: 2.5rem;
     margin: 0 0 16px;
   }
 
-  .contenu-profil h2 {
+  .contenu-profil .entete {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem;
-    margin: 0;
+    margin: 0 0 48px;
   }
 
-  .info-champ-obligatoire {
-    text-align: right;
-    font-size: 0.75rem;
-    margin-bottom: 24px;
-  }
-
-  .requis:before {
-    content: '*';
-    color: #e3271c;
-    margin-right: 4px;
-    font-size: 1rem;
-  }
-
-  .contenu-profil h3 {
-    font-size: 1.375rem;
+  .contenu-profil h2 {
+    font-size: 1.5rem;
     font-weight: 700;
-    line-height: 1.75rem;
+    line-height: 2rem;
     margin: 0;
   }
 
@@ -248,35 +173,16 @@
     margin-bottom: 48px;
   }
 
-  .champ {
-    display: flex;
-    flex-direction: column;
-  }
-
   .identite-lecture-seule {
+    font-size: 1rem;
+    line-height: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  label {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.313rem;
-    margin-bottom: 3px;
-  }
-
-  :global(form.formulaire-profil label) {
-    margin: 0;
-    font-weight: normal;
-  }
-
-  .sous-titre {
-    display: block;
-    color: var(--texte-clair);
-    font-size: 0.75rem;
-    line-height: 1.25rem;
-    margin-bottom: 5px;
+  dsfr-callout {
+    margin-bottom: -1.5rem;
   }
 
   .actions {
