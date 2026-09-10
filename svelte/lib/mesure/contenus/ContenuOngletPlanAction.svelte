@@ -10,15 +10,20 @@
   import Initiales from '../../ui/Initiales.svelte';
   import type { IdUtilisateur } from '../mesure.d';
   import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import TiroirGestionContributeurs from '../../ui/tiroirs/TiroirGestionContributeurs.svelte';
+  import type { DonneesServicePourTiroirContributeurs } from '../../gestionContributeurs/gestionContributeurs.d';
 
   interface Props {
+    service: DonneesServicePourTiroirContributeurs | undefined;
     visible: boolean;
     estLectureSeule: boolean;
     priorites: ReferentielPriorite;
     statuts: ReferentielStatut;
   }
 
-  let { visible, estLectureSeule, priorites, statuts }: Props = $props();
+  let { service, visible, estLectureSeule, priorites, statuts }: Props =
+    $props();
 
   let planDactionNonDisponible = $derived(
     !planDActionDisponible($store.mesureEditee.mesure.statut)
@@ -87,12 +92,14 @@
     </p>
     <p class="sous-titre" class:estLectureSeule={selectionDesactivee}>
       <button
-        disabled={selectionDesactivee}
+        disabled={selectionDesactivee || !service}
         type="button"
-        onclick={() =>
-          document.body.dispatchEvent(
-            new CustomEvent('jquery-affiche-tiroir-contributeurs')
-          )}>Gérer les contributeurs</button
+        onclick={() => {
+          if (service)
+            tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+              services: [service],
+            });
+        }}>Gérer les contributeurs</button
       >
       <span>pour modifier les droits ou ajouter des responsables.</span>
     </p>

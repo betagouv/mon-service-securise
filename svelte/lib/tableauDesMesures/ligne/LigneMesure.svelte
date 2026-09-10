@@ -27,6 +27,7 @@
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import { partieResponsable } from './mapPartieResponsable';
   import type { IdUtilisateur } from '../../mesure/mesure.d';
+  import type { DonneesServicePourTiroirContributeurs } from '../../gestionContributeurs/gestionContributeurs.d';
   import { ciblage, cibleDeVisiteGuidee } from '../../visiteGuideeSPA/ciblage';
   import EncartReferentielsExternes from '../../referentielsExternesDeMesures/EncartReferentielsExternes.svelte';
   import CartouchesMesure from '../../ui/CartouchesMesure.svelte';
@@ -44,6 +45,7 @@
     affichePlanAction: boolean;
     afficheReferentielsExterne?: boolean;
     priorites: ReferentielPriorite;
+    service: DonneesServicePourTiroirContributeurs | undefined;
     onModificationResponsables: (responsables: IdUtilisateur[]) => void;
     onModificationStatut: (statut: StatutMesure) => void;
     onModificationPriorite: (priorite: PrioriteMesure | undefined) => void;
@@ -62,6 +64,7 @@
     affichePlanAction,
     afficheReferentielsExterne = false,
     priorites,
+    service,
     onModificationResponsables,
     onModificationStatut,
     onModificationPriorite,
@@ -148,6 +151,7 @@
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         surligne={responsablesSurlignes}
+        {service}
         {onModificationResponsables}
       />
     </td>

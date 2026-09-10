@@ -4,11 +4,15 @@
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
   import Initiales from './Initiales.svelte';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
+  import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
+  import { tiroirStore } from './stores/tiroir.store';
+  import TiroirGestionContributeurs from './tiroirs/TiroirGestionContributeurs.svelte';
 
   interface Props {
     responsables: IdUtilisateur[] | null | undefined;
     estLectureSeule: boolean;
     surligne?: boolean;
+    service: DonneesServicePourTiroirContributeurs | undefined;
     onModificationResponsables: (responsables: IdUtilisateur[]) => void;
   }
 
@@ -16,6 +20,7 @@
     responsables = $bindable(),
     estLectureSeule,
     surligne = false,
+    service,
     onModificationResponsables,
   }: Props = $props();
 
@@ -30,10 +35,11 @@
   let menuOuvert = $state(false);
 
   const ouvreTiroirContributeurs = () => {
+    if (!service) return;
     menuOuvert = false;
-    document.body.dispatchEvent(
-      new CustomEvent('jquery-affiche-tiroir-contributeurs')
-    );
+    tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+      services: [service],
+    });
   };
 
   const modifieResponsables = () => {
@@ -87,7 +93,8 @@
       {/each}
     </div>
     <div class="pied-page">
-      <button onclick={ouvreTiroirContributeurs}>Gérer les contributeurs</button
+      <button disabled={!service} onclick={ouvreTiroirContributeurs}
+        >Gérer les contributeurs</button
       >
       <span>pour modifier les droits ou ajouter des responsables.</span>
     </div>

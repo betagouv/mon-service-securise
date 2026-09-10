@@ -2,10 +2,10 @@
   import Formulaire from '../ui/Formulaire.svelte';
   import SuppressionMesureSpecifique from './suppression/SuppressionMesureSpecifique.svelte';
   import type {
-    IdService,
     MesureGenerale,
     MesureSpecifique,
   } from '../tableauDesMesures/tableauDesMesures.d';
+  import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
 
   import { configurationAffichage, store } from './mesure.store';
   import {
@@ -36,7 +36,7 @@
   import { untrack } from 'svelte';
 
   interface Props {
-    idService: IdService;
+    service: DonneesServicePourTiroirContributeurs | undefined;
     categories: Record<string, string>;
     statuts: ReferentielStatut;
     retoursUtilisateur: Record<string, string>;
@@ -49,7 +49,7 @@
   }
 
   let {
-    idService,
+    service,
     categories,
     statuts,
     retoursUtilisateur,
@@ -71,6 +71,7 @@
   const statutInitial = $store.mesureEditee.mesure.statut;
 
   let enCoursEnvoi = $state(false);
+  let idService = $derived(service!.id);
 
   const rafraichisListeMesure = () => {
     document.body.dispatchEvent(
@@ -262,6 +263,7 @@
           {estLectureSeule}
           {statuts}
           {priorites}
+          {service}
         />
         <ContenuOngletActivite
           visible={ongletActif === 'activite'}
