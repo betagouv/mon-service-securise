@@ -118,26 +118,21 @@
         <span>Prénom : <b>{$utilisateur.prenom}</b></span>
         <span>Nom : <b>{$utilisateur.nom}</b></span>
       </div>
-      <div class="champ">
-        <SelectionDomaineSpecialite
-          bind:valeurs={$utilisateur.postes}
-          bind:this={selectionDomaine}
-        />
-      </div>
-      <div class="champ">
-        <label for="telephone">Téléphone</label>
-        <span class="sous-titre"
-          >Pour bénéficier d’un accompagnement personnalisé</span
-        >
-        <ChampTexte
-          id="telephone"
-          nom="telephone"
-          bind:valeur={$utilisateur.telephone}
-          aideSaisie="ex : 0XXXXXXXXX"
-          modele={modeleTelephone}
-          messageErreur="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
-        />
-      </div>
+      <SelectionDomaineSpecialite
+        bind:valeurs={$utilisateur.postes}
+        bind:this={selectionDomaine}
+      />
+      <dsfr-input
+        id="telephone"
+        label="Téléphone"
+        value={$utilisateur.telephone}
+        hint="ex : 0123456789"
+        pattern={modeleTelephone}
+        type="tel"
+        error-message="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
+        onvaluechanged={(e: CustomEvent<string>) =>
+          ($utilisateur.telephone = e.detail)}
+      ></dsfr-input>
     </div>
 
     <div class="bloc" id="siret">
