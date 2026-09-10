@@ -57,16 +57,16 @@
 <div class="contenu-profil">
   <div>
     <h1>Mes informations MonServiceSécurisé</h1>
-    <h2>
+    <div class="entete">
       Informations recueillies dans le cadre de votre inscription à
       MonServiceSécurisé.
-    </h2>
+    </div>
   </div>
 
   <Formulaire classe="formulaire-profil" bind:this={formulaire}>
     <div class="bloc">
       <div>
-        <h3>Mon identité</h3>
+        <h2>Mon identité</h2>
       </div>
       <dsfr-callout
         text="Pour modifier votre prénom ou votre nom, rendez-vous sur votre profil ProConnect."
@@ -109,7 +109,7 @@
     </div>
 
     <div class="bloc" id="bloc-siret">
-      <h3>Mon organisation</h3>
+      <h2>Mon organisation</h2>
       <ChampOrganisation
         afficheLabel
         bind:siret
@@ -118,7 +118,7 @@
     </div>
 
     <div class="bloc" id="estimation-nombre-services">
-      <h3>Mes services numériques</h3>
+      <h2>Mes services numériques</h2>
       <SelectionNombreServices
         {estimationNombreServices}
         bind:valeur={$utilisateur.estimationNombreServices}
@@ -146,23 +146,23 @@
   }
 
   .contenu-profil h1 {
-    font-size: 1.625rem;
+    font-size: 2rem;
     font-weight: 700;
-    line-height: 1.75rem;
+    line-height: 2.5rem;
     margin: 0 0 16px;
   }
 
-  .contenu-profil h2 {
+  .contenu-profil .entete {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem;
     margin: 0;
   }
 
-  .contenu-profil h3 {
-    font-size: 1.375rem;
+  .contenu-profil h2 {
+    font-size: 1.5rem;
     font-weight: 700;
-    line-height: 1.75rem;
+    line-height: 2rem;
     margin: 0;
   }
 
@@ -174,9 +174,15 @@
   }
 
   .identite-lecture-seule {
+    font-size: 1rem;
+    line-height: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  dsfr-callout {
+    margin-bottom: -1.5rem;
   }
 
   .actions {
