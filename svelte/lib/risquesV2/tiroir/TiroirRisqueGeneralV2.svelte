@@ -19,17 +19,22 @@
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     estLectureSeule: boolean;
+    ongletActif?: 'infos' | 'mesuresAssociees';
   }
 
-  let { idService, risque, statuts, niveauxGravite, estLectureSeule }: Props =
-    $props();
+  let {
+    idService,
+    risque,
+    statuts,
+    niveauxGravite,
+    estLectureSeule,
+    ongletActif = 'infos',
+  }: Props = $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
   export const composantEntete = BadgesTiroirRisqueV2;
   export const propsComposantEntete = untrack(() => ({ risque }));
-
-  let ongletActif: 'infos' | 'mesuresAssociees' = $state('infos');
 
   let commentaire = $state(untrack(() => risque.commentaire));
   let gravite = $state(untrack(() => risque.gravite));
