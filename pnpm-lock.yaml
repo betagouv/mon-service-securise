@@ -31,7 +31,7 @@ importers:
         version: 3.30.3(@tiptap/pm@3.30.3)
       '@tiptap/extension-mention':
         specifier: ^3.30.3
-        version: 3.30.3(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(@tiptap/suggestion@3.30.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3))
+        version: 3.31.1(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(@tiptap/suggestion@3.30.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3))
       '@tiptap/extension-placeholder':
         specifier: ^3.30.3
         version: 3.30.3(@tiptap/extensions@3.30.3(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3))
@@ -1390,12 +1390,12 @@ packages:
       '@tiptap/core': 3.30.3
       '@tiptap/pm': 3.30.3
 
-  '@tiptap/extension-mention@3.30.3':
-    resolution: {integrity: sha512-5iAYJPX7/4QMYgcugZ/tlZTBcy04ioOQMcQVy/m7QpM33tR+iuF7wgf9Q9p4zoW0kmazSRkR9OQX51C+7FSePg==}
+  '@tiptap/extension-mention@3.31.1':
+    resolution: {integrity: sha512-oFHpVf8FRfaidBGajziOzrtpyxZ7Su6PuYzi7otiAkkD3Q+ode6MGjKzvsNiVCcnRbtgBdpVuaQ7tZ79GsPdZg==}
     peerDependencies:
-      '@tiptap/core': 3.30.3
-      '@tiptap/pm': 3.30.3
-      '@tiptap/suggestion': 3.30.3
+      '@tiptap/core': 3.31.1
+      '@tiptap/pm': 3.31.1
+      '@tiptap/suggestion': 3.31.1
 
   '@tiptap/extension-ordered-list@3.30.3':
     resolution: {integrity: sha512-lct/FV8vm9Y5kZFcF5TXIM18opi6m7AAkGoChgGP/A7LYalaniX1X6Ja2j13Y22ZdGaOoPTgd8oKRZXP1/miaA==}
@@ -5344,7 +5344,7 @@ snapshots:
       '@tiptap/core': 3.30.3(@tiptap/pm@3.30.3)
       '@tiptap/pm': 3.30.3
 
-  '@tiptap/extension-mention@3.30.3(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(@tiptap/suggestion@3.30.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3))':
+  '@tiptap/extension-mention@3.31.1(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(@tiptap/suggestion@3.30.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3))':
     dependencies:
       '@tiptap/core': 3.30.3(@tiptap/pm@3.30.3)
       '@tiptap/pm': 3.30.3
