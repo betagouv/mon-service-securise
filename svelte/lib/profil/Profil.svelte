@@ -5,7 +5,6 @@
     EstimationNombreServices,
     Organisation,
   } from '../inscription/inscription.d';
-  import Bouton from '../ui/Bouton.svelte';
   import { untrack } from 'svelte';
   import { writable } from 'svelte/store';
   import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
@@ -127,7 +126,9 @@
   </Formulaire>
 
   <div class="actions">
-    <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button label="Valider" onclick={valide} disabled={enCoursEnvoi}
+    ></dsfr-button>
   </div>
 </div>
 
@@ -136,7 +137,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 48px;
     margin: 56px auto;
     width: 792px;
     background-color: white;
@@ -156,7 +156,7 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem;
-    margin: 0;
+    margin: 0 0 48px;
   }
 
   .contenu-profil h2 {
