@@ -24,29 +24,6 @@ export const recupereAutorisations = async (idService: IdService) => {
   return reponse.data;
 };
 
-export const metEnFormeMesures = (mesures: Mesures) => {
-  type MesureGeneraleApi = { statut: string; modalites?: string };
-
-  const mesuresGenerales: Record<IdMesureGenerale, MesureGeneraleApi> =
-    Object.entries(mesures.mesuresGenerales)
-      .filter(([_, mesure]) => mesure.statut)
-      .reduce(
-        (acc, [id, m]) => ({
-          ...acc,
-          [id]: {
-            statut: m.statut,
-            ...(m.modalites && { modalites: m.modalites }),
-          },
-        }),
-        {}
-      );
-
-  return {
-    mesuresGenerales,
-    mesuresSpecifiques: mesures.mesuresSpecifiques,
-  };
-};
-
 export const metsAJourMesureSpecifique = async (
   idService: IdService,
   mesure: MesureSpecifique
