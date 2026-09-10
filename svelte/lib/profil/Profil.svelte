@@ -1,9 +1,6 @@
 <script lang="ts">
   import type { Departement, Utilisateur } from './profil.d';
-  import ChampTexte from '../ui/ChampTexte.svelte';
   import Formulaire from '../ui/Formulaire.svelte';
-  import SelectionDepartement from '../inscription/SelectionDepartement.svelte';
-  import SelectionOrganisation from '../inscription/SelectionOrganisation.svelte';
   import type {
     EstimationNombreServices,
     Organisation,
@@ -13,42 +10,29 @@
   import { untrack } from 'svelte';
   import { writable } from 'svelte/store';
   import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
+  import ChampOrganisation from '../ui/ChampOrganisation.svelte';
 
   interface Props {
-    departements: Departement[];
     utilisateur: Utilisateur;
     entite: Organisation;
     estimationNombreServices: EstimationNombreServices[];
   }
 
-  let {
-    departements,
-    utilisateur: u,
-    entite,
-    estimationNombreServices,
-  }: Props = $props();
+  let { utilisateur: u, entite, estimationNombreServices }: Props = $props();
 
   let utilisateur = writable(untrack(() => u));
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement = $state(
-    untrack(
-      () =>
-        (entite && departements.find((d) => d.code === entite.departement)) || {
-          nom: '',
-          code: '',
-        }
-    )
-  );
 
   let formulaire: Formulaire | undefined = $state();
   let selectionDomaine: SelectionDomaineSpecialite | undefined = $state();
   let enCoursEnvoi: boolean = $state(false);
+  let siret = $state(untrack(() => entite.siret));
 
   const valide = async () => {
     if (!formulaire) return;
     const domaineValide = selectionDomaine?.valide() ?? false;
-    if (formulaire.estValide() && domaineValide) {
+    if (formulaire.estValide() && domaineValide && siret) {
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
@@ -58,7 +42,7 @@
           telephone: $utilisateur.telephone,
           transactionnelAccepte: $utilisateur.transactionnelAccepte,
           pixelDeSuiviAccepte: $utilisateur.pixelDeSuiviAccepte,
-          siretEntite: entite.siret,
+          siretEntite: siret,
         });
         window.location.href = '/tableauDeBord';
       } catch {
@@ -66,17 +50,6 @@
       } finally {
         enCoursEnvoi = false;
       }
-    }
-  };
-
-  let elementSelectionDepartement: SelectionDepartement | undefined = $state();
-  const modifieDepartementApresChoixOrganisation = (
-    organisation: Organisation
-  ) => {
-    if (!elementSelectionDepartement) return;
-    const d = departements.find((d) => d.code === organisation.departement);
-    if (d) {
-      elementSelectionDepartement.choisisDepartement(d);
     }
   };
 </script>
@@ -135,29 +108,13 @@
       ></dsfr-input>
     </div>
 
-    <div class="bloc" id="siret">
+    <div class="bloc" id="bloc-siret">
       <h3>Mon organisation</h3>
-      <div class="champ">
-        <label for="departement" class="requis"
-          >Département de votre organisation</label
-        >
-        <SelectionDepartement
-          bind:valeur={departement}
-          {departements}
-          bind:this={elementSelectionDepartement}
-        />
-      </div>
-      <div class="champ">
-        <label for="nomSiret" class="requis"
-          >Nom ou SIRET de votre organisation</label
-        >
-        <SelectionOrganisation
-          id="nomSiret"
-          bind:valeur={entite}
-          filtreDepartement={departement}
-          onOrganisationChoisie={modifieDepartementApresChoixOrganisation}
-        />
-      </div>
+      <ChampOrganisation
+        afficheLabel
+        bind:siret
+        label="Nom ou SIRET de votre organisation"
+      />
     </div>
 
     <div class="bloc" id="estimation-nombre-services">
@@ -212,19 +169,6 @@
     margin: 0;
   }
 
-  .info-champ-obligatoire {
-    text-align: right;
-    font-size: 0.75rem;
-    margin-bottom: 24px;
-  }
-
-  .requis:before {
-    content: '*';
-    color: #e3271c;
-    margin-right: 4px;
-    font-size: 1rem;
-  }
-
   .contenu-profil h3 {
     font-size: 1.375rem;
     font-weight: 700;
@@ -239,27 +183,10 @@
     margin-bottom: 48px;
   }
 
-  .champ {
-    display: flex;
-    flex-direction: column;
-  }
-
   .identite-lecture-seule {
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
-
-  label {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.313rem;
-    margin-bottom: 3px;
-  }
-
-  :global(form.formulaire-profil label) {
-    margin: 0;
-    font-weight: normal;
   }
 
   .sous-titre {
