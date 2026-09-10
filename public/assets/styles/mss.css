@@ -17,6 +17,13 @@ body {
   flex-direction: column;
 }
 
+body:has(lab-anssi-bouton-suite-cyber-navigation[data-open]) {
+  @media (max-width: 992px) {
+    overflow: hidden;
+    --brand-top-overflow: visible;
+  }
+}
+
 .marges-fixes {
   width: 1200px;
   margin: 0 auto;
