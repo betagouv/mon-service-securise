@@ -19,6 +19,8 @@
   } from '../risques/risques.d';
   import CartoucheIdentifiantRisqueSpecifiqueV2 from './kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
+  import { singulierPluriel } from '../outils/string';
+  import Bouton from '../ui/Bouton.svelte';
 
   interface Props {
     idService?: string;
@@ -65,6 +67,23 @@
     });
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
   };
+
+  function ouvreTiroirRisqueGeneral(
+    risque: Risque,
+    ongletActif: 'infos' | 'mesuresAssociees' = 'infos'
+  ) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('id', risque.id);
+    history.replaceState(history.state, '', url.href);
+    tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+      idService: idService!,
+      risque: risque,
+      niveauxGravite,
+      statuts,
+      estLectureSeule,
+      ongletActif,
+    });
+  }
 </script>
 
 <dsfr-table
@@ -73,6 +92,7 @@
     { key: 'intitule', label: 'Intitulé du risque' },
     { key: 'gravite', label: 'Gravité' },
     { key: 'vraisemblance', label: 'Vraisemblance' },
+    { key: 'mesuresAssociees', label: 'Mesures associées' },
     { key: 'actions', label: 'Actions' },
   ]}
   rows={tousLesRisques}
@@ -125,6 +145,26 @@
       <Niveau niveau={donnee.vraisemblance} desactive={donnee.desactive} />
     </div>
     <div
+      slot="cell:mesuresAssociees:{i}"
+      class="colonne-mesures-associees colonne"
+      class:inactif={donnee.desactive}
+    >
+      {#if risqueBrut}
+        <Bouton
+          type="lien-dsfr"
+          taille="petit"
+          actif={!donnee.desactive}
+          titre={singulierPluriel(
+            `${risqueBrut?.mesuresAssociees.length} mesure associée`,
+            `${risqueBrut?.mesuresAssociees.length} mesures associées`,
+            risqueBrut?.mesuresAssociees.length
+          )}
+          onclick={() =>
+            ouvreTiroirRisqueGeneral(risqueBrut, 'mesuresAssociees')}
+        ></Bouton>
+      {/if}
+    </div>
+    <div
       slot="cell:actions:{i}"
       class="colonne colonne-actions"
       {@attach cibleDeVisiteGuidee(ciblage().securiser().ligneRisque(i).id())}
@@ -152,16 +192,7 @@
           if (!idService) return;
           if (estRisqueGeneral(donnee)) {
             if (!risqueBrut) return;
-            const url = new URL(window.location.href);
-            url.searchParams.set('id', donnee.id);
-            history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
-            tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-              idService,
-              risque: donnee,
-              niveauxGravite,
-              statuts,
-              estLectureSeule,
-            });
+            ouvreTiroirRisqueGeneral(donnee);
           } else {
             tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
               idService,
