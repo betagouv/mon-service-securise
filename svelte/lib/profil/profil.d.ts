@@ -31,7 +31,6 @@ export type Utilisateur = {
 };
 
 export type ProfilProps = {
-  departements: Departement[];
   utilisateur: Utilisateur;
   estimationNombreServices: EstimationNombreServices[];
   entite: Organisation;

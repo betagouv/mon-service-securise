@@ -35,7 +35,6 @@ const routesConnectePage = ({
     '/profil',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const departements = referentiel.departements();
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
       await depotDonnees.rafraichisProfilUtilisateurLocal(idUtilisateur);
@@ -44,7 +43,6 @@ const routesConnectePage = ({
 
       reponse.render('profil', {
         utilisateur: utilisateur.toJSON(),
-        departements,
         estimationNombreServices,
         entite,
       });
