@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Departement, Utilisateur } from './profil.d';
   import ChampTexte from '../ui/ChampTexte.svelte';
-  import SelectionDomaineSpecialite from '../inscription/SelectionDomaineSpecialite.svelte';
   import Formulaire from '../ui/Formulaire.svelte';
   import SelectionDepartement from '../inscription/SelectionDepartement.svelte';
   import SelectionOrganisation from '../inscription/SelectionOrganisation.svelte';
@@ -13,6 +12,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import { untrack } from 'svelte';
   import { writable } from 'svelte/store';
+  import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
 
   interface Props {
     departements: Departement[];
@@ -42,11 +42,13 @@
   );
 
   let formulaire: Formulaire | undefined = $state();
+  let selectionDomaine: SelectionDomaineSpecialite | undefined = $state();
   let enCoursEnvoi: boolean = $state(false);
 
   const valide = async () => {
     if (!formulaire) return;
-    if (formulaire.estValide()) {
+    const domaineValide = selectionDomaine?.valide() ?? false;
+    if (formulaire.estValide() && domaineValide) {
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
@@ -107,9 +109,8 @@
           icon="external-link-line"
           icon-place="right"
           markup="a"
-          type={undefined}
           href="https://identite.proconnect.gouv.fr"
-          target="blank"
+          target="_blank"
         ></dsfr-button>
       </dsfr-callout>
       <div class="identite-lecture-seule">
@@ -117,15 +118,10 @@
         <span>Prénom : <b>{$utilisateur.prenom}</b></span>
         <span>Nom : <b>{$utilisateur.nom}</b></span>
       </div>
-      <div class="info-champ-obligatoire requis">Champ obligatoire</div>
       <div class="champ">
-        <label class="requis" for="domaine-specialite"
-          >Domaine de spécialité</label
-        >
         <SelectionDomaineSpecialite
-          id="domaine-specialite"
-          requis
           bind:valeurs={$utilisateur.postes}
+          bind:this={selectionDomaine}
         />
       </div>
       <div class="champ">
