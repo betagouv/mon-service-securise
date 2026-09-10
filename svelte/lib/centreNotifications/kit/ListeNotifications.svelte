@@ -82,7 +82,7 @@
 
 <style>
   .contenu-notifications {
-    max-height: 322px;
+    height: 322px;
     overflow-y: auto;
     font-size: 0.9rem;
     text-align: left;
@@ -114,8 +114,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 36px 0;
-    border-top: 1px solid var(--liseres-fonce);
+    height: 100%;
   }
 
   .conteneur-aucune-notification p {
