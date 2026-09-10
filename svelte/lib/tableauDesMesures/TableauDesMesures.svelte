@@ -10,8 +10,8 @@
     enregistreMesureGenerale,
     metsAJourMesureSpecifique as metsAJourMesureSpecifiqueAPI,
     recupereAutorisations,
-    recupereContributeurs,
     recupereMesures,
+    recupereService,
   } from './tableauDesMesures.api';
   import { onMount } from 'svelte';
   import {
@@ -49,6 +49,8 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import { contributeurs } from './stores/contributeurs.store';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
+  import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
+  import { donneesServiceVisiteGuidee } from '../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
   import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
   import { rechercheParReferentiel } from './stores/rechercheParReferentiel.store';
   import { rechercheParPriorite } from './stores/rechercheParPriorite.store';
@@ -97,6 +99,8 @@
 
   let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined =
     $state();
+
+  let service: DonneesServicePourTiroirContributeurs | undefined = $state.raw();
 
   const rafraichisComposant = () => {
     const requete = new URLSearchParams(window.location.search);
@@ -154,7 +158,7 @@
   ) => {
     mesureStore.reinitialise(mesureAEditer as MesureEditee | undefined);
     tiroirStore.afficheContenu(Mesure, {
-      idService,
+      service,
       categories,
       statuts,
       priorites,
@@ -167,11 +171,13 @@
     });
   };
 
-  const rafraichisContributeurs = async () => {
+  const rafraichisService = async () => {
+    service = modeVisiteGuidee
+      ? donneesServiceVisiteGuidee
+      : await recupereService(idService);
+
     contributeurs.reinitialise(
-      modeVisiteGuidee
-        ? contributeursVisiteGuidee
-        : await recupereContributeurs(idService)
+      modeVisiteGuidee ? contributeursVisiteGuidee : service.contributeurs
     );
   };
 
@@ -217,7 +223,7 @@
 
     await Promise.all([
       rafraichisMesures(),
-      rafraichisContributeurs(),
+      rafraichisService(),
       rafraichisAutorisations(),
     ]);
 
@@ -323,8 +329,8 @@
   on:mesure-modifiee={rafraichisMesures}
   on:collaboratif-service-modifie={() =>
     Promise.all([
-      rafraichisContributeurs(), // Pour avoir une liste à jour dans la sélection des responsables
-      rafraichisAutorisations(), // Pour avoir des pastilles de couleur à jour sur les droits
+      rafraichisService(), // Pour la liste des contributeurs (sélection des responsables) et la réouverture du tiroir avec des données à jour
+      rafraichisAutorisations(), // Pour des pastilles de couleur à jour sur les droits
       rafraichisMesures(), // Pour avoir les responsables de mesures à jour
     ])}
   on:modeles-mesure-specifique-associes={() =>
@@ -473,6 +479,7 @@
           nom={mesure.description}
           referentielStatuts={statuts}
           {priorites}
+          {service}
           bind:mesure={$mesures.mesuresGenerales[id]}
           onModificationStatut={(statut) => {
             mesures.metAJourStatutMesureGenerale(id, statut);
@@ -508,6 +515,7 @@
           nom={mesure.description}
           referentielStatuts={statuts}
           {priorites}
+          {service}
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           onModificationStatut={(statut) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, statut);

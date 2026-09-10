@@ -4,8 +4,8 @@ import type {
   Mesures,
   MesureSpecifique,
   MesureGenerale,
-  Contributeur,
 } from './tableauDesMesures.d';
+import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
 
 const formatteurDate = new Intl.DateTimeFormat('en-EN');
 
@@ -14,9 +14,11 @@ export const recupereMesures = async (idService: IdService) => {
   return reponse.data as Mesures;
 };
 
-export const recupereContributeurs = async (idService: IdService) => {
-  const reponse = await axios.get(`/api/service/${idService}`);
-  return reponse.data.contributeurs as Contributeur[];
+export const recupereService = async (idService: IdService) => {
+  const reponse = await axios.get<DonneesServicePourTiroirContributeurs>(
+    `/api/service/${idService}`
+  );
+  return reponse.data;
 };
 
 export const recupereAutorisations = async (idService: IdService) => {
