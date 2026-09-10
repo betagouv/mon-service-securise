@@ -15,8 +15,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(express@5.2.1)
       '@lab-anssi/ui-kit':
-        specifier: 1.60.9
-        version: 1.60.9(svelte@5.55.7(@typescript-eslint/types@8.68.0))
+        specifier: 1.61.2
+        version: 1.61.2(svelte@5.55.7(@typescript-eslint/types@8.68.0))
       '@myriaddreamin/typst-ts-node-compiler':
         specifier: 0.7.0
         version: 0.7.0
@@ -690,11 +690,11 @@ packages:
     peerDependencies:
       express: ~5.2.1
 
-  '@lab-anssi/ui-kit@1.60.9':
-    resolution: {integrity: sha512-Yz3a/GntYjbSJlyNLnL8ZDA3MgCqj7Cij8hCZDRYTpCTRqXfoi53fd7BvvRyLwW64e0vdHiaiNQELxsx4OGOfQ==}
+  '@lab-anssi/ui-kit@1.61.2':
+    resolution: {integrity: sha512-KNN6l/ul2NCZ3RpuuwVC+Pn4jqbvOE+Hpp+J1g5kjAVYFc+NtuY7+16LjK1cX+xlOlxzFwpZ+t2/Gt26Rtfhyg==}
     engines: {node: '>=24.18.0'}
     peerDependencies:
-      svelte: ~5.55.10 || ~5.56.0
+      svelte: ^5.55.0
 
   '@myriaddreamin/typst-ts-node-compiler-android-arm-eabi@0.7.0':
     resolution: {integrity: sha512-25gKyErQai/u/EWBOSSZvV0rFfSL4tqHgYEyd4rZPXSHMpkvvgPmfA/Ees8InB1nnPV9Jlu9r0sftV6oiccprg==}
@@ -4841,7 +4841,7 @@ snapshots:
       - debug
       - supports-color
 
-  '@lab-anssi/ui-kit@1.60.9(svelte@5.55.7(@typescript-eslint/types@8.68.0))':
+  '@lab-anssi/ui-kit@1.61.2(svelte@5.55.7(@typescript-eslint/types@8.68.0))':
     dependencies:
       svelte: 5.55.7(@typescript-eslint/types@8.68.0)
 
