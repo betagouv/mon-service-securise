@@ -1,15 +1,12 @@
 import { writable } from 'svelte/store';
 
-export const creeFileMisesAJour = () => {
+export const creeFileMisesAJour = (callbackErreur: () => void = () => {}) => {
   const enCours = writable(false);
   let derniereTache: Promise<void> = Promise.resolve();
 
   const ajoute = <T>(tache: () => Promise<T>): Promise<T> => {
     const resultat = derniereTache.then(tache);
-    const finDeLaTache = resultat.then(
-      () => {},
-      () => {}
-    );
+    const finDeLaTache = resultat.then(() => {}, callbackErreur);
 
     derniereTache = finDeLaTache;
     enCours.set(true);

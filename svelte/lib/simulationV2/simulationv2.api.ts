@@ -5,6 +5,7 @@ import type { IdNiveauDeSecurite } from '../ui/types';
 import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 import type { DetailMesure } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.types';
 import { creeFileMisesAJour } from '../ui/stores/fileMisesAJour.store';
+import { toasterStore } from '../ui/stores/toaster.store';
 
 type Simulation = BrouillonIncomplet;
 
@@ -45,7 +46,9 @@ const appliqueLaMiseAJour = async (idService: UUID, donnees: MiseAJour) => {
   }
 };
 
-export const fileMAJSimulation = creeFileMisesAJour();
+export const fileMAJSimulation = creeFileMisesAJour(() =>
+  toasterStore.erreur('Une erreur est survenue', 'Merci de recharger la page')
+);
 
 export const metsAJourSimulation = async (
   idService: UUID,

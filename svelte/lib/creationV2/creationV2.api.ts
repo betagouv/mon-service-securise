@@ -4,6 +4,7 @@ import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 import type { IdNiveauDeSecurite } from '../ui/types';
 import { donneesVisiteGuidee } from '../pagesService/donneesVisiteGuidees';
 import { creeFileMisesAJour } from '../ui/stores/fileMisesAJour.store';
+import { toasterStore } from '../ui/stores/toaster.store';
 
 export const creeBrouillonService = async (
   nomService: string
@@ -38,7 +39,9 @@ const appliqueLaMiseAJour = async (idBrouillon: UUID, donnees: MiseAJour) => {
   }
 };
 
-export const fileMAJBrouillon = creeFileMisesAJour();
+export const fileMAJBrouillon = creeFileMisesAJour(() =>
+  toasterStore.erreur('Une erreur est survenue', 'Merci de recharger la page')
+);
 
 export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
