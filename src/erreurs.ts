@@ -111,6 +111,13 @@ class ErreurTeleversementInexistant extends ErreurModele {}
 class ErreurTeleversementInvalide extends ErreurModele {}
 
 class ErreurBrouillonInexistant extends ErreurModele {}
+class ErreurBrouillonIncompletPourNiveauSecurite extends ErreurModele {
+  constructor(proprietesManquantes: string[]) {
+    super(
+      `Le niveau de sécurité ne peut pas être évalué sans les propriétés : ${proprietesManquantes.join(', ')}`
+    );
+  }
+}
 
 class ErreurMoteurDeReglesV2 extends ErreurModele {}
 class ErreurVersionServiceIncompatible extends ErreurModele {}
@@ -128,6 +135,7 @@ export {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
+  ErreurBrouillonIncompletPourNiveauSecurite,
   ErreurBrouillonInexistant,
   ErreurBusEvenements,
   ErreurCategoriesRisqueManquantes,

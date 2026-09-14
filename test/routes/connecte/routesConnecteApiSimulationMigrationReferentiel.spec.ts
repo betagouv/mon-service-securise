@@ -391,6 +391,17 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       expect(reponse.status).toBe(404);
     });
 
+    it('renvoie une erreur 422 si la simulation est incomplète pour un calcul de niveau de sécurité', async () => {
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+        new BrouillonService(unUUIDRandom(), { nomService: 'Un service' });
+
+      const reponse = await testeur.get(
+        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/niveauSecuriteRequis`
+      );
+
+      expect(reponse.status).toBe(422);
+    });
+
     it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
       const resultat = await testeur.get(
         `/api/service/pas-un-uuid/simulation-migration-referentiel/niveauSecuriteRequis`

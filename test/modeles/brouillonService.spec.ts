@@ -4,8 +4,30 @@ import {
 } from '../../src/modeles/brouillonService.js';
 import { unUUID } from '../constructeurs/UUID.js';
 import { deuxFois } from '../aides/tableaux.ts';
+import { ErreurBrouillonIncompletPourNiveauSecurite } from '../../src/erreurs.js';
 
 describe('Un brouillon de Service v2', () => {
+  const unBrouillonComplet = () =>
+    new BrouillonService(unUUID('b'), {
+      nomService: 'Mairie A',
+      siret: 'un siret',
+      presentation: 'Mon service qui…',
+      statutDeploiement: 'enCours',
+      pointsAcces: ['b.fr'],
+      activitesExternalisees: ['administrationTechnique'],
+      specificitesProjet: ['annuaire'],
+      typeService: ['api'],
+      typeHebergement: 'cloud',
+      ouvertureSysteme: 'accessibleSurInternet',
+      audienceCible: 'large',
+      categoriesDonneesTraitees: ['secretsDEntreprise'],
+      categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
+      volumetrieDonneesTraitees: 'eleve',
+      localisationDonneesTraitees: 'UE',
+      niveauSecurite: 'niveau1',
+      dureeDysfonctionnementAcceptable: 'moinsDe4h',
+    });
+
   const unBrouillonAvecDoublons = () =>
     new BrouillonService(unUUID('b'), {
       nomService: 'Mairie A',
@@ -148,6 +170,35 @@ describe('Un brouillon de Service v2', () => {
       ]);
       expect(sansDoublons.typeService).toEqual(['api']);
       expect(sansDoublons.pointsAcces).toEqual(['a.fr', 'b.fr']);
+    });
+  });
+  describe('sur demande de la vue pour le calcul du niveau de sécurité', () => {
+    it('retourne les données nécessaires', async () => {
+      const b = unBrouillonComplet();
+
+      const donnees = b.pourCalculNiveauDeSecurite();
+
+      expect(donnees).toEqual({
+        audienceCible: 'large',
+        autresDonneesTraitees: ['une catégorie'],
+        categories: ['secretsDEntreprise'],
+        disponibilite: 'moinsDe4h',
+        ouvertureSysteme: 'accessibleSurInternet',
+        volumetrie: 'eleve',
+      });
+    });
+
+    it('jette une erreur si des données obligatoires sont manquantes', async () => {
+      const b = new BrouillonService(unUUID('b'), { nomService: 'Mairie A' });
+
+      expect(() => b.pourCalculNiveauDeSecurite()).toThrowError(
+        new ErreurBrouillonIncompletPourNiveauSecurite([
+          'audienceCible',
+          'dureeDysfonctionnementAcceptable',
+          'ouvertureSysteme',
+          'volumetrieDonneesTraitees',
+        ])
+      );
     });
   });
 });
