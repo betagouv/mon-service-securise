@@ -4,6 +4,7 @@ import type { MiseAJour } from '../creationV2/creationV2.api';
 import type { IdNiveauDeSecurite } from '../ui/types';
 import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 import type { DetailMesure } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.types';
+import { creeFileMisesAJour } from '../ui/stores/fileMisesAJour.store';
 
 type Simulation = BrouillonIncomplet;
 
@@ -33,10 +34,7 @@ export const lisSimulation = async (idService: UUID): Promise<Simulation> =>
     )
   ).data;
 
-export const metsAJourSimulation = async (
-  idService: UUID,
-  donnees: MiseAJour
-) => {
+const appliqueLaMiseAJour = async (idService: UUID, donnees: MiseAJour) => {
   const misesAJour = Object.entries(donnees);
   for (let i = 0; i < misesAJour.length; i++) {
     const [proprieteMiseAJour, valeurMiseAJour] = misesAJour[i];
@@ -45,6 +43,15 @@ export const metsAJourSimulation = async (
       { [proprieteMiseAJour]: valeurMiseAJour }
     );
   }
+};
+
+export const fileMAJSimulation = creeFileMisesAJour();
+
+export const metsAJourSimulation = async (
+  idService: UUID,
+  donnees: MiseAJour
+) => {
+  await fileMAJSimulation.ajoute(() => appliqueLaMiseAJour(idService, donnees));
 };
 
 export const niveauSecuriteMinimalRequis = async (
