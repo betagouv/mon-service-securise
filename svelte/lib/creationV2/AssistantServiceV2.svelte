@@ -14,6 +14,7 @@
     action_supplementaire?: import('svelte').Snippet;
     onChampModifie?: (miseAJour: MiseAJour) => Promise<void>;
     onFinalise?: () => Promise<void>;
+    miseAJourEnCours: boolean;
   }
 
   let {
@@ -23,6 +24,7 @@
     action_supplementaire,
     onChampModifie,
     onFinalise,
+    miseAJourEnCours,
   }: Props = $props();
   let questionCouranteEstComplete = $state(false);
   let modeRapide = $state(false);
@@ -101,6 +103,7 @@
             taille="md"
             icone="arrow-left-line"
             positionIcone="gauche"
+            actif={!miseAJourEnCours}
             onclick={navigationStore.precedent}
           ></lab-anssi-bouton>
         {/if}
@@ -118,14 +121,20 @@
             ? 'check-line'
             : 'arrow-right-line'}
           positionIcone="droite"
-          actif={questionCouranteEstComplete && !enCoursDeChargement}
+          actif={questionCouranteEstComplete &&
+            !enCoursDeChargement &&
+            !miseAJourEnCours}
           onclick={async () =>
             $etapeCourante.estDerniereQuestion
               ? await onFinalise?.()
               : suivant()}
         ></lab-anssi-bouton>
         <div class="info-enregistrement-automatique">
-          <em>Brouillon enregistré automatiquement</em>
+          {#if miseAJourEnCours}
+            <em>Enregistrement en cours…</em>
+          {:else}
+            <em>Brouillon enregistré</em>
+          {/if}
         </div>
       </div>
     </div>

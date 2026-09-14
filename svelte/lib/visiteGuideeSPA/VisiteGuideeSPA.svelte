@@ -156,6 +156,7 @@
       titreAssistant="Ajouter un service"
       titreBoutonFinalise="Commencer à sécuriser le service"
       enCoursDeChargement={false}
+      miseAJourEnCours={false}
     />
   {:else if pageFondVisiteGuidee === 'besoinsSecuriteV2'}
     <CreationV2

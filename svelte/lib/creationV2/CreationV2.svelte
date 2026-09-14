@@ -4,6 +4,7 @@
   import type { UUID } from '../typesBasiquesSvelte';
   import {
     creeBrouillonService,
+    fileMAJBrouillon,
     finaliseBrouillonService,
     lisBrouillonService,
     metsAJourBrouillonService,
@@ -23,6 +24,8 @@
     entite: Entite | undefined;
     modeVisiteGuidee?: boolean;
   }
+
+  const { enCours } = fileMAJBrouillon;
 
   let { entite, modeVisiteGuidee = false }: Props = $props();
   let enCoursDeChargement = $state(false);
@@ -114,4 +117,5 @@
   bind:enCoursDeChargement
   titreAssistant="Ajouter un service"
   titreBoutonFinalise="Commencer à sécuriser le service"
+  miseAJourEnCours={$enCours}
 />
