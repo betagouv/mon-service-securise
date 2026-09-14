@@ -22,7 +22,7 @@
   interface Props {
     donnees: DescriptionServiceV2;
     seulementNomServiceEditable: boolean;
-    onChampModifie: (miseAJour: MiseAJour) => void;
+    onChampModifie: (miseAJour: MiseAJour) => Promise<void>;
   }
 
   let {
@@ -83,7 +83,7 @@
   };
 
   const champModifie = async (propriete: string, valeur: string | string[]) => {
-    onChampModifie({ [propriete]: valeur });
+    await onChampModifie({ [propriete]: valeur });
   };
 
   let elementHtml:
