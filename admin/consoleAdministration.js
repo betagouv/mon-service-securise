@@ -35,6 +35,7 @@ import { adaptateurChiffrementChaCha20 } from '../src/adaptateurs/adaptateurChif
 import EvenementCguAcceptees from '../src/modeles/journalMSS/evenementCguAcceptees.js';
 import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAdministrationOrganisations.js';
 import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
+import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -48,6 +49,7 @@ class ConsoleAdministration {
     this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({});
 
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+    this.referentielV2 = fabriqueReferentiel().v2();
 
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
     this.busEvenements = new BusEvenements({ adaptateurGestionErreur });
@@ -58,6 +60,7 @@ class ConsoleAdministration {
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
+      referentielV2: this.referentielV2,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
       busEvenements: this.busEvenements,
     });
