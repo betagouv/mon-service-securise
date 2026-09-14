@@ -17,6 +17,40 @@ import { deuxFois } from '../aides/tableaux.ts';
 describe('Une description service V2', () => {
   const referentiel = creeReferentielV2();
 
+  it("force les valeurs des activités externalisées si le type d'hébergement est SaaS", () => {
+    const descriptionV2 = new DescriptionServiceV2(
+      {
+        nomService: 'Mairie',
+        organisationResponsable: {
+          nom: 'Ville V',
+          siret: '1111111111111',
+          departement: '33',
+        },
+        typeService: ['api'],
+        statutDeploiement: 'enCours',
+        niveauSecurite: 'niveau1',
+        volumetrieDonneesTraitees: 'faible',
+        presentation: 'Le premier de …',
+        pointsAcces: [{ description: 'https://url.com' }],
+        audienceCible: 'large',
+        typeHebergement: 'saas',
+        ouvertureSysteme: 'accessibleSurInternet',
+        specificitesProjet: ['accesPhysiqueAuxBureaux'],
+        activitesExternalisees: [],
+        dureeDysfonctionnementAcceptable: 'moinsDe24h',
+        categoriesDonneesTraitees: ['documentsRHSensibles'],
+        categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+        localisationDonneesTraitees: 'horsUE',
+      },
+      referentiel
+    );
+
+    expect(descriptionV2.activitesExternalisees).toEqual([
+      'administrationTechnique',
+      'developpementLogiciel',
+    ]);
+  });
+
   it('connaît ses données à persister', () => {
     const descriptionV2 = new DescriptionServiceV2(
       {

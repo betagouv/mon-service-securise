@@ -92,7 +92,10 @@ export class DescriptionServiceV2 {
     this.typeService = donnees.typeService;
     this.specificitesProjet = donnees.specificitesProjet;
     this.typeHebergement = donnees.typeHebergement;
-    this.activitesExternalisees = donnees.activitesExternalisees;
+    this.activitesExternalisees =
+      donnees.typeHebergement === 'saas'
+        ? ['administrationTechnique', 'developpementLogiciel']
+        : donnees.activitesExternalisees;
     this.ouvertureSysteme = donnees.ouvertureSysteme;
     this.audienceCible = donnees.audienceCible;
     this.dureeDysfonctionnementAcceptable =
