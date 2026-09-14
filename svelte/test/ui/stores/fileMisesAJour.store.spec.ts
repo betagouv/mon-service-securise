@@ -5,8 +5,10 @@ import { get } from 'svelte/store';
 describe('La file de mises à jour', () => {
   const unePromesse = <T = void>() => {
     let termine!: (valeur: T) => void;
-    const promesse = new Promise<T>((resolve) => {
+    let echoue!: (valeur: T) => void;
+    const promesse = new Promise<T>((resolve, reject) => {
       termine = resolve;
+      echoue = reject;
     });
 
     const controle = {
@@ -16,6 +18,7 @@ describe('La file de mises à jour', () => {
         return promesse;
       },
       termine,
+      echoue,
     };
     return controle;
   };
@@ -51,5 +54,21 @@ describe('La file de mises à jour', () => {
     p1.termine();
     await laissePasserLesPromesses();
     expect(get(file.enCours)).toBe(false);
+  });
+
+  it("peut appeler une callback en cas d'erreur", async () => {
+    let callbackAppelee = false;
+    const p1 = unePromesse();
+    const file = creeFileMisesAJour(() => {
+      callbackAppelee = true;
+    });
+
+    file.ajoute(p1.tache);
+    await laissePasserLesPromesses();
+    expect(callbackAppelee).toBe(false);
+
+    p1.echoue();
+    await laissePasserLesPromesses();
+    expect(callbackAppelee).toBe(true);
   });
 });
