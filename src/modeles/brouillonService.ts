@@ -13,6 +13,7 @@ import {
 } from '../../donneesReferentielMesuresV2.js';
 import { PourCalculNiveauSecurite } from '../moteurRegles/v2/niveauSecurite.js';
 import { ReferentielV2 } from '../referentiel.interface.js';
+import { ErreurBrouillonIncompletPourNiveauSecurite } from '../erreurs.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -56,6 +57,18 @@ export class BrouillonService {
   }
 
   pourCalculNiveauDeSecurite(): PourCalculNiveauSecurite {
+    const proprietesManquantes = [
+      'audienceCible',
+      'dureeDysfonctionnementAcceptable',
+      'ouvertureSysteme',
+      'volumetrieDonneesTraitees',
+    ].filter((p) => !this.donnees[p as keyof DonneesBrouillonService]);
+
+    if (proprietesManquantes.length > 0) {
+      throw new ErreurBrouillonIncompletPourNiveauSecurite(
+        proprietesManquantes
+      );
+    }
     return {
       audienceCible: this.donnees.audienceCible!,
       autresDonneesTraitees:

@@ -2,7 +2,10 @@ import express from 'express';
 import * as z from 'zod';
 import { UUID } from '../../typesBasiques.js';
 import { DepotDonneesSimulationMigrationReferentiel } from '../../depots/depotDonneesSimulationMigrationReferentiel.js';
-import { ErreurSimulationInexistante } from '../../erreurs.js';
+import {
+  ErreurBrouillonIncompletPourNiveauSecurite,
+  ErreurSimulationInexistante,
+} from '../../erreurs.js';
 import { valideParams } from '../../http/validePayloads.js';
 import {
   Permissions,
@@ -134,6 +137,8 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
       } catch (e) {
         if (e instanceof ErreurSimulationInexistante)
           return reponse.sendStatus(404);
+        if (e instanceof ErreurBrouillonIncompletPourNiveauSecurite)
+          return reponse.sendStatus(422);
         return suite(e);
       }
     }

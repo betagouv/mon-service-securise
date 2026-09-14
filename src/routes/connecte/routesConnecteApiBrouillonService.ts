@@ -5,6 +5,7 @@ import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { UUID } from '../../typesBasiques.js';
 import {
+  ErreurBrouillonIncompletPourNiveauSecurite,
   ErreurBrouillonInexistant,
   ErreurModele,
   ErreurNomServiceDejaExistant,
@@ -118,6 +119,8 @@ const routesConnecteApiBrouillonService = ({
     } catch (e) {
       if (e instanceof ErreurBrouillonInexistant)
         return reponse.sendStatus(404);
+      if (e instanceof ErreurBrouillonIncompletPourNiveauSecurite)
+        return reponse.sendStatus(422);
       return suite(e);
     }
   });

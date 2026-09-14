@@ -444,6 +444,17 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
       expect(reponse.status).toBe(404);
     });
+
+    it('renvoie une erreur 422 si le brouillon est incomplet pour le calcul de niveau de sécurité', async () => {
+      testeur.depotDonnees().lisBrouillonService = async () =>
+        new BrouillonService(unUUIDRandom(), { nomService: 'Un service' });
+
+      const reponse = await testeur.get(
+        `/api/brouillon-service/${unUUIDRandom()}/niveauSecuriteRequis`
+      );
+
+      expect(reponse.status).toBe(422);
+    });
   });
 
   describe('quand requête DELETE sur `/api/brouillon-service/:id`', () => {
