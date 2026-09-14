@@ -26,7 +26,7 @@
   let formulaire: Formulaire | undefined = $state();
   let selectionDomaine: SelectionDomaineSpecialite | undefined = $state();
   let enCoursEnvoi: boolean = $state(false);
-  let siret = $state(untrack(() => entite.siret));
+  let siret = $state(untrack(() => entite?.siret));
 
   const valide = async () => {
     if (!formulaire) return;
@@ -56,10 +56,10 @@
 <div class="contenu-profil">
   <div>
     <h1>Mes informations MonServiceSécurisé</h1>
-    <div class="entete">
+    <p class="entete">
       Informations recueillies dans le cadre de votre inscription à
       MonServiceSécurisé.
-    </div>
+    </p>
   </div>
 
   <Formulaire classe="formulaire-profil" bind:this={formulaire}>
