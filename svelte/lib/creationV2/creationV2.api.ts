@@ -5,6 +5,7 @@ import type { IdNiveauDeSecurite } from '../ui/types';
 import { donneesVisiteGuidee } from '../pagesService/donneesVisiteGuidees';
 import { creeFileMisesAJour } from '../ui/stores/fileMisesAJour.store';
 import { toasterStore } from '../ui/stores/toaster.store';
+import { isAxiosError } from 'axios';
 
 export const creeBrouillonService = async (
   nomService: string
@@ -62,9 +63,19 @@ export const niveauSecuriteMinimalRequis = async (
 ): Promise<IdNiveauDeSecurite> => {
   if (id === donneesVisiteGuidee.brouillonComplet.id) return 'niveau1';
 
-  return (
-    await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
-      `/api/brouillon-service/${id}/niveauSecuriteRequis`
-    )
-  ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
+  try {
+    const reponse = await axios.get<{
+      niveauDeSecuriteMinimal: NiveauSecurite;
+    }>(`/api/brouillon-service/${id}/niveauSecuriteRequis`);
+
+    return reponse.data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
+  } catch (e) {
+    if (isAxiosError(e) && e.response?.status === 422) {
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        'Merci de recharger la page'
+      );
+    }
+    throw e;
+  }
 };

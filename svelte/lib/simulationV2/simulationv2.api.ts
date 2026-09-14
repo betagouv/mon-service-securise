@@ -6,6 +6,7 @@ import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 import type { DetailMesure } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.types';
 import { creeFileMisesAJour } from '../ui/stores/fileMisesAJour.store';
 import { toasterStore } from '../ui/stores/toaster.store';
+import { isAxiosError } from 'axios';
 
 type Simulation = BrouillonIncomplet;
 
@@ -59,12 +60,23 @@ export const metsAJourSimulation = async (
 
 export const niveauSecuriteMinimalRequis = async (
   idService: UUID
-): Promise<IdNiveauDeSecurite> =>
-  (
-    await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
-      `/api/service/${idService}/simulation-migration-referentiel/niveauSecuriteRequis`
-    )
-  ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
+): Promise<IdNiveauDeSecurite> => {
+  try {
+    return (
+      await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
+        `/api/service/${idService}/simulation-migration-referentiel/niveauSecuriteRequis`
+      )
+    ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
+  } catch (e) {
+    if (isAxiosError(e) && e.response?.status === 422) {
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        'Merci de recharger la page'
+      );
+    }
+    throw e;
+  }
+};
 
 export const lisEvolutionMesures = async (
   idService: UUID
