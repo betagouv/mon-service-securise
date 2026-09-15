@@ -15,11 +15,19 @@
   "prConcurrentLimit": 2,
   "platform": "github",
   "repositories": ["betagouv/mon-service-securise"],
+  "constraints": {
+    "node": "24.x"
+  },
   "packageRules": [
     {
       "description": "@lab-anssi/ui-kit ne se met pas à jour via package.json seul : voir scripts/ui-kit/maj.sh, qui synchronise aussi UI_KIT_VERSION dans src/vues/mss.pug et pnpm-workspace.yaml",
       "matchPackageNames": ["@lab-anssi/ui-kit"],
       "enabled": false
+    },
+    {
+      "description": "@types/node ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24). À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25.0.0"
     },
     {
       "description": "lockFileMaintenance",
