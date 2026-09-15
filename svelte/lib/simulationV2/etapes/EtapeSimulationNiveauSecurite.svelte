@@ -9,6 +9,7 @@
     metsAJourSimulation,
     niveauSecuriteMinimalRequis,
   } from '../simulationv2.api';
+  import Loader from '../../ui/Loader.svelte';
 
   interface Props {
     estComplete: boolean;
@@ -73,6 +74,10 @@
     {niveauDeSecuriteMinimal}
     onChampModifie={metsAJour}
   />
+{:else}
+  <div class="loader">
+    <Loader />
+  </div>
 {/if}
 
 <style>
@@ -84,5 +89,9 @@
     padding: 0;
     margin: -24px 0 8px;
     width: 690px;
+  }
+
+  .loader {
+    margin: auto;
   }
 </style>

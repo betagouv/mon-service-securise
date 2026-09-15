@@ -8,6 +8,7 @@
   import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import NiveauDeSecuriteEditable from '../NiveauDeSecuriteEditable.svelte';
+  import Loader from '../../ui/Loader.svelte';
 
   interface Props {
     estComplete: boolean;
@@ -74,6 +75,10 @@
         await metsAJourBrouillonService($leBrouillon.id, miseAJour);
     }}
   />
+{:else}
+  <div class="loader">
+    <Loader />
+  </div>
 {/if}
 
 <style>
@@ -85,5 +90,9 @@
     padding: 0;
     margin: -24px 0 8px;
     width: 690px;
+  }
+
+  .loader {
+    margin: auto;
   }
 </style>
