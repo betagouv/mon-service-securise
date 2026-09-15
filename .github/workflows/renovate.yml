@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Lance la github action Renovate
-        uses: renovatebot/github-action@6d859fc95779be83a0335ca704879b47e5d79641 # v46.1.16
+        uses: renovatebot/github-action@37beffda261423addd537c33f2d126df7f6ffbab # v46.2.6
         with:
           configurationFile: .github/renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
