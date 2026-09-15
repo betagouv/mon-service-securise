@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22
+ARG NODE_VERSION=24
 
 #checkov:skip=CKV_DOCKER_2:Uniquement utilisé en local pour le dev
 #checkov:skip=CKV_DOCKER_3:Uniquement utilisé en local pour le dev
