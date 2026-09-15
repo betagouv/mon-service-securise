@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "test:a11y": "playwright test",
     "start": "node dist/server.js",
-    "prepare": "husky install",
+    "prepare": "husky",
     "preinstall": "npx only-allow@1.2.2 pnpm"
   },
   "lint-staged": {
