@@ -1,5 +1,5 @@
 import axios from 'axios';
-import express, { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 import { sentry } from './adaptateurEnvironnement.js';
 import { UUID } from '../typesBasiques.js';
@@ -39,25 +39,17 @@ const logueErreur = (
   });
 };
 
-const initialise = (applicationExpress: express.Application) => {
+const initialise = () => {
   const config = sentry();
 
   Sentry.init({
     dsn: config.dsn(),
     environment: config.environnement(),
-    integrations: [
-      new Sentry.Integrations.Express({ app: applicationExpress }),
-      new Sentry.Integrations.Postgres(),
-      ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-    ],
     ignoreTransactions: config.cheminsIgnoresParTracing(),
     tracesSampleRate: config.sampleRateDuTracing(),
     maxValueLength: 50_000,
   });
   Sentry.setTag('mss-source', 'backend');
-
-  applicationExpress.use(Sentry.Handlers.requestHandler());
-  applicationExpress.use(Sentry.Handlers.tracingHandler());
 };
 
 const controleurErreurs = (
@@ -73,7 +65,9 @@ const controleurErreurs = (
     });
   }
 
-  Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
+  const idEvenement = Sentry.captureException(erreur);
+  (reponse as Response & { sentry?: string }).sentry = idEvenement;
+  suite(erreur);
 };
 
 const identifieUtilisateur = (
