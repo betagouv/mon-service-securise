@@ -71,4 +71,18 @@ describe('La file de mises à jour', () => {
     await laissePasserLesPromesses();
     expect(callbackAppelee).toBe(true);
   });
+
+  it('sait attendre la fin de toute la file', async () => {
+    const p1 = unePromesse();
+    const p2 = unePromesse();
+    const file = creeFileMisesAJour();
+
+    file.ajoute(p1.tache);
+    file.ajoute(p2.tache);
+    const promesseDeFin = file.attendsLaFin();
+    p1.termine();
+    p2.termine();
+    await promesseDeFin;
+    expect(get(file.enCours)).toBe(false);
+  });
 });
