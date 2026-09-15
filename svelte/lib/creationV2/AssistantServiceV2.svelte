@@ -103,7 +103,6 @@
             taille="md"
             icone="arrow-left-line"
             positionIcone="gauche"
-            actif={!miseAJourEnCours}
             onclick={navigationStore.precedent}
           ></lab-anssi-bouton>
         {/if}
@@ -121,9 +120,7 @@
             ? 'check-line'
             : 'arrow-right-line'}
           positionIcone="droite"
-          actif={questionCouranteEstComplete &&
-            !enCoursDeChargement &&
-            !miseAJourEnCours}
+          actif={questionCouranteEstComplete && !enCoursDeChargement}
           onclick={async () =>
             $etapeCourante.estDerniereQuestion
               ? await onFinalise?.()
