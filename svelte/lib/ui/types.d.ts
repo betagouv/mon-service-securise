@@ -84,11 +84,7 @@ export type LibellePriorite = {
 export type EcheanceMesure = string;
 
 export type ResumeNiveauDroit =
-  | 'ADMIN'
-  | 'PROPRIETAIRE'
-  | 'ECRITURE'
-  | 'LECTURE'
-  | 'PERSONNALISE';
+  'ADMIN' | 'PROPRIETAIRE' | 'ECRITURE' | 'LECTURE' | 'PERSONNALISE';
 
 export enum CategorieMesure {
   GOUVERNANCE = 'gouvernance',

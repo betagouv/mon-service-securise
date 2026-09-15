@@ -87,8 +87,8 @@
   };
 
   let elementHtml:
-    | (HTMLElement & { errorMessage: string; status: string })
-    | undefined = $state();
+    (HTMLElement & { errorMessage: string; status: string }) | undefined =
+    $state();
 
   type BlurEvent = FocusEvent & { target: HTMLInputElement };
   const metAJour = {

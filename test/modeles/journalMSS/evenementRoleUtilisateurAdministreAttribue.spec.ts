@@ -89,10 +89,7 @@ describe("Un événement d'attribution de rôle à un utilisateur administré", 
       };
       delete donneesTest[
         proprieteRequise as
-          | 'idAdmin'
-          | 'idUtilisateurAdministre'
-          | 'role'
-          | 'idsServices'
+          'idAdmin' | 'idUtilisateurAdministre' | 'role' | 'idsServices'
       ];
 
       expect(

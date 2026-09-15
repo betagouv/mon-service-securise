@@ -16,9 +16,6 @@ export type ConfigurationRisqueV2 = Record<
 export type IdRisqueV2 = (typeof idsRisquesV2)[number];
 
 export type CategorieRisque =
-  | 'disponibilite'
-  | 'integrite'
-  | 'confidentialite'
-  | 'tracabilite';
+  'disponibilite' | 'integrite' | 'confidentialite' | 'tracabilite';
 
 export type DonneesRisquesV2 = Partial<Record<IdRisqueV2, DonneesRisqueV2>>;

@@ -15,14 +15,12 @@ const detecteElementHTML = async (
 ): Promise<HTMLElement> => {
   return new Promise((resolve) => {
     const el = document.querySelectorAll(selecteur)[index] as
-      | HTMLElement
-      | undefined;
+      HTMLElement | undefined;
     if (el) return resolve(el);
 
     const observer = new MutationObserver(() => {
       const el = document.querySelectorAll(selecteur)[index] as
-        | HTMLElement
-        | undefined;
+        HTMLElement | undefined;
       if (el) {
         observer.disconnect();
         resolve(el);

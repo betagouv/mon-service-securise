@@ -4,18 +4,12 @@ import type { StatutMesure } from '../../../modeles/mesure.js';
 export type Vraisemblance = 1 | 2 | 3 | 4;
 
 export type IdentifiantGroupeMesureVraisemblance =
-  | 'a'
-  | 'b'
-  | 'c'
-  | 'd'
-  | 'e'
-  | 'f'
-  | 'g'
-  | 'h'
-  | 'z';
+  'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'z';
 
 export type PoidsGroupeMesure = {
-  [K in Capitalize<IdentifiantGroupeMesureVraisemblance> as `poids${K}`]: number;
+  [
+    K in Capitalize<IdentifiantGroupeMesureVraisemblance> as `poids${K}`
+  ]: number;
 };
 
 export type MesureAvecStatut = {

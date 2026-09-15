@@ -14,10 +14,7 @@
       | 'rafraichir'
       | undefined;
     type?:
-      | 'bouton-primaire'
-      | 'bouton-secondaire'
-      | 'bouton-tertiaire'
-      | 'lien';
+      'bouton-primaire' | 'bouton-secondaire' | 'bouton-tertiaire' | 'lien';
     taille?: 'petit' | 'moyen';
     classe?: string;
     href: string;

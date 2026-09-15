@@ -44,11 +44,7 @@ type Ecriture = 2;
 type Permission = Invisible | Lecture | Ecriture;
 
 export type Rubrique =
-  | 'DECRIRE'
-  | 'SECURISER'
-  | 'HOMOLOGUER'
-  | 'RISQUES'
-  | 'CONTACTS';
+  'DECRIRE' | 'SECURISER' | 'HOMOLOGUER' | 'RISQUES' | 'CONTACTS';
 
 export const enDroitsSurRubrique = (
   resume: ResumeNiveauDroit

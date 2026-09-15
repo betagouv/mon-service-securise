@@ -41,9 +41,7 @@ export type ModificateursDeRegles = {
 };
 
 export type ModificateurPourBesoin =
-  | 'Indispensable'
-  | 'Recommandée'
-  | 'Absente';
+  'Indispensable' | 'Recommandée' | 'Absente';
 
 export type BesoinsDeSecurite = {
   niveau1: ModificateurPourBesoin;

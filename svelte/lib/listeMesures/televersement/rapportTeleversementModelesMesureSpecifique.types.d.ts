@@ -18,9 +18,7 @@ export type ModeleTeleverse = {
 };
 
 export type ErreurModele =
-  | 'INTITULE_MANQUANT'
-  | 'CATEGORIE_INCONNUE'
-  | 'MESURE_DUPLIQUEE';
+  'INTITULE_MANQUANT' | 'CATEGORIE_INCONNUE' | 'MESURE_DUPLIQUEE';
 
 export const MessagesErreur: Record<ErreurModele, string> = {
   INTITULE_MANQUANT: 'Intitulé manquant',

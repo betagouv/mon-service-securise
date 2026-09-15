@@ -38,11 +38,7 @@ export type DonneesDossier = {
 };
 
 type IdentifiantEtape =
-  | 'decision'
-  | 'dateTelechargement'
-  | 'autorite'
-  | 'avis'
-  | 'documents';
+  'decision' | 'dateTelechargement' | 'autorite' | 'avis' | 'documents';
 
 class Dossier extends InformationsService {
   readonly id!: UUID;

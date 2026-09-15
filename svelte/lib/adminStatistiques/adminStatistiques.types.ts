@@ -14,11 +14,7 @@ declare global {
 type EvolutionMensuelle = Array<{ mois: string; total: number }>;
 
 export type TrancheExpirationHomologation =
-  | 'expire'
-  | '< 6'
-  | '< 12'
-  | '< 24'
-  | '< 36';
+  'expire' | '< 6' | '< 12' | '< 24' | '< 36';
 
 export type Statistiques = {
   nombreServicesCompletudeSuperieur80: number;

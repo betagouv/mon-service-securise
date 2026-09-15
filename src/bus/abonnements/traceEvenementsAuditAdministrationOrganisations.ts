@@ -107,8 +107,7 @@ const traceModificationPerimetreAdminDansAudit =
   }) =>
   async (
     evenement:
-      | EvenementAdminNommeSurOrganisation
-      | EvenementAdminRetireDeOrganisation
+      EvenementAdminNommeSurOrganisation | EvenementAdminRetireDeOrganisation
   ) => {
     const { idCible, idActeur, siret } = evenement;
 
