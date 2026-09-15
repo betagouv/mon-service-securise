@@ -54,9 +54,9 @@ const creeServeur = ({
 }) => {
   let serveur;
 
-  const app = express();
+  adaptateurGestionErreur.initialise();
 
-  adaptateurGestionErreur.initialise(app);
+  const app = express();
 
   app.use(middleware.redirigeVersUrlBase);
 
