@@ -61,6 +61,8 @@ export const metsAJourSimulation = async (
 export const niveauSecuriteMinimalRequis = async (
   idService: UUID
 ): Promise<IdNiveauDeSecurite> => {
+  await fileMAJSimulation.attendsLaFin();
+
   try {
     return (
       await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
@@ -88,6 +90,7 @@ export const lisEvolutionMesures = async (
   ).data as ResumeEvolutions;
 
 export const finaliseMigration = async (idService: UUID) => {
+  await fileMAJSimulation.attendsLaFin();
   await axios.post(
     `/api/service/${idService}/simulation-migration-referentiel/finalise`
   );

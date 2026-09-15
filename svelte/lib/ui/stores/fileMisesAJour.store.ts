@@ -19,5 +19,13 @@ export const creeFileMisesAJour = (callbackErreur: () => void = () => {}) => {
     return resultat;
   };
 
-  return { enCours: { subscribe: enCours.subscribe }, ajoute };
+  const attendsLaFin = async () => {
+    let tacheAttendue: Promise<void>;
+    do {
+      tacheAttendue = derniereTache;
+      await tacheAttendue;
+    } while (tacheAttendue !== derniereTache);
+  };
+
+  return { enCours: { subscribe: enCours.subscribe }, ajoute, attendsLaFin };
 };

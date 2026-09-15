@@ -19,6 +19,8 @@ export const creeBrouillonService = async (
 export const finaliseBrouillonService = async (
   idBrouillon: UUID
 ): Promise<UUID> => {
+  await fileMAJBrouillon.attendsLaFin();
+
   const reponse = await axios.post<{ idService: UUID }>(
     `/api/brouillon-service/${idBrouillon}/finalise`
   );
@@ -62,6 +64,8 @@ export const niveauSecuriteMinimalRequis = async (
   id: UUID
 ): Promise<IdNiveauDeSecurite> => {
   if (id === donneesVisiteGuidee.brouillonComplet.id) return 'niveau1';
+
+  await fileMAJBrouillon.attendsLaFin();
 
   try {
     const reponse = await axios.get<{
