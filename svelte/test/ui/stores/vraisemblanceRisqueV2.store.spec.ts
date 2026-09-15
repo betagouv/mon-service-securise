@@ -3,6 +3,8 @@ import { storeVraisemblanceRisqueV2 } from '../../../lib/ui/stores/vraisemblance
 import axios from 'axios';
 import { toasterStore } from '../../../lib/ui/stores/toaster.store';
 
+vi.mock('axios');
+
 const globalAny: Record<string, unknown> = global;
 
 describe('Le store des vraisemblances de risque v2', () => {
@@ -15,7 +17,6 @@ describe('Le store des vraisemblances de risque v2', () => {
   });
 
   beforeEach(() => {
-    vi.mock('axios');
     vi.mocked(axios.get).mockResolvedValue({
       data: {
         risques: [

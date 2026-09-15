@@ -2,6 +2,8 @@ import { get } from 'svelte/store';
 import { storeNotifications } from '../../../lib/ui/stores/notifications.store';
 import axios from 'axios';
 
+vi.mock('axios');
+
 const globalAny: Record<string, unknown> = global;
 
 describe('Le store de notifications', () => {
@@ -11,10 +13,6 @@ describe('Le store de notifications', () => {
 
   afterAll(() => {
     delete globalAny.axios;
-  });
-
-  beforeEach(() => {
-    vi.mock('axios');
   });
 
   afterEach(() => {
