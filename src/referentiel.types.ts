@@ -36,6 +36,12 @@ export type IdNouvelleFonctionnalite =
   (typeof donnees.nouvellesFonctionnalites)[number]['id'];
 export type IdNotificationTransactionnelle =
   keyof typeof donnees.notificationsTransactionnelles;
+export type IdProfil = keyof typeof donnees.reglesPersonnalisation.profils;
+type ReglePersonnalisation =
+  (typeof donnees.reglesPersonnalisation.profils)[IdProfil]['regles'][number];
+export type CritereRegle =
+  | Extract<ReglePersonnalisation, { presence: unknown }>['presence'][number]
+  | Extract<ReglePersonnalisation, { absence: unknown }>['absence'][number];
 
 export type DonneesReferentiel = {
   indiceCyber: {
