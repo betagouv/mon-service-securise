@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "test:a11y": "playwright test",
     "start": "node dist/server.js",
-    "prepare": "husky install",
+    "prepare": "husky",
     "preinstall": "npx only-allow@1.2.2 pnpm"
   },
   "lint-staged": {
@@ -104,7 +104,7 @@
     "expect.js": "^0.3.1",
     "glob": "^13.0.6",
     "globals": "^17.4.0",
-    "husky": "^8.0.3",
+    "husky": "^9.0.0",
     "jquery": "^3.6.3",
     "jsdom": "^29.0.0",
     "knex-pglite": "^0.14.0",
