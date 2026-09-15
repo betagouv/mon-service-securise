@@ -27,6 +27,42 @@
         "lockFileMaintenance"
       ],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Regroupe les montées de version patch npm dans une seule PR",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "npm - mises à jour patch"
+    },
+    {
+      "description": "Regroupe les montées de version mineure npm dans une seule PR",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "npm - mises à jour mineures"
+    },
+    {
+      "description": "Regroupe les montées de version patch des GitHub Actions dans une seule PR",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "github-actions - mises à jour patch"
+    },
+    {
+      "description": "Regroupe les montées de version mineure des GitHub Actions dans une seule PR",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "github-actions - mises à jour mineures"
+    },
+    {
+      "description": "Regroupe les montées de version patch Docker (docker-compose + Dockerfile) dans une seule PR",
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "docker - mises à jour patch"
+    },
+    {
+      "description": "Regroupe les montées de version mineure Docker (docker-compose + Dockerfile) dans une seule PR",
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "docker - mises à jour mineures"
     }
   ]
 }
