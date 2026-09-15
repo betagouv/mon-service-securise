@@ -190,8 +190,7 @@
   });
 
   let elementEtapesModification:
-    | EtapesModificationMultipleStatutPrecision
-    | undefined = $state();
+    EtapesModificationMultipleStatutPrecision | undefined = $state();
 </script>
 
 <ContenuTiroir>

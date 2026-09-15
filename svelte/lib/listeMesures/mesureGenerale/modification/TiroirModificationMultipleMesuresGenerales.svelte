@@ -108,8 +108,7 @@
   };
 
   let elementEtapesModification:
-    | EtapesModificationMultipleStatutPrecision
-    | undefined = $state();
+    EtapesModificationMultipleStatutPrecision | undefined = $state();
 
   let tabActive = $state(0);
   const configurationsTabs = [

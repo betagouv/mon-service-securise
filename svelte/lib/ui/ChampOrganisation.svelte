@@ -26,8 +26,8 @@
   let suggestions: OrganisationAvecLabel[] = $state([]);
   let suggestionsVisibles = $state(false);
   let elementInput:
-    | (HTMLInputElement & { status: 'default' | 'error' })
-    | undefined = $state(undefined);
+    (HTMLInputElement & { status: 'default' | 'error' }) | undefined =
+    $state(undefined);
 
   onMount(async () => {
     if (!siret) return;

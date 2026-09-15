@@ -72,9 +72,7 @@ import { mount } from 'svelte';
 
 mount(MonComposant, {
   target: document.getElementById('mon-composant')!,
-  props: {
-    /* ... */
-  },
+  props: {/* ... */},
 });
 ```
 

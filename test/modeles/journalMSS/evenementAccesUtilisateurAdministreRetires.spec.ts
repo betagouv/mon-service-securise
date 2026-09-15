@@ -82,9 +82,7 @@ describe("Un événement de retrait d'accès à un utilisateur administré", () 
       };
       delete donneesTest[
         proprieteRequise as
-          | 'idAdmin'
-          | 'idUtilisateurAdministre'
-          | 'idsServices'
+          'idAdmin' | 'idUtilisateurAdministre' | 'idsServices'
       ];
 
       expect(

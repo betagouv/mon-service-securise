@@ -3,10 +3,7 @@ import { resultatsDeRecherche } from './resultatDeRecherche.store';
 import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 
 export type StatutHomologation =
-  | 'bientotExpiree'
-  | 'enCoursEdition'
-  | 'expiree'
-  | 'tous';
+  'bientotExpiree' | 'enCoursEdition' | 'expiree' | 'tous';
 
 type ServicesParStatutHomologation = {
   tous: ServiceAvecIndiceCyber[];

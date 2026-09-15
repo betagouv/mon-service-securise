@@ -31,7 +31,8 @@
     selection?: string[];
     preSelectionImmuable?: string[];
     champIdentifiantLigne?: string;
-    composantTableauVide?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    composantTableauVide?:
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       { composant: Component<any>; props: Record<string, any> } | undefined;
     actionsComplementaires?: Snippet;
     onglets?: Snippet;

@@ -81,8 +81,7 @@ const convertisDonneesCaracterePersonnel = (
 ) => {
   const categoriesDonneesTraitees: CategorieDonneesTraitees[] = [];
   const donneesCaracterePersonnel = description.donneesCaracterePersonnel as
-    | string[]
-    | undefined;
+    string[] | undefined;
   const correspondancesDonneesCaracterePersonnel: Record<
     string,
     CategorieDonneesTraitees

@@ -1,9 +1,5 @@
 export type Role =
-  | 'LECTURE'
-  | 'ECRITURE'
-  | 'PERSONNALISE'
-  | 'ADMIN'
-  | 'PROPRIETAIRE';
+  'LECTURE' | 'ECRITURE' | 'PERSONNALISE' | 'ADMIN' | 'PROPRIETAIRE';
 
 export type UtilisateurAdministre = {
   id: string;

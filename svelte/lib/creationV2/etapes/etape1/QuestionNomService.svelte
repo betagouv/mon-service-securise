@@ -11,8 +11,8 @@
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   let elementHtml:
-    | (HTMLElement & { errorMessage: string; status: string })
-    | undefined = $state();
+    (HTMLElement & { errorMessage: string; status: string }) | undefined =
+    $state();
 
   $effect(() => {
     estComplete =

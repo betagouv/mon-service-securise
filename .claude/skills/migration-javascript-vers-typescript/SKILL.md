@@ -46,13 +46,13 @@ Vitest est configuré avec `globals: true` : `describe`, `it`, `expect`, `before
 1. `git mv monFichier.spec.js monFichier.spec.ts`.
 2. **Supprimer** `import expect from 'expect.js';`.
 3. **Traduire les matchers** :
-   | expect.js | Vitest |
-   | --- | --- |
-   | `.to.be(x)` | `.toBe(x)` |
-   | `.to.equal(x)` | `.toEqual(x)` |
-   | `.to.eql(x)` | `.toEqual(x)` |
+   | expect.js                                | Vitest                    |
+   | ---------------------------------------- | ------------------------- |
+   | `.to.be(x)`                              | `.toBe(x)`                |
+   | `.to.equal(x)`                           | `.toEqual(x)`             |
+   | `.to.eql(x)`                             | `.toEqual(x)`             |
    | `.to.be.a(Classe)` / `.to.be.an(Classe)` | `.toBeInstanceOf(Classe)` |
-   | `.to.have.length(n)` | `.toHaveLength(n)` |
+   | `.to.have.length(n)`                     | `.toHaveLength(n)`        |
 4. **Exceptions** : remplacer le pattern `try { ...; expect().fail(); } catch (e) { expect(e).to.be.a(ErreurX); expect(e.message).to.equal('...'); }` par :
    ```ts
    expect(() => codeQuiLeve()).toThrowError(new ErreurX('message attendu'));

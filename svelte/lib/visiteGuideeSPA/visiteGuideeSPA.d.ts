@@ -28,10 +28,7 @@ export type PageFondVisiteGuidee =
 export type EtapeVisiteGuidee = 1 | 2 | 3 | 4;
 
 export type EtapeVisiteGuideeAdditionnelle =
-  | 'contributeurs'
-  | 'liste-mesures'
-  | 'televersement'
-  | 'organisations';
+  'contributeurs' | 'liste-mesures' | 'televersement' | 'organisations';
 
 export type DecoupeVisiteGuidee = {
   marge: number;
