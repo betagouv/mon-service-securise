@@ -3,8 +3,13 @@
 minimumReleaseAge: 10080 # 7 jours (exprimé en minutes)
 preferFrozenLockfile: true
 
-onlyBuiltDependencies:
-  - bcrypt@6.0.0
+allowBuilds:
+  bcrypt: true
+  '@lab-anssi/lib': false
+  '@parcel/watcher': false
+  '@sentry/cli': false
+  esbuild: false
+  unrs-resolver: false
 
 minimumReleaseAgeExclude:
   - '@lab-anssi/ui-kit@1.60.9'
