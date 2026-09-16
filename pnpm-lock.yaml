@@ -86,9 +86,6 @@ importers:
       lusca:
         specifier: ^1.7.0
         version: 1.7.0
-      marked:
-        specifier: ^18.0.0
-        version: 18.0.12
       multer:
         specifier: ^2.1.1
         version: 2.3.0
@@ -3203,11 +3200,6 @@ packages:
   marked@13.0.3:
     resolution: {integrity: sha512-rqRix3/TWzE9rIoFGIn8JmsVfhiuC8VIQ8IdX5TfzmeBucdY05/0UlzKaw0eVtpcN/OdVFpBk7CjKGo9iHJ/zA==}
     engines: {node: '>= 18'}
-    hasBin: true
-
-  marked@18.0.12:
-    resolution: {integrity: sha512-LEm4ga2YeI2T3GVHj9b0BaDPPk93LLTHMFeMyQbNIzPxc8vCI0y/scy0ZA6z6lXKyT9j9Nhl/OC6ZYKYGuFScA==}
-    engines: {node: '>= 20'}
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -7244,8 +7236,6 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.6.0
 
   marked@13.0.3: {}
-
-  marked@18.0.12: {}
 
   math-intrinsics@1.1.0: {}
 
