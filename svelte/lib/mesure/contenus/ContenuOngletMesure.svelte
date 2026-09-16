@@ -73,8 +73,7 @@
         bind:value={$store.mesureEditee.mesure.descriptionLongue}
         id="descriptionLongue"
         placeholder="Description de la mesure"
-        readonly={estLectureSeule}
-      ></textarea>
+        readonly={estLectureSeule}></textarea>
     </label>
   {/if}
   {#if $configurationAffichage.doitAfficherPorteursSinguliers && $store.mesureEditee.mesure.porteursSinguliers}
@@ -114,8 +113,7 @@
       maxlength="3000"
       id="details"
       placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
-      readonly={estLectureSeule}
-    ></textarea>
+      readonly={estLectureSeule}></textarea>
   </label>
 
   {#if $configurationAffichage.doitAfficherChoixCategorie}
@@ -156,8 +154,7 @@
           <textarea
             bind:value={commentaireRetourUtilisateur}
             placeholder="Apportez des précisions ou formulez une suggestion."
-            rows="3"
-          ></textarea>
+            rows="3"></textarea>
         {/if}
       </div>
     {/if}
