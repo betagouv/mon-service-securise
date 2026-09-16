@@ -23,3 +23,5 @@ jobs:
         with:
           configurationFile: .github/renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          RENOVATE_ALLOWED_COMMANDS: '["^node scripts/renovate/repareIntegriteLockfile\\.js$"]'

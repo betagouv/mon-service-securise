@@ -18,7 +18,6 @@
   "constraints": {
     "node": "24.x"
   },
-  "allowedCommands": ["^node scripts/renovate/repareIntegriteLockfile\\.js$"],
   "postUpgradeTasks": {
     "commands": ["node scripts/renovate/repareIntegriteLockfile.js"],
     "fileFilters": ["pnpm-lock.yaml"],
