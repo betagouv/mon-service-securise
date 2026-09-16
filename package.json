@@ -2,7 +2,7 @@
   "type": "module",
   "name": "MonServiceSécurisé",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@12.4.0",
   "description": "",
   "scripts": {
     "build:front": "vite build --config svelte/vite.config.mts",
