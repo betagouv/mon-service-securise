@@ -32,7 +32,7 @@
     {
       "description": "L'image Docker node (Dockerfile de dev) ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24) : la contrainte \"constraints.node\" ne s'applique qu'au manager npm, pas dockerfile. À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
       "matchManagers": ["dockerfile"],
-      "matchPackageNames": ["node"],
+      "matchPackageNames": ["docker.io/node"],
       "allowedVersions": "<25.0.0"
     },
     {
@@ -47,7 +47,7 @@
     },
     {
       "description": "postgres ne doit pas dépasser la version majeure utilisée en production (actuellement 14, cf. docker-compose.yml). À relever manuellement lors d'une montée de version PostgreSQL planifiée.",
-      "matchPackageNames": ["postgres"],
+      "matchPackageNames": ["docker.io/postgres"],
       "matchDatasources": ["docker"],
       "allowedVersions": "<15.0.0"
     },
