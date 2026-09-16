@@ -18,11 +18,6 @@
   "constraints": {
     "node": "24.x"
   },
-  "postUpgradeTasks": {
-    "commands": ["node scripts/renovate/repareIntegriteLockfile.js"],
-    "fileFilters": ["pnpm-lock.yaml"],
-    "executionMode": "branch"
-  },
   "packageRules": [
     {
       "description": "@lab-anssi/ui-kit ne se met pas à jour via package.json seul : voir scripts/ui-kit/maj.sh, qui synchronise aussi UI_KIT_VERSION dans src/vues/mss.pug et pnpm-workspace.yaml",
