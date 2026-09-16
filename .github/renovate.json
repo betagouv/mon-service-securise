@@ -41,6 +41,11 @@
       "allowedVersions": "<7.0.0"
     },
     {
+      "description": "pnpm ne doit pas dépasser la v11 : Clever Cloud ne gère pas encore pnpm v12. À relever manuellement dès que Clever Cloud supporte pnpm v12.",
+      "matchPackageNames": ["pnpm"],
+      "allowedVersions": "<12.0.0"
+    },
+    {
       "description": "postgres ne doit pas dépasser la version majeure utilisée en production (actuellement 14, cf. docker-compose.yml). À relever manuellement lors d'une montée de version PostgreSQL planifiée.",
       "matchPackageNames": ["postgres"],
       "matchDatasources": ["docker"],
