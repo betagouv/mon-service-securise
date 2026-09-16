@@ -27,8 +27,7 @@
     bind:value={contenu}
     rows={tailleMinimale}
     placeholder={aideSaisie}
-    required={requis}
-  ></textarea>
+    required={requis}></textarea>
 </label>
 
 <style lang="scss">

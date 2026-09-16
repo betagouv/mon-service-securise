@@ -31,8 +31,7 @@
   use:validationChamp={requis ? messageErreur : ''}
   rows={lignes}
   class:sans-hauteur={!lignes}
-  maxlength={max}
-></textarea>
+  maxlength={max}></textarea>
 
 <style>
   textarea {
