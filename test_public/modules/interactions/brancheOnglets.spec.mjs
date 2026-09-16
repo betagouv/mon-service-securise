@@ -1,12 +1,14 @@
+// @vitest-environment jsdom
 import expect from 'expect.js';
-import jquery from 'jquery';
-import { JSDOM } from 'jsdom';
+import $ from 'jquery';
 
 import brancheOnglets from '../../../public/modules/interactions/brancheOnglets.mjs';
 
+global.$ = $;
+
 describe('Le branchement des onglets', () => {
   beforeEach(() => {
-    const sourcePage = `
+    document.body.innerHTML = `
       <nav id="onglets-liens">
         <a class="actif" id="onglet-gouvernance"></a>
         <a id="onglet-parties-prenantes">Parties prenantes</a>
@@ -14,8 +16,6 @@ describe('Le branchement des onglets', () => {
       <div class="onglet" id="gouvernance"></div>
       <div class="onglet" id="parties-prenantes"></div>
     `;
-    const dom = new JSDOM(sourcePage);
-    global.$ = jquery(dom.window);
   });
 
   it("rend visible l'onglet actif", () => {

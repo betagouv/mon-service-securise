@@ -1,11 +1,13 @@
+// @vitest-environment jsdom
 import expect from 'expect.js';
-import jquery from 'jquery';
-import { JSDOM } from 'jsdom';
+import $ from 'jquery';
 
 import {
   brancheValidationCasesACocher,
   declencheValidationCasesACocher,
 } from '../../../public/modules/interactions/brancheValidationCasesACocher.mjs';
+
+global.$ = $;
 
 describe('Le branchement de la validation des cases à cocher', () => {
   const validiteToutesCases = (selecteurGroupe) =>
@@ -21,7 +23,7 @@ describe('Le branchement de la validation des cases à cocher', () => {
   };
 
   beforeEach(() => {
-    const sourcePage = `
+    document.body.innerHTML = `
     <fieldset id="casesACocher" class="casesACocher" required>
       <input id="case1" name="casesACocher" value="valeur1" type="checkbox">
       <input id="case2" name="casesACocher" value="valeur2" type="checkbox">
@@ -31,8 +33,6 @@ describe('Le branchement de la validation des cases à cocher', () => {
       <input id="case4" name="casesACocher2" value="valeur4" type="checkbox" checked>
     </fieldset>
     `;
-    const dom = new JSDOM(sourcePage);
-    global.$ = jquery(dom.window);
   });
 
   describe("quand le groupe n'est pas indiqué comme requis", () => {
