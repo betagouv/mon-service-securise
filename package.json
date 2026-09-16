@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
+    "@e965/xlsx": "^0.20.3",
     "@gouvfr/dsfr-chart": "^2.1.1",
     "@lab-anssi/lib": "^2.2.1",
     "@lab-anssi/ui-kit": "1.60.9",
@@ -70,7 +71,6 @@
     "string-strip-html": "^13.0.0",
     "tippy.js": "^6.3.7",
     "uuid": "^14.0.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.1.5"
   },
   "devDependencies": {

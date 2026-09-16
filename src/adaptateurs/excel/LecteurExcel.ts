@@ -1,4 +1,4 @@
-import xlsx, { WorkBook } from 'xlsx';
+import xlsx, { WorkBook } from '@e965/xlsx';
 import { ErreurFichierXlsInvalide } from '../../erreurs.js';
 
 class LecteurExcel {
