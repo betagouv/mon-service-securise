@@ -9,7 +9,7 @@ RUN apt-get install -y \
   jq
 
 WORKDIR /usr/src/app
-COPY package.json pnpm-lock.yaml /usr/src/app/
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /usr/src/app/
 RUN npm install -g "$(jq -r '.packageManager' package.json)"
 RUN pnpm install
 
