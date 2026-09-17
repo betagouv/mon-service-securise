@@ -228,10 +228,8 @@ test.describe.serial('Création de service v2', () => {
       await page.waitForURL(
         `**/service/${idService}/homologation/edition/etape/autorite`
       );
-      // `dsfr-input` n'associe pas son label au champ via l'accessibilité
-      // (getByLabel ne le trouve pas) : on cible les deux champs par ordre.
-      await page.getByRole('textbox').nth(0).fill('Jean Dupont');
-      await page.getByRole('textbox').nth(1).fill('Directeur général');
+      await page.getByLabel('Prénom Nom').fill('Jean Dupont');
+      await page.getByLabel('Fonction').fill('Directeur général');
       await Promise.all([
         page.waitForResponse(
           (r) =>
