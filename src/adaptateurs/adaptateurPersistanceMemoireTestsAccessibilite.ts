@@ -16,7 +16,6 @@ export const nouvelAdaptateur = () => {
       adaptateurEnvironnement as AdaptateurEnvironnementPourChiffrement,
   });
 
-  const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur();
   const {
     utilisateurLambda,
     entite,
@@ -26,6 +25,16 @@ export const nouvelAdaptateur = () => {
     utilisateurFuturAdmin,
     utilisateurSuperviseur,
   } = donneesTestsAccessibilite;
+
+  const siretHashEntite = chiffrement.hacheSha256(entite.siret);
+  const persistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+    adminsOrganisations: [
+      { idAdmin: utilisateurAdmin.id, siretHash: siretHashEntite },
+    ],
+    superviseurs: [
+      { idSuperviseur: utilisateurSuperviseur.id, siretHash: siretHashEntite },
+    ],
+  });
 
   persistance.ajouteUtilisateur(
     utilisateurLambda.id,
