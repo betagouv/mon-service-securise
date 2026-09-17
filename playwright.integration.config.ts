@@ -4,6 +4,7 @@ const PORT = 3334;
 
 export default defineConfig({
   testDir: './test_integration',
+  globalSetup: './test_integration/globalSetup.ts',
   use: {
     baseURL: `http://localhost:${PORT}`,
     viewport: { width: 1550, height: 900 },
