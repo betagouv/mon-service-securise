@@ -1,6 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "onboarding": true,
   "enabledManagers": [
     "docker-compose",
     "dockerfile",
@@ -13,8 +12,6 @@
   "commitMessagePrefix": "[RENOVATE]",
   "schedule": ["* 8 * * 2"],
   "timezone": "Europe/Paris",
-  "platform": "github",
-  "repositories": ["betagouv/mon-service-securise"],
   "constraints": {
     "node": "24.x"
   },
