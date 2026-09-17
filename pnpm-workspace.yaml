@@ -10,6 +10,7 @@ allowBuilds:
   '@sentry/cli': false
   esbuild: false
   unrs-resolver: false
+  puppeteer: false
 
 minimumReleaseAgeExclude:
   - '@lab-anssi/ui-kit@1.60.9'
