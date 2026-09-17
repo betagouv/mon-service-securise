@@ -127,6 +127,7 @@
           : { onsupprimer: () => commandeAvis.supprime(index) }}
       >
         <TextareaDSFR
+          id="collaborateurs-avis"
           label="Collaborateurs métier et techniques renseignant l'avis"
           hint="Un collaborateur par ligne"
           rows={3}
@@ -169,6 +170,7 @@
         ></dsfr-radios-group>
 
         <TextareaDSFR
+          id="recommandations"
           label="Commentaires et recommandations"
           rows={6}
           maxlength={1000}

@@ -2,6 +2,7 @@
   import type { HTMLTextareaAttributes } from 'svelte/elements';
 
   interface Props extends HTMLTextareaAttributes {
+    id?: string;
     label: string;
     value: string;
     rows: number;
@@ -9,6 +10,7 @@
     disabled?: boolean;
   }
   let {
+    id,
     hint,
     label,
     value = $bindable(),
@@ -23,6 +25,7 @@
 </script>
 
 <dsfr-textarea
+  {id}
   {label}
   {hint}
   {rows}
