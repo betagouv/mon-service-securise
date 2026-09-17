@@ -2,7 +2,6 @@ import { rmSync } from 'fs';
 import { chromium, FullConfig } from '@playwright/test';
 import {
   captureDEcran,
-  fermeModale2FASiPresente,
   fermeModaleVisiteGuideeSiPresente,
 } from './aideAuxTests.js';
 import { donneesTestsAccessibilite } from './donneesTestAccessibilite.js';
@@ -38,7 +37,6 @@ export default async (config: FullConfig) => {
         `${urlBase}/oidc/apres-authentification?email=${donneesTestsAccessibilite.utilisateurLambda.email}`
       );
       await page.waitForURL(/tableauDeBord/);
-      await fermeModale2FASiPresente(page);
       await fermeModaleVisiteGuideeSiPresente(page);
       await page.waitForLoadState('domcontentloaded');
     } catch (e) {

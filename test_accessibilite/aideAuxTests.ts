@@ -96,15 +96,6 @@ export const navigueSurPageConnectee = async (
   await page.waitForURL(urlPage, { waitUntil: 'networkidle' });
 };
 
-export const fermeModale2FASiPresente = async (page: Page) => {
-  const popin2FAEstVisible = await page
-    .locator(
-      ':text("Activez l\'authentification multifacteurs sur ProConnect")'
-    )
-    .isVisible();
-  if (popin2FAEstVisible) await page.click('text=Me le rappeler plus tard');
-};
-
 export const fermeModaleNouveauReferentielSiPresente = async (page: Page) => {
   const popinNouveauReferentielEstVisible = await page
     .locator(':text("Mise en place d’un nouveau référentiel de mesures")')
@@ -126,14 +117,12 @@ export const fermeModaleVisiteGuideeSiPresente = async (page: Page) => {
 
 export const navigueSurTableauDeBordAvecConnexion = async (page: Page) => {
   await navigueSurPageConnectee('/tableauDeBord', page);
-  await fermeModale2FASiPresente(page);
   await fermeModaleNouveauReferentielSiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
 
 export const navigueSurTableauDeBordSansConnexion = async (page: Page) => {
   await page.goto('/tableauDeBord');
-  await fermeModale2FASiPresente(page);
   await fermeModaleNouveauReferentielSiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
