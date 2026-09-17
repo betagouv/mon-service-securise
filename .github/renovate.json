@@ -11,7 +11,7 @@
   "dependencyDashboard": true,
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
-  "schedule": ["0 8 * * 2"],
+  "schedule": ["* 8 * * 2"],
   "timezone": "Europe/Paris",
   "platform": "github",
   "repositories": ["betagouv/mon-service-securise"],
