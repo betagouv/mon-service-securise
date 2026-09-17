@@ -107,4 +107,41 @@ test.describe.serial('Création de service v2', () => {
       page.getByRole('heading', { level: 1, name: nomService })
     ).toBeVisible();
   });
+
+  test.describe('Les pages du service sont accessibles', () => {
+    test('La page mesures affiche des mesures et permet de changer leur statut', async ({
+      page,
+    }) => {
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r.url().includes(`/api/service/${idService}/mesures`) &&
+            r.request().method() === 'GET' &&
+            r.status() === 200
+        ),
+        navigueSurPageConnectee(`/service/${idService}/mesures`, page),
+      ]);
+
+      await page.getByRole('button', { name: 'Toutes les mesures' }).click();
+
+      const premiereLigne = page.locator('tr.ligne-de-mesure').first();
+      await expect(premiereLigne).toBeVisible();
+      const idLigne = await premiereLigne
+        .locator('select[id^="statut-"]')
+        .getAttribute('id');
+
+      const selectStatut = page.locator(`[id="${idLigne}"]`);
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            /\/api\/service\/[0-9a-f-]+\/mesures\//.test(r.url()) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 200
+        ),
+        selectStatut.selectOption({ label: 'Partielle' }),
+      ]);
+
+      await expect(selectStatut).toHaveValue('enCours');
+    });
+  });
 });
