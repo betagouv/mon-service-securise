@@ -202,6 +202,7 @@
         <div>
           <p>
             <dsfr-input
+              id="intitule-risque"
               label="Intitulé du risque"
               type="text"
               value={donneesRisque.intitule}
@@ -213,6 +214,7 @@
           </p>
           <p>
             <dsfr-textarea
+              id="description-risque"
               label="Description du risque"
               type="text"
               rows="5"
@@ -224,6 +226,7 @@
           </p>
           <p>
             <lab-anssi-multi-select
+              id="categories-risque"
               label="Catégories"
               disabled={estLectureSeule}
               options={[
@@ -260,6 +263,7 @@
             >
             <div class="ligne-niveau-risque">
               <dsfr-select
+                id="gravite-brute"
                 label="Gravité potentielle"
                 placeholder="Sélectionnez une valeur"
                 options={optionsNiveauxGravite}
@@ -269,6 +273,7 @@
                 required
               ></dsfr-select>
               <dsfr-select
+                id="vraisemblance-brute"
                 label="Vraisemblance au départ"
                 placeholder="Sélectionnez une valeur"
                 options={optionsNiveauxVraisemblance}
@@ -287,6 +292,7 @@
             >
             <div class="ligne-niveau-risque">
               <dsfr-select
+                id="gravite"
                 label="Gravité résiduelle"
                 placeholder="Sélectionnez une valeur"
                 options={optionsNiveauxGravite}
@@ -296,6 +302,7 @@
                 required
               ></dsfr-select>
               <dsfr-select
+                id="vraisemblance"
                 label="Vraisemblance résiduelle"
                 placeholder="Sélectionnez une valeur"
                 options={optionsNiveauxVraisemblance}
@@ -308,6 +315,7 @@
           </div>
           <div>
             <dsfr-textarea
+              id="commentaire"
               label="Commentaire"
               value={donneesRisque.commentaire}
               hint="Apportez des précisions sur le risque"

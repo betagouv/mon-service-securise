@@ -75,6 +75,7 @@
   <CarteFormulaire titre="Documents">
     <div class="ajout-document">
       <InputDSFR
+        id="document-a-ajouter"
         label="Nom du document et informations utiles"
         bind:value={nouveauDocument}
         disabled={estLectureSeule}

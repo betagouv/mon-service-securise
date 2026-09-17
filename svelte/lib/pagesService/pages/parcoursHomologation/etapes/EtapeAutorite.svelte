@@ -35,6 +35,7 @@
 
 <div class="champs">
   <InputDSFR
+    id="nom-prenom-autorite"
     label="Prénom Nom"
     bind:value={autorite.nom}
     disabled={estLectureSeule}
@@ -43,6 +44,7 @@
     maxlength={200}
   />
   <InputDSFR
+    id="fonction-autorite"
     label="Fonction"
     bind:value={autorite.fonction}
     disabled={estLectureSeule}
