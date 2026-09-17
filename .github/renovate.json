@@ -11,8 +11,8 @@
   "dependencyDashboard": true,
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
-  "prHourlyLimit": 10,
-  "prConcurrentLimit": 2,
+  "schedule": ["0 8 * * 2"],
+  "timezone": "Europe/Paris",
   "platform": "github",
   "repositories": ["betagouv/mon-service-securise"],
   "constraints": {
