@@ -191,5 +191,159 @@ test.describe.serial('Création de service v2', () => {
 
       await expect(toggleActivation).not.toBeChecked();
     });
+
+    test("On peut créer et finaliser un dossier d'homologation, puis télécharger le tampon", async ({
+      page,
+    }) => {
+      test.setTimeout(60_000);
+
+      await navigueSurPageConnectee(`/service/${idService}/dossiers`, page);
+
+      await expect(
+        page.getByRole('heading', {
+          level: 4,
+          name: 'Aucun projet d’homologation en cours',
+        })
+      ).toBeVisible();
+
+      await page
+        .getByRole('button', { name: "Créer un nouveau projet d'homologation" })
+        .click();
+
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(`/api/service/${idService}/homologation/reprends`) &&
+            r.request().method() === 'POST' &&
+            r.status() === 200
+        ),
+        page
+          .getByRole('button', { name: 'Ok, j’homologue le service !' })
+          .click(),
+      ]);
+
+      // Étape "Autorité"
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/autorite`
+      );
+      // `dsfr-input` n'associe pas son label au champ via l'accessibilité
+      // (getByLabel ne le trouve pas) : on cible les deux champs par ordre.
+      await page.getByRole('textbox').nth(0).fill('Jean Dupont');
+      await page.getByRole('textbox').nth(1).fill('Directeur général');
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(`/api/service/${idService}/homologation/autorite`) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.getByRole('button', { name: 'Suivant' }).click(),
+      ]);
+
+      // Étape "Avis"
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/avis`
+      );
+      await page.click('label[for="aucun"]');
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r.url().includes(`/api/service/${idService}/homologation/avis`) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.getByRole('button', { name: 'Suivant' }).click(),
+      ]);
+
+      // Étape "Documents"
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/documents`
+      );
+      await page.click('label[for="aucun"]');
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(`/api/service/${idService}/homologation/documents`) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.getByRole('button', { name: 'Suivant' }).click(),
+      ]);
+
+      // Étape de téléchargement de l'archive du dossier (id "dateTelechargement",
+      // libellé stepper trompeur "Décision")
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/dateTelechargement`
+      );
+      const [downloadDossier] = await Promise.all([
+        page.waitForEvent('download'),
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(
+                `/api/service/${idService}/homologation/telechargement`
+              ) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.getByText("MonServiceSécurisé - Dossier d'homologation").click(),
+      ]);
+      expect(downloadDossier.suggestedFilename()).toMatch(/\.zip$/);
+      await page.getByRole('button', { name: 'Suivant' }).click();
+
+      // Étape "Date" (libellé stepper trompeur, id réel "decision")
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/decision`
+      );
+      await page.locator('input[type="date"]').fill('2026-01-15');
+      await page.click('label[for="validee-oui"]');
+      await page.click('label[for="duree-unAn"]');
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(`/api/service/${idService}/homologation/decision`) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.getByRole('button', { name: 'Suivant' }).click(),
+      ]);
+
+      // Étape "Récapitulatif"
+      await page.waitForURL(
+        `**/service/${idService}/homologation/edition/etape/recapitulatif`
+      );
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r
+              .url()
+              .includes(`/api/service/${idService}/homologation/finalise`) &&
+            r.request().method() === 'POST' &&
+            r.status() === 204
+        ),
+        page.getByRole('button', { name: 'Enregistrer la décision' }).click(),
+      ]);
+
+      await page.waitForURL(
+        /\/service\/[0-9a-f-]+\/dossiers\?succesHomologation=true/
+      );
+
+      const [downloadTampon] = await Promise.all([
+        page.waitForEvent('download'),
+        page
+          .getByRole('link', { name: "Télécharger l'encart d'homologation" })
+          .click(),
+      ]);
+      expect(downloadTampon.suggestedFilename()).toMatch(/\.zip$/);
+    });
   });
 });
