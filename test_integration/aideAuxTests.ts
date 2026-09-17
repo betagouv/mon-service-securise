@@ -1,4 +1,7 @@
 import { Page } from '@playwright/test';
+import { TokenMSSPourCreationUtilisateur } from '../src/utilisateur/tokenMSSPourCreationUtilisateur.js';
+import { adaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
+import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 
 // Compte pré-provisionné par adaptateurPersistanceMemoireTestsAccessibilite.ts
 // pour NODE_ENV=test_accessibilite (CGU déjà acceptées, entité déjà rattachée).
@@ -34,6 +37,20 @@ export const navigueSurPageConnectee = async (
   await page.goto(`/oidc/apres-authentification?email=${emailConnexion}`);
   await page.waitForURL(urlPage, { waitUntil: 'networkidle' });
 };
+
+export const genereTokenPourCreationCompte = () =>
+  new TokenMSSPourCreationUtilisateur(
+    adaptateurJWT({ adaptateurEnvironnement })
+  ).cree({
+    nom: 'John',
+    prenom: 'Doe',
+    email: 'compte-a-creer@mss.fr',
+    organisation: {
+      departement: '75',
+      siret: '13000766900018',
+      nom: 'ANSSI',
+    },
+  });
 
 export const fermeModaleNouveauReferentielSiPresente = async (page: Page) => {
   const popinNouveauReferentielEstVisible = await page
