@@ -160,5 +160,36 @@ test.describe.serial('Création de service v2', () => {
 
       await expect(selectStatut).toHaveValue('enCours');
     });
+
+    test('La page risques permet de désactiver un risque', async ({ page }) => {
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            r.url().includes(`/api/service/${idService}/risques/v2`) &&
+            r.request().method() === 'GET' &&
+            r.status() === 200
+        ),
+        navigueSurPageConnectee(`/service/${idService}/risques`, page),
+      ]);
+
+      const toggleActivation = page
+        .locator('input[type="checkbox"][id^="risque-"][id$="-actif"]')
+        .first();
+      await expect(toggleActivation).toBeVisible();
+      await expect(toggleActivation).toBeChecked();
+      const idToggle = await toggleActivation.getAttribute('id');
+
+      await Promise.all([
+        page.waitForResponse(
+          (r) =>
+            /\/api\/service\/[0-9a-f-]+\/risques\/v2\//.test(r.url()) &&
+            r.request().method() === 'PUT' &&
+            r.status() === 204
+        ),
+        page.click(`label[for="${idToggle}"]`),
+      ]);
+
+      await expect(toggleActivation).not.toBeChecked();
+    });
   });
 });
