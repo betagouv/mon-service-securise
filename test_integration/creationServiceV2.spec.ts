@@ -109,6 +109,23 @@ test.describe.serial('Création de service v2', () => {
   });
 
   test.describe('Les pages du service sont accessibles', () => {
+    test('On peut télécharger tous les documents', async ({ page }) => {
+      await navigueSurPageConnectee(`/service/${idService}/mesures`, page);
+
+      await page.getByRole('button', { name: 'Documents' }).click();
+
+      const carteZip = page
+        .locator('.document-telechargeable')
+        .filter({ hasText: 'Tous les documents' });
+
+      const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        carteZip.getByRole('link', { name: 'Télécharger' }).click(),
+      ]);
+
+      expect(download.suggestedFilename()).toMatch(/^MSS_decision_.*\.zip$/);
+    });
+
     test('La page mesures affiche des mesures et permet de changer leur statut', async ({
       page,
     }) => {
