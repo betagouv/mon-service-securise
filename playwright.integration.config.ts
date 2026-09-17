@@ -8,6 +8,7 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     viewport: { width: 1550, height: 900 },
+    screenshot: 'only-on-failure',
   },
   webServer: {
     command: 'pnpm build:front && pnpm build:back && pnpm start',
