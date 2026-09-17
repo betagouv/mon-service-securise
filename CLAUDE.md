@@ -12,7 +12,7 @@ Ne **JAMAIS** accéder ou tenter d'accéder au fichier `.env` à la racine du pr
 - **Serveur HTTP** : Express (rendu Pug côté serveur + API JSON).
 - **Persistance** : PostgreSQL via Knex (pas d'ORM). Migrations dans `/migrations/`, config dans `knexfile.js`.
 - **Frontend** : rendu Pug serveur + îlots Svelte 5 dans `/svelte/` (compilés vers `/public/composants-svelte/`).
-- **Tests** : Vitest (`vitest.config.ts`), tests dans `/test/` et `/test_accessibilite/`.
+- **Tests** : Vitest (`vitest.config.ts`), tests dans `/test/`, `/test_accessibilite/` et `/test_integration/`.
 
 ## Point d'entrée
 
@@ -101,7 +101,8 @@ Classes en français : `Service`, `Dossier`, `Utilisateur`, `Mesure`, `Autorisat
 
 - Runner : **Vitest**. Unitaires dans `/test/` (miroir de la structure `src/`).
 - Les tests instancient directement les objets de domaine — pas de mocks de DB, utilisation de l'adaptateur de persistance en mémoire (`adaptateurPersistanceMemoire.js`).
-- A11y/E2E : `/test_accessibilite/` (Playwright, voir `playwright.config.ts`).
+- A11y/E2E : `/test_accessibilite/` (Playwright, voir `playwright.accessibilite.config.ts`).
+- Intégration (parcours critiques bout en bout, ex. création de service) : `/test_integration/` (Playwright, voir `playwright.integration.config.ts`), exécutés sur chaque PR.
 
 ## Conventions de développement
 

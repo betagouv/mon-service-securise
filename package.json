@@ -13,7 +13,8 @@
     "migration-bdd": "tsx node_modules/knex/bin/cli.js migrate:latest",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
-    "test:a11y": "playwright test",
+    "test:a11y": "playwright test --config=playwright.accessibilite.config.ts",
+    "test:integration": "playwright test --config=playwright.integration.config.ts",
     "start": "node dist/server.js",
     "prepare": "husky",
     "preinstall": "npx only-allow@1.2.2 pnpm"

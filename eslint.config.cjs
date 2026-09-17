@@ -220,7 +220,12 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['test_accessibilite/**/*.*ts', 'playwright.config.ts'],
+    files: [
+      'test_accessibilite/**/*.*ts',
+      'playwright.accessibilite.config.ts',
+      'test_integration/**/*.*ts',
+      'playwright.integration.config.ts',
+    ],
 
     rules: {
       'import/no-extraneous-dependencies': [
