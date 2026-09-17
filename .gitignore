@@ -13,3 +13,4 @@ test-results
 test_accessibilite/rapport
 test_accessibilite/screenshots
 pocTypst.pdf
+.vitest/json/output.json

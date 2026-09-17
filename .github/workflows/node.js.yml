@@ -30,13 +30,17 @@ jobs:
         run: |
           echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
 
+      - name: Installer pnpm
+        run: npm install -g "$(jq -r '.packageManager' package.json)"
+
       - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       - name: Installer les dépendances
-        run: npm install -g "$(jq -r '.packageManager' package.json)" && pnpm install
+        run: pnpm install
 
       - name: Contrôler la mise en forme avec Prettier
         run: ./node_modules/.bin/prettier --check .
@@ -66,3 +70,43 @@ jobs:
           name: Tests
           path: ./test-report.xml
           reporter: jest-junit
+
+  integration:
+    name: Vérifie que les scénarios vitaux de MSS fonctionnent
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloner le dépôt Git
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Déterminer la version de Node.js à utiliser
+        run: |
+          echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
+
+      - name: Installer pnpm
+        run: npm install -g "$(jq -r '.packageManager' package.json)"
+
+      - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Installer les dépendances
+        run: pnpm install
+
+      - name: Installer Chromium pour Playwright
+        run: ./node_modules/.bin/playwright install chromium --with-deps
+
+      - name: Exécuter les tests d'intégration
+        run: pnpm test:integration
+
+      - name: Publier le rapport Playwright en cas d'échec
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: rapport-playwright-integration
+          path: test-results/
