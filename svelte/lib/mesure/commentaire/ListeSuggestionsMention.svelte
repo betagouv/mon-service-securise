@@ -25,7 +25,7 @@
   let commande: Commande | undefined = $state(undefined);
 
   const selectionneItem = (item: Contributeur) => {
-    if (commande) commande({ id: item.id, label: item.prenomNom });
+    if (commande && item) commande({ id: item.id, label: item.prenomNom });
     listeVisible = false;
   };
 
