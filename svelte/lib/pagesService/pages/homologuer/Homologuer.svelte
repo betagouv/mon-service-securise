@@ -156,7 +156,7 @@
           dossier={dossiers.dossierActif}
           {statutsHomologation}
           avecStatutHomologation
-          avecTamponAccessible
+          avecTamponAccessible={!dossiers.dossierActif.importe}
           {idService}
         />
       {:else}
