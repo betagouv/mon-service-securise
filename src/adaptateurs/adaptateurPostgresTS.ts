@@ -8,11 +8,13 @@ import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTra
 import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
+import { DonneesCleApi } from '../modeles/cleApi.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
   SUPERVISEURS = 'superviseurs',
   NOTIFICATIONS_TRANSACTIONNELLES = 'notifications_transactionnelles',
+  CLES_API = 'cles_api',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -313,5 +315,58 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     await this.knex(TABLES.NOTIFICATIONS_TRANSACTIONNELLES)
       .whereRaw("metadonnees->>'idService' = ?", [idService])
       .delete();
+  }
+
+  async lisClesApiDe(idUtilisateur: UUID): Promise<DonneesCleApi[]> {
+    const lignes = await this.knex(TABLES.CLES_API)
+      .select({
+        id: 'id',
+        idUtilisateur: 'id_utilisateur',
+        prefixe: 'prefixe',
+        empreinte: 'empreinte',
+        dateCreation: 'date_creation',
+        dateRevocation: 'date_revocation',
+      })
+      .where({ id_utilisateur: idUtilisateur });
+
+    return lignes.map(({ dateRevocation, ...ligne }): DonneesCleApi => ({
+      ...ligne,
+      ...(dateRevocation && { dateRevocation }),
+    }));
+  }
+
+  async lisCleApiParEmpreinte(
+    empreinte: string
+  ): Promise<DonneesCleApi | undefined> {
+    const ligne = await this.knex(TABLES.CLES_API)
+      .select({
+        id: 'id',
+        idUtilisateur: 'id_utilisateur',
+        prefixe: 'prefixe',
+        empreinte: 'empreinte',
+        dateCreation: 'date_creation',
+        dateRevocation: 'date_revocation',
+      })
+      .where({ empreinte })
+      .first();
+
+    if (!ligne) return undefined;
+
+    if (ligne.dateRevocation === null) ligne.dateRevocation = undefined;
+    return ligne;
+  }
+
+  async sauvegardeCleApi(donnees: DonneesCleApi): Promise<void> {
+    await this.knex(TABLES.CLES_API)
+      .insert({
+        id: donnees.id,
+        id_utilisateur: donnees.idUtilisateur,
+        prefixe: donnees.prefixe,
+        empreinte: donnees.empreinte,
+        date_creation: donnees.dateCreation,
+        date_revocation: donnees.dateRevocation,
+      })
+      .onConflict('id')
+      .merge();
   }
 }
