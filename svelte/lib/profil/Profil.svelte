@@ -5,7 +5,7 @@
     EstimationNombreServices,
     Organisation,
   } from '../inscription/inscription.d';
-  import { untrack } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import { writable } from 'svelte/store';
   import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
   import SelectionNombreServices from './SelectionNombreServices.svelte';
@@ -51,6 +51,12 @@
       }
     }
   };
+
+  onMount(() => {
+    const ancre = window.location.hash.slice(1);
+    if (ancre)
+      document.getElementById(ancre)?.scrollIntoView({ block: 'center' });
+  });
 </script>
 
 <div class="contenu-profil">
@@ -94,21 +100,23 @@
         bind:valeurs={$utilisateur.postes}
         bind:this={selectionDomaine}
       />
-      <dsfr-input
-        id="telephone"
-        label="Téléphone"
-        value={$utilisateur.telephone}
-        hint="ex : 0123456789"
-        pattern={modeleTelephone}
-        type="tel"
-        required
-        error-message="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
-        onvaluechanged={(e: CustomEvent<string>) =>
-          ($utilisateur.telephone = e.detail)}
-      ></dsfr-input>
+      <div id="telephone">
+        <dsfr-input
+          id="champ-telephone"
+          label="Téléphone"
+          value={$utilisateur.telephone}
+          hint="ex : 0123456789"
+          pattern={modeleTelephone}
+          type="tel"
+          required
+          error-message="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
+          onvaluechanged={(e: CustomEvent<string>) =>
+            ($utilisateur.telephone = e.detail)}
+        ></dsfr-input>
+      </div>
     </div>
 
-    <div class="bloc" id="bloc-siret">
+    <div class="bloc" id="siret">
       <h2>Mon organisation</h2>
       <ChampOrganisation
         afficheLabel

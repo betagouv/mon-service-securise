@@ -117,7 +117,7 @@
     {label}
     hideLabel={!afficheLabel}
     type="text"
-    id="siret"
+    id="champ-siret"
     nom="siret"
     value={saisie}
     errorMessage="Le SIRET est obligatoire."
