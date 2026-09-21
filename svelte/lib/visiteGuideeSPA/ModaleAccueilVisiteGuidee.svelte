@@ -3,7 +3,6 @@
 
   interface Props {
     estOuverte: boolean;
-    profilUtilisateurComplet: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
     onselectionVisiteAvancee: () => void;
@@ -11,7 +10,6 @@
 
   let {
     estOuverte = $bindable(),
-    profilUtilisateurComplet,
     prenomNom,
     aDejaVuEntierementVisiteGuidee,
     onselectionVisiteAvancee,
@@ -25,7 +23,7 @@
   const titreModale = $derived(
     aDejaVuEntierementVisiteGuidee
       ? 'Choisissez votre visite guidée'
-      : `Bonjour${profilUtilisateurComplet && prenomNom ? ` ${prenomNom}` : ''}, bienvenue sur MonServiceSécurisé !`
+      : `Bonjour ${prenomNom}, bienvenue sur MonServiceSécurisé !`
   );
 </script>
 

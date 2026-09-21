@@ -10,7 +10,6 @@ export type TableauDeBordProps = {
   estAdmin: boolean;
   avecGestionOrganisations: boolean;
   modeVisiteGuidee?: boolean;
-  profilUtilisateurComplet?: boolean;
   prenomNom?: string;
   aDejaVuEntierementVisiteGuidee: boolean;
 };
