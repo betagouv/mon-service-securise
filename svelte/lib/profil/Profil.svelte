@@ -101,6 +101,7 @@
         hint="ex : 0123456789"
         pattern={modeleTelephone}
         type="tel"
+        required
         error-message="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
         onvaluechanged={(e: CustomEvent<string>) =>
           ($utilisateur.telephone = e.detail)}

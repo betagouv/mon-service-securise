@@ -84,9 +84,12 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         { valeurErronee: '01234567890' },
         { valeurErronee: '1234567890' },
         { valeurErronee: '012345678' },
+        { valeurErronee: '' },
+        { valeurErronee: undefined },
       ])(
         'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le téléphone',
         async ({ valeurErronee }) => {
+          // @ts-expect-error on force une valeur undefined pour le test
           donneesRequete.telephone = valeurErronee;
 
           const reponse = await testeur.post(
@@ -98,11 +101,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         }
       );
 
-      it.each([
-        { valeurValide: '0123456789' },
-        { valeurValide: '' },
-        { valeurValide: undefined },
-      ])(
+      it.each([{ valeurValide: '0123456789' }])(
         'accepte $valeurValide comme valeur valide pour le téléphone',
         async ({ valeurValide }) => {
           donneesRequete.telephone = valeurValide;
