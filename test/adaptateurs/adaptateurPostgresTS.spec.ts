@@ -9,12 +9,22 @@ import {
   DonneesNotificationTransactionnelle,
   MetadonneesNotificationExpirationHomologation,
 } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import { DonneesCleApi } from '../../src/modeles/cleApi.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
   let trx: Knex.Knex.Transaction;
   let persistance: PersistanceTS;
   const chiffrement = unAdaptateurChiffrementQuiWrap();
+
+  const uneCleApi = (donnees: Partial<DonneesCleApi> = {}): DonneesCleApi => ({
+    id: unUUIDRandom(),
+    idUtilisateur: unUUIDRandom(),
+    prefixe: '7f3a91c4',
+    empreinte: `empreinte-${unUUIDRandom()}`,
+    dateCreation: new Date('2026-09-01T08:00:00Z'),
+    ...donnees,
+  });
 
   const insereUneNotification = async (
     donnees: Partial<DonneesNotificationTransactionnelle>
@@ -760,6 +770,84 @@ describe("L'adaptateur persistance Postgres", () => {
         .select();
       expect(notifications).toHaveLength(1);
       expect(notifications[0].metadonnees.idService).toBe(idServiceAConserver);
+    });
+  });
+
+  describe("sur demande de sauvegarde d'une clé d'API", () => {
+    it('insère une nouvelle clé', async () => {
+      const cle = uneCleApi();
+
+      await persistance.sauvegardeCleApi(cle);
+
+      const lignes = await trx.table('cles_api').select();
+      expect(lignes).toHaveLength(1);
+      expect(lignes[0]).toMatchObject({
+        id: cle.id,
+        id_utilisateur: cle.idUtilisateur,
+        prefixe: cle.prefixe,
+        empreinte: cle.empreinte,
+        date_revocation: null,
+      });
+    });
+
+    it('met à jour une clé existante, pour persister sa révocation', async () => {
+      const cle = uneCleApi();
+      await persistance.sauvegardeCleApi(cle);
+
+      await persistance.sauvegardeCleApi({
+        ...cle,
+        dateRevocation: new Date('2026-09-21T10:00:00Z'),
+      });
+
+      const lignes = await trx.table('cles_api').select();
+      expect(lignes).toHaveLength(1);
+      expect(lignes[0].date_revocation).toEqual(
+        new Date('2026-09-21T10:00:00Z')
+      );
+    });
+  });
+
+  describe("sur demande de lecture des clés d'API d'un utilisateur", () => {
+    it("retourne uniquement les clés de l'utilisateur", async () => {
+      const idUtilisateur = unUUIDRandom();
+      const saCle = uneCleApi({ idUtilisateur });
+      await persistance.sauvegardeCleApi(saCle);
+      await persistance.sauvegardeCleApi(uneCleApi());
+
+      const cles = await persistance.lisClesApiDe(idUtilisateur);
+
+      expect(cles).toEqual([saCle]);
+    });
+
+    it('retourne la date de révocation quand la clé est révoquée', async () => {
+      const cleRevoquee = uneCleApi({
+        dateRevocation: new Date('2026-09-21T10:00:00Z'),
+      });
+      await persistance.sauvegardeCleApi(cleRevoquee);
+
+      const [cle] = await persistance.lisClesApiDe(cleRevoquee.idUtilisateur);
+
+      expect(cle.dateRevocation).toEqual(new Date('2026-09-21T10:00:00Z'));
+    });
+  });
+
+  describe("sur demande de lecture d'une clé d'API par son empreinte", () => {
+    it('retourne la clé correspondante', async () => {
+      const cle = uneCleApi({ empreinte: 'empreinte-recherchee' });
+      await persistance.sauvegardeCleApi(cle);
+      await persistance.sauvegardeCleApi(uneCleApi());
+
+      const cleLue = await persistance.lisCleApiParEmpreinte(
+        'empreinte-recherchee'
+      );
+
+      expect(cleLue).toEqual(cle);
+    });
+
+    it('retourne `undefined` si aucune clé ne correspond', async () => {
+      const cleLue = await persistance.lisCleApiParEmpreinte('inconnue');
+
+      expect(cleLue).toBeUndefined();
     });
   });
 });
