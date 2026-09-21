@@ -227,6 +227,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     it('ne mets pas à jour MonProfilAnssi pour un utilisateur MSS qui a un profil incomplet', async () => {
       let miseAJourFaite = false;
+      adaptateurProfilAnssi.aDesDonneesSuffisantes = () => false;
       adaptateurProfilAnssi.metsAJour = () => {
         miseAJourFaite = true;
       };
@@ -834,6 +835,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       it("n'inscris pas l'utilisateur invité dans MonProfilAnssi", async () => {
         let profilAnssiEnvoyeAAdaptateur;
+        adaptateurProfilAnssi.aDesDonneesSuffisantes = () => false;
         adaptateurProfilAnssi.metsAJour = (utilisateur) =>
           (profilAnssiEnvoyeAAdaptateur = utilisateur);
 

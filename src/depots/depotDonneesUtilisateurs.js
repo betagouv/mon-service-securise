@@ -244,9 +244,8 @@ const creeDepot = (config = {}) => {
     await p.ajoute(id, donneesUtilisateur);
     u = await p.lis.un(id);
 
-    if (!u.estUnInvite()) {
+    if (adaptateurProfilAnssi.aDesDonneesSuffisantes(u))
       await adaptateurProfilAnssi.metsAJour(u);
-    }
 
     await busEvenements.publie(
       new EvenementUtilisateurInscrit({ utilisateur: u })
@@ -286,7 +285,7 @@ const creeDepot = (config = {}) => {
 
     const u = await p.lis.un(id);
 
-    if (u.completudeProfil().estComplet)
+    if (adaptateurProfilAnssi.aDesDonneesSuffisantes(u))
       await adaptateurProfilAnssi.metsAJour(u);
 
     await busEvenements.publie(
