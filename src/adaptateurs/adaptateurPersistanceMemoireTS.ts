@@ -5,11 +5,13 @@ import { PersistanceTS } from './persistanceTS.interface.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { IdNotificationTransactionnelle } from '../referentiel.types.js';
+import { DonneesCleApi } from '../modeles/cleApi.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
   superviseurs: DonneesSuperviseur[];
   notificationsTransactionnelles: DonneesNotificationTransactionnelle[];
+  clesApi: DonneesCleApi[];
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
@@ -17,6 +19,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     adminsOrganisations: [],
     superviseurs: [],
     notificationsTransactionnelles: [],
+    clesApi: [],
   };
 
   constructor(donnees?: Partial<DonneesPersistanceMemoire>) {
@@ -26,6 +29,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
         superviseurs: donnees.superviseurs ?? [],
         notificationsTransactionnelles:
           donnees.notificationsTransactionnelles ?? [],
+        clesApi: donnees.clesApi ?? [],
       };
   }
 
@@ -162,5 +166,24 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       this.donnees.notificationsTransactionnelles.filter(
         (n) => n.metadonnees.idService !== idService
       );
+  }
+
+  async lisClesApiDe(idUtilisateur: UUID): Promise<DonneesCleApi[]> {
+    return this.donnees.clesApi.filter(
+      (c) => c.idUtilisateur === idUtilisateur
+    );
+  }
+
+  async lisCleApiParEmpreinte(
+    empreinte: string
+  ): Promise<DonneesCleApi | undefined> {
+    return this.donnees.clesApi.find((c) => c.empreinte === empreinte);
+  }
+
+  async sauvegardeCleApi(donnees: DonneesCleApi): Promise<void> {
+    this.donnees.clesApi = this.donnees.clesApi.filter(
+      (c) => c.id !== donnees.id
+    );
+    this.donnees.clesApi.push(donnees);
   }
 }

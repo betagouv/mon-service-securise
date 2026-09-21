@@ -38,6 +38,7 @@ import { AdaptateurRechercheEntreprise } from './adaptateurs/adaptateurRecherche
 import BusEvenements from './bus/busEvenements.js';
 import { ServiceCgu } from './serviceCgu.interface.js';
 import { DepotDonneesNotificationsTransactionnelles } from './depots/depotDonneesNotificationsTransactionnelles.js';
+import { DepotDonneesClesApi } from './depots/depotDonneesClesApi.js';
 
 export type ConfigDepotDonnees = {
   adaptateurChiffrement?: AdaptateurChiffrement;
@@ -207,6 +208,11 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       adaptateurPersistanceTS,
       busEvenements,
     });
+
+  const depotClesApi = new DepotDonneesClesApi({
+    adaptateurChiffrement,
+    adaptateurPersistanceTS,
+  });
 
   const {
     ajouteDescriptionService,
@@ -528,6 +534,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
         depotAdminsOrganisations
       ),
     estAdmin: depotAdminsOrganisations.estAdmin.bind(depotAdminsOrganisations),
+    nouvelleCle: depotClesApi.nouvelleCle.bind(depotClesApi),
+    lisClesDe: depotClesApi.lisClesDe.bind(depotClesApi),
+    lisCleParValeur: depotClesApi.lisCleParValeur.bind(depotClesApi),
+    revoqueCle: depotClesApi.revoqueCle.bind(depotClesApi),
   };
 };
 
