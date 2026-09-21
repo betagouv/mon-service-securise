@@ -60,6 +60,7 @@ test("La page creation-compte n'a aucune violation grave d'accessibilité", asyn
   await page.click('.declencheur');
   await page.click('#RSSI');
   await page.click('body');
+  await page.fill('#telephone', '0102030405');
   await page.selectOption('#estimation-nombre-services', '1_10');
   await page.click('text=Suivant');
   await checkIntermediaire.valideEtape(page);
