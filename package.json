@@ -8,6 +8,7 @@
     "build:front": "vite build --config svelte/vite.config.mts",
     "build:back": "tsc && cp src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv ./dist/src/moteurRegles/v2/",
     "dev:back": "node --watch --import tsx server.ts",
+    "dev:api": "node --watch --import tsx serverApiPublique.ts",
     "dev:front": "cd svelte && vite dev --host 0.0.0.0",
     "maj-ui-kit": "bash ./scripts/ui-kit/maj.sh",
     "migration-bdd": "tsx node_modules/knex/bin/cli.js migrate:latest",
@@ -16,6 +17,7 @@
     "test:a11y": "playwright test --config=playwright.accessibilite.config.ts",
     "test:integration": "playwright test --config=playwright.integration.config.ts",
     "start": "node dist/server.js",
+    "start:api": "node dist/serverApiPublique.js",
     "prepare": "husky",
     "preinstall": "npx only-allow@1.2.2 pnpm"
   },
