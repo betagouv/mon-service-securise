@@ -35,6 +35,7 @@ class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
+class ErreurCleApiInexistante extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
 class ErreurDecisionInvalide extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
@@ -141,6 +142,7 @@ export {
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
   ErreurCategorieInconnue,
+  ErreurCleApiInexistante,
   ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
   ErreurDecisionInvalide,
