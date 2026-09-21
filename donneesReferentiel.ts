@@ -92,6 +92,14 @@ const donnees = {
       titreCta: 'Mettre à jour le SIRET',
     },
     {
+      id: 'telephone',
+      lien: '/profil#telephone',
+      entete: 'Renseignez votre numéro de téléphone',
+      titre:
+        "Ajoutez votre numéro de téléphone pour bénéficier d'un accompagnement personnalisé. Il sera utilisé uniquement à cette fin.",
+      titreCta: 'Ajouter mon numéro',
+    },
+    {
       id: 'estimationNombreServices',
       lien: '/profil#estimation-nombre-services',
       entete: 'Estimez vos services à sécuriser',
