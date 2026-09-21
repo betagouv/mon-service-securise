@@ -11,11 +11,7 @@ export const schemaCommunPutPostUtilisateur = {
   ]),
   postes: z.array(z.string().max(200)).max(8).min(1),
   siretEntite: z.string().regex(/^\d{14}$/),
-  telephone: z
-    .string()
-    .regex(/^0\d{9}$/)
-    .optional()
-    .or(z.literal('')),
+  telephone: z.string().regex(/^0\d{9}$/),
   transactionnelAccepte: z.boolean(),
   infolettreAcceptee: z.boolean(),
   pixelDeSuiviAccepte: z.boolean(),

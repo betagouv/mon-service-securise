@@ -117,10 +117,10 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         }
       );
 
-      it('accepte un numéro de téléphone vide', async () => {
+      it("n'accepte pas un numéro de téléphone vide", async () => {
         donneesRequete.telephone = '';
         const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
-        expect(reponse.status).toBe(200);
+        expect(reponse.status).toBe(400);
       });
 
       it.each([undefined, 'abc', '123456789'])(

@@ -213,15 +213,17 @@
           <h1>Votre identité</h1>
           <ControleFormulaire
             libelle="Téléphone"
-            sousTitre="Pour bénéficier d'un accompagement personnalisé"
+            requis
+            sousTitre="Pour bénéficier d'un accompagnement personnalisé"
           >
             <ChampTexte
               id="telephone"
+              requis
               nom="telephone"
-              aideSaisie="Ex : 0XXXXXXXXX"
+              aideSaisie="Ex : 0123456789"
               modele={modeleTelephone}
               bind:valeur={formulaireInscription.telephone}
-              messageErreur="Le numéro de téléphone doit respecter le format 0000000000."
+              messageErreur="Le numéro de téléphone doit respecter le format 0XXXXXXXXX."
             />
           </ControleFormulaire>
           <ControleFormulaire requis={true} libelle="Domaine de spécialité">
