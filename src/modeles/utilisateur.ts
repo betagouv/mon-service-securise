@@ -250,17 +250,22 @@ class Utilisateur extends Base {
 
   completudeProfil() {
     const nomEstRenseigne = (this.nom?.trim() ?? '') !== '';
+    const telephoneEstRenseigne = (this.telephone?.trim() ?? '') !== '';
     const siretEstRenseigne = (this.entite?.siret ?? '') !== '';
     const estimationNombreServicesEstRenseigne =
       (this.estimationNombreServices?.borneBasse ?? '0') !== '0' &&
       (this.estimationNombreServices?.borneHaute ?? '0') !== '0';
     const estComplet =
       nomEstRenseigne &&
+      telephoneEstRenseigne &&
       siretEstRenseigne &&
       estimationNombreServicesEstRenseigne;
     const champsNonRenseignes = [];
     if (!nomEstRenseigne) {
       champsNonRenseignes.push('nom');
+    }
+    if (!telephoneEstRenseigne) {
+      champsNonRenseignes.push('telephone');
     }
     if (!siretEstRenseigne) {
       champsNonRenseignes.push('siret');

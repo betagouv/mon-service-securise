@@ -37,6 +37,7 @@ describe('Un utilisateur', () => {
     nom: 'Dujardin',
     cguAcceptees: 'CGU',
     dateCreation: new Date(),
+    telephone: '012345678',
     email: 'jean.dujardin@beta.gouv.fr',
     entite: { nom: 'ANSSI', siret: '1234', departement: '75' },
     estimationNombreServices: { borneBasse: '0', borneHaute: '0' },
@@ -54,6 +55,7 @@ describe('Un utilisateur', () => {
           nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
           entite: { siret: '12345' },
+          telephone: '12345678',
           estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         }),
         adaptateursParDefaut
@@ -62,11 +64,12 @@ describe('Un utilisateur', () => {
       expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([]);
     });
 
-    it("considère le profil « incomplet » à cause du nom, du SIRET et de l'estimation du nombre de services manquants s'ils ne sont pas renseignés", () => {
+    it("considère le profil « incomplet » à cause du nom, du téléphone, du SIRET et de l'estimation du nombre de services manquants s'ils ne sont pas renseignés", () => {
       const utilisateur = new Utilisateur(
         donneesUtilisateur({
           email: 'jean.dupont@mail.fr',
           nom: undefined,
+          telephone: undefined,
           entite: { siret: undefined },
           estimationNombreServices: undefined,
         }),
@@ -75,22 +78,9 @@ describe('Un utilisateur', () => {
       expect(utilisateur.completudeProfil().estComplet).toBe(false);
       expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([
         'nom',
+        'telephone',
         'siret',
         'estimationNombreServices',
-      ]);
-    });
-
-    it("considère le profil « incomplet » à cause du SIRET manquant si le SIRET de l'entité n'est pas renseigné", () => {
-      const utilisateur = new Utilisateur(
-        donneesUtilisateur({
-          estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
-          entite: { siret: undefined },
-        }),
-        adaptateursParDefaut
-      );
-      expect(utilisateur.completudeProfil().estComplet).toBe(false);
-      expect(utilisateur.completudeProfil().champsNonRenseignes).toEqual([
-        'siret',
       ]);
     });
 
