@@ -8,6 +8,15 @@ const CONFIGURATION_AUTHENTIFICATION = {
   },
 };
 
+const aDesDonneesSuffisantes = async ({ nom, prenom, email, entite, postes }) =>
+  !!email &&
+  !!nom &&
+  !!prenom &&
+  !!entite &&
+  !!entite.siret &&
+  !!postes &&
+  postes.length > 0;
+
 const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
   await axios.put(
@@ -43,4 +52,4 @@ const recupere = async (email) => {
   }
 };
 
-export { recupere, metsAJour };
+export { recupere, metsAJour, aDesDonneesSuffisantes };

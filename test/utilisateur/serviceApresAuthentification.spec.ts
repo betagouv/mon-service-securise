@@ -236,6 +236,7 @@ describe("Le service d'après authentification", () => {
           metsAJour: async (donnees: Record<string, unknown>) => {
             donneesMpa = donnees;
           },
+          aDesDonneesSuffisantes: () => true,
           recupere: async () => ({
             ...donneesMpa,
             telephone: '06…',
