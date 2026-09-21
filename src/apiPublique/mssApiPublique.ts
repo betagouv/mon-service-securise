@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import { authentificationParCleApi } from './authentificationParCleApi.js';
 import { routesApiPubliqueV1 } from './routesApiPubliqueV1.js';
+import { routesDocumentation } from './routesDocumentation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
 
@@ -16,6 +17,8 @@ export const creeServeurApiPublique = ({
 }: ConfigurationApiPublique) => {
   const app = express();
   app.disable('x-powered-by');
+
+  app.use(routesDocumentation());
 
   app.use(
     '/v1',
