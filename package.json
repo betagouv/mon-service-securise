@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "9.1.0",
     "@e965/xlsx": "^0.20.3",
     "@gouvfr/dsfr-chart": "^2.1.1",
     "@lab-anssi/lib": "^2.2.1",

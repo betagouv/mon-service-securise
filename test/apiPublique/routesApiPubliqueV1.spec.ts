@@ -3,7 +3,8 @@ import { creeServeurApiPublique } from '../../src/apiPublique/mssApiPublique.js'
 import { depotVide } from '../depots/depotVide.js';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
-import { unUUID } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
+import { schemaReponseServices } from '../../src/apiPublique/schemas/services.schema.ts';
 import {
   Permissions,
   Rubriques,
@@ -78,6 +79,46 @@ describe("Les routes d'API publique `/v1`", () => {
             niveauSecurite: 'niveau3',
           },
         ],
+      });
+    });
+
+    it('renvoie une réponse conforme au schéma documenté', async () => {
+      const idService = unUUIDRandom();
+      depotDonnees.services = async () => [
+        unServiceV2().avecId(idService).construis(),
+      ];
+      depotDonnees.autorisations = async () => [
+        uneAutorisation()
+          .deContributeur(unUUID('U'), idService)
+          .avecDroits({ [DECRIRE]: LECTURE })
+          .construis(),
+      ];
+
+      const reponse = await request(uneApp())
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(schemaReponseServices.safeParse(reponse.body).success).toBe(true);
+    });
+
+    it("renvoie `null` pour le nom et le SIRET de l'organisation quand ils ne sont pas renseignés", async () => {
+      depotDonnees.services = async () => [
+        unServiceV2()
+          .avecId(unUUID('S'))
+          .avecOrganisationResponsable({})
+          .construis(),
+      ];
+      depotDonnees.autorisations = async () => [
+        uneAutorisation().deContributeur(unUUID('U'), unUUID('S')).construis(),
+      ];
+
+      const reponse = await request(uneApp())
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(reponse.body.donnees[0].organisationResponsable).toEqual({
+        nom: null,
+        siret: null,
       });
     });
 
