@@ -829,7 +829,6 @@ describe('Le middleware MSS', () => {
 
           expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).to.eql({
             prenom: 'Jeanne',
-            profilComplet: false,
             dateInscription: '2025-01-01',
           });
         });

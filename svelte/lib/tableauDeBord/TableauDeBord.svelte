@@ -33,7 +33,6 @@
     estAdmin: boolean;
     avecGestionOrganisations: boolean;
     modeVisiteGuidee?: boolean;
-    profilUtilisateurComplet?: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
   }
@@ -44,7 +43,6 @@
     avecGestionOrganisations,
     modeVisiteGuidee = false,
     prenomNom,
-    profilUtilisateurComplet = true,
     aDejaVuEntierementVisiteGuidee,
   }: Props = $props();
 
@@ -179,7 +177,6 @@
 <ModaleAccueilVisiteGuidee
   bind:estOuverte={avecModaleAccueilVisiteGuidee}
   {prenomNom}
-  {profilUtilisateurComplet}
   {aDejaVuEntierementVisiteGuidee}
   onselectionVisiteAvancee={ouvreModaleAvancee}
 />

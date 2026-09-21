@@ -12,8 +12,6 @@ $(() => {
     'avec-gestion-organisations'
   );
   const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
-  const profilUtilisateurComplet =
-    etatVisiteGuidee.utilisateurCourant.profilComplet;
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-de-bord', {
@@ -23,7 +21,6 @@ $(() => {
         prenomNom,
         aDejaVuEntierementVisiteGuidee,
         avecGestionOrganisations,
-        profilUtilisateurComplet,
       },
     })
   );

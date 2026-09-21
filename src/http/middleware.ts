@@ -281,7 +281,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       ...parcoursUtilisateur.etatVisiteGuidee.toJSON(),
       utilisateurCourant: {
         prenom: utilisateur.prenom,
-        profilComplet: utilisateur.completudeProfil().estComplet,
         dateInscription: utilisateur.dateCreation,
       },
     };

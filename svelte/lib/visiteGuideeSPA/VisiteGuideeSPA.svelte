@@ -170,7 +170,6 @@
         estAdmin={false}
         avecGestionOrganisations={false}
         modeVisiteGuidee={true}
-        profilUtilisateurComplet={true}
         aDejaVuEntierementVisiteGuidee={false}
       />
     </div>
