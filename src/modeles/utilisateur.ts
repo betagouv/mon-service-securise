@@ -271,14 +271,6 @@ class Utilisateur extends Base {
     return { estComplet, champsNonRenseignes };
   }
 
-  aLesInformationsAgentConnect() {
-    const { champsNonRenseignes } = this.completudeProfil();
-    return (
-      !champsNonRenseignes.includes('nom') &&
-      !champsNonRenseignes.includes('siret')
-    );
-  }
-
   async changePreferencesCommunication(
     nouvellesPreferences: {
       infolettreAcceptee?: boolean;
