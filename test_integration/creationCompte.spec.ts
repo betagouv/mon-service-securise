@@ -11,6 +11,7 @@ test('La page creation-compte permet de créer un nouveau compte', async ({
   await page.click('.declencheur');
   await page.click('#RSSI');
   await page.click('body');
+  await page.fill('#telephone', '0102030405');
   await page.selectOption('#estimation-nombre-services', '1_10');
   await page.click('text=Suivant');
   await page.click('#cguAcceptees');
