@@ -32,8 +32,9 @@ services:
     tty: true
     command: bash -c "
       pnpm run migration-bdd &&
-      ./node_modules/.bin/concurrently -n 'SERVEUR,FRONT SVELTE' -c 'blue.bold,magenta.underline'
+      ./node_modules/.bin/concurrently -n 'SERVEUR,API,FRONT SVELTE' -c 'blue.bold,green.bold,magenta.underline'
       'SVELTE_DEV_LOCAL_AVEC_HOT_RELOAD=\"true\" pnpm run dev:back'
+      'PORT=4000 pnpm run dev:api'
       'pnpm run dev:front'
       "
     environment:
@@ -45,6 +46,7 @@ services:
       - '${PORT_MSS}:3000'
       - '9229:9229'
       - '3001:3001'
+      - '4000:4000'
     depends_on:
       - mss-db
 
