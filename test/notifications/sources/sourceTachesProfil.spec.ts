@@ -130,6 +130,37 @@ describe('Les notifications de tâche profil', () => {
     });
   });
 
+  describe("lorsque le téléphone de l'utilisateur est manquant", () => {
+    beforeEach(() => {
+      depotDonnees.utilisateur = async () =>
+        unUtilisateur()
+          .quiSAppelle('Jeanine Valjean')
+          .avecNomEntite('Entité')
+          .avecTelephone(undefined)
+          .construis();
+    });
+
+    it('renvoie la notification correspondant au champ non renseigné du profil', async () => {
+      referentiel = unReferentiel({
+        tachesCompletudeProfil: [
+          {
+            id: 'telephone',
+            entete: 'Complétez votre profil',
+            titre: 'Des Explications',
+          },
+        ],
+      });
+
+      const taches = await laSource().notificationsPour(unUUID('U1'));
+
+      expect(taches.length).toBe(1);
+      expect(taches[0].titre).toBe('Complétez votre profil');
+      expect(taches[0].sousTitre).toBe('Des Explications');
+      expect(taches[0].statutLecture).toBe('nonLue');
+      expect(taches[0].canalDiffusion).toBe('centreNotifications');
+    });
+  });
+
   describe("lorsque l'utilisateur vient d'être invité, donc son profil a plein de champs non renseignés", () => {
     it('renvoie uniquement la notification « globale » de profil à mettre à jour', async () => {
       depotDonnees.utilisateur = async () =>
