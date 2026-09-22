@@ -17,7 +17,10 @@ describe("Le serveur d'API publique", () => {
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
   });
 
-  const uneApp = () =>
+  const uneApp = (limiteDeDebit?: {
+    fenetreMs: number;
+    maxParFenetre: number;
+  }) =>
     creeServeurApiPublique({
       depotDonnees,
       adaptateurGestionErreur: {
@@ -25,6 +28,7 @@ describe("Le serveur d'API publique", () => {
           erreursLoguees.push(erreur);
         },
       } as AdaptateurGestionErreur,
+      limiteDeDebit,
     }).app;
 
   it("n'annonce pas la technologie du serveur", async () => {
@@ -70,6 +74,23 @@ describe("Le serveur d'API publique", () => {
       expect(erreursLoguees.map((e) => e.message)).toEqual([
         'Base indisponible',
       ]);
+    });
+  });
+
+  describe("concernant la limitation par clé d'API", () => {
+    it("renvoie 429 au-delà du quota configuré, avec le délai d'attente", async () => {
+      const app = uneApp({ fenetreMs: 60_000, maxParFenetre: 1 });
+      await request(app)
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      const reponse = await request(app)
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(reponse.status).toBe(429);
+      expect(reponse.body).toEqual({ erreur: 'QUOTA_DEPASSE' });
+      expect(reponse.headers['retry-after']).toBeDefined();
     });
   });
 });
