@@ -1,19 +1,29 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import { authentificationParCleApi } from './authentificationParCleApi.js';
+import { limiteDeDebitParCleApi } from './limiteDeDebitParCleApi.js';
 import { routesApiPubliqueV1 } from './routesApiPubliqueV1.js';
 import { routesDocumentation } from './routesDocumentation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
 
+type LimiteDeDebit = { fenetreMs: number; maxParFenetre: number };
+
 type ConfigurationApiPublique = {
   depotDonnees: DepotDonnees;
   adaptateurGestionErreur: AdaptateurGestionErreur;
+  limiteDeDebit?: LimiteDeDebit;
+};
+
+const limiteDeDebitParDefaut: LimiteDeDebit = {
+  fenetreMs: 60_000,
+  maxParFenetre: 60,
 };
 
 export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
+  limiteDeDebit = limiteDeDebitParDefaut,
 }: ConfigurationApiPublique) => {
   const app = express();
   app.disable('x-powered-by');
@@ -23,6 +33,7 @@ export const creeServeurApiPublique = ({
   app.use(
     '/v1',
     authentificationParCleApi({ depotDonnees }),
+    limiteDeDebitParCleApi(limiteDeDebit),
     routesApiPubliqueV1({ depotDonnees })
   );
 
