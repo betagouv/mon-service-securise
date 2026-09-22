@@ -1,0 +1,14 @@
+extends ./mssConnecte
+
+block title
+  title Clé d'API | MonServiceSécurisé
+
+block variables
+  - const ongletActif = "profil-cle-api"
+
+block append scripts
+  +composantSvelte('cleApi.js')
+  +donneesPartagees('donnees-cle-api', { cles })
+
+block main
+  #conteneur-cle-api
