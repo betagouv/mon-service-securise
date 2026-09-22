@@ -12,6 +12,10 @@ const reponseJson = (description: string, schema: typeof schemaErreur) => ({
 
 const reponsesErreurCommunes = {
   401: reponseJson("Clé d'API absente, inconnue ou révoquée.", schemaErreur),
+  429: reponseJson(
+    "Quota dépassé pour cette clé d'API. Le délai d'attente est indiqué dans l'en-tête `Retry-After`.",
+    schemaErreur
+  ),
   500: reponseJson('Incident de notre côté.', schemaErreur),
 };
 
