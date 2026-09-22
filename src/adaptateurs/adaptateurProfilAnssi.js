@@ -8,7 +8,7 @@ const CONFIGURATION_AUTHENTIFICATION = {
   },
 };
 
-const aDesDonneesSuffisantes = async ({ nom, prenom, email, entite, postes }) =>
+const aDesDonneesSuffisantes = ({ nom, prenom, email, entite, postes }) =>
   !!email &&
   !!nom &&
   !!prenom &&
