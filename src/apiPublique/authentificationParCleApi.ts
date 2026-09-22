@@ -37,7 +37,7 @@ export const authentificationParCleApi =
     }
 
     const cle = await depotDonnees.lisCleParValeur(valeurEnClair);
-    if (!cle || cle.estRevoquee() || cle.estExpiree()) {
+    if (!cle || !cle.estValide()) {
       refuse();
       return;
     }

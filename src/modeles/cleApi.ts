@@ -53,6 +53,10 @@ export class CleApi {
     return aLaDate >= this.donneesCle.dateExpiration;
   }
 
+  estValide(aLaDate: Date = new Date()) {
+    return !this.estRevoquee() && !this.estExpiree(aLaDate);
+  }
+
   revoque(date: Date) {
     if (this.estRevoquee()) return;
 

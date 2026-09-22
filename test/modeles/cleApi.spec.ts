@@ -102,6 +102,52 @@ describe("Une clé d'API", () => {
     });
   });
 
+  describe('sur vérification de sa validité', () => {
+    const uneCle = ({
+      dateExpiration,
+      dateRevocation,
+    }: {
+      dateExpiration: Date;
+      dateRevocation?: Date;
+    }) =>
+      CleApi.hydrate({
+        id: unUUID('C'),
+        idUtilisateur: unUUID('U'),
+        prefixe: '7f3a91c4',
+        empreinte: 'empreinte',
+        dateCreation: new Date('2026-09-01'),
+        dateExpiration,
+        dateRevocation,
+      });
+
+    it('est valide si elle n’est ni révoquée ni expirée', () => {
+      const cle = uneCle({ dateExpiration: new Date('2999-01-01') });
+
+      expect(cle.estValide(new Date('2026-09-15'))).toBe(true);
+    });
+
+    it('n’est pas valide si elle est révoquée', () => {
+      const cle = uneCle({
+        dateExpiration: new Date('2999-01-01'),
+        dateRevocation: new Date('2026-09-02'),
+      });
+
+      expect(cle.estValide(new Date('2026-09-15'))).toBe(false);
+    });
+
+    it("n'est pas valide si elle est expirée", () => {
+      const cle = uneCle({ dateExpiration: new Date('2020-01-01') });
+
+      expect(cle.estValide(new Date('2026-09-15'))).toBe(false);
+    });
+
+    it("utilise l'instant présent quand aucune date n'est précisée", () => {
+      const cle = uneCle({ dateExpiration: new Date('2999-01-01') });
+
+      expect(cle.estValide()).toBe(true);
+    });
+  });
+
   describe('sur demande de révocation', () => {
     const uneCleActive = () =>
       CleApi.hydrate({
