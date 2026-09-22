@@ -37,12 +37,21 @@ const serviceVerificationCoherenceSels =
     depotDonnees,
   });
 
+const maxRequetesParMinuteParCleApi = Number(
+  process.env.NB_REQUETES_MAX_PAR_MINUTE_API_PUBLIQUE
+);
+const limiteDeDebit =
+  maxRequetesParMinuteParCleApi > 0
+    ? { fenetreMs: 60_000, maxParFenetre: maxRequetesParMinuteParCleApi }
+    : undefined;
+
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
   adaptateurGestionErreur.initialise();
 
   const serveur = creeServeurApiPublique({
     depotDonnees,
     adaptateurGestionErreur,
+    limiteDeDebit,
   });
 
   serveur.ecoute(port, () => {
