@@ -76,8 +76,21 @@ describe("Le middleware d'authentification par clé d'API", () => {
     verifieRefus(reponse);
   });
 
+  it('refuse une clé expirée', async () => {
+    const { valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'), -1);
+
+    const reponse = await request(uneApp())
+      .get('/ressource')
+      .set('Authorization', `Bearer ${valeurEnClair}`);
+
+    verifieRefus(reponse);
+  });
+
   it("accepte une clé valide et identifie l'utilisateur à qui elle appartient", async () => {
-    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'), 30);
+    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(
+      unUUID('U'),
+      30
+    );
 
     const reponse = await request(uneApp())
       .get('/ressource')
