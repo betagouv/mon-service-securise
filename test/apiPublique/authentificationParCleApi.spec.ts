@@ -45,7 +45,7 @@ describe("Le middleware d'authentification par clé d'API", () => {
   });
 
   it("refuse une requête dont l'en-tête `Authorization` n'est pas de type `Bearer`", async () => {
-    const { valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'));
+    const { valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'), 30);
 
     const reponse = await request(uneApp())
       .get('/ressource')
@@ -63,7 +63,10 @@ describe("Le middleware d'authentification par clé d'API", () => {
   });
 
   it('refuse une clé révoquée', async () => {
-    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'));
+    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(
+      unUUID('U'),
+      30
+    );
     await depotClesApi.revoqueCle(cle.donnees().id, unUUID('U'));
 
     const reponse = await request(uneApp())
@@ -74,7 +77,7 @@ describe("Le middleware d'authentification par clé d'API", () => {
   });
 
   it("accepte une clé valide et identifie l'utilisateur à qui elle appartient", async () => {
-    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'));
+    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'), 30);
 
     const reponse = await request(uneApp())
       .get('/ressource')

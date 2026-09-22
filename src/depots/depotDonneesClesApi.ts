@@ -27,9 +27,11 @@ export class DepotDonneesClesApi {
     this.chiffrement = adaptateurChiffrement;
   }
 
-  async nouvelleCle(idUtilisateur: UUID) {
-    const { cle, valeurEnClair } = CleApi.nouvelle(idUtilisateur, (valeur) =>
-      this.empreinteDe(valeur)
+  async nouvelleCle(idUtilisateur: UUID, dureeValiditeEnJours: number) {
+    const { cle, valeurEnClair } = CleApi.nouvelle(
+      idUtilisateur,
+      dureeValiditeEnJours,
+      (valeur) => this.empreinteDe(valeur)
     );
 
     await this.persistance.sauvegardeCleApi(cle.donnees());
