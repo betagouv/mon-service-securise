@@ -61,7 +61,11 @@ describe('Le middleware MSS', () => {
 
   const leMiddleware = ({
     adaptateurJWT,
-    adaptateurEnvironnement,
+    adaptateurEnvironnement = {
+      featureFlag: () => ({
+        avecAccesCreationCleApi: () => true,
+      }),
+    },
     adaptateurGestionErreur,
     adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
   } = {}) =>
@@ -275,6 +279,47 @@ describe('Le middleware MSS', () => {
         email: 'jean.dujardin@beta.gouv.com',
         estAdmin: true,
         estSuperviseur: false,
+      });
+    });
+
+    describe("concernant l'accès à la création de clé d'API", () => {
+      it('autorise tout le monde quand la liste est vide', async () => {
+        const middleware = leMiddleware();
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(true);
+      });
+
+      it("délègue à l'adaptateur environnement, pour l'utilisateur courant", async () => {
+        let idUtilisateurRecu;
+        const adaptateurEnvironnement = {
+          featureFlag: () => ({
+            avecAccesCreationCleApi: (idUtilisateur) => {
+              idUtilisateurRecu = idUtilisateur;
+              return true;
+            },
+          }),
+        };
+        const middleware = leMiddleware({ adaptateurEnvironnement });
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(idUtilisateurRecu).to.be('123');
+        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(true);
+      });
+
+      it("reflète le refus de l'adaptateur environnement", async () => {
+        const adaptateurEnvironnement = {
+          featureFlag: () => ({
+            avecAccesCreationCleApi: () => false,
+          }),
+        };
+        const middleware = leMiddleware({ adaptateurEnvironnement });
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(false);
       });
     });
 

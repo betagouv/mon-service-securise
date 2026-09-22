@@ -164,6 +164,13 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       estAdmin,
       estSuperviseur,
     };
+
+    reponse.locals.featureFlags = {
+      ...reponse.locals.featureFlags,
+      avecCreationCleApi: adaptateurEnvironnement
+        .featureFlag()
+        .avecAccesCreationCleApi(utilisateurCourant.id),
+    };
     requete.cguAcceptees = requete.session?.cguAcceptees;
     requete.estInvite = requete.session?.estInvite;
 
