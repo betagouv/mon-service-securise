@@ -46,9 +46,18 @@ describe("La documentation de l'API publique", () => {
       const document = await leDocumentOpenApi();
 
       const reponses = document.paths['/v1/services'].get.responses;
-      expect(Object.keys(reponses)).toEqual(['200', '401', '500']);
+      expect(Object.keys(reponses)).toEqual(['200', '401', '429', '500']);
       expect(reponses['200'].content['application/json'].schema).toEqual({
         $ref: '#/components/schemas/ReponseServices',
+      });
+    });
+
+    it('documente la réponse 429 en cas de quota dépassé', async () => {
+      const document = await leDocumentOpenApi();
+
+      const reponse429 = document.paths['/v1/services'].get.responses['429'];
+      expect(reponse429.content['application/json'].schema).toEqual({
+        $ref: '#/components/schemas/Erreur',
       });
     });
 
