@@ -1,10 +1,10 @@
 import request from 'supertest';
-import { creeServeurApiPublique } from '../../src/apiPublique/mssApiPublique.js';
-import { depotVide } from '../depots/depotVide.js';
-import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
-import { AdaptateurGestionErreur } from '../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
+import { creeServeurApiPublique } from '../../../src/apiPublique/mssApiPublique.js';
+import { depotVide } from '../../depots/depotVide.js';
+import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
+import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 
-describe("La documentation de l'API publique", () => {
+describe("Les routes de documentation de l'API publique", () => {
   let depotDonnees: DepotDonnees;
 
   beforeEach(async () => {
