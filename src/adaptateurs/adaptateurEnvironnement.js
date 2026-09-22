@@ -68,6 +68,16 @@ const featureFlag = () => ({
   avecRisquesV2: () => process.env.FEATURE_FLAG_AVEC_RISQUES_V2 === 'true',
   avecGestionDesOrganisations: () =>
     process.env.FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS === 'true',
+  avecAccesCreationCleApi: (idUtilisateur) => {
+    const idsUtilisateursAutorises = (
+      process.env.FEATURE_FLAG_IDS_UTILISATEURS_CREATION_CLE_API?.split(',') ??
+      []
+    ).map((id) => id.trim());
+    return (
+      idsUtilisateursAutorises.length === 0 ||
+      idsUtilisateursAutorises.includes(idUtilisateur)
+    );
+  },
 });
 
 const statique = () => ({
