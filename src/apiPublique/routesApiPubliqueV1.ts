@@ -3,7 +3,7 @@ import { RequeteApiPublique } from './middlewares/authentificationParCleApi.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import Service from '../modeles/service.js';
-import { serialiseServicePourAPIPublique } from './schemas/services.schema.js';
+import { serialiseServicePourAPIPublique } from './mappers/services.mapper.js';
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
