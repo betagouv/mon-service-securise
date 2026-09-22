@@ -13,7 +13,7 @@ describe("Le serveur d'API publique", () => {
   beforeEach(async () => {
     depotDonnees = await depotVide();
     erreursLoguees = [];
-    const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'));
+    const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'), 30);
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
   });
 

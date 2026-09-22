@@ -21,7 +21,7 @@ describe("Les routes d'API publique `/v1`", () => {
 
   beforeEach(async () => {
     depotDonnees = await depotVide();
-    const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'));
+    const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'), 30);
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
   });
 

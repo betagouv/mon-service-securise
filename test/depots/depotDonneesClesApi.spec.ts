@@ -24,26 +24,36 @@ describe("Le dépôt de données des clés d'API", () => {
 
   describe("sur demande d'une nouvelle clé", () => {
     it('renvoie la clé et sa valeur en clair', async () => {
-      const { cle, valeurEnClair } = await unDepot().nouvelleCle(unUUID('U'));
+      const { cle, valeurEnClair } = await unDepot().nouvelleCle(
+        unUUID('U'),
+        30
+      );
 
       expect(cle).toBeInstanceOf(CleApi);
       expect(valeurEnClair).toMatch(/^mss_live_/);
     });
 
     it("persiste l'empreinte de la clé hachée avec les sels", async () => {
-      const { valeurEnClair } = await unDepot().nouvelleCle(unUUID('U'));
+      const { valeurEnClair } = await unDepot().nouvelleCle(unUUID('U'), 30);
 
       const [cleLue] = await persistance.lisClesApiDe(unUUID('U'));
       expect(cleLue.empreinte).toBe(`v1:${valeurEnClair}-hachee`);
+    });
+
+    it("persiste sa date d'expiration selon la durée de validité demandée", async () => {
+      const { cle } = await unDepot().nouvelleCle(unUUID('U'), 30);
+
+      const [cleLue] = await persistance.lisClesApiDe(unUUID('U'));
+      expect(cleLue.dateExpiration).toEqual(cle.donnees().dateExpiration);
     });
   });
 
   describe("sur demande des clés d'un utilisateur", () => {
     it('renvoie uniquement ses clés, sous forme de modèles métier', async () => {
       const depot = unDepot();
-      await depot.nouvelleCle(unUUID('U'));
-      await depot.nouvelleCle(unUUID('U'));
-      await depot.nouvelleCle(unUUID('A'));
+      await depot.nouvelleCle(unUUID('U'), 30);
+      await depot.nouvelleCle(unUUID('U'), 30);
+      await depot.nouvelleCle(unUUID('A'), 30);
 
       const cles = await depot.lisClesDe(unUUID('U'));
 
@@ -59,7 +69,7 @@ describe("Le dépôt de données des clés d'API", () => {
   describe("sur demande d'une clé à partir de sa valeur en clair", () => {
     it('retrouve la clé correspondante', async () => {
       const depot = unDepot();
-      const { cle, valeurEnClair } = await depot.nouvelleCle(unUUID('U'));
+      const { cle, valeurEnClair } = await depot.nouvelleCle(unUUID('U'), 30);
 
       const cleLue = await depot.lisCleParValeur(valeurEnClair);
 
@@ -77,7 +87,7 @@ describe("Le dépôt de données des clés d'API", () => {
   describe("sur demande de révocation d'une clé", () => {
     it('persiste la révocation', async () => {
       const depot = unDepot();
-      const { cle } = await depot.nouvelleCle(unUUID('U'));
+      const { cle } = await depot.nouvelleCle(unUUID('U'), 30);
 
       await depot.revoqueCle(cle.donnees().id, unUUID('U'));
 
@@ -87,7 +97,7 @@ describe("Le dépôt de données des clés d'API", () => {
 
     it("refuse de révoquer la clé d'un autre utilisateur", async () => {
       const depot = unDepot();
-      const { cle } = await depot.nouvelleCle(unUUID('U'));
+      const { cle } = await depot.nouvelleCle(unUUID('U'), 30);
 
       await expect(
         depot.revoqueCle(cle.donnees().id, unUUID('A'))
