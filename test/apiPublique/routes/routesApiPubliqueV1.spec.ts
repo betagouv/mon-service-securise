@@ -1,16 +1,16 @@
 import request from 'supertest';
-import { creeServeurApiPublique } from '../../src/apiPublique/mssApiPublique.js';
-import { depotVide } from '../depots/depotVide.js';
-import { unServiceV2 } from '../constructeurs/constructeurService.js';
-import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
-import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
-import { schemaReponseServices } from '../../src/apiPublique/schemas/services.schema.ts';
+import { creeServeurApiPublique } from '../../../src/apiPublique/mssApiPublique.js';
+import { depotVide } from '../../depots/depotVide.js';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { schemaReponseServices } from '../../../src/apiPublique/schemas/services.schema.ts';
 import {
   Permissions,
   Rubriques,
-} from '../../src/modeles/autorisations/gestionDroits.ts';
-import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
-import { AdaptateurGestionErreur } from '../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
+} from '../../../src/modeles/autorisations/gestionDroits.ts';
+import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
+import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 
 const { LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE } = Rubriques;

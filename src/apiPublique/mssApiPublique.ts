@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
-import { authentificationParCleApi } from './authentificationParCleApi.js';
-import { limiteDeDebitParCleApi } from './limiteDeDebitParCleApi.js';
-import { routesApiPubliqueV1 } from './routesApiPubliqueV1.js';
-import { routesDocumentation } from './routesDocumentation.js';
+import { authentificationParCleApi } from './middlewares/authentificationParCleApi.js';
+import { limiteDeDebitParCleApi } from './middlewares/limiteDeDebitParCleApi.js';
+import { routesApiPubliqueV1 } from './routes/routesApiPubliqueV1.js';
+import { routesDocumentation } from './routes/routesDocumentation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
 
