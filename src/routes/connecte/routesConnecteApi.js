@@ -41,6 +41,7 @@ import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMe
 import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js';
 import { routesConnecteApiExplicationRisquesV2 } from './routesConnecteApiExplicationRisquesV2.js';
 import { routesConnecteApiAdmin } from './routesConnecteApiAdmin.js';
+import { routesConnecteApiCleApi } from './routesConnecteApiCleApi.js';
 import { ProcedureSuppressionContributeur } from '../../modeles/autorisations/procedureSuppressionContributeur.js';
 
 const { ECRITURE, LECTURE } = Permissions;
@@ -396,6 +397,15 @@ const routesConnecteApi = ({
       adaptateurHorloge,
       depotDonnees,
       referentiel,
+    })
+  );
+
+  routes.use(
+    '/cles-api',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiCleApi({
+      depotDonnees,
+      adaptateurEnvironnement,
     })
   );
 
