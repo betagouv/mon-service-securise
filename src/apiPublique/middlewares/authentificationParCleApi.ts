@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { UUID } from '../typesBasiques.js';
-import { CleApi } from '../modeles/cleApi.js';
+import { UUID } from '../../typesBasiques.js';
+import { CleApi } from '../../modeles/cleApi.js';
 
 export type RequeteApiPublique = Request & {
   idUtilisateurCourant?: UUID;

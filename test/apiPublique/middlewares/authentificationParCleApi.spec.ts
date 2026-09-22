@@ -3,10 +3,10 @@ import request from 'supertest';
 import {
   authentificationParCleApi,
   RequeteApiPublique,
-} from '../../src/apiPublique/authentificationParCleApi.js';
-import { DepotDonneesClesApi } from '../../src/depots/depotDonneesClesApi.js';
-import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.js';
-import { unUUID } from '../constructeurs/UUID.js';
+} from '../../../src/apiPublique/middlewares/authentificationParCleApi.js';
+import { DepotDonneesClesApi } from '../../../src/depots/depotDonneesClesApi.js';
+import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.js';
+import { unUUID } from '../../constructeurs/UUID.js';
 
 describe("Le middleware d'authentification par clé d'API", () => {
   let depotClesApi: DepotDonneesClesApi;
