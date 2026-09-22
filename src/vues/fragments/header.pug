@@ -69,6 +69,15 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     const contenuFluide = estConnecte ? contenuMenuAdmin : [];
     const itemsMenu = fluide ? contenuFluide : contenuMenuPagePublique;
 
+    const liensMonEspace = [
+      { label: "Mon tableau de bord", href: "/tableauDeBord" },
+      { label: "Mettre à jour mon profil", href: "/profil" },
+      { label: "Préférences", href: "/preferences" },
+    ];
+    if (featureFlags.avecCreationCleApi) {
+      liensMonEspace.push({ label: "Clés d'API", href: "/profil/cle-api" });
+    }
+
   dsfr-header(
     id="dsfr-header"
     class="fr-header__brand"
@@ -100,11 +109,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
             collapse-id="user-menu-collapse"
             button-id="user-menu-btn"
             has-logout
-            links=JSON.stringify([
-              { label: "Mon tableau de bord", href: "/tableauDeBord" },
-              { label: "Mettre à jour mon profil", href: "/profil" },
-              { label: "Préférences", href: "/preferences" }
-            ])
+            links=JSON.stringify(liensMonEspace)
           )
         .conteneur-outils-entete(slot="toolLinks")
           lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
@@ -117,11 +122,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
             collapse-id="user-menu-collapse"
             button-id="user-menu-btn"
             has-logout
-            links=JSON.stringify([
-              { label: "Mon tableau de bord", href: "/tableauDeBord" },
-              { label: "Mettre à jour mon profil", href: "/profil" },
-              { label: "Préférences", href: "/preferences" }
-            ])
+            links=JSON.stringify(liensMonEspace)
           )
       else
         lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé", slot="beforetoolslinks")
