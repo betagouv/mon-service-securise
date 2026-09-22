@@ -2,8 +2,8 @@ import {
   OpenAPIRegistry,
   OpenApiGeneratorV31,
 } from '@asteasolutions/zod-to-openapi';
-import { schemaReponseServices } from './schemas/services.schema.js';
-import { schemaErreur } from './schemas/erreur.schema.js';
+import { schemaReponseServices } from './services.schema.js';
+import { schemaErreur } from './erreur.schema.js';
 
 const reponseJson = (description: string, schema: typeof schemaErreur) => ({
   description,
