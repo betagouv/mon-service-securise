@@ -67,6 +67,32 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/profil/cle-api',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      if (
+        !adaptateurEnvironnement
+          .featureFlag()
+          .avecAccesCreationCleApi(idUtilisateur)
+      ) {
+        reponse.status(404).render('404');
+        return;
+      }
+
+      const cles = await depotDonnees.lisClesDe(idUtilisateur);
+      const clesValides = cles
+        .filter((cle) => cle.estValide())
+        .map((cle) => {
+          const { id, prefixe, dateCreation, dateExpiration } = cle.donnees();
+          return { id, prefixe, dateCreation, dateExpiration };
+        });
+
+      reponse.render('profilCleApi', { cles: clesValides });
+    }
+  );
+
+  routes.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,

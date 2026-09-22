@@ -129,6 +129,7 @@ const testeurMss = () => {
       featureFlag: () => ({
         avecRisquesV2: () => true,
         avecGestionDesOrganisations: () => true,
+        avecAccesCreationCleApi: () => true,
       }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],

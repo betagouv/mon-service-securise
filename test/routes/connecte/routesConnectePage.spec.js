@@ -2,6 +2,7 @@ import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
+import { CleApi } from '../../../src/modeles/cleApi.js';
 import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
@@ -19,6 +20,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     '/visiteGuidee',
     '/mesures',
     '/preferences',
+    '/profil/cle-api',
   ].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {
@@ -182,6 +184,73 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           echeanceMesureBientotExpiree: true,
           echeanceMesureExpiree: true,
         },
+      });
+    });
+  });
+
+  describe('quand GET sur /profil/cle-api', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().lisClesDe = async () => [];
+    });
+
+    it("délègue au dépôt de données la lecture des clés d'API de l'utilisateur", async () => {
+      let idRecu;
+      testeur.depotDonnees().lisClesDe = async (idUtilisateur) => {
+        idRecu = idUtilisateur;
+        return [];
+      };
+
+      await testeur.get('/profil/cle-api');
+
+      expect(idRecu).to.be('U1');
+    });
+
+    it('ne transmet que les clés ni révoquées ni expirées', async () => {
+      const uneCle = (id, dateExpiration) =>
+        CleApi.hydrate({
+          id,
+          idUtilisateur: 'U1',
+          prefixe: id,
+          empreinte: 'empreinte',
+          dateCreation: new Date('2026-09-01'),
+          dateExpiration,
+        });
+
+      const revoquee = uneCle('revoquee', new Date('2999-01-01'));
+      revoquee.revoque(new Date('2026-09-02'));
+
+      testeur.depotDonnees().lisClesDe = async () => [
+        uneCle('valide', new Date('2999-01-01')),
+        revoquee,
+        uneCle('expiree', new Date('2020-01-01')),
+      ];
+
+      const reponse = await testeur.get('/profil/cle-api');
+
+      const { cles } = donneesPartagees(reponse.text, 'donnees-cle-api');
+      expect(cles.map((c) => c.id)).to.eql(['valide']);
+    });
+
+    describe("concernant l'accès restreint par le feature flag de création de clé d'API", () => {
+      it("répond 404 si l'adaptateur environnement refuse l'accès à l'utilisateur", async () => {
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecAccesCreationCleApi: () => false,
+        });
+
+        const reponse = await testeur.get('/profil/cle-api');
+
+        expect(reponse.status).to.be(404);
+      });
+
+      it("répond 200 si l'adaptateur environnement autorise l'utilisateur", async () => {
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecAccesCreationCleApi: () => true,
+        });
+
+        const reponse = await testeur.get('/profil/cle-api');
+
+        expect(reponse.status).to.be(200);
       });
     });
   });
