@@ -24,7 +24,10 @@ describe("Le middleware d'authentification par clé d'API", () => {
     const app = express();
     app.use(authentificationParCleApi({ depotDonnees: depotClesApi }));
     app.get('/ressource', (requete: RequeteApiPublique, reponse) => {
-      reponse.json({ idUtilisateur: requete.idUtilisateurCourant });
+      reponse.json({
+        idUtilisateur: requete.idUtilisateurCourant,
+        idCleApi: requete.idCleApiCourante,
+      });
     });
     return app;
   };
@@ -71,13 +74,16 @@ describe("Le middleware d'authentification par clé d'API", () => {
   });
 
   it("accepte une clé valide et identifie l'utilisateur à qui elle appartient", async () => {
-    const { valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'));
+    const { cle, valeurEnClair } = await depotClesApi.nouvelleCle(unUUID('U'));
 
     const reponse = await request(uneApp())
       .get('/ressource')
       .set('Authorization', `Bearer ${valeurEnClair}`);
 
     expect(reponse.status).toBe(200);
-    expect(reponse.body).toEqual({ idUtilisateur: unUUID('U') });
+    expect(reponse.body).toEqual({
+      idUtilisateur: unUUID('U'),
+      idCleApi: cle.donnees().id,
+    });
   });
 });

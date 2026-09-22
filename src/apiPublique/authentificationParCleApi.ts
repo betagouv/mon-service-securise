@@ -4,6 +4,7 @@ import { CleApi } from '../modeles/cleApi.js';
 
 export type RequeteApiPublique = Request & {
   idUtilisateurCourant?: UUID;
+  idCleApiCourante?: UUID;
 };
 
 type DepotPourAuthentification = {
@@ -42,5 +43,6 @@ export const authentificationParCleApi =
     }
 
     requete.idUtilisateurCourant = cle.donnees().idUtilisateur;
+    requete.idCleApiCourante = cle.donnees().id;
     suite();
   };
