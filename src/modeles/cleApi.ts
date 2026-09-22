@@ -7,6 +7,7 @@ export type DonneesCleApi = {
   prefixe: string;
   empreinte: string;
   dateCreation: Date;
+  dateExpiration: Date;
   dateRevocation?: Date;
 };
 
@@ -15,17 +16,26 @@ export type Hacheur = (valeurEnClair: string) => string;
 export class CleApi {
   private constructor(private readonly donneesCle: DonneesCleApi) {}
 
-  static nouvelle(idUtilisateur: UUID, hache: Hacheur) {
+  static nouvelle(
+    idUtilisateur: UUID,
+    dureeValiditeEnJours: number,
+    hache: Hacheur
+  ) {
     const prefixe = randomBytes(4).toString('hex');
     const secret = randomBytes(32).toString('base64url');
     const valeurEnClair = `mss_live_${prefixe}_${secret}`;
+
+    const dateCreation = new Date();
+    const dateExpiration = new Date(dateCreation);
+    dateExpiration.setDate(dateExpiration.getDate() + dureeValiditeEnJours);
 
     const cle = new CleApi({
       id: crypto.randomUUID(),
       idUtilisateur,
       prefixe,
       empreinte: hache(valeurEnClair),
-      dateCreation: new Date(),
+      dateCreation,
+      dateExpiration,
     });
 
     return { cle, valeurEnClair };
@@ -37,6 +47,10 @@ export class CleApi {
 
   estRevoquee() {
     return this.donneesCle.dateRevocation !== undefined;
+  }
+
+  estExpiree(aLaDate: Date = new Date()) {
+    return aLaDate >= this.donneesCle.dateExpiration;
   }
 
   revoque(date: Date) {
