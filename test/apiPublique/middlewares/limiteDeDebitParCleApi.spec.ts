@@ -1,9 +1,9 @@
 import express from 'express';
 import request from 'supertest';
-import { limiteDeDebitParCleApi } from '../../src/apiPublique/limiteDeDebitParCleApi.js';
-import { RequeteApiPublique } from '../../src/apiPublique/authentificationParCleApi.js';
-import { unUUID } from '../constructeurs/UUID.js';
-import { UUID } from '../../src/typesBasiques.ts';
+import { limiteDeDebitParCleApi } from '../../../src/apiPublique/middlewares/limiteDeDebitParCleApi.js';
+import { RequeteApiPublique } from '../../../src/apiPublique/middlewares/authentificationParCleApi.js';
+import { unUUID } from '../../constructeurs/UUID.js';
+import { UUID } from '../../../src/typesBasiques.ts';
 
 describe("Le middleware de limite de débit par clé d'API", () => {
   const uneApp = ({ maxParFenetre }: { maxParFenetre: number }) => {
