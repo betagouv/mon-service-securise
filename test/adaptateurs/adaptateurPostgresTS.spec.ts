@@ -23,6 +23,7 @@ describe("L'adaptateur persistance Postgres", () => {
     prefixe: '7f3a91c4',
     empreinte: `empreinte-${unUUIDRandom()}`,
     dateCreation: new Date('2026-09-01T08:00:00Z'),
+    dateExpiration: new Date('2027-09-01T08:00:00Z'),
     ...donnees,
   });
 
@@ -786,6 +787,7 @@ describe("L'adaptateur persistance Postgres", () => {
         id_utilisateur: cle.idUtilisateur,
         prefixe: cle.prefixe,
         empreinte: cle.empreinte,
+        date_expiration: cle.dateExpiration,
         date_revocation: null,
       });
     });

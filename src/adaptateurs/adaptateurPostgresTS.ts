@@ -325,6 +325,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         prefixe: 'prefixe',
         empreinte: 'empreinte',
         dateCreation: 'date_creation',
+        dateExpiration: 'date_expiration',
         dateRevocation: 'date_revocation',
       })
       .where({ id_utilisateur: idUtilisateur });
@@ -345,6 +346,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         prefixe: 'prefixe',
         empreinte: 'empreinte',
         dateCreation: 'date_creation',
+        dateExpiration: 'date_expiration',
         dateRevocation: 'date_revocation',
       })
       .where({ empreinte })
@@ -364,6 +366,7 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         prefixe: donnees.prefixe,
         empreinte: donnees.empreinte,
         date_creation: donnees.dateCreation,
+        date_expiration: donnees.dateExpiration,
         date_revocation: donnees.dateRevocation,
       })
       .onConflict('id')
