@@ -10,8 +10,13 @@ import Service from '../../modeles/service.js';
 import { serialiseServicePourAPIPublique } from '../mappers/services.mapper.js';
 import { serialiseIndiceCyberPourAPIPublique } from '../mappers/indiceCyber.mapper.js';
 import { serialiseMesuresPourAPIPublique } from '../mappers/mesures.mapper.js';
+import { serialiseHomologationPourAPIPublique } from '../mappers/homologation.mapper.js';
 
-const { DROITS_VOIR_INDICE_CYBER, DROITS_VOIR_MESURES } = Autorisation;
+const {
+  DROITS_VOIR_INDICE_CYBER,
+  DROITS_VOIR_MESURES,
+  DROITS_VOIR_STATUT_HOMOLOGATION,
+} = Autorisation;
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
@@ -61,6 +66,14 @@ export const routesApiPubliqueV1 = ({
     serviceAccessible(DROITS_VOIR_MESURES),
     (requete: RequeteServiceApiPublique, reponse: Response) => {
       reponse.json(serialiseMesuresPourAPIPublique(requete.service!));
+    }
+  );
+
+  routes.get(
+    '/services/:id/homologation',
+    serviceAccessible(DROITS_VOIR_STATUT_HOMOLOGATION),
+    (requete: RequeteServiceApiPublique, reponse: Response) => {
+      reponse.json(serialiseHomologationPourAPIPublique(requete.service!));
     }
   );
 
