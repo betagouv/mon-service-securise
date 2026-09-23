@@ -100,7 +100,11 @@
   </aside>
 
   <div class="contenu">
-    <h1>{modele.titre}</h1>
+    <h1>
+      {modele.titre}
+      <dsfr-badge label="BÊTA" type="accent" accent="green-emeraude" size="sm"
+      ></dsfr-badge>
+    </h1>
     {#if modele.description}
       <p class="introduction">{modele.description}</p>
     {/if}
@@ -266,6 +270,9 @@
     font-size: 2.5rem;
     line-height: 1.2;
     margin: 0 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .contenu h2 {
     font-size: 1.75rem;
