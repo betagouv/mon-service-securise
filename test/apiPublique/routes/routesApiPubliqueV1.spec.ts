@@ -6,6 +6,7 @@ import {
   unServiceV2,
 } from '../../constructeurs/constructeurService.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { schemaReponseServices } from '../../../src/apiPublique/schemas/services.schema.ts';
 import { schemaReponseIndiceCyber } from '../../../src/apiPublique/schemas/indiceCyber.schema.ts';
@@ -99,7 +100,7 @@ describe("Les routes d'API publique `/v1`", () => {
               siret: '21690123400015',
             },
             nombreContributeurs: 4,
-            niveauSecurite: 'niveau3',
+            besoinsSecurite: 'avances',
           },
         ],
       });
@@ -145,7 +146,39 @@ describe("Les routes d'API publique `/v1`", () => {
       });
     });
 
-    it("n'expose pas le niveau de sécurité sans le droit de lire la description du service", async () => {
+    it.each([
+      { niveauSecurite: 'niveau1', besoinsSecurite: 'basiques' },
+      { niveauSecurite: 'niveau2', besoinsSecurite: 'moderes' },
+      { niveauSecurite: 'niveau3', besoinsSecurite: 'avances' },
+    ] as const)(
+      'renvoie les besoins de sécurité `$besoinsSecurite` pour un service de niveau `$niveauSecurite`',
+      async ({ niveauSecurite, besoinsSecurite }) => {
+        depotDonnees.services = async () => [
+          unServiceV2()
+            .avecId(unUUID('S'))
+            .avecDescription(
+              uneDescriptionV2Valide()
+                .avecNiveauSecurite(niveauSecurite)
+                .donneesDescription()
+            )
+            .construis(),
+        ];
+        depotDonnees.autorisations = async () => [
+          uneAutorisation()
+            .deContributeur(unUUID('U'), unUUID('S'))
+            .avecDroits({ [DECRIRE]: LECTURE })
+            .construis(),
+        ];
+
+        const reponse = await request(uneApp())
+          .get('/v1/services')
+          .set('Authorization', enTeteAuthorization);
+
+        expect(reponse.body.donnees[0].besoinsSecurite).toBe(besoinsSecurite);
+      }
+    );
+
+    it("n'expose pas les besoins de sécurité sans le droit de lire la description du service", async () => {
       depotDonnees.services = async () => [unServiceDeLyon()];
       depotDonnees.autorisations = async () => [
         uneAutorisation()
@@ -158,7 +191,7 @@ describe("Les routes d'API publique `/v1`", () => {
         .get('/v1/services')
         .set('Authorization', enTeteAuthorization);
 
-      expect(reponse.body.donnees[0]).not.toHaveProperty('niveauSecurite');
+      expect(reponse.body.donnees[0]).not.toHaveProperty('besoinsSecurite');
     });
   });
 

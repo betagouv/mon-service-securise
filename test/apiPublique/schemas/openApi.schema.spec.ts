@@ -23,9 +23,9 @@ describe('La génération de la documentation OpenAPI', () => {
         'nom',
         'organisationResponsable',
         'nombreContributeurs',
-        'niveauSecurite',
+        'besoinsSecurite',
       ]);
-      expect(schemaService.required).not.toContain('niveauSecurite');
+      expect(schemaService.required).not.toContain('besoinsSecurite');
     });
 
     it('documente les codes de réponse', async () => {

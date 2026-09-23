@@ -168,7 +168,7 @@ describe('Le modèle de documentation', () => {
         'donnees[].organisationResponsable.nom',
         'donnees[].organisationResponsable.siret',
         'donnees[].nombreContributeurs',
-        'donnees[].niveauSecurite',
+        'donnees[].besoinsSecurite',
       ]);
     });
 
@@ -184,8 +184,8 @@ describe('Le modèle de documentation', () => {
         'string | null'
       );
       expect(typeDe('donnees[].nombreContributeurs')).toBe('integer');
-      expect(typeDe('donnees[].niveauSecurite')).toBe(
-        '"niveau1" | "niveau2" | "niveau3"'
+      expect(typeDe('donnees[].besoinsSecurite')).toBe(
+        '"basiques" | "moderes" | "avances"'
       );
     });
 
@@ -198,7 +198,7 @@ describe('Le modèle de documentation', () => {
         requis: 'Oui',
         description: 'Nombre de personnes ayant accès au service. · ≥ 0',
       });
-      expect(ligne('donnees[].niveauSecurite')?.requis).toBe('Non');
+      expect(ligne('donnees[].besoinsSecurite')?.requis).toBe('Non');
     });
 
     it('construit un exemple JSON à partir des exemples et des types', () => {
@@ -211,7 +211,7 @@ describe('Le modèle de documentation', () => {
             nom: "Téléservice de demande d'aide",
             organisationResponsable: { nom: 'ANSSI', siret: '21690123400015' },
             nombreContributeurs: 4,
-            niveauSecurite: 'niveau1',
+            besoinsSecurite: 'basiques',
           },
         ],
       });
