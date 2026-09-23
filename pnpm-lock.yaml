@@ -237,6 +237,9 @@ importers:
       lint-staged:
         specifier: ^17.0.0
         version: 17.5.0
+      openapi3-ts:
+        specifier: ^4.6.1
+        version: 4.6.1
       prettier:
         specifier: ^3.8.1
         version: 3.9.6
