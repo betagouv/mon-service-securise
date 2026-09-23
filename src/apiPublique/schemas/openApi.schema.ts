@@ -7,6 +7,7 @@ import { schemaReponseServices } from './services.schema.js';
 import { schemaReponseIndiceCyber } from './indiceCyber.schema.js';
 import { schemaReponseMesures } from './mesures.schema.js';
 import { schemaReponseHomologation } from './homologation.schema.js';
+import { schemaReponseRisques } from './risques.schema.js';
 import { schemaErreur } from './erreur.schema.js';
 
 const reponseJson = (description: string, schema: typeof schemaErreur) => ({
@@ -122,6 +123,15 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
       "L'homologation en cours du service. Un dossier en cours de saisie mais pas encore décidé n'apparaît pas. Nécessite le droit de lecture sur la rubrique « Homologuer ».",
     descriptionReponse: "L'homologation en cours du service.",
     schemaReponse: schemaReponseHomologation,
+  });
+
+  enregistreUneRouteDUnService(registry, {
+    chemin: '/v1/services/{id}/risques',
+    resume: "Risques d'un service",
+    description:
+      "Les risques du service : ceux du référentiel ANSSI, puis ceux ajoutés par l'équipe, avec leur gravité et leur vraisemblance. Les risques désactivés par l'équipe ne sont pas renvoyés. Nécessite le droit de lecture sur la rubrique « Risques ».",
+    descriptionReponse: 'Les risques du service.',
+    schemaReponse: schemaReponseRisques,
   });
 };
 

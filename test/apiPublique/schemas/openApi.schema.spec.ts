@@ -57,6 +57,7 @@ describe('La génération de la documentation OpenAPI', () => {
       chemin: '/v1/services/{id}/homologation',
       schemaReponse: 'ReponseHomologation',
     },
+    { chemin: '/v1/services/{id}/risques', schemaReponse: 'ReponseRisques' },
   ])('concernant la route $chemin', ({ chemin, schemaReponse }) => {
     it("documente l'identifiant du service en paramètre de chemin", async () => {
       const document = documentOpenApi();
