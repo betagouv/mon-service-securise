@@ -12,6 +12,11 @@ describe('Le modèle de documentation', () => {
     ...surcharge,
   });
 
+  const operationDuDocumentOpenApi = (chemin: string) =>
+    construisModeleDocumentation(documentOpenApi())
+      .groupes.flatMap((groupe) => groupe.operations)
+      .find((operation) => operation.chemin === chemin)!;
+
   describe('sur les informations générales', () => {
     it('reprend le titre, la version et la description', () => {
       const modele = construisModeleDocumentation(documentOpenApi());
@@ -44,19 +49,31 @@ describe('Le modèle de documentation', () => {
 
   describe('sur les opérations', () => {
     it('les groupe par tag', () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+      const modele = construisModeleDocumentation(
+        unDocument({
+          paths: {
+            '/services': { get: { tags: ['Services'], responses: {} } },
+            '/services/{id}': { get: { tags: ['Services'], responses: {} } },
+            '/comptes': { get: { tags: ['Comptes'], responses: {} } },
+          },
+        })
+      );
 
-      expect(modele.groupes).toHaveLength(1);
-      const [services] = modele.groupes;
-      expect(services.id).toBe('groupe-services');
-      expect(services.nom).toBe('Services');
-      expect(services.operations).toHaveLength(5);
+      expect(
+        modele.groupes.map(({ id, nom, operations }) => [
+          id,
+          nom,
+          operations.map((operation) => operation.chemin),
+        ])
+      ).toEqual([
+        ['groupe-services', 'Services', ['/services', '/services/{id}']],
+        ['groupe-comptes', 'Comptes', ['/comptes']],
+      ]);
     });
 
     it("décrit l'opération", () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+      const operation = operationDuDocumentOpenApi('/v1/services');
 
-      const [operation] = modele.groupes[0].operations;
       expect(operation.id).toBe('operation-get-v1-services');
       expect(operation.methode).toBe('GET');
       expect(operation.chemin).toBe('/v1/services');
@@ -124,8 +141,7 @@ describe('Le modèle de documentation', () => {
 
   describe('sur les réponses', () => {
     const reponsesDeListeDesServices = () =>
-      construisModeleDocumentation(documentOpenApi()).groupes[0].operations[0]
-        .reponses;
+      operationDuDocumentOpenApi('/v1/services').reponses;
 
     it('liste chaque statut avec sa description', () => {
       const reponses = reponsesDeListeDesServices();
@@ -217,21 +233,28 @@ describe('Le modèle de documentation', () => {
   });
 
   describe('sur les schémas', () => {
-    it('décrit chaque schéma nommé avec ses champs et un exemple', () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+    it('décrit chaque schéma nommé du document', () => {
+      const modele = construisModeleDocumentation(
+        unDocument({
+          components: {
+            schemas: {
+              ReponseServices: { type: 'object' },
+              Erreur: { type: 'object' },
+            },
+          },
+        })
+      );
 
       expect(modele.schemas.map((s) => [s.id, s.nom])).toEqual([
         ['schema-reponseservices', 'ReponseServices'],
-        ['schema-service', 'Service'],
         ['schema-erreur', 'Erreur'],
-        ['schema-reponseindicecyber', 'ReponseIndiceCyber'],
-        ['schema-reponsemesures', 'ReponseMesures'],
-        ['schema-mesure', 'Mesure'],
-        ['schema-reponsehomologation', 'ReponseHomologation'],
-        ['schema-reponserisques', 'ReponseRisques'],
-        ['schema-risque', 'Risque'],
       ]);
-      const erreur = modele.schemas[2];
+    });
+
+    it("décrit les champs d'un schéma et en donne un exemple", () => {
+      const modele = construisModeleDocumentation(documentOpenApi());
+
+      const erreur = modele.schemas.find((s) => s.nom === 'Erreur')!;
       expect(erreur.lignes).toEqual([
         {
           nom: 'erreur',
