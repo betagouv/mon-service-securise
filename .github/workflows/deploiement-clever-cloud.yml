@@ -17,6 +17,8 @@ on:
         required: true
       CLEVER_CLOUD_ID_APP:
         required: true
+      CLEVER_CLOUD_ID_APP_API:
+        required: false
       CLEVER_CLOUD_ID_ORGANISATION:
         required: true
 
@@ -25,6 +27,9 @@ jobs:
     name: ${{ inputs.nom }}
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    env:
+      # Le contexte `secrets` n'est pas lisible depuis le `if` d'une étape, d'où ce passage par `env`
+      ID_APP_API: ${{ secrets.CLEVER_CLOUD_ID_APP_API }}
     steps:
       - name: Cloner le dépôt Git
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -36,7 +41,7 @@ jobs:
         shell: bash
         run: npm install -g clever-tools@4.4.0 # Utilisation de `npm` acceptable avec une version épinglée
 
-      - name: Déployer
+      - name: Déployer l'application web
         env:
           CLEVER_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
           CLEVER_TOKEN: ${{ secrets.CLEVER_CLOUD_TOKEN }}
@@ -47,3 +52,15 @@ jobs:
           clever link -o="$ID_ORGANISATION" "$ID_APP"
           clever env set CC_NODE_VERSION "$NODE_VERSION"
           clever deploy --force --same-commit-policy=rebuild
+
+      - name: Déployer l'API publique
+        if: env.ID_APP_API != ''
+        env:
+          CLEVER_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
+          CLEVER_TOKEN: ${{ secrets.CLEVER_CLOUD_TOKEN }}
+          ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
+        run: |
+          NODE_VERSION="$(./scripts/get-node-version.sh)"
+          clever link -o="$ID_ORGANISATION" --alias api "$ID_APP_API"
+          clever env set --alias api CC_NODE_VERSION "$NODE_VERSION"
+          clever deploy --force --same-commit-policy=rebuild --alias api
