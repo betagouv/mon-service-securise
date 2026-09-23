@@ -60,7 +60,7 @@ ${styles(urlBaseMss)
     <script src="${SCRIPT_UI_KIT}" defer></script>
     ${head}
   </head>
-  <body>
+  <body data-themeable="true">
     ${body}
   </body>
 </html>
