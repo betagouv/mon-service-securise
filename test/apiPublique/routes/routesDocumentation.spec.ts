@@ -30,23 +30,42 @@ describe("Les routes de documentation de l'API publique", () => {
   });
 
   describe('sur GET /docs', () => {
-    it("sert la page Redoc, sans clé d'API, branchée sur le document OpenAPI", async () => {
+    it("sert la page de documentation, sans clé d'API, rendue côté serveur depuis le document OpenAPI", async () => {
       const reponse = await request(uneApp()).get('/docs');
 
       expect(reponse.status).toBe(200);
       expect(reponse.headers['content-type']).toContain('text/html');
-      expect(reponse.text).toContain('<redoc spec-url="/openapi.json">');
+      expect(reponse.text).toContain('<dsfr-header');
+      expect(reponse.text).toContain('id="operation-get-v1-services"');
+      expect(reponse.text).toContain('href="/openapi.json"');
     });
 
-    it("charge Redoc dans une version figée, avec contrôle d'intégrité", async () => {
+    it('charge le UI Kit dans une version figée, sans dépendre du DSFR', async () => {
       const reponse = await request(uneApp()).get('/docs');
 
       expect(reponse.text).toContain(
-        'src="https://cdn.jsdelivr.net/npm/redoc@2.5.4/bundles/redoc.standalone.js"'
+        'src="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js"'
       );
       expect(reponse.text).toContain(
-        'integrity="sha384-w447zOpYfw/1Tv/5AK9NfHTlQIqE3RVR6KY62jCyy9zNDgO64cMwGGP1Fj0zJVf5"'
+        'href="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/dsfr-variables.css"'
       );
+      expect(reponse.text).not.toContain('@gouvfr/dsfr');
+    });
+
+    it('sert les polices Marianne du dépôt', async () => {
+      const app = uneApp();
+
+      const feuille = await request(app).get(
+        '/statique/assets/styles/fonts.css'
+      );
+      const police = await request(app).get(
+        '/statique/assets/fonts/Marianne-Regular.woff2'
+      );
+
+      expect(feuille.status).toBe(200);
+      expect(feuille.headers['content-type']).toContain('text/css');
+      expect(police.status).toBe(200);
+      expect(police.headers['content-type']).toContain('font/woff2');
     });
 
     it('restreint la page avec une politique de sécurité du contenu', async () => {
@@ -55,10 +74,16 @@ describe("Les routes de documentation de l'API publique", () => {
       const csp = reponse.headers['content-security-policy'];
       expect(csp).toContain("default-src 'none'");
       expect(csp).toContain(
-        'script-src https://cdn.jsdelivr.net/npm/redoc@2.5.4/bundles/redoc.standalone.js'
+        'script-src https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js'
       );
-      expect(csp).toContain("connect-src 'self'");
-      expect(csp).toContain('worker-src blob:');
+      expect(csp).toContain(
+        "style-src 'self' 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/"
+      );
+      expect(csp).toContain("font-src 'self'");
+      expect(csp).toContain(
+        "img-src 'self' data: https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/"
+      );
+      expect(csp).not.toContain('worker-src');
     });
   });
 });
