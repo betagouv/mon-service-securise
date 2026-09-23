@@ -111,7 +111,7 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
     chemin: '/v1/services/{id}/mesures',
     resume: "Mesures d'un service",
     description:
-      "L'état d'application de chaque mesure du service : mesures du référentiel ANSSI applicables au service, puis mesures ajoutées par l'équipe. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
+      "L'état d'application de chaque mesure du service : mesures du référentiel ANSSI / CNIL applicables au service, puis mesures ajoutées par l'équipe. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
     descriptionReponse: 'Les mesures du service et leur synthèse par statut.',
     schemaReponse: schemaReponseMesures,
   });
@@ -120,8 +120,8 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
     chemin: '/v1/services/{id}/homologation',
     resume: "Homologation d'un service",
     description:
-      "L'homologation en cours du service. Un dossier en cours de saisie mais pas encore décidé n'apparaît pas. Nécessite le droit de lecture sur la rubrique « Homologuer ».",
-    descriptionReponse: "L'homologation en cours du service.",
+      "La dernière homologation active du service. Un dossier en cours de saisie mais pas encore finalisé n'apparaît pas. Nécessite le droit de lecture sur la rubrique « Homologuer ».",
+    descriptionReponse: 'La dernière homologation active du service.',
     schemaReponse: schemaReponseHomologation,
   });
 
