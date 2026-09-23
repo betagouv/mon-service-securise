@@ -61,6 +61,17 @@ describe("Les routes de documentation de l'API publique", () => {
       );
     });
 
+    it("affiche le favicon et le logo ANSSI de l'application principale", async () => {
+      const reponse = await request(uneApp()).get('/docs');
+
+      expect(reponse.text).toContain(
+        '<link rel="icon" href="https://mss.example.org/statique/assets/images/favicons/favicon.ico">'
+      );
+      expect(reponse.text).toContain(
+        'brand-operator-src="https://mss.example.org/statique/assets/images/logo_ANSSI_MSS.svg"'
+      );
+    });
+
     it('restreint la page avec une politique de sécurité du contenu', async () => {
       const reponse = await request(uneApp()).get('/docs');
 
@@ -74,7 +85,7 @@ describe("Les routes de documentation de l'API publique", () => {
       );
       expect(csp).toContain('font-src https://mss.example.org/');
       expect(csp).toContain(
-        "img-src 'self' data: https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/"
+        "img-src 'self' data: https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/ https://mss.example.org/"
       );
       expect(csp).not.toContain('worker-src');
     });

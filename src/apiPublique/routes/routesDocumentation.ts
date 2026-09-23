@@ -14,7 +14,7 @@ const politiqueSecuriteContenu = (urlBaseMss: string) =>
     `script-src ${SCRIPT_UI_KIT}`,
     `style-src 'unsafe-inline' ${SOURCES_EXTERNES.uiKit} ${urlBaseMss}/`,
     `font-src ${urlBaseMss}/`,
-    `img-src 'self' data: ${SOURCES_EXTERNES.uiKitAssets}`,
+    `img-src 'self' data: ${SOURCES_EXTERNES.uiKitAssets} ${urlBaseMss}/`,
     `connect-src ${SOURCES_EXTERNES.uiKitAssets}`,
     "base-uri 'none'",
     "form-action 'none'",
