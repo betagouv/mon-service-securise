@@ -66,6 +66,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     urlBaseMss,
     limiteDeDebit,
     trustProxy: adaptateurEnvironnement.trustProxy(),
+    adaptateurEnvironnement,
   });
 
   serveur.ecoute(port, () => {

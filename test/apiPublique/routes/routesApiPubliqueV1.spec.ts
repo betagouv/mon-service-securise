@@ -11,6 +11,12 @@ import { schemaReponseServices } from '../../../src/apiPublique/schemas/services
 import { schemaReponseIndiceCyber } from '../../../src/apiPublique/schemas/indiceCyber.schema.ts';
 import { schemaReponseMesures } from '../../../src/apiPublique/schemas/mesures.schema.ts';
 import { schemaReponseHomologation } from '../../../src/apiPublique/schemas/homologation.schema.ts';
+import { schemaReponseRisques } from '../../../src/apiPublique/schemas/risques.schema.ts';
+import Risques from '../../../src/modeles/risques.ts';
+import { RisquesV2 } from '../../../src/moteurRisques/v2/risquesV2.ts';
+import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
+import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
+import { AdaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.ts';
 import {
@@ -23,13 +29,15 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 
 const { LECTURE, INVISIBLE } = Permissions;
-const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
+const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES } = Rubriques;
 
 describe("Les routes d'API publique `/v1`", () => {
   let depotDonnees: DepotDonnees;
   let enTeteAuthorization: string;
+  let avecRisquesV2: boolean;
 
   beforeEach(async () => {
+    avecRisquesV2 = false;
     depotDonnees = await depotVide();
     const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'), 30);
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
@@ -43,6 +51,9 @@ describe("Les routes d'API publique `/v1`", () => {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
       adaptateurAuditApiPublique: { trace: async () => {} },
+      adaptateurEnvironnement: {
+        featureFlag: () => ({ avecRisquesV2: () => avecRisquesV2 }),
+      } as unknown as AdaptateurEnvironnement,
     }).app;
 
   const unServiceDeLyon = () =>
@@ -156,6 +167,7 @@ describe("Les routes d'API publique `/v1`", () => {
       { route: 'indice-cyber', rubriqueRequise: SECURISER },
       { route: 'mesures', rubriqueRequise: SECURISER },
       { route: 'homologation', rubriqueRequise: HOMOLOGUER },
+      { route: 'risques', rubriqueRequise: RISQUES },
     ];
 
     let idService: UUID;
@@ -481,6 +493,194 @@ describe("Les routes d'API publique `/v1`", () => {
         expect(schemaReponseHomologation.safeParse(reponse.body).success).toBe(
           true
         );
+      });
+    });
+
+    describe('sur GET /v1/services/:id/risques', () => {
+      const idRisqueSpecifique = unUUIDRandom();
+
+      const recupereRisques = () =>
+        request(uneApp())
+          .get(`/v1/services/${idService}/risques`)
+          .set('Authorization', enTeteAuthorization);
+
+      describe("pour un service qui suit l'ancien référentiel de risques", () => {
+        const referentiel = creeReferentiel({
+          risques: {
+            indisponibiliteService: {
+              description: 'Indisponibilité du service',
+              categories: ['disponibilite'],
+            },
+            fuiteDonnees: {
+              description: 'Fuite de données',
+              categories: ['confidentialite'],
+            },
+            risqueDesactive: {
+              description: 'Risque désactivé',
+              categories: ['integrite'],
+            },
+          },
+          niveauxGravite: { grave: { position: 3 } },
+          vraisemblancesRisques: { vraisemblable: { position: 2 } },
+        });
+
+        beforeEach(() => {
+          const risques = new Risques(
+            {
+              risquesGeneraux: [
+                {
+                  id: 'indisponibiliteService',
+                  niveauGravite: 'grave',
+                  niveauVraisemblance: 'vraisemblable',
+                  commentaire: 'Pas de bascule automatique',
+                },
+                { id: 'risqueDesactive', desactive: true },
+              ],
+              risquesSpecifiques: [
+                {
+                  id: idRisqueSpecifique,
+                  intitule: 'Départ du seul administrateur système',
+                  identifiantNumerique: 'RS1',
+                  categories: [],
+                  niveauGravite: 'grave',
+                },
+              ],
+            },
+            referentiel
+          );
+          depotDonnees.service = async () =>
+            unService(referentiel)
+              .avecId(idService)
+              .avecRisques(risques)
+              .construis();
+        });
+
+        it("renvoie tous les risques actifs du référentiel, puis ceux ajoutés par l'équipe", async () => {
+          const reponse = await recupereRisques();
+
+          expect(reponse.status).toBe(200);
+          expect(reponse.body).toEqual({
+            donnees: [
+              {
+                id: 'indisponibiliteService',
+                origine: 'referentielV1',
+                intitule: 'Indisponibilité du service',
+                categories: ['disponibilite'],
+                niveauGravite: 'grave',
+                niveauVraisemblance: 'vraisemblable',
+                commentaire: 'Pas de bascule automatique',
+              },
+              {
+                id: 'fuiteDonnees',
+                origine: 'referentielV1',
+                intitule: 'Fuite de données',
+                categories: ['confidentialite'],
+                niveauGravite: null,
+                niveauVraisemblance: null,
+                commentaire: null,
+              },
+              {
+                id: idRisqueSpecifique,
+                origine: 'utilisateur',
+                intitule: 'Départ du seul administrateur système',
+                categories: [],
+                niveauGravite: 'grave',
+                niveauVraisemblance: null,
+                commentaire: null,
+              },
+            ],
+          });
+        });
+
+        it('renvoie une réponse conforme au schéma documenté', async () => {
+          const reponse = await recupereRisques();
+
+          expect(schemaReponseRisques.safeParse(reponse.body).success).toBe(
+            true
+          );
+        });
+      });
+
+      describe('pour un service qui suit le nouveau référentiel de risques', () => {
+        const unRisqueV2 = () =>
+          new RisqueV2('V1', { OV2: 2 }, 3, [], {
+            commentaire: 'Postes non chiffrés',
+          });
+
+        beforeEach(() => {
+          const service = unServiceV2().avecId(idService).construis();
+          service.risquesV2 = new RisquesV2({
+            risques: [
+              unRisqueV2(),
+              new RisqueV2('V2', { OV1: 4 }, 4, [], { desactive: true }),
+            ],
+            risquesBruts: [],
+            risquesCibles: [],
+            risquesSpecifiques: [
+              new RisqueSpecifiqueV2({
+                id: idRisqueSpecifique,
+                identifiantNumerique: 'RS1',
+                intitule: 'Départ du seul administrateur système',
+                categories: ['disponibilite'],
+                risqueBrut: { gravite: 4, vraisemblance: 4 },
+                gravite: 1,
+                vraisemblance: 1,
+              }),
+            ],
+          });
+          depotDonnees.service = async () => service;
+        });
+
+        it('renvoie les risques V2 quand la fonctionnalité est activée', async () => {
+          avecRisquesV2 = true;
+
+          const reponse = await recupereRisques();
+
+          expect(reponse.status).toBe(200);
+          expect(reponse.body).toEqual({
+            donnees: [
+              {
+                id: 'R1',
+                origine: 'referentielV2',
+                intitule: unRisqueV2().intitule,
+                categories: ['confidentialite', 'integrite'],
+                niveauGravite: 'significatif',
+                niveauVraisemblance: 'tresVraisemblable',
+                commentaire: 'Postes non chiffrés',
+              },
+              {
+                id: idRisqueSpecifique,
+                origine: 'utilisateur',
+                intitule: 'Départ du seul administrateur système',
+                categories: ['disponibilite'],
+                niveauGravite: 'minime',
+                niveauVraisemblance: 'peuVraisemblable',
+                commentaire: null,
+              },
+            ],
+          });
+        });
+
+        it("renvoie les risques V1 quand la fonctionnalité n'est pas activée", async () => {
+          avecRisquesV2 = false;
+
+          const reponse = await recupereRisques();
+
+          const origines = reponse.body.donnees.map(
+            ({ origine }: { origine: string }) => origine
+          );
+          expect(origines).not.toContain('referentielV2');
+        });
+
+        it('renvoie une réponse conforme au schéma documenté', async () => {
+          avecRisquesV2 = true;
+
+          const reponse = await recupereRisques();
+
+          expect(schemaReponseRisques.safeParse(reponse.body).success).toBe(
+            true
+          );
+        });
       });
     });
   });
