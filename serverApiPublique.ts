@@ -52,6 +52,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     depotDonnees,
     adaptateurGestionErreur,
     limiteDeDebit,
+    trustProxy: adaptateurEnvironnement.trustProxy(),
   });
 
   serveur.ecoute(port, () => {

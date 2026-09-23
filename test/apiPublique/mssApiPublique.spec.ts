@@ -39,6 +39,16 @@ describe("Le serveur d'API publique", () => {
     expect(reponse.headers['x-powered-by']).toBeUndefined();
   });
 
+  it("fait confiance au nombre de proxys configuré pour déterminer l'adresse IP du client", () => {
+    const { app } = creeServeurApiPublique({
+      depotDonnees,
+      adaptateurGestionErreur: {} as AdaptateurGestionErreur,
+      trustProxy: 2,
+    });
+
+    expect(app.get('trust proxy')).toBe(2);
+  });
+
   describe('sur une route inconnue', () => {
     it('renvoie une 404 en JSON', async () => {
       const reponse = await request(uneApp())
