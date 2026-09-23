@@ -4,16 +4,34 @@ import { depotVide } from '../depots/depotVide.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { AdaptateurGestionErreur } from '../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
+import {
+  AdaptateurAuditApiPublique,
+  TraceAuditApiPublique,
+} from '../../src/adaptateurs/adaptateurAuditApiPublique.interface.ts';
+import { UUID } from '../../src/typesBasiques.ts';
 
 describe("Le serveur d'API publique", () => {
   let depotDonnees: DepotDonnees;
   let erreursLoguees: Error[];
   let enTeteAuthorization: string;
+  let idCleApi: UUID;
+  let traces: TraceAuditApiPublique[];
+  let adaptateurAuditApiPublique: AdaptateurAuditApiPublique;
 
   beforeEach(async () => {
     depotDonnees = await depotVide();
     erreursLoguees = [];
-    const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'), 30);
+    traces = [];
+    adaptateurAuditApiPublique = {
+      trace: async (trace) => {
+        traces.push(trace);
+      },
+    };
+    const { cle, valeurEnClair } = await depotDonnees.nouvelleCle(
+      unUUID('U'),
+      30
+    );
+    idCleApi = cle.donnees().id;
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
   });
 
@@ -28,6 +46,7 @@ describe("Le serveur d'API publique", () => {
           erreursLoguees.push(erreur);
         },
       } as AdaptateurGestionErreur,
+      adaptateurAuditApiPublique,
       limiteDeDebit,
     }).app;
 
@@ -43,6 +62,7 @@ describe("Le serveur d'API publique", () => {
     const { app } = creeServeurApiPublique({
       depotDonnees,
       adaptateurGestionErreur: {} as AdaptateurGestionErreur,
+      adaptateurAuditApiPublique,
       trustProxy: 2,
     });
 
@@ -101,6 +121,42 @@ describe("Le serveur d'API publique", () => {
       expect(reponse.status).toBe(429);
       expect(reponse.body).toEqual({ erreur: 'QUOTA_DEPASSE' });
       expect(reponse.headers['retry-after']).toBeDefined();
+    });
+
+    it('ne trace pas un appel refusé pour quota dépassé', async () => {
+      const app = uneApp({ fenetreMs: 60_000, maxParFenetre: 1 });
+      await request(app)
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      await request(app)
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(traces).toHaveLength(1);
+    });
+  });
+
+  describe("concernant l'audit des appels", () => {
+    it('trace un appel authentifié', async () => {
+      await request(uneApp())
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(traces).toEqual([
+        {
+          idCleApi,
+          idUtilisateur: unUUID('U'),
+          route: '/v1/services',
+          adresseIp: expect.any(String),
+        },
+      ]);
+    });
+
+    it("ne trace pas un appel sans clé d'API valide", async () => {
+      await request(uneApp()).get('/v1/services');
+
+      expect(traces).toEqual([]);
     });
   });
 });

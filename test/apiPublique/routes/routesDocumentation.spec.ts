@@ -17,6 +17,7 @@ describe("Les routes de documentation de l'API publique", () => {
       adaptateurGestionErreur: {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
+      adaptateurAuditApiPublique: { trace: async () => {} },
     }).app;
 
   describe('sur GET /openapi.json', () => {
