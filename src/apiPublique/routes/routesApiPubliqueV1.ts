@@ -1,9 +1,16 @@
 import express, { Response } from 'express';
 import { RequeteApiPublique } from '../middlewares/authentificationParCleApi.js';
+import {
+  chargeServiceAccessible,
+  RequeteServiceApiPublique,
+} from '../middlewares/chargeServiceAccessible.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import Service from '../../modeles/service.js';
 import { serialiseServicePourAPIPublique } from '../mappers/services.mapper.js';
+import { serialiseIndiceCyberPourAPIPublique } from '../mappers/indiceCyber.mapper.js';
+
+const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
@@ -11,6 +18,7 @@ export const routesApiPubliqueV1 = ({
   depotDonnees: DepotDonnees;
 }) => {
   const routes = express.Router();
+  const serviceAccessible = chargeServiceAccessible({ depotDonnees });
 
   routes.get(
     '/services',
@@ -29,6 +37,21 @@ export const routesApiPubliqueV1 = ({
           serialiseServicePourAPIPublique(service, autorisationDe(service))
         ),
       });
+    }
+  );
+
+  routes.get(
+    '/services/:id/indice-cyber',
+    serviceAccessible(DROITS_VOIR_INDICE_CYBER),
+    (requete: RequeteServiceApiPublique, reponse: Response) => {
+      const service = requete.service!;
+
+      reponse.json(
+        serialiseIndiceCyberPourAPIPublique(
+          service.indiceCyber(),
+          service.referentiel.indiceCyberNoteMax()
+        )
+      );
     }
   );
 
