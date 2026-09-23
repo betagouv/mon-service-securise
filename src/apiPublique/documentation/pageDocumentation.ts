@@ -43,7 +43,9 @@ export const pageDocumentation = (
   { urlBaseMss }: { urlBaseMss: string }
 ) => {
   const modele = construisModeleDocumentation(document);
-  const { head, body } = render(Documentation, { props: { modele } });
+  const { head, body } = render(Documentation, {
+    props: { modele, urlBaseMss },
+  });
 
   return `<!doctype html>
 <html lang="fr" data-fr-scheme="light">
@@ -51,6 +53,7 @@ export const pageDocumentation = (
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${echappeHtml(modele.titre)}</title>
+    <link rel="icon" href="${urlBaseMss}/statique/assets/images/favicons/favicon.ico">
 ${styles(urlBaseMss)
   .map((style) => `    <link rel="stylesheet" href="${style}">`)
   .join('\n')}

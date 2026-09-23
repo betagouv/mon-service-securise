@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { ModeleDocumentation } from './modeleDocumentation';
 
-  let { modele }: { modele: ModeleDocumentation } = $props();
+  let {
+    modele,
+    urlBaseMss,
+  }: { modele: ModeleDocumentation; urlBaseMss: string } = $props();
 
   const json = (valeur: unknown) => JSON.stringify(valeur);
 
@@ -73,6 +76,10 @@
 </script>
 
 <dsfr-header
+  has-brand-operator
+  brand-operator-src={`${urlBaseMss}/statique/assets/images/logo_ANSSI_MSS.svg`}
+  brand-operator-alt="MonServiceSécurisé"
+  brand-operator-style="height:4rem"
   brand-service="MonServiceSécurisé"
   has-brand-tagline
   brand-tagline={`Documentation de l'API publique · v${modele.version}`}

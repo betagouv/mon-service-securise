@@ -205,9 +205,16 @@ const creeServeur = ({
     routesNonConnecteApiStyles()
   );
 
+  const FICHIERS_PARTAGES_AVEC_API_PUBLIQUE = [
+    '/assets/styles/fonts.css',
+    '/assets/images/favicons/favicon.ico',
+    '/assets/images/logo_ANSSI_MSS.svg',
+  ];
   const estPartageAvecApiPublique = (chemin) =>
     chemin.includes('/assets/fonts/') ||
-    chemin.endsWith('/assets/styles/fonts.css');
+    FICHIERS_PARTAGES_AVEC_API_PUBLIQUE.some((fichier) =>
+      chemin.endsWith(fichier)
+    );
 
   app.use(
     '/statique',

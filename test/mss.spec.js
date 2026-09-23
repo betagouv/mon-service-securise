@@ -92,6 +92,22 @@ describe('Le serveur MSS', () => {
       );
     });
 
+    it("expose le favicon et le logo ANSSI à l'API publique", async () => {
+      const favicon = await testeur.get(
+        '/statique/assets/images/favicons/favicon.ico'
+      );
+      const logo = await testeur.get(
+        '/statique/assets/images/logo_ANSSI_MSS.svg'
+      );
+
+      expect(favicon.headers['cross-origin-resource-policy']).to.equal(
+        'cross-origin'
+      );
+      expect(logo.headers['cross-origin-resource-policy']).to.equal(
+        'cross-origin'
+      );
+    });
+
     it("n'expose pas les autres fichiers aux autres origines", async () => {
       const reponse = await testeur.get('/statique/assets/styles/mss.css');
 
