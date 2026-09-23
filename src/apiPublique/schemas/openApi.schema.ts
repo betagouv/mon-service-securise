@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { schemaReponseServices } from './services.schema.js';
 import { schemaReponseIndiceCyber } from './indiceCyber.schema.js';
 import { schemaReponseMesures } from './mesures.schema.js';
+import { schemaReponseHomologation } from './homologation.schema.js';
 import { schemaErreur } from './erreur.schema.js';
 
 const reponseJson = (description: string, schema: typeof schemaErreur) => ({
@@ -112,6 +113,15 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
       "L'état d'application de chaque mesure du service : mesures du référentiel ANSSI applicables au service, puis mesures ajoutées par l'équipe. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
     descriptionReponse: 'Les mesures du service et leur synthèse par statut.',
     schemaReponse: schemaReponseMesures,
+  });
+
+  enregistreUneRouteDUnService(registry, {
+    chemin: '/v1/services/{id}/homologation',
+    resume: "Homologation d'un service",
+    description:
+      "L'homologation en cours du service. Un dossier en cours de saisie mais pas encore décidé n'apparaît pas. Nécessite le droit de lecture sur la rubrique « Homologuer ».",
+    descriptionReponse: "L'homologation en cours du service.",
+    schemaReponse: schemaReponseHomologation,
   });
 };
 
