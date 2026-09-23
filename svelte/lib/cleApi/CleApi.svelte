@@ -56,7 +56,14 @@
   };
 </script>
 
-<h1>Clés d'API</h1>
+<h1>
+  Clés d'API <dsfr-badge
+    label="BÊTA"
+    type="accent"
+    accent="green-emeraude"
+    size="sm"
+  ></dsfr-badge>
+</h1>
 <p>
   Générez une clé d'API personnelle pour relire, dans vos propres outils, les
   données des services auxquels vous avez déjà accès.
@@ -130,6 +137,9 @@
     line-height: 2.5rem;
     margin: 56px 0 0;
     text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   h2 {
