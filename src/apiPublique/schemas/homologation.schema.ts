@@ -23,7 +23,7 @@ export const schemaReponseHomologation = z
   .object({
     enCours: schemaHomologation.nullable().meta({
       description:
-        "L'homologation en cours du service, `null` si le service n'en a aucune.",
+        "La dernière homologation active du service, `null` si le service n'en a aucune.",
     }),
   })
   .meta({ id: 'ReponseHomologation' });
