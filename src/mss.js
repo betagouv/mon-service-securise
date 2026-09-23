@@ -205,17 +205,27 @@ const creeServeur = ({
     routesNonConnecteApiStyles()
   );
 
+  const estPartageAvecApiPublique = (chemin) =>
+    chemin.includes('/assets/fonts/') ||
+    chemin.endsWith('/assets/styles/fonts.css');
+
   app.use(
     '/statique',
     express.static('public', {
-      setHeaders: (reponse, chemin) =>
+      setHeaders: (reponse, chemin) => {
         reponse.setHeader(
           'cache-control',
           enTeteCachePourFichierStatique(
             chemin,
             adaptateurEnvironnement.statique().politiqueCache()
           )
-        ),
+        );
+        if (estPartageAvecApiPublique(chemin))
+          reponse.set({
+            'access-control-allow-origin': '*',
+            'cross-origin-resource-policy': 'cross-origin',
+          });
+      },
     })
   );
 

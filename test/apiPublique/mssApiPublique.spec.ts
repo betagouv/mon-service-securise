@@ -41,6 +41,7 @@ describe("Le serveur d'API publique", () => {
   }) =>
     creeServeurApiPublique({
       depotDonnees,
+      urlBaseMss: 'https://mss.example.org',
       adaptateurGestionErreur: {
         logueErreur: (erreur: Error) => {
           erreursLoguees.push(erreur);

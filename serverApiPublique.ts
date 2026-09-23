@@ -42,6 +42,12 @@ const serviceVerificationCoherenceSels =
     depotDonnees,
   });
 
+const urlBaseMss = adaptateurEnvironnement.mss().urlBase();
+if (!urlBaseMss)
+  throw new Error(
+    "La variable d'environnement URL_BASE_MSS est requise pour la documentation de l'API publique."
+  );
+
 const maxRequetesParMinuteParCleApi = Number(
   process.env.NB_REQUETES_MAX_PAR_MINUTE_API_PUBLIQUE
 );
@@ -57,6 +63,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     depotDonnees,
     adaptateurGestionErreur,
     adaptateurAuditApiPublique,
+    urlBaseMss,
     limiteDeDebit,
     trustProxy: adaptateurEnvironnement.trustProxy(),
   });

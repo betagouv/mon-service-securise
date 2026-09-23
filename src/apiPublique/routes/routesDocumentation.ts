@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import path from 'node:path';
 import { documentOpenApi } from '../schemas/openApi.schema.js';
 import {
   pageDocumentation,
@@ -7,47 +6,36 @@ import {
   SOURCES_EXTERNES,
 } from '../documentation/pageDocumentation.js';
 
-const POLITIQUE_SECURITE_CONTENU = [
-  "default-src 'none'",
-  `script-src ${SCRIPT_UI_KIT}`,
-  `style-src 'self' 'unsafe-inline' ${SOURCES_EXTERNES.uiKit}`,
-  "font-src 'self'",
-  `img-src 'self' data: ${SOURCES_EXTERNES.uiKitAssets}`,
-  `connect-src ${SOURCES_EXTERNES.uiKitAssets}`,
-  "base-uri 'none'",
-  "form-action 'none'",
-  "frame-ancestors 'none'",
-].join('; ');
+type ConfigurationDocumentation = { urlBaseMss: string };
 
-const DOSSIER_ASSETS = path.resolve('public/assets');
+const politiqueSecuriteContenu = (urlBaseMss: string) =>
+  [
+    "default-src 'none'",
+    `script-src ${SCRIPT_UI_KIT}`,
+    `style-src 'unsafe-inline' ${SOURCES_EXTERNES.uiKit} ${urlBaseMss}/`,
+    `font-src ${urlBaseMss}/`,
+    `img-src 'self' data: ${SOURCES_EXTERNES.uiKitAssets}`,
+    `connect-src ${SOURCES_EXTERNES.uiKitAssets}`,
+    "base-uri 'none'",
+    "form-action 'none'",
+    "frame-ancestors 'none'",
+  ].join('; ');
 
-export const routesDocumentation = () => {
+export const routesDocumentation = ({
+  urlBaseMss,
+}: ConfigurationDocumentation) => {
   const routes = express.Router();
   const document = documentOpenApi();
-  const page = pageDocumentation(document);
+  const page = pageDocumentation(document, { urlBaseMss });
+  const csp = politiqueSecuriteContenu(urlBaseMss);
 
   routes.get('/openapi.json', (_requete: Request, reponse: Response) => {
     reponse.json(document);
   });
 
   routes.get('/docs', (_requete: Request, reponse: Response) => {
-    reponse
-      .set('Content-Security-Policy', POLITIQUE_SECURITE_CONTENU)
-      .type('html')
-      .send(page);
+    reponse.set('Content-Security-Policy', csp).type('html').send(page);
   });
-
-  routes.get(
-    '/statique/assets/styles/fonts.css',
-    (_requete: Request, reponse: Response) => {
-      reponse.sendFile(path.join(DOSSIER_ASSETS, 'styles/fonts.css'));
-    }
-  );
-
-  routes.use(
-    '/statique/assets/fonts',
-    express.static(path.join(DOSSIER_ASSETS, 'fonts'))
-  );
 
   return routes;
 };
