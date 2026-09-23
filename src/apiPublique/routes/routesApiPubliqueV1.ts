@@ -11,17 +11,23 @@ import { serialiseServicePourAPIPublique } from '../mappers/services.mapper.js';
 import { serialiseIndiceCyberPourAPIPublique } from '../mappers/indiceCyber.mapper.js';
 import { serialiseMesuresPourAPIPublique } from '../mappers/mesures.mapper.js';
 import { serialiseHomologationPourAPIPublique } from '../mappers/homologation.mapper.js';
+import { serialiseRisquesPourAPIPublique } from '../mappers/risques.mapper.js';
+import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 const {
   DROITS_VOIR_INDICE_CYBER,
   DROITS_VOIR_MESURES,
   DROITS_VOIR_STATUT_HOMOLOGATION,
+  DROITS_VOIR_RISQUES,
 } = Autorisation;
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
+  adaptateurEnvironnement,
 }: {
   depotDonnees: DepotDonnees;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
 }) => {
   const routes = express.Router();
   const serviceAccessible = chargeServiceAccessible({ depotDonnees });
@@ -74,6 +80,19 @@ export const routesApiPubliqueV1 = ({
     serviceAccessible(DROITS_VOIR_STATUT_HOMOLOGATION),
     (requete: RequeteServiceApiPublique, reponse: Response) => {
       reponse.json(serialiseHomologationPourAPIPublique(requete.service!));
+    }
+  );
+
+  routes.get(
+    '/services/:id/risques',
+    serviceAccessible(DROITS_VOIR_RISQUES),
+    (requete: RequeteServiceApiPublique, reponse: Response) => {
+      const service = requete.service!;
+      const avecRisquesV2 =
+        adaptateurEnvironnement.featureFlag().avecRisquesV2() &&
+        service.version() === VersionService.v2;
+
+      reponse.json(serialiseRisquesPourAPIPublique(service, { avecRisquesV2 }));
     }
   );
 

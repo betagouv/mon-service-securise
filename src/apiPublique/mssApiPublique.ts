@@ -9,6 +9,8 @@ import { routesDocumentation } from './routes/routesDocumentation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
 import { AdaptateurAuditApiPublique } from '../adaptateurs/adaptateurAuditApiPublique.interface.js';
+import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
+import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
 
 type LimiteDeDebit = { fenetreMs: number; maxParFenetre: number };
 
@@ -19,6 +21,7 @@ type ConfigurationApiPublique = {
   adaptateurAuditApiPublique: AdaptateurAuditApiPublique;
   limiteDeDebit?: LimiteDeDebit;
   trustProxy?: boolean | number | string;
+  adaptateurEnvironnement?: AdaptateurEnvironnement;
 };
 
 const limiteDeDebitParDefaut: LimiteDeDebit = {
@@ -41,6 +44,7 @@ export const creeServeurApiPublique = ({
   adaptateurAuditApiPublique,
   limiteDeDebit = limiteDeDebitParDefaut,
   trustProxy,
+  adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
 }: ConfigurationApiPublique) => {
   const app = express();
   app.disable('x-powered-by');
@@ -54,7 +58,7 @@ export const creeServeurApiPublique = ({
     authentificationParCleApi({ depotDonnees }),
     limiteDeDebitParCleApi(limiteDeDebit),
     auditApiPublique({ adaptateurAuditApiPublique, adaptateurGestionErreur }),
-    routesApiPubliqueV1({ depotDonnees })
+    routesApiPubliqueV1({ depotDonnees, adaptateurEnvironnement })
   );
 
   app.use((_requete: Request, reponse: Response) => {
