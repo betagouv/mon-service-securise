@@ -47,9 +47,13 @@ describe('La génération de la documentation OpenAPI', () => {
     });
   });
 
-  describe('concernant la route /v1/services/{id}/indice-cyber', () => {
-    const chemin = '/v1/services/{id}/indice-cyber';
-
+  describe.each([
+    {
+      chemin: '/v1/services/{id}/indice-cyber',
+      schemaReponse: 'ReponseIndiceCyber',
+    },
+    { chemin: '/v1/services/{id}/mesures', schemaReponse: 'ReponseMesures' },
+  ])('concernant la route $chemin', ({ chemin, schemaReponse }) => {
     it("documente l'identifiant du service en paramètre de chemin", async () => {
       const document = documentOpenApi();
 
@@ -79,7 +83,7 @@ describe('La génération de la documentation OpenAPI', () => {
         '500',
       ]);
       expect(reponses['200'].content['application/json'].schema).toEqual({
-        $ref: '#/components/schemas/ReponseIndiceCyber',
+        $ref: `#/components/schemas/${schemaReponse}`,
       });
     });
   });

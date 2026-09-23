@@ -5,6 +5,7 @@ import {
 import { z } from 'zod';
 import { schemaReponseServices } from './services.schema.js';
 import { schemaReponseIndiceCyber } from './indiceCyber.schema.js';
+import { schemaReponseMesures } from './mesures.schema.js';
 import { schemaErreur } from './erreur.schema.js';
 
 const reponseJson = (description: string, schema: typeof schemaErreur) => ({
@@ -42,6 +43,42 @@ const parametresDUnService = z.object({
   }),
 });
 
+type RouteDUnService = {
+  chemin: string;
+  resume: string;
+  description: string;
+  descriptionReponse: string;
+  schemaReponse: z.ZodType;
+};
+
+const enregistreUneRouteDUnService = (
+  registry: OpenAPIRegistry,
+  {
+    chemin,
+    resume,
+    description,
+    descriptionReponse,
+    schemaReponse,
+  }: RouteDUnService
+) => {
+  registry.registerPath({
+    method: 'get',
+    path: chemin,
+    summary: resume,
+    description,
+    tags: ['Services'],
+    request: { params: parametresDUnService },
+    responses: {
+      200: {
+        description: descriptionReponse,
+        content: { 'application/json': { schema: schemaReponse } },
+      },
+      ...reponsesErreurCommunes,
+      ...reponsesErreurDUnService,
+    },
+  });
+};
+
 const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: 'get',
@@ -59,22 +96,22 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
     },
   });
 
-  registry.registerPath({
-    method: 'get',
-    path: '/v1/services/{id}/indice-cyber',
-    summary: "Indice cyber d'un service",
+  enregistreUneRouteDUnService(registry, {
+    chemin: '/v1/services/{id}/indice-cyber',
+    resume: "Indice cyber d'un service",
     description:
       "L'indice cyber du service et son détail par catégorie de mesures, calculés au moment de l'appel. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
-    tags: ['Services'],
-    request: { params: parametresDUnService },
-    responses: {
-      200: {
-        description: "L'indice cyber du service.",
-        content: { 'application/json': { schema: schemaReponseIndiceCyber } },
-      },
-      ...reponsesErreurCommunes,
-      ...reponsesErreurDUnService,
-    },
+    descriptionReponse: "L'indice cyber du service.",
+    schemaReponse: schemaReponseIndiceCyber,
+  });
+
+  enregistreUneRouteDUnService(registry, {
+    chemin: '/v1/services/{id}/mesures',
+    resume: "Mesures d'un service",
+    description:
+      "L'état d'application de chaque mesure du service : mesures du référentiel ANSSI applicables au service, puis mesures ajoutées par l'équipe. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
+    descriptionReponse: 'Les mesures du service et leur synthèse par statut.',
+    schemaReponse: schemaReponseMesures,
   });
 };
 
