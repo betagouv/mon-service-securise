@@ -13,6 +13,7 @@ type ConfigurationApiPublique = {
   depotDonnees: DepotDonnees;
   adaptateurGestionErreur: AdaptateurGestionErreur;
   limiteDeDebit?: LimiteDeDebit;
+  trustProxy?: boolean | number | string;
 };
 
 const limiteDeDebitParDefaut: LimiteDeDebit = {
@@ -24,9 +25,11 @@ export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
   limiteDeDebit = limiteDeDebitParDefaut,
+  trustProxy,
 }: ConfigurationApiPublique) => {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', trustProxy);
 
   app.use(routesDocumentation());
 
