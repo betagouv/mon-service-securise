@@ -28,6 +28,14 @@ describe("Les routes de documentation de l'API publique", () => {
       expect(reponse.status).toBe(200);
       expect(reponse.body.openapi).toBe('3.1.0');
     });
+
+    it("reste sous la politique de sécurité de l'API, sans autoriser de ressource", async () => {
+      const reponse = await request(uneApp()).get('/openapi.json');
+
+      const csp = reponse.headers['content-security-policy'];
+      expect(csp).toContain("default-src 'none'");
+      expect(csp).not.toContain('script-src');
+    });
   });
 
   describe('sur GET /docs', () => {
