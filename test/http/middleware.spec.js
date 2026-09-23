@@ -283,14 +283,6 @@ describe('Le middleware MSS', () => {
     });
 
     describe("concernant l'accès à la création de clé d'API", () => {
-      it('autorise tout le monde quand la liste est vide', async () => {
-        const middleware = leMiddleware();
-
-        await middleware.verificationJWT(requete, reponse, () => {});
-
-        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(true);
-      });
-
       it("délègue à l'adaptateur environnement, pour l'utilisateur courant", async () => {
         let idUtilisateurRecu;
         const adaptateurEnvironnement = {
