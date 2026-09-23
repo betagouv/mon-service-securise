@@ -50,7 +50,7 @@ describe('Le modèle de documentation', () => {
       const [services] = modele.groupes;
       expect(services.id).toBe('groupe-services');
       expect(services.nom).toBe('Services');
-      expect(services.operations).toHaveLength(4);
+      expect(services.operations).toHaveLength(5);
     });
 
     it("décrit l'opération", () => {
@@ -228,6 +228,8 @@ describe('Le modèle de documentation', () => {
         ['schema-reponsemesures', 'ReponseMesures'],
         ['schema-mesure', 'Mesure'],
         ['schema-reponsehomologation', 'ReponseHomologation'],
+        ['schema-reponserisques', 'ReponseRisques'],
+        ['schema-risque', 'Risque'],
       ]);
       const erreur = modele.schemas[2];
       expect(erreur.lignes).toEqual([
