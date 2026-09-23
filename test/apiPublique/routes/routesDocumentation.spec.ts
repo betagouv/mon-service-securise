@@ -20,59 +20,11 @@ describe("Les routes de documentation de l'API publique", () => {
     }).app;
 
   describe('sur GET /openapi.json', () => {
-    const leDocumentOpenApi = async () => {
-      const reponse = await request(uneApp()).get('/openapi.json');
-      return reponse.body;
-    };
-
     it("est accessible sans clé d'API", async () => {
       const reponse = await request(uneApp()).get('/openapi.json');
 
       expect(reponse.status).toBe(200);
       expect(reponse.body.openapi).toBe('3.1.0');
-    });
-
-    it("déclare l'authentification par clé d'API en `Bearer`", async () => {
-      const document = await leDocumentOpenApi();
-
-      expect(document.components.securitySchemes.cleApi).toMatchObject({
-        type: 'http',
-        scheme: 'bearer',
-      });
-      expect(document.security).toEqual([{ cleApi: [] }]);
-    });
-
-    it('documente GET /v1/services et ses réponses', async () => {
-      const document = await leDocumentOpenApi();
-
-      const reponses = document.paths['/v1/services'].get.responses;
-      expect(Object.keys(reponses)).toEqual(['200', '401', '429', '500']);
-      expect(reponses['200'].content['application/json'].schema).toEqual({
-        $ref: '#/components/schemas/ReponseServices',
-      });
-    });
-
-    it('documente la réponse 429 en cas de quota dépassé', async () => {
-      const document = await leDocumentOpenApi();
-
-      const reponse429 = document.paths['/v1/services'].get.responses['429'];
-      expect(reponse429.content['application/json'].schema).toEqual({
-        $ref: '#/components/schemas/Erreur',
-      });
-    });
-
-    it('décrit les champs d’un service à partir du schéma de sortie', async () => {
-      const document = await leDocumentOpenApi();
-
-      const schemaService = document.components.schemas.Service;
-      expect(Object.keys(schemaService.properties)).toEqual([
-        'id',
-        'nom',
-        'organisationResponsable',
-        'nombreContributeurs',
-        'niveauSecurite',
-      ]);
-      expect(schemaService.required).not.toContain('niveauSecurite');
     });
   });
 

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { documentOpenApi } from '../schemas/documentationOpenApi.js';
+import { documentOpenApi } from '../schemas/openApi.schema.js';
 
 const URL_REDOC =
   'https://cdn.jsdelivr.net/npm/redoc@2.5.4/bundles/redoc.standalone.js';
