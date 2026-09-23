@@ -10,7 +10,7 @@
   "dependencyDashboard": true,
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
-  "schedule": ["* 8 * * 2"],
+  "schedule": ["* * * * 2"],
   "timezone": "Europe/Paris",
   "constraints": {
     "node": "24.x"
