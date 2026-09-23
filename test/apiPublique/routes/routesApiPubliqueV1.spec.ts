@@ -10,6 +10,7 @@ import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { schemaReponseServices } from '../../../src/apiPublique/schemas/services.schema.ts';
 import { schemaReponseIndiceCyber } from '../../../src/apiPublique/schemas/indiceCyber.schema.ts';
 import { schemaReponseMesures } from '../../../src/apiPublique/schemas/mesures.schema.ts';
+import { schemaReponseHomologation } from '../../../src/apiPublique/schemas/homologation.schema.ts';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.ts';
 import {
@@ -22,7 +23,7 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 
 const { LECTURE, INVISIBLE } = Permissions;
-const { DECRIRE, SECURISER } = Rubriques;
+const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
 
 describe("Les routes d'API publique `/v1`", () => {
   let depotDonnees: DepotDonnees;
@@ -154,6 +155,7 @@ describe("Les routes d'API publique `/v1`", () => {
     const routesDUnService = [
       { route: 'indice-cyber', rubriqueRequise: SECURISER },
       { route: 'mesures', rubriqueRequise: SECURISER },
+      { route: 'homologation', rubriqueRequise: HOMOLOGUER },
     ];
 
     let idService: UUID;
@@ -394,6 +396,91 @@ describe("Les routes d'API publique `/v1`", () => {
           .set('Authorization', enTeteAuthorization);
 
         expect(schemaReponseMesures.safeParse(reponse.body).success).toBe(true);
+      });
+    });
+
+    describe('sur GET /v1/services/:id/homologation', () => {
+      const unDossierFinalise = (
+        dateHomologation: string,
+        { archive = false } = {}
+      ) => ({
+        id: unUUIDRandom(),
+        finalise: true,
+        archive,
+        decision: { dateHomologation, dureeValidite: 'unAn' },
+      });
+
+      const unDossierNonFinalise = () => ({
+        id: unUUIDRandom(),
+        decision: { dateHomologation: '2026-09-01', dureeValidite: 'unAn' },
+      });
+
+      const leServiceADesDossiers = (dossiers: object[]) => {
+        depotDonnees.service = async () =>
+          unServiceV2().avecId(idService).avecDossiers(dossiers).construis();
+      };
+
+      const recupereHomologation = () =>
+        request(uneApp())
+          .get(`/v1/services/${idService}/homologation`)
+          .set('Authorization', enTeteAuthorization);
+
+      beforeEach(() => {
+        vi.useFakeTimers({ toFake: ['Date'] });
+        vi.setSystemTime(new Date('2026-09-23T10:00:00Z'));
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("renvoie l'homologation active du service", async () => {
+        leServiceADesDossiers([
+          unDossierFinalise('2025-02-03', { archive: true }),
+          unDossierFinalise('2026-03-12'),
+          unDossierNonFinalise(),
+        ]);
+
+        const reponse = await recupereHomologation();
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body).toEqual({
+          enCours: {
+            statut: 'activee',
+            dateDecision: '2026-03-12',
+            dureeValidite: 'unAn',
+            dateEcheance: '2027-03-12',
+          },
+        });
+      });
+
+      it("renvoie le statut calculé à la date de l'appel", async () => {
+        leServiceADesDossiers([unDossierFinalise('2025-02-03')]);
+
+        const reponse = await recupereHomologation();
+
+        expect(reponse.body.enCours.statut).toBe('expiree');
+      });
+
+      it("renvoie `null` quand le service n'a pas d'homologation active", async () => {
+        leServiceADesDossiers([
+          unDossierFinalise('2025-02-03', { archive: true }),
+          unDossierNonFinalise(),
+        ]);
+
+        const reponse = await recupereHomologation();
+
+        expect(reponse.body).toEqual({ enCours: null });
+      });
+
+      it('renvoie une réponse conforme au schéma documenté', async () => {
+        leServiceADesDossiers([unDossierFinalise('2026-03-12')]);
+
+        const reponse = await recupereHomologation();
+
+        expect(schemaReponseHomologation.safeParse(reponse.body).success).toBe(
+          true
+        );
       });
     });
   });
