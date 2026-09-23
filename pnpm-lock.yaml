@@ -119,6 +119,9 @@ importers:
       string-strip-html:
         specifier: ^13.0.0
         version: 13.7.3
+      svelte:
+        specifier: ^5.54.0
+        version: 5.57.0(@typescript-eslint/types@8.70.0)
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -246,9 +249,6 @@ importers:
       supertest:
         specifier: ^7.2.2
         version: 7.2.2(supports-color@10.2.2)
-      svelte:
-        specifier: ^5.54.0
-        version: 5.57.0(@typescript-eslint/types@8.70.0)
       svelte-check:
         specifier: ^4.4.5
         version: 4.7.6(picomatch@4.0.7)(svelte@5.57.0(@typescript-eslint/types@8.70.0))(typescript@6.0.3)
