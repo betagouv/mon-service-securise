@@ -7,6 +7,8 @@ import {
 import { DepotDonneesClesApi } from '../../../src/depots/depotDonneesClesApi.js';
 import { unePersistanceMemoireTS } from '../../constructeurs/constructeurAdaptateurPersistanceMemoireTS.js';
 import { unUUID } from '../../constructeurs/UUID.js';
+import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
+import BusEvenements from '../../../src/bus/busEvenements.js';
 
 describe("Le middleware d'authentification par clé d'API", () => {
   let depotClesApi: DepotDonneesClesApi;
@@ -17,6 +19,7 @@ describe("Le middleware d'authentification par clé d'API", () => {
       adaptateurChiffrement: {
         hacheSha256: (chaine: string) => `v1:${chaine}-hachee`,
       },
+      busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
   });
 

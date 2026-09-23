@@ -212,6 +212,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const depotClesApi = new DepotDonneesClesApi({
     adaptateurChiffrement,
     adaptateurPersistanceTS,
+    busEvenements,
   });
 
   const {

@@ -6,12 +6,18 @@ import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateur
 import { unUUID } from '../constructeurs/UUID.ts';
 import { CleApi } from '../../src/modeles/cleApi.ts';
 import { ErreurCleApiInexistante } from '../../src/erreurs.ts';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { EvenementCleApiCreee } from '../../src/bus/evenementCleApiCreee.ts';
+import { EvenementCleApiRevoquee } from '../../src/bus/evenementCleApiRevoquee.ts';
 
 describe("Le dépôt de données des clés d'API", () => {
   let persistance: PersistanceClesApi;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   beforeEach(() => {
     persistance = unePersistanceMemoireTS().construis();
+    busEvenements = fabriqueBusPourLesTests();
   });
 
   const unDepot = () =>
@@ -20,6 +26,7 @@ describe("Le dépôt de données des clés d'API", () => {
       adaptateurChiffrement: {
         hacheSha256: (chaine: string) => `v1:${chaine}-hachee`,
       },
+      busEvenements: busEvenements as unknown as BusEvenements,
     });
 
   describe("sur demande d'une nouvelle clé", () => {
@@ -45,6 +52,14 @@ describe("Le dépôt de données des clés d'API", () => {
 
       const [cleLue] = await persistance.lisClesApiDe(unUUID('U'));
       expect(cleLue.dateExpiration).toEqual(cle.donnees().dateExpiration);
+    });
+
+    it('publie un évènement de clé créée sur le bus', async () => {
+      const { cle } = await unDepot().nouvelleCle(unUUID('U'), 30);
+
+      expect(busEvenements.recupereEvenement(EvenementCleApiCreee)).toEqual(
+        new EvenementCleApiCreee({ cle, dureeValiditeEnJours: 30 })
+      );
     });
   });
 
@@ -95,6 +110,19 @@ describe("Le dépôt de données des clés d'API", () => {
       expect(cleLue.estRevoquee()).toBe(true);
     });
 
+    it('publie un évènement de clé révoquée sur le bus', async () => {
+      const depot = unDepot();
+      const { cle } = await depot.nouvelleCle(unUUID('U'), 30);
+
+      await depot.revoqueCle(cle.donnees().id, unUUID('U'));
+
+      const evenement = busEvenements.recupereEvenement(
+        EvenementCleApiRevoquee
+      );
+      expect(evenement.cle.donnees().id).toBe(cle.donnees().id);
+      expect(evenement.cle.estRevoquee()).toBe(true);
+    });
+
     it("refuse de révoquer la clé d'un autre utilisateur", async () => {
       const depot = unDepot();
       const { cle } = await depot.nouvelleCle(unUUID('U'), 30);
@@ -105,6 +133,9 @@ describe("Le dépôt de données des clés d'API", () => {
 
       const [cleLue] = await depot.lisClesDe(unUUID('U'));
       expect(cleLue.estRevoquee()).toBe(false);
+      expect(busEvenements.nAPasRecuUnEvenement(EvenementCleApiRevoquee)).toBe(
+        true
+      );
     });
 
     it("lève une erreur si la clé n'existe pas", async () => {

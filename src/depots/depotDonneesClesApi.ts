@@ -1,6 +1,9 @@
 import { UUID } from '../typesBasiques.js';
 import { CleApi, DonneesCleApi } from '../modeles/cleApi.js';
 import { ErreurCleApiInexistante } from '../erreurs.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementCleApiCreee } from '../bus/evenementCleApiCreee.js';
+import { EvenementCleApiRevoquee } from '../bus/evenementCleApiRevoquee.js';
 
 export type PersistanceClesApi = {
   lisClesApiDe(idUtilisateur: UUID): Promise<DonneesCleApi[]>;
@@ -15,16 +18,20 @@ type ChiffrementPourClesApi = {
 export class DepotDonneesClesApi {
   private readonly persistance: PersistanceClesApi;
   private readonly chiffrement: ChiffrementPourClesApi;
+  private readonly busEvenements: BusEvenements;
 
   constructor({
     adaptateurPersistanceTS,
     adaptateurChiffrement,
+    busEvenements,
   }: {
     adaptateurPersistanceTS: PersistanceClesApi;
     adaptateurChiffrement: ChiffrementPourClesApi;
+    busEvenements: BusEvenements;
   }) {
     this.persistance = adaptateurPersistanceTS;
     this.chiffrement = adaptateurChiffrement;
+    this.busEvenements = busEvenements;
   }
 
   async nouvelleCle(idUtilisateur: UUID, dureeValiditeEnJours: number) {
@@ -35,6 +42,10 @@ export class DepotDonneesClesApi {
     );
 
     await this.persistance.sauvegardeCleApi(cle.donnees());
+
+    await this.busEvenements.publie(
+      new EvenementCleApiCreee({ cle, dureeValiditeEnJours })
+    );
 
     return { cle, valeurEnClair };
   }
@@ -61,6 +72,8 @@ export class DepotDonneesClesApi {
     cle.revoque(new Date());
 
     await this.persistance.sauvegardeCleApi(cle.donnees());
+
+    await this.busEvenements.publie(new EvenementCleApiRevoquee({ cle }));
   }
 
   private empreinteDe(valeurEnClair: string) {
