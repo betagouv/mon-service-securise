@@ -9,8 +9,9 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import Service from '../../modeles/service.js';
 import { serialiseServicePourAPIPublique } from '../mappers/services.mapper.js';
 import { serialiseIndiceCyberPourAPIPublique } from '../mappers/indiceCyber.mapper.js';
+import { serialiseMesuresPourAPIPublique } from '../mappers/mesures.mapper.js';
 
-const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
+const { DROITS_VOIR_INDICE_CYBER, DROITS_VOIR_MESURES } = Autorisation;
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
@@ -52,6 +53,14 @@ export const routesApiPubliqueV1 = ({
           service.referentiel.indiceCyberNoteMax()
         )
       );
+    }
+  );
+
+  routes.get(
+    '/services/:id/mesures',
+    serviceAccessible(DROITS_VOIR_MESURES),
+    (requete: RequeteServiceApiPublique, reponse: Response) => {
+      reponse.json(serialiseMesuresPourAPIPublique(requete.service!));
     }
   );
 

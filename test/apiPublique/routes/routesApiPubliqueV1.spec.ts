@@ -1,11 +1,17 @@
 import request from 'supertest';
 import { creeServeurApiPublique } from '../../../src/apiPublique/mssApiPublique.js';
 import { depotVide } from '../../depots/depotVide.js';
-import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { schemaReponseServices } from '../../../src/apiPublique/schemas/services.schema.ts';
 import { schemaReponseIndiceCyber } from '../../../src/apiPublique/schemas/indiceCyber.schema.ts';
+import { schemaReponseMesures } from '../../../src/apiPublique/schemas/mesures.schema.ts';
+import Mesures from '../../../src/modeles/mesures.js';
+import { creeReferentiel } from '../../../src/referentiel.ts';
 import {
   Permissions,
   Rubriques,
@@ -147,6 +153,7 @@ describe("Les routes d'API publique `/v1`", () => {
   describe("sur les routes d'un service", () => {
     const routesDUnService = [
       { route: 'indice-cyber', rubriqueRequise: SECURISER },
+      { route: 'mesures', rubriqueRequise: SECURISER },
     ];
 
     let idService: UUID;
@@ -243,6 +250,150 @@ describe("Les routes d'API publique `/v1`", () => {
         expect(schemaReponseIndiceCyber.safeParse(reponse.body).success).toBe(
           true
         );
+      });
+    });
+
+    describe('sur GET /v1/services/:id/mesures', () => {
+      const idMesureSpecifique = unUUIDRandom();
+
+      const desMesures = () => {
+        const referentiel = creeReferentiel({
+          mesures: {
+            deconnexionAutomatique: {
+              description: 'Mettre en place une déconnexion automatique',
+              categorie: 'protection',
+              indispensable: true,
+            },
+            revueDesDroits: {
+              description: 'Revoir les droits des utilisateurs',
+              categorie: 'gouvernance',
+            },
+          },
+          categoriesMesures: {
+            gouvernance: 'Gouvernance',
+            protection: 'Protection',
+          },
+        });
+        const mesuresPersonnalisees = {
+          deconnexionAutomatique: {
+            description: 'Mettre en place une déconnexion automatique',
+            categorie: 'protection',
+            indispensable: true,
+          },
+          revueDesDroits: {
+            description: 'Revoir les droits des utilisateurs',
+            categorie: 'gouvernance',
+            indispensable: false,
+          },
+        };
+        return new Mesures(
+          {
+            mesuresGenerales: [
+              {
+                id: 'deconnexionAutomatique',
+                statut: 'enCours',
+                echeance: '12/31/2026',
+                modalites: 'Délai porté à 30 minutes',
+              },
+            ],
+            mesuresSpecifiques: [
+              {
+                id: idMesureSpecifique,
+                description: 'Revue trimestrielle des comptes à privilèges',
+                categorie: 'gouvernance',
+                statut: 'fait',
+              },
+            ],
+          },
+          referentiel,
+          mesuresPersonnalisees
+        );
+      };
+
+      it("renvoie les mesures du référentiel puis celles ajoutées par l'équipe", async () => {
+        depotDonnees.service = async () =>
+          unServiceV2().avecId(idService).avecMesures(desMesures()).construis();
+
+        const reponse = await request(uneApp())
+          .get(`/v1/services/${idService}/mesures`)
+          .set('Authorization', enTeteAuthorization);
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body.donnees).toEqual([
+          {
+            id: 'deconnexionAutomatique',
+            origine: 'referentielV2',
+            intitule: 'Mettre en place une déconnexion automatique',
+            categorie: 'protection',
+            indispensable: true,
+            statut: 'enCours',
+            echeance: '2026-12-31',
+            modalites: 'Délai porté à 30 minutes',
+          },
+          {
+            id: 'revueDesDroits',
+            origine: 'referentielV2',
+            intitule: 'Revoir les droits des utilisateurs',
+            categorie: 'gouvernance',
+            indispensable: false,
+            statut: null,
+            echeance: null,
+            modalites: null,
+          },
+          {
+            id: idMesureSpecifique,
+            origine: 'utilisateur',
+            intitule: 'Revue trimestrielle des comptes à privilèges',
+            categorie: 'gouvernance',
+            indispensable: false,
+            statut: 'fait',
+            echeance: null,
+            modalites: null,
+          },
+        ]);
+      });
+
+      it("indique qu'une mesure provient du référentiel V1 pour un service V1", async () => {
+        depotDonnees.service = async () =>
+          unService().avecId(idService).avecMesures(desMesures()).construis();
+
+        const reponse = await request(uneApp())
+          .get(`/v1/services/${idService}/mesures`)
+          .set('Authorization', enTeteAuthorization);
+
+        expect(
+          reponse.body.donnees.map(
+            ({ origine }: { origine: string }) => origine
+          )
+        ).toEqual(['referentielV1', 'referentielV1', 'utilisateur']);
+      });
+
+      it('renvoie une synthèse du nombre de mesures par statut', async () => {
+        depotDonnees.service = async () =>
+          unServiceV2().avecId(idService).avecMesures(desMesures()).construis();
+
+        const reponse = await request(uneApp())
+          .get(`/v1/services/${idService}/mesures`)
+          .set('Authorization', enTeteAuthorization);
+
+        expect(reponse.body.synthese).toEqual({
+          fait: 1,
+          enCours: 1,
+          nonFait: 0,
+          aLancer: 0,
+          nonRenseigne: 1,
+        });
+      });
+
+      it('renvoie une réponse conforme au schéma documenté', async () => {
+        depotDonnees.service = async () =>
+          unServiceV2().avecId(idService).avecMesures(desMesures()).construis();
+
+        const reponse = await request(uneApp())
+          .get(`/v1/services/${idService}/mesures`)
+          .set('Authorization', enTeteAuthorization);
+
+        expect(schemaReponseMesures.safeParse(reponse.body).success).toBe(true);
       });
     });
   });
