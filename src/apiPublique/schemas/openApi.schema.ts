@@ -2,7 +2,9 @@ import {
   OpenAPIRegistry,
   OpenApiGeneratorV31,
 } from '@asteasolutions/zod-to-openapi';
+import { z } from 'zod';
 import { schemaReponseServices } from './services.schema.js';
+import { schemaReponseIndiceCyber } from './indiceCyber.schema.js';
 import { schemaErreur } from './erreur.schema.js';
 
 const reponseJson = (description: string, schema: typeof schemaErreur) => ({
@@ -19,6 +21,27 @@ const reponsesErreurCommunes = {
   500: reponseJson('Incident de notre côté.', schemaErreur),
 };
 
+const reponsesErreurDUnService = {
+  400: reponseJson(
+    "L'identifiant du service n'est pas un UUID valide.",
+    schemaErreur
+  ),
+  403: reponseJson(
+    "La clé d'API donne accès au service, mais pas à cette rubrique.",
+    schemaErreur
+  ),
+  404: reponseJson(
+    "Service inexistant, ou hors du périmètre de la clé d'API.",
+    schemaErreur
+  ),
+};
+
+const parametresDUnService = z.object({
+  id: z.uuid().meta({
+    description: 'Identifiant du service, obtenu via `GET /v1/services`.',
+  }),
+});
+
 const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: 'get',
@@ -33,6 +56,24 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
         content: { 'application/json': { schema: schemaReponseServices } },
       },
       ...reponsesErreurCommunes,
+    },
+  });
+
+  registry.registerPath({
+    method: 'get',
+    path: '/v1/services/{id}/indice-cyber',
+    summary: "Indice cyber d'un service",
+    description:
+      "L'indice cyber du service et son détail par catégorie de mesures, calculés au moment de l'appel. Nécessite le droit de lecture sur la rubrique « Sécuriser ».",
+    tags: ['Services'],
+    request: { params: parametresDUnService },
+    responses: {
+      200: {
+        description: "L'indice cyber du service.",
+        content: { 'application/json': { schema: schemaReponseIndiceCyber } },
+      },
+      ...reponsesErreurCommunes,
+      ...reponsesErreurDUnService,
     },
   });
 };
