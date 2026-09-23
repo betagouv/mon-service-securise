@@ -87,6 +87,10 @@ import { supprimeNotificationsTransactionnelles } from './abonnements/supprimeNo
 import { consigneNotificationsExpirationHomologation } from './abonnements/consigneNotificationsExpirationHomologation.js';
 import { EvenementContributeurAjoute } from './evenementContributeurAjoute.js';
 import { consigneNotificationInvitationsServices } from './abonnements/consigneNotificationInvitationsServices.js';
+import { EvenementCleApiCreee } from './evenementCleApiCreee.js';
+import { EvenementCleApiRevoquee } from './evenementCleApiRevoquee.js';
+import { consigneCleApiCreeeDansJournal } from './abonnements/consigneCleApiCreeeDansJournal.js';
+import { consigneCleApiRevoqueeDansJournal } from './abonnements/consigneCleApiRevoqueeDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -338,6 +342,16 @@ const cableTousLesAbonnes = (
     consigneNotificationInvitationsServices({
       depotDonnees,
     })
+  );
+
+  busEvenements.abonne(
+    EvenementCleApiCreee,
+    consigneCleApiCreeeDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementCleApiRevoquee,
+    consigneCleApiRevoqueeDansJournal({ adaptateurJournal })
   );
 };
 
