@@ -46,4 +46,41 @@ describe('La génération de la documentation OpenAPI', () => {
       }
     });
   });
+
+  describe('concernant la route /v1/services/{id}/indice-cyber', () => {
+    const chemin = '/v1/services/{id}/indice-cyber';
+
+    it("documente l'identifiant du service en paramètre de chemin", async () => {
+      const document = documentOpenApi();
+
+      const [parametre] = document.paths![chemin]!.get!.parameters! as Array<{
+        name: string;
+        in: string;
+        required: boolean;
+      }>;
+      expect(parametre).toMatchObject({
+        name: 'id',
+        in: 'path',
+        required: true,
+      });
+    });
+
+    it('documente les codes de réponse', async () => {
+      const document = documentOpenApi();
+
+      const reponses = document.paths![chemin]!.get!.responses!;
+      expect(Object.keys(reponses)).toEqual([
+        '200',
+        '400',
+        '401',
+        '403',
+        '404',
+        '429',
+        '500',
+      ]);
+      expect(reponses['200'].content['application/json'].schema).toEqual({
+        $ref: '#/components/schemas/ReponseIndiceCyber',
+      });
+    });
+  });
 });
