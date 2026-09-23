@@ -14,6 +14,7 @@ describe("Les routes de documentation de l'API publique", () => {
   const uneApp = () =>
     creeServeurApiPublique({
       depotDonnees,
+      urlBaseMss: 'https://mss.example.org',
       adaptateurGestionErreur: {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
@@ -52,20 +53,12 @@ describe("Les routes de documentation de l'API publique", () => {
       expect(reponse.text).not.toContain('@gouvfr/dsfr');
     });
 
-    it('sert les polices Marianne du dépôt', async () => {
-      const app = uneApp();
+    it("charge les polices Marianne depuis l'application principale", async () => {
+      const reponse = await request(uneApp()).get('/docs');
 
-      const feuille = await request(app).get(
-        '/statique/assets/styles/fonts.css'
+      expect(reponse.text).toContain(
+        'href="https://mss.example.org/statique/assets/styles/fonts.css"'
       );
-      const police = await request(app).get(
-        '/statique/assets/fonts/Marianne-Regular.woff2'
-      );
-
-      expect(feuille.status).toBe(200);
-      expect(feuille.headers['content-type']).toContain('text/css');
-      expect(police.status).toBe(200);
-      expect(police.headers['content-type']).toContain('font/woff2');
     });
 
     it('restreint la page avec une politique de sécurité du contenu', async () => {
@@ -77,9 +70,9 @@ describe("Les routes de documentation de l'API publique", () => {
         'script-src https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js'
       );
       expect(csp).toContain(
-        "style-src 'self' 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/"
+        "style-src 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/ https://mss.example.org/"
       );
-      expect(csp).toContain("font-src 'self'");
+      expect(csp).toContain('font-src https://mss.example.org/');
       expect(csp).toContain(
         "img-src 'self' data: https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/"
       );

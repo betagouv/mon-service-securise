@@ -14,6 +14,7 @@ type LimiteDeDebit = { fenetreMs: number; maxParFenetre: number };
 type ConfigurationApiPublique = {
   depotDonnees: DepotDonnees;
   adaptateurGestionErreur: AdaptateurGestionErreur;
+  urlBaseMss: string;
   adaptateurAuditApiPublique: AdaptateurAuditApiPublique;
   limiteDeDebit?: LimiteDeDebit;
   trustProxy?: boolean | number | string;
@@ -27,6 +28,7 @@ const limiteDeDebitParDefaut: LimiteDeDebit = {
 export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
+  urlBaseMss,
   adaptateurAuditApiPublique,
   limiteDeDebit = limiteDeDebitParDefaut,
   trustProxy,
@@ -35,7 +37,7 @@ export const creeServeurApiPublique = ({
   app.disable('x-powered-by');
   app.set('trust proxy', trustProxy);
 
-  app.use(routesDocumentation());
+  app.use(routesDocumentation({ urlBaseMss }));
 
   app.use(
     '/v1',

@@ -13,10 +13,10 @@ export const SOURCES_EXTERNES = {
 };
 
 export const SCRIPT_UI_KIT = `${SOURCES_EXTERNES.uiKit}lab-anssi-ui-kit.iife.js`;
-const STYLES = [
+const styles = (urlBaseMss: string) => [
   `${SOURCES_EXTERNES.uiKit}dsfr-variables.css`,
   `${SOURCES_EXTERNES.uiKit}lab-anssi-theme.mss.css`,
-  '/statique/assets/styles/fonts.css',
+  `${urlBaseMss}/statique/assets/styles/fonts.css`,
 ];
 
 // Le composant est lu depuis les sources, à partir de la racine du projet,
@@ -38,7 +38,10 @@ const echappeHtml = (texte: string) =>
       })[caractere] ?? caractere
   );
 
-export const pageDocumentation = (document: OpenAPIObject) => {
+export const pageDocumentation = (
+  document: OpenAPIObject,
+  { urlBaseMss }: { urlBaseMss: string }
+) => {
   const modele = construisModeleDocumentation(document);
   const { head, body } = render(Documentation, { props: { modele } });
 
@@ -48,7 +51,9 @@ export const pageDocumentation = (document: OpenAPIObject) => {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${echappeHtml(modele.titre)}</title>
-${STYLES.map((style) => `    <link rel="stylesheet" href="${style}">`).join('\n')}
+${styles(urlBaseMss)
+  .map((style) => `    <link rel="stylesheet" href="${style}">`)
+  .join('\n')}
     <script src="${SCRIPT_UI_KIT}" defer></script>
     ${head}
   </head>

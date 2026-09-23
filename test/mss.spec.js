@@ -70,6 +70,38 @@ describe('Le serveur MSS', () => {
 
       expect(reponse.status).to.equal(404);
     });
+
+    it("expose les polices de caractères à l'API publique, hébergée sur une autre origine", async () => {
+      const reponse = await testeur.get(
+        '/statique/assets/fonts/Marianne-Regular.woff2'
+      );
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['access-control-allow-origin']).to.equal('*');
+      expect(reponse.headers['cross-origin-resource-policy']).to.equal(
+        'cross-origin'
+      );
+    });
+
+    it("expose la feuille de style des polices à l'API publique", async () => {
+      const reponse = await testeur.get('/statique/assets/styles/fonts.css');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['cross-origin-resource-policy']).to.equal(
+        'cross-origin'
+      );
+    });
+
+    it("n'expose pas les autres fichiers aux autres origines", async () => {
+      const reponse = await testeur.get('/statique/assets/styles/mss.css');
+
+      expect(reponse.headers).to.not.have.property(
+        'access-control-allow-origin'
+      );
+      expect(reponse.headers['cross-origin-resource-policy']).to.not.equal(
+        'cross-origin'
+      );
+    });
   });
 
   describe('sur configuration des types de requête', () => {
