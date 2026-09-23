@@ -25,9 +25,12 @@ export const schemaService = z
       description: 'Nombre de personnes ayant accès au service.',
       example: 4,
     }),
-    niveauSecurite: z.enum(['niveau1', 'niveau2', 'niveau3']).optional().meta({
-      description: 'Niveau de sécurité du service.',
-    }),
+    besoinsSecurite: z
+      .enum(['basiques', 'moderes', 'avances'])
+      .optional()
+      .meta({
+        description: 'Besoins de sécurité du service.',
+      }),
   })
   .meta({ id: 'Service' });
 

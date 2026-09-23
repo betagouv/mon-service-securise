@@ -1,8 +1,18 @@
 import Service from '../../modeles/service.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { ServiceApiPublique } from '../schemas/services.schema.js';
+import { IdNiveauSecurite } from '../../referentiel.types.js';
 
 const { DROITS_VOIR_DESCRIPTION } = Autorisation;
+
+const besoinsSecuriteParNiveau: Record<
+  IdNiveauSecurite,
+  ServiceApiPublique['besoinsSecurite']
+> = {
+  niveau1: 'basiques',
+  niveau2: 'moderes',
+  niveau3: 'avances',
+};
 
 export const serialiseServicePourAPIPublique = (
   service: Service,
@@ -22,6 +32,9 @@ export const serialiseServicePourAPIPublique = (
       siret: organisationResponsable.siret ?? null,
     },
     nombreContributeurs: service.contributeurs.length,
-    ...(peutVoirLaDescription && { niveauSecurite }),
+    ...(peutVoirLaDescription && {
+      besoinsSecurite:
+        besoinsSecuriteParNiveau[niveauSecurite as IdNiveauSecurite],
+    }),
   };
 };
