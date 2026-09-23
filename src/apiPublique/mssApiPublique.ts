@@ -2,16 +2,19 @@ import express, { NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
 import { authentificationParCleApi } from './middlewares/authentificationParCleApi.js';
 import { limiteDeDebitParCleApi } from './middlewares/limiteDeDebitParCleApi.js';
+import { auditApiPublique } from './middlewares/auditApiPublique.js';
 import { routesApiPubliqueV1 } from './routes/routesApiPubliqueV1.js';
 import { routesDocumentation } from './routes/routesDocumentation.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
+import { AdaptateurAuditApiPublique } from '../adaptateurs/adaptateurAuditApiPublique.interface.js';
 
 type LimiteDeDebit = { fenetreMs: number; maxParFenetre: number };
 
 type ConfigurationApiPublique = {
   depotDonnees: DepotDonnees;
   adaptateurGestionErreur: AdaptateurGestionErreur;
+  adaptateurAuditApiPublique: AdaptateurAuditApiPublique;
   limiteDeDebit?: LimiteDeDebit;
   trustProxy?: boolean | number | string;
 };
@@ -24,6 +27,7 @@ const limiteDeDebitParDefaut: LimiteDeDebit = {
 export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
+  adaptateurAuditApiPublique,
   limiteDeDebit = limiteDeDebitParDefaut,
   trustProxy,
 }: ConfigurationApiPublique) => {
@@ -37,6 +41,7 @@ export const creeServeurApiPublique = ({
     '/v1',
     authentificationParCleApi({ depotDonnees }),
     limiteDeDebitParCleApi(limiteDeDebit),
+    auditApiPublique({ adaptateurAuditApiPublique, adaptateurGestionErreur }),
     routesApiPubliqueV1({ depotDonnees })
   );
 

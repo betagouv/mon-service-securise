@@ -9,10 +9,15 @@ import { fabriqueServiceCgu } from './src/serviceCgu.js';
 import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerificationCoherenceSels.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 import { creeServeurApiPublique } from './src/apiPublique/mssApiPublique.js';
+import { fabriqueAdaptateurAuditApiPublique } from './src/adaptateurs/fabriqueAdaptateurAuditApiPublique.js';
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurJWT = fabriqueAdaptateurJWT();
 const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
+const adaptateurAuditApiPublique = fabriqueAdaptateurAuditApiPublique(
+  process.env.NODE_ENV!,
+  adaptateurChiffrement
+);
 
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 4000;
@@ -51,6 +56,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
   const serveur = creeServeurApiPublique({
     depotDonnees,
     adaptateurGestionErreur,
+    adaptateurAuditApiPublique,
     limiteDeDebit,
     trustProxy: adaptateurEnvironnement.trustProxy(),
   });

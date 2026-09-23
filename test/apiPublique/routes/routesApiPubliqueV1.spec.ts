@@ -31,6 +31,7 @@ describe("Les routes d'API publique `/v1`", () => {
       adaptateurGestionErreur: {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
+      adaptateurAuditApiPublique: { trace: async () => {} },
     }).app;
 
   const unServiceDeLyon = () =>
