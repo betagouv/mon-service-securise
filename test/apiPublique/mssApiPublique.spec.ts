@@ -59,8 +59,43 @@ describe("Le serveur d'API publique", () => {
     expect(reponse.headers['x-powered-by']).toBeUndefined();
   });
 
+  describe('concernant les en-têtes de sécurité', () => {
+    it("applique une politique de sécurité du contenu qui interdit tout chargement de ressource sur les routes de l'API", async () => {
+      const reponse = await request(uneApp())
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      const csp = reponse.headers['content-security-policy'];
+      expect(csp).toContain("default-src 'none'");
+      expect(csp).toContain("frame-ancestors 'none'");
+    });
+
+    it('positionne les en-têtes de durcissement usuels', async () => {
+      const reponse = await request(uneApp())
+        .get('/v1/services')
+        .set('Authorization', enTeteAuthorization);
+
+      expect(reponse.headers['x-content-type-options']).toBe('nosniff');
+      expect(reponse.headers['x-frame-options']).toBe('DENY');
+      expect(reponse.headers['referrer-policy']).toBe('no-referrer');
+      expect(reponse.headers['strict-transport-security']).toContain(
+        'max-age='
+      );
+    });
+
+    it('protège aussi les réponses des routes inconnues', async () => {
+      const reponse = await request(uneApp()).get('/inconnue');
+
+      expect(reponse.status).toBe(404);
+      expect(reponse.headers['content-security-policy']).toContain(
+        "default-src 'none'"
+      );
+    });
+  });
+
   it("fait confiance au nombre de proxys configuré pour déterminer l'adresse IP du client", () => {
     const { app } = creeServeurApiPublique({
+      urlBaseMss: 'https://mss.example.org',
       depotDonnees,
       adaptateurGestionErreur: {} as AdaptateurGestionErreur,
       adaptateurAuditApiPublique,

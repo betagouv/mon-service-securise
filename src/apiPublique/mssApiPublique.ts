@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Server } from 'http';
+import helmet from 'helmet';
 import { authentificationParCleApi } from './middlewares/authentificationParCleApi.js';
 import { limiteDeDebitParCleApi } from './middlewares/limiteDeDebitParCleApi.js';
 import { auditApiPublique } from './middlewares/auditApiPublique.js';
@@ -25,6 +26,14 @@ const limiteDeDebitParDefaut: LimiteDeDebit = {
   maxParFenetre: 60,
 };
 
+const politiqueSecuriteApi = helmet({
+  contentSecurityPolicy: {
+    useDefaults: false,
+    directives: { defaultSrc: ["'none'"], frameAncestors: ["'none'"] },
+  },
+  frameguard: { action: 'deny' },
+});
+
 export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
@@ -36,6 +45,7 @@ export const creeServeurApiPublique = ({
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', trustProxy);
+  app.use(politiqueSecuriteApi);
 
   app.use(routesDocumentation({ urlBaseMss }));
 
