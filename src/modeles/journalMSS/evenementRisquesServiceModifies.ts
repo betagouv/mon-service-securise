@@ -1,41 +1,47 @@
-import { ErreurServiceManquant } from './erreurs.js';
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import Service from '../service.js';
 import RisqueGeneral from '../risqueGeneral.js';
 import RisqueSpecifique from '../risqueSpecifique.js';
 
-class EvenementRisquesServiceModifies extends Evenement {
-  constructor({ service }: { service: Service }, options = {}) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+type Donnees = { service: Service };
 
-    if (!service) throw new ErreurServiceManquant();
+const donneesPertinentesRisqueGeneral = ({
+  id,
+  niveauGravite,
+  niveauVraisemblance,
+}: RisqueGeneral) => ({ id, niveauGravite, niveauVraisemblance });
 
-    const donneesPerninentesRisqueGeneral = (risqueGeneral: RisqueGeneral) => {
-      const { niveauGravite, id, niveauVraisemblance } = risqueGeneral;
-      return { id, niveauGravite, niveauVraisemblance };
+const donneesPertinentesRisqueSpecifique = ({
+  id,
+  niveauGravite,
+  niveauVraisemblance,
+  categories,
+}: RisqueSpecifique) => ({
+  id,
+  niveauGravite,
+  niveauVraisemblance,
+  categories,
+});
+
+class EvenementRisquesServiceModifies extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'RISQUES_SERVICE_MODIFIES';
+  }
+
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return ['service'];
+  }
+
+  protected override donneesAConsigner({ service }: Donnees, hache: Hacheur) {
+    return {
+      idService: hache(service.id),
+      risquesGeneraux: service
+        .risquesGeneraux()
+        .items.map(donneesPertinentesRisqueGeneral),
+      risquesSpecifiques: service
+        .risquesSpecifiques()
+        .items.map(donneesPertinentesRisqueSpecifique),
     };
-
-    const donneesPerninentesRisqueSpecifique = (
-      risqueSpecifique: RisqueSpecifique
-    ) => {
-      const { niveauGravite, id, niveauVraisemblance, categories } =
-        risqueSpecifique;
-      return { id, niveauGravite, niveauVraisemblance, categories };
-    };
-
-    super(
-      'RISQUES_SERVICE_MODIFIES',
-      {
-        idService: adaptateurChiffrement.hacheSha256(service.id),
-        risquesGeneraux: service
-          .risquesGeneraux()
-          .items.map(donneesPerninentesRisqueGeneral),
-        risquesSpecifiques: service
-          .risquesSpecifiques()
-          .items.map(donneesPerninentesRisqueSpecifique),
-      },
-      date
-    );
   }
 }
 

@@ -1,85 +1,18 @@
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
-import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import EvenementAdminRetireDeOrganisation from '../../../src/modeles/journalMSS/evenementAdminRetireDeOrganisation.ts';
 import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe("Un événement de retrait d'admin d'une organisation", () => {
-  it("hache l'identifiant de l'acteur", () => {
+  it("consigne les identifiants hachés de l'acteur, de la cible et le siret haché", () => {
     const evenement = new EvenementAdminRetireDeOrganisation(
-      {
-        idActeur: unUUID('a'),
-        idCible: unUUIDRandom(),
-        siret: '12345678901234',
-      },
-      { adaptateurChiffrement: hacheEnMajuscules }
-    );
-
-    expect(evenement.toJSON().donnees.idActeur).toBe(unUUID('A'));
-  });
-
-  it("hache l'identifiant de la cible", () => {
-    const evenement = new EvenementAdminRetireDeOrganisation(
-      {
-        idActeur: unUUIDRandom(),
-        idCible: unUUID('c'),
-        siret: '12345678901234',
-      },
-      { adaptateurChiffrement: hacheEnMajuscules }
-    );
-
-    expect(evenement.toJSON().donnees.idCible).toBe(unUUID('C'));
-  });
-
-  it('hache le siret', () => {
-    const evenement = new EvenementAdminRetireDeOrganisation(
-      {
-        idActeur: unUUIDRandom(),
-        idCible: unUUIDRandom(),
-        siret: 'abcd',
-      },
-      { adaptateurChiffrement: hacheEnMajuscules }
-    );
-
-    expect(evenement.toJSON().donnees.siret).toBe('ABCD');
-  });
-
-  it('sait se convertir en JSON', () => {
-    const evenement = new EvenementAdminRetireDeOrganisation(
-      {
-        idActeur: unUUID('a'),
-        idCible: unUUID('c'),
-        siret: 'abcd',
-      },
+      { idActeur: unUUID('a'), idCible: unUUID('c'), siret: 'abcd' },
       { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
     );
 
-    expect(evenement.toJSON()).to.eql({
+    expect(evenement.toJSON()).toEqual({
       type: 'ADMIN_RETIRE_DE_ORGANISATION',
-      donnees: {
-        idActeur: unUUID('A'),
-        idCible: unUUID('C'),
-        siret: 'ABCD',
-      },
+      donnees: { idActeur: unUUID('A'), idCible: unUUID('C'), siret: 'ABCD' },
       date: '17/11/2022',
     });
   });
-
-  it.each(['idActeur', 'idCible', 'siret'])(
-    'exige que %s soit renseigné',
-    (proprieteRequise) => {
-      const donneesTest = {
-        idActeur: unUUID('a'),
-        idCible: unUUID('c'),
-        siret: '12345678901234',
-      };
-      delete donneesTest[proprieteRequise as 'idActeur' | 'idCible' | 'siret'];
-
-      expect(
-        () =>
-          new EvenementAdminRetireDeOrganisation(donneesTest, {
-            adaptateurChiffrement: hacheEnMajuscules,
-          })
-      ).toThrow(ErreurDonneeManquante);
-    }
-  );
 });

@@ -1,4 +1,4 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { type UUID } from '../../typesBasiques.js';
 
 export type DonneesEvenementCleApiCreee = {
@@ -9,29 +9,38 @@ export type DonneesEvenementCleApiCreee = {
   dateExpiration: Date;
 };
 
-class EvenementCleApiCreee extends Evenement {
-  constructor(donnees: DonneesEvenementCleApiCreee, options = {}) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+class EvenementCleApiCreee extends Evenement<DonneesEvenementCleApiCreee> {
+  protected override typeEvenement() {
+    return 'CLE_API_CREEE';
+  }
 
-    Evenement.verifieProprietesRenseignees(donnees, [
+  protected override proprietesRequises(): (keyof DonneesEvenementCleApiCreee)[] {
+    return [
       'idCle',
       'idUtilisateur',
       'dureeValiditeEnJours',
       'dateCreation',
       'dateExpiration',
-    ]);
+    ];
+  }
 
-    super(
-      'CLE_API_CREEE',
-      {
-        idCle: adaptateurChiffrement.hacheSha256(donnees.idCle),
-        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
-        dureeValiditeEnJours: donnees.dureeValiditeEnJours,
-        dateCreation: donnees.dateCreation,
-        dateExpiration: donnees.dateExpiration,
-      },
-      date
-    );
+  protected override donneesAConsigner(
+    {
+      idCle,
+      idUtilisateur,
+      dureeValiditeEnJours,
+      dateCreation,
+      dateExpiration,
+    }: DonneesEvenementCleApiCreee,
+    hache: Hacheur
+  ) {
+    return {
+      idCle: hache(idCle),
+      idUtilisateur: hache(idUtilisateur),
+      dureeValiditeEnJours,
+      dateCreation,
+      dateExpiration,
+    };
   }
 }
 

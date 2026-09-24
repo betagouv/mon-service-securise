@@ -1,6 +1,6 @@
 export type EvenementJournal = {
   type: string;
-  date: Date;
+  date: Date | number | string;
   donnees: Record<string, unknown>;
 };
 

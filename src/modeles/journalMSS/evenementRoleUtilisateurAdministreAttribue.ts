@@ -1,38 +1,33 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { UUID } from '../../typesBasiques.js';
 import { Role } from '../autorisations/autorisation.js';
 
-class EvenementRoleUtilisateurAdministreAttribue extends Evenement {
-  constructor(
-    donnees: {
-      idAdmin: UUID;
-      idUtilisateurAdministre: UUID;
-      role: Role;
-      idsServices: UUID[];
-    },
-    options = {}
+type Donnees = {
+  idAdmin: UUID;
+  idUtilisateurAdministre: UUID;
+  role: Role;
+  idsServices: UUID[];
+};
+
+class EvenementRoleUtilisateurAdministreAttribue extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'ROLE_UTILISATEUR_ADMINISTRE_ATTRIBUE';
+  }
+
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return ['idAdmin', 'idUtilisateurAdministre', 'role', 'idsServices'];
+  }
+
+  protected override donneesAConsigner(
+    { idAdmin, idUtilisateurAdministre, role, idsServices }: Donnees,
+    hache: Hacheur
   ) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
-
-    Evenement.verifieProprietesRenseignees(donnees, [
-      'idAdmin',
-      'idUtilisateurAdministre',
-      'role',
-      'idsServices',
-    ]);
-
-    super(
-      'ROLE_UTILISATEUR_ADMINISTRE_ATTRIBUE',
-      {
-        idAdmin: adaptateurChiffrement.hacheSha256(donnees.idAdmin),
-        idUtilisateurAdministre: adaptateurChiffrement.hacheSha256(
-          donnees.idUtilisateurAdministre
-        ),
-        role: donnees.role,
-        idsServices: donnees.idsServices.map(adaptateurChiffrement.hacheSha256),
-      },
-      date
-    );
+    return {
+      idAdmin: hache(idAdmin),
+      idUtilisateurAdministre: hache(idUtilisateurAdministre),
+      role,
+      idsServices: idsServices.map(hache),
+    };
   }
 }
 

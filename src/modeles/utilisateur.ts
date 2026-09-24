@@ -71,7 +71,7 @@ class Utilisateur extends Base {
   private infolettreAcceptee!: boolean;
   private transactionnelAccepte!: boolean;
   private pixelDeSuiviAccepte!: boolean;
-  private readonly estimationNombreServices!: EstimationNombreServices;
+  readonly estimationNombreServices!: EstimationNombreServices;
   readonly postes!: Array<string>;
   readonly entite: Entite;
   private readonly identite: Identite;

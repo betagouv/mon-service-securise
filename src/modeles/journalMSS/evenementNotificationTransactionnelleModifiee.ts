@@ -1,4 +1,4 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { type UUID } from '../../typesBasiques.js';
 import { type IdNotificationTransactionnelle } from '../../referentiel.types.js';
 import { EtatNotificationTransactionnelle } from '../../bus/evenementNotificationTransactionnelleModifiee.js';
@@ -15,40 +15,45 @@ export type DonneesEvenementNotificationTransactionnelleModifiee = {
   etat: EtatNotificationTransactionnelle;
 };
 
-class EvenementNotificationTransactionnelleModifiee extends Evenement {
-  constructor(
-    donnees: DonneesEvenementNotificationTransactionnelleModifiee,
-    options = {}
-  ) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+class EvenementNotificationTransactionnelleModifiee extends Evenement<DonneesEvenementNotificationTransactionnelleModifiee> {
+  protected override typeEvenement() {
+    return 'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE';
+  }
 
-    Evenement.verifieProprietesRenseignees(donnees, [
+  protected override proprietesRequises(): (keyof DonneesEvenementNotificationTransactionnelleModifiee)[] {
+    return [
       'idNotification',
       'idActeur',
       'idDestinataire',
       'idService',
       'typeNotification',
       'etat',
-    ]);
+    ];
+  }
 
-    super(
-      'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE',
-      {
-        idNotification: adaptateurChiffrement.hacheSha256(
-          donnees.idNotification
-        ),
-        idActeur: adaptateurChiffrement.hacheSha256(donnees.idActeur),
-        idDestinataire: adaptateurChiffrement.hacheSha256(
-          donnees.idDestinataire
-        ),
-        idService: adaptateurChiffrement.hacheSha256(donnees.idService),
-        ...(donnees.idMesure && { idMesure: donnees.idMesure }),
-        ...(donnees.typeMesure && { typeMesure: donnees.typeMesure }),
-        typeNotification: donnees.typeNotification,
-        etat: donnees.etat,
-      },
-      date
-    );
+  protected override donneesAConsigner(
+    {
+      idNotification,
+      idActeur,
+      idDestinataire,
+      idService,
+      idMesure,
+      typeMesure,
+      typeNotification,
+      etat,
+    }: DonneesEvenementNotificationTransactionnelleModifiee,
+    hache: Hacheur
+  ) {
+    return {
+      idNotification: hache(idNotification),
+      idActeur: hache(idActeur),
+      idDestinataire: hache(idDestinataire),
+      idService: hache(idService),
+      ...(idMesure && { idMesure }),
+      ...(typeMesure && { typeMesure }),
+      typeNotification,
+      etat,
+    };
   }
 }
 

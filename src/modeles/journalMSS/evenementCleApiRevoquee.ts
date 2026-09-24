@@ -1,4 +1,4 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { type UUID } from '../../typesBasiques.js';
 
 export type DonneesEvenementCleApiRevoquee = {
@@ -7,25 +7,24 @@ export type DonneesEvenementCleApiRevoquee = {
   dateRevocation: Date;
 };
 
-class EvenementCleApiRevoquee extends Evenement {
-  constructor(donnees: DonneesEvenementCleApiRevoquee, options = {}) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+class EvenementCleApiRevoquee extends Evenement<DonneesEvenementCleApiRevoquee> {
+  protected override typeEvenement() {
+    return 'CLE_API_REVOQUEE';
+  }
 
-    Evenement.verifieProprietesRenseignees(donnees, [
-      'idCle',
-      'idUtilisateur',
-      'dateRevocation',
-    ]);
+  protected override proprietesRequises(): (keyof DonneesEvenementCleApiRevoquee)[] {
+    return ['idCle', 'idUtilisateur', 'dateRevocation'];
+  }
 
-    super(
-      'CLE_API_REVOQUEE',
-      {
-        idCle: adaptateurChiffrement.hacheSha256(donnees.idCle),
-        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
-        dateRevocation: donnees.dateRevocation,
-      },
-      date
-    );
+  protected override donneesAConsigner(
+    { idCle, idUtilisateur, dateRevocation }: DonneesEvenementCleApiRevoquee,
+    hache: Hacheur
+  ) {
+    return {
+      idCle: hache(idCle),
+      idUtilisateur: hache(idUtilisateur),
+      dateRevocation,
+    };
   }
 }
 

@@ -1,11 +1,11 @@
 import Evenement, { Hacheur } from './evenement.js';
-import { type UUID } from '../../typesBasiques.js';
+import { UUID } from '../../typesBasiques.js';
 
 type Donnees = { idService: UUID };
 
-class EvenementSimulationMigrationReferentielCreee extends Evenement<Donnees> {
+class EvenementServiceSupprime extends Evenement<Donnees> {
   protected override typeEvenement() {
-    return 'SIMULATION_MIGRATION_REFERENTIEL_CREEE';
+    return 'SERVICE_SUPPRIME';
   }
 
   protected override proprietesRequises(): (keyof Donnees)[] {
@@ -17,4 +17,4 @@ class EvenementSimulationMigrationReferentielCreee extends Evenement<Donnees> {
   }
 }
 
-export default EvenementSimulationMigrationReferentielCreee;
+export default EvenementServiceSupprime;

@@ -8,10 +8,10 @@ export function consigneRisquesV2DansJournal({
   adaptateurJournal: AdaptateurJournalMSS;
 }) {
   return async (evenementMss: MssRisquesV2ServiceModifies) => {
-    const evenementJournal = new JournalRisquesV2ServiceModifies(
-      evenementMss.idService,
-      evenementMss.risques
-    );
+    const evenementJournal = new JournalRisquesV2ServiceModifies({
+      idService: evenementMss.idService,
+      risques: evenementMss.risques,
+    });
 
     await adaptateurJournal.consigneEvenement(evenementJournal.toJSON());
   };

@@ -202,6 +202,7 @@ module.exports = defineConfig([
       'import/prefer-default-export': 'off',
       'lines-between-class-members': 'off',
       'no-useless-constructor': 'off',
+      'class-methods-use-this': ['error', { ignoreOverrideMethods: true }],
 
       'no-param-reassign': [
         'error',
