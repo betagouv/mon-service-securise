@@ -57,7 +57,7 @@ const limiteDeDebit =
     : undefined;
 
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
-  adaptateurGestionErreur.initialise();
+  adaptateurGestionErreur.initialise('api-publique');
 
   const serveur = creeServeurApiPublique({
     depotDonnees,
