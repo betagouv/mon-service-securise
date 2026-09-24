@@ -126,6 +126,7 @@ const trustProxy = () => {
 
 const mss = () => ({
   urlBase: () => process.env.URL_BASE_MSS,
+  urlDocumentationApi: () => `${process.env.URL_BASE_API_MSS}/docs`,
 });
 
 const crisp = () => ({

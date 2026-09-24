@@ -18,4 +18,5 @@ export type CleApiCreee = CleApiPublique & {
 
 export type CleApiProps = {
   cles: CleApiPublique[];
+  urlDocumentationApi: string;
 };
