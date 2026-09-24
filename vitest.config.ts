@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 export default defineConfig({
   test: {
     globals: true,
-    isolate: false,
     exclude: [
       '**/node_modules/**',
       'test_accessibilite/**',
@@ -19,5 +18,22 @@ export default defineConfig({
         new URL('./test/mocks/sentryNodeVide.ts', import.meta.url)
       ),
     },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'backend',
+          include: ['test/**/*.spec.{js,ts}'],
+          isolate: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'autres',
+          exclude: ['test/**'],
+        },
+      },
+    ],
   },
 });
