@@ -12,8 +12,40 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    name: Construction de MonServiceSécurisé
+  controles:
+    name: ${{ matrix.controle.nom }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        controle:
+          - nom: Contrôler la mise en forme avec Prettier
+            commande: ./node_modules/.bin/prettier --check .
+          - nom: Contrôler la cohérence avec Eslint
+            commande: ./node_modules/.bin/eslint .
+          - nom: Contrôler la cohérence du Frontend avec Eslint
+            commande: ./node_modules/.bin/eslint -c svelte/eslint.config.js svelte
+          - nom: Contrôler le Typescript du Backend
+            commande: ./node_modules/.bin/tsc --noEmit
+          - nom: Contrôler la cohérence de Svelte avec `svelte-check`
+            commande: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
+
+    steps:
+      - name: Cloner le dépôt Git
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Préparer l'environnement Node.js
+        uses: ./.github/actions/preparer-environnement-node
+
+      - name: ${{ matrix.controle.nom }}
+        run: ${{ matrix.controle.commande }}
+
+  tests-unitaires:
+    name: Exécuter les tests unitaires
 
     runs-on: ubuntu-latest
 
@@ -26,36 +58,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Déterminer la version de Node.js à utiliser
-        run: |
-          echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
-
-      - name: Installer pnpm
-        run: npm install -g "$(jq -r '.packageManager' package.json)"
-
-      - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Installer les dépendances
-        run: pnpm install
-
-      - name: Contrôler la mise en forme avec Prettier
-        run: ./node_modules/.bin/prettier --check .
-
-      - name: Contrôler la cohérence avec Eslint
-        run: ./node_modules/.bin/eslint .
-
-      - name: Contrôler la cohérence du Frontend avec Eslint
-        run: ./node_modules/.bin/eslint -c svelte/eslint.config.js svelte
-
-      - name: Contrôler le Typescript du Backend
-        run: ./node_modules/.bin/tsc --noEmit
-
-      - name: Contrôler la cohérence de Svelte avec `svelte-check`
-        run: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
+      - name: Préparer l'environnement Node.js
+        uses: ./.github/actions/preparer-environnement-node
 
       - name: Installer Miller (mlr) pour les tests des scripts du moteur de risques v2
         run: sudo apt-get update && sudo apt-get install -y miller
@@ -82,21 +86,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Déterminer la version de Node.js à utiliser
-        run: |
-          echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
-
-      - name: Installer pnpm
-        run: npm install -g "$(jq -r '.packageManager' package.json)"
-
-      - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Installer les dépendances
-        run: pnpm install
+      - name: Préparer l'environnement Node.js
+        uses: ./.github/actions/preparer-environnement-node
 
       - name: Installer Chromium pour Playwright
         run: ./node_modules/.bin/playwright install chromium --with-deps
