@@ -54,7 +54,17 @@ jobs:
         uses: ./.github/actions/preparer-environnement-node
 
       - name: Installer Miller (mlr) pour les tests des scripts du moteur de risques v2
-        run: sudo apt-get update && sudo apt-get install -y miller
+        env:
+          MILLER_VERSION: 6.21.0
+          MILLER_SHA256: 22daf43f3afc7c497da0b9480a0d4ef0d39c9bf68b2460068dd0187ed44f7b80
+        run: |
+          DOSSIER_MILLER="$RUNNER_TEMP/miller"
+          ARCHIVE="$RUNNER_TEMP/miller.tar.gz"
+          mkdir -p "$DOSSIER_MILLER"
+          curl -fsSL -o "$ARCHIVE" "https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-amd64.tar.gz"
+          echo "${MILLER_SHA256}  ${ARCHIVE}" | sha256sum --check --strict
+          tar -xzf "$ARCHIVE" --strip-components=1 -C "$DOSSIER_MILLER" "miller-${MILLER_VERSION}-linux-amd64/mlr"
+          echo "$DOSSIER_MILLER" >> "$GITHUB_PATH"
 
       - name: Exécuter les tests
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
