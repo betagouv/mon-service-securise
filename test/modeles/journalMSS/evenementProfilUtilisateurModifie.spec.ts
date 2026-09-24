@@ -1,5 +1,5 @@
 import EvenementProfilUtilisateurModifie from '../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie.ts';
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.ts';
+import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
@@ -33,6 +33,6 @@ describe('Un événement de profil utilisateur modifié', () => {
         new EvenementProfilUtilisateurModifie(null, {
           adaptateurChiffrement: hacheEnMajuscules,
         })
-    ).toThrow(ErreurDonneeManquante);
+    ).toThrow(ErreurDonneesObligatoiresManquantes);
   });
 });

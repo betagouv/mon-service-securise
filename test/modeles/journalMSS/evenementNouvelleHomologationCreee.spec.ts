@@ -1,5 +1,5 @@
 import EvenementNouvelleHomologationCreee from '../../../src/modeles/journalMSS/evenementNouvelleHomologationCreee.ts';
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.ts';
+import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 import { unUUID } from '../../constructeurs/UUID.ts';
 
@@ -32,7 +32,7 @@ describe('Un événement de nouvelle homologation', () => {
           { idService: unUUID('a'), dateHomologation: '2023-03-30' },
           { adaptateurChiffrement: hacheEnMajuscules }
         )
-    ).toThrow(new ErreurDonneeManquante('dureeHomologationMois'));
+    ).toThrow(ErreurDonneesObligatoiresManquantes);
   });
 
   it("accepte l'absence de durée d'homologation si l'homologation est refusée, et le consigne", () => {

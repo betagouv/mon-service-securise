@@ -1,5 +1,5 @@
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   unService,
   unServiceV2,
@@ -193,7 +193,7 @@ describe('Un événement de complétude modifiée', () => {
     it('exige que le service soit renseigné', () => {
       expect(() => {
         unEvenementSurV1().sans('service').construis();
-      }).toThrowError(ErreurDonneeManquante);
+      }).toThrowError(ErreurDonneesObligatoiresManquantes);
     });
   });
 
@@ -345,7 +345,7 @@ describe('Un événement de complétude modifiée', () => {
     it('exige que le service soit renseigné', () => {
       expect(() => {
         unEvenementSurV2().sans('service').construis();
-      }).toThrowError(ErreurDonneeManquante);
+      }).toThrowError(ErreurDonneesObligatoiresManquantes);
     });
   });
 });

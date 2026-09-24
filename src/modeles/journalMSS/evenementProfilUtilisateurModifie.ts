@@ -1,5 +1,5 @@
 import Evenement, { Hacheur } from './evenement.js';
-import { ErreurDonneeManquante } from './erreurs.js';
+import { ErreurDonneesObligatoiresManquantes } from '../../erreurs.js';
 import Utilisateur from '../utilisateur.js';
 
 class EvenementProfilUtilisateurModifie extends Evenement<Utilisateur> {
@@ -9,7 +9,9 @@ class EvenementProfilUtilisateurModifie extends Evenement<Utilisateur> {
 
   protected override valide(utilisateur: Utilisateur) {
     if (!(utilisateur instanceof Utilisateur))
-      throw new ErreurDonneeManquante('utilisateur');
+      throw new ErreurDonneesObligatoiresManquantes(
+        'Il manque la donnée utilisateur'
+      );
   }
 
   protected override donneesAConsigner(

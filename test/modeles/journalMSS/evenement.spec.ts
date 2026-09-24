@@ -1,7 +1,7 @@
 import Evenement, {
   Hacheur,
 } from '../../../src/modeles/journalMSS/evenement.ts';
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 type DonneesDeTest = { idService: string; commentaire?: string };
@@ -98,7 +98,9 @@ describe('Un événement du journal MSS', () => {
             { ...desDonnees(), idService: valeurManquante },
             { adaptateurChiffrement: hacheEnMajuscules }
           )
-      ).toThrow(new ErreurDonneeManquante('idService'));
+      ).toThrow(
+        new ErreurDonneesObligatoiresManquantes('Il manque la donnée idService')
+      );
     }
   );
 
@@ -109,7 +111,7 @@ describe('Un événement du journal MSS', () => {
         new EvenementDeTest(undefined, {
           adaptateurChiffrement: hacheEnMajuscules,
         })
-    ).toThrow(ErreurDonneeManquante);
+    ).toThrow(ErreurDonneesObligatoiresManquantes);
   });
 
   it("accepte l'absence d'une propriété non requise", () => {
