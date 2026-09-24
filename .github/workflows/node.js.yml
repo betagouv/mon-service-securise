@@ -89,8 +89,24 @@ jobs:
       - name: Préparer l'environnement Node.js
         uses: ./.github/actions/preparer-environnement-node
 
+      - name: Déterminer la version de Playwright
+        run: |
+          echo "PLAYWRIGHT_VERSION=$(./node_modules/.bin/playwright --version | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Restaurer Chromium depuis le cache
+        id: cache-chromium
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ env.PLAYWRIGHT_VERSION }}
+
       - name: Installer Chromium pour Playwright
+        if: steps.cache-chromium.outputs.cache-hit != 'true'
         run: ./node_modules/.bin/playwright install chromium --with-deps
+
+      - name: Installer les dépendances système de Chromium
+        if: steps.cache-chromium.outputs.cache-hit == 'true'
+        run: ./node_modules/.bin/playwright install-deps chromium
 
       - name: Exécuter les tests d'intégration
         run: pnpm test:integration
