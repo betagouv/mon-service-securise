@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 export default defineConfig({
   test: {
     globals: true,
+    isolate: false,
     exclude: [
       '**/node_modules/**',
       'test_accessibilite/**',
