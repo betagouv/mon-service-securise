@@ -124,6 +124,7 @@ const testeurMss = () => {
     adaptateurEnvironnement = {
       mss: () => ({
         urlBase: () => 'http://localhost:1234',
+        urlDocumentationApi: () => 'http://localhost:1235/docs',
       }),
       trustProxy: () => 0,
       featureFlag: () => ({

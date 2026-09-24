@@ -1,10 +1,10 @@
 import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
-  const { cles } = lisDonneesPartagees('donnees-cle-api');
+  const { cles, urlDocumentationApi } = lisDonneesPartagees('donnees-cle-api');
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-cle-api', {
-      detail: { cles },
+      detail: { cles, urlDocumentationApi },
     })
   );
 });

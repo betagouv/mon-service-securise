@@ -88,7 +88,12 @@ const routesConnectePage = ({
           return { id, prefixe, dateCreation, dateExpiration };
         });
 
-      reponse.render('profilCleApi', { cles: clesValides });
+      reponse.render('profilCleApi', {
+        cles: clesValides,
+        urlDocumentationApi: adaptateurEnvironnement
+          .mss()
+          .urlDocumentationApi(),
+      });
     }
   );
 

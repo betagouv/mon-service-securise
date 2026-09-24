@@ -7,7 +7,7 @@
   import { api } from './cleApi.api';
   import type { CleApiCreee, CleApiProps } from './cleApi.d';
 
-  let { cles: clesInitiales }: CleApiProps = $props();
+  let { cles: clesInitiales, urlDocumentationApi }: CleApiProps = $props();
 
   let cles = $state(untrack(() => clesInitiales));
   let idCleARevoquer = $state<string | null>(null);
@@ -67,6 +67,14 @@
 <p>
   Générez une clé d'API personnelle pour relire, dans vos propres outils, les
   données des services auxquels vous avez déjà accès.
+</p>
+<p>
+  Vous trouverez la documentation à l'adresse suivante : <dsfr-link
+    href={urlDocumentationApi}
+    label={urlDocumentationApi}
+    blank
+    neutral
+  ></dsfr-link>
 </p>
 
 <FormulaireCreationCleApi onCleCreee={ajouteCle} />
