@@ -1,7 +1,7 @@
 import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.interface.js';
 import { fabriqueAdaptateurChiffrement } from '../../adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { EvenementJournal } from '../../adaptateurs/adaptateurJournalMSS.interface.js';
-import { ErreurDonneesObligatoiresManquantes } from '../../erreurs.js';
+import { verifieProprietesRenseignees } from '../../utilitaires/proprietesRequises.js';
 
 export type Hacheur = AdaptateurChiffrement['hacheSha256'];
 export type DateEvenement = EvenementJournal['date'];
@@ -9,8 +9,6 @@ export type OptionsEvenement = {
   date?: DateEvenement;
   adaptateurChiffrement?: Pick<AdaptateurChiffrement, 'hacheSha256'>;
 };
-
-const manque = (valeur: unknown) => valeur === undefined || valeur === null;
 
 abstract class Evenement<Donnees> {
   readonly type: string;
@@ -41,12 +39,7 @@ abstract class Evenement<Donnees> {
   }
 
   protected valide(donnees: Donnees) {
-    this.proprietesRequises(donnees).forEach((requise) => {
-      if (manque(donnees?.[requise]))
-        throw new ErreurDonneesObligatoiresManquantes(
-          `Il manque la donnée ${String(requise)}`
-        );
-    });
+    verifieProprietesRenseignees(donnees, this.proprietesRequises(donnees));
   }
 
   toJSON(): EvenementJournal {

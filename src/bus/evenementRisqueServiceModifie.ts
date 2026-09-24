@@ -1,13 +1,10 @@
+import { EvenementMetier } from './evenementMetier.js';
 import Service from '../modeles/service.js';
 
-class EvenementRisqueServiceModifie {
-  readonly service: Service;
+type Donnees = { service: Service };
 
-  constructor({ service }: { service: Service }) {
-    if (!service) {
-      throw new Error("Impossible d'instancier l'événement sans service");
-    }
-    this.service = service;
-  }
-}
+class EvenementRisqueServiceModifie extends EvenementMetier<Donnees>([
+  'service',
+]) {}
+
 export default EvenementRisqueServiceModifie;

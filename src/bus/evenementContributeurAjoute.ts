@@ -1,28 +1,24 @@
+import { EvenementMetier } from './evenementMetier.js';
 import Service from '../modeles/service.js';
 import Utilisateur from '../modeles/utilisateur.js';
+import { ErreurDonneesObligatoiresManquantes } from '../erreurs.js';
 
-export class EvenementContributeurAjoute {
-  public readonly services: Service[];
-  public readonly acteur: Utilisateur;
-  public readonly destinataire: Utilisateur;
+type Donnees = {
+  acteur: Utilisateur;
+  destinataire: Utilisateur;
+  services: Service[];
+};
 
-  constructor({
-    acteur,
-    destinataire,
-    services,
-  }: {
-    acteur: Utilisateur;
-    destinataire: Utilisateur;
-    services: Service[];
-  }) {
-    if (!services || !services.length)
-      throw Error("Impossible d'instancier l'événement sans services");
-    if (!destinataire)
-      throw Error("Impossible d'instancier l'événement sans destinataire");
-    if (!acteur) throw Error("Impossible d'instancier l'événement sans acteur");
-
-    this.services = services;
-    this.acteur = acteur;
-    this.destinataire = destinataire;
+export class EvenementContributeurAjoute extends EvenementMetier<Donnees>([
+  'acteur',
+  'destinataire',
+  'services',
+]) {
+  constructor(donnees: Donnees) {
+    super(donnees);
+    if (donnees.services.length === 0)
+      throw new ErreurDonneesObligatoiresManquantes(
+        'Il manque la donnée services'
+      );
   }
 }

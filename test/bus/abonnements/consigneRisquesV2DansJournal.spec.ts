@@ -17,15 +17,15 @@ describe("L'abonnement qui consigne les risques v2dans le journal MSS", () => {
 
   it('consigne un événement contenant les données des risques V2', async () => {
     await consigneRisquesV2DansJournal({ adaptateurJournal })(
-      new MssRisquesV2ServiceModifies(
-        unUUID('S'),
-        new RisquesV2({
+      new MssRisquesV2ServiceModifies({
+        idService: unUUID('S'),
+        risques: new RisquesV2({
           risques: [new RisqueV2('V3', { OV1: 3 }, 4, [], {})],
           risquesBruts: [],
           risquesCibles: [],
           risquesSpecifiques: [],
-        })
-      )
+        }),
+      })
     );
 
     expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(

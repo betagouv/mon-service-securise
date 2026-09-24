@@ -1,14 +1,10 @@
+import { EvenementMetier } from './evenementMetier.js';
 import type Service from '../modeles/service.js';
 
-class EvenementSimulationMigrationReferentielCreee {
-  service: Service;
+type Donnees = { service: Service };
 
-  constructor({ service }: { service: Service }) {
-    if (!service)
-      throw Error("Impossible d'instancier l'événement sans service");
-
-    this.service = service;
-  }
-}
+class EvenementSimulationMigrationReferentielCreee extends EvenementMetier<Donnees>(
+  ['service']
+) {}
 
 export default EvenementSimulationMigrationReferentielCreee;

@@ -1,9 +1,8 @@
+import { EvenementMetier } from './evenementMetier.js';
 import { CleApi } from '../modeles/cleApi.js';
 
-export class EvenementCleApiRevoquee {
-  readonly cle: CleApi;
+type Donnees = { cle: CleApi };
 
-  constructor({ cle }: { cle: CleApi }) {
-    this.cle = cle;
-  }
-}
+export class EvenementCleApiRevoquee extends EvenementMetier<Donnees>([
+  'cle',
+]) {}

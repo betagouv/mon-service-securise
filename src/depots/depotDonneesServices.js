@@ -786,7 +786,10 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 
     busEvenements.publie(
-      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+      new EvenementRisquesV2ServiceModifies({
+        idService: s.id,
+        risques: s.risquesV2,
+      })
     );
   };
 
@@ -799,7 +802,10 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 
     busEvenements.publie(
-      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+      new EvenementRisquesV2ServiceModifies({
+        idService: s.id,
+        risques: s.risquesV2,
+      })
     );
   };
 
@@ -815,7 +821,10 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 
     busEvenements.publie(
-      new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
+      new EvenementRisquesV2ServiceModifies({
+        idService: s.id,
+        risques: s.risquesV2,
+      })
     );
   };
 
