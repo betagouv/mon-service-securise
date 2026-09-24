@@ -1,25 +1,19 @@
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
 import {
-  AdaptateurJournalMSS,
-  EvenementJournal,
-} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+  fabriqueJournalPourLesTests,
+  JournalPourLesTests,
+} from '../aides/journalPourLesTests.js';
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from '../../../src/bus/abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.ts';
 import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { Autorisation } from '../../../src/modeles/autorisations/autorisation.ts';
 
 describe("L'abonnement qui consigne l'attribution d'un rôle à un utilisateur administré dans le journal MSS", () => {
-  let adaptateurJournal: AdaptateurJournalMSS;
+  let adaptateurJournal: JournalPourLesTests;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it("consigne un événement d'attribution de rôle à un utilisateur administré", async () => {
-    let evenementRecu: EvenementJournal;
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneRoleUtilisateurAdministreAttribueDansJournal({
       adaptateurJournal,
     })({
@@ -29,7 +23,9 @@ describe("L'abonnement qui consigne l'attribution d'un rôle à un utilisateur a
       idsServices: [unUUIDRandom()],
     });
 
-    expect(evenementRecu!.type).toEqual('ROLE_UTILISATEUR_ADMINISTRE_ATTRIBUE');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
+      'ROLE_UTILISATEUR_ADMINISTRE_ATTRIBUE'
+    );
   });
 
   it.each(['idAdmin', 'idUtilisateurAdministre', 'role', 'idsServices'])(

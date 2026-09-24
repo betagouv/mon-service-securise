@@ -3,10 +3,9 @@ import EvenementNouvelleHomologationCreee from '../../../src/modeles/journalMSS/
 import './constructeurEvenementCompletudeServiceModifiee.js';
 import '../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de nouvelle homologation', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementNouvelleHomologationCreee(
       {

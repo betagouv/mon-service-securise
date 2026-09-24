@@ -2,12 +2,9 @@ import EvenementServicesImportes from '../../../src/modeles/journalMSS/evenement
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { VersionService } from '../../../src/modeles/versionService.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de services importés', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   it("chiffre l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementServicesImportes(
       {

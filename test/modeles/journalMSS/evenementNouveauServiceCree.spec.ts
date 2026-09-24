@@ -2,12 +2,9 @@ import EvenementNouveauServiceCree from '../../../src/modeles/journalMSS/eveneme
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { VersionService } from '../../../src/modeles/versionService.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de nouveau service créé', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur.toUpperCase(),
-  };
-
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementNouveauServiceCree(
       {

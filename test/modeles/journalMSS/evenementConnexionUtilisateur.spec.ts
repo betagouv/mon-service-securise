@@ -5,12 +5,9 @@ import {
 } from '../../../src/modeles/journalMSS/erreurs.js';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de connexion utilisateur', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   const donneesEvenement = () => ({
     idUtilisateur: unUUID('a'),
     dateDerniereConnexion: '2022-07-07',

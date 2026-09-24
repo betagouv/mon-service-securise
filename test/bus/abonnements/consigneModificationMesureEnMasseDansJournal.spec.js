@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { consigneModificationMesureEnMasseDansJournal } from '../../../src/bus/abonnements/consigneModificationMesureEnMasseDansJournal.js';
 
@@ -7,15 +7,10 @@ describe("L'abonnement qui consigne la modification en masse d'une mesure dans l
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de mesure modifiée en masse', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneModificationMesureEnMasseDansJournal({ adaptateurJournal })({
       utilisateur: unUtilisateur().avecId('ABC').construis(),
       idMesure: 'uneMesure',
@@ -25,13 +20,28 @@ describe("L'abonnement qui consigne la modification en masse d'une mesure dans l
       type: 'generale',
     });
 
-    expect(evenementRecu.type).to.equal('MESURE_MODIFIEE_EN_MASSE');
-    expect(evenementRecu.donnees.idUtilisateur).not.to.be(undefined);
-    expect(evenementRecu.donnees.idMesure).to.be('uneMesure');
-    expect(evenementRecu.donnees.statutModifie).to.be(true);
-    expect(evenementRecu.donnees.modalitesModifiees).to.be(false);
-    expect(evenementRecu.donnees.nombreServicesConcernes).to.be(2);
-    expect(evenementRecu.donnees.type).to.be('generale');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.equal(
+      'MESURE_MODIFIEE_EN_MASSE'
+    );
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees.idUtilisateur
+    ).not.to.be(undefined);
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees.idMesure).to.be(
+      'uneMesure'
+    );
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees.statutModifie
+    ).to.be(true);
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees.modalitesModifiees
+    ).to.be(false);
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees
+        .nombreServicesConcernes
+    ).to.be(2);
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees.type).to.be(
+      'generale'
+    );
   });
 
   it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {

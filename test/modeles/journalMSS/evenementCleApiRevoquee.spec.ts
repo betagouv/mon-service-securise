@@ -3,12 +3,9 @@ import EvenementCleApiRevoquee, {
   DonneesEvenementCleApiRevoquee,
 } from '../../../src/modeles/journalMSS/evenementCleApiRevoquee.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe("Un événement de clé d'API révoquée", () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   const uneCle = (): DonneesEvenementCleApiRevoquee => ({
     idCle: unUUID('c'),
     idUtilisateur: unUUID('u'),

@@ -7,11 +7,9 @@ import { creeReferentiel } from '../../../src/referentiel.ts';
 import { DonneesRisqueSpecifique } from '../../../src/modeles/risqueSpecifique.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { DonneesRisqueGeneral } from '../../../src/modeles/risqueGeneral.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de risques modifiés', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
   let referentiel: Referentiel;
 
   beforeEach(() => {

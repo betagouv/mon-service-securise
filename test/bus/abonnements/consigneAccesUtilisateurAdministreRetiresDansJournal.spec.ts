@@ -1,24 +1,18 @@
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
 import {
-  AdaptateurJournalMSS,
-  EvenementJournal,
-} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+  fabriqueJournalPourLesTests,
+  JournalPourLesTests,
+} from '../aides/journalPourLesTests.js';
 import { consigneAccesUtilisateurAdministreRetiresDansJournal } from '../../../src/bus/abonnements/consigneAccesUtilisateurAdministreRetiresDansJournal.ts';
 import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne le retrait d'accès à un utilisateur administré dans le journal MSS", () => {
-  let adaptateurJournal: AdaptateurJournalMSS;
+  let adaptateurJournal: JournalPourLesTests;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it("consigne un événement de retrait d'accès à un utilisateur administré", async () => {
-    let evenementRecu: EvenementJournal;
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneAccesUtilisateurAdministreRetiresDansJournal({
       adaptateurJournal,
     })({
@@ -27,7 +21,9 @@ describe("L'abonnement qui consigne le retrait d'accès à un utilisateur admini
       idsServices: [unUUIDRandom()],
     });
 
-    expect(evenementRecu!.type).toEqual('ACCES_UTILISATEUR_ADMINISTRE_RETIRES');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
+      'ACCES_UTILISATEUR_ADMINISTRE_RETIRES'
+    );
   });
 
   it.each(['idAdmin', 'idUtilisateurAdministre', 'idsServices'])(

@@ -2,12 +2,9 @@ import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.j
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import EvenementRoleUtilisateurAdministreAttribue from '../../../src/modeles/journalMSS/evenementRoleUtilisateurAdministreAttribue.ts';
 import { Autorisation } from '../../../src/modeles/autorisations/autorisation.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe("Un événement d'attribution de rôle à un utilisateur administré", () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur.toUpperCase(),
-  };
-
   it("chiffre l'identifiant de l'admin", () => {
     const evenement = new EvenementRoleUtilisateurAdministreAttribue(
       {

@@ -1,20 +1,15 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal } from '../../../src/bus/abonnements/consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal.js';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un téléversement de modèles de mesure spécifique", () => {
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de "modèles de mesure spécifique importés"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal({
       adaptateurJournal,
     })({
@@ -22,7 +17,9 @@ describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un t
       nbModelesMesureSpecifiqueImportes: 42,
     });
 
-    expect(evenementRecu.type).to.be('MODELES_MESURE_SPECIFIQUE_IMPORTES');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'MODELES_MESURE_SPECIFIQUE_IMPORTES'
+    );
   });
 
   [

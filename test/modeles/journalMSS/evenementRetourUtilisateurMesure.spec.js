@@ -1,9 +1,9 @@
 import expect from 'expect.js';
 import EvenementRetourUtilisateurMesure from '../../../src/modeles/journalMSS/evenementRetourUtilisateurMesure.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de retour utilisateur sur une mesure', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
   const unEvenement = () =>
     new EvenementRetourUtilisateurMesure(
       {

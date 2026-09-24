@@ -2,10 +2,9 @@ import expect from 'expect.js';
 import EvenementProfilUtilisateurModifie from '../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie.js';
 import { ErreurUtilisateurManquant } from '../../../src/modeles/journalMSS/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de profil utilisateur modifié', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("chiffre l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementProfilUtilisateurModifie(
       unUtilisateur().avecId('abc').construis(),

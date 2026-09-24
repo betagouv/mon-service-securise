@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { consigneProprietaireCreeUnServiceDansJournal } from '../../../src/bus/abonnements/consigneProprietaireCreeUnServiceDansJournal.js';
@@ -8,22 +8,20 @@ describe("L'abonnement qui consigne (dans le journal MSS) le lien entre un propr
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de "collaboratif de service modifié" indiquant que l\'utilisateur est le propriétaire du service', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal })({
       service: unService().avecId('123').construis(),
       utilisateur: unUtilisateur().avecId('ABC').construis(),
     });
 
-    expect(evenementRecu.type).to.be('COLLABORATIF_SERVICE_MODIFIE');
-    const { autorisations } = evenementRecu.donnees;
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'COLLABORATIF_SERVICE_MODIFIE'
+    );
+    const { autorisations } =
+      adaptateurJournal.dernierEvenementConsigne().donnees;
     expect(autorisations.length).to.be(1);
     expect(autorisations[0].idUtilisateur).not.to.be(undefined);
     expect(autorisations[0].droit).to.be('PROPRIETAIRE');

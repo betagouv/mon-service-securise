@@ -13,6 +13,7 @@ import {
   uneDescriptionDeNiveauDeSecuriteEstime3,
 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de complétude modifiée', () => {
   const detailsOrganisationResponsable = {
@@ -29,10 +30,6 @@ describe('Un événement de complétude modifiée', () => {
     anneeTrancheEffectifSalarie: null,
     commune: '33376',
     departement: '33',
-  };
-
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
 
   describe('qui traite un service v1', () => {

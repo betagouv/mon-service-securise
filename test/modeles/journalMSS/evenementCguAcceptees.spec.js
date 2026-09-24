@@ -1,10 +1,9 @@
 import expect from 'expect.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import EvenementCguAcceptees from '../../../src/modeles/journalMSS/evenementCguAcceptees.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de CGU acceptées', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("hache l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementCguAcceptees(
       { idUtilisateur: 'abc', cguAcceptees: '1.0' },

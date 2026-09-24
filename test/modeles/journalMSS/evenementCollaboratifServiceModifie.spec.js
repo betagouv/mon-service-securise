@@ -2,11 +2,11 @@ import expect from 'expect.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import { EvenementCollaboratifServiceModifie } from '../../../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
 import { Autorisation } from '../../../src/modeles/autorisations/autorisation.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 const { PROPRIETAIRE } = Autorisation.RESUME_NIVEAU_DROIT;
 
 describe("Un événement de modification du collaboratif d'un service", () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
   const unEvenement = () =>
     new EvenementCollaboratifServiceModifie(
       {

@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { consigneRisquesDansJournal } from '../../../src/bus/abonnements/consigneRisquesDansJournal.js';
 
@@ -7,24 +7,21 @@ describe("L'abonnement qui consigne les risques dans le journal MSS", () => {
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de changement des risques du service', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneRisquesDansJournal({
       adaptateurJournal,
     })({
       service: unService().construis(),
     });
 
-    expect(evenementRecu.type).to.equal('RISQUES_SERVICE_MODIFIES');
-    expect(evenementRecu.donnees).to.eql({
-      idService: evenementRecu.donnees.idService,
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.equal(
+      'RISQUES_SERVICE_MODIFIES'
+    );
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees).to.eql({
+      idService: adaptateurJournal.dernierEvenementConsigne().donnees.idService,
       risquesGeneraux: [],
       risquesSpecifiques: [],
     });

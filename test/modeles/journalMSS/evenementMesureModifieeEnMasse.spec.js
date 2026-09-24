@@ -1,9 +1,8 @@
 import expect from 'expect.js';
 import { EvenementMesureModifieeEnMasse } from '../../../src/modeles/journalMSS/evenementMesureModifieeEnMasse.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de mesure modifiée en masse', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("chiffre l'identifiant utilisateur qui lui est donné", () => {
     const evenement = new EvenementMesureModifieeEnMasse(
       { idUtilisateur: 'def' },

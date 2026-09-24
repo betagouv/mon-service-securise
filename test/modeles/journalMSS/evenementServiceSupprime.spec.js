@@ -1,10 +1,9 @@
 import expect from 'expect.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import EvenementServiceSupprime from '../../../src/modeles/journalMSS/evenementServiceSupprime.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de service supprimé', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementServiceSupprime(
       { idService: 'abc' },

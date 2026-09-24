@@ -1,24 +1,18 @@
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
 import {
-  AdaptateurJournalMSS,
-  EvenementJournal,
-} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+  fabriqueJournalPourLesTests,
+  JournalPourLesTests,
+} from '../aides/journalPourLesTests.js';
 import { consigneAdminNommeSurOrganisationDansJournal } from '../../../src/bus/abonnements/consigneAdminNommeSurOrganisationDansJournal.ts';
 import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne la nomination d'un admin sur une organisation dans le journal MSS", () => {
-  let adaptateurJournal: AdaptateurJournalMSS;
+  let adaptateurJournal: JournalPourLesTests;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it("consigne un événement de nomination d'admin sur une organisation", async () => {
-    let evenementRecu: EvenementJournal;
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneAdminNommeSurOrganisationDansJournal({
       adaptateurJournal,
     })({
@@ -27,7 +21,9 @@ describe("L'abonnement qui consigne la nomination d'un admin sur une organisatio
       siret: '12345678901234',
     });
 
-    expect(evenementRecu!.type).toEqual('ADMIN_NOMME_SUR_ORGANISATION');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
+      'ADMIN_NOMME_SUR_ORGANISATION'
+    );
   });
 
   it.each(['idActeur', 'idCible', 'siret'])(

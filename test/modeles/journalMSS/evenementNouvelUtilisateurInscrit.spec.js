@@ -1,10 +1,9 @@
 import expect from 'expect.js';
 import EvenementNouvelUtilisateurInscrit from '../../../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de nouvel utilisateur inscrit', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("hache l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementNouvelUtilisateurInscrit(
       { idUtilisateur: 'abc' },

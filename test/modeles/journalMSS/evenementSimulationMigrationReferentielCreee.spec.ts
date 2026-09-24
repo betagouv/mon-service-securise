@@ -1,12 +1,9 @@
 import { unUUID } from '../../constructeurs/UUID.ts';
 import EvenementSimulationMigrationReferentielCreee from '../../../src/modeles/journalMSS/evenementSimulationMigrationReferentielCreee.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de création de simulation de migration de référentiel', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementSimulationMigrationReferentielCreee(
       {

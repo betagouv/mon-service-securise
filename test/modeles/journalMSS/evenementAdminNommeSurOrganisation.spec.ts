@@ -1,12 +1,9 @@
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import EvenementAdminNommeSurOrganisation from '../../../src/modeles/journalMSS/evenementAdminNommeSurOrganisation.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe("Un événement de nomination d'admin sur une organisation", () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur.toUpperCase(),
-  };
-
   it("hache l'identifiant de l'acteur", () => {
     const evenement = new EvenementAdminNommeSurOrganisation(
       {

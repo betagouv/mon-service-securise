@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { consigneNouvelleHomologationCreeeDansJournal } from '../../../src/bus/abonnements/consigneNouvelleHomologationCreeeDansJournal.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import * as Referentiel from '../../../src/referentiel.js';
@@ -9,7 +9,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
   let referentiel;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
     referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
       statutsAvisDossierHomologation: { favorable: {} },
@@ -17,11 +17,6 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
   });
 
   it('consigne un événement de "nouvelle homologation créée"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneNouvelleHomologationCreeeDansJournal({
       adaptateurJournal,
       referentiel,
@@ -30,15 +25,12 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
       dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construis(),
     });
 
-    expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'NOUVELLE_HOMOLOGATION_CREEE'
+    );
   });
 
   it('peut consigner un événement de "nouvelle homologation `importee`"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneNouvelleHomologationCreeeDansJournal({
       adaptateurJournal,
       referentiel,
@@ -48,16 +40,15 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
       importe: true,
     });
 
-    expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
-    expect(evenementRecu.donnees.importe).to.be(true);
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'NOUVELLE_HOMOLOGATION_CREEE'
+    );
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees.importe).to.be(
+      true
+    );
   });
 
   it('peut consigner un événement de "nouvelle homologation `refusee`"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneNouvelleHomologationCreeeDansJournal({
       adaptateurJournal,
       referentiel,
@@ -66,9 +57,15 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
       dossier: unDossier(referentiel).quiEstRefuse('2026-04-29').construis(),
     });
 
-    expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
-    expect(evenementRecu.donnees.dateHomologation).to.be('2026-04-29');
-    expect(evenementRecu.donnees.refusee).to.be(true);
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'NOUVELLE_HOMOLOGATION_CREEE'
+    );
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees.dateHomologation
+    ).to.be('2026-04-29');
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees.refusee).to.be(
+      true
+    );
   });
 
   [

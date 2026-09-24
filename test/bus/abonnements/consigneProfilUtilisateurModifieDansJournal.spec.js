@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { consigneProfilUtilisateurModifieDansJournal } from '../../../src/bus/abonnements/consigneProfilUtilisateurModifieDansJournal.js';
 
@@ -7,30 +7,22 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de "profil utilisateur modifié"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
     })({
       utilisateur: unUtilisateur().construis(),
     });
 
-    expect(evenementRecu.type).to.be('PROFIL_UTILISATEUR_MODIFIE');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'PROFIL_UTILISATEUR_MODIFIE'
+    );
   });
 
   it("complète l'évènement avec les détails de l'utilisateur", async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
     })({
@@ -41,8 +33,13 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
         .construis(),
     });
 
-    expect(evenementRecu.donnees.idUtilisateur).to.not.be(null);
-    expect(evenementRecu.donnees.roles).to.eql(['AB', 'CD']);
+    expect(
+      adaptateurJournal.dernierEvenementConsigne().donnees.idUtilisateur
+    ).to.not.be(null);
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees.roles).to.eql([
+      'AB',
+      'CD',
+    ]);
   });
 
   it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {

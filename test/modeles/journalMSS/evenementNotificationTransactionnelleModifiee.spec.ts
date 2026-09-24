@@ -3,12 +3,9 @@ import EvenementNotificationTransactionnelleModifiee, {
   DonneesEvenementNotificationTransactionnelleModifiee,
 } from '../../../src/modeles/journalMSS/evenementNotificationTransactionnelleModifiee.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de notification transactionnelle modifiée', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   const uneNotification =
     (): DonneesEvenementNotificationTransactionnelleModifiee => ({
       idNotification: unUUID('a'),

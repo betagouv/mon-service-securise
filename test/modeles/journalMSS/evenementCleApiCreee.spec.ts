@@ -3,12 +3,9 @@ import EvenementCleApiCreee, {
   DonneesEvenementCleApiCreee,
 } from '../../../src/modeles/journalMSS/evenementCleApiCreee.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe("Un événement de clé d'API créée", () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
-
   const uneCle = (): DonneesEvenementCleApiCreee => ({
     idCle: unUUID('c'),
     idUtilisateur: unUUID('u'),

@@ -1,8 +1,7 @@
-import * as JournalMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
 import {
-  AdaptateurJournalMSS,
-  EvenementJournal,
-} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+  fabriqueJournalPourLesTests,
+  JournalPourLesTests,
+} from '../aides/journalPourLesTests.js';
 import { consigneNotificationTransactionnelleModifieeDansJournal } from '../../../src/bus/abonnements/consigneNotificationTransactionnelleModifieeDansJournal.ts';
 import { EvenementNotificationTransactionnelleModifiee } from '../../../src/bus/evenementNotificationTransactionnelleModifiee.ts';
 import {
@@ -13,17 +12,13 @@ import { unUUID } from '../../constructeurs/UUID.ts';
 import { fabriqueAdaptateurChiffrement } from '../../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 
 describe("L'abonnement qui consigne une notification transactionnelle modifiée dans le journal MSS", () => {
-  let adaptateurJournal: AdaptateurJournalMSS;
+  let adaptateurJournal: JournalPourLesTests;
 
   beforeEach(() => {
-    adaptateurJournal = JournalMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement contenant les données de mesure', async () => {
-    let evenementRecu: EvenementJournal;
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
     const notification = NotificationTransactionnelle.nouveau({
       idActeur: unUUID('A'),
       idDestinataire: unUUID('D'),
@@ -44,13 +39,13 @@ describe("L'abonnement qui consigne une notification transactionnelle modifiée 
       })
     );
 
-    expect(evenementRecu!.type).toEqual(
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
       'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE'
     );
     const donnees = notification.donnees();
     const metadonnees = donnees.metadonnees as MetadonneesNotificationMesure;
     const hache = fabriqueAdaptateurChiffrement().hacheSha256;
-    expect(evenementRecu!.donnees).toEqual({
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees).toEqual({
       idNotification: hache(donnees.id),
       idActeur: hache(donnees.idActeur),
       idDestinataire: hache(donnees.idDestinataire),
@@ -63,10 +58,6 @@ describe("L'abonnement qui consigne une notification transactionnelle modifiée 
   });
 
   it('consigne un événement ne contenant pas les données de mesure', async () => {
-    let evenementRecu: EvenementJournal;
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
     const notification = NotificationTransactionnelle.nouveau({
       idActeur: unUUID('A'),
       idDestinataire: unUUID('D'),
@@ -85,12 +76,12 @@ describe("L'abonnement qui consigne une notification transactionnelle modifiée 
       })
     );
 
-    expect(evenementRecu!.type).toEqual(
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
       'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE'
     );
     const donnees = notification.donnees();
     const hache = fabriqueAdaptateurChiffrement().hacheSha256;
-    expect(evenementRecu!.donnees).toEqual({
+    expect(adaptateurJournal.dernierEvenementConsigne().donnees).toEqual({
       idNotification: hache(donnees.id),
       idActeur: hache(donnees.idActeur),
       idDestinataire: hache(donnees.idDestinataire),

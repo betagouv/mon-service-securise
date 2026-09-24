@@ -1,20 +1,15 @@
 import expect from 'expect.js';
-import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { fabriqueJournalPourLesTests } from '../aides/journalPourLesTests.js';
 import { consigneTeleversementServicesRealiseDansJournal } from '../../../src/bus/abonnements/consigneTeleversementServicesRealiseDansJournal.js';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un téléversement de services", () => {
   let adaptateurJournal;
 
   beforeEach(() => {
-    adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
+    adaptateurJournal = fabriqueJournalPourLesTests();
   });
 
   it('consigne un événement de "services importés"', async () => {
-    let evenementRecu = {};
-    adaptateurJournal.consigneEvenement = async (evenement) => {
-      evenementRecu = evenement;
-    };
-
     await consigneTeleversementServicesRealiseDansJournal({
       adaptateurJournal,
     })({
@@ -22,7 +17,9 @@ describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un t
       nbServicesImportes: 42,
     });
 
-    expect(evenementRecu.type).to.be('SERVICES_IMPORTES');
+    expect(adaptateurJournal.dernierEvenementConsigne().type).to.be(
+      'SERVICES_IMPORTES'
+    );
   });
 
   [

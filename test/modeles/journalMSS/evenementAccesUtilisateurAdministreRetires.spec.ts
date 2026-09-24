@@ -1,12 +1,9 @@
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import EvenementAccesUtilisateurAdministreRetires from '../../../src/modeles/journalMSS/evenementAccesUtilisateurAdministreRetires.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe("Un événement de retrait d'accès à un utilisateur administré", () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur.toUpperCase(),
-  };
-
   it("hache l'identifiant de l'admin", () => {
     const evenement = new EvenementAccesUtilisateurAdministreRetires(
       {

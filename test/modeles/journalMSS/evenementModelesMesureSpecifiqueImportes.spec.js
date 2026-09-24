@@ -1,10 +1,9 @@
 import expect from 'expect.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import EvenementModelesMesureSpecifiqueImportes from '../../../src/modeles/journalMSS/evenementModelesMesureSpecifiqueImportes.js';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de modèles de mesure spécifique importés', () => {
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
-
   it("chiffre l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementModelesMesureSpecifiqueImportes(
       {
