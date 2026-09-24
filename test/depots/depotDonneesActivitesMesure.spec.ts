@@ -83,14 +83,11 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(
         busEvenements.aRecuUnEvenement(EvenementActiviteMesureAjoutee)
       ).toBe(true);
-      expect(
-        busEvenements.recupereEvenement(EvenementActiviteMesureAjoutee)
-      ).toEqual(
-        new EvenementActiviteMesureAjoutee({
-          ...activite,
-          date: expect.any(Date),
-        })
+      const { activiteMesure } = busEvenements.recupereEvenement(
+        EvenementActiviteMesureAjoutee
       );
+      expect(activiteMesure).toBeInstanceOf(ActiviteMesure);
+      expect(activiteMesure).toEqual({ ...activite, date: expect.any(Date) });
     });
   });
 

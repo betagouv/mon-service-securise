@@ -1,8 +1,6 @@
 import { ComparateurMesures } from './comparateurMesures.js';
+import EvenementMesureServiceModifiee from '../evenementMesureServiceModifiee.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
-import Service from '../../modeles/service.js';
-import Utilisateur from '../../modeles/utilisateur.js';
-import Mesure from '../../modeles/mesure.js';
 import { NotificationTransactionnelle } from '../../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import { UUID } from '../../typesBasiques.js';
 
@@ -14,13 +12,7 @@ export const consigneNotificationModificationResponsable =
     ancienneMesure,
     nouvelleMesure,
     typeMesure,
-  }: {
-    service: Service;
-    utilisateur: Utilisateur;
-    ancienneMesure: Mesure;
-    nouvelleMesure: Mesure;
-    typeMesure: 'generale' | 'specifique';
-  }) => {
+  }: EvenementMesureServiceModifiee) => {
     const comparateur = new ComparateurMesures(ancienneMesure, nouvelleMesure);
 
     const consigneNotification = async (idDestinataire: UUID) =>

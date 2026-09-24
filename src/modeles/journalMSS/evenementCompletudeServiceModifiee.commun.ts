@@ -1,5 +1,5 @@
 import Service from '../service.js';
-import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.interface.js';
+import { Hacheur } from './evenement.js';
 import { CategorieMesure, DonneesIndiceCyber } from '../indiceCyber.type.js';
 import PointsAcces from '../pointsAcces.js';
 
@@ -14,10 +14,7 @@ const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
     []
   );
 
-export const completudeCommune = (
-  service: Service,
-  adaptateurChiffrement: AdaptateurChiffrement
-) => {
+export const completudeCommune = (service: Service, hache: Hacheur) => {
   const {
     indiceCyber,
     nombreTotalMesures,
@@ -29,7 +26,7 @@ export const completudeCommune = (
   return {
     detailIndiceCyber: enTableau(indiceCyber),
     detailMesures,
-    idService: adaptateurChiffrement.hacheSha256(service.id),
+    idService: hache(service.id),
     niveauSecurite: description.niveauSecurite,
     niveauSecuriteMinimal: service.estimeNiveauDeSecurite(),
     nombreMesuresCompletes,

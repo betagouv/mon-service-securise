@@ -1,5 +1,5 @@
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
-import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   unService,
   unServiceV2,
@@ -13,6 +13,7 @@ import {
   uneDescriptionDeNiveauDeSecuriteEstime3,
 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de complétude modifiée', () => {
   const detailsOrganisationResponsable = {
@@ -29,10 +30,6 @@ describe('Un événement de complétude modifiée', () => {
     anneeTrancheEffectifSalarie: null,
     commune: '33376',
     departement: '33',
-  };
-
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
 
   describe('qui traite un service v1', () => {
@@ -196,7 +193,7 @@ describe('Un événement de complétude modifiée', () => {
     it('exige que le service soit renseigné', () => {
       expect(() => {
         unEvenementSurV1().sans('service').construis();
-      }).toThrowError(ErreurDonneeManquante);
+      }).toThrowError(ErreurDonneesObligatoiresManquantes);
     });
   });
 
@@ -348,7 +345,7 @@ describe('Un événement de complétude modifiée', () => {
     it('exige que le service soit renseigné', () => {
       expect(() => {
         unEvenementSurV2().sans('service').construis();
-      }).toThrowError(ErreurDonneeManquante);
+      }).toThrowError(ErreurDonneesObligatoiresManquantes);
     });
   });
 });

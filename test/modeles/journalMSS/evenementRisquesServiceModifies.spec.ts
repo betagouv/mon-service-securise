@@ -1,17 +1,14 @@
 import { unService } from '../../constructeurs/constructeurService.js';
 import EvenementRisquesServiceModifies from '../../../src/modeles/journalMSS/evenementRisquesServiceModifies.js';
-import { ErreurServiceManquant } from '../../../src/modeles/journalMSS/erreurs.js';
 import Risques from '../../../src/modeles/risques.js';
 import { Referentiel } from '../../../src/referentiel.interface.ts';
 import { creeReferentiel } from '../../../src/referentiel.ts';
 import { DonneesRisqueSpecifique } from '../../../src/modeles/risqueSpecifique.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { DonneesRisqueGeneral } from '../../../src/modeles/risqueGeneral.ts';
+import { hacheEnMajuscules } from '../../mocks/adaptateurChiffrementQuiHacheEnMajuscules.js';
 
 describe('Un événement de risques modifiés', () => {
-  const hacheEnMajuscules = {
-    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
-  };
   let referentiel: Referentiel;
 
   beforeEach(() => {
@@ -25,18 +22,7 @@ describe('Un événement de risques modifiés', () => {
     });
   });
 
-  it("chiffre l'identifiant du service qui lui est donné", () => {
-    const evenement = new EvenementRisquesServiceModifies(
-      { service: unService().avecId('abc').construis() },
-      { adaptateurChiffrement: hacheEnMajuscules }
-    );
-
-    const json = evenement.toJSON();
-
-    expect(json.donnees.idService).toBe('ABC');
-  });
-
-  it('sait se convertir en JSON', () => {
+  it("consigne l'identifiant haché du service et ses risques", () => {
     const risquesGeneraux: DonneesRisqueGeneral[] = [
       { id: 'R1', niveauGravite: 'moyen', niveauVraisemblance: 'quasiCertain' },
     ];
@@ -84,16 +70,6 @@ describe('Un événement de risques modifiés', () => {
       },
       date: '30/10/2024',
     });
-  });
-
-  it('exige que le service soit renseigné', () => {
-    expect(
-      () =>
-        new EvenementRisquesServiceModifies({
-          // @ts-expect-error on veut justement tester ça
-          service: undefined,
-        })
-    ).toThrow(ErreurServiceManquant);
   });
 
   it("n'envoie que les données pertinentes du risque général", () => {

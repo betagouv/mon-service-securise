@@ -1,45 +1,46 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { ErreurDateDerniereConnexionInvalide } from './erreurs.js';
 import { UUID } from '../../typesBasiques.js';
 import { SourceAuthentification } from '../sourceAuthentification.js';
 
-type DonneesEvenementConnexionUtilisateur = {
+type Donnees = {
   idUtilisateur: UUID;
   dateDerniereConnexion: string;
   source: SourceAuthentification;
   connexionAvecMFA: boolean;
 };
 
-class EvenementConnexionUtilisateur extends Evenement {
-  constructor(donnees: DonneesEvenementConnexionUtilisateur, options = {}) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+class EvenementConnexionUtilisateur extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'CONNEXION_UTILISATEUR';
+  }
 
-    const valide = () => {
-      Evenement.verifieProprietesRenseignees(donnees, [
-        'connexionAvecMFA',
-        'idUtilisateur',
-        'dateDerniereConnexion',
-        'source',
-      ]);
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return [
+      'connexionAvecMFA',
+      'idUtilisateur',
+      'dateDerniereConnexion',
+      'source',
+    ];
+  }
 
-      if (Number.isNaN(new Date(donnees.dateDerniereConnexion).valueOf()))
-        throw new ErreurDateDerniereConnexionInvalide();
+  protected override valide(donnees: Donnees) {
+    super.valide(donnees);
+
+    if (Number.isNaN(new Date(donnees.dateDerniereConnexion).valueOf()))
+      throw new ErreurDateDerniereConnexionInvalide();
+  }
+
+  protected override donneesAConsigner(
+    { connexionAvecMFA, idUtilisateur, dateDerniereConnexion, source }: Donnees,
+    hache: Hacheur
+  ) {
+    return {
+      connexionAvecMFA,
+      dateDerniereConnexion,
+      idUtilisateur: hache(idUtilisateur),
+      source,
     };
-
-    valide();
-
-    const { connexionAvecMFA, idUtilisateur, dateDerniereConnexion, source } =
-      donnees;
-    super(
-      'CONNEXION_UTILISATEUR',
-      {
-        connexionAvecMFA,
-        dateDerniereConnexion,
-        idUtilisateur: adaptateurChiffrement.hacheSha256(idUtilisateur),
-        source,
-      },
-      date
-    );
   }
 }
 

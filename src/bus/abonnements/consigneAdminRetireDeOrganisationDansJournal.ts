@@ -1,31 +1,10 @@
-import { EvenementAdminRetireDeOrganisation as MssAdminRetireDeOrganisation } from '../evenementAdminRetireDeOrganisation.js';
-import { AdaptateurJournalMSS } from '../../adaptateurs/adaptateurJournalMSS.interface.js';
+import { consigneDansJournal } from './consigneDansJournal.js';
 import EvenementAdminRetireDeOrganisation from '../../modeles/journalMSS/evenementAdminRetireDeOrganisation.js';
+import { EvenementAdminRetireDeOrganisation as MssAdminRetireDeOrganisation } from '../evenementAdminRetireDeOrganisation.js';
 
-const leveException = (raison: keyof MssAdminRetireDeOrganisation) => {
-  throw new Error(
-    `Impossible de consigner un retrait d'admin d'une organisation sans avoir ${raison} en paramètre.`
-  );
-};
+const consigneAdminRetireDeOrganisationDansJournal = consigneDansJournal(
+  ({ idActeur, idCible, siret }: MssAdminRetireDeOrganisation) =>
+    new EvenementAdminRetireDeOrganisation({ idActeur, idCible, siret })
+);
 
-export function consigneAdminRetireDeOrganisationDansJournal({
-  adaptateurJournal,
-}: {
-  adaptateurJournal: AdaptateurJournalMSS;
-}) {
-  return async (evenement: MssAdminRetireDeOrganisation) => {
-    const { idActeur, idCible, siret } = evenement;
-
-    if (!idActeur) leveException('idActeur');
-    if (!idCible) leveException('idCible');
-    if (!siret) leveException('siret');
-
-    await adaptateurJournal.consigneEvenement(
-      new EvenementAdminRetireDeOrganisation({
-        idActeur,
-        idCible,
-        siret,
-      }).toJSON()
-    );
-  };
-}
+export { consigneAdminRetireDeOrganisationDansJournal };

@@ -1,32 +1,31 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { UUID } from '../../typesBasiques.js';
 import { VersionService } from '../versionService.js';
 
-class EvenementServicesImportes extends Evenement {
-  constructor(
-    donnees: {
-      idUtilisateur: UUID;
-      nbServicesImportes: number;
-      versionServicesImportes?: VersionService;
-    },
-    options = {}
+type Donnees = {
+  idUtilisateur: UUID;
+  nbServicesImportes: number;
+  versionServicesImportes?: VersionService;
+};
+
+class EvenementServicesImportes extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'SERVICES_IMPORTES';
+  }
+
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return ['idUtilisateur', 'nbServicesImportes'];
+  }
+
+  protected override donneesAConsigner(
+    { idUtilisateur, nbServicesImportes, versionServicesImportes }: Donnees,
+    hache: Hacheur
   ) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
-
-    Evenement.verifieProprietesRenseignees(donnees, [
-      'idUtilisateur',
-      'nbServicesImportes',
-    ]);
-
-    super(
-      'SERVICES_IMPORTES',
-      {
-        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
-        nbServicesImportes: donnees.nbServicesImportes,
-        versionServicesImportes: donnees.versionServicesImportes,
-      },
-      date
-    );
+    return {
+      idUtilisateur: hache(idUtilisateur),
+      nbServicesImportes,
+      versionServicesImportes,
+    };
   }
 }
 

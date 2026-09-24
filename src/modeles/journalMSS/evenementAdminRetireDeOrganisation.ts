@@ -1,32 +1,26 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { UUID } from '../../typesBasiques.js';
 
-class EvenementAdminRetireDeOrganisation extends Evenement {
-  constructor(
-    donnees: {
-      idActeur: UUID;
-      idCible: UUID;
-      siret: string;
-    },
-    options = {}
+type Donnees = { idActeur: UUID; idCible: UUID; siret: string };
+
+class EvenementAdminRetireDeOrganisation extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'ADMIN_RETIRE_DE_ORGANISATION';
+  }
+
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return ['idActeur', 'idCible', 'siret'];
+  }
+
+  protected override donneesAConsigner(
+    { idActeur, idCible, siret }: Donnees,
+    hache: Hacheur
   ) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
-
-    Evenement.verifieProprietesRenseignees(donnees, [
-      'idActeur',
-      'idCible',
-      'siret',
-    ]);
-
-    super(
-      'ADMIN_RETIRE_DE_ORGANISATION',
-      {
-        idActeur: adaptateurChiffrement.hacheSha256(donnees.idActeur),
-        idCible: adaptateurChiffrement.hacheSha256(donnees.idCible),
-        siret: adaptateurChiffrement.hacheSha256(donnees.siret),
-      },
-      date
-    );
+    return {
+      idActeur: hache(idActeur),
+      idCible: hache(idCible),
+      siret: hache(siret),
+    };
   }
 }
 

@@ -1,20 +1,14 @@
+import { EvenementMetier } from './evenementMetier.js';
 import { NotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 
 export type EtatNotificationTransactionnelle =
   'cree' | 'lu' | 'supprime-par-utilisateur' | 'supprime-par-systeme';
 
-export class EvenementNotificationTransactionnelleModifiee {
-  readonly notification: NotificationTransactionnelle;
-  readonly etat: EtatNotificationTransactionnelle;
+type Donnees = {
+  notification: NotificationTransactionnelle;
+  etat: EtatNotificationTransactionnelle;
+};
 
-  constructor({
-    notification,
-    etat,
-  }: {
-    notification: NotificationTransactionnelle;
-    etat: EtatNotificationTransactionnelle;
-  }) {
-    this.notification = notification;
-    this.etat = etat;
-  }
-}
+export class EvenementNotificationTransactionnelleModifiee extends EvenementMetier<Donnees>(
+  ['notification', 'etat']
+) {}

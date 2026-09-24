@@ -1,21 +1,8 @@
+import { EvenementMetier } from './evenementMetier.js';
 import { UUID } from '../typesBasiques.js';
 
-export class EvenementAdminRetireDeOrganisation {
-  public readonly idActeur: UUID;
-  public readonly idCible: UUID;
-  public readonly siret: string;
+type Donnees = { idActeur: UUID; idCible: UUID; siret: string };
 
-  constructor({
-    idActeur,
-    idCible,
-    siret,
-  }: {
-    idActeur: UUID;
-    idCible: UUID;
-    siret: string;
-  }) {
-    this.idActeur = idActeur;
-    this.idCible = idCible;
-    this.siret = siret;
-  }
-}
+export class EvenementAdminRetireDeOrganisation extends EvenementMetier<Donnees>(
+  ['idActeur', 'idCible', 'siret']
+) {}

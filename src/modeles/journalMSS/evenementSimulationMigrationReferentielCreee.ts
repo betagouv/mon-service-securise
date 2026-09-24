@@ -1,19 +1,19 @@
-import Evenement from './evenement.js';
+import Evenement, { Hacheur } from './evenement.js';
 import { type UUID } from '../../typesBasiques.js';
 
-class EvenementSimulationMigrationReferentielCreee extends Evenement {
-  constructor(donnees: { idService: UUID }, options = {}) {
-    const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
+type Donnees = { idService: UUID };
 
-    Evenement.verifieProprietesRenseignees(donnees, ['idService']);
+class EvenementSimulationMigrationReferentielCreee extends Evenement<Donnees> {
+  protected override typeEvenement() {
+    return 'SIMULATION_MIGRATION_REFERENTIEL_CREEE';
+  }
 
-    super(
-      'SIMULATION_MIGRATION_REFERENTIEL_CREEE',
-      {
-        idService: adaptateurChiffrement.hacheSha256(donnees.idService),
-      },
-      date
-    );
+  protected override proprietesRequises(): (keyof Donnees)[] {
+    return ['idService'];
+  }
+
+  protected override donneesAConsigner({ idService }: Donnees, hache: Hacheur) {
+    return { idService: hache(idService) };
   }
 }
 

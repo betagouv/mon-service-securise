@@ -4,18 +4,18 @@ type ProprieteMesure = keyof Mesure;
 
 export class ComparateurMesures {
   constructor(
-    private readonly ancienneMesure: Mesure,
+    private readonly ancienneMesure: Mesure | undefined,
     private readonly nouvelleMesure: Mesure
   ) {}
 
   valeursEgales(propriete: ProprieteMesure) {
     if (propriete === 'echeance') {
       return (
-        new Date(this.ancienneMesure[propriete] ?? 0).getTime() ===
+        new Date(this.ancienneMesure?.[propriete] ?? 0).getTime() ===
         new Date(this.nouvelleMesure[propriete] ?? 0).getTime()
       );
     }
-    return this.ancienneMesure[propriete] === this.nouvelleMesure[propriete];
+    return this.ancienneMesure?.[propriete] === this.nouvelleMesure[propriete];
   }
 
   aMisAJour = (propriete: ProprieteMesure) =>

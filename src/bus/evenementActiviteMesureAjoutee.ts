@@ -1,5 +1,8 @@
+import { EvenementMetier } from './evenementMetier.js';
 import ActiviteMesure from '../modeles/activiteMesure.js';
 
-export class EvenementActiviteMesureAjoutee {
-  constructor(private readonly activiteMesure: ActiviteMesure) {}
-}
+type Donnees = { activiteMesure: ActiviteMesure };
+
+export class EvenementActiviteMesureAjoutee extends EvenementMetier<Donnees>([
+  'activiteMesure',
+]) {}

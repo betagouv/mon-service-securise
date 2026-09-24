@@ -51,12 +51,9 @@ const creeDepot = (config: {
     );
 
     await busEvenements.publie(
-      new EvenementActiviteMesureAjoutee(
-        new ActiviteMesure({
-          ...activite,
-          date,
-        })
-      )
+      new EvenementActiviteMesureAjoutee({
+        activiteMesure: new ActiviteMesure({ ...activite, date }),
+      })
     );
   };
 

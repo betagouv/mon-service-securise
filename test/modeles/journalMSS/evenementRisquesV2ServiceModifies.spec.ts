@@ -37,22 +37,9 @@ describe('Un événement de risques V2 modifiés', () => {
       ],
     });
 
-  it("hache l'identifiant du service qui lui est donné", () => {
+  it("consigne l'identifiant haché du service et ses risques", () => {
     const evenement = new EvenementRisquesV2ServiceModifies(
-      unUUID('s'),
-      desRisques(),
-      { adaptateurChiffrement: hacheSimple }
-    );
-
-    const json = evenement.toJSON();
-
-    expect(json.donnees.idService).toBe(`${unUUID('s')}-haché`);
-  });
-
-  it('sait se convertir en JSON', () => {
-    const evenement = new EvenementRisquesV2ServiceModifies(
-      unUUID('s'),
-      desRisques(),
+      { idService: unUUID('s'), risques: desRisques() },
       {
         date: '26/06/2026',
         adaptateurChiffrement: hacheSimple,
