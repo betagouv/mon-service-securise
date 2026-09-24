@@ -94,11 +94,7 @@ jobs:
 
       - name: Installer Chromium pour Playwright
         if: steps.cache-chromium.outputs.cache-hit != 'true'
-        run: ./node_modules/.bin/playwright install chromium --with-deps
-
-      - name: Installer les dépendances système de Chromium
-        if: steps.cache-chromium.outputs.cache-hit == 'true'
-        run: ./node_modules/.bin/playwright install-deps chromium
+        run: ./node_modules/.bin/playwright install chromium
 
       - name: Exécuter les tests d'intégration
         run: pnpm test:integration
