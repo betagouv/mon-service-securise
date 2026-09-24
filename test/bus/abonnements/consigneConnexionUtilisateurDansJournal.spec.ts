@@ -2,7 +2,7 @@ import {
   fabriqueJournalPourLesTests,
   JournalPourLesTests,
 } from '../aides/journalPourLesTests.js';
-import { consigneConnexionUtilisateurDansJournal } from '../../../src/bus/abonnements/consigneConnexionUtilisateurDansJournal.js';
+import { consigneConnexionUtilisateurDansJournal } from '../../../src/bus/abonnements/consigneConnexionUtilisateurDansJournal.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
 

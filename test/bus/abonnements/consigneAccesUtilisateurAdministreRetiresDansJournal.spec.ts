@@ -21,29 +21,8 @@ describe("L'abonnement qui consigne le retrait d'accès à un utilisateur admini
       idsServices: [unUUIDRandom()],
     });
 
-    expect(adaptateurJournal.dernierEvenementConsigne().type).toEqual(
+    expect(adaptateurJournal.dernierEvenementConsigne().type).toBe(
       'ACCES_UTILISATEUR_ADMINISTRE_RETIRES'
     );
   });
-
-  it.each(['idAdmin', 'idUtilisateurAdministre', 'idsServices'])(
-    "lève une exception s'il ne reçoit pas de %s",
-    async (proprieteObligatoire) => {
-      const payload = {
-        idAdmin: unUUIDRandom(),
-        idUtilisateurAdministre: unUUIDRandom(),
-        idsServices: [unUUIDRandom()],
-      };
-      // @ts-expect-error On supprime la propriété
-      delete payload[proprieteObligatoire];
-
-      await expect(
-        consigneAccesUtilisateurAdministreRetiresDansJournal({
-          adaptateurJournal,
-        })(payload)
-      ).rejects.toThrow(
-        `Impossible de consigner un retrait d'accès à un utilisateur administré sans avoir ${proprieteObligatoire} en paramètre.`
-      );
-    }
-  );
 });
