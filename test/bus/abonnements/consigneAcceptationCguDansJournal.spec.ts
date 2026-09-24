@@ -4,6 +4,7 @@ import {
 } from '../aides/journalPourLesTests.js';
 import { consigneAcceptationCguDansJournal } from '../../../src/bus/abonnements/consigneAcceptationCguDansJournal.ts';
 import { EvenementCguAccepteesParUtilisateur } from '../../../src/bus/evenementCguAccepteesParUtilisateur.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne (dans le journal MSS) l'acceptation des CGU par un utilisateur", () => {
   let adaptateurJournal: JournalPourLesTests;
@@ -15,7 +16,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) l'acceptation des CGU 
   it('consigne un événement de "cgu acceptées"', async () => {
     await consigneAcceptationCguDansJournal({ adaptateurJournal })(
       new EvenementCguAccepteesParUtilisateur({
-        idUtilisateur: 'U1',
+        idUtilisateur: unUUID('U'),
         cguAcceptees: 'v1.0',
       })
     );

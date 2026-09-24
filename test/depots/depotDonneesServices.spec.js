@@ -2842,7 +2842,7 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.statutModifie).to.be(true);
       expect(evenement.modalitesModifiees).to.be(false);
       expect(evenement.nombreServicesConcernes).to.be(2);
-      expect(evenement.type).to.be('generale');
+      expect(evenement.typeMesure).to.be('generale');
     });
   });
 
@@ -3036,7 +3036,7 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.statutModifie).to.be(true);
       expect(evenement.modalitesModifiees).to.be(false);
       expect(evenement.nombreServicesConcernes).to.be(2);
-      expect(evenement.type).to.be('specifique');
+      expect(evenement.typeMesure).to.be('specifique');
     });
   });
 

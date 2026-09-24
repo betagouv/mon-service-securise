@@ -4,6 +4,7 @@ import {
 } from '../aides/journalPourLesTests.js';
 import { consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal } from '../../../src/bus/abonnements/consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal.ts';
 import EvenementModelesMesureSpecifiqueImportes from '../../../src/bus/evenementModelesMesureSpecifiqueImportes.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un téléversement de modèles de mesure spécifique", () => {
   let adaptateurJournal: JournalPourLesTests;
@@ -17,7 +18,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la réalisation d'un t
       adaptateurJournal,
     })(
       new EvenementModelesMesureSpecifiqueImportes({
-        idUtilisateur: 'abc',
+        idUtilisateur: unUUID('a'),
         nbModelesMesureSpecifiqueImportes: 42,
       })
     );

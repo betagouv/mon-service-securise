@@ -4,7 +4,7 @@ import MssMesureModifieeEnMasse from '../evenementMesureModifieeEnMasse.js';
 
 const consigneModificationMesureEnMasseDansJournal = consigneDansJournal(
   ({
-    type,
+    typeMesure,
     idMesure,
     utilisateur,
     statutModifie,
@@ -12,7 +12,7 @@ const consigneModificationMesureEnMasseDansJournal = consigneDansJournal(
     nombreServicesConcernes,
   }: MssMesureModifieeEnMasse) =>
     new EvenementMesureModifieeEnMasse({
-      type,
+      type: typeMesure,
       idMesure,
       statutModifie,
       modalitesModifiees,

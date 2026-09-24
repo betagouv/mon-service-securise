@@ -668,6 +668,7 @@ const creeDepot = (config = {}) => {
         service: s,
         utilisateur: u,
         nouvelleMesure: mesure,
+        typeMesure: 'specifique',
       })
     );
   };

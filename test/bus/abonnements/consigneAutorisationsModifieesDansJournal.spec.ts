@@ -4,6 +4,7 @@ import {
 } from '../aides/journalPourLesTests.js';
 import { consigneAutorisationsModifieesDansJournal } from '../../../src/bus/abonnements/consigneAutorisationsModifieesDansJournal.ts';
 import { EvenementAutorisationsServiceModifiees } from '../../../src/bus/evenementAutorisationsServiceModifiees.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la modification d'autorisations pour un service", () => {
   let adaptateurJournal: JournalPourLesTests;
@@ -15,8 +16,8 @@ describe("L'abonnement qui consigne (dans le journal MSS) la modification d'auto
   it("consigne un événement de 'collaboratif de service modifié' indiquant le résumé des autorisations du service", async () => {
     await consigneAutorisationsModifieesDansJournal({ adaptateurJournal })(
       new EvenementAutorisationsServiceModifiees({
-        idService: 'S1',
-        autorisations: [{ droit: 'PROPRIETAIRE', idUtilisateur: 'U1' }],
+        idService: unUUID('S'),
+        autorisations: [{ droit: 'PROPRIETAIRE', idUtilisateur: unUUID('U') }],
       })
     );
 

@@ -4,7 +4,7 @@ import { UUID } from '../../typesBasiques.js';
 type Donnees = {
   idUtilisateur: UUID;
   type: 'generale' | 'specifique';
-  idMesure: string;
+  idMesure?: string;
   statutModifie: boolean;
   modalitesModifiees: boolean;
   nombreServicesConcernes: number;

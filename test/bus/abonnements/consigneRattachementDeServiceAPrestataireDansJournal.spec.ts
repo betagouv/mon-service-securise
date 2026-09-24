@@ -4,6 +4,7 @@ import {
 } from '../aides/journalPourLesTests.js';
 import { consigneRattachementDeServiceAPrestataireDansJournal } from '../../../src/bus/abonnements/consigneRattachementDeServiceAPrestataireDansJournal.ts';
 import { EvenementServiceRattacheAPrestataire } from '../../../src/bus/evenementServiceRattacheAPrestataire.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe("L'abonnement qui consigne (dans le journal MSS) le rattachement d'un service à un prestataire", () => {
   let adaptateurJournal: JournalPourLesTests;
@@ -17,7 +18,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) le rattachement d'un s
       adaptateurJournal,
     })(
       new EvenementServiceRattacheAPrestataire({
-        idService: 'S1',
+        idService: unUUID('S'),
         codePrestataire: 'PRESTA',
       })
     );
