@@ -54,7 +54,7 @@ const creeServeur = ({
 }) => {
   let serveur;
 
-  adaptateurGestionErreur.initialise();
+  adaptateurGestionErreur.initialise('backend');
 
   const app = express();
 

@@ -39,7 +39,9 @@ const logueErreur = (
   });
 };
 
-const initialise = () => {
+type SourceMss = 'backend' | 'api-publique';
+
+const initialise = (source: SourceMss) => {
   const config = sentry();
 
   Sentry.init({
@@ -49,7 +51,7 @@ const initialise = () => {
     tracesSampleRate: config.sampleRateDuTracing(),
     maxValueLength: 50_000,
   });
-  Sentry.setTag('mss-source', 'backend');
+  Sentry.setTag('mss-source', source);
 };
 
 const controleurErreurs = (
@@ -81,3 +83,4 @@ const identifieUtilisateur = (
 };
 
 export { initialise, identifieUtilisateur, controleurErreurs, logueErreur };
+export type { SourceMss };
