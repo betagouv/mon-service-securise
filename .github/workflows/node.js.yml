@@ -13,24 +13,9 @@ on:
 
 jobs:
   controles:
-    name: ${{ matrix.controle.nom }}
+    name: Contrôler le code (Prettier, Eslint, Typescript, Svelte)
 
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        controle:
-          - nom: Contrôler la mise en forme avec Prettier
-            commande: ./node_modules/.bin/prettier --check .
-          - nom: Contrôler la cohérence avec Eslint
-            commande: ./node_modules/.bin/eslint .
-          - nom: Contrôler la cohérence du Frontend avec Eslint
-            commande: ./node_modules/.bin/eslint -c svelte/eslint.config.js svelte
-          - nom: Contrôler le Typescript du Backend
-            commande: ./node_modules/.bin/tsc --noEmit
-          - nom: Contrôler la cohérence de Svelte avec `svelte-check`
-            commande: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
 
     steps:
       - name: Cloner le dépôt Git
@@ -41,8 +26,15 @@ jobs:
       - name: Préparer l'environnement Node.js
         uses: ./.github/actions/preparer-environnement-node
 
-      - name: ${{ matrix.controle.nom }}
-        run: ${{ matrix.controle.commande }}
+      - name: Exécuter les contrôles en parallèle
+        run: >-
+          pnpm exec concurrently --group
+          --names prettier,eslint,eslint-svelte,tsc,svelte-check
+          "prettier --check ."
+          "eslint ."
+          "eslint -c svelte/eslint.config.js svelte"
+          "tsc --noEmit"
+          "svelte-check --workspace svelte --fail-on-warnings"
 
   tests-unitaires:
     name: Exécuter les tests unitaires
