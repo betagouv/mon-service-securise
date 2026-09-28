@@ -121,6 +121,13 @@ const middleware = (configuration: ConfigurationMiddleware) => {
         prenomNom: utilisateurCourant.prenomNom,
         email: utilisateurCourant.email,
       };
+
+      reponse.locals.featureFlags = {
+        ...reponse.locals.featureFlags,
+        avecCreationCleApi: adaptateurEnvironnement
+          .featureFlag()
+          .avecAccesCreationCleApi(utilisateurCourant.id),
+      };
     }
     suite();
   };
@@ -165,12 +172,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       estSuperviseur,
     };
 
-    reponse.locals.featureFlags = {
-      ...reponse.locals.featureFlags,
-      avecCreationCleApi: adaptateurEnvironnement
-        .featureFlag()
-        .avecAccesCreationCleApi(utilisateurCourant.id),
-    };
     requete.cguAcceptees = requete.session?.cguAcceptees;
     requete.estInvite = requete.session?.estInvite;
 
