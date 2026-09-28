@@ -282,39 +282,6 @@ describe('Le middleware MSS', () => {
       });
     });
 
-    describe("concernant l'accès à la création de clé d'API", () => {
-      it("délègue à l'adaptateur environnement, pour l'utilisateur courant", async () => {
-        let idUtilisateurRecu;
-        const adaptateurEnvironnement = {
-          featureFlag: () => ({
-            avecAccesCreationCleApi: (idUtilisateur) => {
-              idUtilisateurRecu = idUtilisateur;
-              return true;
-            },
-          }),
-        };
-        const middleware = leMiddleware({ adaptateurEnvironnement });
-
-        await middleware.verificationJWT(requete, reponse, () => {});
-
-        expect(idUtilisateurRecu).to.be('123');
-        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(true);
-      });
-
-      it("reflète le refus de l'adaptateur environnement", async () => {
-        const adaptateurEnvironnement = {
-          featureFlag: () => ({
-            avecAccesCreationCleApi: () => false,
-          }),
-        };
-        const middleware = leMiddleware({ adaptateurEnvironnement });
-
-        await middleware.verificationJWT(requete, reponse, () => {});
-
-        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(false);
-      });
-    });
-
     describe('quand le JWT est expiré', () => {
       const adaptateurJWT = {
         decode: () => {
@@ -1298,6 +1265,28 @@ describe('Le middleware MSS', () => {
       });
 
       expect(doitAfficher).to.be(true);
+    });
+  });
+
+  describe("sur demande de chargement de l'utilisateur connecté", () => {
+    describe("concernant l'accès à la fonctionnalité de création de clés d'API", () => {
+      it("délègue à l'adaptateur environnement, pour l'utilisateur connecté", async () => {
+        let idUtilisateurRecu;
+        const adaptateurEnvironnement = {
+          featureFlag: () => ({
+            avecAccesCreationCleApi: (idUtilisateur) => {
+              idUtilisateurRecu = idUtilisateur;
+              return true;
+            },
+          }),
+        };
+        const middleware = leMiddleware({ adaptateurEnvironnement });
+
+        await middleware.chargeUtilisateurConnecte(requete, reponse, () => {});
+
+        expect(idUtilisateurRecu).to.be('123');
+        expect(reponse.locals.featureFlags.avecCreationCleApi).to.be(true);
+      });
     });
   });
 });
