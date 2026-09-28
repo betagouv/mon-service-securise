@@ -154,26 +154,80 @@ class MigrationHash {
           case 'COMPLETUDE_SERVICE_MODIFIEE':
           case 'NOUVELLE_HOMOLOGATION_CREEE':
           case 'RISQUES_SERVICE_MODIFIES':
+          case 'SERVICE_RATTACHE_A_PRESTATAIRE':
           case 'SERVICE_SUPPRIME':
+          case 'SIMULATION_MIGRATION_REFERENTIEL_CREEE':
             nouvellesDonnees = {
               ...donnees,
               idService: fonctionDeMigration(donnees.idService),
             };
             break;
+          case 'CGU_ACCEPTEES':
           case 'CONNEXION_UTILISATEUR':
           case 'NOUVEL_UTILISATEUR_INSCRIT':
           case 'PROFIL_UTILISATEUR_MODIFIE':
+          case 'SERVICES_IMPORTES':
+          case 'MESURE_MODIFIEE_EN_MASSE':
+          case 'MODELES_MESURE_SPECIFIQUE_IMPORTES':
             nouvellesDonnees = {
               ...donnees,
               idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
             };
             break;
           case 'RETOUR_UTILISATEUR_MESURE_RECU':
+          case 'SERVICE_V1_MIGRE_EN_V2':
           case 'NOUVEAU_SERVICE_CREE':
             nouvellesDonnees = {
               ...donnees,
               idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
               idService: fonctionDeMigration(donnees.idService),
+            };
+            break;
+          case 'ACCES_UTILISATEUR_ADMINISTRE_RETIRES':
+          case 'ROLE_UTILISATEUR_ADMINISTRE_ATTRIBUE':
+            nouvellesDonnees = {
+              ...donnees,
+              idAdmin: fonctionDeMigration(donnees.idAdmin),
+              idUtilisateurAdministre: fonctionDeMigration(
+                donnees.idUtilisateurAdministre
+              ),
+              idsServices: donnees.idsServices.map(fonctionDeMigration),
+            };
+            break;
+          case 'ADMIN_NOMME_SUR_ORGANISATION':
+          case 'ADMIN_RETIRE_DE_ORGANISATION':
+            nouvellesDonnees = {
+              ...donnees,
+              idActeur: fonctionDeMigration(donnees.idActeur),
+              idCible: fonctionDeMigration(donnees.idCible),
+              siret: fonctionDeMigration(donnees.siret),
+            };
+            break;
+          case 'CLE_API_CREEE':
+          case 'CLE_API_REVOQUEE':
+            nouvellesDonnees = {
+              ...donnees,
+              idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
+              idCle: fonctionDeMigration(donnees.idCle),
+            };
+            break;
+          case 'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE':
+            nouvellesDonnees = {
+              ...donnees,
+              idNotification: fonctionDeMigration(donnees.idNotification),
+              idActeur: fonctionDeMigration(donnees.idActeur),
+              idDestinataire: fonctionDeMigration(donnees.idDestinataire),
+              idService: fonctionDeMigration(donnees.idService),
+            };
+            break;
+          case 'RISQUES_V2_SERVICE_MODIFIES':
+            nouvellesDonnees = {
+              ...donnees,
+              idService: fonctionDeMigration(donnees.idService),
+              risquesSpecifiques: donnees.risquesSpecifiques.map((rs) => ({
+                ...rs,
+                id: fonctionDeMigration(rs.id),
+              })),
             };
             break;
           default:
