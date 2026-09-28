@@ -86,7 +86,72 @@ class MigrationHash {
         }
       );
 
-      await Promise.all([...majServices, ...majUtilisateurs]);
+      const admins = await trx('admins_organisations');
+
+      const majAdmins = admins.map(
+        ({ id_utilisateur: idUtilisateur, siret_hash: siretHacheActuel }) =>
+          trx('admins_organisations')
+            .where({
+              id_utilisateur: idUtilisateur,
+              siret_hash: siretHacheActuel,
+            })
+            .update({
+              siret_hash: fonctionDeMigration(siretHacheActuel),
+            })
+      );
+
+      const auditAdmins = await trx('admins_organisations_audit');
+
+      const majAuditAdmins = auditAdmins.map(
+        ({
+          id,
+          email_acteur_hash: emailActeurHacheActuel,
+          email_utilisateur_cible_hash: emailUtilisateurCibleHacheActuel,
+          siret_hash: siretHacheActuel,
+        }) =>
+          trx('admins_organisations_audit')
+            .where({ id })
+            .update({
+              email_acteur_hash: fonctionDeMigration(emailActeurHacheActuel),
+              email_utilisateur_cible_hash: fonctionDeMigration(
+                emailUtilisateurCibleHacheActuel
+              ),
+              siret_hash: fonctionDeMigration(siretHacheActuel),
+            })
+      );
+
+      const superviseurs = await trx('superviseurs');
+
+      const majSuperviseurs = superviseurs.map(
+        ({ id_superviseur: idSuperviseur, siret_hash: siretHacheActuel }) =>
+          trx('superviseurs')
+            .where({
+              id_superviseur: idSuperviseur,
+              siret_hash: siretHacheActuel,
+            })
+            .update({
+              siret_hash: fonctionDeMigration(siretHacheActuel),
+            })
+      );
+
+      const clesApi = await trx('cles_api');
+
+      const majClesApi = clesApi.map(({ id, empreinte }) =>
+        trx('cles_api')
+          .where({ id })
+          .update({
+            empreinte: fonctionDeMigration(empreinte),
+          })
+      );
+
+      await Promise.all([
+        ...majServices,
+        ...majUtilisateurs,
+        ...majAdmins,
+        ...majAuditAdmins,
+        ...majSuperviseurs,
+        ...majClesApi,
+      ]);
     });
   }
 
