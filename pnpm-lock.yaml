@@ -254,7 +254,7 @@ importers:
         version: 1.104.1
       supertest:
         specifier: ^7.2.2
-        version: 7.2.2(supports-color@10.2.2)
+        version: 7.3.0(supports-color@10.2.2)
       svelte-check:
         specifier: ^4.4.5
         version: 4.7.6(picomatch@4.0.7)(svelte@5.57.1(@typescript-eslint/types@8.70.1))(typescript@6.0.3)
@@ -3982,8 +3982,8 @@ packages:
     resolution: {integrity: sha512-B+4Ik7ROgVKrQsXTV0Jwp2u+PXYLSlqtDAhYnkkD+zn3yg8s/zjA2MeGayPoY/KICrbitwneDHrjSotxKL+0XQ==}
     engines: {node: '>=14.18.0'}
 
-  supertest@7.2.2:
-    resolution: {integrity: sha512-oK8WG9diS3DlhdUkcFn4tkNIiIbBx9lI2ClF8K+b2/m8Eyv47LSawxUzZQSNKUrVb2KsqeTDCcjAAVPYaSLVTA==}
+  supertest@7.3.0:
+    resolution: {integrity: sha512-UwwmWq3xLhyU96c521wYNaBg7IqX78Wpj4FKs6Katp6vdklX42zU5ESvX3KeZRLFyO44RwFp4yvxYMNZzCcX9g==}
     engines: {node: '>=14.18.0'}
 
   supports-color@10.2.2:
@@ -8087,11 +8087,11 @@ snapshots:
       formidable: 3.5.4
       methods: 1.1.2
       mime: 2.6.0
-      qs: 6.14.1
+      qs: 6.16.0
     transitivePeerDependencies:
       - supports-color
 
-  supertest@7.2.2(supports-color@10.2.2):
+  supertest@7.3.0(supports-color@10.2.2):
     dependencies:
       cookie-signature: 1.2.2
       methods: 1.1.2
