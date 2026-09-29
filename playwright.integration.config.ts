@@ -11,7 +11,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'pnpm build:front && pnpm build:back && pnpm start',
+    command: 'pnpm build:front && pnpm build:back && node dist/server.js',
     url: `http://localhost:${PORT}`,
     reuseExistingServer: true,
     env: {

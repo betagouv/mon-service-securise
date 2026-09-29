@@ -11,7 +11,7 @@ export default defineConfig({
     viewport: { width: 1550, height: 900 },
   },
   webServer: {
-    command: 'pnpm build:front && pnpm build:back && pnpm start',
+    command: 'pnpm build:front && pnpm build:back && node dist/server.js',
     url: `http://localhost:${PORT}`,
     reuseExistingServer: true,
     env: {
