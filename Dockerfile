@@ -11,6 +11,7 @@ RUN apt-get install -y \
 WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /usr/src/app/
 RUN npm install -g "$(jq -r '.packageManager' package.json)"
+ENV pnpm_config_store_dir=/pnpm-store
 RUN pnpm install
 
 COPY . /usr/src/app
