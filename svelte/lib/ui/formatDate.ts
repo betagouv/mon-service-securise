@@ -1,5 +1,8 @@
 const MILISECONDES_DANS_UNE_JOURNEE = 1000 * 3600 * 24;
 
+export const formateDateCourte = (date: string | Date) =>
+  new Date(date).toLocaleDateString('fr-FR');
+
 export const formatteDifferenceDateRelative = (chaineDate: string) => {
   const dateAComparer = new Date(chaineDate);
   const maintenant = new Date();

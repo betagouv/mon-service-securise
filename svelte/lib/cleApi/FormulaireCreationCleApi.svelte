@@ -3,6 +3,7 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import { api } from './cleApi.api';
   import type { CleApiCreee } from './cleApi.d';
+  import { formateDateCourte } from '../ui/formatDate';
 
   interface Props {
     onCleCreee: (cle: CleApiCreee) => void;
@@ -51,77 +52,114 @@
   };
 </script>
 
-{#if cleCreee}
-  <div class="conteneur-revelation">
-    <dsfr-alert
-      size="md"
-      type="warning"
-      has-title
-      title="Copiez votre clé maintenant"
-      has-description
-      text="Cette valeur ne sera plus jamais affichée. Conservez-la dans un endroit sûr."
-    ></dsfr-alert>
-    <div class="valeur-en-clair">
-      <code>{cleCreee.valeurEnClair}</code>
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Copier"
-        kind="secondary"
-        size="sm"
-        has-icon
-        icon="file-line"
-        icon-place="left"
-        type="button"
-        onclick={copieValeurEnClair}
-      ></dsfr-button>
-    </div>
-  </div>
-{/if}
+<div class="conteneur-global">
+  <h2>{cleCreee ? 'Copiez votre clé maintenant' : 'Nouvelle clé'}</h2>
 
-<div class="conteneur-creation">
-  <dsfr-select
-    id="duree-validite-cle-api"
-    label="Durée de validité"
-    options={optionsDuree}
-    value={dureeValiditeEnJours !== null ? String(dureeValiditeEnJours) : ''}
-    onvaluechanged={(e: CustomEvent<string>) => {
-      dureeValiditeEnJours = e.detail ? Number(e.detail) : null;
-    }}
-  ></dsfr-select>
-  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-  <dsfr-button
-    label="Générer une clé"
-    kind="primary"
-    size="md"
-    type="button"
-    disabled={dureeValiditeEnJours === null || enCoursCreation}
-    onclick={creeCle}
-  ></dsfr-button>
+  {#if cleCreee}
+    <div class="conteneur-revelation">
+      <dsfr-input
+        action
+        id="cle-en-clair"
+        label="Votre clé valable jusqu'au {formateDateCourte(
+          cleCreee.dateExpiration
+        )}"
+        value={cleCreee.valeurEnClair}
+      >
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+        <dsfr-button
+          slot="button"
+          label="Copier"
+          size="sm"
+          has-icon
+          icon="file-line"
+          icon-place="left"
+          type="button"
+          onclick={copieValeurEnClair}
+        ></dsfr-button>
+      </dsfr-input>
+
+      <dsfr-alert
+        size="sm"
+        type="warning"
+        text="Cette valeur ne sera plus jamais affichée. Conservez-la dans un endroit sûr."
+      ></dsfr-alert>
+
+      <hr />
+    </div>
+  {:else}
+    <p>La clé s'affichera une seule fois, juste après sa génération.</p>
+  {/if}
+
+  <div class="conteneur-creation">
+    <dsfr-select
+      id="duree-validite-cle-api"
+      label={cleCreee ? 'Générer une nouvelle clé' : 'Durée de validité'}
+      hint={cleCreee ? 'Durée de validité' : ''}
+      options={optionsDuree}
+      value={dureeValiditeEnJours !== null ? String(dureeValiditeEnJours) : ''}
+      onvaluechanged={(e: CustomEvent<string>) => {
+        dureeValiditeEnJours = e.detail ? Number(e.detail) : null;
+      }}
+    ></dsfr-select>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Générer une clé"
+      kind={cleCreee ? 'secondary' : 'primary'}
+      size="md"
+      type="button"
+      disabled={dureeValiditeEnJours === null || enCoursCreation}
+      onclick={creeCle}
+    ></dsfr-button>
+  </div>
 </div>
 
 <style lang="scss">
-  .conteneur-revelation {
-    margin: 24px 0;
-  }
-
-  .valeur-en-clair {
+  .conteneur-global {
+    border: 1px solid #ddd;
+    border-radius: 8px;
     display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 16px;
-    padding: 16px;
-    background: var(--fond-gris-pale-composant);
-    border-radius: 4px;
+    flex-direction: column;
+    padding: 40px;
+    margin: 24px 0 56px;
 
-    code {
-      overflow-wrap: anywhere;
+    h2 {
+      color: #161616;
+      font-size: 1.5rem;
+      line-height: 2rem;
+      font-weight: 700;
+      margin: 0 0 16px;
     }
-  }
 
-  .conteneur-creation {
-    display: flex;
-    align-items: flex-end;
-    gap: 16px;
-    margin: 32px 0;
+    h2 + p {
+      color: #3a3a3a;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      margin: 0;
+    }
+
+    .conteneur-revelation {
+      margin-top: 8px;
+
+      hr,
+      dsfr-alert {
+        margin: 24px 0 0;
+      }
+    }
+
+    .conteneur-creation {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 24px 0 0;
+
+      dsfr-select {
+        width: 100%;
+      }
+
+      dsfr-button {
+        white-space: nowrap;
+      }
+    }
   }
 </style>
