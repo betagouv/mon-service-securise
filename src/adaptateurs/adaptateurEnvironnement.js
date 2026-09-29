@@ -45,6 +45,13 @@ const sentry = () => ({
     process.env.SENTRY_CHEMINS_IGNORES_PAR_TRACING?.split(',') ?? [],
 });
 
+const webhookLogErreur = () => ({
+  actif: () =>
+    process.env.MATTERMOST_URL_WEBHOOK_CANAL_LOG_ERREUR &&
+    process.env.AVEC_DUPLICATION_LOG_ERREUR_SUR_WEBHOOK === 'true',
+  url: () => process.env.MATTERMOST_URL_WEBHOOK_CANAL_LOG_ERREUR,
+});
+
 const chiffrement = () => ({
   utiliseChiffrementChaCha20: () =>
     process.env.CHIFFREMENT_CHACHA20_ACTIF === 'true',
@@ -165,6 +172,7 @@ export {
   crisp,
   emailMemoire,
   featureFlag,
+  webhookLogErreur,
   JWT,
   journalMSS,
   matomo,
