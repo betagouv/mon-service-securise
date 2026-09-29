@@ -6,6 +6,7 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import { api } from './cleApi.api';
   import type { CleApiCreee, CleApiProps } from './cleApi.d';
+  import Pastille from '../ui/Pastille.svelte';
 
   let { cles: clesInitiales, urlDocumentationApi }: CleApiProps = $props();
 
@@ -69,24 +70,24 @@
   données des services auxquels vous avez déjà accès.
 </p>
 <p>
-  Vous trouverez la documentation à l'adresse suivante : <dsfr-link
+  <dsfr-link
     href={urlDocumentationApi}
-    label={urlDocumentationApi}
+    label="Consulter la documentation de l'API"
     blank
-    neutral
   ></dsfr-link>
 </p>
 
 <FormulaireCreationCleApi onCleCreee={ajouteCle} />
 
 <div class="conteneur-liste">
-  <h2>Clés actives</h2>
+  <h2>Clés actives <Pastille contenu={cles.length.toString()} active /></h2>
   {#if cles.length === 0}
     <p>Aucune clé active pour le moment.</p>
   {:else}
     <dsfr-table
       columns={[
         { key: 'prefixe', label: 'Clé' },
+        { key: 'dateCreation', label: 'Créée le' },
         { key: 'dateExpiration', label: 'Expire le' },
         { key: 'actions', label: 'Actions' },
       ]}
@@ -100,6 +101,9 @@
         </div>
         <div slot="cell:dateExpiration:{i}">
           {formateDate(cle.dateExpiration)}
+        </div>
+        <div slot="cell:dateCreation:{i}">
+          {formateDate(cle.dateCreation)}
         </div>
         <div slot="cell:actions:{i}" class="conteneur-actions">
           <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -151,8 +155,12 @@
   }
 
   h2 {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
   }
 
   h1 + p {
