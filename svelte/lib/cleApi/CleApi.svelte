@@ -7,6 +7,7 @@
   import { api } from './cleApi.api';
   import type { CleApiCreee, CleApiProps } from './cleApi.d';
   import Pastille from '../ui/Pastille.svelte';
+  import { formateDateCourte } from '../ui/formatDate';
 
   let { cles: clesInitiales, urlDocumentationApi }: CleApiProps = $props();
 
@@ -16,9 +17,6 @@
   let modaleRevocationOuverte = $state(false);
 
   let cleARevoquer = $derived(cles.find((cle) => cle.id === idCleARevoquer));
-
-  const formateDate = (date: string | Date) =>
-    new Date(date).toLocaleDateString('fr-FR');
 
   const ajouteCle = (cle: CleApiCreee) => {
     cles = [
@@ -100,10 +98,10 @@
           <code>mss_live_{cle.prefixe}_…</code>
         </div>
         <div slot="cell:dateExpiration:{i}">
-          {formateDate(cle.dateExpiration)}
+          {formateDateCourte(cle.dateExpiration)}
         </div>
         <div slot="cell:dateCreation:{i}">
-          {formateDate(cle.dateCreation)}
+          {formateDateCourte(cle.dateCreation)}
         </div>
         <div slot="cell:actions:{i}" class="conteneur-actions">
           <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -163,11 +161,15 @@
     margin: 0 0 8px;
   }
 
+  p {
+    margin: 0;
+  }
+
   h1 + p {
     color: #3a3a3a;
     font-size: 1.25rem;
     line-height: 2rem;
-    margin: 16px 0 0;
+    margin: 16px 0;
     text-align: left;
   }
 
