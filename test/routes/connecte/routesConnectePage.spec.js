@@ -255,6 +255,37 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
+  describe('quand GET sur /profil/groupes-services', () => {
+    beforeEach(() => {
+      const utilisateur = unUtilisateur().construis();
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
+    });
+
+    it("vérifie que l'utilisateur a accepté les CGU", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), '/profil/groupes');
+    });
+
+    it('sert le contenu HTML de la page', async () => {
+      const reponse = await testeur.get('/profil/groupes');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/html');
+    });
+
+    it('répond 404 si le feature flag est désactivé', async () => {
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecGroupesServices: () => false,
+      });
+
+      const reponse = await testeur.get('/profil/groupes');
+
+      expect(reponse.status).to.be(404);
+    });
+  });
+
   describe('quand GET sur /tableauDeBord', () => {
     it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
       await testeur
