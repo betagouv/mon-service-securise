@@ -355,16 +355,23 @@ export class ServiceStatistiquesAdmin {
     const tauxDeCompletude = servicesFiltres.map((s) =>
       s.tauxCompletudeMesures()
     );
+    const [
+      evolutionNombreServices,
+      evolutionNombreOrganisations,
+      servicesParTrancheDateDerniereModification,
+    ] = await Promise.all([
+      this.evolutionNombreServices(servicesFiltres),
+      this.evolutionNombreOrganisations(servicesFiltres),
+      this.servicesParTrancheDateDerniereModification(servicesFiltres),
+    ]);
 
     return {
       servicesParType:
         ServiceStatistiquesAdmin.servicesParType(servicesFiltres),
       servicesParNiveauSecurite:
         ServiceStatistiquesAdmin.servicesParNiveauSecurite(servicesFiltres),
-      evolutionNombreServices:
-        await this.evolutionNombreServices(servicesFiltres),
-      evolutionNombreOrganisations:
-        await this.evolutionNombreOrganisations(servicesFiltres),
+      evolutionNombreServices,
+      evolutionNombreOrganisations,
       indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(indicesCyber),
       servicesParTrancheIndiceCyber:
         ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(indicesCyber),
@@ -386,8 +393,7 @@ export class ServiceStatistiquesAdmin {
         ),
       nombreMesuresParStatutEtCategorie:
         this.nombreMesuresParStatutEtCategorie(servicesFiltres),
-      servicesParTrancheDateDerniereModification:
-        await this.servicesParTrancheDateDerniereModification(servicesFiltres),
+      servicesParTrancheDateDerniereModification,
     };
   }
 }
