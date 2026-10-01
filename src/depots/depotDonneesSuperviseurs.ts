@@ -30,8 +30,6 @@ export class DepotDonneesSuperviseurs {
   }
 
   async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
-    const superviseur = await this.lisSuperviseur(idUtilisateur);
-
-    return superviseur !== undefined;
+    return this.persistance.estSuperviseur(idUtilisateur);
   }
 }

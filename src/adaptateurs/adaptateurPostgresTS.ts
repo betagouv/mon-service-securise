@@ -92,6 +92,15 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     return { idUtilisateur, entitesSupervisees: entitesDechiffrees };
   }
 
+  async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
+    const uneLigne = await this.knex(TABLES.SUPERVISEURS)
+      .select('id_superviseur')
+      .where({ id_superviseur: idUtilisateur })
+      .first();
+
+    return uneLigne !== undefined;
+  }
+
   async sauvegardeSuperviseur(donnees: DonneesSuperviseur): Promise<void> {
     if (donnees.entitesSupervisees.length === 0) {
       await this.supprimeSuperviseur(donnees.idUtilisateur);
