@@ -20,5 +20,5 @@ export const metEnFormeEntite = (entite: Entite) => {
       6,
       9
     )} ${siret.substring(9, 14)}`;
-  return `(${entite.departement}) ${entite.nom} - ${siretFormatte}`;
+  return `${entite.departement && entite.nom ? `(${entite.departement}) ${entite.nom} - ` : ''}${siretFormatte}`;
 };
