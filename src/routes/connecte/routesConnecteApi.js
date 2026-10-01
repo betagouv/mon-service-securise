@@ -42,6 +42,7 @@ import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js'
 import { routesConnecteApiExplicationRisquesV2 } from './routesConnecteApiExplicationRisquesV2.js';
 import { routesConnecteApiAdmin } from './routesConnecteApiAdmin.js';
 import { routesConnecteApiCleApi } from './routesConnecteApiCleApi.js';
+import { routesConnecteApiGroupesServices } from './routesConnecteApiGroupesServices.js';
 import { ProcedureSuppressionContributeur } from '../../modeles/autorisations/procedureSuppressionContributeur.js';
 
 const { ECRITURE, LECTURE } = Permissions;
@@ -404,6 +405,15 @@ const routesConnecteApi = ({
     '/cles-api',
     middleware.verificationAcceptationCGU,
     routesConnecteApiCleApi({
+      depotDonnees,
+      adaptateurEnvironnement,
+    })
+  );
+
+  routes.use(
+    '/groupes-services',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiGroupesServices({
       depotDonnees,
       adaptateurEnvironnement,
     })
