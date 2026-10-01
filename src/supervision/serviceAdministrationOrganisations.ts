@@ -198,9 +198,9 @@ export class ServiceAdministrationOrganisations {
   ): Promise<Array<DonneesEntiteSupervisee>> {
     const sirets = entites.map((e) => e.siret);
 
-    const [adminsParSiret, servicesParSiret] = await Promise.all([
+    const [adminsParSiret, denombrementsParSiret] = await Promise.all([
       this.depotDonnees.lisAdminsPourSirets(sirets),
-      this.depotDonnees.tousLesServicesAvecSirets(sirets),
+      this.depotDonnees.denombreServicesEtUtilisateursParSiret(sirets),
     ]);
 
     const idsDesAdmins = [
@@ -214,19 +214,17 @@ export class ServiceAdministrationOrganisations {
     const adminParId = new Map(lesAdmins.map((u) => [u.id, u]));
 
     return entites.map((uneEntite) => {
-      const services = servicesParSiret.get(uneEntite.siret) ?? [];
+      const { nombreServices, nombreUtilisateurs } = denombrementsParSiret.get(
+        uneEntite.siret
+      )!;
       const admins = adminsParSiret.get(uneEntite.siret) ?? [];
 
       return {
         siret: uneEntite.siret,
         nom: uneEntite.nom,
         departement: uneEntite.departement,
-        nombreServices: services.length,
-        nombreUtilisateurs: new Set(
-          services.flatMap((s: Service) =>
-            s.contributeurs.map((c: Contributeur) => c.idUtilisateur)
-          )
-        ).size,
+        nombreServices,
+        nombreUtilisateurs,
         administrateurs: admins.map((a) => {
           const u = adminParId.get(a.donnees().idUtilisateur)!;
           return {
