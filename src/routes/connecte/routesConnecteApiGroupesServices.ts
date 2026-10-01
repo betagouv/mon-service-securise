@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
-import { GroupeServices } from '../../modeles/groupeServices.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   ErreurGroupeServicesDejaExistant,
@@ -14,11 +13,6 @@ import {
   schemaIdGroupeServices,
   schemaLibelleGroupeServices,
 } from './routesConnecteApiGroupesServices.schema.js';
-
-const enJSON = (groupe: GroupeServices) => {
-  const { id, libelle } = groupe.donnees();
-  return { id, libelle };
-};
 
 const traduisErreur = (
   erreur: unknown,
@@ -60,7 +54,7 @@ const routesConnecteApiGroupesServices = ({
 
     const groupes = await depotDonnees.lisGroupesDe(idUtilisateurCourant);
 
-    reponse.json(groupes.map(enJSON));
+    reponse.json(groupes.map((c) => c.toJSON()));
   });
 
   routes.post(
@@ -75,7 +69,7 @@ const routesConnecteApiGroupesServices = ({
           requete.body.libelle
         );
 
-        reponse.status(201).json(enJSON(groupe));
+        reponse.status(201).json(groupe.toJSON());
       } catch (e) {
         traduisErreur(e, reponse, suite);
       }
