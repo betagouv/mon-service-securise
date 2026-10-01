@@ -77,6 +77,29 @@
     <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
     <p>Aucun groupe pour le moment.</p>
   </div>
+{:else}
+  <div class="conteneur-liste">
+    <p>
+      Un service peut appartenir à plusieurs groupes : la somme des colonnes
+      «&nbsp;Services&nbsp;» peut donc dépasser le nombre total de services
+      enregistrés. Pour classer un service dans un groupe, rendez-vous sur le
+      tableau de bord.
+    </p>
+    <dsfr-table
+      columns={[
+        { key: 'libelle', label: 'Libellé' },
+        { key: 'actions', label: 'Actions' },
+      ]}
+      rows={groupes}
+      rich
+      multiline
+    >
+      {#each groupes as groupe, i (groupe.id)}
+        <div slot="cell:libelle:{i}">{groupe.libelle}</div>
+        <div slot="cell:actions:{i}" class="conteneur-actions"></div>
+      {/each}
+    </dsfr-table>
+  </div>
 {/if}
 
 <Toaster />
@@ -100,6 +123,23 @@
 
   dsfr-button {
     white-space: nowrap;
+  }
+
+  .conteneur-liste {
+    margin: 8px 0 24px;
+
+    p {
+      margin: 24px 0 8px;
+      color: #3a3a3a;
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  .conteneur-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .aucun-groupe {
