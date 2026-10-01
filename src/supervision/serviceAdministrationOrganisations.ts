@@ -537,12 +537,9 @@ export class ServiceAdministrationOrganisations {
       ?.donnees()
       .entitesSupervisees.map((e) => e.siret);
 
-    return (
-      await Promise.all(
-        siretsSupervises.map((s) =>
-          this.depotDonnees.tousLesServicesAvecSiret(s)
-        )
-      )
-    ).flat();
+    const servicesParSiret =
+      await this.depotDonnees.tousLesServicesAvecSirets(siretsSupervises);
+
+    return [...servicesParSiret.values()].flat();
   }
 }
