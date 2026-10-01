@@ -39,6 +39,7 @@ import BusEvenements from './bus/busEvenements.js';
 import { ServiceCgu } from './serviceCgu.interface.js';
 import { DepotDonneesNotificationsTransactionnelles } from './depots/depotDonneesNotificationsTransactionnelles.js';
 import { DepotDonneesClesApi } from './depots/depotDonneesClesApi.js';
+import { DepotDonneesGroupesServices } from './depots/depotDonneesGroupesServices.js';
 
 export type ConfigDepotDonnees = {
   adaptateurChiffrement?: AdaptateurChiffrement;
@@ -213,6 +214,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     adaptateurChiffrement,
     adaptateurPersistanceTS,
     busEvenements,
+  });
+
+  const depotGroupesServices = new DepotDonneesGroupesServices({
+    persistance: adaptateurPersistanceTS,
   });
 
   const {
@@ -539,6 +544,13 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     lisClesDe: depotClesApi.lisClesDe.bind(depotClesApi),
     lisCleParValeur: depotClesApi.lisCleParValeur.bind(depotClesApi),
     revoqueCle: depotClesApi.revoqueCle.bind(depotClesApi),
+    nouveauGroupe:
+      depotGroupesServices.nouveauGroupe.bind(depotGroupesServices),
+    lisGroupesDe: depotGroupesServices.lisGroupesDe.bind(depotGroupesServices),
+    renommeGroupe:
+      depotGroupesServices.renommeGroupe.bind(depotGroupesServices),
+    supprimeGroupe:
+      depotGroupesServices.supprimeGroupe.bind(depotGroupesServices),
   };
 };
 
