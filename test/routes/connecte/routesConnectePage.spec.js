@@ -255,7 +255,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
-  describe('quand GET sur /profil/groupes-services', () => {
+  describe('quand GET sur /profil/groupes', () => {
     beforeEach(() => {
       const utilisateur = unUtilisateur().construis();
       testeur.depotDonnees().utilisateur = async () => utilisateur;
@@ -273,6 +273,13 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('text/html');
+    });
+
+    it('charge le composant Svelte des groupes de services', async () => {
+      const reponse = await testeur.get('/profil/groupes');
+
+      expect(reponse.text).to.contain('id="conteneur-groupes"');
+      expect(reponse.text).to.contain('/statique/composants-svelte/groupes.js');
     });
 
     it('répond 404 si le feature flag est désactivé', async () => {
