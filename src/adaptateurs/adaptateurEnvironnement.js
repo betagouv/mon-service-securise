@@ -75,6 +75,8 @@ const featureFlag = () => ({
   avecRisquesV2: () => process.env.FEATURE_FLAG_AVEC_RISQUES_V2 === 'true',
   avecGestionDesOrganisations: () =>
     process.env.FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS === 'true',
+  avecGroupesServices: () =>
+    process.env.FEATURE_FLAG_AVEC_GROUPES_SERVICES === 'true',
   avecAccesCreationCleApi: (idUtilisateur) => {
     const idsUtilisateursAutorises = (
       process.env.FEATURE_FLAG_IDS_UTILISATEURS_CREATION_CLE_API?.split(',') ??
