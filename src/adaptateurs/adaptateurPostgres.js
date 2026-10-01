@@ -257,6 +257,23 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     }));
   };
 
+  const denombreServicesEtUtilisateursParSiret = async (hashSirets) => {
+    const requete = await knex.raw(
+      `
+        SELECT s.siret_hash AS "siretHash",
+               COUNT(DISTINCT s.id)::int AS "nombreServices",
+               COUNT(DISTINCT a.donnees->>'idUtilisateur')::int AS "nombreUtilisateurs"
+        FROM services s
+               LEFT JOIN autorisations a ON (a.donnees->>'idService')::uuid = s.id
+        WHERE s.siret_hash = ANY(:hashSirets)
+        GROUP BY s.siret_hash;
+      `,
+      { hashSirets }
+    );
+
+    return requete.rows;
+  };
+
   const nombreServices = async (idUtilisateur) => {
     const total = await knex('autorisations')
       .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
@@ -1088,6 +1105,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     autorisations,
     autorisationsDuService,
     contributeursDesServicesDe,
+    denombreServicesEtUtilisateursParSiret,
     estJwtRevoque,
     lisBrouillonsService,
     lisDernierIndiceCyber,
