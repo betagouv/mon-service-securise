@@ -106,7 +106,7 @@ const routesConnectePage = ({
         return;
       }
 
-      reponse.render('profilGroupesServices');
+      reponse.render('profilGroupes');
     }
   );
 
