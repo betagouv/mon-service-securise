@@ -1,0 +1,93 @@
+<script lang="ts">
+  import { toasterStore } from '../ui/stores/toaster.store';
+  import { api, estUnLibelleDejaUtilise } from './groupes.api';
+  import type { Groupe } from './groupes.d';
+
+  interface Props {
+    groupe: Groupe | null;
+    onRenommee: (groupe: Groupe) => void;
+    onFerme: () => void;
+  }
+
+  let { groupe, onRenommee, onFerme }: Props = $props();
+
+  let libelle = $derived(groupe?.libelle ?? '');
+  let erreur = $state('');
+  let enCours = $state(false);
+
+  const ferme = () => {
+    erreur = '';
+    onFerme();
+  };
+
+  const renomme = async () => {
+    if (!groupe || !libelle.trim()) return;
+
+    const libelleRenomme = libelle.trim();
+    enCours = true;
+    erreur = '';
+    try {
+      await api.renommeGroupe(groupe.id, libelleRenomme);
+      onRenommee({ ...groupe, libelle: libelleRenomme });
+      toasterStore.succes('Succès', 'Le groupe a été renommé.');
+      ferme();
+    } catch (e) {
+      if (estUnLibelleDejaUtilise(e)) {
+        erreur = 'Vous avez déjà un groupe avec ce libellé.';
+        return;
+      }
+      toasterStore.erreur(
+        'Erreur',
+        "Le groupe n'a pas pu être renommé, veuillez réessayer."
+      );
+    } finally {
+      enCours = false;
+    }
+  };
+</script>
+
+<dsfr-modal
+  id="modale-renommage-groupe"
+  has-footer
+  opened={groupe !== null}
+  title="Renommer le groupe"
+  onclose={ferme}
+>
+  <dsfr-input
+    id="libelle-groupe-renomme"
+    label="Libellé"
+    value={libelle}
+    onvaluechanged={(e: CustomEvent<string>) => (libelle = e.detail)}
+    maxlength="200"
+    status={erreur ? 'error' : 'default'}
+    errorMessage={erreur}
+  ></dsfr-input>
+  <div slot="footer" class="conteneur-actions-modale">
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Annuler"
+      kind="secondary"
+      size="md"
+      type="button"
+      onclick={ferme}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Renommer"
+      kind="primary"
+      size="md"
+      type="button"
+      disabled={enCours || !libelle.trim()}
+      onclick={renomme}
+    ></dsfr-button>
+  </div>
+</dsfr-modal>
+
+<style lang="scss">
+  .conteneur-actions-modale {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+  }
+</style>
