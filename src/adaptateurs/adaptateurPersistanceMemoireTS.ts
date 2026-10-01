@@ -6,12 +6,14 @@ import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTra
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
+import { DonneesGroupeServices } from '../modeles/groupeServices.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
   superviseurs: DonneesSuperviseur[];
   notificationsTransactionnelles: DonneesNotificationTransactionnelle[];
   clesApi: DonneesCleApi[];
+  groupesServices: DonneesGroupeServices[];
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
@@ -20,6 +22,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     superviseurs: [],
     notificationsTransactionnelles: [],
     clesApi: [],
+    groupesServices: [],
   };
 
   constructor(donnees?: Partial<DonneesPersistanceMemoire>) {
@@ -30,6 +33,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
         notificationsTransactionnelles:
           donnees.notificationsTransactionnelles ?? [],
         clesApi: donnees.clesApi ?? [],
+        groupesServices: donnees.groupesServices ?? [],
       };
   }
 
@@ -185,5 +189,26 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       (c) => c.id !== donnees.id
     );
     this.donnees.clesApi.push(donnees);
+  }
+
+  async lisGroupesServicesDe(
+    idUtilisateur: UUID
+  ): Promise<DonneesGroupeServices[]> {
+    return this.donnees.groupesServices
+      .filter((c) => c.idUtilisateur === idUtilisateur)
+      .map((c) => ({ ...c }));
+  }
+
+  async sauvegardeGroupeServices(
+    donnees: DonneesGroupeServices
+  ): Promise<void> {
+    await this.supprimeGroupeServices(donnees.id);
+    this.donnees.groupesServices.push({ ...donnees });
+  }
+
+  async supprimeGroupeServices(idGroupe: UUID): Promise<void> {
+    this.donnees.groupesServices = this.donnees.groupesServices.filter(
+      (c) => c.id !== idGroupe
+    );
   }
 }

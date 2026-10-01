@@ -10,6 +10,7 @@ import {
   MetadonneesNotificationExpirationHomologation,
 } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 import { DonneesCleApi } from '../../src/modeles/cleApi.ts';
+import { DonneesGroupeServices } from '../../src/modeles/groupeServices.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -24,6 +25,15 @@ describe("L'adaptateur persistance Postgres", () => {
     empreinte: `empreinte-${unUUIDRandom()}`,
     dateCreation: new Date('2026-09-01T08:00:00Z'),
     dateExpiration: new Date('2027-09-01T08:00:00Z'),
+    ...donnees,
+  });
+
+  const unGroupeServices = (
+    donnees: Partial<DonneesGroupeServices> = {}
+  ): DonneesGroupeServices => ({
+    id: unUUIDRandom(),
+    idUtilisateur: unUUIDRandom(),
+    libelle: 'Métier',
     ...donnees,
   });
 
@@ -850,6 +860,64 @@ describe("L'adaptateur persistance Postgres", () => {
       const cleLue = await persistance.lisCleApiParEmpreinte('inconnue');
 
       expect(cleLue).toBeUndefined();
+    });
+  });
+
+  describe("sur demande de sauvegarde d'un groupe de services", () => {
+    it('chiffre le libellé', async () => {
+      const groupe = unGroupeServices({ libelle: 'Santé RH' });
+
+      await persistance.sauvegardeGroupeServices(groupe);
+
+      const lignes = await trx.table('groupes_services').select();
+      expect(lignes).toEqual([
+        {
+          id: groupe.id,
+          id_utilisateur: groupe.idUtilisateur,
+          donnees: { coffreFort: { libelle: 'Santé RH' }, chiffre: true },
+        },
+      ]);
+    });
+
+    it("met à jour le libellé d'un groupe existant", async () => {
+      const groupe = unGroupeServices({ libelle: 'Métier' });
+      await persistance.sauvegardeGroupeServices(groupe);
+
+      await persistance.sauvegardeGroupeServices({
+        ...groupe,
+        libelle: 'Support',
+      });
+
+      const lignes = await trx.table('groupes_services').select();
+      expect(lignes).toHaveLength(1);
+      expect(lignes[0].donnees.coffreFort).toEqual({ libelle: 'Support' });
+    });
+  });
+
+  describe("sur demande de lecture des groupes de services d'un utilisateur", () => {
+    it('retourne uniquement ses groupes, déchiffrés', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const sonGroupe = unGroupeServices({ idUtilisateur });
+      await persistance.sauvegardeGroupeServices(sonGroupe);
+      await persistance.sauvegardeGroupeServices(unGroupeServices());
+
+      const groupes = await persistance.lisGroupesServicesDe(idUtilisateur);
+
+      expect(groupes).toEqual([sonGroupe]);
+    });
+  });
+
+  describe("sur demande de suppression d'un groupe de services", () => {
+    it('supprime uniquement le groupe concerné', async () => {
+      const aSupprimer = unGroupeServices();
+      const aConserver = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(aSupprimer);
+      await persistance.sauvegardeGroupeServices(aConserver);
+
+      await persistance.supprimeGroupeServices(aSupprimer.id);
+
+      const lignes = await trx.table('groupes_services').select('id');
+      expect(lignes).toEqual([{ id: aConserver.id }]);
     });
   });
 });
