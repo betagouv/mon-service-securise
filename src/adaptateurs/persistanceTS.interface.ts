@@ -19,6 +19,7 @@ export interface PersistanceTS {
   lisSuperviseur: (
     idUtilisateur: UUID
   ) => Promise<DonneesSuperviseur | undefined>;
+  estSuperviseur: (idUtilisateur: UUID) => Promise<boolean>;
   sauvegardeSuperviseur: (donnees: DonneesSuperviseur) => Promise<void>;
   lisSuperviseursOrganisation: (
     siret: string

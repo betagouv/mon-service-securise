@@ -267,6 +267,33 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe('sur demande de savoir si un utilisateur est superviseur', () => {
+    const superviseUneEntite = async (idSuperviseur: string) => {
+      await trx.table('superviseurs').insert({
+        id_superviseur: idSuperviseur,
+        siret_hash: chiffrement.hacheSha256('siret'),
+        donnees: await chiffrement.chiffre({ nom: 'nom', siret: 'siret' }),
+      });
+    };
+
+    it("répond non s'il ne supervise aucune entité", async () => {
+      await superviseUneEntite(unUUIDRandom());
+
+      const estSuperviseur = await persistance.estSuperviseur(unUUIDRandom());
+
+      expect(estSuperviseur).toBe(false);
+    });
+
+    it("répond oui s'il supervise au moins une entité", async () => {
+      const idSuperviseur = unUUIDRandom();
+      await superviseUneEntite(idSuperviseur);
+
+      const estSuperviseur = await persistance.estSuperviseur(idSuperviseur);
+
+      expect(estSuperviseur).toBe(true);
+    });
+  });
+
   describe("sur demande de suppression d'un superviseur", () => {
     it('supprime toutes les lignes du superviseur', async () => {
       const idSuperviseur = unUUIDRandom();

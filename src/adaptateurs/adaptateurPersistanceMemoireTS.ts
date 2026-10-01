@@ -75,6 +75,12 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     );
   }
 
+  async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
+    return this.donnees.superviseurs.some(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
+  }
+
   async sauvegardeSuperviseur(donnees: DonneesSuperviseur): Promise<void> {
     this.donnees.superviseurs = this.donnees.superviseurs.filter(
       (s) => s.idUtilisateur !== donnees.idUtilisateur
