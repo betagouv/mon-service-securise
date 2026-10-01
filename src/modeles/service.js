@@ -167,6 +167,13 @@ class Service {
     };
   }
 
+  tauxCompletudeMesures() {
+    const { nombreTotalMesures, nombreMesuresCompletes } =
+      this.mesures.completude();
+
+    return nombreMesuresCompletes / nombreTotalMesures;
+  }
+
   contributeurParId(idUtilisateur) {
     return this.contributeurs.find((c) => c.idUtilisateur === idUtilisateur);
   }
