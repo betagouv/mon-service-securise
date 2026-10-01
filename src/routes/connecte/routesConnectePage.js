@@ -98,6 +98,19 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/profil/groupes',
+    middleware.verificationAcceptationCGU,
+    async (_requete, reponse) => {
+      if (!adaptateurEnvironnement.featureFlag().avecGroupesServices()) {
+        reponse.status(404).render('404');
+        return;
+      }
+
+      reponse.render('profilGroupesServices');
+    }
+  );
+
+  routes.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
