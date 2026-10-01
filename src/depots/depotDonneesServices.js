@@ -86,6 +86,11 @@ const fabriquePersistance = (
     return new Service(serviceEnClair, referentielAUtiliser);
   };
 
+  const indexeParHash = (sirets) =>
+    new Map(
+      sirets.map((siret) => [adaptateurChiffrement.hacheSha256(siret), siret])
+    );
+
   const persistance = {
     lis: {
       un: async (idService) => {
@@ -95,12 +100,7 @@ const fabriquePersistance = (
         return mappeDonneesVersDomaine(s);
       },
       ceuxAvecSirets: async (sirets) => {
-        const siretParHash = new Map(
-          sirets.map((siret) => [
-            adaptateurChiffrement.hacheSha256(siret),
-            siret,
-          ])
-        );
+        const siretParHash = indexeParHash(sirets);
 
         const parSiret = new Map(sirets.map((siret) => [siret, []]));
         if (sirets.length === 0) return parSiret;
@@ -124,6 +124,27 @@ const fabriquePersistance = (
       },
       ceuxAvecSiret: async (siret) =>
         (await persistance.lis.ceuxAvecSirets([siret])).get(siret),
+      denombrementsParSiret: async (sirets) => {
+        const parSiret = new Map(
+          sirets.map((siret) => [
+            siret,
+            { nombreServices: 0, nombreUtilisateurs: 0 },
+          ])
+        );
+        if (sirets.length === 0) return parSiret;
+
+        const siretParHash = indexeParHash(sirets);
+        const denombrements =
+          await adaptateurPersistance.denombreServicesEtUtilisateursParSiret([
+            ...siretParHash.keys(),
+          ]);
+
+        denombrements.forEach(({ siretHash, ...denombrement }) => {
+          parSiret.set(siretParHash.get(siretHash), denombrement);
+        });
+
+        return parSiret;
+      },
       ceuxDeUtilisateur: async (idUtilisateur) => {
         const donnees = await adaptateurPersistance.servicesComplets({
           idUtilisateur,
@@ -352,6 +373,9 @@ const creeDepot = (config = {}) => {
   const tousLesServicesAvecSiret = (siret) => p.lis.ceuxAvecSiret(siret);
 
   const tousLesServicesAvecSirets = (sirets) => p.lis.ceuxAvecSirets(sirets);
+
+  const denombreServicesEtUtilisateursParSiret = (sirets) =>
+    p.lis.denombrementsParSiret(sirets);
 
   const enregistreDossier = (idService, dossier) =>
     ajouteAItemsDuService('dossiers', idService, dossier);
@@ -835,6 +859,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueSpecifiqueAService,
     ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
+    denombreServicesEtUtilisateursParSiret,
     dupliqueService,
     enregistreDossier,
     finaliseDossierCourant,

@@ -2516,6 +2516,108 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
+  describe('sur demande de dénombrement des services et utilisateurs de plusieurs SIRET', () => {
+    let depot;
+
+    beforeEach(() => {
+      const referentiel = creeReferentielVide();
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S2')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S3')
+            .avecOrganisationResponsable({ siret: 'SIRET-B' }).donnees
+        )
+        .construis();
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+      });
+    });
+
+    it('compte les services de chaque SIRET', async () => {
+      const parSiret = await depot.denombreServicesEtUtilisateursParSiret([
+        'SIRET-A',
+        'SIRET-B',
+      ]);
+
+      expect(parSiret.get('SIRET-A').nombreServices).to.be(2);
+      expect(parSiret.get('SIRET-B').nombreServices).to.be(1);
+    });
+
+    it('compte une seule fois un utilisateur ayant accès à plusieurs services du SIRET', async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService(
+          unService(creeReferentielVide())
+            .avecId('S1')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUnService(
+          unService(creeReferentielVide())
+            .avecId('S2')
+            .avecOrganisationResponsable({ siret: 'SIRET-A' }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('proprietaire', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('proprietaire', 'S2').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('contributeur', 'S2').donnees
+        )
+        .construis();
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+      });
+
+      const parSiret = await depot.denombreServicesEtUtilisateursParSiret([
+        'SIRET-A',
+      ]);
+
+      expect(parSiret.get('SIRET-A').nombreUtilisateurs).to.be(2);
+    });
+
+    it('associe un dénombrement nul à un SIRET sans service', async () => {
+      const parSiret = await depot.denombreServicesEtUtilisateursParSiret([
+        'SIRET-INCONNU',
+      ]);
+
+      expect(parSiret.get('SIRET-INCONNU')).to.eql({
+        nombreServices: 0,
+        nombreUtilisateurs: 0,
+      });
+    });
+
+    it('ne lit pas la persistance si aucun SIRET est demandé', async () => {
+      let persistanceLue = false;
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance: {
+          denombreServicesEtUtilisateursParSiret: async () => {
+            persistanceLue = true;
+            return [];
+          },
+        },
+      });
+
+      const parSiret = await depot.denombreServicesEtUtilisateursParSiret([]);
+
+      expect(persistanceLue).to.be(false);
+      expect(parSiret.size).to.be(0);
+    });
+  });
+
   describe("sur demande d'ajout de mesure spécifique", () => {
     let depot;
     let adaptateurPersistance;
