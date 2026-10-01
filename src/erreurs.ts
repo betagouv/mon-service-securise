@@ -35,6 +35,8 @@ class ErreurAutorisationExisteDeja extends ErreurModele {}
 class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
+class ErreurGroupeServicesDejaExistant extends ErreurModele {}
+class ErreurGroupeServicesInexistant extends ErreurModele {}
 class ErreurCleApiInexistante extends ErreurModele {}
 class ErreurLibelleGroupeServicesInvalide extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
@@ -162,6 +164,8 @@ export {
   ErreurEcheanceMesureInvalide,
   ErreurEntiteNonAdministre,
   ErreurEmailManquant,
+  ErreurGroupeServicesDejaExistant,
+  ErreurGroupeServicesInexistant,
   ErreurHashDeSelInvalide,
   ErreurIdentifiantNotificationTransactionnelleInconnu,
   ErreurIdentifiantNouveauteInconnu,
