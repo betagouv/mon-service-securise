@@ -100,13 +100,17 @@ const routesConnectePage = ({
   routes.get(
     '/profil/groupes',
     middleware.verificationAcceptationCGU,
-    async (_requete, reponse) => {
+    async (requete, reponse) => {
       if (!adaptateurEnvironnement.featureFlag().avecGroupesServices()) {
         reponse.status(404).render('404');
         return;
       }
 
-      reponse.render('profilGroupes');
+      const groupes = await depotDonnees.lisGroupesDe(
+        requete.idUtilisateurCourant
+      );
+
+      reponse.render('profilGroupes', { groupes });
     }
   );
 

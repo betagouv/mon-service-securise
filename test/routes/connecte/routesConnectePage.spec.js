@@ -310,6 +310,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       expect(reponse.text).to.contain('/statique/composants-svelte/groupes.js');
     });
 
+    it("partage les groupes de l'utilisateur courant avec la page", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      const groupe = await testeur.depotDonnees().nouveauGroupe('U1', 'Métier');
+      await testeur.depotDonnees().nouveauGroupe('U2', 'Support');
+
+      const reponse = await testeur.get('/profil/groupes');
+
+      const { groupes } = donneesPartagees(reponse.text, 'donnees-groupes');
+      expect(groupes).to.eql([{ id: groupe.donnees().id, libelle: 'Métier' }]);
+    });
+
     it('répond 404 si le feature flag est désactivé', async () => {
       testeur.adaptateurEnvironnement().featureFlag = () => ({
         avecGroupesServices: () => false,

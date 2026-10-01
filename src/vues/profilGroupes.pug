@@ -5,6 +5,9 @@ block title
 
 block append scripts
   +composantSvelte('groupes.js')
+  +donneesPartagees('donnees-groupes', { groupes })
 
 block main
   #conteneur-groupes
+
+  +moduleAvecVersion('/statique/groupes.mjs')

@@ -1,6 +1,20 @@
 import Groupes from './Groupes.svelte';
-import { mount } from 'svelte';
+import type { GroupesProps } from './groupes.d';
+import { mount, unmount } from 'svelte';
 
-mount(Groupes, {
-  target: document.getElementById('conteneur-groupes')!,
-});
+document.body.addEventListener(
+  'svelte-recharge-groupes',
+  async (e: CustomEvent<GroupesProps>) => await rechargeApp({ ...e.detail })
+);
+
+let app: Groupes;
+const rechargeApp = async (props: GroupesProps) => {
+  if (app) await unmount(app);
+
+  app = mount(Groupes, {
+    target: document.getElementById('conteneur-groupes')!,
+    props,
+  });
+};
+
+export default app!;
