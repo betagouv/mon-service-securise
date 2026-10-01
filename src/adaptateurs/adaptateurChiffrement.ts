@@ -25,6 +25,14 @@ const adaptateurChiffrement = ({
   const hacheSha256SansSel = (chaine: string) =>
     hacheSha256AvecUnSeulSel(chaine, '');
 
+  let selsDeHachageDejaLus: { sel: string; version: number }[] | undefined;
+  const selsDeHachage = () => {
+    selsDeHachageDejaLus ??= adaptateurEnvironnement
+      .chiffrement()
+      .tousLesSelsDeHachage();
+    return selsDeHachageDejaLus;
+  };
+
   return {
     chiffre: async (chaineOuObjet: Stringifiable) =>
       chaineOuObjet as DonneesChiffrees,
@@ -38,9 +46,7 @@ const adaptateurChiffrement = ({
     compareBCrypt: bcrypt.compare,
 
     hacheSha256: (chaineEnClair: string) => {
-      const tousLesSelsDeHachage = adaptateurEnvironnement
-        .chiffrement()
-        .tousLesSelsDeHachage();
+      const tousLesSelsDeHachage = selsDeHachage();
 
       const hashFinal = tousLesSelsDeHachage.reduce(
         (acc, { sel }) => hacheSha256AvecUnSeulSel(acc, sel),
