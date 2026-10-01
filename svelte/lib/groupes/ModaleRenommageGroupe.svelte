@@ -50,12 +50,15 @@
   id="modale-renommage-groupe"
   has-footer
   opened={groupe !== null}
-  title="Renommer le groupe"
+  title="Renommer le groupe «&nbsp;{groupe?.libelle}&nbsp;»"
   onclose={ferme}
 >
+  <p>
+    Vous pouvez renommer ce groupe sans modifier les services qu’il contient.
+  </p>
   <dsfr-input
     id="libelle-groupe-renomme"
-    label="Libellé"
+    label="Nom du groupe"
     value={libelle}
     onvaluechanged={(e: CustomEvent<string>) => (libelle = e.detail)}
     maxlength="200"
@@ -73,7 +76,7 @@
     ></dsfr-button>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
-      label="Renommer"
+      label="Enregistrer"
       kind="primary"
       size="md"
       type="button"
@@ -84,6 +87,13 @@
 </dsfr-modal>
 
 <style lang="scss">
+  p {
+    color: #161616;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0 0 24px;
+  }
+
   .conteneur-actions-modale {
     display: flex;
     justify-content: flex-end;
