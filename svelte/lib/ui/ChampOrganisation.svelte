@@ -60,7 +60,7 @@
         6,
         9
       )} ${siret.substring(9, 14)}`;
-    return `(${organisation.departement}) ${organisation.nom} - ${siretFormatte}`;
+    return `${organisation.departement && organisation.nom ? `(${organisation.departement}) ${organisation.nom} - ` : ''}${siretFormatte}`;
   };
 
   const uneSuggestion = (organisation: Organisation): OrganisationAvecLabel => {
