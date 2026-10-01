@@ -71,7 +71,7 @@ class DescriptionService extends InformationsService {
     });
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
     DescriptionService.valide(donnees, referentiel);
-    this.renseigneProprietes(donnees);
+    this.renseigneProprietes(donnees, referentiel);
 
     this.referentiel = referentiel;
   }

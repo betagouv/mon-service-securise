@@ -1,6 +1,7 @@
 import InformationsService from '../../src/modeles/informationsService.js';
 import Hebergement from '../../src/modeles/partiesPrenantes/hebergement.js';
 import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
 
 describe("L'ensemble des rôles et responsabilités", () => {
   it('connaît ses constituants', () => {
@@ -59,6 +60,17 @@ describe("L'ensemble des rôles et responsabilités", () => {
       acteursHomologation: [{ role: 'DSI', nom: 'John', fonction: 'Maire' }],
       partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
+  });
+
+  it('transmet son référentiel à ses listes, plutôt que de leur en créer un chacune', () => {
+    const referentiel = creeReferentielVide();
+
+    const rolesResponsabilites = new RolesResponsabilites({}, referentiel);
+
+    expect(rolesResponsabilites.acteursHomologation.referentiel).toBe(
+      referentiel
+    );
+    expect(rolesResponsabilites.partiesPrenantes.referentiel).toBe(referentiel);
   });
 
   it('présente les informations relatives au ou à la déléguée à la protection des données', () => {

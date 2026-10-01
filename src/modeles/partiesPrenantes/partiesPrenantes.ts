@@ -6,15 +6,19 @@ import PartiePrenante, { DonneesPartiePrenante } from './partiePrenante.js';
 import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
 import SecuriteService from './securiteService.js';
 import { fabriquePartiePrenante } from './fabriquePartiePrenante.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
 
 type DonneesPartiesPrenantes = {
   partiesPrenantes: Array<DonneesPartiePrenante & { type: string }>;
 };
 
 class PartiesPrenantes extends ElementsFabricables<PartiePrenante> {
-  constructor(donnees: Partial<DonneesPartiesPrenantes> = {}) {
+  constructor(
+    donnees: Partial<DonneesPartiesPrenantes> = {},
+    referentiel?: TousReferentiels
+  ) {
     const { partiesPrenantes = [] } = donnees;
-    super(fabriquePartiePrenante, { items: partiesPrenantes });
+    super(fabriquePartiePrenante, { items: partiesPrenantes }, referentiel);
   }
 
   type(Type: typeof PartiePrenante) {

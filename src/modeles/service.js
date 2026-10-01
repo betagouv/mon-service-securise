@@ -92,7 +92,10 @@ class Service {
       modelesDisponiblesDeMesureSpecifique
     );
 
-    this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
+    this.rolesResponsabilites = new RolesResponsabilites(
+      rolesResponsabilites,
+      referentiel
+    );
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
       referentiel

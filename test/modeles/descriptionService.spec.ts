@@ -62,6 +62,20 @@ describe('La description du service', () => {
     expect(descriptionService.niveauSecurite).toEqual('niveau1');
   });
 
+  it('transmet son référentiel à ses listes, plutôt que de leur en créer un chacune', () => {
+    const referentiel = creeReferentielVide();
+
+    const descriptionService = new DescriptionService({}, referentiel);
+
+    expect(descriptionService.donneesSensiblesSpecifiques.referentiel).toBe(
+      referentiel
+    );
+    expect(descriptionService.fonctionnalitesSpecifiques.referentiel).toBe(
+      referentiel
+    );
+    expect(descriptionService.pointsAcces.referentiel).toBe(referentiel);
+  });
+
   it('connaît ses propriétés obligatoires', () => {
     expect(DescriptionService.proprietesObligatoires()).toEqual([
       'delaiAvantImpactCritique',
