@@ -1,10 +1,10 @@
 <script lang="ts">
   import { untrack } from 'svelte';
-  import type { AxiosError } from 'axios';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
-  import { api } from './groupes.api';
-  import type { GroupesProps } from './groupes.d';
+  import { api, estUnLibelleDejaUtilise } from './groupes.api';
+  import type { Groupe, GroupesProps } from './groupes.d';
+  import ModaleRenommageGroupe from './ModaleRenommageGroupe.svelte';
 
   let { groupes: groupesInitiaux }: GroupesProps = $props();
 
@@ -12,14 +12,7 @@
   let nouveauLibelle = $state('');
   let erreurLibelle = $state('');
   let enCoursAjout = $state(false);
-
-  const estUnLibelleDejaUtilise = (e: unknown) => {
-    const { response } = e as AxiosError<{ erreur: { code: string } }>;
-    return (
-      response?.status === 422 &&
-      response.data?.erreur?.code === 'LIBELLE_GROUPE_DEJA_EXISTANT'
-    );
-  };
+  let groupeARenommer = $state<Groupe | null>(null);
 
   const ajouteGroupe = async () => {
     if (!nouveauLibelle.trim()) return;
@@ -42,6 +35,10 @@
     } finally {
       enCoursAjout = false;
     }
+  };
+
+  const remplaceGroupe = (renommee: Groupe) => {
+    groupes = groupes.map((c) => (c.id === renommee.id ? renommee : c));
   };
 </script>
 
@@ -96,11 +93,29 @@
     >
       {#each groupes as groupe, i (groupe.id)}
         <div slot="cell:libelle:{i}">{groupe.libelle}</div>
-        <div slot="cell:actions:{i}" class="conteneur-actions"></div>
+        <div slot="cell:actions:{i}" class="conteneur-actions">
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            label="Renommer"
+            kind="secondary"
+            size="sm"
+            has-icon
+            icon="edit-line"
+            icon-place="left"
+            type="button"
+            onclick={() => (groupeARenommer = groupe)}
+          ></dsfr-button>
+        </div>
       {/each}
     </dsfr-table>
   </div>
 {/if}
+
+<ModaleRenommageGroupe
+  groupe={groupeARenommer}
+  onRenommee={remplaceGroupe}
+  onFerme={() => (groupeARenommer = null)}
+/>
 
 <Toaster />
 
