@@ -1,8 +1,8 @@
 import ItemsAvecDescription from './itemsAvecDescription.js';
 
 class DonneesSensiblesSpecifiques extends ItemsAvecDescription {
-  constructor(donnees) {
-    super({ items: donnees.donneesSensiblesSpecifiques });
+  constructor(donnees, referentiel) {
+    super({ items: donnees.donneesSensiblesSpecifiques }, referentiel);
   }
 }
 

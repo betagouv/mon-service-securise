@@ -3,6 +3,7 @@ import { DonneesActeurHomologation } from './acteurHomologation.js';
 import InformationsService from './informationsService.js';
 import PartiesPrenantes from './partiesPrenantes/partiesPrenantes.js';
 import { DonneesPartiePrenante } from './partiesPrenantes/partiePrenante.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 export type DonneesRolesResponsabilites = {
   autoriteHomologation: string;
@@ -42,7 +43,8 @@ class RolesResponsabilites extends InformationsService {
   readonly partiesPrenantes!: PartiesPrenantes;
 
   constructor(
-    donneesRolesResponsabilites: Partial<DonneesRolesResponsabilites> = {}
+    donneesRolesResponsabilites: Partial<DonneesRolesResponsabilites> = {},
+    referentiel?: TousReferentiels
   ) {
     super({
       proprietesAtomiquesRequises: [
@@ -61,7 +63,7 @@ class RolesResponsabilites extends InformationsService {
       },
     });
 
-    this.renseigneProprietes(donneesRolesResponsabilites);
+    this.renseigneProprietes(donneesRolesResponsabilites, referentiel);
   }
 
   descriptionDelegueProtectionDonnees() {

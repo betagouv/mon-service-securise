@@ -352,6 +352,17 @@ describe('Un service', () => {
     expect(service.structureDeveloppement()).toEqual('Une structure');
   });
 
+  it('transmet son référentiel à ses rôles et responsabilités', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+
+    const service = new Service({ id: '123' }, referentiel);
+
+    const { acteursHomologation, partiesPrenantes } =
+      service.rolesResponsabilites;
+    expect(acteursHomologation.referentiel).toBe(referentiel);
+    expect(partiesPrenantes.referentiel).toBe(referentiel);
+  });
+
   it('connaît ses dossiers', () => {
     const referentiel = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },
