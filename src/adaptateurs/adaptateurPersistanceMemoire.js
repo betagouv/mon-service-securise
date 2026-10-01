@@ -173,6 +173,26 @@ const nouvelAdaptateur = (
     });
   };
 
+  const denombreServicesEtUtilisateursParSiret = async (hashSirets) =>
+    hashSirets
+      .map((siretHash) => {
+        const idsServices = donnees.services
+          .filter((s) => s.siretHash === siretHash)
+          .map((s) => s.id);
+        const idsUtilisateurs = new Set(
+          donnees.autorisations
+            .filter((a) => idsServices.includes(a.idService))
+            .map((a) => a.idUtilisateur)
+        );
+
+        return {
+          siretHash,
+          nombreServices: idsServices.length,
+          nombreUtilisateurs: idsUtilisateurs.size,
+        };
+      })
+      .filter(({ nombreServices: nombre }) => nombre > 0);
+
   const nombreServices = async (idUtilisateur) => {
     const as = await autorisations(idUtilisateur);
     return as.length;
@@ -797,6 +817,7 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     contributeursDesServicesDe,
+    denombreServicesEtUtilisateursParSiret,
     estJwtRevoque,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
