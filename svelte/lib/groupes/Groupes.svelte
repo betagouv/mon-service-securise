@@ -5,6 +5,7 @@
   import { api, estUnLibelleDejaUtilise } from './groupes.api';
   import type { Groupe, GroupesProps } from './groupes.d';
   import ModaleRenommageGroupe from './ModaleRenommageGroupe.svelte';
+  import ModaleSuppressionGroupe from './ModaleSuppressionGroupe.svelte';
 
   let { groupes: groupesInitiaux }: GroupesProps = $props();
 
@@ -13,6 +14,7 @@
   let erreurLibelle = $state('');
   let enCoursAjout = $state(false);
   let groupeARenommer = $state<Groupe | null>(null);
+  let groupeASupprimer = $state<Groupe | null>(null);
 
   const ajouteGroupe = async () => {
     if (!nouveauLibelle.trim()) return;
@@ -39,6 +41,10 @@
 
   const remplaceGroupe = (renommee: Groupe) => {
     groupes = groupes.map((c) => (c.id === renommee.id ? renommee : c));
+  };
+
+  const retireGroupe = (idSupprimee: string) => {
+    groupes = groupes.filter((c) => c.id !== idSupprimee);
   };
 </script>
 
@@ -105,6 +111,17 @@
             type="button"
             onclick={() => (groupeARenommer = groupe)}
           ></dsfr-button>
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+          <dsfr-button
+            label="Supprimer"
+            kind="tertiary"
+            size="sm"
+            has-icon
+            icon="delete-line"
+            icon-place="left"
+            type="button"
+            onclick={() => (groupeASupprimer = groupe)}
+          ></dsfr-button>
         </div>
       {/each}
     </dsfr-table>
@@ -115,6 +132,12 @@
   groupe={groupeARenommer}
   onRenommee={remplaceGroupe}
   onFerme={() => (groupeARenommer = null)}
+/>
+
+<ModaleSuppressionGroupe
+  groupe={groupeASupprimer}
+  onSupprimee={retireGroupe}
+  onFerme={() => (groupeASupprimer = null)}
 />
 
 <Toaster />
