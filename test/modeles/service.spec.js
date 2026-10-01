@@ -298,6 +298,27 @@ describe('Un service', () => {
     });
   });
 
+  it('sait donner le taux de complétude de ses mesures', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { gouvernance: {} },
+      mesures: { mesureA: {} },
+      statutsMesures: { fait: {} },
+    });
+    const uneMesureCompleteSurQuatre = new Mesures(
+      { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+      referentiel,
+      {
+        mesureA: { categorie: 'gouvernance' },
+        mesureB: { categorie: 'gouvernance' },
+        mesureC: { categorie: 'gouvernance' },
+        mesureD: { categorie: 'gouvernance' },
+      }
+    );
+    const s = unService().avecMesures(uneMesureCompleteSurQuatre).construis();
+
+    expect(s.tauxCompletudeMesures()).toBe(0.25);
+  });
+
   it('sait décrire le type service', () => {
     const referentiel = Referentiel.creeReferentiel({
       typesService: {
