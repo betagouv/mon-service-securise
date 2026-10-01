@@ -6,6 +6,8 @@ export const api = {
     axios.post('/api/groupes-services', { libelle }),
   renommeGroupe: async (id: string, libelle: string) =>
     axios.put(`/api/groupes-services/${id}`, { libelle }),
+  supprimeGroupe: async (id: string) =>
+    axios.delete(`/api/groupes-services/${id}`),
 };
 
 export const estUnLibelleDejaUtilise = (e: unknown) => {
