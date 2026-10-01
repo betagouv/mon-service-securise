@@ -251,6 +251,12 @@ describe('Le référentiel', () => {
         idMesure: { attributModifiable: 'Une valeur de référence' },
       });
     });
+
+    it('ne retourne rien pour une mesure inconnue', () => {
+      const referentiel = Referentiel.creeReferentiel({ mesures: {} });
+
+      expect(referentiel.mesure('idInconnu')).to.be(undefined);
+    });
   });
 
   it('sait si une mesure est indispensable', () => {
