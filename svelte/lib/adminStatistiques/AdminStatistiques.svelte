@@ -20,6 +20,7 @@
   import type { StatutMesure } from '../modeles/modeleMesure';
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
+  import Loader from '../ui/Loader.svelte';
 
   interface Props {
     referentiel: ReferentielStatistiques;
@@ -30,12 +31,15 @@
 
   let statistiques: Statistiques | undefined = $state();
   let entites: Array<EntiteSupervisee> = $state([]);
+  let enCoursChargement = $state(false);
 
   const rafraichisStatistiques = async () => {
+    enCoursChargement = true;
     statistiques = await api.statistiques({
       filtreNiveauxSecurite,
       filtreEntites,
     });
+    enCoursChargement = false;
   };
 
   onMount(async () => {
@@ -178,9 +182,16 @@
 
   let filtreNiveauxSecurite = $state<IdNiveauDeSecurite[]>([]);
   let filtreEntites = $state<string[]>([]);
-  $effect(() => {
+
+  const filtreParNiveauxSecurite = (niveaux: IdNiveauDeSecurite[]) => {
+    filtreNiveauxSecurite = niveaux;
     if (!modeVisiteGuidee) rafraichisStatistiques();
-  });
+  };
+
+  const filtreParEntites = (sirets: string[]) => {
+    filtreEntites = sirets;
+    if (!modeVisiteGuidee) rafraichisStatistiques();
+  };
 </script>
 
 <div class="entete-statistiques">
@@ -221,7 +232,7 @@
       placeholder="Séléctionner un/des besoins"
       values={filtreNiveauxSecurite}
       onvaluechanged={(e: CustomEvent<IdNiveauDeSecurite[]>) =>
-        (filtreNiveauxSecurite = e.detail)}
+        filtreParNiveauxSecurite(e.detail)}
     ></lab-anssi-multi-select>
     <lab-anssi-multi-select
       label="Entités"
@@ -232,9 +243,15 @@
       }))}
       placeholder="Sélectionner une/des entités"
       values={filtreEntites}
-      onvaluechanged={(e: CustomEvent<string[]>) => (filtreEntites = e.detail)}
+      onvaluechanged={(e: CustomEvent<string[]>) => filtreParEntites(e.detail)}
     ></lab-anssi-multi-select>
   </div>
+{/if}
+{#if enCoursChargement}
+  <div class="conteneur-loader">
+    <Loader />
+  </div>
+{:else if statistiques}
   <div class="grille-graphiques">
     <div
       class="ligne-deux-items"
@@ -403,6 +420,14 @@
     lab-anssi-multi-select {
       width: fit-content;
     }
+  }
+
+  .conteneur-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    max-width: 1200px;
   }
 
   .grille-graphiques {

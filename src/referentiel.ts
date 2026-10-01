@@ -143,8 +143,10 @@ const creeReferentiel = (
   const mesures = () => structuredClone(donnees.mesures);
   const estIdentifiantMesureConnu = (id: IdMesure) =>
     Object.keys(donnees.mesures).includes(id);
-  const mesure = (id: IdMesure): DetailsMesureGeneraleV1 =>
-    structuredClone(donnees.mesures[id]);
+  const mesure = (id: IdMesure): DetailsMesureGeneraleV1 => {
+    const mesureDuReferentiel = donnees.mesures[id];
+    return mesureDuReferentiel && { ...mesureDuReferentiel };
+  };
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
