@@ -36,6 +36,7 @@ class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurCleApiInexistante extends ErreurModele {}
+class ErreurLibelleGroupeServicesInvalide extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
 class ErreurDecisionInvalide extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
@@ -167,6 +168,7 @@ export {
   ErreurIntituleRisqueManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
+  ErreurLibelleGroupeServicesInvalide,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
