@@ -23,6 +23,7 @@
     erreurLibelle = '';
     try {
       const { data } = await api.ajouteGroupe(nouveauLibelle);
+      toasterStore.succes('Succès', 'Le groupe a été créé.');
       groupes = [...groupes, data];
       nouveauLibelle = '';
     } catch (e) {
@@ -49,6 +50,11 @@
 </script>
 
 <h1>Mes groupes</h1>
+
+<p>
+  Organisez vos services en groupes pour faciliter leur classement et leur
+  gestion.
+</p>
 
 <dsfr-input
   id="nouveau-groupe"
@@ -77,8 +83,12 @@
 
 {#if groupes.length === 0}
   <div class="aucun-groupe">
-    <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
-    <p>Aucun groupe pour le moment.</p>
+    <img src="/statique/assets/images/illustration_dossiers.svg" alt="" />
+    <h2>Vous n’avez pas encore créé de groupe</h2>
+    <p>
+      Saisissez un nom ci-dessus puis cliquez sur « Créer le groupe ». Vous
+      pourrez ensuite y classer vos services depuis le tableau de bord.
+    </p>
   </div>
 {:else}
   <div class="conteneur-liste">
@@ -90,7 +100,7 @@
     </p>
     <dsfr-table
       columns={[
-        { key: 'libelle', label: 'Libellé' },
+        { key: 'libelle', label: 'Nom du groupe' },
         { key: 'actions', label: 'Actions' },
       ]}
       rows={groupes}
@@ -98,7 +108,12 @@
       multiline
     >
       {#each groupes as groupe, i (groupe.id)}
-        <div slot="cell:libelle:{i}">{groupe.libelle}</div>
+        <div slot="cell:libelle:{i}">
+          <span class="contenu-libelle"
+            ><lab-anssi-icone nom="folder-2-line" taille="sm"
+            ></lab-anssi-icone>{groupe.libelle}</span
+          >
+        </div>
         <div slot="cell:actions:{i}" class="conteneur-actions">
           <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <dsfr-button
@@ -159,6 +174,14 @@
     margin: 56px 0 32px;
   }
 
+  h1 + p {
+    color: #3a3a3a;
+    font-size: 1.25rem;
+    line-height: 2rem;
+    margin: 16px 0;
+    text-align: left;
+  }
+
   dsfr-button {
     white-space: nowrap;
   }
@@ -172,6 +195,11 @@
       font-size: 0.875rem;
       line-height: 1.5rem;
     }
+
+    .contenu-libelle {
+      display: flex;
+      gap: 4px;
+    }
   }
 
   .conteneur-actions {
@@ -181,23 +209,35 @@
   }
 
   .aucun-groupe {
-    padding: 36px 0;
+    padding: 48px 0 56px;
     display: flex;
-    gap: 8px;
     align-items: center;
     flex-direction: column;
     color: #161616;
+    border: 1px solid #ddd;
+    margin-top: 24px;
 
     img {
-      max-width: 128px;
-      transform: scaleX(-1);
+      width: 200px;
+    }
+
+    h2 {
+      color: #161616;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 2rem;
+      margin: 16px 0 0;
     }
 
     p {
       margin: 0;
-      font-size: 1.25rem;
-      line-height: 2rem;
-      font-weight: bold;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+      font-weight: 400;
+      text-align: center;
+      color: #3a3a3a;
+      width: 588px;
     }
   }
 </style>
