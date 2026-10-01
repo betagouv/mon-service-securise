@@ -36,5 +36,18 @@ describe("L'adaptateur chiffrement", () => {
         'v1-v2:cb932aca72319407a746bc174d548cdacb68985c5afa2a3405110cc7696663df'
       );
     });
+
+    it("ne lit les sels dans l'environnement qu'une seule fois, même pour plusieurs hachages", async () => {
+      const tousLesSelsDeHachage = vi.fn(() => [{ version: 1, sel: '' }]);
+      const adaptateurEnvironnement = {
+        chiffrement: () => ({ tousLesSelsDeHachage }),
+      };
+      const adaptateur = adaptateurChiffrement({ adaptateurEnvironnement });
+
+      adaptateur.hacheSha256('une-chaine');
+      adaptateur.hacheSha256('une-autre-chaine');
+
+      expect(tousLesSelsDeHachage).toHaveBeenCalledTimes(1);
+    });
   });
 });
