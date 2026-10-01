@@ -20,12 +20,7 @@ const referentiel = creeReferentielV2();
 
 const serviceAvecCompletude = (pourcentageCompletude: number) => {
   const serviceV2Plus80 = unServiceV2().construis();
-  serviceV2Plus80.completudeMesures = () => ({
-    nombreTotalMesures: 100,
-    nombreMesuresCompletes: pourcentageCompletude,
-    detailMesures: [],
-    indiceCyber: {},
-  });
+  serviceV2Plus80.tauxCompletudeMesures = () => pourcentageCompletude / 100;
   return serviceV2Plus80;
 };
 
