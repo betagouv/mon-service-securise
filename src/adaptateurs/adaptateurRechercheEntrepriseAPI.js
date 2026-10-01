@@ -23,17 +23,18 @@ const extraisDepartement = (commune) => {
     : commune.slice(0, 2);
 };
 
+const estUnSiret = (terme) => terme.match('^[0-9 ]+$');
+const estUnSiretComplet = (terme) => terme.match(/^\d{14}$/);
+
 const extraisInfosEtablissement = (terme, resultat) => {
   let nom = resultat.nom_complet;
   let { departement, siret } = resultat.siege;
-
-  const estUneRechercheParSiret = terme.match('^[0-9 ]+$');
 
   const aUnEtablissement =
     resultat.matching_etablissements &&
     resultat.matching_etablissements.length > 0;
 
-  if (estUneRechercheParSiret && aUnEtablissement) {
+  if (estUnSiret(terme) && aUnEtablissement) {
     const aUneListeEnseigne =
       resultat.matching_etablissements[0].liste_enseignes &&
       resultat.matching_etablissements[0].liste_enseignes.length > 0;
@@ -84,7 +85,7 @@ const rechercheOrganisations = async (
       'Statut HTTP': e.response?.status,
     });
 
-    return [];
+    return estUnSiretComplet(terme) ? [{ siret: terme }] : [];
   }
 };
 

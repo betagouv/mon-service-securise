@@ -184,6 +184,33 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
       });
     });
 
+    describe("si l'API ne répond pas", () => {
+      const fauxAxios = {
+        get: async () => {
+          throw new Error('API indisponible');
+        },
+      };
+
+      it('retourne le siret demandé', async () => {
+        const resultat = await rechercheOrganisations(
+          '13000766900019',
+          '75',
+          fauxAxios
+        );
+
+        expect(resultat.length).to.be(1);
+        expect(resultat[0].nom).to.be(undefined);
+        expect(resultat[0].siret).to.eql('13000766900019');
+        expect(resultat[0].departement).to.be(undefined);
+      });
+
+      it("ne retourne rien si le terme n'est pas un SIRET complet", async () => {
+        const resultat = await rechercheOrganisations('1234', '75', fauxAxios);
+
+        expect(resultat.length).to.be(0);
+      });
+    });
+
     it("retourne les informations du siège s'il n'y a pas de matching établissement", async () => {
       const reponseAPI = {
         nom_complet: 'NOM SIEGE',
