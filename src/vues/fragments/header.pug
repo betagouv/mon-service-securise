@@ -70,15 +70,15 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     const itemsMenu = fluide ? contenuFluide : contenuMenuPagePublique;
 
     const liensMonEspace = [
-      { label: "Mon tableau de bord", href: "/tableauDeBord" },
-      { label: "Mettre à jour mon profil", href: "/profil" },
-      { label: "Préférences", href: "/preferences" },
+      { label: "Mon tableau de bord", href: "/tableauDeBord", icon: "layout-line" },
+      { label: "Mon profil", href: "/profil", icon: "account-circle-line" },
+      { label: "Mes préférences", href: "/preferences", icon: "notification-3-line" },
     ];
     if (featureFlags.avecCreationCleApi) {
-      liensMonEspace.push({ label: "Clés d'API", href: "/profil/cle-api" });
+      liensMonEspace.push({ label: "Mes clés d'API", href: "/profil/cle-api", icon: "lock-line" });
     }
     if (featureFlags.avecGroupesServices) {
-      liensMonEspace.push({ label: "Groupes", href: "/profil/groupes" });
+      liensMonEspace.push({ label: "Mes groupes", href: "/profil/groupes", icon: "folder-2-line" });
     }
 
   dsfr-header(
