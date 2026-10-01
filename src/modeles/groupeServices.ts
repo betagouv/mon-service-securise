@@ -37,4 +37,9 @@ export class GroupeServices {
   donnees(): DonneesGroupeServices {
     return this.donneesGroupe;
   }
+
+  toJSON() {
+    const { id, libelle } = this.donneesGroupe;
+    return { id, libelle };
+  }
 }

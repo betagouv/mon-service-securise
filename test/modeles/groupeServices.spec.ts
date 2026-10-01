@@ -62,4 +62,14 @@ describe('Un groupe de services', () => {
 
     expect(groupe.donnees()).toEqual(donnees);
   });
+
+  it("se sérialise en JSON avec son identifiant et son libellé, sans l'identifiant de l'utilisateur", () => {
+    const groupe = GroupeServices.hydrate({
+      id: unUUID('C'),
+      idUtilisateur: unUUID('U'),
+      libelle: 'Métier',
+    });
+
+    expect(groupe.toJSON()).toEqual({ id: unUUID('C'), libelle: 'Métier' });
+  });
 });
