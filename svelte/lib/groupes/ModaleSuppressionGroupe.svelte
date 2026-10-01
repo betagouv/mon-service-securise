@@ -37,14 +37,13 @@
   id="modale-suppression-groupe"
   has-footer
   opened={groupe !== null}
-  title="Confirmation requise"
+  title="Êtes-vous sûr·e de vouloir supprimer le groupe «&nbsp;{groupe?.libelle}&nbsp;»&nbsp;?"
   onclose={onFerme}
 >
   <div>
-    <dsfr-alert size="sm" type="warning" text="Cette action est irréversible."
-    ></dsfr-alert>
-    <p class="texte-modale">
-      Voulez-vous vraiment supprimer le groupe « {groupe?.libelle} » ?
+    <p>
+      Les services qui ne sont classés dans aucun autre groupe seront
+      automatiquement déplacés dans «&nbsp;Sans groupe&nbsp;».
     </p>
   </div>
   <div slot="footer" class="conteneur-actions-modale">
@@ -58,7 +57,7 @@
     ></dsfr-button>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
-      label="Supprimer"
+      label="Supprimer le groupe"
       kind="primary"
       size="md"
       type="button"
@@ -69,10 +68,11 @@
 </dsfr-modal>
 
 <style lang="scss">
-  .texte-modale {
+  p {
+    color: #161616;
     font-size: 1rem;
     line-height: 1.5rem;
-    margin-top: 16px;
+    margin: 0;
   }
 
   .conteneur-actions-modale {
