@@ -475,6 +475,9 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       avecGestionDesOrganisations: adaptateurEnvironnement
         .featureFlag()
         .avecGestionDesOrganisations(),
+      avecGroupesServices: adaptateurEnvironnement
+        .featureFlag()
+        .avecGroupesServices(),
     };
     suite();
   };
