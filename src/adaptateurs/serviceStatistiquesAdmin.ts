@@ -93,8 +93,7 @@ export class ServiceStatistiquesAdmin {
     );
   }
 
-  private static indiceCyberMoyen(services: Service[]) {
-    const indicesCyber = services.map((s) => s.indiceCyber().total);
+  private static indiceCyberMoyen(indicesCyber: Array<number>) {
     if (!indicesCyber.length) return 0;
 
     return indicesCyber.reduce((acc, i) => acc + i, 0) / indicesCyber.length;
@@ -109,14 +108,14 @@ export class ServiceStatistiquesAdmin {
   }
 
   private static servicesParTrancheIndiceCyber(
-    services: Array<Service>
+    indicesCyber: Array<number>
   ): Record<TrancheIndiceCyber, number> {
     const tranchesVides = Object.fromEntries(
       TRANCHES_INDICE_CYBER.map((tranche) => [tranche, 0])
     ) as Record<TrancheIndiceCyber, number>;
 
-    return services.reduce((repartition, s) => {
-      const tranche = ServiceStatistiquesAdmin.trancheDe(s.indiceCyber().total);
+    return indicesCyber.reduce((repartition, indiceCyber) => {
+      const tranche = ServiceStatistiquesAdmin.trancheDe(indiceCyber);
       // eslint-disable-next-line no-param-reassign
       repartition[tranche] += 1;
       return repartition;
@@ -131,14 +130,10 @@ export class ServiceStatistiquesAdmin {
     ).length;
   }
 
-  private static nombreServicesCompletudeSuperieur80(services: Service[]) {
-    return services.filter((s) => {
-      const completude = s.completudeMesures();
-
-      return (
-        completude.nombreMesuresCompletes / completude.nombreTotalMesures > 0.8
-      );
-    }).length;
+  private static nombreServicesCompletudeSuperieur80(
+    tauxDeCompletude: Array<number>
+  ) {
+    return tauxDeCompletude.filter((taux) => taux > 0.8).length;
   }
 
   private static clesMois(debut: Date, fin: Date): CleMoisAnnee[] {
@@ -225,30 +220,24 @@ export class ServiceStatistiquesAdmin {
       }, tranchesVides);
   }
 
-  private static trancheCompletudeMesures(completudeMesure: {
-    nombreTotalMesures: number;
-    nombreMesuresCompletes: number;
-  }): TrancheCompletudeMesures {
-    const pourcentage =
-      completudeMesure.nombreMesuresCompletes /
-      completudeMesure.nombreTotalMesures;
-    if (pourcentage < 0.25) return '< 25%';
-    if (pourcentage < 0.5) return '< 50%';
-    if (pourcentage < 0.75) return '< 75%';
+  private static trancheCompletudeMesures(
+    tauxCompletude: number
+  ): TrancheCompletudeMesures {
+    if (tauxCompletude < 0.25) return '< 25%';
+    if (tauxCompletude < 0.5) return '< 50%';
+    if (tauxCompletude < 0.75) return '< 75%';
     return '≤ 100%';
   }
 
   private static servicesParTrancheCompletudeMesures(
-    services: Array<Service>
+    tauxDeCompletude: Array<number>
   ): Record<TrancheCompletudeMesures, number> {
     const tranchesVides = Object.fromEntries(
       TRANCHES_COMPLETUDE_MESURES.map((tranche) => [tranche, 0])
     ) as Record<TrancheCompletudeMesures, number>;
 
-    return services.reduce((repartition, s) => {
-      const tranche = ServiceStatistiquesAdmin.trancheCompletudeMesures(
-        s.completudeMesures()
-      );
+    return tauxDeCompletude.reduce((repartition, taux) => {
+      const tranche = ServiceStatistiquesAdmin.trancheCompletudeMesures(taux);
       // eslint-disable-next-line no-param-reassign
       repartition[tranche] += 1;
       return repartition;
@@ -362,6 +351,10 @@ export class ServiceStatistiquesAdmin {
 
   async statistiques(services: Array<Service>, filtres: FiltresStatistiques) {
     const servicesFiltres = ServiceStatistiquesAdmin.filtre(services, filtres);
+    const indicesCyber = servicesFiltres.map((s) => s.indiceCyber().total);
+    const tauxDeCompletude = servicesFiltres.map((s) =>
+      s.tauxCompletudeMesures()
+    );
 
     return {
       servicesParType:
@@ -372,10 +365,9 @@ export class ServiceStatistiquesAdmin {
         await this.evolutionNombreServices(servicesFiltres),
       evolutionNombreOrganisations:
         await this.evolutionNombreOrganisations(servicesFiltres),
-      indiceCyberMoyen:
-        ServiceStatistiquesAdmin.indiceCyberMoyen(servicesFiltres),
+      indiceCyberMoyen: ServiceStatistiquesAdmin.indiceCyberMoyen(indicesCyber),
       servicesParTrancheIndiceCyber:
-        ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(servicesFiltres),
+        ServiceStatistiquesAdmin.servicesParTrancheIndiceCyber(indicesCyber),
       nombreServicesHomologues:
         ServiceStatistiquesAdmin.nombreServicesHomologues(servicesFiltres),
       evolutionNombreHomologations:
@@ -386,11 +378,11 @@ export class ServiceStatistiquesAdmin {
         ),
       nombreServicesCompletudeSuperieur80:
         ServiceStatistiquesAdmin.nombreServicesCompletudeSuperieur80(
-          servicesFiltres
+          tauxDeCompletude
         ),
       servicesParTrancheCompletudeMesures:
         ServiceStatistiquesAdmin.servicesParTrancheCompletudeMesures(
-          servicesFiltres
+          tauxDeCompletude
         ),
       nombreMesuresParStatutEtCategorie:
         this.nombreMesuresParStatutEtCategorie(servicesFiltres),
