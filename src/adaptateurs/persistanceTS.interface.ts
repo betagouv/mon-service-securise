@@ -4,6 +4,7 @@ import { UUID } from '../typesBasiques.js';
 import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTransactionnelles/notificationTransactionnelle.js';
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
+import { DonneesGroupeServices } from '../modeles/groupeServices.js';
 
 export interface PersistanceTS {
   lisAdminOrganisations: (
@@ -43,4 +44,9 @@ export interface PersistanceTS {
     empreinte: string
   ) => Promise<DonneesCleApi | undefined>;
   sauvegardeCleApi: (donnees: DonneesCleApi) => Promise<void>;
+  lisGroupesServicesDe: (
+    idUtilisateur: UUID
+  ) => Promise<DonneesGroupeServices[]>;
+  sauvegardeGroupeServices: (donnees: DonneesGroupeServices) => Promise<void>;
+  supprimeGroupeServices: (idGroupe: UUID) => Promise<void>;
 }

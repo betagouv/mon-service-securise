@@ -9,12 +9,14 @@ import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
+import { DonneesGroupeServices } from '../modeles/groupeServices.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
   SUPERVISEURS = 'superviseurs',
   NOTIFICATIONS_TRANSACTIONNELLES = 'notifications_transactionnelles',
   CLES_API = 'cles_api',
+  GROUPES_SERVICES = 'groupes_services',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -371,5 +373,39 @@ export class AdaptateurPostgresTS implements PersistanceTS {
       })
       .onConflict('id')
       .merge();
+  }
+
+  async lisGroupesServicesDe(
+    idUtilisateur: UUID
+  ): Promise<DonneesGroupeServices[]> {
+    const lignes = await this.knex(TABLES.GROUPES_SERVICES)
+      .select({ id: 'id', donnees: 'donnees' })
+      .where({ id_utilisateur: idUtilisateur });
+
+    return Promise.all(
+      lignes.map(async ({ id, donnees }) => {
+        const { libelle } = await this.chiffrement.dechiffre<{
+          libelle: string;
+        }>(donnees);
+        return { id, idUtilisateur, libelle };
+      })
+    );
+  }
+
+  async sauvegardeGroupeServices(
+    donnees: DonneesGroupeServices
+  ): Promise<void> {
+    await this.knex(TABLES.GROUPES_SERVICES)
+      .insert({
+        id: donnees.id,
+        id_utilisateur: donnees.idUtilisateur,
+        donnees: await this.chiffrement.chiffre({ libelle: donnees.libelle }),
+      })
+      .onConflict('id')
+      .merge();
+  }
+
+  async supprimeGroupeServices(idGroupe: UUID): Promise<void> {
+    await this.knex(TABLES.GROUPES_SERVICES).where({ id: idGroupe }).delete();
   }
 }
