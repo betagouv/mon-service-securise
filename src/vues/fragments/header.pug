@@ -77,6 +77,9 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     if (featureFlags.avecCreationCleApi) {
       liensMonEspace.push({ label: "Clés d'API", href: "/profil/cle-api" });
     }
+    if (featureFlags.avecGroupesServices) {
+      liensMonEspace.push({ label: "Groupes", href: "/profil/groupes" });
+    }
 
   dsfr-header(
     id="dsfr-header"

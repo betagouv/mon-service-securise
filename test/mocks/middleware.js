@@ -75,6 +75,7 @@ let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
 let typeRequeteCharge = null;
 let fonctionDeposeCookie;
+let featureFlagsACharger = {};
 
 const middlewareFantaisie = {
   reinitialise: ({
@@ -87,6 +88,7 @@ const middlewareFantaisie = {
     autorisationACharger = uneAutorisation().construis(),
     authentificationAUtiliser = SourceAuthentification.AGENT_CONNECT,
     fonctionDeposeCookieAAppeler = undefined,
+    featureFlags = {},
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -110,6 +112,7 @@ const middlewareFantaisie = {
     sourceAuthentification = authentificationAUtiliser;
     fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
     typeRequeteCharge = null;
+    featureFlagsACharger = featureFlags;
   },
 
   ajouteVersionFichierCompiles: (_requete, reponse, suite) => {
@@ -381,7 +384,7 @@ const middlewareFantaisie = {
   },
 
   chargeFeatureFlags: (_requete, reponse, suite) => {
-    reponse.locals.featureFlags = {};
+    reponse.locals.featureFlags = featureFlagsACharger;
     suite();
   },
 };

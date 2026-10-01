@@ -255,6 +255,34 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
+  describe('concernant le menu utilisateur', () => {
+    beforeEach(() => {
+      const utilisateur = unUtilisateur().construis();
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
+    });
+
+    it('affiche le lien vers les groupes si le feature flag est actif', async () => {
+      testeur.middleware().reinitialise({
+        featureFlags: { avecGroupesServices: true },
+      });
+
+      const reponse = await testeur.get('/profil');
+
+      expect(reponse.text).to.contain('/profil/groupes');
+    });
+
+    it("n'affiche pas le lien vers les groupes si le feature flag est inactif", async () => {
+      testeur.middleware().reinitialise({
+        featureFlags: { avecGroupesServices: false },
+      });
+
+      const reponse = await testeur.get('/profil');
+
+      expect(reponse.text).not.to.contain('/profil/groupes');
+    });
+  });
+
   describe('quand GET sur /profil/groupes', () => {
     beforeEach(() => {
       const utilisateur = unUtilisateur().construis();
