@@ -257,6 +257,64 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
+  describe('concernant le dénombrement des services et utilisateurs par SIRET', () => {
+    it('compte les services de chaque SIRET demandé', async () => {
+      await insereService('siret-1');
+      await insereService('siret-1');
+      await insereService('siret-2');
+
+      const denombrements =
+        await persistance.denombreServicesEtUtilisateursParSiret([
+          'siret-1',
+          'siret-2',
+        ]);
+
+      const nombreServicesParSiret = Object.fromEntries(
+        denombrements.map((d) => [d.siretHash, d.nombreServices])
+      );
+      expect(nombreServicesParSiret).to.eql({ 'siret-1': 2, 'siret-2': 1 });
+    });
+
+    it('compte une seule fois un utilisateur ayant accès à plusieurs services du SIRET', async () => {
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-1');
+      const idProprietaire = await insereUtilisateur();
+      const idContributeur = await insereUtilisateur();
+      await insereAutorisation(idProprietaire, idService1);
+      await insereAutorisation(idProprietaire, idService2);
+      await insereAutorisationContributeur(idContributeur, idService2);
+
+      const [denombrement] =
+        await persistance.denombreServicesEtUtilisateursParSiret(['siret-1']);
+
+      expect(denombrement.nombreUtilisateurs).to.be(2);
+    });
+
+    it('compte une seule fois un service partagé entre plusieurs utilisateurs', async () => {
+      const idService = await insereService('siret-1');
+      await insereAutorisation(await insereUtilisateur(), idService);
+      await insereAutorisationContributeur(
+        await insereUtilisateur(),
+        idService
+      );
+
+      const [denombrement] =
+        await persistance.denombreServicesEtUtilisateursParSiret(['siret-1']);
+
+      expect(denombrement.nombreServices).to.be(1);
+    });
+
+    it('ignore les services des SIRET non demandés', async () => {
+      await insereService('siret-1');
+      await insereService('siret-2');
+
+      const denombrements =
+        await persistance.denombreServicesEtUtilisateursParSiret(['siret-1']);
+
+      expect(denombrements.map((d) => d.siretHash)).to.eql(['siret-1']);
+    });
+  });
+
   describe('concernant la lecture de plusieurs utilisateurs', () => {
     it('sait lire en une fois les utilisateurs demandés', async () => {
       const idUtilisateur1 = await insereUtilisateur();
