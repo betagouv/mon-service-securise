@@ -42,7 +42,7 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
       const reponse = await testeur.get('/api/groupes-services');
 
       expect(reponse.body).toEqual([
-        { id: groupe.donnees().id, libelle: 'Métier' },
+        { id: groupe.donnees().id, libelle: 'Métier', idServicesAssocies: [] },
       ]);
     });
   });
@@ -58,6 +58,7 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
       expect(reponse.body).toEqual({
         id: groupe.donnees().id,
         libelle: 'Métier',
+        idServicesAssocies: [],
       });
     });
 
