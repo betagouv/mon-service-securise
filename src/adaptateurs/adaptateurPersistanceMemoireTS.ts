@@ -217,4 +217,38 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       (c) => c.id !== idGroupe
     );
   }
+
+  async associeServicesAuGroupe(
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ): Promise<void> {
+    const index = this.donnees.groupesServices.findIndex(
+      (g) => g.id === idGroupe
+    );
+    if (index === -1) {
+      return;
+    }
+    this.donnees.groupesServices[index].idServicesAssocies = [
+      ...new Set([
+        ...this.donnees.groupesServices[index].idServicesAssocies,
+        ...idsServices,
+      ]),
+    ];
+  }
+
+  async supprimeAssociationServicesAuGroupe(
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ): Promise<void> {
+    const index = this.donnees.groupesServices.findIndex(
+      (g) => g.id === idGroupe
+    );
+    if (index === -1) {
+      return;
+    }
+    this.donnees.groupesServices[index].idServicesAssocies =
+      this.donnees.groupesServices[index].idServicesAssocies.filter(
+        (id) => !idsServices.includes(id)
+      );
+  }
 }

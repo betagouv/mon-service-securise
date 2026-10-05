@@ -58,4 +58,44 @@ export class DepotDonneesGroupesServices {
     );
     if (libelleDejaUtilise) throw new ErreurGroupeServicesDejaExistant();
   }
+
+  async metsAJourAssociationsAuxServices(
+    idUtilisateur: UUID,
+    idGroupesAssocies: UUID[],
+    idsServices: UUID[]
+  ) {
+    const tousGroupes = await this.lisGroupesDe(idUtilisateur);
+
+    await Promise.all(
+      tousGroupes
+        .filter((g) => !idGroupesAssocies.includes(g.donnees().id))
+        .map((g) => this.supprimeAssociationServicesAuGroupe(g, idsServices))
+    );
+
+    await Promise.all(
+      tousGroupes
+        .filter((g) => idGroupesAssocies.includes(g.donnees().id))
+        .map((g) => this.associeServicesAuGroupe(g, idsServices))
+    );
+  }
+
+  private async associeServicesAuGroupe(
+    groupe: GroupeServices,
+    idsServices: UUID[]
+  ) {
+    return this.persistance.associeServicesAuGroupe(
+      groupe.donnees().id,
+      idsServices
+    );
+  }
+
+  private async supprimeAssociationServicesAuGroupe(
+    groupe: GroupeServices,
+    idsServices: UUID[]
+  ) {
+    return this.persistance.supprimeAssociationServicesAuGroupe(
+      groupe.donnees().id,
+      idsServices
+    );
+  }
 }
