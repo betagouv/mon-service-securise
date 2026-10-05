@@ -1,21 +1,33 @@
 import { DepotDonneesGroupesServices } from '../../src/depots/depotDonneesGroupesServices.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.ts';
 import { unePersistanceMemoireTS } from '../constructeurs/constructeurAdaptateurPersistanceMemoireTS.ts';
-import { unUUID } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 import { GroupeServices } from '../../src/modeles/groupeServices.ts';
 import {
   ErreurGroupeServicesDejaExistant,
   ErreurGroupeServicesInexistant,
+  ErreurServiceInexistant,
 } from '../../src/erreurs.ts';
+import { creeDepot as creeDepotAutorisation } from '../../src/depots/depotDonneesAutorisations.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { DepotDonneesAutorisation } from '../../src/depots/depotDonneesAutorisations.interface.ts';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 
 describe('Le dépôt de données des groupes de services', () => {
   let persistance: PersistanceTS;
+  let depotAutorisations: DepotDonneesAutorisation;
 
   beforeEach(() => {
     persistance = unePersistanceMemoireTS().construis();
+    depotAutorisations = creeDepotAutorisation({
+      adaptateurPersistance: unePersistanceMemoire().construis(),
+      busEvenements: fabriqueBusPourLesTests(),
+    });
   });
 
-  const unDepot = () => new DepotDonneesGroupesServices({ persistance });
+  const unDepot = () =>
+    new DepotDonneesGroupesServices({ persistance, depotAutorisations });
 
   describe("sur demande d'un nouveau groupe", () => {
     it('persiste le groupe et le renvoie', async () => {
@@ -139,19 +151,25 @@ describe('Le dépôt de données des groupes de services', () => {
 
   describe("sur demande d'association de services à des groupes", () => {
     const idUtilisateur = unUUID('U');
+    const idService = unUUID('S1');
+
+    beforeEach(async () => {
+      await depotAutorisations.sauvegardeAutorisation(
+        uneAutorisation().deProprietaire(idUtilisateur, idService).construis()
+      );
+    });
 
     it('ajoute un service dans un groupe vide', async () => {
       const depot = unDepot();
       const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
-
       await depot.metsAJourAssociationsAuxServices(
         idUtilisateur,
         [groupe.donnees().id],
-        [unUUID('S1')]
+        [idService]
       );
 
       const groupes = await depot.lisGroupesDe(idUtilisateur);
-      expect(groupes[0].donnees().idServicesAssocies).toEqual([unUUID('S1')]);
+      expect(groupes[0].donnees().idServicesAssocies).toEqual([idService]);
     });
 
     it("retire un service d'un groupe dans lequel il ne figure plus", async () => {
@@ -160,17 +178,42 @@ describe('Le dépôt de données des groupes de services', () => {
       await depot.metsAJourAssociationsAuxServices(
         idUtilisateur,
         [groupe.donnees().id],
-        [unUUID('S1')]
+        [idService]
       );
 
       await depot.metsAJourAssociationsAuxServices(
         idUtilisateur,
         [],
-        [unUUID('S1')]
+        [idService]
       );
 
       const groupes = await depot.lisGroupesDe(idUtilisateur);
       expect(groupes[0].donnees().idServicesAssocies).toEqual([]);
+    });
+
+    it("jette une erreur si un des services n'est pas accessible à l'utilisateur", async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
+
+      await expect(
+        depot.metsAJourAssociationsAuxServices(
+          idUtilisateur,
+          [groupe.donnees().id],
+          [unUUID('S2')]
+        )
+      ).rejects.toThrow(new ErreurServiceInexistant());
+    });
+
+    it("jette une erreur si un des groupes n'appartient pas à l'utilisateur", async () => {
+      const depot = unDepot();
+
+      await expect(
+        depot.metsAJourAssociationsAuxServices(
+          idUtilisateur,
+          [unUUIDRandom()],
+          [idService]
+        )
+      ).rejects.toThrow(new ErreurGroupeServicesInexistant());
     });
   });
 });

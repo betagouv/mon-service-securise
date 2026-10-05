@@ -4,13 +4,24 @@ import { GroupeServices } from '../modeles/groupeServices.js';
 import {
   ErreurGroupeServicesDejaExistant,
   ErreurGroupeServicesInexistant,
+  ErreurServiceInexistant,
 } from '../erreurs.js';
+import { DepotDonneesAutorisation } from './depotDonneesAutorisations.interface.js';
+import { Autorisation } from '../modeles/autorisations/autorisation.js';
 
 export class DepotDonneesGroupesServices {
   private readonly persistance: PersistanceTS;
+  private readonly depotAutorisations: DepotDonneesAutorisation;
 
-  constructor({ persistance }: { persistance: PersistanceTS }) {
+  constructor({
+    persistance,
+    depotAutorisations,
+  }: {
+    persistance: PersistanceTS;
+    depotAutorisations: DepotDonneesAutorisation;
+  }) {
     this.persistance = persistance;
+    this.depotAutorisations = depotAutorisations;
   }
 
   async nouveauGroupe(idUtilisateur: UUID, libelle: string) {
@@ -64,7 +75,18 @@ export class DepotDonneesGroupesServices {
     idGroupesAssocies: UUID[],
     idsServices: UUID[]
   ) {
+    const idServicesAutorises = (
+      await this.depotAutorisations.autorisations(idUtilisateur)
+    ).map((a: Autorisation) => a.idService);
+
+    if (idsServices.some((id) => !idServicesAutorises.includes(id)))
+      throw new ErreurServiceInexistant();
+
     const tousGroupes = await this.lisGroupesDe(idUtilisateur);
+    const idGroupesExistants = tousGroupes.map((g) => g.donnees().id);
+
+    if (idGroupesAssocies.some((id) => !idGroupesExistants.includes(id)))
+      throw new ErreurGroupeServicesInexistant();
 
     await Promise.all(
       tousGroupes
