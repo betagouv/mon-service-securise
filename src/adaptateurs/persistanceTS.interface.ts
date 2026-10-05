@@ -50,4 +50,12 @@ export interface PersistanceTS {
   ) => Promise<DonneesGroupeServices[]>;
   sauvegardeGroupeServices: (donnees: DonneesGroupeServices) => Promise<void>;
   supprimeGroupeServices: (idGroupe: UUID) => Promise<void>;
+  associeServicesAuGroupe: (
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ) => Promise<void>;
+  supprimeAssociationServicesAuGroupe: (
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ) => Promise<void>;
 }

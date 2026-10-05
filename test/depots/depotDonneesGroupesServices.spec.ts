@@ -136,4 +136,41 @@ describe('Le dépôt de données des groupes de services', () => {
       expect(await depot.lisGroupesDe(unUUID('A'))).toHaveLength(1);
     });
   });
+
+  describe("sur demande d'association de services à des groupes", () => {
+    const idUtilisateur = unUUID('U');
+
+    it('ajoute un service dans un groupe vide', async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
+
+      await depot.metsAJourAssociationsAuxServices(
+        idUtilisateur,
+        [groupe.donnees().id],
+        [unUUID('S1')]
+      );
+
+      const groupes = await depot.lisGroupesDe(idUtilisateur);
+      expect(groupes[0].donnees().idServicesAssocies).toEqual([unUUID('S1')]);
+    });
+
+    it("retire un service d'un groupe dans lequel il ne figure plus", async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
+      await depot.metsAJourAssociationsAuxServices(
+        idUtilisateur,
+        [groupe.donnees().id],
+        [unUUID('S1')]
+      );
+
+      await depot.metsAJourAssociationsAuxServices(
+        idUtilisateur,
+        [],
+        [unUUID('S1')]
+      );
+
+      const groupes = await depot.lisGroupesDe(idUtilisateur);
+      expect(groupes[0].donnees().idServicesAssocies).toEqual([]);
+    });
+  });
 });
