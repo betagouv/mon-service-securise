@@ -2,6 +2,7 @@ import { UUID } from '../typesBasiques.js';
 import { ErreurLibelleGroupeServicesInvalide } from '../erreurs.js';
 
 export type DonneesGroupeServices = {
+  idServicesAssocies: UUID[];
   id: UUID;
   idUtilisateur: UUID;
   libelle: string;
@@ -23,6 +24,7 @@ export class GroupeServices {
       id: crypto.randomUUID(),
       idUtilisateur,
       libelle: libelleValide(libelle),
+      idServicesAssocies: [],
     });
   }
 
@@ -39,7 +41,7 @@ export class GroupeServices {
   }
 
   toJSON() {
-    const { id, libelle } = this.donneesGroupe;
-    return { id, libelle };
+    const { id, libelle, idServicesAssocies } = this.donneesGroupe;
+    return { id, libelle, idServicesAssocies };
   }
 }
