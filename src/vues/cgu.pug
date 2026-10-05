@@ -3,7 +3,7 @@ extends mssDocumentation
 block variables
     - const meta_description = "Découvrez nos conditions générales d'utilisation sur MonServiceSécurisé. Protégez vos services numériques en toute conformité. Consultez nos engagements pour une sécurité renforcée."
     - const titrePage = 'Conditions générales d\'utilisation de MonServiceSécurisé'
-    - const dateMiseEnVigueur = "30/10/2024"
+    - const dateMiseEnVigueur = "05/10/2026"
     - const sousTitrePage = `En vigueur à partir du ${dateMiseEnVigueur}`
 
 block append styles
@@ -15,71 +15,128 @@ block append scripts
 block contenu-documentation
     h2 Article 1 - Champ d’application
     p
-        | Les présentes conditions générales d’utilisation (ci-après “CGU”) précisent
-        | le cadre juridique de “MonServiceSécurisé” (ci-après la “Plateforme”) et
+        | Les présentes conditions générales d’utilisation (ci-après « CGU ») précisent
+        | le cadre juridique de « MonServiceSécurisé » (ci-après la « Plateforme ») et
         | définissent les conditions d’accès et d’utilisation des Services par
-        | l’Utilisateur. Ce dernier  est nécessairement un membre du personnel d'une
+        | l’Utilisateur. Ce dernier est nécessairement un membre du personnel d'une
         | entité soumise au
         |
         dsfr-link(href='https://www.numerique.gouv.fr/publications/referentiel-general-de-securite/' blank neutral label="Référentiel Général de Sécurité (RGS)")
         | .
 
     h2 Article 2 - Objet de la Plateforme
+    p.
+        La Plateforme a pour objet :
     ul
-        li la création et la gestion de comptes d'utilisateurs ;
-        li d'aider, pas à pas, les entités publiques à sécuriser leurs services numériques et à les faire homologuer selon une approche adaptée aux services les plus courants ;
-        li la création et la gestion des documents d'homologation des services concernés ;
-        li le suivi des documents d'homologation effectués.
+        li La création et la gestion de comptes d'utilisateurs ;
+        li La création et la gestion des organisations, le rattachement des Utilisateurs à leur entité et la désignation des administrateurs de celle-ci ;
+        li L’accompagnement, pas à pas, des entités publiques dans la sécurisation de leurs services numériques et dans leur homologation, selon une approche adaptée aux services les plus courants ;
+        li La création et la gestion des documents d'homologation des services concernés ;
+        li Le suivi des documents d'homologation effectués.
 
     h2 Article 3 - Définitions
     p.
-        “L’Utilisateur” est toute personne physique, membre d’une entité soumise au RGS, qui s’inscrit sur la Plateforme.
+        « L’Utilisateur » est toute personne physique, membre d’une entité soumise au RGS, qui s’inscrit sur la Plateforme.
     p.
-        Les “Services” sont les fonctionnalités offertes par la Plateforme pour répondre à ses finalités.
+        Les « Services » sont les fonctionnalités offertes par la Plateforme pour répondre à ses finalités.
     p.
-        La “Plateforme” est la solution de cybersécurité “MonServiceSécurisé” conçue par le laboratoire d’innovation de l’ANSSI ayant pour mission d’aider les entités publiques à sécuriser et homologuer les services publics numériques.
+        La « Plateforme » est la solution de cybersécurité « MonServiceSécurisé » conçue par le laboratoire d’innovation de l’ANSSI ayant pour mission d’aider les entités publiques à sécuriser et homologuer les services publics numériques.
     p.
-        “L’Éditeur” est la personne morale qui met à la disposition du public la Plateforme, à savoir l’ANSSI.
+        « L’Éditeur » est la personne morale qui met à la disposition du public la Plateforme, à savoir l’ANSSI.
+    p.
+        « Le comportement anormal » désigne tout usage de la Plateforme s’écartant de son usage attendu et susceptible de porter atteinte à la sécurité, à l’intégrité ou à la confidentialité de la Plateforme ou des données qu’elle traite, notamment : la demande ou la création en série de comptes administrateurs, la demande de droits d’administration portant sur des entités sans lien avec l’Utilisateur, l’extraction massive de données, les tentatives répétées d’authentification infructueuses, ou l’utilisation de la Plateforme à des fins étrangères à ses finalités. Cette liste n’est pas limitative.
+    p.
+        « L’Entité » est l’organisme soumis au RGS auquel l’Utilisateur déclare appartenir et au nom duquel les services numériques sont référencés sur la Plateforme.
+    p.
+        « L’Administrateur » est l’Utilisateur habilité par l’Entité à administrer l’espace de celle-ci sur la Plateforme, notamment à y gérer les services numériques référencés et les droits des autres Utilisateurs rattachés à l’Entité.
+    p.
+        « Le Premier administrateur » est le premier Utilisateur à obtenir des droits d’administration sur une Entité qui n’en comptait aucun.
 
     h2 Article 4 - Fonctionnalités
     h3 4.1 Compte Utilisateur
+    h4 A. Principes généraux
     p
-        | L'Utilisateur est titulaire d'un compte. Il s'engage à choisir un mot de passe sécurisé, protéger la sécurité et la confidentialité de son mot de passe, et est responsable de toute utilisation de son compte. Toute utilisation abusive doit être signalée à l'ANSSI aux coordonnées indiquées dans les
+        | L'Utilisateur est titulaire d'un compte. Il s'engage à choisir un mot de passe sécurisé et à en préserver la confidentialité. Il est responsable de toute utilisation de son compte. Toute perte, usurpation, ou utilisation abusive d’un tiers doit être signalée à l'ANSSI aux coordonnées indiquées dans les
         |
         dsfr-link(href="/mentionsLegales" label="Mentions légales" neutral)
         | . Tout utilisateur peut procéder à la modification des données liées à son compte et à sa suppression.
+    h4 B. Dispositions spécifiques aux comptes administrateurs
+    p.
+        Seuls peuvent être « administrateurs » au sens des présentes conditions générales les membres d’un organisme soumis au RGS appartenant à sa direction, chargés des systèmes d’information ou de leur sécurité, ou exerçant une fonction équivalente.
+    p.
+        Peuvent également être Administrateurs les Utilisateurs expressément autorisés par un Administrateur de la même Entité. L’Administrateur qui accorde de tels droits s’assure préalablement que la personne concernée appartient à l’Entité et qu’elle est habilitée par celle-ci ; il répond de cette vérification.
+    p.
+        Lors de toute demande de droits d’administration portant sur une Entité, l’Utilisateur déclare expressément être membre de cette Entité et être habilité par elle à en administrer l’espace sur la Plateforme. Cette déclaration est recueillie distinctement de l’acceptation des présentes CGU, horodatée et conservée par l’Éditeur à titre de preuve pendant une durée de 3 mois à compter de la clôture du compte.
+    p.
+        L’Éditeur peut subordonner l’octroi ou le maintien de droits d’administration à la vérification du rattachement de l’Utilisateur à l’Entité, notamment par l’usage d’une adresse de messagerie professionnelle rattachée au nom de domaine de l’Entité, par une authentification réalisée au moyen de ProConnect, ou par la production de tout justificatif d’habilitation.
+    p.
+        Les premiers droits d'administration d'une entité sont attribués à l'issue du processus suivant :
+    ol
+        li
+            strong Demande
+            |  : l'Utilisateur adresse sa demande à l'équipe MonServiceSécurisé à l'adresse
+            |
+            dsfr-link(href="mailto:contact@monservicesecurise.beta.gouv.fr" label="contact@monservicesecurise.beta.gouv.fr" neutral)
+            | .
+        li
+            strong Formulaire
+            |  : l'équipe transmet à l'Utilisateur un formulaire à renseigner.
+        li
+            strong Examen
+            |  : l'équipe examine la demande au regard de la légitimité du demandeur à administrer l'entité.
+        li
+            strong Entretien
+            |  : un bref entretien en visioconférence est organisé avec le demandeur.
+        li
+            strong Décision
+            |  : l'équipe notifie à l'Utilisateur l'attribution ou le refus des droits. En cas de refus, la décision est motivée.
+    p.
+        Une fois ces droits attribués, l'administrateur peut désigner d'autres administrateurs pour son entité.
+    p
+        strong Vérification périodique
+        |  : l'équipe MonServiceSécurisé peut, à tout moment et au moins une fois par an, demander à l'administrateur de confirmer la légitimité de ses droits. À défaut de réponse dans un délai de 30 jours, les droits d'administration peuvent être suspendus ou retirés.
     h3 4.2 Contributeur
     p.
         L'Utilisateur peut ajouter un contributeur à un service numérique référencé sur MonServiceSécurisé. Dans ce cas, il renseigne l'adresse de messagerie électronique professionnelle du contributeur, à laquelle la Plateforme adresse une invitation à contribuer au projet d'homologation.
     p.
-        Lorsque le contributeur a déjà un compte personnel, l'acceptation de l'invitation à contribuer suffit. Lorsque le contributeur n'a pas de compte, il est invité à s'inscrire et se voit alors appliquer les droits et obligations d'un Utilisateur.
+        Lorsque le contributeur a déjà un compte personnel, l'acceptation de l'invitation à contribuer suffit. Lorsque le contributeur n'a pas de compte, il est invité à s'inscrire et se voit alors appliquer les droits et obligations d'un Utilisateur. Le contributeur ne peut ajouter un autre contributeur au service numérique référencé auquel il est ajouté.
     p.
-        Le contributeur ne peut ajouter un autre contributeur au service numérique référencé auquel il est ajouté.
-    p.
-        Les actions du collaborateur et de l'Utilisateur modifient les informations renseignées concernant le service numérique référencé, ils sont chacun responsables de l'exactitude de leurs déclarations respectives.
+        Les actions du contributeur et de l'Utilisateur modifient les informations renseignées concernant le service numérique référencé. Ils sont chacun responsables de l'exactitude de leurs déclarations respectives.
     h3 4.3 Notifications et Messages
     p.
         L'Utilisateur comprend que des notifications et des messages peuvent lui être communiqués par les moyens suivants : (i) via la Plateforme (compte Utilisateur) ou (ii) envoyés aux coordonnées fournies par l'Utilisateur (adresse e-mail). Si ses coordonnées ne sont pas à jour, l'Utilisateur est conscient que des notifications importantes sont susceptibles de ne pas lui parvenir. Par conséquent, l'Utilisateur s'engage à tenir à jour ses coordonnées.
+    h3 4.4 Suspension et suppression des comptes
+    p.
+        L’Éditeur peut suspendre un compte à titre de mesure conservatoire, dépourvue de caractère de sanction, lorsqu’il dispose d’éléments suffisamment graves et vraisemblables laissant supposer une violation des présentes conditions générales d’utilisation au sens de l’article 5, une usurpation d’identité, ou un comportement anormal au sens de l’article 3, en particulier s’agissant des comptes ayant des droits d’administrateur. Cette mesure a pour seule finalité de faire cesser un trouble ou de prévenir une atteinte à la sécurité, à l’intégrité ou à la confidentialité de la Plateforme ou des données qu’elle traite.
+    p.
+        Ces éléments peuvent notamment résulter d’un signalement de l’Entité ou d’un autre Administrateur de celle-ci, de l’échec d’une vérification d’authentification, ou de tout indice matériel de comportement anormal. Compte tenu de sa finalité conservatoire, la suspension peut être décidée sans information préalable de l’Utilisateur ni mise en mesure de présenter ses observations, notamment lorsque ces formalités seraient incompatibles avec la prévention du risque en cause, en particulier en cas de suspicion d’usurpation d’identité. L’Utilisateur en est informé dans les meilleurs délais après le prononcé de la mesure et peut à tout moment la contester auprès de l’Éditeur aux coordonnées indiquées dans les Mentions légales.
+    p.
+        Lorsque les éléments recueillis établissent une violation avérée des présentes CGU, l’Éditeur peut procéder à la suppression du compte. Cette décision est motivée et notifiée à l’Utilisateur, qui est préalablement mis en mesure de présenter ses observations, sauf lorsque l’urgence ou la protection de la sécurité des systèmes d’information s’y oppose ; dans ce dernier cas, l’Utilisateur en est informé dès que cette circonstance a cessé. Toute décision de suppression mentionne les coordonnées auxquelles elle peut être contestée ainsi que les voies et délais de recours.
+    p.
+        Les services numériques référencés sur la Plateforme le sont au nom de l’Entité et non de l’Utilisateur qui les a créés. La suspension ou la suppression du compte d’un Administrateur est sans effet sur ces services. Lorsque l’Entité ne compte plus aucun Administrateur, l’Éditeur peut, à la demande de celle-ci, désigner un nouvel Administrateur parmi les Utilisateurs qui lui sont rattachés.
 
     h2 Article 5 - Responsabilités
     h3 5.1 Responsabilités de l’Éditeur
     p.
-        Les sources des informations diffusées sur la Plateforme sont réputées fiables mais elle ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
+        Les sources des informations diffusées sur la Plateforme sont réputées fiables, mais l’Éditeur ne garantit pas qu’elles soient exemptes de défauts, d’erreurs ou d’omissions.
     p.
         L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
     p.
         L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu à la Plateforme. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la Plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
     p.
         En cas de manquement à une ou plusieurs des stipulations des présentes CGU, l’Éditeur se réserve le droit de supprimer le compte de l'Utilisateur responsable.
+    p.
+        L’Éditeur ne procède pas à la vérification systématique de la qualité et de l’habilitation des Utilisateurs sollicitant des droits d’administration. Sa responsabilité ne peut être engagée à raison des déclarations inexactes faites par le Premier administrateur ou par les Administrateurs, ni à raison des droits d’administration ouverts par eux, sans préjudice des mesures prévues à l’article 4.4.
     h3 5.2 Responsabilités de l'Utilisateur
     p.
         Dans le cadre de l'utilisation de la Plateforme, l'Utilisateur s'engage à :
     ul
-        li ne créer qu'un seul compte utilisateur et ne communiquer que des informations, fichiers et autres contenus conformes à la réalité, honnêtes et loyaux ;
-        li ne pas divulguer via la Plateforme des propos ou des contenus illicites, et notamment tous contenus contrefaits, diffamatoires, injurieux, insultants, obscènes, offensants, discriminatoires, violents, xénophobes, incitant à la haine raciale ou faisant l'apologie du terrorisme, ou tout autre contenu contraire à la législation et réglementation applicable ainsi qu'aux bonnes mœurs et aux règles de bienséance ;
-        li ne pas intégrer et diffuser via la Plateforme  du contenu qui serait contraire à la finalité de celui-ci ;
-        li ne pas communiquer ou envoyer, par l'intermédiaire de la Plateforme , du contenu, quel qu'il soit, qui comprendrait des liens pointant vers des sites internet illicites, offensants ou incompatibles avec la finalité de la Plateforme ;
-        li ne pas utiliser la Plateforme pour envoyer massivement des messages non sollicités (publicitaires ou autres).
+        li Ne déclarer que des informations exactes s’agissant de son appartenance à une Entité, de sa fonction et de son habilitation à en administrer l’espace, et ne pas usurper l’identité, le titre ou la fonction d’un tiers, en particulier s’agissant des comptes « administrateurs » ;
+        li Ne créer qu'un seul compte utilisateur et ne communiquer que des informations, fichiers et autres contenus conformes à la réalité, honnêtes et loyaux ;
+        li Ne pas divulguer via la Plateforme des propos ou des contenus illicites, et notamment tous contenus contrefaits, diffamatoires, injurieux, insultants, obscènes, offensants, discriminatoires, violents, xénophobes, incitant à la haine raciale ou faisant l'apologie du terrorisme, ou tout autre contenu contraire à la législation et réglementation applicable ainsi qu'aux bonnes mœurs et aux règles de bienséance ;
+        li Ne pas intégrer et diffuser via la Plateforme du contenu qui serait contraire à la finalité de celui-ci ;
+        li Ne pas communiquer ou envoyer, par l'intermédiaire de la Plateforme, du contenu, quel qu'il soit, qui comprendrait des liens pointant vers des sites internet illicites, offensants ou incompatibles avec la finalité de la Plateforme ;
+        li Ne pas utiliser la Plateforme pour envoyer massivement des messages non sollicités (publicitaires ou autres).
     p.
         Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
 
@@ -87,14 +144,17 @@ block contenu-documentation
     p.
         Les services numériques suivants ne peuvent pas être référencés sur MonServiceSécurisé :
     ul
-        li Les services essentiels au fonctionnement de la société ou de l'économie, des opérateurs désignés opérateurs de services essentiels (loi n° 2018-133 du 26 février 2018 qui présente les mesures de transposition de la direction européenne sur la sécurité des réseaux et des systèmes d'information, décret n° 2018-384 du 23 mai 2018 en détaillant les modalités d'application).
+        li Les services essentiels au fonctionnement de la société ou de l'économie, des opérateurs désignés opérateurs de services essentiels (loi n° 2018-133 du 26 février 2018 qui présente les mesures de transposition de la directive européenne sur la sécurité des réseaux et des systèmes d'information, décret n° 2018-384 du 23 mai 2018 en détaillant les modalités d'application).
         li Les services pour lesquels l'atteinte à la sécurité ou au bon fonctionnement engendrerait des conséquences importantes sur le potentiel scientifique et technique (décret n° 2011-1425 du 2 novembre 2011 portant application de l'article 413-7 du code pénal relatif à la protection du potentiel scientifique et technique de la nation).
         li Les services pour lesquels l'atteinte à la sécurité ou au fonctionnement engendrerait des conséquences importantes sur le potentiel de guerre ou économique, la sécurité ou la capacité de survie de la Nation (articles L. 1332-1 à L. 1332-7 du Code de la Défense).
         li Les services traitant d'informations protégées par le secret de la défense nationale ou équivalent, ou de niveau diffusion restreinte (IGI 1300 relative au secret de la défense nationale, l'IGI 2102 relatives aux informations ou supports classifiés de l'Union européenne, l'IGI 2100 relative à la protection des supports classifiés dans le cadre de l'OTAN, l'IGI 901 définissant les règles relatives à la protection des informations sensibles et à diffusion restreinte).
 
     h2 Article 7 - Mise à jour des conditions générales d’utilisation
     p.
-        Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la Plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
+        Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la Plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version. Les Utilisateurs disposant déjà d’un compte en sont informés et sont invités à accepter la nouvelle version lors de leur première connexion suivant son entrée en vigueur. Les versions antérieures demeurent accessibles.
+    p
+        | Version du #{dateMiseEnVigueur}, en vigueur à compter du #{dateMiseEnVigueur}. Elle remplace la version du 30/10/2024, consultable&nbsp;
+        dsfr-link(href="https://docs.numerique.gouv.fr/docs/b9df8f33-a81a-45b6-8015-e3ee594fecd1/" label="ici." neutral blank)
 
 block pied-documentation
     if demandeAcceptation

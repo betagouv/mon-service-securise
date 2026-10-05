@@ -24,6 +24,12 @@
 
 .documentation h3 {
   margin-top: 2em;
+  font-weight: 500;
+  color: var(--texte-fonce);
+}
+
+.documentation h4 {
+  margin-top: 1em;
   font-weight: normal;
   color: var(--texte-fonce);
 }
