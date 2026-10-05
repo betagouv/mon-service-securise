@@ -56,6 +56,7 @@ describe('Un groupe de services', () => {
       id: unUUID('C'),
       idUtilisateur: unUUID('U'),
       libelle: 'Service - Web',
+      idServicesAssocies: [unUUID('S')],
     };
 
     const groupe = GroupeServices.hydrate(donnees);
@@ -68,8 +69,13 @@ describe('Un groupe de services', () => {
       id: unUUID('C'),
       idUtilisateur: unUUID('U'),
       libelle: 'Métier',
+      idServicesAssocies: [unUUID('S')],
     });
 
-    expect(groupe.toJSON()).toEqual({ id: unUUID('C'), libelle: 'Métier' });
+    expect(groupe.toJSON()).toEqual({
+      id: unUUID('C'),
+      libelle: 'Métier',
+      idServicesAssocies: [unUUID('S')],
+    });
   });
 });
