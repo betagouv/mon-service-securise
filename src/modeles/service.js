@@ -168,10 +168,7 @@ class Service {
   }
 
   tauxCompletudeMesures() {
-    const { nombreTotalMesures, nombreMesuresCompletes } =
-      this.mesures.completude();
-
-    return nombreMesuresCompletes / nombreTotalMesures;
+    return this.mesures.tauxCompletudeMesures();
   }
 
   contributeurParId(idUtilisateur) {
