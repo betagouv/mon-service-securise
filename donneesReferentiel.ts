@@ -1714,7 +1714,7 @@ const donnees = {
     autre: 'Autre',
   },
   departements,
-  versionActuelleCgu: 'v2_2024-10-30',
+  versionActuelleCgu: 'v3_2026-10-05',
   optionsFiltrageDate: {
     aujourdhui: "Aujourd'hui",
     hier: 'Hier',
