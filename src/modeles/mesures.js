@@ -52,6 +52,12 @@ class Mesures extends InformationsService {
     });
   }
 
+  tauxCompletudeMesures() {
+    const { nombreTotalMesures, nombreMesuresCompletes } = this.completude();
+
+    return nombreMesuresCompletes / nombreTotalMesures;
+  }
+
   indiceCyber() {
     return new IndiceCyber(
       this.statistiquesMesuresGenerales().totauxParTypeEtParCategorie(),
