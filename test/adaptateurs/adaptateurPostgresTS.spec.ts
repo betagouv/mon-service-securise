@@ -34,6 +34,7 @@ describe("L'adaptateur persistance Postgres", () => {
     id: unUUIDRandom(),
     idUtilisateur: unUUIDRandom(),
     libelle: 'Métier',
+    idServicesAssocies: [],
     ...donnees,
   });
 
@@ -922,7 +923,7 @@ describe("L'adaptateur persistance Postgres", () => {
   });
 
   describe("sur demande de lecture des groupes de services d'un utilisateur", () => {
-    it('retourne uniquement ses groupes, déchiffrés', async () => {
+    it('retourne uniquement les groupes lui appartenant, déchiffrés', async () => {
       const idUtilisateur = unUUIDRandom();
       const sonGroupe = unGroupeServices({ idUtilisateur });
       await persistance.sauvegardeGroupeServices(sonGroupe);
@@ -931,6 +932,34 @@ describe("L'adaptateur persistance Postgres", () => {
       const groupes = await persistance.lisGroupesServicesDe(idUtilisateur);
 
       expect(groupes).toEqual([sonGroupe]);
+    });
+
+    it('retourne pour chaque groupe les ids de services associés', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const groupe1 = unGroupeServices({ idUtilisateur, libelle: '1' });
+      const groupe2 = unGroupeServices({ idUtilisateur, libelle: '2' });
+      await persistance.sauvegardeGroupeServices(groupe1);
+      await persistance.sauvegardeGroupeServices(groupe2);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+      await persistance.associeServicesAuGroupe(groupe1.id, [
+        idService1,
+        idService2,
+      ]);
+      await persistance.associeServicesAuGroupe(groupe2.id, [idService1]);
+
+      const groupes = await persistance.lisGroupesServicesDe(idUtilisateur);
+
+      const idsServicesDuGroupe1 = groupes.find(
+        (g) => g.id === groupe1.id
+      )!.idServicesAssocies;
+      expect(idsServicesDuGroupe1).toHaveLength(2);
+      expect(idsServicesDuGroupe1).toEqual(
+        expect.arrayContaining([idService1, idService2])
+      );
+      expect(
+        groupes.find((g) => g.id === groupe2.id)!.idServicesAssocies
+      ).toEqual([idService1]);
     });
   });
 
@@ -945,6 +974,94 @@ describe("L'adaptateur persistance Postgres", () => {
 
       const lignes = await trx.table('groupes_services').select('id');
       expect(lignes).toEqual([{ id: aConserver.id }]);
+    });
+  });
+
+  describe("sur demande d'association d'un groupe à des services", () => {
+    it('associe les services', async () => {
+      const groupeServices = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(groupeServices);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+
+      await persistance.associeServicesAuGroupe(groupeServices.id, [
+        idService1,
+        idService2,
+      ]);
+
+      const lignes = await trx
+        .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([
+        { id_groupe: groupeServices.id, id_service: idService1 },
+        { id_groupe: groupeServices.id, id_service: idService2 },
+      ]);
+    });
+
+    it('ne crée pas de doublon si le service est déjà associé', async () => {
+      const groupeServices = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(groupeServices);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+      await persistance.associeServicesAuGroupe(groupeServices.id, [
+        idService1,
+      ]);
+
+      await persistance.associeServicesAuGroupe(groupeServices.id, [
+        idService1,
+        idService2,
+      ]);
+
+      const lignes = await trx
+        .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([
+        { id_groupe: groupeServices.id, id_service: idService1 },
+        { id_groupe: groupeServices.id, id_service: idService2 },
+      ]);
+    });
+  });
+
+  describe("sur demande de dissociation de services d'un groupe", () => {
+    it('dissocie les services', async () => {
+      const groupeServices = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(groupeServices);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+      await persistance.associeServicesAuGroupe(groupeServices.id, [
+        idService1,
+        idService2,
+      ]);
+
+      await persistance.supprimeAssociationServicesAuGroupe(groupeServices.id, [
+        idService1,
+        idService2,
+      ]);
+
+      const lignes = await trx
+        .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([]);
+    });
+
+    it('ignore un service qui ne serait pas associé', async () => {
+      const groupeServices = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(groupeServices);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+      await persistance.associeServicesAuGroupe(groupeServices.id, [
+        idService1,
+      ]);
+
+      await persistance.supprimeAssociationServicesAuGroupe(groupeServices.id, [
+        idService1,
+        idService2,
+      ]);
+
+      const lignes = await trx
+        .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([]);
     });
   });
 });

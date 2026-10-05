@@ -17,6 +17,7 @@ enum TABLES {
   NOTIFICATIONS_TRANSACTIONNELLES = 'notifications_transactionnelles',
   CLES_API = 'cles_api',
   GROUPES_SERVICES = 'groupes_services',
+  ASSOCIATION_GROUPES_SERVICES = 'groupes_services_association_aux_services',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -387,16 +388,31 @@ export class AdaptateurPostgresTS implements PersistanceTS {
   async lisGroupesServicesDe(
     idUtilisateur: UUID
   ): Promise<DonneesGroupeServices[]> {
-    const lignes = await this.knex(TABLES.GROUPES_SERVICES)
-      .select({ id: 'id', donnees: 'donnees' })
-      .where({ id_utilisateur: idUtilisateur });
+    const lignes: {
+      id: UUID;
+      donnees: DonneesChiffrees;
+      idServicesAssocies: UUID[];
+    }[] = await this.knex(`${TABLES.GROUPES_SERVICES} as groupe`)
+      .select({ id: 'groupe.id', donnees: 'groupe.donnees' })
+      .select(
+        this.knex.raw(
+          `coalesce(array_agg(association.id_service) filter (where association.id_service is not null), '{}') as "idServicesAssocies"`
+        )
+      )
+      .leftJoin(
+        `${TABLES.ASSOCIATION_GROUPES_SERVICES} as association`,
+        'association.id_groupe',
+        'groupe.id'
+      )
+      .where('groupe.id_utilisateur', idUtilisateur)
+      .groupBy('groupe.id');
 
     return Promise.all(
-      lignes.map(async ({ id, donnees }) => {
+      lignes.map(async ({ id, donnees, idServicesAssocies }) => {
         const { libelle } = await this.chiffrement.dechiffre<{
           libelle: string;
         }>(donnees);
-        return { id, idUtilisateur, libelle };
+        return { id, idUtilisateur, libelle, idServicesAssocies };
       })
     );
   }
@@ -416,5 +432,36 @@ export class AdaptateurPostgresTS implements PersistanceTS {
 
   async supprimeGroupeServices(idGroupe: UUID): Promise<void> {
     await this.knex(TABLES.GROUPES_SERVICES).where({ id: idGroupe }).delete();
+  }
+
+  async associeServicesAuGroupe(
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ): Promise<void> {
+    await Promise.all(
+      idsServices.map((idService) =>
+        this.knex(TABLES.ASSOCIATION_GROUPES_SERVICES)
+          .insert({
+            id_groupe: idGroupe,
+            id_service: idService,
+          })
+          .onConflict()
+          .ignore()
+      )
+    );
+  }
+
+  async supprimeAssociationServicesAuGroupe(
+    idGroupe: UUID,
+    idsServices: UUID[]
+  ): Promise<void> {
+    await Promise.all(
+      idsServices.map((idService) =>
+        this.knex(TABLES.ASSOCIATION_GROUPES_SERVICES).delete().where({
+          id_groupe: idGroupe,
+          id_service: idService,
+        })
+      )
+    );
   }
 }
