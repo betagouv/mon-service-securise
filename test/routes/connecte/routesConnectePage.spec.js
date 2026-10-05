@@ -318,7 +318,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       const reponse = await testeur.get('/profil/groupes');
 
       const { groupes } = donneesPartagees(reponse.text, 'donnees-groupes');
-      expect(groupes).to.eql([{ id: groupe.donnees().id, libelle: 'Métier' }]);
+      expect(groupes).to.eql([
+        { id: groupe.donnees().id, libelle: 'Métier', idServicesAssocies: [] },
+      ]);
     });
 
     it('répond 404 si le feature flag est désactivé', async () => {
