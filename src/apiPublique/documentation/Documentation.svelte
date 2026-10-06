@@ -51,6 +51,9 @@
   });
 
   const menu = $derived([
+    ...(modele.serveurs.length
+      ? [entreeDeMenu('url-base', 'URL de base')]
+      : []),
     ...(modele.authentifications.length
       ? [entreeDeMenu('authentification', 'Authentification')]
       : []),
@@ -113,12 +116,12 @@
     </p>
 
     {#if modele.serveurs.length}
-      <dsfr-callout
-        has-title
-        title="URL de base"
-        title-markup="p"
-        text={modele.serveurs.join(' · ')}
-      ></dsfr-callout>
+      <h2 id="url-base">URL de base</h2>
+      <p class="url-base">
+        {#each modele.serveurs as serveur (serveur)}
+          <code>{serveur}</code>
+        {/each}
+      </p>
     {/if}
 
     {#if modele.authentifications.length}
@@ -300,6 +303,21 @@
     font-size: 1.25rem;
     line-height: 1.6;
   }
+
+  .url-base {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+  }
+
+  .url-base code {
+    padding: 0.25rem 0.5rem;
+    background: var(--background-alt-grey);
+    border-radius: 0.25rem;
+  }
+
   .resume {
     font-size: 1.125rem;
     font-weight: 700;
