@@ -7,3 +7,8 @@ export const schemaLibelleGroupeServices = () => ({
 export const schemaIdGroupeServices = () => ({
   id: z.uuid(),
 });
+
+export const schemaAssociationGroupeServices = () => ({
+  idsGroupes: z.array(z.uuid()).min(1).max(1000),
+  idsServices: z.array(z.uuid()).min(1).max(1000),
+});

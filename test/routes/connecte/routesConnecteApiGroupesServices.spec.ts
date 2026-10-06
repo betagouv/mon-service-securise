@@ -1,4 +1,9 @@
 import testeurMSS from '../testeurMSS.js';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { beforeEach } from 'vitest';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import { UUID } from '../../../src/typesBasiques.ts';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Le serveur MSS des routes privées /api/groupes-services', () => {
   const testeur = testeurMSS();
@@ -183,6 +188,95 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
 
       expect(reponse.status).toBe(404);
       expect(await testeur.depotDonnees().lisGroupesDe('U2')).toHaveLength(1);
+    });
+  });
+
+  describe('quand requête POST sur `/api/groupes-services/associations`', () => {
+    let idUtilisateur: UUID;
+    let idGroupe: UUID;
+    let idService: UUID;
+
+    beforeEach(async () => {
+      const utilisateur = await testeur
+        .depotDonnees()
+        .nouvelUtilisateur(unUtilisateur().donnees);
+      idUtilisateur = utilisateur.id;
+
+      const groupe = await testeur
+        .depotDonnees()
+        .nouveauGroupe(idUtilisateur, 'Métier');
+      idGroupe = groupe.donnees().id;
+      testeur.middleware().reinitialise({ idUtilisateur: idUtilisateur });
+
+      idService = await testeur
+        .depotDonnees()
+        .nouveauService(idUtilisateur, unServiceV2().donnees);
+    });
+
+    it('refuse une liste de services vide', async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [idGroupe],
+        idsServices: [],
+      });
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('refuse des ids de service qui ne sont pas des UUIDs', async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [idGroupe],
+        idsServices: ['pas un uuid'],
+      });
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('refuse une liste de groupes vide', async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [],
+        idsServices: [idService],
+      });
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('refuse des ids de groupe qui ne sont pas des UUIDs', async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: ['pas un uuid'],
+        idsServices: [idService],
+      });
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("répond 404 si l'utilisateur fourni des UUIDs de groupe ne lui appartenant pas", async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [unUUIDRandom()],
+        idsServices: [idService],
+      });
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it("répond 404 si l'utilisateur fourni des UUIDs de services ne lui appartenant pas", async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [idGroupe],
+        idsServices: [unUUIDRandom()],
+      });
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it('associe les services aux groupes', async () => {
+      const reponse = await testeur.post('/api/groupes-services/associations', {
+        idsGroupes: [idGroupe],
+        idsServices: [idService],
+      });
+
+      expect(reponse.status).toBe(200);
+      const groupes = await testeur.depotDonnees().lisGroupesDe(idUtilisateur);
+      expect(groupes).toHaveLength(1);
+      expect(groupes[0].donnees().idServicesAssocies).toEqual([idService]);
     });
   });
 });
