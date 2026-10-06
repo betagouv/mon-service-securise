@@ -237,6 +237,7 @@
         <div slot="panel-{index + 1}">
           <TableauxDesServicesAvecActions
             indicesCyberCharges={indiceCyberMoyen !== undefined}
+            groupes={groupesServices}
           />
         </div>
       {/each}

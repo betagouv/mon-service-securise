@@ -10,6 +10,10 @@
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
   import { singulierPluriel } from '../outils/string';
   import TableauDeServices from './TableauDeServices.svelte';
+  import type { GroupeServices } from './tableauDeBord.d';
+  import Pastille from '../ui/Pastille.svelte';
+  import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
+  import { derived } from 'svelte/store';
 
   let selection = $derived([
     ...$resultatsDeRecherche
@@ -30,9 +34,22 @@
 
   interface Props {
     indicesCyberCharges?: boolean;
+    groupes: GroupeServices[];
   }
+  let { indicesCyberCharges = false, groupes }: Props = $props();
 
-  let { indicesCyberCharges = false }: Props = $props();
+  let tousIdsServicesDansGroupes = $derived([
+    ...new Set(groupes.flatMap((g) => g.idServicesAssocies)),
+  ]);
+  let tousServicesSansGroupe = derived(
+    [resultatsDeRechercheDuStatutHomologationSelectionne],
+    ([$r]) => $r.filter((s) => !tousIdsServicesDansGroupes.includes(s.id))
+  );
+
+  const servicesDuGroupe = (groupe: GroupeServices) =>
+    $resultatsDeRechercheDuStatutHomologationSelectionne.filter((s) =>
+      groupe.idServicesAssocies.includes(s.id)
+    );
 </script>
 
 {#if $affichageTableauVide.doitAfficher}
@@ -51,7 +68,39 @@
     </span>
     <ActionsDesServices {selection} />
   </div>
-  <TableauDeServices {indicesCyberCharges} />
+  {#if groupes.length > 0}
+    {#each groupes as groupe (groupe.id)}
+      <h4>
+        {groupe.libelle}
+        <Pastille
+          contenu={groupe.idServicesAssocies.length.toString()}
+          active
+        />
+      </h4>
+      <TableauDeServices
+        {indicesCyberCharges}
+        servicesAAfficher={servicesDuGroupe(groupe)}
+        brouillonsAAfficher={[]}
+      />
+    {/each}
+    <h4>
+      Sans Groupe <Pastille
+        contenu={$tousServicesSansGroupe.length.toString()}
+        active
+      />
+    </h4>
+    <TableauDeServices
+      {indicesCyberCharges}
+      servicesAAfficher={$tousServicesSansGroupe}
+      brouillonsAAfficher={$resultatsDeRechercheBrouillons}
+    />
+  {:else}
+    <TableauDeServices
+      {indicesCyberCharges}
+      servicesAAfficher={$resultatsDeRechercheDuStatutHomologationSelectionne}
+      brouillonsAAfficher={$resultatsDeRechercheBrouillons}
+    />
+  {/if}
 {/if}
 
 <style lang="scss">
@@ -68,5 +117,11 @@
     line-height: 1.5rem;
     color: #666666;
     white-space: nowrap;
+  }
+
+  h4 {
+    display: flex;
+    gap: 8px;
+    align-items: center;
   }
 </style>

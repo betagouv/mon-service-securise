@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
-  import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
   import { selectionIdsServices } from './stores/selectionService.store';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
@@ -12,11 +10,21 @@
   import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
   import EtiquetteHomologation from './elementsDeService/EtiquetteHomologation.svelte';
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
+  import type {
+    BrouillonService,
+    ServiceAvecIndiceCyber,
+  } from './tableauDeBord.d';
 
   interface Props {
     indicesCyberCharges?: boolean;
+    servicesAAfficher: ServiceAvecIndiceCyber[];
+    brouillonsAAfficher: BrouillonService[];
   }
-  let { indicesCyberCharges = false }: Props = $props();
+  let {
+    indicesCyberCharges = false,
+    servicesAAfficher,
+    brouillonsAAfficher,
+  }: Props = $props();
 </script>
 
 <dsfr-table
@@ -29,10 +37,7 @@
     { key: 'homologation', label: 'Homologation' },
     { key: 'actionsRecommandees', label: 'Actions recommandées' },
   ]}
-  rows={[
-    ...$resultatsDeRechercheBrouillons,
-    ...$resultatsDeRechercheDuStatutHomologationSelectionne,
-  ]}
+  rows={[...brouillonsAAfficher, ...servicesAAfficher]}
   row-key="id"
   selectable
   rich
@@ -44,7 +49,13 @@
     $selectionIdsServices = e.detail.keys;
   }}
 >
-  {#each $resultatsDeRechercheBrouillons as brouillon, i (brouillon.id)}
+  <div slot="empty">
+    <p class="tableau-vide">
+      Aucun service ne correspond à votre recherche et aux filtres dans ce
+      dossier.
+    </p>
+  </div>
+  {#each brouillonsAAfficher as brouillon, i (brouillon.id)}
     <a
       slot="cell:nom:{i}"
       class="cellule-noms"
@@ -73,10 +84,10 @@
       ></dsfr-button>
     </div>
   {/each}
-  {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service, i (service.id)}
+  {#each servicesAAfficher as service, i (service.id)}
     {@const idService = service.id}
     {@const indiceCyberDuService = service.indiceCyber}
-    {@const index = i + $resultatsDeRechercheBrouillons.length}
+    {@const index = i + brouillonsAAfficher.length}
     <a slot="cell:nom:{index}" class="cellule-noms" href="/service/{idService}">
       <span class="denomination-service">
         {#if service.estAdmin}
@@ -212,5 +223,12 @@
     font-style: normal;
     font-weight: 400;
     line-height: 18px;
+  }
+
+  p.tableau-vide {
+    color: #3a3a3a;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin: 0;
   }
 </style>
