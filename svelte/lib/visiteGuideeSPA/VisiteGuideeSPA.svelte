@@ -171,6 +171,7 @@
         avecGestionOrganisations={false}
         modeVisiteGuidee={true}
         aDejaVuEntierementVisiteGuidee={false}
+        avecGroupesServices={false}
       />
     </div>
   {:else if pageFondVisiteGuidee === 'statistiques'}
