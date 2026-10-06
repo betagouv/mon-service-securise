@@ -16,6 +16,7 @@ block append scripts
   +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
   +donneesPartagees('utilisateur-connecte', {estSuperviseur: utilisateurConnecte && utilisateurConnecte.estSuperviseur, estAdmin: utilisateurConnecte && utilisateurConnecte.estAdmin, prenomNom: utilisateurConnecte.prenomNom, aDejaVuEntierementVisiteGuidee: etatVisiteGuidee.dejaTerminee})
   +donneesPartagees('avec-gestion-organisations', featureFlags.avecGestionDesOrganisations)
+  +donneesPartagees('avec-groupes-services', featureFlags.avecGroupesServices)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)
   +moduleAvecVersion('/statique/tableauDeBord.mjs')
 

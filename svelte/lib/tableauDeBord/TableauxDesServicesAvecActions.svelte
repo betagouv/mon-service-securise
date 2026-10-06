@@ -35,8 +35,13 @@
   interface Props {
     indicesCyberCharges?: boolean;
     groupes: GroupeServices[];
+    avecGroupesServices: boolean;
   }
-  let { indicesCyberCharges = false, groupes }: Props = $props();
+  let {
+    indicesCyberCharges = false,
+    groupes,
+    avecGroupesServices,
+  }: Props = $props();
 
   let tousIdsServicesDansGroupes = $derived([
     ...new Set(groupes.flatMap((g) => g.idServicesAssocies)),
@@ -68,7 +73,7 @@
     </span>
     <ActionsDesServices {selection} />
   </div>
-  {#if groupes.length > 0}
+  {#if groupes.length > 0 && avecGroupesServices}
     <div class="contenu-groupes">
       {#each groupes as groupe (groupe.id)}
         <AccordeonDesServices
