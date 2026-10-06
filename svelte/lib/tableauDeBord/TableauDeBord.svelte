@@ -197,6 +197,7 @@
 <svelte:body
   on:rafraichis-services={rafraichisServices}
   on:collaboratif-service-modifie={rafraichisServices}
+  on:rafraichis-groupes={rafraichisGroupes}
 />
 <Toaster />
 <div class="tableau-de-bord">
