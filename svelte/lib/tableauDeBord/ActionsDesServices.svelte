@@ -15,6 +15,7 @@
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
   import TiroirAssociationGroupesServices from '../ui/tiroirs/TiroirAssociationGroupesServices.svelte';
   import type { GroupeServices } from './tableauDeBord.d';
+  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
 
   interface Props {
     selection: ServiceOuBrouillon[];
@@ -43,6 +44,36 @@
   let ontDesDocuments = $derived(
     selection.every((s) => estService(s) && s.documentsPdfDisponibles.length)
   );
+
+  const actionsSupplementaires = $derived([
+    {
+      label: 'Télécharger PDFs',
+      icone: 'file-download-line',
+      action: () =>
+        tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+          service: seulementLesServices(selection)[0],
+        }),
+      disabled: !(actionsDisponibles && selectionUnique && ontDesDocuments),
+    },
+    {
+      label: 'Exporter la sélection',
+      icone: 'inbox-archive-line',
+      disabled: !(actionsDisponibles && !selectionPossedeDesBrouillons),
+      action: () =>
+        tiroirStore.afficheContenu(TiroirExportServices, {
+          services: seulementLesServices(selection),
+        }),
+    },
+    {
+      label: 'Supprimer',
+      icone: 'delete-bin-line',
+      disabled: !(actionsDisponibles && estProprietaireDesServicesSelectionnes),
+      action: () =>
+        tiroirStore.afficheContenu(TiroirSuppression, {
+          servicesEtBrouillon: selection,
+        }),
+    },
+  ]);
 </script>
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
@@ -60,30 +91,6 @@
       )}
       onclick={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-          services: seulementLesServices(selection),
-        })}
-    ></dsfr-button>
-    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-    <dsfr-button
-      label="Télécharger PDFs"
-      icon="file-download-line"
-      kind="tertiary-no-outline"
-      has-icon
-      disabled={!(actionsDisponibles && selectionUnique && ontDesDocuments)}
-      onclick={() =>
-        tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-          service: seulementLesServices(selection)[0],
-        })}
-    ></dsfr-button>
-    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-    <dsfr-button
-      label="Exporter la sélection"
-      icon="inbox-archive-line"
-      kind="tertiary-no-outline"
-      has-icon
-      disabled={!(actionsDisponibles && !selectionPossedeDesBrouillons)}
-      onclick={() =>
-        tiroirStore.afficheContenu(TiroirExportServices, {
           services: seulementLesServices(selection),
         })}
     ></dsfr-button>
@@ -117,18 +124,14 @@
           groupes,
         })}
     ></dsfr-button>
-    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-    <dsfr-button
-      label="Supprimer"
-      icon="delete-bin-line"
-      kind="tertiary-no-outline"
-      has-icon
-      disabled={!(actionsDisponibles && estProprietaireDesServicesSelectionnes)}
-      onclick={() =>
-        tiroirStore.afficheContenu(TiroirSuppression, {
-          servicesEtBrouillon: selection,
-        })}
-    ></dsfr-button>
+    <BoutonAvecListeDeroulante
+      titre=""
+      icone="more-line"
+      typeBouton="tertiary"
+      tailleBouton="md"
+      aligneADroite
+      options={actionsSupplementaires}
+    />
   </div>
 </div>
 

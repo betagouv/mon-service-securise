@@ -4,15 +4,19 @@
     icone: string;
     href?: string;
     action?: () => void;
+    disabled?: boolean;
   };
 </script>
 
 <script lang="ts">
   interface Props {
-    titre: string;
+    titre?: string;
     options: OptionBoutonListeDeroulante[];
     disabled?: boolean;
     aligneADroite?: boolean;
+    icone?: string;
+    typeBouton?: 'primary' | 'secondary' | 'tertiary';
+    tailleBouton?: 'sm' | 'md' | 'lg';
   }
 
   let {
@@ -20,6 +24,9 @@
     options,
     disabled = false,
     aligneADroite = false,
+    icone = 'add-line',
+    typeBouton = 'primary',
+    tailleBouton = 'md',
   }: Props = $props();
 
   let optionsPourDropdown = $derived(
@@ -41,9 +48,10 @@
   id="bouton-liste-deroulante"
   collapse-id="bouton-liste-deroulante-collapse"
   button-title={titre}
-  button-kind="primary"
-  button-size="md"
-  button-icon="add-line"
+  button-kind={typeBouton}
+  button-icon-place={titre ? 'left' : 'only'}
+  button-size={tailleBouton}
+  button-icon={icone}
   content-type="buttons"
   align={aligneADroite ? 'right' : 'left'}
   items={optionsPourDropdown}
