@@ -12,6 +12,7 @@ import {
 import { UUID } from '../../typesBasiques.js';
 import {
   schemaAssociationGroupeServices,
+  schemaDissociationGroupeServices,
   schemaIdGroupeServices,
   schemaLibelleGroupeServices,
 } from './routesConnecteApiGroupesServices.schema.js';
@@ -132,6 +133,36 @@ const routesConnecteApiGroupesServices = ({
         await depotDonnees.associeServicesAuxGroupes(
           idUtilisateurCourant,
           idsGroupes as UUID[],
+          idsServices as UUID[]
+        );
+
+        return reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurGroupeServicesInexistant ||
+          e instanceof ErreurServiceInexistant
+        ) {
+          return reponse.sendStatus(404);
+        }
+        return suite(e);
+      }
+    }
+  );
+
+  routes.delete(
+    '/:id/associations',
+    valideBody(z.strictObject(schemaDissociationGroupeServices())),
+    valideParams(z.strictObject(schemaIdGroupeServices())),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
+      const { idsServices } = requete.body;
+      const { id } = requete.params;
+      try {
+        await depotDonnees.supprimeAssociationServicesAuGroupe(
+          idUtilisateurCourant,
+          id as UUID,
           idsServices as UUID[]
         );
 

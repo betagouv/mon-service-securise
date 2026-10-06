@@ -12,3 +12,7 @@ export const schemaAssociationGroupeServices = () => ({
   idsGroupes: z.array(z.uuid()).min(1).max(1000),
   idsServices: z.array(z.uuid()).min(1).max(1000),
 });
+
+export const schemaDissociationGroupeServices = () => ({
+  idsServices: z.array(z.uuid()).min(1).max(1000),
+});
