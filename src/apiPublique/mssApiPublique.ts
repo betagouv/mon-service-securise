@@ -18,6 +18,7 @@ type ConfigurationApiPublique = {
   depotDonnees: DepotDonnees;
   adaptateurGestionErreur: AdaptateurGestionErreur;
   urlBaseMss: string;
+  urlBaseApi: string;
   adaptateurAuditApiPublique: AdaptateurAuditApiPublique;
   limiteDeDebit?: LimiteDeDebit;
   trustProxy?: boolean | number | string;
@@ -41,6 +42,7 @@ export const creeServeurApiPublique = ({
   depotDonnees,
   adaptateurGestionErreur,
   urlBaseMss,
+  urlBaseApi,
   adaptateurAuditApiPublique,
   limiteDeDebit = limiteDeDebitParDefaut,
   trustProxy,
@@ -51,7 +53,7 @@ export const creeServeurApiPublique = ({
   app.set('trust proxy', trustProxy);
   app.use(politiqueSecuriteApi);
 
-  app.use(routesDocumentation({ urlBaseMss }));
+  app.use(routesDocumentation({ urlBaseMss, urlBaseApi }));
 
   app.use(
     '/v1',

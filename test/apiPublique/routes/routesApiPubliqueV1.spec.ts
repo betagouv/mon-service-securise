@@ -48,6 +48,7 @@ describe("Les routes d'API publique `/v1`", () => {
     creeServeurApiPublique({
       depotDonnees,
       urlBaseMss: 'https://mss.example.org',
+      urlBaseApi: 'https://api.example.org',
       adaptateurGestionErreur: {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
