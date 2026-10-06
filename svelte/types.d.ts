@@ -9,6 +9,7 @@ declare module 'svelte/elements' {
       event: CustomEvent<never>
     ) => void;
     'on:rafraichis-services'?: (event: CustomEvent<never>) => void;
+    'on:rafraichis-groupes'?: (event: CustomEvent<never>) => void;
     'on:risques-v2-modifies'?: (event: CustomEvent<never>) => void;
     'on:description-service-modifiee'?: (event: CustomEvent<never>) => void;
     'on:homologation-supprimee'?: (event: CustomEvent<never>) => void;

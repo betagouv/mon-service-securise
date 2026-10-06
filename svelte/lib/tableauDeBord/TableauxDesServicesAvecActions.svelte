@@ -77,14 +77,13 @@
     <div class="contenu-groupes">
       {#each groupes as groupe (groupe.id)}
         <AccordeonDesServices
-          titre={groupe.libelle}
+          {groupe}
           {indicesCyberCharges}
           servicesAAfficher={servicesDuGroupe(groupe)}
           brouillonsAAfficher={[]}
         />
       {/each}
       <AccordeonDesServices
-        titre="Sans Groupe"
         {indicesCyberCharges}
         servicesAAfficher={$tousServicesSansGroupe}
         brouillonsAAfficher={$resultatsDeRechercheBrouillons}

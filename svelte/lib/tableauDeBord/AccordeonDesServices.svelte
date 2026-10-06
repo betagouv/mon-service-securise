@@ -1,28 +1,46 @@
 <script lang="ts">
   import type {
     BrouillonService,
+    GroupeServices,
     ServiceAvecIndiceCyber,
   } from './tableauDeBord.d';
   import TableauDeServices from './TableauDeServices.svelte';
   import Pastille from '../ui/Pastille.svelte';
   import { untrack } from 'svelte';
+  import { derived } from 'svelte/store';
+  import { selectionIdsServices } from './stores/selectionService.store';
+  import { singulierPluriel } from '../outils/string';
 
   interface Props {
     indicesCyberCharges?: boolean;
     servicesAAfficher: ServiceAvecIndiceCyber[];
     brouillonsAAfficher: BrouillonService[];
     ouvertParDefaut?: boolean;
-    titre: string;
+    groupe?: GroupeServices;
   }
   let {
     indicesCyberCharges = false,
     servicesAAfficher,
     brouillonsAAfficher,
     ouvertParDefaut = false,
-    titre,
+    groupe,
   }: Props = $props();
 
   let estOuvert = $state(untrack(() => ouvertParDefaut));
+
+  let servicesSelectionnesDansAccordeon = derived(
+    [selectionIdsServices],
+    ([$s]) => {
+      return $s.filter((id) => servicesAAfficher.map((s) => s.id).includes(id));
+    }
+  );
+
+  const retireServicesDuGroupe = async () => {
+    await axios.delete(`/api/groupes-services/${groupe?.id}/associations`, {
+      data: { idsServices: $servicesSelectionnesDansAccordeon },
+    });
+    document.body.dispatchEvent(new CustomEvent('rafraichis-groupes'));
+  };
 </script>
 
 <div class="contenu-groupe">
@@ -33,7 +51,7 @@
     }}
   >
     <lab-anssi-icone nom="folder-2-line" taille="md"></lab-anssi-icone>
-    {titre}
+    {groupe ? groupe.libelle : 'Sans groupe'}
     <Pastille
       contenu={`${servicesAAfficher.length + brouillonsAAfficher.length}`}
       active={estOuvert}
@@ -41,6 +59,32 @@
     <lab-anssi-icone class="fleche" nom="arrow-up-s-line" taille="md"
     ></lab-anssi-icone>
   </button>
+  {#if groupe && servicesAAfficher.length > 0}
+    <div class="selection" class:ouvert={estOuvert}>
+      <p>
+        {#if $servicesSelectionnesDansAccordeon.length === 0}
+          Aucun service sélectionné
+        {:else}
+          {$servicesSelectionnesDansAccordeon.length}
+          {singulierPluriel(
+            'service sélectionné',
+            'services sélectionnés',
+            $servicesSelectionnesDansAccordeon.length
+          )} dans ce groupe
+        {/if}
+      </p>
+      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="secondary"
+        disabled={$servicesSelectionnesDansAccordeon.length === 0}
+        label="Supprimer de ce groupe"
+        has-icon
+        icon="close-circle-line"
+        onclick={async () => await retireServicesDuGroupe()}
+      >
+      </dsfr-button>
+    </div>
+  {/if}
   <div class="contenu" class:ouvert={estOuvert}>
     <TableauDeServices
       {indicesCyberCharges}
@@ -54,6 +98,28 @@
   .contenu-groupe {
     margin: 16px 0 0;
     z-index: 0;
+
+    .selection {
+      display: none;
+
+      &.ouvert {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px;
+        border-left: 1px solid #929292;
+        border-right: 1px solid #929292;
+
+        p {
+          margin: 0;
+          color: #666;
+          font-size: 0.875rem;
+          font-weight: 400;
+          line-height: 1.5rem;
+        }
+      }
+    }
 
     .contenu {
       display: none;
