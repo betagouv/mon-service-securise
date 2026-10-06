@@ -71,7 +71,7 @@
         )}
       {/if}
     </span>
-    <ActionsDesServices {selection} />
+    <ActionsDesServices {selection} {groupes} />
   </div>
   {#if groupes.length > 0 && avecGroupesServices}
     <div class="contenu-groupes">
