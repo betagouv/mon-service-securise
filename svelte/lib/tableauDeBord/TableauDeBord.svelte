@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type {
+    GroupeServices,
     IndiceCyberMoyen,
     ReponseApiIndicesCyber,
     ReponseApiServices,
@@ -55,6 +56,7 @@
   let avecModaleFinVisiteGuidee = $state(false);
   let avecModaleAccueilVisiteGuidee = $state(false);
   let avecModaleVisiteGuideeAvancee = $state(false);
+  let groupesServices: GroupeServices[] = $state([]);
 
   let utilisateurADesServices = derived(services, ($s) => $s.length > 0);
 
@@ -71,6 +73,7 @@
       enCoursChargement = false;
     } else {
       await rafraichisServices();
+      await rafraichisGroupes();
       afficheModalesVisiteGuideeSiNecessaire();
     }
   });
@@ -128,6 +131,10 @@
     document.body.dispatchEvent(
       new CustomEvent('svelte-tableau-des-services-rafraichi')
     );
+  };
+
+  const rafraichisGroupes = async () => {
+    groupesServices = (await axios.get('/api/groupes-services')).data;
   };
 
   const configurationsTabs: { id: StatutHomologation; label: string }[] = [

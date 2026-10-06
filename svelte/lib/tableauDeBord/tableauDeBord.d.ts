@@ -94,3 +94,9 @@ export type ActionRecommandee = {
   id: IdActionRecommandee;
   autorisee: boolean;
 };
+
+export type GroupeServices = {
+  id: string;
+  libelle: string;
+  idServicesAssocies: string[];
+};
