@@ -3,9 +3,14 @@ import { documentOpenApi } from '../schemas/openApi.schema.js';
 import { pageDocumentation } from '../documentation/pageDocumentation.js';
 import { politiqueSecuriteDocumentation } from '../middlewares/politiqueSecuriteDocumentation.js';
 
-export const routesDocumentation = ({ urlBaseMss }: { urlBaseMss: string }) => {
+type ConfigurationDocumentation = { urlBaseMss: string; urlBaseApi: string };
+
+export const routesDocumentation = ({
+  urlBaseMss,
+  urlBaseApi,
+}: ConfigurationDocumentation) => {
   const routes = express.Router();
-  const document = documentOpenApi();
+  const document = documentOpenApi({ urlBaseApi });
   const page = pageDocumentation(document, { urlBaseMss });
 
   routes.get('/openapi.json', (_requete: Request, reponse: Response) => {

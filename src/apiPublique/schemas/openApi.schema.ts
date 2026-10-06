@@ -135,7 +135,7 @@ const enregistreLesRoutes = (registry: OpenAPIRegistry) => {
   });
 };
 
-export const documentOpenApi = () => {
+export const documentOpenApi = ({ urlBaseApi }: { urlBaseApi: string }) => {
   const registry = new OpenAPIRegistry();
 
   registry.registerComponent('securitySchemes', 'cleApi', {
@@ -154,6 +154,7 @@ export const documentOpenApi = () => {
       description:
         'API en lecture seule donnant accès, dans vos propres outils, aux données des services que vous voyez déjà dans MonServiceSécurisé.',
     },
+    servers: [{ url: urlBaseApi }],
     security: [{ cleApi: [] }],
   });
 };

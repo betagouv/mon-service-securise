@@ -2,8 +2,16 @@ import type { SchemaObject } from '@asteasolutions/zod-to-openapi/dist/types.d.j
 import { documentOpenApi } from '../../../src/apiPublique/schemas/openApi.schema.js';
 
 describe('La génération de la documentation OpenAPI', () => {
+  const urlBaseApi = 'https://api.example.org';
+
+  it("déclare l'URL de base de l'API comme unique serveur", async () => {
+    const document = documentOpenApi({ urlBaseApi });
+
+    expect(document.servers).toEqual([{ url: 'https://api.example.org' }]);
+  });
+
   it("déclare l'authentification par clé d'API en `Bearer`", async () => {
-    const document = documentOpenApi();
+    const document = documentOpenApi({ urlBaseApi });
 
     expect(document.components!.securitySchemes!.cleApi).toMatchObject({
       type: 'http',
@@ -14,7 +22,7 @@ describe('La génération de la documentation OpenAPI', () => {
 
   describe('concernant le schéma de la route /v1/services', () => {
     it('décrit les champs d’un service à partir du schéma de sortie', async () => {
-      const document = documentOpenApi();
+      const document = documentOpenApi({ urlBaseApi });
 
       const schemaService = document.components!.schemas!
         .Service as SchemaObject;
@@ -29,7 +37,7 @@ describe('La génération de la documentation OpenAPI', () => {
     });
 
     it('documente les codes de réponse', async () => {
-      const document = documentOpenApi();
+      const document = documentOpenApi({ urlBaseApi });
 
       const reponses = document.paths!['/v1/services']!.get!.responses!;
       expect(Object.keys(reponses)).toEqual(['200', '401', '429', '500']);
@@ -60,7 +68,7 @@ describe('La génération de la documentation OpenAPI', () => {
     { chemin: '/v1/services/{id}/risques', schemaReponse: 'ReponseRisques' },
   ])('concernant la route $chemin', ({ chemin, schemaReponse }) => {
     it("documente l'identifiant du service en paramètre de chemin", async () => {
-      const document = documentOpenApi();
+      const document = documentOpenApi({ urlBaseApi });
 
       const [parametre] = document.paths![chemin]!.get!.parameters! as Array<{
         name: string;
@@ -75,7 +83,7 @@ describe('La génération de la documentation OpenAPI', () => {
     });
 
     it('documente les codes de réponse', async () => {
-      const document = documentOpenApi();
+      const document = documentOpenApi({ urlBaseApi });
 
       const reponses = document.paths![chemin]!.get!.responses!;
       expect(Object.keys(reponses)).toEqual([

@@ -48,6 +48,12 @@ if (!urlBaseMss)
     "La variable d'environnement URL_BASE_MSS est requise pour la documentation de l'API publique."
   );
 
+const urlBaseApi = adaptateurEnvironnement.mss().urlBaseApi();
+if (!urlBaseApi)
+  throw new Error(
+    "La variable d'environnement URL_BASE_API_MSS est requise pour la documentation de l'API publique."
+  );
+
 const maxRequetesParMinuteParCleApi = Number(
   process.env.NB_REQUETES_MAX_PAR_MINUTE_API_PUBLIQUE
 );
@@ -64,6 +70,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurGestionErreur,
     adaptateurAuditApiPublique,
     urlBaseMss,
+    urlBaseApi,
     limiteDeDebit,
     trustProxy: adaptateurEnvironnement.trustProxy(),
     adaptateurEnvironnement,

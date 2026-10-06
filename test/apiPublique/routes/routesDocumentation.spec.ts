@@ -15,6 +15,7 @@ describe("Les routes de documentation de l'API publique", () => {
     creeServeurApiPublique({
       depotDonnees,
       urlBaseMss: 'https://mss.example.org',
+      urlBaseApi: 'https://api.example.org',
       adaptateurGestionErreur: {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
@@ -27,6 +28,14 @@ describe("Les routes de documentation de l'API publique", () => {
 
       expect(reponse.status).toBe(200);
       expect(reponse.body.openapi).toBe('3.1.0');
+    });
+
+    it("déclare l'URL de base de l'API publique comme serveur", async () => {
+      const reponse = await request(uneApp()).get('/openapi.json');
+
+      expect(reponse.body.servers).toEqual([
+        { url: 'https://api.example.org' },
+      ]);
     });
 
     it("reste sous la politique de sécurité de l'API, sans autoriser de ressource", async () => {

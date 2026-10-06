@@ -13,13 +13,17 @@ describe('Le modèle de documentation', () => {
   });
 
   const operationDuDocumentOpenApi = (chemin: string) =>
-    construisModeleDocumentation(documentOpenApi())
+    construisModeleDocumentation(
+      documentOpenApi({ urlBaseApi: 'https://api.example.org' })
+    )
       .groupes.flatMap((groupe) => groupe.operations)
       .find((operation) => operation.chemin === chemin)!;
 
   describe('sur les informations générales', () => {
     it('reprend le titre, la version et la description', () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+      const modele = construisModeleDocumentation(
+        documentOpenApi({ urlBaseApi: 'https://api.example.org' })
+      );
 
       expect(modele.titre).toBe('API publique MonServiceSécurisé');
       expect(modele.version).toBe('1.0.0');
@@ -35,7 +39,9 @@ describe('Le modèle de documentation', () => {
     });
 
     it("décrit les mécanismes d'authentification", () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+      const modele = construisModeleDocumentation(
+        documentOpenApi({ urlBaseApi: 'https://api.example.org' })
+      );
 
       expect(modele.authentifications).toEqual([
         {
@@ -252,7 +258,9 @@ describe('Le modèle de documentation', () => {
     });
 
     it("décrit les champs d'un schéma et en donne un exemple", () => {
-      const modele = construisModeleDocumentation(documentOpenApi());
+      const modele = construisModeleDocumentation(
+        documentOpenApi({ urlBaseApi: 'https://api.example.org' })
+      );
 
       const erreur = modele.schemas.find((s) => s.nom === 'Erreur')!;
       expect(erreur.lignes).toEqual([
