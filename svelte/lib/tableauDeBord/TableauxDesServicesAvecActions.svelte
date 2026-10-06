@@ -11,9 +11,9 @@
   import { singulierPluriel } from '../outils/string';
   import TableauDeServices from './TableauDeServices.svelte';
   import type { GroupeServices } from './tableauDeBord.d';
-  import Pastille from '../ui/Pastille.svelte';
   import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
   import { derived } from 'svelte/store';
+  import AccordeonDesServices from './AccordeonDesServices.svelte';
 
   let selection = $derived([
     ...$resultatsDeRecherche
@@ -69,31 +69,23 @@
     <ActionsDesServices {selection} />
   </div>
   {#if groupes.length > 0}
-    {#each groupes as groupe (groupe.id)}
-      <h4>
-        {groupe.libelle}
-        <Pastille
-          contenu={groupe.idServicesAssocies.length.toString()}
-          active
+    <div class="contenu-groupes">
+      {#each groupes as groupe (groupe.id)}
+        <AccordeonDesServices
+          titre={groupe.libelle}
+          {indicesCyberCharges}
+          servicesAAfficher={servicesDuGroupe(groupe)}
+          brouillonsAAfficher={[]}
         />
-      </h4>
-      <TableauDeServices
+      {/each}
+      <AccordeonDesServices
+        titre="Sans Groupe"
         {indicesCyberCharges}
-        servicesAAfficher={servicesDuGroupe(groupe)}
-        brouillonsAAfficher={[]}
+        servicesAAfficher={$tousServicesSansGroupe}
+        brouillonsAAfficher={$resultatsDeRechercheBrouillons}
+        ouvertParDefaut
       />
-    {/each}
-    <h4>
-      Sans Groupe <Pastille
-        contenu={$tousServicesSansGroupe.length.toString()}
-        active
-      />
-    </h4>
-    <TableauDeServices
-      {indicesCyberCharges}
-      servicesAAfficher={$tousServicesSansGroupe}
-      brouillonsAAfficher={$resultatsDeRechercheBrouillons}
-    />
+    </div>
   {:else}
     <TableauDeServices
       {indicesCyberCharges}
@@ -104,6 +96,12 @@
 {/if}
 
 <style lang="scss">
+  .contenu-groupes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .barre-actions {
     margin-bottom: 8px;
     display: flex;
@@ -117,11 +115,5 @@
     line-height: 1.5rem;
     color: #666666;
     white-space: nowrap;
-  }
-
-  h4 {
-    display: flex;
-    gap: 8px;
-    align-items: center;
   }
 </style>
