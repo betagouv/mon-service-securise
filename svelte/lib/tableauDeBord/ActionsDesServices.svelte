@@ -13,12 +13,15 @@
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
+  import TiroirAssociationGroupesServices from '../ui/tiroirs/TiroirAssociationGroupesServices.svelte';
+  import type { GroupeServices } from './tableauDeBord.d';
 
   interface Props {
     selection: ServiceOuBrouillon[];
+    groupes: GroupeServices[];
   }
 
-  let { selection }: Props = $props();
+  let { selection, groupes }: Props = $props();
 
   const estService = (
     s: ServiceOuBrouillon
@@ -99,6 +102,19 @@
       onclick={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
           service: seulementLesServices(selection)[0],
+        })}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Classer dans des groupes"
+      icon="folder-2-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!actionsDisponibles || selectionPossedeDesBrouillons}
+      onclick={() =>
+        tiroirStore.afficheContenu(TiroirAssociationGroupesServices, {
+          services: seulementLesServices(selection),
+          groupes,
         })}
     ></dsfr-button>
     <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
