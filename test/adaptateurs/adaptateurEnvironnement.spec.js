@@ -1,6 +1,7 @@
 import expect from 'expect.js';
 import {
   chiffrement,
+  mss,
   statique,
 } from '../../src/adaptateurs/adaptateurEnvironnement.js';
 
@@ -66,6 +67,20 @@ describe("L'adaptateur environnement", () => {
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
     expect(tousLesSelsDeHachage[0].version === 1).to.be(true);
+  });
+
+  describe('sur demande des URL de MonServiceSécurisé', () => {
+    it("expose l'URL de base de l'API publique", () => {
+      process.env = { URL_BASE_API_MSS: 'https://api.example.org' };
+
+      expect(mss().urlBaseApi()).to.be('https://api.example.org');
+    });
+
+    it("construit l'URL de la documentation à partir de l'URL de base de l'API publique", () => {
+      process.env = { URL_BASE_API_MSS: 'https://api.example.org' };
+
+      expect(mss().urlDocumentationApi()).to.be('https://api.example.org/docs');
+    });
   });
 
   describe('sur demande de la politique de cache des fichiers statiques', () => {
