@@ -7,9 +7,11 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   ErreurGroupeServicesDejaExistant,
   ErreurGroupeServicesInexistant,
+  ErreurServiceInexistant,
 } from '../../erreurs.js';
 import { UUID } from '../../typesBasiques.js';
 import {
+  schemaAssociationGroupeServices,
   schemaIdGroupeServices,
   schemaLibelleGroupeServices,
 } from './routesConnecteApiGroupesServices.schema.js';
@@ -114,6 +116,34 @@ const routesConnecteApiGroupesServices = ({
         reponse.sendStatus(200);
       } catch (e) {
         traduisErreur(e, reponse, suite);
+      }
+    }
+  );
+
+  routes.post(
+    '/associations',
+    valideBody(z.strictObject(schemaAssociationGroupeServices())),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
+      const { idsGroupes, idsServices } = requete.body;
+      try {
+        await depotDonnees.associeServicesAuxGroupes(
+          idUtilisateurCourant,
+          idsGroupes as UUID[],
+          idsServices as UUID[]
+        );
+
+        return reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurGroupeServicesInexistant ||
+          e instanceof ErreurServiceInexistant
+        ) {
+          return reponse.sendStatus(404);
+        }
+        return suite(e);
       }
     }
   );
