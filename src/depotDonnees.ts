@@ -554,8 +554,10 @@ const creeDepot = (config: ConfigDepotDonnees) => {
       depotGroupesServices.renommeGroupe.bind(depotGroupesServices),
     supprimeGroupe:
       depotGroupesServices.supprimeGroupe.bind(depotGroupesServices),
-    metsAJourAssociationsAuxServices:
-      depotGroupesServices.metsAJourAssociationsAuxServices.bind(
+    associeServicesAuxGroupes:
+      depotGroupesServices.associeServicesAuxGroupes.bind(depotGroupesServices),
+    supprimeAssociationServicesAuGroupe:
+      depotGroupesServices.supprimeAssociationServicesAuGroupe.bind(
         depotGroupesServices
       ),
   };
