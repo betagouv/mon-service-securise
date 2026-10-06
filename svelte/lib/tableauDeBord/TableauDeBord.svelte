@@ -7,7 +7,7 @@
     ReponseApiServices,
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
-  import TableauDesServices from './TableauDesServices.svelte';
+  import TableauxDesServicesAvecActions from './TableauxDesServicesAvecActions.svelte';
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
@@ -235,7 +235,7 @@
           />
         </div>
         <div slot="panel-{index + 1}">
-          <TableauDesServices
+          <TableauxDesServicesAvecActions
             indicesCyberCharges={indiceCyberMoyen !== undefined}
           />
         </div>
