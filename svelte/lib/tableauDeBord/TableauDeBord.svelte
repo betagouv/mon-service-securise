@@ -36,6 +36,7 @@
     modeVisiteGuidee?: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
+    avecGroupesServices: boolean;
   }
 
   let {
@@ -45,6 +46,7 @@
     modeVisiteGuidee = false,
     prenomNom,
     aDejaVuEntierementVisiteGuidee,
+    avecGroupesServices,
   }: Props = $props();
 
   let enCoursChargement = $state(true);
@@ -238,6 +240,7 @@
           <TableauxDesServicesAvecActions
             indicesCyberCharges={indiceCyberMoyen !== undefined}
             groupes={groupesServices}
+            {avecGroupesServices}
           />
         </div>
       {/each}

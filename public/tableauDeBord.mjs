@@ -11,6 +11,7 @@ $(() => {
   const avecGestionOrganisations = lisDonneesPartagees(
     'avec-gestion-organisations'
   );
+  const avecGroupesServices = lisDonneesPartagees('avec-groupes-services');
   const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
 
   document.body.dispatchEvent(
@@ -21,6 +22,7 @@ $(() => {
         prenomNom,
         aDejaVuEntierementVisiteGuidee,
         avecGestionOrganisations,
+        avecGroupesServices,
       },
     })
   );
