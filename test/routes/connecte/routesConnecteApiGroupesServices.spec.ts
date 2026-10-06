@@ -1,6 +1,5 @@
 import testeurMSS from '../testeurMSS.js';
-import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
-import { beforeEach } from 'vitest';
+import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
@@ -206,7 +205,7 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
         .depotDonnees()
         .nouveauGroupe(idUtilisateur, 'Métier');
       idGroupe = groupe.donnees().id;
-      testeur.middleware().reinitialise({ idUtilisateur: idUtilisateur });
+      testeur.middleware().reinitialise({ idUtilisateur });
 
       idService = await testeur
         .depotDonnees()
@@ -277,6 +276,102 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
       const groupes = await testeur.depotDonnees().lisGroupesDe(idUtilisateur);
       expect(groupes).toHaveLength(1);
       expect(groupes[0].donnees().idServicesAssocies).toEqual([idService]);
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/groupes-services/:id/associations`', () => {
+    let idUtilisateur: UUID;
+    let idGroupe: UUID;
+    let idService: UUID;
+
+    beforeEach(async () => {
+      const utilisateur = await testeur
+        .depotDonnees()
+        .nouvelUtilisateur(unUtilisateur().donnees);
+      idUtilisateur = utilisateur.id;
+
+      const groupe = await testeur
+        .depotDonnees()
+        .nouveauGroupe(idUtilisateur, 'Métier');
+      idGroupe = groupe.donnees().id;
+      testeur.middleware().reinitialise({ idUtilisateur });
+
+      idService = await testeur
+        .depotDonnees()
+        .nouveauService(idUtilisateur, unServiceV2().donnees);
+
+      await testeur
+        .depotDonnees()
+        .associeServicesAuxGroupes(idUtilisateur, [idGroupe], [idService]);
+    });
+
+    it('refuse une liste de services vide', async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/${idGroupe}/associations`,
+        {
+          idsServices: [],
+        }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('refuse des ids de service qui ne sont pas des UUIDs', async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/${idGroupe}/associations`,
+        {
+          idsServices: ['pas un uuid'],
+        }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("refuse un id de groupe qui n'est pas un UUID", async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/PAS_UN_UUID/associations`,
+        {
+          idsServices: [idService],
+        }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("répond 404 si l'utilisateur fourni un UUID de groupe ne lui appartenant pas", async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/${unUUIDRandom()}/associations`,
+        {
+          idsServices: [idService],
+        }
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it("répond 404 si l'utilisateur fourni des UUIDs de services ne lui appartenant pas", async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/${idGroupe}/associations`,
+        {
+          idsServices: [unUUIDRandom()],
+        }
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it('dissocie les services du groupe', async () => {
+      const reponse = await testeur.delete(
+        `/api/groupes-services/${idGroupe}/associations`,
+        {
+          idsServices: [idService],
+        }
+      );
+
+      expect(reponse.status).toBe(200);
+      const groupes = await testeur.depotDonnees().lisGroupesDe(idUtilisateur);
+      expect(groupes).toHaveLength(1);
+      expect(groupes[0].donnees().idServicesAssocies).toHaveLength(0);
     });
   });
 });
