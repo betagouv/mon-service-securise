@@ -149,7 +149,7 @@ describe('Le dépôt de données des groupes de services', () => {
     });
   });
 
-  describe("sur demande d'association de services à des groupes", () => {
+  describe("sur demande de suppression d'une association entre un groupe et des services", () => {
     const idUtilisateur = unUUID('U');
     const idService = unUUID('S1');
 
@@ -159,31 +159,18 @@ describe('Le dépôt de données des groupes de services', () => {
       );
     });
 
-    it('ajoute un service dans un groupe vide', async () => {
+    it("retire un service d'un groupe dans lequel il ne doit plus figurer", async () => {
       const depot = unDepot();
       const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
-      await depot.metsAJourAssociationsAuxServices(
+      await depot.associeServicesAuxGroupes(
         idUtilisateur,
         [groupe.donnees().id],
         [idService]
       );
 
-      const groupes = await depot.lisGroupesDe(idUtilisateur);
-      expect(groupes[0].donnees().idServicesAssocies).toEqual([idService]);
-    });
-
-    it("retire un service d'un groupe dans lequel il ne figure plus", async () => {
-      const depot = unDepot();
-      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
-      await depot.metsAJourAssociationsAuxServices(
+      await depot.supprimeAssociationServicesAuGroupe(
         idUtilisateur,
-        [groupe.donnees().id],
-        [idService]
-      );
-
-      await depot.metsAJourAssociationsAuxServices(
-        idUtilisateur,
-        [],
+        groupe.donnees().id,
         [idService]
       );
 
@@ -196,7 +183,56 @@ describe('Le dépôt de données des groupes de services', () => {
       const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
 
       await expect(
-        depot.metsAJourAssociationsAuxServices(
+        depot.supprimeAssociationServicesAuGroupe(
+          idUtilisateur,
+          groupe.donnees().id,
+          [unUUID('S2')]
+        )
+      ).rejects.toThrow(new ErreurServiceInexistant());
+    });
+
+    it("jette une erreur si un des groupes n'appartient pas à l'utilisateur", async () => {
+      const depot = unDepot();
+
+      await expect(
+        depot.supprimeAssociationServicesAuGroupe(
+          idUtilisateur,
+          unUUIDRandom(),
+          [idService]
+        )
+      ).rejects.toThrow(new ErreurGroupeServicesInexistant());
+    });
+  });
+
+  describe("sur demande d'association de services à des groupes", () => {
+    const idUtilisateur = unUUID('U');
+    const idService = unUUID('S1');
+
+    beforeEach(async () => {
+      await depotAutorisations.sauvegardeAutorisation(
+        uneAutorisation().deProprietaire(idUtilisateur, idService).construis()
+      );
+    });
+
+    it('ajoute un service dans un groupe', async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
+      await depot.associeServicesAuxGroupes(
+        idUtilisateur,
+        [groupe.donnees().id],
+        [idService]
+      );
+
+      const groupes = await depot.lisGroupesDe(idUtilisateur);
+      expect(groupes[0].donnees().idServicesAssocies).toEqual([idService]);
+    });
+
+    it("jette une erreur si un des services n'est pas accessible à l'utilisateur", async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupe(idUtilisateur, 'Métier');
+
+      await expect(
+        depot.associeServicesAuxGroupes(
           idUtilisateur,
           [groupe.donnees().id],
           [unUUID('S2')]
@@ -208,7 +244,7 @@ describe('Le dépôt de données des groupes de services', () => {
       const depot = unDepot();
 
       await expect(
-        depot.metsAJourAssociationsAuxServices(
+        depot.associeServicesAuxGroupes(
           idUtilisateur,
           [unUUIDRandom()],
           [idService]

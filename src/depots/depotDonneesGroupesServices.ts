@@ -70,9 +70,9 @@ export class DepotDonneesGroupesServices {
     if (libelleDejaUtilise) throw new ErreurGroupeServicesDejaExistant();
   }
 
-  async metsAJourAssociationsAuxServices(
+  async associeServicesAuxGroupes(
     idUtilisateur: UUID,
-    idGroupesAssocies: UUID[],
+    idsGroupes: UUID[],
     idsServices: UUID[]
   ) {
     const idServicesAutorises = (
@@ -85,38 +85,32 @@ export class DepotDonneesGroupesServices {
     const tousGroupes = await this.lisGroupesDe(idUtilisateur);
     const idGroupesExistants = tousGroupes.map((g) => g.donnees().id);
 
-    if (idGroupesAssocies.some((id) => !idGroupesExistants.includes(id)))
+    if (idsGroupes.some((id) => !idGroupesExistants.includes(id)))
       throw new ErreurGroupeServicesInexistant();
 
     await Promise.all(
-      tousGroupes
-        .filter((g) => !idGroupesAssocies.includes(g.donnees().id))
-        .map((g) => this.supprimeAssociationServicesAuGroupe(g, idsServices))
-    );
-
-    await Promise.all(
-      tousGroupes
-        .filter((g) => idGroupesAssocies.includes(g.donnees().id))
-        .map((g) => this.associeServicesAuGroupe(g, idsServices))
+      idsGroupes.map((idGroupe) =>
+        this.persistance.associeServicesAuGroupe(idGroupe, idsServices)
+      )
     );
   }
 
-  private async associeServicesAuGroupe(
-    groupe: GroupeServices,
+  async supprimeAssociationServicesAuGroupe(
+    idUtilisateur: UUID,
+    idGroupe: UUID,
     idsServices: UUID[]
   ) {
-    return this.persistance.associeServicesAuGroupe(
-      groupe.donnees().id,
-      idsServices
-    );
-  }
+    const idServicesAutorises = (
+      await this.depotAutorisations.autorisations(idUtilisateur)
+    ).map((a: Autorisation) => a.idService);
 
-  private async supprimeAssociationServicesAuGroupe(
-    groupe: GroupeServices,
-    idsServices: UUID[]
-  ) {
+    if (idsServices.some((id) => !idServicesAutorises.includes(id)))
+      throw new ErreurServiceInexistant();
+
+    await this.lisGroupeDe(idUtilisateur, idGroupe);
+
     return this.persistance.supprimeAssociationServicesAuGroupe(
-      groupe.donnees().id,
+      idGroupe,
       idsServices
     );
   }
