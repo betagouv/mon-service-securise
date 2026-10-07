@@ -39,15 +39,21 @@
       ).length === 0
   );
 
-  $effect(() => {
-    if (elementAccordeon && estOuvert) {
+  export const focus = () => {
+    if (elementAccordeon) {
       elementAccordeon.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      estOuvert = true;
     }
-  });
+  };
+
+  export const ferme = () => {
+    estOuvert = false;
+  };
 
   resultatsDeRechercheDuStatutHomologationSelectionne.subscribe(() => {
     if ($rechercheTextuelle.length > 0) {
-      estOuvert = servicesAAfficher.length > 0;
+      estOuvert =
+        servicesAAfficher.length > 0 || brouillonsAAfficher.length > 0;
     } else {
       estOuvert = groupe === undefined;
     }
