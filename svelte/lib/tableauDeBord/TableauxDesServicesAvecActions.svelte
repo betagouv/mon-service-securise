@@ -58,6 +58,8 @@
       groupe.idServicesAssocies.includes(s.id)
     );
 
+  let hauteurBarreActions = $state(0);
+
   let groupesTries = $derived(
     [...groupes].sort((a, b) => a.libelle.localeCompare(b.libelle))
   );
@@ -66,7 +68,7 @@
 {#if $affichageTableauVide.doitAfficher}
   <TableauVide />
 {:else}
-  <div class="barre-actions">
+  <div class="barre-actions" bind:offsetHeight={hauteurBarreActions}>
     <span class="sous-texte">
       {#if $selectionIdsServices.length > 0}
         {$selectionIdsServices.length}
@@ -80,7 +82,10 @@
     <ActionsDesServices {selection} {groupes} {avecGroupesServices} />
   </div>
   {#if groupesTries.length > 0 && avecGroupesServices}
-    <div class="contenu-groupes">
+    <div
+      class="contenu-groupes"
+      style:--hauteur-barre-actions="{hauteurBarreActions}px"
+    >
       {#each groupesTries as groupe (groupe.id)}
         <AccordeonDesServices
           {groupe}
@@ -114,6 +119,11 @@
   }
 
   .barre-actions {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: white;
+    padding: 12px 0;
     margin-bottom: 8px;
     display: flex;
     flex-direction: row;
