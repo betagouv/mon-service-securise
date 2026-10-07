@@ -59,6 +59,14 @@
     );
 
   let hauteurBarreActions = $state(0);
+  let elementsAccordeon: Record<string, AccordeonDesServices> = $state({});
+
+  $effect(() => {
+    if (idGroupeOuvert && elementsAccordeon[idGroupeOuvert]) {
+      elementsAccordeon[idGroupeOuvert].focus();
+      elementsAccordeon.SANS_GROUPE.ferme();
+    }
+  });
 
   let groupesTries = $derived(
     [...groupes].sort((a, b) => a.libelle.localeCompare(b.libelle))
@@ -88,6 +96,7 @@
     >
       {#each groupesTries as groupe (groupe.id)}
         <AccordeonDesServices
+          bind:this={elementsAccordeon[groupe.id]}
           {groupe}
           {indicesCyberCharges}
           servicesAAfficher={servicesDuGroupe(groupe)}
@@ -96,6 +105,7 @@
         />
       {/each}
       <AccordeonDesServices
+        bind:this={elementsAccordeon.SANS_GROUPE}
         {indicesCyberCharges}
         servicesAAfficher={tousServicesSansGroupe}
         brouillonsAAfficher={$resultatsDeRechercheBrouillons}
