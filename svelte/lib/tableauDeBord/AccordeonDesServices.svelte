@@ -60,7 +60,7 @@
     }}
   >
     <lab-anssi-icone nom="folder-2-line" taille="md"></lab-anssi-icone>
-    {groupe ? groupe.libelle : 'Sans groupe'}
+    <span>{groupe ? groupe.libelle : 'Sans groupe'}</span>
     <Pastille
       contenu={`${servicesAAfficher.length + brouillonsAAfficher.length}`}
       active={estOuvert}
@@ -158,6 +158,7 @@
       font-weight: 700;
       line-height: 2rem;
       background: transparent;
+      text-align: left;
 
       .fleche {
         transition: transform 200ms ease-out;
