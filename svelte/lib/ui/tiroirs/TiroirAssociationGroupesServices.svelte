@@ -80,8 +80,8 @@
 </script>
 
 <ContenuTiroir>
+  <h4>Groupes</h4>
   {#if groupes.length > 0}
-    <h4>Groupes</h4>
     <div class="conteneur-selection">
       {#each groupes as groupe (groupe.id)}
         <dsfr-checkbox
@@ -177,6 +177,10 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 2rem;
+    margin: 0;
+  }
+
+  p {
     margin: 0;
   }
 
