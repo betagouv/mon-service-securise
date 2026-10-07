@@ -91,6 +91,12 @@ import { EvenementCleApiCreee } from './evenementCleApiCreee.js';
 import { EvenementCleApiRevoquee } from './evenementCleApiRevoquee.js';
 import { consigneCleApiCreeeDansJournal } from './abonnements/consigneCleApiCreeeDansJournal.js';
 import { consigneCleApiRevoqueeDansJournal } from './abonnements/consigneCleApiRevoqueeDansJournal.js';
+import { EvenementGroupeServicesCree } from './evenementGroupeServicesCree.js';
+import { EvenementGroupeServicesSupprime } from './evenementGroupeServicesSupprime.js';
+import { EvenementServicesDuGroupeModifies } from './evenementServicesDuGroupeModifies.js';
+import { consigneGroupeServicesCreeDansJournal } from './abonnements/consigneGroupeServicesCreeDansJournal.js';
+import { consigneGroupeServicesSupprimeDansJournal } from './abonnements/consigneGroupeServicesSupprimeDansJournal.js';
+import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consigneServicesDuGroupeModifiesDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -352,6 +358,21 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementCleApiRevoquee,
     consigneCleApiRevoqueeDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementGroupeServicesCree,
+    consigneGroupeServicesCreeDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementGroupeServicesSupprime,
+    consigneGroupeServicesSupprimeDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementServicesDuGroupeModifies,
+    consigneServicesDuGroupeModifiesDansJournal({ adaptateurJournal })
   );
 };
 
