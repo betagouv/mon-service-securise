@@ -3,7 +3,6 @@
     recherche: string;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { recherche = $bindable() }: Props = $props();
 
   const metsAJourRecherche = (e: CustomEvent<string>) => (recherche = e.detail);
@@ -15,6 +14,7 @@
   input-id="recherche"
   input-label="Rechercher"
   button-label="Rechercher"
+  value={recherche}
 ></dsfr-search>
 
 <style>
