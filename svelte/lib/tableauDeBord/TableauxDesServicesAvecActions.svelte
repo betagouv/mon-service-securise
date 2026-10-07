@@ -35,11 +35,13 @@
     indicesCyberCharges?: boolean;
     groupes: GroupeServices[];
     avecGroupesServices: boolean;
+    idGroupeOuvert: string | undefined;
   }
   let {
     indicesCyberCharges = false,
     groupes,
     avecGroupesServices,
+    idGroupeOuvert,
   }: Props = $props();
 
   let tousServicesSansGroupe = $derived.by(() => {
@@ -81,13 +83,14 @@
           {indicesCyberCharges}
           servicesAAfficher={servicesDuGroupe(groupe)}
           brouillonsAAfficher={[]}
+          ouvertParDefaut={groupe.id === idGroupeOuvert}
         />
       {/each}
       <AccordeonDesServices
         {indicesCyberCharges}
         servicesAAfficher={tousServicesSansGroupe}
         brouillonsAAfficher={$resultatsDeRechercheBrouillons}
-        ouvertParDefaut
+        ouvertParDefaut={!idGroupeOuvert}
       />
     </div>
   {:else}

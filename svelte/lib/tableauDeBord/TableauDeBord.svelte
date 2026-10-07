@@ -74,11 +74,20 @@
       indiceCyberMoyen = donneesVisiteGuidee.indiceCyber;
       enCoursChargement = false;
     } else {
+      ouvreGroupeSiNecessaire();
       await rafraichisServices();
       await rafraichisGroupes();
       afficheModalesVisiteGuideeSiNecessaire();
     }
   });
+
+  let idGroupeOuvert: string | undefined = $state();
+
+  const ouvreGroupeSiNecessaire = () => {
+    const requete = new URLSearchParams(window.location.search);
+    idGroupeOuvert = requete.get('idGroupe') || undefined;
+    if (idGroupeOuvert) enleveParametreDeUrl('idGroupe');
+  };
 
   const afficheModalesVisiteGuideeSiNecessaire = () => {
     const requete = new URLSearchParams(window.location.search);
@@ -242,6 +251,7 @@
             indicesCyberCharges={indiceCyberMoyen !== undefined}
             groupes={groupesServices}
             {avecGroupesServices}
+            {idGroupeOuvert}
           />
         </div>
       {/each}
