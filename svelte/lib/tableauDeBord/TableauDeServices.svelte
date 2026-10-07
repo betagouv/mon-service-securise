@@ -52,7 +52,7 @@
   <div slot="empty">
     <p class="tableau-vide">
       Aucun service ne correspond à votre recherche et aux filtres dans ce
-      dossier.
+      groupe.
     </p>
   </div>
   {#each brouillonsAAfficher as brouillon, i (brouillon.id)}
