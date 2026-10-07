@@ -26,7 +26,15 @@
     groupe,
   }: Props = $props();
 
+  let elementAccordeon: HTMLDivElement | undefined = $state();
   let estOuvert = $state(untrack(() => ouvertParDefaut));
+  $effect(() => {
+    if (elementAccordeon && estOuvert) {
+      const top =
+        elementAccordeon.getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
 
   let servicesSelectionnesDansAccordeon = derived(
     [selectionIdsServices],
@@ -44,7 +52,7 @@
   };
 </script>
 
-<div class="contenu-groupe">
+<div class="contenu-groupe" bind:this={elementAccordeon}>
   <button
     class:ouvert={estOuvert}
     onclick={() => {
