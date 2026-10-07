@@ -57,6 +57,10 @@
     $resultatsDeRechercheDuStatutHomologationSelectionne.filter((s) =>
       groupe.idServicesAssocies.includes(s.id)
     );
+
+  let groupesTries = $derived(
+    [...groupes].sort((a, b) => a.libelle.localeCompare(b.libelle))
+  );
 </script>
 
 {#if $affichageTableauVide.doitAfficher}
@@ -75,9 +79,9 @@
     </span>
     <ActionsDesServices {selection} {groupes} />
   </div>
-  {#if groupes.length > 0 && avecGroupesServices}
+  {#if groupesTries.length > 0 && avecGroupesServices}
     <div class="contenu-groupes">
-      {#each groupes as groupe (groupe.id)}
+      {#each groupesTries as groupe (groupe.id)}
         <AccordeonDesServices
           {groupe}
           {indicesCyberCharges}
