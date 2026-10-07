@@ -195,7 +195,7 @@
     color: #161616;
     font-size: 2rem;
     line-height: 2.5rem;
-    margin: 56px 0 32px;
+    margin: 56px 0 0;
   }
 
   h1 + p {
