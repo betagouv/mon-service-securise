@@ -6,6 +6,7 @@
   import type { Groupe, GroupesProps } from './groupes.d';
   import ModaleRenommageGroupe from './ModaleRenommageGroupe.svelte';
   import ModaleSuppressionGroupe from './ModaleSuppressionGroupe.svelte';
+  import { singulierPluriel } from '../outils/string';
 
   let { groupes: groupesInitiaux }: GroupesProps = $props();
 
@@ -101,6 +102,7 @@
     <dsfr-table
       columns={[
         { key: 'libelle', label: 'Nom du groupe' },
+        { key: 'services', label: 'Services' },
         { key: 'actions', label: 'Actions' },
       ]}
       rows={groupes}
@@ -113,6 +115,18 @@
             ><lab-anssi-icone nom="folder-2-line" taille="sm"
             ></lab-anssi-icone>{groupe.libelle}</span
           >
+        </div>
+        <div slot="cell:services:{i}">
+          <dsfr-link
+            label="{groupe.idServicesAssocies.length} {singulierPluriel(
+              'service',
+              'services',
+              groupe.idServicesAssocies.length
+            )}"
+            title="Voir les services du groupe {groupe.libelle} sur le tableau de bord"
+            href="/tableauDeBord?idGroupe={groupe.id}"
+            size="sm"
+          ></dsfr-link>
         </div>
         <div slot="cell:actions:{i}" class="conteneur-actions">
           <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->

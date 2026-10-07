@@ -7,6 +7,7 @@ declare global {
 export type Groupe = {
   id: string;
   libelle: string;
+  idServicesAssocies: string[];
 };
 
 export type GroupesProps = {
