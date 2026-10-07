@@ -39,6 +39,7 @@
     await axios.delete(`/api/groupes-services/${groupe?.id}/associations`, {
       data: { idsServices: $servicesSelectionnesDansAccordeon },
     });
+    selectionIdsServices.vide();
     document.body.dispatchEvent(new CustomEvent('rafraichis-groupes'));
   };
 </script>

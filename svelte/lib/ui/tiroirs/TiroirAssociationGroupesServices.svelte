@@ -10,6 +10,7 @@
   import { tiroirStore } from '../stores/tiroir.store';
   import { toasterStore } from '../stores/toaster.store';
   import { SvelteSet } from 'svelte/reactivity';
+  import { selectionIdsServices } from '../../tableauDeBord/stores/selectionService.store';
 
   interface Props {
     services: Service[];
@@ -41,6 +42,7 @@
       singulierPluriel('Service classé', 'Services classés', nbServices),
       `${nbServices} ${singulierPluriel('service a été classé', 'services ont été classés', nbServices)} dans ${formatteListe.format(nomGroupes)}.`
     );
+    selectionIdsServices.vide();
     tiroirStore.ferme();
   };
 
