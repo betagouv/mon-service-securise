@@ -164,9 +164,9 @@
       position: relative;
       width: 100%;
       color: #3a3a3a;
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 700;
-      line-height: 2rem;
+      line-height: 1.75rem;
       background: transparent;
       text-align: left;
 
