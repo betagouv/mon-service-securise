@@ -76,6 +76,14 @@ const inventaire: Record<
     occurrences: 1,
     couvertPar: 'migreLesEvenementsDuJournal',
   },
+  'src/modeles/journalMSS/evenementGroupeServicesCree.ts': {
+    occurrences: 2,
+    couvertPar: 'migreLesEvenementsDuJournal',
+  },
+  'src/modeles/journalMSS/evenementGroupeServicesSupprime.ts': {
+    occurrences: 2,
+    couvertPar: 'migreLesEvenementsDuJournal',
+  },
   'src/modeles/journalMSS/evenementMesureModifieeEnMasse.js': {
     occurrences: 1,
     couvertPar: 'migreLesEvenementsDuJournal',
@@ -130,6 +138,10 @@ const inventaire: Record<
   },
   'src/modeles/journalMSS/evenementServiceSupprime.js': {
     occurrences: 1,
+    couvertPar: 'migreLesEvenementsDuJournal',
+  },
+  'src/modeles/journalMSS/evenementServicesDuGroupeModifies.ts': {
+    occurrences: 2,
     couvertPar: 'migreLesEvenementsDuJournal',
   },
   'src/modeles/journalMSS/evenementServicesImportes.ts': {

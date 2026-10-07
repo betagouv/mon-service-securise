@@ -276,6 +276,15 @@ class MigrationHash {
               idCle: fonctionDeMigration(donnees.idCle),
             };
             break;
+          case 'GROUPE_SERVICES_CREE':
+          case 'GROUPE_SERVICES_SUPPRIME':
+          case 'SERVICES_DU_GROUPE_MODIFIES':
+            nouvellesDonnees = {
+              ...donnees,
+              idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
+              idGroupe: fonctionDeMigration(donnees.idGroupe),
+            };
+            break;
           case 'NOTIFICATION_TRANSACTIONNELLE_MODIFIEE':
             nouvellesDonnees = {
               ...donnees,
