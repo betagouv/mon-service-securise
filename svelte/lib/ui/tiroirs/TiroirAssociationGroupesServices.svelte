@@ -79,26 +79,36 @@
 </script>
 
 <ContenuTiroir>
-  <h4>Groupes</h4>
-  <div class="conteneur-selection">
-    {#each groupes as groupe (groupe.id)}
-      <dsfr-checkbox
-        id="checkbox-{groupe.id}"
-        hint={singulierPluriel(
-          `${groupe.idServicesAssocies.length > 0 ? '1 service' : 'Aucun service'}`,
-          `${groupe.idServicesAssocies.length} services`,
-          groupe.idServicesAssocies.length
-        )}
-        size="md"
-        label={groupe.libelle}
-        name="checkbox-{groupe.id}"
-        checked={idsGroupes.has(groupe.id)}
-        onvaluechanged={(e: CustomEvent<boolean>) => {
-          selectionneGroupe(groupe.id, e.detail);
-        }}
-      ></dsfr-checkbox>
-    {/each}
-  </div>
+  {#if groupes.length > 0}
+    <h4>Groupes</h4>
+    <div class="conteneur-selection">
+      {#each groupes as groupe (groupe.id)}
+        <dsfr-checkbox
+          id="checkbox-{groupe.id}"
+          hint={singulierPluriel(
+            `${groupe.idServicesAssocies.length > 0 ? '1 service' : 'Aucun service'}`,
+            `${groupe.idServicesAssocies.length} services`,
+            groupe.idServicesAssocies.length
+          )}
+          size="md"
+          label={groupe.libelle}
+          name="checkbox-{groupe.id}"
+          checked={idsGroupes.has(groupe.id)}
+          onvaluechanged={(e: CustomEvent<boolean>) => {
+            selectionneGroupe(groupe.id, e.detail);
+          }}
+        ></dsfr-checkbox>
+      {/each}
+    </div>
+  {:else}
+    <p>
+      Vous n’avez pas encore de groupe. Créez-en un pour classer {singulierPluriel(
+        'votre service',
+        'vos services',
+        services.length
+      )}
+    </p>
+  {/if}
   {#if !modeCreation}
     <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
     <dsfr-button
@@ -154,6 +164,7 @@
       'les services',
       services.length
     )}"
+    disabled={!idsGroupes.size}
     kind="primary"
     onclick={async () => await associeServicesAuxGroupes()}
   ></dsfr-button>
