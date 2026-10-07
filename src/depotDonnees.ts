@@ -219,6 +219,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
   const depotGroupesServices = new DepotDonneesGroupesServices({
     persistance: adaptateurPersistanceTS,
     depotAutorisations,
+    busEvenements,
   });
 
   const {
