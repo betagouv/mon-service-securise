@@ -12,7 +12,6 @@
   import TableauDeServices from './TableauDeServices.svelte';
   import type { GroupeServices } from './tableauDeBord.d';
   import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
-  import { derived } from 'svelte/store';
   import AccordeonDesServices from './AccordeonDesServices.svelte';
 
   let selection = $derived([
@@ -43,13 +42,14 @@
     avecGroupesServices,
   }: Props = $props();
 
-  let tousIdsServicesDansGroupes = $derived([
-    ...new Set(groupes.flatMap((g) => g.idServicesAssocies)),
-  ]);
-  let tousServicesSansGroupe = derived(
-    [resultatsDeRechercheDuStatutHomologationSelectionne],
-    ([$r]) => $r.filter((s) => !tousIdsServicesDansGroupes.includes(s.id))
-  );
+  let tousServicesSansGroupe = $derived.by(() => {
+    const tousIdsServicesDansGroupes = [
+      ...new Set(groupes.flatMap((g) => g.idServicesAssocies)),
+    ];
+    return $resultatsDeRechercheDuStatutHomologationSelectionne.filter(
+      (s) => !tousIdsServicesDansGroupes.includes(s.id)
+    );
+  });
 
   const servicesDuGroupe = (groupe: GroupeServices) =>
     $resultatsDeRechercheDuStatutHomologationSelectionne.filter((s) =>
@@ -85,7 +85,7 @@
       {/each}
       <AccordeonDesServices
         {indicesCyberCharges}
-        servicesAAfficher={$tousServicesSansGroupe}
+        servicesAAfficher={tousServicesSansGroupe}
         brouillonsAAfficher={$resultatsDeRechercheBrouillons}
         ouvertParDefaut
       />
