@@ -8,20 +8,28 @@ import {
 } from '../erreurs.js';
 import { DepotDonneesAutorisation } from './depotDonneesAutorisations.interface.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementGroupeServicesCree } from '../bus/evenementGroupeServicesCree.js';
+import { EvenementGroupeServicesSupprime } from '../bus/evenementGroupeServicesSupprime.js';
+import { EvenementServicesDuGroupeModifies } from '../bus/evenementServicesDuGroupeModifies.js';
 
 export class DepotDonneesGroupesServices {
   private readonly persistance: PersistanceTS;
   private readonly depotAutorisations: DepotDonneesAutorisation;
+  private readonly busEvenements: BusEvenements;
 
   constructor({
     persistance,
     depotAutorisations,
+    busEvenements,
   }: {
     persistance: PersistanceTS;
     depotAutorisations: DepotDonneesAutorisation;
+    busEvenements: BusEvenements;
   }) {
     this.persistance = persistance;
     this.depotAutorisations = depotAutorisations;
+    this.busEvenements = busEvenements;
   }
 
   async nouveauGroupe(idUtilisateur: UUID, libelle: string) {
@@ -29,6 +37,10 @@ export class DepotDonneesGroupesServices {
 
     await this.verifieLibelleDisponible(groupe);
     await this.persistance.sauvegardeGroupeServices(groupe.donnees());
+
+    await this.busEvenements.publie(
+      new EvenementGroupeServicesCree({ groupe })
+    );
 
     return groupe;
   }
@@ -47,9 +59,13 @@ export class DepotDonneesGroupesServices {
   }
 
   async supprimeGroupe(idGroupe: UUID, idUtilisateur: UUID) {
-    await this.lisGroupeDe(idUtilisateur, idGroupe);
+    const groupe = await this.lisGroupeDe(idUtilisateur, idGroupe);
 
     await this.persistance.supprimeGroupeServices(idGroupe);
+
+    await this.busEvenements.publie(
+      new EvenementGroupeServicesSupprime({ groupe })
+    );
   }
 
   private async lisGroupeDe(idUtilisateur: UUID, idGroupe: UUID) {
@@ -93,6 +109,8 @@ export class DepotDonneesGroupesServices {
         this.persistance.associeServicesAuGroupe(idGroupe, idsServices)
       )
     );
+
+    await this.publieServicesDesGroupesModifies(idUtilisateur, idsGroupes);
   }
 
   async supprimeAssociationServicesAuGroupe(
@@ -109,9 +127,29 @@ export class DepotDonneesGroupesServices {
 
     await this.lisGroupeDe(idUtilisateur, idGroupe);
 
-    return this.persistance.supprimeAssociationServicesAuGroupe(
+    await this.persistance.supprimeAssociationServicesAuGroupe(
       idGroupe,
       idsServices
+    );
+
+    await this.publieServicesDesGroupesModifies(idUtilisateur, [idGroupe]);
+  }
+
+  private async publieServicesDesGroupesModifies(
+    idUtilisateur: UUID,
+    idsGroupes: UUID[]
+  ) {
+    const groupesAJour = await this.lisGroupesDe(idUtilisateur);
+    const groupesModifies = idsGroupes.map((idGroupe) =>
+      groupesAJour.find((g) => g.donnees().id === idGroupe)!
+    );
+
+    await Promise.all(
+      groupesModifies.map((groupe) =>
+        this.busEvenements.publie(
+          new EvenementServicesDuGroupeModifies({ groupe })
+        )
+      )
     );
   }
 }
