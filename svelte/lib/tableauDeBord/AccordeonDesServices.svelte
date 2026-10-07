@@ -77,19 +77,15 @@
     <lab-anssi-icone class="fleche" nom="arrow-up-s-line" taille="md"
     ></lab-anssi-icone>
   </button>
-  {#if groupe && servicesAAfficher.length > 0}
+  {#if groupe && servicesAAfficher.length > 0 && $servicesSelectionnesDansAccordeon.length > 0}
     <div class="selection" class:ouvert={estOuvert}>
       <p>
-        {#if $servicesSelectionnesDansAccordeon.length === 0}
-          Aucun service sélectionné
-        {:else}
-          {$servicesSelectionnesDansAccordeon.length}
-          {singulierPluriel(
-            'service sélectionné',
-            'services sélectionnés',
-            $servicesSelectionnesDansAccordeon.length
-          )} dans ce groupe
-        {/if}
+        {$servicesSelectionnesDansAccordeon.length}
+        {singulierPluriel(
+          'service sélectionné',
+          'services sélectionnés',
+          $servicesSelectionnesDansAccordeon.length
+        )} dans ce groupe
       </p>
       <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
       <dsfr-button
