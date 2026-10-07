@@ -3,6 +3,9 @@ extends ./mssConnecte
 block title
   title Groupes de services | MonServiceSécurisé
 
+block variables
+  - const ongletActif = "profil-groupes"
+
 block append scripts
   +composantSvelte('groupes.js')
   +donneesPartagees('donnees-groupes', { groupes })
