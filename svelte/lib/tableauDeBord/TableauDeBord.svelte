@@ -145,7 +145,8 @@
   };
 
   const rafraichisGroupes = async () => {
-    groupesServices = (await axios.get('/api/groupes-services')).data;
+    if (avecGroupesServices)
+      groupesServices = (await axios.get('/api/groupes-services')).data;
   };
 
   const configurationsTabs: { id: StatutHomologation; label: string }[] = [
