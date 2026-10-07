@@ -10,6 +10,7 @@
   import { derived } from 'svelte/store';
   import { selectionIdsServices } from './stores/selectionService.store';
   import { singulierPluriel } from '../outils/string';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   interface Props {
     indicesCyberCharges?: boolean;
@@ -47,6 +48,14 @@
     await axios.delete(`/api/groupes-services/${groupe?.id}/associations`, {
       data: { idsServices: $servicesSelectionnesDansAccordeon },
     });
+    toasterStore.succes(
+      singulierPluriel(
+        'Service retiré',
+        'Services retirés',
+        $servicesSelectionnesDansAccordeon.length
+      ),
+      `${$servicesSelectionnesDansAccordeon.length} ${singulierPluriel('service a été retiré', 'services ont été retirés', $servicesSelectionnesDansAccordeon.length)} de « ${groupe?.libelle} ».`
+    );
     selectionIdsServices.vide();
     document.body.dispatchEvent(new CustomEvent('rafraichis-groupes'));
   };
