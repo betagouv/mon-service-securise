@@ -28,7 +28,7 @@
   );
   let intituleSuppression = $derived(
     servicesEtBrouillon.length > 1
-      ? `les ${servicesEtBrouillon.length} services séléctionnés`
+      ? `les ${servicesEtBrouillon.length} services sélectionnés`
       : `le service ${servicesEtBrouillon[0].nomService}`
   );
 
