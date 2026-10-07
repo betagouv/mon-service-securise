@@ -11,6 +11,7 @@
   import { toasterStore } from '../stores/toaster.store';
   import { SvelteSet } from 'svelte/reactivity';
   import { selectionIdsServices } from '../../tableauDeBord/stores/selectionService.store';
+  import { api, estUnLibelleDejaUtilise } from '../../groupes/groupes.api';
 
   interface Props {
     services: Service[];
@@ -50,6 +51,31 @@
     if (selectionne) idsGroupes.add(idGroupe);
     else idsGroupes.delete(idGroupe);
   };
+
+  let modeCreation = $state(false);
+  let nouveauLibelle = $state('');
+  let erreurLibelle = $state('');
+  let enCoursAjout = $state(false);
+
+  const ajouteGroupe = async () => {
+    if (!nouveauLibelle.trim()) return;
+
+    enCoursAjout = true;
+    erreurLibelle = '';
+    try {
+      const { data } = await api.ajouteGroupe(nouveauLibelle);
+      document.body.dispatchEvent(new CustomEvent('rafraichis-groupes'));
+      groupes = [...groupes, data];
+      nouveauLibelle = '';
+    } catch (e) {
+      if (estUnLibelleDejaUtilise(e)) {
+        erreurLibelle = 'Vous avez déjà un groupe avec ce libellé.';
+        return;
+      }
+    } finally {
+      enCoursAjout = false;
+    }
+  };
 </script>
 
 <ContenuTiroir>
@@ -73,6 +99,45 @@
       ></dsfr-checkbox>
     {/each}
   </div>
+  {#if !modeCreation}
+    <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+    <dsfr-button
+      kind="secondary"
+      has-icon
+      icon="add-line"
+      label="Créer un groupe"
+      onclick={() => (modeCreation = true)}
+    ></dsfr-button>
+  {:else}
+    <dsfr-input
+      id="nouveau-groupe"
+      label="Nom du nouveau groupe"
+      value={nouveauLibelle}
+      onvaluechanged={(e: CustomEvent<string>) => (nouveauLibelle = e.detail)}
+      maxlength="200"
+      status={erreurLibelle ? 'error' : 'default'}
+      errorMessage={erreurLibelle}
+    ></dsfr-input>
+    <div class="conteneur-actions-ajout">
+      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="tertiary-no-outline"
+        label="Annuler"
+        onclick={() => {
+          modeCreation = false;
+          nouveauLibelle = '';
+          erreurLibelle = '';
+        }}
+      ></dsfr-button>
+      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+      <dsfr-button
+        kind="primary"
+        label="Créer le groupe"
+        onclick={async () => await ajouteGroupe()}
+        disabled={enCoursAjout || !nouveauLibelle.trim()}
+      ></dsfr-button>
+    </div>
+  {/if}
 </ContenuTiroir>
 
 <ActionsTiroir>
@@ -107,5 +172,11 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .conteneur-actions-ajout {
+    display: flex;
+    gap: 8px;
+    justify-content: end;
   }
 </style>
