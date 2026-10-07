@@ -88,6 +88,7 @@
         disabled={$servicesSelectionnesDansAccordeon.length === 0}
         label="Supprimer de ce groupe"
         has-icon
+        size="sm"
         icon="close-circle-line"
         onclick={async () => await retireServicesDuGroupe()}
       >
