@@ -66,6 +66,7 @@
       const { data } = await api.ajouteGroupe(nouveauLibelle);
       document.body.dispatchEvent(new CustomEvent('rafraichis-groupes'));
       groupes = [...groupes, data];
+      idsGroupes.add(data.id);
       nouveauLibelle = '';
     } catch (e) {
       if (estUnLibelleDejaUtilise(e)) {
