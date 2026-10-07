@@ -128,5 +128,6 @@
     align-items: center;
     flex-direction: row;
     gap: 12px;
+    z-index: 4;
   }
 </style>

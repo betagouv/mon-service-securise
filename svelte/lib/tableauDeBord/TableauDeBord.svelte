@@ -49,6 +49,18 @@
     avecGroupesServices,
   }: Props = $props();
 
+  // Le `overflow: hidden` interne de dsfr-tabs empêche la barre d'actions d'être sticky,
+  // et le composant n'expose pas de `::part` : on surcharge donc dans son shadow DOM.
+  const autoriseLeStickyDansLesOnglets = (onglets: HTMLElement) => {
+    customElements.whenDefined('dsfr-tabs').then(() => {
+      const racine = onglets.shadowRoot;
+      if (!racine) return;
+      const surcharge = new CSSStyleSheet();
+      surcharge.replaceSync(':host .fr-tabs { overflow: clip; }');
+      racine.adoptedStyleSheets = [...racine.adoptedStyleSheets, surcharge];
+    });
+  };
+
   let enCoursChargement = $state(true);
 
   let nombreServices: number | undefined = $state();
@@ -235,6 +247,7 @@
       tabs={configurationsTabs}
       active-tab-index={idTabActive}
       ontabchanged={gereChangementTab}
+      {@attach autoriseLeStickyDansLesOnglets}
     >
       {#each configurationsTabs as tab, index (index)}
         <div slot="tab-{index + 1}">
@@ -267,7 +280,7 @@
     padding: 32px 20px;
     text-align: left;
     background: white;
-    overflow: auto;
+    min-width: 0;
   }
 
   .conteneur-loader {

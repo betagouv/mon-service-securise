@@ -39,9 +39,7 @@
 
   $effect(() => {
     if (elementAccordeon && estOuvert) {
-      const top =
-        elementAccordeon.getBoundingClientRect().top + window.scrollY - 24;
-      window.scrollTo({ top, behavior: 'smooth' });
+      elementAccordeon.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
 
@@ -122,6 +120,7 @@
   .contenu-groupe {
     margin: 16px 0 0;
     z-index: 0;
+    scroll-margin-top: calc(var(--hauteur-barre-actions, 0px) + 8px);
 
     .selection {
       display: none;
