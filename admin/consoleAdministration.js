@@ -10,14 +10,15 @@ import { fabriqueAdaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
 import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
 import { fabriqueAdaptateurUUID } from '../src/adaptateurs/adaptateurUUID.js';
 import fabriqueAdaptateurJournalMSS from '../src/adaptateurs/fabriqueAdaptateurJournalMSS.js';
+import Entite from '../src/modeles/entite.js';
 import EvenementNouvelleHomologationCreee from '../src/modeles/journalMSS/evenementNouvelleHomologationCreee.js';
 import EvenementNouvelUtilisateurInscrit from '../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit.js';
 import { avecPMapPourChaqueElement } from '../src/utilitaires/pMap.js';
 import * as FabriqueAutorisation from '../src/modeles/autorisations/fabriqueAutorisation.js';
 import { EvenementCollaboratifServiceModifie } from '../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
+import { fabriqueAdaptateurMail } from '../src/adaptateurs/fabriqueAdaptateurMail.js';
 import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import * as adaptateurRechercheEntrepriseAPI from '../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
-import { adaptateurMailSendinblue as adaptateurMail } from '../src/adaptateurs/adaptateurMailSendinblue.js';
 import CrmBrevo from '../src/crm/crmBrevo.js';
 import { verifieCoherenceDesDroits } from '../src/modeles/autorisations/gestionDroits.js';
 import BusEvenements from '../src/bus/busEvenements.js';
@@ -64,10 +65,11 @@ class ConsoleAdministration {
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
       busEvenements: this.busEvenements,
     });
+    this.adaptateurMail = fabriqueAdaptateurMail();
 
     this.adaptateurJournalMSS = fabriqueAdaptateurJournalMSS();
     this.crmBrevo = new CrmBrevo({
-      adaptateurMail,
+      adaptateurMail: this.adaptateurMail,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
     });
 
@@ -81,7 +83,7 @@ class ConsoleAdministration {
       adaptateurTracking,
       adaptateurJournal: this.adaptateurJournalMSS,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
-      adaptateurMail,
+      adaptateurMail: this.adaptateurMail,
       adaptateurSupervision: this.adaptateurSupervision,
       depotDonnees: this.depotDonnees,
       referentiel: this.referentiel,
@@ -458,7 +460,7 @@ class ConsoleAdministration {
     );
     const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
     const rattrapeUtilisateur = async (utilisateur) =>
-      adaptateurMail.inscrisEmailsTransactionnels(utilisateur.email);
+      this.adaptateurMail.inscrisEmailsTransactionnels(utilisateur.email);
 
     return ConsoleAdministration.rattrapage(
       utilisateursTransactionnels,
@@ -592,6 +594,18 @@ class ConsoleAdministration {
       await this.supprimeSupervisionDeUtilisateur(utilisateur.id);
     }
 
+    if (await this.depotDonnees.estAdmin(utilisateur.id)) {
+      const admin = await this.depotDonnees.lisAdminOrganisations(
+        utilisateur.id
+      );
+      admin
+        .donnees()
+        .entitesAdministrees.forEach((e) =>
+          admin.cesseDAdministrer(new Entite(e))
+        );
+      await this.depotDonnees.sauvegardeAdminOrganisations(admin);
+    }
+
     const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
     const procedureSuppressionContributeur =
       new ProcedureSuppressionContributeur({ depotDonnees: this.depotDonnees });
@@ -610,7 +624,13 @@ class ConsoleAdministration {
     }
 
     await this.depotDonnees.supprimeUtilisateur(utilisateur.id);
-    await adaptateurMail.supprimeContact(utilisateur.email);
+    const groupes = await this.depotDonnees.lisGroupesDe(utilisateur.id);
+    await Promise.all(
+      groupes.map((g) =>
+        this.depotDonnees.supprimeGroupe(g.donnees().id, utilisateur.id)
+      )
+    );
+    await this.adaptateurMail.supprimeContact(utilisateur.email);
 
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
   }
@@ -666,7 +686,7 @@ class ConsoleAdministration {
     const serviceAdminOrgas = new ServiceAdministrationOrganisations({
       depotDonnees: this.depotDonnees,
       adaptateurUUID: fabriqueAdaptateurUUID(),
-      adaptateurMail,
+      adaptateurMail: this.adaptateurMail,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
       busEvenements: this.busEvenements,
       adaptateurEnvironnement,
