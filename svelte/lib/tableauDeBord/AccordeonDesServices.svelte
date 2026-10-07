@@ -12,6 +12,8 @@
   import { singulierPluriel } from '../outils/string';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { services } from './stores/services.store';
+  import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
+  import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
 
   interface Props {
     indicesCyberCharges?: boolean;
@@ -40,6 +42,14 @@
   $effect(() => {
     if (elementAccordeon && estOuvert) {
       elementAccordeon.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  resultatsDeRechercheDuStatutHomologationSelectionne.subscribe(() => {
+    if ($rechercheTextuelle.length > 0) {
+      estOuvert = servicesAAfficher.length > 0;
+    } else {
+      estOuvert = groupe === undefined;
     }
   });
 
