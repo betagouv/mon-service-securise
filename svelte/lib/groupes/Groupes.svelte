@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { api, estUnLibelleDejaUtilise } from './groupes.api';
@@ -7,6 +7,8 @@
   import ModaleRenommageGroupe from './ModaleRenommageGroupe.svelte';
   import ModaleSuppressionGroupe from './ModaleSuppressionGroupe.svelte';
   import { singulierPluriel } from '../outils/string';
+  import { services } from '../tableauDeBord/stores/services.store';
+  import type { ReponseApiServices } from '../tableauDeBord/tableauDeBord.d';
 
   let { groupes: groupesInitiaux }: GroupesProps = $props();
 
@@ -16,6 +18,11 @@
   let enCoursAjout = $state(false);
   let groupeARenommer = $state<Groupe | null>(null);
   let groupeASupprimer = $state<Groupe | null>(null);
+
+  onMount(async () => {
+    const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
+    services.reinitialise(reponse.services);
+  });
 
   const ajouteGroupe = async () => {
     if (!nouveauLibelle.trim()) return;
@@ -110,6 +117,9 @@
       multiline
     >
       {#each groupes as groupe, i (groupe.id)}
+        {@const nombreServices = groupe.idServicesAssocies.filter((id) =>
+          $services.some((s) => s.id === id)
+        ).length}
         <div slot="cell:libelle:{i}">
           <span class="contenu-libelle"
             ><lab-anssi-icone nom="folder-2-line" taille="sm"
@@ -118,10 +128,10 @@
         </div>
         <div slot="cell:services:{i}">
           <dsfr-link
-            label="{groupe.idServicesAssocies.length} {singulierPluriel(
+            label="{nombreServices} {singulierPluriel(
               'service',
               'services',
-              groupe.idServicesAssocies.length
+              nombreServices
             )}"
             title="Voir les services du groupe {groupe.libelle} sur le tableau de bord"
             href="/tableauDeBord?idGroupe={groupe.id}"
