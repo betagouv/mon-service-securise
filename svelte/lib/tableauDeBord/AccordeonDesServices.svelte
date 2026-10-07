@@ -11,6 +11,7 @@
   import { selectionIdsServices } from './stores/selectionService.store';
   import { singulierPluriel } from '../outils/string';
   import { toasterStore } from '../ui/stores/toaster.store';
+  import { services } from './stores/services.store';
 
   interface Props {
     indicesCyberCharges?: boolean;
@@ -29,6 +30,13 @@
 
   let elementAccordeon: HTMLDivElement | undefined = $state();
   let estOuvert = $state(untrack(() => ouvertParDefaut));
+  let avecMentionGroupeVide = $derived(
+    groupe &&
+      groupe.idServicesAssocies.filter((id) =>
+        $services.some((s) => s.id === id)
+      ).length === 0
+  );
+
   $effect(() => {
     if (elementAccordeon && estOuvert) {
       const top =
@@ -105,6 +113,7 @@
       {indicesCyberCharges}
       {servicesAAfficher}
       {brouillonsAAfficher}
+      {avecMentionGroupeVide}
     />
   </div>
 </div>

@@ -19,11 +19,13 @@
     indicesCyberCharges?: boolean;
     servicesAAfficher: ServiceAvecIndiceCyber[];
     brouillonsAAfficher: BrouillonService[];
+    avecMentionGroupeVide?: boolean;
   }
   let {
     indicesCyberCharges = false,
     servicesAAfficher,
     brouillonsAAfficher,
+    avecMentionGroupeVide = false,
   }: Props = $props();
 </script>
 
@@ -51,8 +53,12 @@
 >
   <div slot="empty">
     <p class="tableau-vide">
-      Aucun service ne correspond à votre recherche et aux filtres dans ce
-      groupe.
+      {#if avecMentionGroupeVide}
+        Votre groupe ne contient aucun service
+      {:else}
+        Aucun service ne correspond à votre recherche et aux filtres dans ce
+        groupe.
+      {/if}
     </p>
   </div>
   {#each brouillonsAAfficher as brouillon, i (brouillon.id)}
