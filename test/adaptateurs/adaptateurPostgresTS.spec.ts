@@ -963,20 +963,6 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   });
 
-  describe("sur demande de suppression d'un groupe de services", () => {
-    it('supprime uniquement le groupe concerné', async () => {
-      const aSupprimer = unGroupeServices();
-      const aConserver = unGroupeServices();
-      await persistance.sauvegardeGroupeServices(aSupprimer);
-      await persistance.sauvegardeGroupeServices(aConserver);
-
-      await persistance.supprimeGroupeServices(aSupprimer.id);
-
-      const lignes = await trx.table('groupes_services').select('id');
-      expect(lignes).toEqual([{ id: aConserver.id }]);
-    });
-  });
-
   describe("sur demande d'association d'un groupe à des services", () => {
     it('associe les services', async () => {
       const groupeServices = unGroupeServices();
@@ -1057,6 +1043,38 @@ describe("L'adaptateur persistance Postgres", () => {
         idService1,
         idService2,
       ]);
+
+      const lignes = await trx
+        .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([]);
+    });
+  });
+
+  describe("sur demande de suppression d'un groupe de services", () => {
+    it('supprime uniquement le groupe concerné', async () => {
+      const aSupprimer = unGroupeServices();
+      const aConserver = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(aSupprimer);
+      await persistance.sauvegardeGroupeServices(aConserver);
+
+      await persistance.supprimeGroupeServices(aSupprimer.id);
+
+      const lignes = await trx.table('groupes_services').select('id');
+      expect(lignes).toEqual([{ id: aConserver.id }]);
+    });
+
+    it('supprime également les associations avec les services', async () => {
+      const aSupprimer = unGroupeServices();
+      await persistance.sauvegardeGroupeServices(aSupprimer);
+      const idService1 = unUUIDRandom();
+      const idService2 = unUUIDRandom();
+      await persistance.associeServicesAuGroupe(aSupprimer.id, [
+        idService1,
+        idService2,
+      ]);
+
+      await persistance.supprimeGroupeServices(aSupprimer.id);
 
       const lignes = await trx
         .table('groupes_services_association_aux_services')

@@ -432,6 +432,9 @@ export class AdaptateurPostgresTS implements PersistanceTS {
 
   async supprimeGroupeServices(idGroupe: UUID): Promise<void> {
     await this.knex(TABLES.GROUPES_SERVICES).where({ id: idGroupe }).delete();
+    await this.knex(TABLES.ASSOCIATION_GROUPES_SERVICES)
+      .where({ id_groupe: idGroupe })
+      .delete();
   }
 
   async associeServicesAuGroupe(
