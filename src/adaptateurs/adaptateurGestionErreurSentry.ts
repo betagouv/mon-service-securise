@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
-import { sentry } from './adaptateurEnvironnement.js';
 import { UUID } from '../typesBasiques.js';
+import { optionsSentry } from './gestionErreur/optionsSentry.js';
 
 const logueErreur = (
   erreur: Error,
@@ -42,15 +42,7 @@ const logueErreur = (
 type SourceMss = 'backend' | 'api-publique';
 
 const initialise = (source: SourceMss) => {
-  const config = sentry();
-
-  Sentry.init({
-    dsn: config.dsn(),
-    environment: config.environnement(),
-    ignoreTransactions: config.cheminsIgnoresParTracing(),
-    tracesSampleRate: config.sampleRateDuTracing(),
-    maxValueLength: 50_000,
-  });
+  Sentry.init(optionsSentry());
   Sentry.setTag('mss-source', source);
 };
 
