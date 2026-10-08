@@ -15,7 +15,10 @@ export type Groupe = GroupeAffichable & {
   idServicesAssocies: string[];
 };
 
-export type GroupesProps = Record<string, never>;
+export type GroupesProps = {
+  avecGroupesServices: boolean;
+  avecGroupesEntites: boolean;
+};
 
 export type ApiGroupes<G extends GroupeAffichable> = {
   lisGroupes: () => Promise<G[]>;
@@ -25,7 +28,6 @@ export type ApiGroupes<G extends GroupeAffichable> = {
 };
 
 export type TextesOngletGroupes = {
-  introduction: string;
   exempleLibelle: string;
   aucunGroupe: string;
   explicationListe: string;

@@ -1,11 +1,26 @@
 <script lang="ts">
   import Toaster from '../ui/Toaster.svelte';
+  import TitreOngletDSFR from '../ui/TitreOngletDSFR.svelte';
   import { api } from './groupes.api';
-  import type { Groupe } from './groupes.d';
+  import type { Groupe, GroupesProps } from './groupes.d';
   import OngletGroupes from './OngletGroupes.svelte';
   import { singulierPluriel } from '../outils/string';
   import { services } from '../tableauDeBord/stores/services.store';
   import type { ReponseApiServices } from '../tableauDeBord/tableauDeBord.d';
+
+  let { avecGroupesServices, avecGroupesEntites }: GroupesProps = $props();
+
+  const configurationsTabs = [
+    { id: 'services', label: 'Groupes de services' },
+    { id: 'entites', label: 'Groupes d’entités' },
+  ];
+  let idTabActive = $state(0);
+
+  const elementsAOrganiser = $derived(
+    [avecGroupesServices && 'vos services', avecGroupesEntites && 'vos entités']
+      .filter(Boolean)
+      .join(' et ')
+  );
 
   const chargeServices = async () => {
     const reponse = await axios.get<ReponseApiServices>('/api/services');
@@ -26,22 +41,54 @@
 
 <h1>Mes groupes</h1>
 
-<OngletGroupes
-  identifiant="services"
-  {api}
-  textes={{
-    introduction:
-      'Organisez vos services en groupes pour faciliter leur classement et leur gestion.',
-    exempleLibelle: 'exemple : Enfance et famille',
-    aucunGroupe:
-      'Saisissez un nom ci-dessus puis cliquez sur « Créer le groupe ». Vous pourrez ensuite y classer vos services depuis le tableau de bord.',
-    explicationListe:
-      'Un service peut appartenir à plusieurs groupes : la somme des colonnes « Services » peut donc dépasser le nombre total de services enregistrés. Pour classer un service dans un groupe, rendez-vous sur le tableau de bord.',
-    colonneElements: 'Services',
-  }}
-  chargeElements={chargeServices}
-  lienElements={lienServicesDuGroupe}
-/>
+<p class="introduction">
+  Organisez {elementsAOrganiser} en groupes pour faciliter leur classement et leur
+  gestion.
+</p>
+
+{#snippet ongletServices()}
+  <OngletGroupes
+    identifiant="services"
+    {api}
+    textes={{
+      exempleLibelle: 'exemple : Enfance et famille',
+      aucunGroupe:
+        'Saisissez un nom ci-dessus puis cliquez sur « Créer le groupe ». Vous pourrez ensuite y classer vos services depuis le tableau de bord.',
+      explicationListe:
+        'Un service peut appartenir à plusieurs groupes : la somme des colonnes « Services » peut donc dépasser le nombre total de services enregistrés. Pour classer un service dans un groupe, rendez-vous sur le tableau de bord.',
+      colonneElements: 'Services',
+    }}
+    chargeElements={chargeServices}
+    lienElements={lienServicesDuGroupe}
+  />
+{/snippet}
+
+{#snippet ongletEntites()}{/snippet}
+
+{#if avecGroupesServices && avecGroupesEntites}
+  <dsfr-tabs
+    tabs={configurationsTabs}
+    activeTabIndex={idTabActive}
+    ontabchanged={(e: CustomEvent<{ index: number }>) =>
+      (idTabActive = e.detail.index)}
+  >
+    {#each configurationsTabs as tab, index (tab.id)}
+      <div slot="tab-{index + 1}">
+        <TitreOngletDSFR active={idTabActive === index} libelle={tab.label} />
+      </div>
+    {/each}
+    <div slot="panel-1">
+      {@render ongletServices()}
+    </div>
+    <div slot="panel-2">
+      {@render ongletEntites()}
+    </div>
+  </dsfr-tabs>
+{:else if avecGroupesServices}
+  {@render ongletServices()}
+{:else}
+  {@render ongletEntites()}
+{/if}
 
 <Toaster />
 
@@ -49,6 +96,7 @@
   :global(main:has(#conteneur-groupes)) {
     background: white;
     text-align: left;
+    padding: 56px 0;
   }
 
   :global(#conteneur-groupes) {
@@ -59,6 +107,18 @@
     color: #161616;
     font-size: 2rem;
     line-height: 2.5rem;
-    margin: 56px 0 0;
+    margin: 0;
+  }
+
+  .introduction {
+    color: #3a3a3a;
+    font-size: 1.25rem;
+    line-height: 2rem;
+    margin: 16px 0;
+    text-align: left;
+  }
+
+  dsfr-tabs {
+    margin: 56px 0;
   }
 </style>

@@ -76,6 +76,7 @@ let versionBuildeeChargee = false;
 let typeRequeteCharge = null;
 let fonctionDeposeCookie;
 let featureFlagsACharger = {};
+let utilisateurConnecteACharger = {};
 
 const middlewareFantaisie = {
   reinitialise: ({
@@ -89,6 +90,7 @@ const middlewareFantaisie = {
     authentificationAUtiliser = SourceAuthentification.AGENT_CONNECT,
     fonctionDeposeCookieAAppeler = undefined,
     featureFlags = {},
+    utilisateurConnecte = {},
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -113,6 +115,7 @@ const middlewareFantaisie = {
     fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
     typeRequeteCharge = null;
     featureFlagsACharger = featureFlags;
+    utilisateurConnecteACharger = utilisateurConnecte;
   },
 
   ajouteVersionFichierCompiles: (_requete, reponse, suite) => {
@@ -236,6 +239,7 @@ const middlewareFantaisie = {
     requete.cguAcceptees = cguAcceptees;
     reponse.locals.utilisateurConnecte = {
       prenomNom: 'John Doe',
+      ...utilisateurConnecteACharger,
     };
     verificationCGUMenee = true;
     // Réplique le comportement du middleware CGU de PROD,

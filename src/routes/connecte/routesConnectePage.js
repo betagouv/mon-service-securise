@@ -100,13 +100,27 @@ const routesConnectePage = ({
   routes.get(
     '/profil/groupes',
     middleware.verificationAcceptationCGU,
-    async (_requete, reponse) => {
-      if (!adaptateurEnvironnement.featureFlag().avecGroupesServices()) {
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete;
+      const [estAdmin, estSuperviseur] = await Promise.all([
+        depotDonnees.estAdmin(idUtilisateurCourant),
+        depotDonnees.estSuperviseur(idUtilisateurCourant),
+      ]);
+
+      const featureFlags = adaptateurEnvironnement.featureFlag();
+      const avecGroupesServices = featureFlags.avecGroupesServices();
+      const avecGroupesEntites =
+        featureFlags.avecGroupesEntites() && (estAdmin || estSuperviseur);
+
+      if (!avecGroupesServices && !avecGroupesEntites) {
         reponse.status(404).render('404');
         return;
       }
 
-      reponse.render('profilGroupes');
+      reponse.render('profilGroupes', {
+        avecGroupesServices,
+        avecGroupesEntites,
+      });
     }
   );
 
