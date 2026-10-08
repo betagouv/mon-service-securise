@@ -48,6 +48,21 @@ describe("L'abonnement qui envoie au tracking les informations de complétude", 
     });
   });
 
+  it("n'envoie rien si la modification fait partie d'une modification en masse", async () => {
+    let trackingEnvoye = false;
+    adaptateurTracking.envoieTrackingCompletudeService = async () => {
+      trackingEnvoye = true;
+    };
+    const utilisateur = unUtilisateur().construis();
+
+    await envoieTrackingCompletude({ adaptateurTracking, depotDonnees })({
+      utilisateur,
+      enMasse: true,
+    });
+
+    expect(trackingEnvoye).to.be(false);
+  });
+
   it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
     try {
       await envoieTrackingCompletude({ adaptateurTracking, depotDonnees })({

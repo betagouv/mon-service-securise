@@ -2923,6 +2923,22 @@ describe('Le dépôt de données des services', () => {
       expect(tousEvenements[1].service.id).to.be('S2');
     });
 
+    it("indique que les événements de 'Mesure service modifiée' font partie d'une modification en masse", async () => {
+      await depot.metsAJourMesureGeneraleDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'uneMesure',
+        'fait',
+        '',
+        'v1'
+      );
+
+      const tousEvenements = busEvenements.recupereEvenements(
+        EvenementMesureServiceModifiee
+      );
+      expect(tousEvenements.every((e) => e.enMasse)).to.be(true);
+    });
+
     it("publie un événement de 'Mesure modifiée en masse'", async () => {
       await depot.metsAJourMesureGeneraleDesServices(
         'U1',
@@ -3116,6 +3132,21 @@ describe('Le dépôt de données des services', () => {
       expect(tousEvenements[1].nouvelleMesure.id).to.be('MS2');
       expect(tousEvenements[1].service.id).to.be('S2');
       expect(tousEvenements[1].typeMesure).to.be('specifique');
+    });
+
+    it("indique que les événements de 'Mesure service modifiée' font partie d'une modification en masse", async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'MOD1',
+        'fait',
+        ''
+      );
+
+      const tousEvenements = busEvenements.recupereEvenements(
+        EvenementMesureServiceModifiee
+      );
+      expect(tousEvenements.every((e) => e.enMasse)).to.be(true);
     });
 
     it("publie un événement de 'Mesure modifiée en masse'", async () => {

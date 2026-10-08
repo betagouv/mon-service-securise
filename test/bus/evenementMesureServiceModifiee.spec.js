@@ -23,4 +23,23 @@ describe("L'événement `mesureServiceModifiee", () => {
         })
     ).to.throwError();
   });
+
+  it("n'est pas en masse par défaut", () => {
+    const evenement = new EvenementMesureServiceModifiee({
+      service: unService().construis(),
+      utilisateur: unUtilisateur().construis(),
+    });
+
+    expect(evenement.enMasse).to.be(false);
+  });
+
+  it("peut indiquer que la modification fait partie d'une modification en masse", () => {
+    const evenement = new EvenementMesureServiceModifiee({
+      service: unService().construis(),
+      utilisateur: unUtilisateur().construis(),
+      enMasse: true,
+    });
+
+    expect(evenement.enMasse).to.be(true);
+  });
 });
