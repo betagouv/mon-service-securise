@@ -478,6 +478,9 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       avecGroupesServices: adaptateurEnvironnement
         .featureFlag()
         .avecGroupesServices(),
+      avecGroupesEntites: adaptateurEnvironnement
+        .featureFlag()
+        .avecGroupesEntites(),
     };
     suite();
   };
