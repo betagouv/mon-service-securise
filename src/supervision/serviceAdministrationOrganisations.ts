@@ -166,11 +166,8 @@ export class ServiceAdministrationOrganisations {
       throw new ErreurSuppressionImpossible();
   }
 
-  async nommeAdmin(idActeur: UUID, siret: string, idAdmin: UUID) {
-    let admin = await this.depotDonnees.lisAdminOrganisations(idAdmin);
-    if (!admin) admin = AdminOrganisations.nouveau(idAdmin);
-
-    await this.assignePerimetre(idActeur, idAdmin, [siret], []);
+  async nommeAdmin(idActeur: UUID, sirets: string[], idAdmin: UUID) {
+    await this.assignePerimetre(idActeur, idAdmin, sirets, []);
   }
 
   async entitesDe(

@@ -692,18 +692,12 @@ class ConsoleAdministration {
       adaptateurEnvironnement,
     });
 
-    /* eslint-disable no-restricted-syntax */
-    /* eslint-disable no-await-in-loop */
-    for (const siret of sirets) {
-      console.log(`Ajout du SIRET ${siret}`);
-      await serviceAdminOrgas.nommeAdmin(
-        adaptateurEnvironnement.consoleAdmin().idConsoleAdmin(),
-        siret,
-        admin.id
-      );
-    }
-    /* eslint-enable no-restricted-syntax */
-    /* eslint-enable no-await-in-loop */
+    console.log(`Ajout de ${sirets.length} SIRET`);
+    await serviceAdminOrgas.nommeAdmin(
+      adaptateurEnvironnement.consoleAdmin().idConsoleAdmin(),
+      sirets,
+      admin.id
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this

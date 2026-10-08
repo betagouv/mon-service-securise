@@ -478,10 +478,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       expect(status).toBe(200);
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(idSuperviseur, siret, idAdminA);
+      ).toHaveBeenCalledWith(idSuperviseur, [siret], idAdminA);
       expect(
         testeur.serviceAdministrationOrganisations().nommeAdmin
-      ).toHaveBeenCalledWith(idSuperviseur, siret, idAdminB);
+      ).toHaveBeenCalledWith(idSuperviseur, [siret], idAdminB);
     });
 
     it('dédoublonne les emails', async () => {

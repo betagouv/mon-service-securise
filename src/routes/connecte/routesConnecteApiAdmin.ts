@@ -221,7 +221,7 @@ const routesConnecteApiAdmin = ({
         if (!utilisateur) return;
         await serviceAdministrationOrganisations.nommeAdmin(
           idUtilisateurCourant,
-          siret,
+          [siret],
           utilisateur!.id
         );
       };
