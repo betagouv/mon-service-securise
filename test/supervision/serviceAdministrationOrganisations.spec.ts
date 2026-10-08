@@ -203,7 +203,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(
         administrationOrganisations.nommeAdmin(
           idActeur,
-          'UN-SIRET',
+          ['UN-SIRET'],
           unUUID('P')
         )
       ).rejects.toThrow(ErreurEntiteNonAdministre);
@@ -213,7 +213,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(
         administrationOrganisations.nommeAdmin(
           idSuperviseur,
-          'UN-SIRET-PAS-SUPERVISÉ',
+          ['UN-SIRET-PAS-SUPERVISÉ'],
           unUUID('P')
         )
       ).rejects.toThrow(ErreurEntiteNonAdministre);
@@ -223,7 +223,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(
         administrationOrganisations.nommeAdmin(
           idAdmin,
-          'UN-SIRET-PAS-SUPERVISÉ',
+          ['UN-SIRET-PAS-SUPERVISÉ'],
           unUUID('P')
         )
       ).rejects.toThrow(ErreurEntiteNonAdministre);
@@ -233,7 +233,7 @@ describe("Le service de gestion des admins d'organisation", () => {
       await expect(
         administrationOrganisations.nommeAdmin(
           idSuperviseur,
-          entite.siret,
+          [entite.siret],
           idSuperviseur
         )
       ).rejects.toThrow(EchecAutorisation);
@@ -242,7 +242,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it('crée le nouvel admin', async () => {
       await administrationOrganisations.nommeAdmin(
         idAdmin,
-        entite.siret,
+        [entite.siret],
         unUUID('A')
       );
 
@@ -255,7 +255,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("ajoute l'entité administrée à l'admin existant", async () => {
       await administrationOrganisations.nommeAdmin(
         idSuperviseur,
-        siretSupervise,
+        [siretSupervise],
         idAdmin
       );
 
@@ -266,7 +266,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("complète les données de l'entité grâce à la recherche entreprise", async () => {
       await administrationOrganisations.nommeAdmin(
         idSuperviseur,
-        siretSupervise,
+        [siretSupervise],
         idAdmin
       );
 
@@ -278,7 +278,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it('ajoute les autorisations correspondantes', async () => {
       await administrationOrganisations.nommeAdmin(
         idSuperviseur,
-        siretSupervise,
+        [siretSupervise],
         unUUID('A')
       );
 
@@ -292,7 +292,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("élève les droits au rôle d'admin si l'admin est un contributeur existant", async () => {
       await administrationOrganisations.nommeAdmin(
         idSuperviseur,
-        siretAvecUnProprietaire,
+        [siretAvecUnProprietaire],
         unUUID('P')
       );
 
@@ -311,7 +311,7 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       const service = leServiceDAdministrationDesOrgas({ adaptateurMail });
 
-      await service.nommeAdmin(idSuperviseur, siretSupervise, unUUID('A'));
+      await service.nommeAdmin(idSuperviseur, [siretSupervise], unUUID('A'));
 
       expect(envoieMessageNominationAdmin).toHaveBeenCalledWith(
         'nouvel-admin@mail.fr'
@@ -321,7 +321,7 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("publie un évènement d'admin nommé sur le bus", async () => {
       await administrationOrganisations.nommeAdmin(
         idSuperviseur,
-        siretSupervise,
+        [siretSupervise],
         idAdmin
       );
 
