@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { onMount, untrack } from 'svelte';
+  import { onMount } from 'svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { api, estUnLibelleDejaUtilise } from './groupes.api';
-  import type { Groupe, GroupesProps } from './groupes.d';
+  import type { Groupe } from './groupes.d';
   import ModaleRenommageGroupe from './ModaleRenommageGroupe.svelte';
   import ModaleSuppressionGroupe from './ModaleSuppressionGroupe.svelte';
   import { singulierPluriel } from '../outils/string';
   import { services } from '../tableauDeBord/stores/services.store';
   import type { ReponseApiServices } from '../tableauDeBord/tableauDeBord.d';
+  import Loader from '../ui/Loader.svelte';
 
-  let { groupes: groupesInitiaux }: GroupesProps = $props();
-
-  let groupes = $state(untrack(() => groupesInitiaux));
+  let groupes = $state<Groupe[]>([]);
+  let enCoursChargement = $state(true);
   let nouveauLibelle = $state('');
   let erreurLibelle = $state('');
   let enCoursAjout = $state(false);
@@ -20,8 +20,13 @@
   let groupeASupprimer = $state<Groupe | null>(null);
 
   onMount(async () => {
-    const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
-    services.reinitialise(reponse.services);
+    const [reponseServices, groupesLus] = await Promise.all([
+      axios.get<ReponseApiServices>('/api/services'),
+      api.lisGroupes(),
+    ]);
+    services.reinitialise(reponseServices.data.services);
+    groupes = groupesLus;
+    enCoursChargement = false;
   });
 
   const ajouteGroupe = async () => {
@@ -89,7 +94,11 @@
   ></dsfr-button>
 </dsfr-input>
 
-{#if groupes.length === 0}
+{#if enCoursChargement}
+  <div class="conteneur-loader">
+    <Loader />
+  </div>
+{:else if groupes.length === 0}
   <div class="aucun-groupe">
     <img src="/statique/assets/images/illustration_dossiers.svg" alt="" />
     <h2>Vous n’avez pas encore créé de groupe</h2>
@@ -224,6 +233,13 @@
       display: flex;
       gap: 4px;
     }
+  }
+
+  .conteneur-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
   .conteneur-actions {

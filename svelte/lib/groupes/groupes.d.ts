@@ -10,6 +10,4 @@ export type Groupe = {
   idServicesAssocies: string[];
 };
 
-export type GroupesProps = {
-  groupes: Groupe[];
-};
+export type GroupesProps = {};
