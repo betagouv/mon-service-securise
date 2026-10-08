@@ -21,6 +21,7 @@ import MesureSpecifique from '../modeles/mesureSpecifique.js';
 import { VersionService } from '../modeles/versionService.js';
 import EvenementServiceV1MigreEnV2 from '../bus/evenementServiceV1MigreEnV2.js';
 import { EvenementRisquesV2ServiceModifies } from '../bus/evenementRisquesV2ServiceModifies.js';
+import { avecPMapPourChaqueElementSansPromesse } from '../utilitaires/pMap.js';
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -593,8 +594,11 @@ const creeDepot = (config = {}) => {
         })
       );
     };
+    await avecPMapPourChaqueElementSansPromesse(
+      servicesConcernes,
+      pourUnService
+    );
 
-    await Promise.all(servicesConcernes.map(pourUnService));
     await busEvenements.publie(
       new EvenementMesureModifieeEnMasse({
         utilisateur,
@@ -645,7 +649,10 @@ const creeDepot = (config = {}) => {
         })
       );
     };
-    await Promise.all(servicesConcernes.map(pourUnService));
+    await avecPMapPourChaqueElementSansPromesse(
+      servicesConcernes,
+      pourUnService
+    );
 
     await busEvenements.publie(
       new EvenementMesureModifieeEnMasse({
