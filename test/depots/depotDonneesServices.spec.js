@@ -65,6 +65,22 @@ import { EvenementRisquesV2ServiceModifies } from '../../src/bus/evenementRisque
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
 
+const espionneMisesAJourSimultanees = (adaptateurPersistance) => {
+  let miseAJourEnCours = 0;
+  let maximum = 0;
+  const { verifieServiceExiste } = adaptateurPersistance;
+  adaptateurPersistance.verifieServiceExiste = async (idService) => {
+    miseAJourEnCours += 1;
+    maximum = Math.max(maximum, miseAJourEnCours);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 5);
+    });
+    miseAJourEnCours -= 1;
+    return verifieServiceExiste(idService);
+  };
+  return { maximumMisesAJourSimultanees: () => maximum };
+};
+
 describe('Le dépôt de données des services', () => {
   let busEvenements;
 
@@ -2782,6 +2798,35 @@ describe('Le dépôt de données des services', () => {
         .construis();
     });
 
+    it('limite le nombre de services mis à jour simultanément', async () => {
+      const adaptateurPersistance = persistance
+        .ajouteUnService(
+          unService(referentiel).avecId('S3').construis().donneesAPersister()
+            .donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S3').donnees
+        )
+        .construis();
+      const espion = espionneMisesAJourSimultanees(adaptateurPersistance);
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+
+      await depot.metsAJourMesureGeneraleDesServices(
+        'U1',
+        ['S1', 'S2', 'S3'],
+        'uneMesure',
+        'fait',
+        '',
+        'v1'
+      );
+
+      expect(espion.maximumMisesAJourSimultanees()).to.be(2);
+    });
+
     it('jette une erreur si une modification des modalités seules est tentée sur une mesure sans statut', async () => {
       try {
         await depot.metsAJourMesureGeneraleDesServices(
@@ -3043,6 +3088,43 @@ describe('Le dépôt de données des services', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurStatutMesureManquant);
       }
+    });
+
+    it('limite le nombre de services mis à jour simultanément', async () => {
+      const adaptateurPersistance = persistance
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S3')
+            .avecMesures(
+              new Mesures(
+                { mesuresSpecifiques: [{ idModele: 'MOD1', id: 'MS3' }] },
+                referentiel,
+                {},
+                { MOD1: { categorie: 'gouvernance' } }
+              )
+            )
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .associeLeServiceAuxModelesDeMesureSpecifique('S3', ['MOD1'])
+        .nommeCommeProprietaire('U1', ['S3'])
+        .construis();
+      const espion = espionneMisesAJourSimultanees(adaptateurPersistance);
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecAdaptateurPersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S1', 'S2', 'S3'],
+        'MOD1',
+        'fait',
+        ''
+      );
+
+      expect(espion.maximumMisesAJourSimultanees()).to.be(2);
     });
 
     it('met à jour les mesures spécifiques pour des services', async () => {
