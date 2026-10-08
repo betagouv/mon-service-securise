@@ -32,8 +32,7 @@ const scrubDonnee = (donnee: unknown): unknown => {
   return donnee;
 };
 
-const scrubEvenementSentry = <T extends Record<string, unknown>>(
-  evenement: T
-): T => scrubDonnee(evenement) as T;
+const scrubEvenementSentry = <T extends object>(evenement: T): T =>
+  scrubDonnee(evenement) as T;
 
 export { scrubEvenementSentry };
