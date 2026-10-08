@@ -2,7 +2,8 @@
   import Toaster from '../ui/Toaster.svelte';
   import TitreOngletDSFR from '../ui/TitreOngletDSFR.svelte';
   import { api } from './groupes.api';
-  import type { Groupe, GroupesProps } from './groupes.d';
+  import { apiGroupesEntites } from './groupesEntites.api';
+  import type { Groupe, GroupeEntites, GroupesProps } from './groupes.d';
   import OngletGroupes from './OngletGroupes.svelte';
   import { singulierPluriel } from '../outils/string';
   import { services } from '../tableauDeBord/stores/services.store';
@@ -37,6 +38,15 @@
       href: `/tableauDeBord?idGroupe=${groupe.id}`,
     };
   };
+
+  const lienEntitesDuGroupe = (groupe: GroupeEntites) => {
+    const nombreEntites = groupe.siretsAssocies.length;
+    return {
+      label: `${nombreEntites} ${singulierPluriel('entité', 'entités', nombreEntites)}`,
+      title: `Voir les entités du groupe ${groupe.libelle}`,
+      href: `/admin/entites?idGroupe=${groupe.id}`,
+    };
+  };
 </script>
 
 <h1>Mes groupes</h1>
@@ -63,7 +73,21 @@
   />
 {/snippet}
 
-{#snippet ongletEntites()}{/snippet}
+{#snippet ongletEntites()}
+  <OngletGroupes
+    identifiant="entites"
+    api={apiGroupesEntites}
+    textes={{
+      exempleLibelle: 'exemple : Région Nord',
+      aucunGroupe:
+        'Saisissez un nom ci-dessus puis cliquez sur « Créer le groupe ». Vous pourrez ensuite y classer vos entités depuis la page Entités.',
+      explicationListe:
+        'Une entité peut appartenir à plusieurs groupes : la somme des colonnes « Entités » peut donc dépasser le nombre total d’entités de votre périmètre. Pour classer une entité dans un groupe, rendez-vous sur la page Entités.',
+      colonneElements: 'Entités',
+    }}
+    lienElements={lienEntitesDuGroupe}
+  />
+{/snippet}
 
 {#if avecGroupesServices && avecGroupesEntites}
   <dsfr-tabs

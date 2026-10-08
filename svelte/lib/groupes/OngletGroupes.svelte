@@ -16,12 +16,17 @@
     identifiant: string;
     api: ApiGroupes<G>;
     textes: TextesOngletGroupes;
-    chargeElements: () => Promise<void>;
+    chargeElements?: () => Promise<void>;
     lienElements: (groupe: G) => LienElementsDuGroupe;
   }
 
-  let { identifiant, api, textes, chargeElements, lienElements }: Props =
-    $props();
+  let {
+    identifiant,
+    api,
+    textes,
+    chargeElements = async () => {},
+    lienElements,
+  }: Props = $props();
 
   let groupes = $state<G[]>([]);
   let enCoursChargement = $state(true);
