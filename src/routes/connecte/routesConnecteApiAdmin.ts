@@ -27,12 +27,15 @@ import {
 } from '../../erreurs.js';
 import { ServiceStatistiquesAdmin } from '../../adaptateurs/serviceStatistiquesAdmin.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
+import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
+import { routesConnecteApiAdminGroupesEntites } from './routesConnecteApiAdminGroupesEntites.js';
 
 type Configuration = {
   serviceStatistiquesAdmin: ServiceStatistiquesAdmin;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
 };
 
 const routesConnecteApiAdmin = ({
@@ -40,8 +43,17 @@ const routesConnecteApiAdmin = ({
   depotDonnees,
   middleware,
   serviceAdministrationOrganisations,
+  adaptateurEnvironnement,
 }: Configuration) => {
   const routes = express.Router();
+
+  routes.use(
+    '/groupes-entites',
+    routesConnecteApiAdminGroupesEntites({
+      depotDonnees,
+      adaptateurEnvironnement,
+    })
+  );
 
   routes.get('/entites', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
