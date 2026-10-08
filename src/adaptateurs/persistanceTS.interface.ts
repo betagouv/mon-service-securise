@@ -5,6 +5,7 @@ import { DonneesNotificationTransactionnelle } from '../modeles/notificationsTra
 import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
 import { DonneesGroupeServices } from '../modeles/groupeServices.js';
+import { DonneesGroupeEntites } from '../modeles/groupeEntites.js';
 
 export interface PersistanceTS {
   lisAdminOrganisations: (
@@ -57,5 +58,16 @@ export interface PersistanceTS {
   supprimeAssociationServicesAuGroupe: (
     idGroupe: UUID,
     idsServices: UUID[]
+  ) => Promise<void>;
+  lisGroupesEntitesDe: (
+    idUtilisateur: UUID,
+    siretsDuPerimetre: string[]
+  ) => Promise<DonneesGroupeEntites[]>;
+  sauvegardeGroupeEntites: (donnees: DonneesGroupeEntites) => Promise<void>;
+  supprimeGroupeEntites: (idGroupe: UUID) => Promise<void>;
+  associeEntitesAuGroupe: (idGroupe: UUID, sirets: string[]) => Promise<void>;
+  supprimeAssociationEntitesAuGroupe: (
+    idGroupe: UUID,
+    sirets: string[]
   ) => Promise<void>;
 }

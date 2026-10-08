@@ -144,6 +144,22 @@ class MigrationHash {
           })
       );
 
+      const associationsGroupesEntites = await trx(
+        'groupes_entites_association_aux_entites'
+      );
+
+      const majAssociationsGroupesEntites = associationsGroupesEntites.map(
+        ({ id_groupe: idGroupe, siret_hash: siretHacheActuel }) =>
+          trx('groupes_entites_association_aux_entites')
+            .where({
+              id_groupe: idGroupe,
+              siret_hash: siretHacheActuel,
+            })
+            .update({
+              siret_hash: fonctionDeMigration(siretHacheActuel),
+            })
+      );
+
       await Promise.all([
         ...majServices,
         ...majUtilisateurs,
@@ -151,6 +167,7 @@ class MigrationHash {
         ...majAuditAdmins,
         ...majSuperviseurs,
         ...majClesApi,
+        ...majAssociationsGroupesEntites,
       ]);
     });
   }

@@ -17,7 +17,7 @@ const inventaire: Record<
     couvertPar: 'migreLesHashDeMss',
   },
   'src/adaptateurs/adaptateurPostgresTS.ts': {
-    occurrences: 4,
+    occurrences: 7,
     couvertPar: 'migreLesHashDeMss',
   },
   'src/depots/depotDonneesClesApi.ts': {
