@@ -73,8 +73,6 @@
   };
 </script>
 
-<p class="introduction">{textes.introduction}</p>
-
 <dsfr-input
   id="nouveau-groupe-{identifiant}"
   label="Nouveau groupe"
@@ -185,20 +183,12 @@
 />
 
 <style lang="scss">
-  .introduction {
-    color: #3a3a3a;
-    font-size: 1.25rem;
-    line-height: 2rem;
-    margin: 16px 0;
-    text-align: left;
-  }
-
   dsfr-button {
     white-space: nowrap;
   }
 
   .conteneur-liste {
-    margin: 8px 0 24px;
+    margin: 8px 0 0;
 
     p {
       margin: 24px 0 8px;

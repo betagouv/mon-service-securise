@@ -8,6 +8,8 @@ import {
   verifieTypeFichierServiEstCSV,
 } from '../../aides/verifieFichierServi.js';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.js';
+import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.js';
+import Superviseur from '../../../src/modeles/superviseur.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -281,6 +283,27 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
       expect(reponse.text).not.to.contain('/profil/groupes');
     });
+
+    it("affiche le lien vers les groupes à un admin si seul le feature flag des groupes d'entités est actif", async () => {
+      testeur.middleware().reinitialise({
+        featureFlags: { avecGroupesServices: false, avecGroupesEntites: true },
+        utilisateurConnecte: { estAdmin: true },
+      });
+
+      const reponse = await testeur.get('/profil');
+
+      expect(reponse.text).to.contain('/profil/groupes');
+    });
+
+    it("n'affiche pas le lien vers les groupes à un utilisateur ni admin ni superviseur si seul le feature flag des groupes d'entités est actif", async () => {
+      testeur.middleware().reinitialise({
+        featureFlags: { avecGroupesServices: false, avecGroupesEntites: true },
+      });
+
+      const reponse = await testeur.get('/profil');
+
+      expect(reponse.text).not.to.contain('/profil/groupes');
+    });
   });
 
   describe('quand GET sur /profil/groupes', () => {
@@ -310,14 +333,105 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       expect(reponse.text).to.contain('/statique/composants-svelte/groupes.js');
     });
 
-    it('répond 404 si le feature flag est désactivé', async () => {
+    it('répond 404 si les deux feature flags sont désactivés', async () => {
       testeur.adaptateurEnvironnement().featureFlag = () => ({
         avecGroupesServices: () => false,
+        avecGroupesEntites: () => false,
       });
 
       const reponse = await testeur.get('/profil/groupes');
 
       expect(reponse.status).to.be(404);
+    });
+
+    it("sert la page à un admin si seul le feature flag des groupes d'entités est activé", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecGroupesServices: () => false,
+        avecGroupesEntites: () => true,
+      });
+      await testeur.depotDonnees().sauvegardeAdminOrganisations(
+        AdminOrganisations.hydrate({
+          idUtilisateur: 'U1',
+          entitesAdministrees: [{ siret: '11111111100011' }],
+        })
+      );
+
+      const reponse = await testeur.get('/profil/groupes');
+
+      expect(reponse.status).to.be(200);
+      const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
+      expect(donnees.avecGroupesServices).to.be(false);
+    });
+
+    it("répond 404 à un utilisateur ni admin ni superviseur si seul le feature flag des groupes d'entités est activé", async () => {
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecGroupesServices: () => false,
+        avecGroupesEntites: () => true,
+      });
+
+      const reponse = await testeur.get('/profil/groupes');
+
+      expect(reponse.status).to.be(404);
+    });
+
+    describe("concernant l'affichage des groupes d'entités", () => {
+      beforeEach(() => {
+        testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      });
+
+      it('indique à la page de les afficher pour un superviseur', async () => {
+        await testeur.depotDonnees().sauvegardeSuperviseur(
+          Superviseur.hydrate({
+            idUtilisateur: 'U1',
+            entitesSupervisees: [{ siret: '11111111100011' }],
+          })
+        );
+
+        const reponse = await testeur.get('/profil/groupes');
+
+        const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
+        expect(donnees.avecGroupesEntites).to.be(true);
+      });
+
+      it("indique à la page de les afficher pour un admin d'organisations", async () => {
+        await testeur.depotDonnees().sauvegardeAdminOrganisations(
+          AdminOrganisations.hydrate({
+            idUtilisateur: 'U1',
+            entitesAdministrees: [{ siret: '11111111100011' }],
+          })
+        );
+
+        const reponse = await testeur.get('/profil/groupes');
+
+        const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
+        expect(donnees.avecGroupesEntites).to.be(true);
+      });
+
+      it('indique à la page de ne pas les afficher pour un utilisateur ni admin ni superviseur', async () => {
+        const reponse = await testeur.get('/profil/groupes');
+
+        const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
+        expect(donnees.avecGroupesEntites).to.be(false);
+      });
+
+      it('indique à la page de ne pas les afficher si le feature flag est désactivé, même pour un admin', async () => {
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecGroupesServices: () => true,
+          avecGroupesEntites: () => false,
+        });
+        await testeur.depotDonnees().sauvegardeAdminOrganisations(
+          AdminOrganisations.hydrate({
+            idUtilisateur: 'U1',
+            entitesAdministrees: [{ siret: '11111111100011' }],
+          })
+        );
+
+        const reponse = await testeur.get('/profil/groupes');
+
+        const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
+        expect(donnees.avecGroupesEntites).to.be(false);
+      });
     });
   });
 
