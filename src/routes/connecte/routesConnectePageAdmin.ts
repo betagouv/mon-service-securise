@@ -38,7 +38,11 @@ const routesConnectePageAdmin = ({
   });
 
   routes.get('/entites', async (_requete, reponse) => {
-    reponse.render('admin/entites');
+    reponse.render('admin/entites', {
+      avecGroupesEntites: adaptateurEnvironnement
+        .featureFlag()
+        .avecGroupesEntites(),
+    });
   });
 
   routes.get('/utilisateurs', async (requete, reponse) => {

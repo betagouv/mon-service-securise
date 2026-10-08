@@ -1,5 +1,6 @@
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { donneesPartagees } from '../../aides/http.js';
 
 describe("Le serveur MSS des pages d'admin", () => {
   const testeur = testeurMSS();
@@ -70,5 +71,30 @@ describe("Le serveur MSS des pages d'admin", () => {
     const reponse = await testeur.get('/admin/administrateurs');
 
     expect(reponse.status).to.equal(404);
+  });
+
+  describe("concernant l'affichage des groupes d'entités sur /admin/entites", () => {
+    beforeEach(() => {
+      testeur.depotDonnees().estAdmin = async () => true;
+    });
+
+    it('indique à la page de les afficher si le feature flag est activé', async () => {
+      const reponse = await testeur.get('/admin/entites');
+
+      const donnees = donneesPartagees(reponse.text, 'donnees-admin-entites');
+      expect(donnees.avecGroupesEntites).toBe(true);
+    });
+
+    it('indique à la page de ne pas les afficher si le feature flag est désactivé', async () => {
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecGestionDesOrganisations: () => true,
+        avecGroupesEntites: () => false,
+      });
+
+      const reponse = await testeur.get('/admin/entites');
+
+      const donnees = donneesPartagees(reponse.text, 'donnees-admin-entites');
+      expect(donnees.avecGroupesEntites).toBe(false);
+    });
   });
 });
