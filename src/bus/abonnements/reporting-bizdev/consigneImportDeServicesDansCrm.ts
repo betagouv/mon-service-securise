@@ -12,7 +12,7 @@ type Config = {
   };
 };
 
-type CrmImportEnMasse = {
+export type CrmImportEnMasse = {
   emailUtilisateur: string;
   nbServices: number;
   versionServices: VersionService;
