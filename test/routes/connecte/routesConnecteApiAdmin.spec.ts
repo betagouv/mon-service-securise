@@ -368,8 +368,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
   describe('quand requete POST sur `/api/admin/verifieEmail', () => {
     beforeEach(() => {
-      testeur.depotDonnees().lisSuperviseur = async () =>
-        Superviseur.nouveau(unUUIDRandom());
+      testeur.depotDonnees().estSuperviseur = async () => true;
     });
 
     it('applique une protection de trafic', async () => {
@@ -379,14 +378,37 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       });
     });
 
-    it("renvoie une erreur 403 si l'utilisateur courant n'est pas superviseur", async () => {
-      testeur.depotDonnees().lisSuperviseur = async () => undefined;
+    it("renvoie une erreur 403 si l'utilisateur courant n'est ni superviseur ni admin", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      testeur.depotDonnees().estAdmin = async () => false;
 
       const { status } = await testeur.post('/api/admin/verifieEmail', {
         email: 'a@a.fr',
       });
 
       expect(status).toBe(403);
+    });
+
+    it('autorise un admin', async () => {
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      testeur.depotDonnees().estAdmin = async () => true;
+
+      const { status } = await testeur.post('/api/admin/verifieEmail', {
+        email: 'a@a.fr',
+      });
+
+      expect(status).toBe(200);
+    });
+
+    it('autorise un superviseur', async () => {
+      testeur.depotDonnees().estSuperviseur = async () => true;
+      testeur.depotDonnees().estAdmin = async () => false;
+
+      const { status } = await testeur.post('/api/admin/verifieEmail', {
+        email: 'a@a.fr',
+      });
+
+      expect(status).toBe(200);
     });
 
     it("jette une erreur 400 si l'email est invalide", async () => {
