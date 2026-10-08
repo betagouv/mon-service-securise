@@ -7,7 +7,7 @@ document.body.addEventListener(
   async (e: CustomEvent<GroupesProps>) => await rechargeApp({ ...e.detail })
 );
 
-let app: Groupes;
+let app: ReturnType<typeof mount>;
 const rechargeApp = async (props: GroupesProps) => {
   if (app) await unmount(app);
 

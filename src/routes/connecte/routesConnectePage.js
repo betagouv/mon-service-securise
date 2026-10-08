@@ -101,16 +101,26 @@ const routesConnectePage = ({
     '/profil/groupes',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      if (!adaptateurEnvironnement.featureFlag().avecGroupesServices()) {
+      const { idUtilisateurCourant } = requete;
+      const [estAdmin, estSuperviseur] = await Promise.all([
+        depotDonnees.estAdmin(idUtilisateurCourant),
+        depotDonnees.estSuperviseur(idUtilisateurCourant),
+      ]);
+
+      const featureFlags = adaptateurEnvironnement.featureFlag();
+      const avecGroupesServices = featureFlags.avecGroupesServices();
+      const avecGroupesEntites =
+        featureFlags.avecGroupesEntites() && (estAdmin || estSuperviseur);
+
+      if (!avecGroupesServices && !avecGroupesEntites) {
         reponse.status(404).render('404');
         return;
       }
 
-      const groupes = await depotDonnees.lisGroupesDe(
-        requete.idUtilisateurCourant
-      );
-
-      reponse.render('profilGroupes', { groupes });
+      reponse.render('profilGroupes', {
+        avecGroupesServices,
+        avecGroupesEntites,
+      });
     }
   );
 

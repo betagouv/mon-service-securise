@@ -1,15 +1,16 @@
-<script lang="ts">
+<script lang="ts" generics="G extends GroupeAffichable">
   import { toasterStore } from '../ui/stores/toaster.store';
-  import { api } from './groupes.api';
-  import type { Groupe } from './groupes.d';
+  import type { ApiGroupes, GroupeAffichable } from './groupes.d';
 
   interface Props {
-    groupe: Groupe | null;
+    identifiant: string;
+    api: ApiGroupes<G>;
+    groupe: G | null;
     onSupprimee: (idGroupe: string) => void;
     onFerme: () => void;
   }
 
-  let { groupe, onSupprimee, onFerme }: Props = $props();
+  let { identifiant, api, groupe, onSupprimee, onFerme }: Props = $props();
 
   let enCours = $state(false);
 
@@ -34,7 +35,7 @@
 </script>
 
 <dsfr-modal
-  id="modale-suppression-groupe"
+  id="modale-suppression-groupe-{identifiant}"
   has-footer
   opened={groupe !== null}
   title="Êtes-vous sûr·e de vouloir supprimer le groupe «&nbsp;{groupe?.libelle}&nbsp;»&nbsp;?"

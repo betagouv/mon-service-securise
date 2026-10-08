@@ -77,7 +77,8 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     if (featureFlags.avecCreationCleApi) {
       liensMonEspace.push({ label: "Mes clés d'API", href: "/profil/cle-api", icon: "lock-line" });
     }
-    if (featureFlags.avecGroupesServices) {
+    const peutVoirGroupesEntites = featureFlags.avecGroupesEntites && estConnecte && (utilisateurConnecte.estAdmin || utilisateurConnecte.estSuperviseur);
+    if (featureFlags.avecGroupesServices || peutVoirGroupesEntites) {
       liensMonEspace.push({ label: "Mes groupes", href: "/profil/groupes", icon: "folder-2-line" });
     }
 

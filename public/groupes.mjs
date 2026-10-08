@@ -1,10 +1,11 @@
 import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
-  const { groupes } = lisDonneesPartagees('donnees-groupes');
+  const { avecGroupesServices, avecGroupesEntites } =
+    lisDonneesPartagees('donnees-groupes');
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-groupes', {
-      detail: { groupes },
+      detail: { avecGroupesServices, avecGroupesEntites },
     })
   );
 });
