@@ -1,15 +1,17 @@
-<script lang="ts">
+<script lang="ts" generics="G extends GroupeAffichable">
   import { toasterStore } from '../ui/stores/toaster.store';
-  import { api, estUnLibelleDejaUtilise } from './groupes.api';
-  import type { Groupe } from './groupes.d';
+  import { estUnLibelleDejaUtilise } from './groupes.api';
+  import type { ApiGroupes, GroupeAffichable } from './groupes.d';
 
   interface Props {
-    groupe: Groupe | null;
-    onRenommee: (groupe: Groupe) => void;
+    identifiant: string;
+    api: ApiGroupes<G>;
+    groupe: G | null;
+    onRenommee: (groupe: G) => void;
     onFerme: () => void;
   }
 
-  let { groupe, onRenommee, onFerme }: Props = $props();
+  let { identifiant, api, groupe, onRenommee, onFerme }: Props = $props();
 
   let libelle = $derived(groupe?.libelle ?? '');
   let erreur = $state('');
@@ -47,7 +49,7 @@
 </script>
 
 <dsfr-modal
-  id="modale-renommage-groupe"
+  id="modale-renommage-groupe-{identifiant}"
   has-footer
   opened={groupe !== null}
   title="Renommer le groupe «&nbsp;{groupe?.libelle}&nbsp;»"
@@ -57,7 +59,7 @@
     Vous pouvez renommer ce groupe sans modifier les services qu’il contient.
   </p>
   <dsfr-input
-    id="libelle-groupe-renomme"
+    id="libelle-groupe-renomme-{identifiant}"
     label="Nom du groupe"
     value={libelle}
     onvaluechanged={(e: CustomEvent<string>) => (libelle = e.detail)}
