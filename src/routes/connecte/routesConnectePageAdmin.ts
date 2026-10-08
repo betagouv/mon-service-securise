@@ -19,8 +19,18 @@ const routesConnectePageAdmin = ({
 }: Configuration) => {
   const routes = express.Router();
 
-  routes.use((_requete, reponse, suite) => {
+  routes.use(async (requete, reponse, suite) => {
     if (!adaptateurEnvironnement.featureFlag().avecGestionDesOrganisations()) {
+      reponse.status(404).render('404');
+      return;
+    }
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+    const [estAdmin, estSuperviseur] = await Promise.all([
+      depotDonnees.estAdmin(idUtilisateurCourant),
+      depotDonnees.estSuperviseur(idUtilisateurCourant),
+    ]);
+
+    if (!estAdmin && !estSuperviseur) {
       reponse.status(404).render('404');
       return;
     }
@@ -33,10 +43,8 @@ const routesConnectePageAdmin = ({
 
   routes.get('/utilisateurs', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
-    const adminCourant =
-      await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
-
-    if (!adminCourant) {
+    const estAdmin = await depotDonnees.estAdmin(idUtilisateurCourant);
+    if (!estAdmin) {
       reponse.status(404).render('404');
       return;
     }
@@ -46,10 +54,9 @@ const routesConnectePageAdmin = ({
 
   routes.get('/administrateurs', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
-    const superviseurCourant =
-      await depotDonnees.lisSuperviseur(idUtilisateurCourant);
-
-    if (!superviseurCourant) {
+    const estSuperviseur =
+      await depotDonnees.estSuperviseur(idUtilisateurCourant);
+    if (!estSuperviseur) {
       reponse.status(404).render('404');
       return;
     }

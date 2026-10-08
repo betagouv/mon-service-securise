@@ -1,8 +1,5 @@
 import testeurMSS from '../testeurMSS.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
-import { unUUID } from '../../constructeurs/UUID.ts';
-import { AdminOrganisations } from '../../../src/modeles/gestionOrganisations/adminOrganisations.ts';
-import Superviseur from '../../../src/modeles/superviseur.ts';
 
 describe("Le serveur MSS des pages d'admin", () => {
   const testeur = testeurMSS();
@@ -19,16 +16,8 @@ describe("Le serveur MSS des pages d'admin", () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
         testeur.depotDonnees().utilisateur = async () => utilisateur;
-        testeur.depotDonnees().lisAdminOrganisations = async () =>
-          AdminOrganisations.hydrate({
-            idUtilisateur: unUUID('U'),
-            entitesAdministrees: [{ siret: '1234' }],
-          });
-        testeur.depotDonnees().lisSuperviseur = async () =>
-          Superviseur.hydrate({
-            idUtilisateur: unUUID('U'),
-            entitesSupervisees: [{ siret: '1234' }],
-          });
+        testeur.depotDonnees().estAdmin = async () => true;
+        testeur.depotDonnees().estSuperviseur = async () => true;
       });
 
       it("vérifie que l'utilisateur a accepté les CGU", async () => {
@@ -53,11 +42,21 @@ describe("Le serveur MSS des pages d'admin", () => {
 
         expect(reponse.status).toBe(404);
       });
+
+      it("jette une erreur 404 si l'utilisateur n'est ni admin ni superviseur", async () => {
+        testeur.depotDonnees().estAdmin = async () => false;
+        testeur.depotDonnees().estSuperviseur = async () => false;
+
+        const reponse = await testeur.get(`${route}`);
+
+        expect(reponse.status).toBe(404);
+      });
     });
   });
 
   it("ne donne accès à la page admin/utilisateurs qu'aux admins", async () => {
-    testeur.depotDonnees().lisAdminOrganisations = async () => undefined;
+    testeur.depotDonnees().estAdmin = async () => false;
+    testeur.depotDonnees().estSuperviseur = async () => true;
 
     const reponse = await testeur.get('/admin/utilisateurs');
 
@@ -65,7 +64,8 @@ describe("Le serveur MSS des pages d'admin", () => {
   });
 
   it("ne donne accès à la page admin/administrateurs qu'aux superviseurs", async () => {
-    testeur.depotDonnees().lisSuperviseur = async () => undefined;
+    testeur.depotDonnees().estAdmin = async () => true;
+    testeur.depotDonnees().estSuperviseur = async () => false;
 
     const reponse = await testeur.get('/admin/administrateurs');
 
