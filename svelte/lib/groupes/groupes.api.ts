@@ -1,7 +1,7 @@
 import type { AxiosError, AxiosResponse } from 'axios';
-import type { Groupe } from './groupes.d';
+import type { ApiGroupes, Groupe } from './groupes.d';
 
-export const api = {
+export const api: ApiGroupes<Groupe> = {
   lisGroupes: async (): Promise<Groupe[]> =>
     (await axios.get<Groupe[]>('/api/groupes-services')).data,
   ajouteGroupe: async (libelle: string): Promise<AxiosResponse<Groupe>> =>
