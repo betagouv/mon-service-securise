@@ -15,6 +15,10 @@ export type Groupe = GroupeAffichable & {
   idServicesAssocies: string[];
 };
 
+export type GroupeEntites = GroupeAffichable & {
+  siretsAssocies: string[];
+};
+
 export type GroupesProps = {
   avecGroupesServices: boolean;
   avecGroupesEntites: boolean;
