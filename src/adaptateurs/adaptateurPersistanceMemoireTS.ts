@@ -271,7 +271,14 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
   }
 
   async sauvegardeGroupeEntites(donnees: DonneesGroupeEntites): Promise<void> {
-    this.donnees.groupesEntites.push({ ...donnees });
+    const existant = this.donnees.groupesEntites.find(
+      (g) => g.id === donnees.id
+    );
+    await this.supprimeGroupeEntites(donnees.id);
+    this.donnees.groupesEntites.push({
+      ...donnees,
+      siretsAssocies: existant?.siretsAssocies ?? [],
+    });
   }
 
   async associeEntitesAuGroupe(

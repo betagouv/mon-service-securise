@@ -40,6 +40,7 @@ import { ServiceCgu } from './serviceCgu.interface.js';
 import { DepotDonneesNotificationsTransactionnelles } from './depots/depotDonneesNotificationsTransactionnelles.js';
 import { DepotDonneesClesApi } from './depots/depotDonneesClesApi.js';
 import { DepotDonneesGroupesServices } from './depots/depotDonneesGroupesServices.js';
+import { DepotDonneesGroupesEntites } from './depots/depotDonneesGroupesEntites.js';
 
 export type ConfigDepotDonnees = {
   adaptateurChiffrement?: AdaptateurChiffrement;
@@ -220,6 +221,12 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     persistance: adaptateurPersistanceTS,
     depotAutorisations,
     busEvenements,
+  });
+
+  const depotGroupesEntites = new DepotDonneesGroupesEntites({
+    persistance: adaptateurPersistanceTS,
+    depotAdminsOrganisations,
+    depotSuperviseurs,
   });
 
   const {
@@ -560,6 +567,20 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     supprimeAssociationServicesAuGroupe:
       depotGroupesServices.supprimeAssociationServicesAuGroupe.bind(
         depotGroupesServices
+      ),
+    nouveauGroupeEntites:
+      depotGroupesEntites.nouveauGroupeEntites.bind(depotGroupesEntites),
+    lisGroupesEntitesDe:
+      depotGroupesEntites.lisGroupesEntitesDe.bind(depotGroupesEntites),
+    renommeGroupeEntites:
+      depotGroupesEntites.renommeGroupeEntites.bind(depotGroupesEntites),
+    supprimeGroupeEntites:
+      depotGroupesEntites.supprimeGroupeEntites.bind(depotGroupesEntites),
+    associeEntitesAuxGroupes:
+      depotGroupesEntites.associeEntitesAuxGroupes.bind(depotGroupesEntites),
+    supprimeAssociationEntitesAuGroupe:
+      depotGroupesEntites.supprimeAssociationEntitesAuGroupe.bind(
+        depotGroupesEntites
       ),
   };
 };
