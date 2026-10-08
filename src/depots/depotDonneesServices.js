@@ -589,6 +589,7 @@ const creeDepot = (config = {}) => {
           ancienneMesure,
           nouvelleMesure,
           typeMesure: 'generale',
+          enMasse: true,
         })
       );
     };
@@ -640,6 +641,7 @@ const creeDepot = (config = {}) => {
           ancienneMesure,
           nouvelleMesure,
           typeMesure: 'specifique',
+          enMasse: true,
         })
       );
     };

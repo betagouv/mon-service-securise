@@ -5,6 +5,7 @@ class EvenementMesureServiceModifiee {
     ancienneMesure,
     nouvelleMesure,
     typeMesure,
+    enMasse = false,
   }) {
     if (!service)
       throw Error("Impossible d'instancier l'événement sans service");
@@ -16,6 +17,7 @@ class EvenementMesureServiceModifiee {
     this.ancienneMesure = ancienneMesure;
     this.nouvelleMesure = nouvelleMesure;
     this.typeMesure = typeMesure;
+    this.enMasse = enMasse;
   }
 }
 

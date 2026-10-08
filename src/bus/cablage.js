@@ -146,10 +146,10 @@ const cableTousLesAbonnes = (
     rattacheServiceEtAdmins({ serviceAdministrationOrganisations }),
   ]);
 
-  busEvenements.abonne(
-    EvenementMesureModifieeEnMasse,
-    consigneModificationMesureEnMasseDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementMesureModifieeEnMasse, [
+    consigneModificationMesureEnMasseDansJournal({ adaptateurJournal }),
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+  ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [
     consigneCompletudeDansJournal({

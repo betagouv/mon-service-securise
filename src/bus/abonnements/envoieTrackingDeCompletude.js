@@ -7,9 +7,10 @@ const leveException = (raison) => {
 };
 function envoieTrackingCompletude({ adaptateurTracking, depotDonnees }) {
   return async (evenement) => {
-    const { utilisateur } = evenement;
+    const { utilisateur, enMasse } = evenement;
 
     if (!utilisateur) leveException("l'utilisateur");
+    if (enMasse) return;
 
     const serviceTracking = fabriqueServiceTracking();
 
