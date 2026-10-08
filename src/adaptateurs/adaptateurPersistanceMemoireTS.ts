@@ -7,6 +7,7 @@ import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire
 import { IdNotificationTransactionnelle } from '../referentiel.types.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
 import { DonneesGroupeServices } from '../modeles/groupeServices.js';
+import { DonneesGroupeEntites } from '../modeles/groupeEntites.js';
 
 type DonneesPersistanceMemoire = {
   adminsOrganisations: DonneesAdminOrganisations[];
@@ -14,6 +15,7 @@ type DonneesPersistanceMemoire = {
   notificationsTransactionnelles: DonneesNotificationTransactionnelle[];
   clesApi: DonneesCleApi[];
   groupesServices: DonneesGroupeServices[];
+  groupesEntites: DonneesGroupeEntites[];
 };
 
 export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
@@ -23,6 +25,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     notificationsTransactionnelles: [],
     clesApi: [],
     groupesServices: [],
+    groupesEntites: [],
   };
 
   constructor(donnees?: Partial<DonneesPersistanceMemoire>) {
@@ -34,6 +37,7 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
           donnees.notificationsTransactionnelles ?? [],
         clesApi: donnees.clesApi ?? [],
         groupesServices: donnees.groupesServices ?? [],
+        groupesEntites: donnees.groupesEntites ?? [],
       };
   }
 
@@ -250,5 +254,58 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
       this.donnees.groupesServices[index].idServicesAssocies.filter(
         (id) => !idsServices.includes(id)
       );
+  }
+
+  async lisGroupesEntitesDe(
+    idUtilisateur: UUID,
+    siretsDuPerimetre: string[]
+  ): Promise<DonneesGroupeEntites[]> {
+    return this.donnees.groupesEntites
+      .filter((g) => g.idUtilisateur === idUtilisateur)
+      .map((g) => ({
+        ...g,
+        siretsAssocies: g.siretsAssocies.filter((siret) =>
+          siretsDuPerimetre.includes(siret)
+        ),
+      }));
+  }
+
+  async sauvegardeGroupeEntites(donnees: DonneesGroupeEntites): Promise<void> {
+    const existant = this.donnees.groupesEntites.find(
+      (g) => g.id === donnees.id
+    );
+    await this.supprimeGroupeEntites(donnees.id);
+    this.donnees.groupesEntites.push({
+      ...donnees,
+      siretsAssocies: existant?.siretsAssocies ?? [],
+    });
+  }
+
+  async associeEntitesAuGroupe(
+    idGroupe: UUID,
+    sirets: string[]
+  ): Promise<void> {
+    const groupe = this.donnees.groupesEntites.find((g) => g.id === idGroupe);
+    if (!groupe) return;
+
+    groupe.siretsAssocies = [...new Set([...groupe.siretsAssocies, ...sirets])];
+  }
+
+  async supprimeAssociationEntitesAuGroupe(
+    idGroupe: UUID,
+    sirets: string[]
+  ): Promise<void> {
+    const groupe = this.donnees.groupesEntites.find((g) => g.id === idGroupe);
+    if (!groupe) return;
+
+    groupe.siretsAssocies = groupe.siretsAssocies.filter(
+      (siret) => !sirets.includes(siret)
+    );
+  }
+
+  async supprimeGroupeEntites(idGroupe: UUID): Promise<void> {
+    this.donnees.groupesEntites = this.donnees.groupesEntites.filter(
+      (g) => g.id !== idGroupe
+    );
   }
 }

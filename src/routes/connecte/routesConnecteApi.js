@@ -450,6 +450,7 @@ const routesConnecteApi = ({
       depotDonnees,
       middleware,
       serviceAdministrationOrganisations,
+      adaptateurEnvironnement,
     })
   );
 

@@ -11,6 +11,7 @@ import {
 } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 import { DonneesCleApi } from '../../src/modeles/cleApi.ts';
 import { DonneesGroupeServices } from '../../src/modeles/groupeServices.ts';
+import { DonneesGroupeEntites } from '../../src/modeles/groupeEntites.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -35,6 +36,16 @@ describe("L'adaptateur persistance Postgres", () => {
     idUtilisateur: unUUIDRandom(),
     libelle: 'Métier',
     idServicesAssocies: [],
+    ...donnees,
+  });
+
+  const unGroupeEntites = (
+    donnees: Partial<DonneesGroupeEntites> = {}
+  ): DonneesGroupeEntites => ({
+    id: unUUIDRandom(),
+    idUtilisateur: unUUIDRandom(),
+    libelle: 'Région Nord',
+    siretsAssocies: [],
     ...donnees,
   });
 
@@ -1078,6 +1089,185 @@ describe("L'adaptateur persistance Postgres", () => {
 
       const lignes = await trx
         .table('groupes_services_association_aux_services')
+        .select();
+      expect(lignes).toEqual([]);
+    });
+  });
+
+  describe("sur demande de sauvegarde d'un groupe d'entités", () => {
+    it('chiffre le libellé', async () => {
+      const groupe = unGroupeEntites({ libelle: 'Région Nord' });
+
+      await persistance.sauvegardeGroupeEntites(groupe);
+
+      const lignes = await trx.table('groupes_entites').select();
+      expect(lignes).toEqual([
+        {
+          id: groupe.id,
+          id_utilisateur: groupe.idUtilisateur,
+          donnees: { coffreFort: { libelle: 'Région Nord' }, chiffre: true },
+        },
+      ]);
+    });
+
+    it("met à jour le libellé d'un groupe existant", async () => {
+      const groupe = unGroupeEntites({ libelle: 'Région Nord' });
+      await persistance.sauvegardeGroupeEntites(groupe);
+
+      await persistance.sauvegardeGroupeEntites({
+        ...groupe,
+        libelle: 'Région Sud',
+      });
+
+      const lignes = await trx.table('groupes_entites').select();
+      expect(lignes).toHaveLength(1);
+      expect(lignes[0].donnees.coffreFort).toEqual({ libelle: 'Région Sud' });
+    });
+  });
+
+  describe("sur demande de lecture des groupes d'entités d'un utilisateur", () => {
+    it('retourne uniquement les groupes lui appartenant, déchiffrés', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const sonGroupe = unGroupeEntites({ idUtilisateur });
+      await persistance.sauvegardeGroupeEntites(sonGroupe);
+      await persistance.sauvegardeGroupeEntites(unGroupeEntites());
+
+      const groupes = await persistance.lisGroupesEntitesDe(idUtilisateur, []);
+
+      expect(groupes).toEqual([sonGroupe]);
+    });
+
+    it('retourne pour chaque groupe les SIRETs associés', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const groupe1 = unGroupeEntites({ idUtilisateur, libelle: '1' });
+      const groupe2 = unGroupeEntites({ idUtilisateur, libelle: '2' });
+      await persistance.sauvegardeGroupeEntites(groupe1);
+      await persistance.sauvegardeGroupeEntites(groupe2);
+      await persistance.associeEntitesAuGroupe(groupe1.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+      await persistance.associeEntitesAuGroupe(groupe2.id, ['11111111100011']);
+
+      const groupes = await persistance.lisGroupesEntitesDe(idUtilisateur, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      const siretsDuGroupe1 = groupes.find(
+        (g) => g.id === groupe1.id
+      )!.siretsAssocies;
+      expect(siretsDuGroupe1).toHaveLength(2);
+      expect(siretsDuGroupe1).toEqual(
+        expect.arrayContaining(['11111111100011', '22222222200022'])
+      );
+      expect(groupes.find((g) => g.id === groupe2.id)!.siretsAssocies).toEqual([
+        '11111111100011',
+      ]);
+    });
+
+    it('ne retourne pas les SIRETs associés qui ne sont plus dans le périmètre', async () => {
+      const idUtilisateur = unUUIDRandom();
+      const groupe = unGroupeEntites({ idUtilisateur });
+      await persistance.sauvegardeGroupeEntites(groupe);
+      await persistance.associeEntitesAuGroupe(groupe.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      const groupes = await persistance.lisGroupesEntitesDe(idUtilisateur, [
+        '11111111100011',
+      ]);
+
+      expect(groupes[0].siretsAssocies).toEqual(['11111111100011']);
+    });
+  });
+
+  describe("sur demande d'association d'un groupe à des entités", () => {
+    it('associe les entités par le hash de leur SIRET', async () => {
+      const groupe = unGroupeEntites();
+      await persistance.sauvegardeGroupeEntites(groupe);
+
+      await persistance.associeEntitesAuGroupe(groupe.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      const lignes = await trx
+        .table('groupes_entites_association_aux_entites')
+        .select();
+      expect(lignes).toEqual([
+        { id_groupe: groupe.id, siret_hash: '11111111100011-haché256' },
+        { id_groupe: groupe.id, siret_hash: '22222222200022-haché256' },
+      ]);
+    });
+
+    it("ne crée pas de doublon si l'entité est déjà associée", async () => {
+      const groupe = unGroupeEntites();
+      await persistance.sauvegardeGroupeEntites(groupe);
+      await persistance.associeEntitesAuGroupe(groupe.id, ['11111111100011']);
+
+      await persistance.associeEntitesAuGroupe(groupe.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      const lignes = await trx
+        .table('groupes_entites_association_aux_entites')
+        .select();
+      expect(lignes).toEqual([
+        { id_groupe: groupe.id, siret_hash: '11111111100011-haché256' },
+        { id_groupe: groupe.id, siret_hash: '22222222200022-haché256' },
+      ]);
+    });
+  });
+
+  describe("sur demande de dissociation d'entités d'un groupe", () => {
+    it('dissocie les entités', async () => {
+      const groupe = unGroupeEntites();
+      await persistance.sauvegardeGroupeEntites(groupe);
+      await persistance.associeEntitesAuGroupe(groupe.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      await persistance.supprimeAssociationEntitesAuGroupe(groupe.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      const lignes = await trx
+        .table('groupes_entites_association_aux_entites')
+        .select();
+      expect(lignes).toEqual([]);
+    });
+  });
+
+  describe("sur demande de suppression d'un groupe d'entités", () => {
+    it('supprime uniquement le groupe concerné', async () => {
+      const aSupprimer = unGroupeEntites();
+      const aConserver = unGroupeEntites();
+      await persistance.sauvegardeGroupeEntites(aSupprimer);
+      await persistance.sauvegardeGroupeEntites(aConserver);
+
+      await persistance.supprimeGroupeEntites(aSupprimer.id);
+
+      const lignes = await trx.table('groupes_entites').select('id');
+      expect(lignes).toEqual([{ id: aConserver.id }]);
+    });
+
+    it('supprime également les associations avec les entités', async () => {
+      const aSupprimer = unGroupeEntites();
+      await persistance.sauvegardeGroupeEntites(aSupprimer);
+      await persistance.associeEntitesAuGroupe(aSupprimer.id, [
+        '11111111100011',
+        '22222222200022',
+      ]);
+
+      await persistance.supprimeGroupeEntites(aSupprimer.id);
+
+      const lignes = await trx
+        .table('groupes_entites_association_aux_entites')
         .select();
       expect(lignes).toEqual([]);
     });
