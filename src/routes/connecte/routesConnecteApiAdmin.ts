@@ -205,12 +205,12 @@ const routesConnecteApiAdmin = ({
     valideBody(z.strictObject({ email: z.email() })),
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete as RequestRouteConnecte;
-      const superviseur =
-        await depotDonnees.lisSuperviseur(idUtilisateurCourant);
-      const admin =
-        await depotDonnees.lisAdminOrganisations(idUtilisateurCourant);
+      const [estAdmin, estSuperviseur] = await Promise.all([
+        depotDonnees.estAdmin(idUtilisateurCourant),
+        depotDonnees.estSuperviseur(idUtilisateurCourant),
+      ]);
 
-      if (!superviseur && !admin) {
+      if (!estAdmin && !estSuperviseur) {
         reponse.sendStatus(403);
         return;
       }
