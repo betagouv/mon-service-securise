@@ -39,6 +39,7 @@ class ErreurGroupeServicesDejaExistant extends ErreurModele {}
 class ErreurGroupeServicesInexistant extends ErreurModele {}
 class ErreurCleApiInexistante extends ErreurModele {}
 class ErreurLibelleGroupeServicesInvalide extends ErreurModele {}
+class ErreurLibelleGroupeEntitesInvalide extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
 class ErreurDecisionInvalide extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
@@ -172,6 +173,7 @@ export {
   ErreurIntituleRisqueManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
+  ErreurLibelleGroupeEntitesInvalide,
   ErreurLibelleGroupeServicesInvalide,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
