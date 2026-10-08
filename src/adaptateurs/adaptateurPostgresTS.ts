@@ -10,6 +10,7 @@ import { NombreNotificationsParType } from '../notifications/rapportHebdomadaire
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { DonneesCleApi } from '../modeles/cleApi.js';
 import { DonneesGroupeServices } from '../modeles/groupeServices.js';
+import { DonneesGroupeEntites } from '../modeles/groupeEntites.js';
 
 enum TABLES {
   ADMINS_ORGANISATIONS = 'admins_organisations',
@@ -18,6 +19,8 @@ enum TABLES {
   CLES_API = 'cles_api',
   GROUPES_SERVICES = 'groupes_services',
   ASSOCIATION_GROUPES_SERVICES = 'groupes_services_association_aux_services',
+  GROUPES_ENTITES = 'groupes_entites',
+  ASSOCIATION_GROUPES_ENTITES = 'groupes_entites_association_aux_entites',
 }
 
 export class AdaptateurPostgresTS implements PersistanceTS {
@@ -466,5 +469,96 @@ export class AdaptateurPostgresTS implements PersistanceTS {
         })
       )
     );
+  }
+
+  async lisGroupesEntitesDe(
+    idUtilisateur: UUID,
+    siretsDuPerimetre: string[]
+  ): Promise<DonneesGroupeEntites[]> {
+    const siretParHash = new Map(
+      siretsDuPerimetre.map((siret) => [
+        this.chiffrement.hacheSha256(siret),
+        siret,
+      ])
+    );
+
+    const lignes: {
+      id: UUID;
+      donnees: DonneesChiffrees;
+      siretsHashAssocies: string[];
+    }[] = await this.knex(`${TABLES.GROUPES_ENTITES} as groupe`)
+      .select({ id: 'groupe.id', donnees: 'groupe.donnees' })
+      .select(
+        this.knex.raw(
+          `coalesce(array_agg(association.siret_hash) filter (where association.siret_hash is not null), '{}') as "siretsHashAssocies"`
+        )
+      )
+      .leftJoin(
+        `${TABLES.ASSOCIATION_GROUPES_ENTITES} as association`,
+        'association.id_groupe',
+        'groupe.id'
+      )
+      .where('groupe.id_utilisateur', idUtilisateur)
+      .groupBy('groupe.id');
+
+    return Promise.all(
+      lignes.map(async ({ id, donnees, siretsHashAssocies }) => {
+        const { libelle } = await this.chiffrement.dechiffre<{
+          libelle: string;
+        }>(donnees);
+        const siretsAssocies = siretsHashAssocies
+          .filter((hash) => siretParHash.has(hash))
+          .map((hash) => siretParHash.get(hash)!);
+        return { id, idUtilisateur, libelle, siretsAssocies };
+      })
+    );
+  }
+
+  async sauvegardeGroupeEntites(donnees: DonneesGroupeEntites): Promise<void> {
+    await this.knex(TABLES.GROUPES_ENTITES)
+      .insert({
+        id: donnees.id,
+        id_utilisateur: donnees.idUtilisateur,
+        donnees: await this.chiffrement.chiffre({ libelle: donnees.libelle }),
+      })
+      .onConflict('id')
+      .merge();
+  }
+
+  async associeEntitesAuGroupe(
+    idGroupe: UUID,
+    sirets: string[]
+  ): Promise<void> {
+    await Promise.all(
+      sirets.map((siret) =>
+        this.knex(TABLES.ASSOCIATION_GROUPES_ENTITES)
+          .insert({
+            id_groupe: idGroupe,
+            siret_hash: this.chiffrement.hacheSha256(siret),
+          })
+          .onConflict()
+          .ignore()
+      )
+    );
+  }
+
+  async supprimeAssociationEntitesAuGroupe(
+    idGroupe: UUID,
+    sirets: string[]
+  ): Promise<void> {
+    await this.knex(TABLES.ASSOCIATION_GROUPES_ENTITES)
+      .where('id_groupe', idGroupe)
+      .whereIn(
+        'siret_hash',
+        sirets.map((siret) => this.chiffrement.hacheSha256(siret))
+      )
+      .delete();
+  }
+
+  async supprimeGroupeEntites(idGroupe: UUID): Promise<void> {
+    await this.knex(TABLES.GROUPES_ENTITES).where({ id: idGroupe }).delete();
+    await this.knex(TABLES.ASSOCIATION_GROUPES_ENTITES)
+      .where({ id_groupe: idGroupe })
+      .delete();
   }
 }
