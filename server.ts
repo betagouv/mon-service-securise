@@ -37,6 +37,7 @@ import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail
 import { fabriqueAdaptateurAuditAdminOrganisations } from './src/adaptateurs/fabriqueAdaptateurAuditAdminOrganisations.js';
 import { AdaptateurPdfTypst } from './src/adaptateurs/adaptateurPdf.typst.js';
 import { fabriqueServiceStatistiquesAdmin } from './src/adaptateurs/fabriqueServiceStatistiquesAdmin.js';
+import { fabriqueAdaptateurReportingCrm } from './src/adaptateurs/fabriqueAdaptateurReportingCrm.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -87,6 +88,8 @@ const adaptateurAuditAdminOrganisations =
     adaptateurChiffrement
   );
 
+const adaptateurReportingCrm = fabriqueAdaptateurReportingCrm();
+
 const adaptateurStatistiques = fabriqueAdaptateurStatistiques();
 const serviceStatistiquesAdmin = fabriqueServiceStatistiquesAdmin(
   adaptateurChiffrement,
@@ -105,6 +108,7 @@ cableTousLesAbonnes(busEvenements, {
   depotDonnees,
   referentiel,
   adaptateurAuditAdminOrganisations,
+  adaptateurReportingCrm,
 });
 
 const middleware = Middleware({

@@ -97,6 +97,7 @@ import { EvenementServicesDuGroupeModifies } from './evenementServicesDuGroupeMo
 import { consigneGroupeServicesCreeDansJournal } from './abonnements/consigneGroupeServicesCreeDansJournal.js';
 import { consigneGroupeServicesSupprimeDansJournal } from './abonnements/consigneGroupeServicesSupprimeDansJournal.js';
 import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consigneServicesDuGroupeModifiesDansJournal.js';
+import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -111,6 +112,7 @@ const cableTousLesAbonnes = (
     depotDonnees,
     referentiel,
     adaptateurAuditAdminOrganisations,
+    adaptateurReportingCrm,
   }
 ) => {
   const crmBrevo = new CrmBrevo({
@@ -265,10 +267,13 @@ const cableTousLesAbonnes = (
     supprimeNotificationsTransactionnelles({ depotDonnees }),
   ]);
 
-  busEvenements.abonne(
-    EvenementServicesImportes,
-    consigneTeleversementServicesRealiseDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementServicesImportes, [
+    consigneTeleversementServicesRealiseDansJournal({ adaptateurJournal }),
+    consigneImportDeServicesDansCrm({
+      depotDonnees,
+      reportingCrm: adaptateurReportingCrm,
+    }),
+  ]);
 
   busEvenements.abonne(
     EvenementModelesMesureSpecifiqueImportes,
