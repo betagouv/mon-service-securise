@@ -12,6 +12,8 @@ const baseDeDonnees = () => ({
 });
 
 export const crm = () => ({
+  estActif: () =>
+    process.env.REPORTING_TWENTY_CRM_EST_ACTIF?.trim().toLowerCase() === 'true',
   cleApi: () => process.env.REPORTING_TWENTY_CRM_CLE_API,
   urlBase: () => new URL(process.env.REPORTING_TWENTY_CRM_URL_BASE),
 });
