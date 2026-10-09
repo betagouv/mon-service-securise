@@ -2,16 +2,24 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
-axiosRetry(axios, {
-  retries: 3,
-  retryCondition: (e) => e.response?.status === 429,
-  retryDelay: (retryCount, e) => {
-    const retryAfter = e.response?.headers?.['retry-after'];
-    return retryAfter
-      ? Number(retryAfter) * 1000
-      : axiosRetry.exponentialDelay(retryCount);
-  },
-});
+const fabriqueAxiosAdaptateur = () => {
+  const instance = axios.create();
+
+  axiosRetry(instance, {
+    retries: 3,
+    retryCondition: (e) => e.response?.status === 429,
+    retryDelay: (retryCount, e) => {
+      const retryAfter = e.response?.headers?.['retry-after'];
+      return retryAfter
+        ? Number(retryAfter) * 1000
+        : axiosRetry.exponentialDelay(retryCount);
+    },
+  });
+
+  return instance;
+};
+
+const axiosQuiRetry = fabriqueAxiosAdaptateur();
 
 const extraisDepartement = (commune) => {
   if (!commune) {
@@ -58,7 +66,7 @@ const extraisInfosEtablissement = (terme, resultat) => {
 const rechercheOrganisations = async (
   terme,
   departement,
-  instanceAxios = axios
+  instanceAxios = axiosQuiRetry
 ) => {
   try {
     const reponse = await instanceAxios.get(
@@ -89,7 +97,10 @@ const rechercheOrganisations = async (
   }
 };
 
-const recupereDetailsOrganisation = async (siret, instanceAxios = axios) => {
+const recupereDetailsOrganisation = async (
+  siret,
+  instanceAxios = axiosQuiRetry
+) => {
   try {
     const reponse = await instanceAxios.get(
       'https://recherche-entreprises.api.gouv.fr/search',
