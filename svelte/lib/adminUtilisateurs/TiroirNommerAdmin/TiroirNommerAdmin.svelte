@@ -18,6 +18,7 @@
   import { api } from '../adminUtilisateurs.api';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import type { AxiosError } from 'axios';
+  import ChargementEnCours from '../../ui/ChargementEnCours.svelte';
 
   interface Props {
     utilisateur: UtilisateurAdministre;
@@ -40,7 +41,8 @@
 
   export const taille = 'large';
 
-  let etape: 'SELECTION' | 'RECAPITULATIF' = $state('SELECTION');
+  let etape: 'SELECTION' | 'RECAPITULATIF' | 'OPERATION_EN_COURS' =
+    $state('SELECTION');
 
   let siretsSelectionnesInitialement = untrack(() =>
     siretsOuIlEstAdmin(utilisateur.id, toutesEntites)
@@ -90,6 +92,7 @@
 
   const enregistreModifications = async () => {
     try {
+      etape = 'OPERATION_EN_COURS';
       await api.enregistreNouveauPerimetreAdmin(
         utilisateur.id,
         recapitulatif.nouvelles,
@@ -126,6 +129,7 @@
           "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
         );
       }
+      etape = 'SELECTION';
     }
   };
 
@@ -141,12 +145,14 @@
 </script>
 
 <ContenuTiroir>
-  <dsfr-stepper
-    title={etape === 'SELECTION' ? 'Sélection des entités' : 'Récapitulatif'}
-    nextStep={etape === 'SELECTION' ? 'Récapitulatif' : undefined}
-    currentStep={etape === 'SELECTION' ? 1 : 2}
-    stepCount={2}
-  ></dsfr-stepper>
+  {#if etape === 'SELECTION' || etape === 'RECAPITULATIF'}
+    <dsfr-stepper
+      title={etape === 'SELECTION' ? 'Sélection des entités' : 'Récapitulatif'}
+      nextStep={etape === 'SELECTION' ? 'Récapitulatif' : undefined}
+      currentStep={etape === 'SELECTION' ? 1 : 2}
+      stepCount={2}
+    ></dsfr-stepper>
+  {/if}
 
   {#if etape === 'SELECTION'}
     {#if siretsSelectionnes.size === 0}
@@ -246,7 +252,7 @@
         {/each}
       </dsfr-table>
     </div>
-  {:else}
+  {:else if etape === 'RECAPITULATIF'}
     <dsfr-callout
       has-title
       title="Récapitulatif"
@@ -293,6 +299,10 @@
         </div>
       {/each}
     </dsfr-table>
+  {:else if etape === 'OPERATION_EN_COURS'}
+    <div class="chargement-en-cours">
+      <ChargementEnCours />
+    </div>
   {/if}
 </ContenuTiroir>
 
@@ -371,5 +381,12 @@
 
   dsfr-callout {
     margin-bottom: -1.5rem;
+  }
+
+  .chargement-en-cours {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
   }
 </style>
