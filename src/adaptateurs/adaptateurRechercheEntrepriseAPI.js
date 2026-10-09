@@ -1,9 +1,16 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
+import { enCadence } from '../utilitaires/pThrottle.js';
 
 const fabriqueAxiosAdaptateur = () => {
   const instance = axios.create();
+
+  const septParSeconde = Math.ceil(1000 / 7);
+  const laissePasserLaRequete = async (config) => config;
+  instance.interceptors.request.use(
+    enCadence(septParSeconde, laissePasserLaRequete)
+  );
 
   axiosRetry(instance, {
     retries: 3,
@@ -153,4 +160,8 @@ const recupereDetailsOrganisation = async (
   }
 };
 
-export { rechercheOrganisations, recupereDetailsOrganisation };
+export {
+  fabriqueAxiosAdaptateur,
+  rechercheOrganisations,
+  recupereDetailsOrganisation,
+};

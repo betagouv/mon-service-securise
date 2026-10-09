@@ -1,5 +1,7 @@
+import { vi } from 'vitest';
 import expect from 'expect.js';
 import {
+  fabriqueAxiosAdaptateur,
   rechercheOrganisations,
   recupereDetailsOrganisation,
 } from '../../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
@@ -272,6 +274,29 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
       );
       expect(resultat.commune).to.eql('75000');
       expect(resultat.departement).to.eql('75');
+    });
+  });
+
+  describe("concernant l'instance axios utilisée pour appeler l'API", () => {
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
+
+    it('espace les requêtes de 143 ms pour respecter 7 appels par seconde', async () => {
+      const instance = fabriqueAxiosAdaptateur();
+      const instantsDesAppels = [];
+      instance.defaults.adapter = async (config) => {
+        instantsDesAppels.push(Date.now());
+        return { data: {}, status: 200, statusText: 'OK', headers: {}, config };
+      };
+
+      const requetes = [1, 2, 3].map(() => instance.get('/search'));
+      await vi.runAllTimersAsync();
+      await Promise.all(requetes);
+
+      const ecarts = instantsDesAppels
+        .slice(1)
+        .map((instant, i) => instant - instantsDesAppels[i]);
+      expect(ecarts).to.eql([143, 143]);
     });
   });
 });
