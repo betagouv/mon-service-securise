@@ -1,6 +1,5 @@
 import EvenementServicesImportes from '../../../src/modeles/journalMSS/evenementServicesImportes.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
-import { VersionService } from '../../../src/modeles/versionService.ts';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de services importés', () => {
@@ -25,7 +24,6 @@ describe('Un événement de services importés', () => {
       {
         idUtilisateur: unUUID('a'),
         nbServicesImportes: 42,
-        versionServicesImportes: VersionService.v2,
       },
       { date: '27/03/2023', adaptateurChiffrement: hacheEnMajuscules }
     );
@@ -35,7 +33,6 @@ describe('Un événement de services importés', () => {
       donnees: {
         idUtilisateur: unUUID('A'),
         nbServicesImportes: 42,
-        versionServicesImportes: 'v2',
       },
       date: '27/03/2023',
     });
