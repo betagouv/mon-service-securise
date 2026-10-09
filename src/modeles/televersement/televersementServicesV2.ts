@@ -144,7 +144,6 @@ class TeleversementServicesV2 {
       new EvenementServicesImportes({
         idUtilisateur,
         nbServicesImportes: this.services.length,
-        versionServicesImportes: VersionService.v2,
       })
     );
   }

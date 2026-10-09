@@ -331,9 +331,10 @@ describe('Un téléversement de services V2', () => {
           expect(busEvenement.aRecuUnEvenement(EvenementServicesImportes)).toBe(
             true
           );
-          const e = busEvenement.recupereEvenement(EvenementServicesImportes);
-          expect(e.nbServicesImportes).toBe(1);
-          expect(e.versionServicesImportes).toBe('v2');
+          expect(
+            busEvenement.recupereEvenement(EvenementServicesImportes)
+              .nbServicesImportes
+          ).toBe(1);
         });
       });
 
