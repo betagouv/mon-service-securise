@@ -72,6 +72,17 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
       titreCta: 'Découvrir',
     },
+    {
+      id: 'groupesServices',
+      dateDeDeploiement: '2026-10-12 08:00:00Z',
+      lien: '/profil/groupes',
+      titre: 'Organisez vos services en groupes !',
+      sousTitre:
+        'Vous pouvez désormais créer des groupes pour organiser vos services par projet, direction ou thématique.',
+      image: 'groupesServices.svg',
+      canalDiffusion: 'centreNotifications',
+      titreCta: 'Découvrir',
+    },
   ],
 
   tachesCompletudeProfil: [
