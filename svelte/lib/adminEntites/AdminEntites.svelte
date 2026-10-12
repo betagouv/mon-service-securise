@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { enleveParametreDeUrl } from '../outils/url';
   import { api } from './adminEntites.api';
   import type {
     AdminEntitesProps,
@@ -52,8 +53,26 @@
       onEntitesClassees: () => (siretsSelectionnes = []),
     });
 
+  let idGroupeOuvert: string | undefined = $state();
+  let elementsAccordeon: Record<string, AccordeonDesEntites> = $state({});
+  let hauteurBarreActions = $state(0);
+
+  const lisGroupeAOuvrir = () => {
+    const requete = new URLSearchParams(window.location.search);
+    idGroupeOuvert = requete.get('idGroupe') || undefined;
+    if (idGroupeOuvert) enleveParametreDeUrl('idGroupe');
+  };
+
+  const focaliseGroupeOuvert = async () => {
+    if (!idGroupeOuvert) return;
+    await tick();
+    elementsAccordeon[idGroupeOuvert]?.focus();
+  };
+
   onMount(async () => {
+    lisGroupeAOuvrir();
     await rafraichis();
+    await focaliseGroupeOuvert();
   });
 
   const rafraichis = async () => {
@@ -110,7 +129,7 @@
 {/if}
 
 {#if avecGroupesEntites && !enCoursChargement}
-  <div class="barre-actions">
+  <div class="barre-actions" bind:offsetHeight={hauteurBarreActions}>
     <span class="sous-texte">
       {#if siretsSelectionnes.length > 0}
         {siretsSelectionnes.length}
@@ -140,11 +159,17 @@
 {:else if recherche.length > 0 && mesEntitesFiltrees.length === 0}
   <AucunResultatRecherche onclick={() => changeRecherche('')} />
 {:else if groupesTries.length > 0}
-  <div class="contenu-groupes">
+  <div
+    class="contenu-groupes"
+    style:--hauteur-barre-actions="{hauteurBarreActions}px"
+  >
     {#each groupesTries as groupe (groupe.id)}
       <AccordeonDesEntites
+        bind:this={elementsAccordeon[groupe.id]}
         {groupe}
         entites={entitesDuGroupe(groupe)}
+        {recherche}
+        ouvertParDefaut={groupe.id === idGroupeOuvert}
         selectionnable={avecGroupesEntites}
         {siretsSelectionnes}
         onSelectionChange={changeSelection}
@@ -154,7 +179,8 @@
     {#if avecEntitesSansGroupe}
       <AccordeonDesEntites
         entites={entitesSansGroupe}
-        ouvertParDefaut
+        {recherche}
+        ouvertParDefaut={!idGroupeOuvert}
         selectionnable={avecGroupesEntites}
         {siretsSelectionnes}
         onSelectionChange={changeSelection}
