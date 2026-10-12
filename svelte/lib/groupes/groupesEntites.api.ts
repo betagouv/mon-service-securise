@@ -10,3 +10,11 @@ export const apiGroupesEntites: ApiGroupes<GroupeEntites> = {
   supprimeGroupe: async (id: string) =>
     axios.delete(`/api/admin/groupes-entites/${id}`),
 };
+
+export const dissocieEntitesDuGroupe = async (
+  idGroupe: string,
+  sirets: string[]
+) =>
+  axios.delete(`/api/admin/groupes-entites/${idGroupe}/associations`, {
+    data: { sirets },
+  });

@@ -12,6 +12,7 @@
     selectionnable?: boolean;
     siretsSelectionnes?: string[];
     onSelectionChange?: (sirets: string[]) => void;
+    avecMentionGroupeVide?: boolean;
   }
 
   let {
@@ -19,6 +20,7 @@
     selectionnable = false,
     siretsSelectionnes = [],
     onSelectionChange,
+    avecMentionGroupeVide = false,
   }: Props = $props();
 </script>
 
@@ -39,6 +41,15 @@
     onSelectionChange?.(e.detail.keys)}
   rich
 >
+  <div slot="empty">
+    <p class="tableau-vide">
+      {#if avecMentionGroupeVide}
+        Votre groupe ne contient aucune entité
+      {:else}
+        Aucune entité ne correspond à votre recherche dans ce groupe.
+      {/if}
+    </p>
+  </div>
   {#each entites as entite, i (entite.siret)}
     <div slot="cell:nom:{i}">
       <span><b><NomEntite {entite} /></b></span>
@@ -65,6 +76,13 @@
 </dsfr-table>
 
 <style lang="scss">
+  p.tableau-vide {
+    color: #3a3a3a;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin: 0;
+  }
+
   .conteneur-admins {
     display: flex;
     gap: 8px;
