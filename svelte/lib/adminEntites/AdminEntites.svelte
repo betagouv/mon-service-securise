@@ -39,6 +39,11 @@
     groupes = await apiGroupesEntites.lisGroupes();
   };
 
+  const rafraichisApresRetrait = async () => {
+    siretsSelectionnes = [];
+    await rafraichisGroupes();
+  };
+
   const ouvreTiroirAssociation = () =>
     tiroirStore.afficheContenu(TiroirAssociationGroupesEntites, {
       sirets: siretsSelectionnes,
@@ -138,6 +143,7 @@
         selectionnable={avecGroupesEntites}
         {siretsSelectionnes}
         onSelectionChange={changeSelection}
+        onEntitesRetirees={rafraichisApresRetrait}
       />
     {/each}
     <AccordeonDesEntites
