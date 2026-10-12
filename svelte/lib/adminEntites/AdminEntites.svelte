@@ -84,12 +84,17 @@
   const entitesDuGroupe = (groupe: GroupeEntites) =>
     mesEntitesFiltrees.filter((e) => groupe.siretsAssocies.includes(e.siret));
 
-  let entitesSansGroupe = $derived.by(() => {
-    const siretsDansDesGroupes = new Set(
-      groupes.flatMap((g) => g.siretsAssocies)
-    );
-    return mesEntitesFiltrees.filter((e) => !siretsDansDesGroupes.has(e.siret));
-  });
+  let siretsDansDesGroupes = $derived(
+    new Set(groupes.flatMap((g) => g.siretsAssocies))
+  );
+
+  let avecEntitesSansGroupe = $derived(
+    mesEntites.some((e) => !siretsDansDesGroupes.has(e.siret))
+  );
+
+  let entitesSansGroupe = $derived(
+    mesEntitesFiltrees.filter((e) => !siretsDansDesGroupes.has(e.siret))
+  );
 </script>
 
 <Toaster />
@@ -146,13 +151,15 @@
         onEntitesRetirees={rafraichisApresRetrait}
       />
     {/each}
-    <AccordeonDesEntites
-      entites={entitesSansGroupe}
-      ouvertParDefaut
-      selectionnable={avecGroupesEntites}
-      {siretsSelectionnes}
-      onSelectionChange={changeSelection}
-    />
+    {#if avecEntitesSansGroupe}
+      <AccordeonDesEntites
+        entites={entitesSansGroupe}
+        ouvertParDefaut
+        selectionnable={avecGroupesEntites}
+        {siretsSelectionnes}
+        onSelectionChange={changeSelection}
+      />
+    {/if}
   </div>
 {:else}
   <TableauDesEntites

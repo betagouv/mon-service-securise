@@ -13,6 +13,8 @@
   import type { GroupeServices } from './tableauDeBord.d';
   import { resultatsDeRechercheDuStatutHomologationSelectionne } from './stores/affichageParStatutHomologation';
   import AccordeonDesServices from './AccordeonDesServices.svelte';
+  import { services } from './stores/services.store';
+  import { brouillonsService } from './stores/brouillonsService.store';
 
   let selection = $derived([
     ...$resultatsDeRecherche
@@ -53,6 +55,16 @@
     );
   });
 
+  let avecServicesSansGroupe = $derived.by(() => {
+    const tousIdsServicesDansGroupes = new Set(
+      groupes.flatMap((g) => g.idServicesAssocies)
+    );
+    return (
+      $brouillonsService.length > 0 ||
+      $services.some((s) => !tousIdsServicesDansGroupes.has(s.id))
+    );
+  });
+
   const servicesDuGroupe = (groupe: GroupeServices) =>
     $resultatsDeRechercheDuStatutHomologationSelectionne.filter((s) =>
       groupe.idServicesAssocies.includes(s.id)
@@ -64,7 +76,7 @@
   $effect(() => {
     if (idGroupeOuvert && elementsAccordeon[idGroupeOuvert]) {
       elementsAccordeon[idGroupeOuvert].focus();
-      elementsAccordeon.SANS_GROUPE.ferme();
+      elementsAccordeon.SANS_GROUPE?.ferme();
     }
   });
 
@@ -104,13 +116,15 @@
           ouvertParDefaut={groupe.id === idGroupeOuvert}
         />
       {/each}
-      <AccordeonDesServices
-        bind:this={elementsAccordeon.SANS_GROUPE}
-        {indicesCyberCharges}
-        servicesAAfficher={tousServicesSansGroupe}
-        brouillonsAAfficher={$resultatsDeRechercheBrouillons}
-        ouvertParDefaut={!idGroupeOuvert}
-      />
+      {#if avecServicesSansGroupe}
+        <AccordeonDesServices
+          bind:this={elementsAccordeon.SANS_GROUPE}
+          {indicesCyberCharges}
+          servicesAAfficher={tousServicesSansGroupe}
+          brouillonsAAfficher={$resultatsDeRechercheBrouillons}
+          ouvertParDefaut={!idGroupeOuvert}
+        />
+      {/if}
     </div>
   {:else}
     <TableauDeServices
