@@ -16,7 +16,7 @@
         titre: notification.titre,
         description: notification.sousTitre,
         src: `/statique/assets/images/notifications/illustrations/${notification.image}`,
-        blank: true,
+        blank: !notification.lien.startsWith('/'),
         badge: {
           couleur: 'yellow-moutarde',
           icone: 'flashlight-fill',
