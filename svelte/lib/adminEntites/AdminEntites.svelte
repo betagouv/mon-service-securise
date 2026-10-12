@@ -11,7 +11,9 @@
   import Toaster from '../ui/Toaster.svelte';
   import Tuiles from './Tuiles.svelte';
   import TableauDesEntites from './TableauDesEntites.svelte';
-  import { chaineNormalisee } from '../outils/string';
+  import { chaineNormalisee, singulierPluriel } from '../outils/string';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirAssociationGroupesEntites from './TiroirAssociationGroupesEntites.svelte';
   import ChampRecherche from '../ui/ChampRecherche.svelte';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
   import Loader from '../ui/Loader.svelte';
@@ -22,6 +24,28 @@
   let groupes: GroupeEntites[] = $state([]);
   let recherche = $state('');
   let enCoursChargement = $state(false);
+  let siretsSelectionnes: string[] = $state([]);
+
+  const changeRecherche = (nouvelleRecherche: string) => {
+    recherche = nouvelleRecherche;
+    siretsSelectionnes = [];
+  };
+
+  const changeSelection = (sirets: string[]) => {
+    siretsSelectionnes = sirets;
+  };
+
+  const rafraichisGroupes = async () => {
+    groupes = await apiGroupesEntites.lisGroupes();
+  };
+
+  const ouvreTiroirAssociation = () =>
+    tiroirStore.afficheContenu(TiroirAssociationGroupesEntites, {
+      sirets: siretsSelectionnes,
+      groupes,
+      onGroupesModifies: rafraichisGroupes,
+      onEntitesClassees: () => (siretsSelectionnes = []),
+    });
 
   onMount(async () => {
     await rafraichis();
@@ -72,7 +96,31 @@
 <Tuiles {mesEntites} {enCoursChargement} />
 
 {#if !enCoursChargement}
-  <ChampRecherche bind:valeur={recherche} />
+  <ChampRecherche bind:valeur={() => recherche, changeRecherche} />
+{/if}
+
+{#if avecGroupesEntites && !enCoursChargement}
+  <div class="barre-actions">
+    <span class="sous-texte">
+      {#if siretsSelectionnes.length > 0}
+        {siretsSelectionnes.length}
+        {singulierPluriel(
+          'entité sélectionnée',
+          'entités sélectionnées',
+          siretsSelectionnes.length
+        )}
+      {/if}
+    </span>
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Classer dans des groupes"
+      icon="folder-2-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={siretsSelectionnes.length === 0}
+      onclick={ouvreTiroirAssociation}
+    ></dsfr-button>
+  </div>
 {/if}
 
 {#if enCoursChargement}
@@ -80,16 +128,33 @@
     <Loader />
   </div>
 {:else if recherche.length > 0 && mesEntitesFiltrees.length === 0}
-  <AucunResultatRecherche onclick={() => (recherche = '')} />
+  <AucunResultatRecherche onclick={() => changeRecherche('')} />
 {:else if groupesTries.length > 0}
   <div class="contenu-groupes">
     {#each groupesTries as groupe (groupe.id)}
-      <AccordeonDesEntites {groupe} entites={entitesDuGroupe(groupe)} />
+      <AccordeonDesEntites
+        {groupe}
+        entites={entitesDuGroupe(groupe)}
+        selectionnable={avecGroupesEntites}
+        {siretsSelectionnes}
+        onSelectionChange={changeSelection}
+      />
     {/each}
-    <AccordeonDesEntites entites={entitesSansGroupe} ouvertParDefaut />
+    <AccordeonDesEntites
+      entites={entitesSansGroupe}
+      ouvertParDefaut
+      selectionnable={avecGroupesEntites}
+      {siretsSelectionnes}
+      onSelectionChange={changeSelection}
+    />
   </div>
 {:else}
-  <TableauDesEntites entites={mesEntitesFiltrees} />
+  <TableauDesEntites
+    entites={mesEntitesFiltrees}
+    selectionnable={avecGroupesEntites}
+    {siretsSelectionnes}
+    onSelectionChange={changeSelection}
+  />
 {/if}
 
 <style lang="scss">
@@ -110,6 +175,25 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
+  }
+
+  .barre-actions {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: white;
+    padding: 12px 0;
+    margin: 12px 0 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sous-texte {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: #666666;
+    white-space: nowrap;
   }
 
   .contenu-groupes {

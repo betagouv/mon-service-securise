@@ -9,9 +9,17 @@
 
   interface Props {
     entites: EntiteSupervisee[];
+    selectionnable?: boolean;
+    siretsSelectionnes?: string[];
+    onSelectionChange?: (sirets: string[]) => void;
   }
 
-  let { entites }: Props = $props();
+  let {
+    entites,
+    selectionnable = false,
+    siretsSelectionnes = [],
+    onSelectionChange,
+  }: Props = $props();
 </script>
 
 <dsfr-table
@@ -23,8 +31,13 @@
     { key: 'actions', label: 'Actions' },
   ]}
   rows={entites}
+  row-key="siret"
+  selectable={selectionnable}
+  select-all={selectionnable}
+  selected-row-keys={JSON.stringify(siretsSelectionnes)}
+  onselectionchanged={(e: CustomEvent<{ keys: string[] }>) =>
+    onSelectionChange?.(e.detail.keys)}
   rich
-  multiline
 >
   {#each entites as entite, i (entite.siret)}
     <div slot="cell:nom:{i}">
