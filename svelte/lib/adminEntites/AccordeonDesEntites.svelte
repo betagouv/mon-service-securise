@@ -10,6 +10,7 @@
 
   interface Props {
     entites: EntiteSupervisee[];
+    recherche: string;
     groupe?: GroupeEntites;
     ouvertParDefaut?: boolean;
     selectionnable?: boolean;
@@ -20,6 +21,7 @@
 
   let {
     entites,
+    recherche,
     groupe,
     ouvertParDefaut = false,
     selectionnable = false,
@@ -28,7 +30,15 @@
     onEntitesRetirees,
   }: Props = $props();
 
-  let estOuvert = $state(untrack(() => ouvertParDefaut));
+  let accordeon: AccordeonGroupe | undefined = $state();
+
+  let estOuvert = $derived(
+    recherche.length > 0
+      ? untrack(() => entites.length > 0)
+      : untrack(() => ouvertParDefaut)
+  );
+
+  export const focus = () => accordeon?.focus();
   let avecMentionGroupeVide = $derived(
     groupe !== undefined && groupe.siretsAssocies.length === 0
   );
@@ -61,6 +71,7 @@
 </script>
 
 <AccordeonGroupe
+  bind:this={accordeon}
   bind:ouvert={estOuvert}
   libelle={groupe ? groupe.libelle : 'Sans groupe'}
   nombreElements={entites.length}
