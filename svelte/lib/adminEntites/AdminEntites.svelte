@@ -202,7 +202,7 @@
     background: #fff;
     width: 100%;
     padding: 32px 20px;
-    overflow: auto;
+    min-width: 0;
   }
 
   :global(main) {
