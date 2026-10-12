@@ -9,9 +9,19 @@
     entites: EntiteSupervisee[];
     groupe?: GroupeEntites;
     ouvertParDefaut?: boolean;
+    selectionnable?: boolean;
+    siretsSelectionnes?: string[];
+    onSelectionChange?: (sirets: string[]) => void;
   }
 
-  let { entites, groupe, ouvertParDefaut = false }: Props = $props();
+  let {
+    entites,
+    groupe,
+    ouvertParDefaut = false,
+    selectionnable = false,
+    siretsSelectionnes = [],
+    onSelectionChange,
+  }: Props = $props();
 
   let estOuvert = $state(untrack(() => ouvertParDefaut));
 </script>
@@ -21,5 +31,10 @@
   libelle={groupe ? groupe.libelle : 'Sans groupe'}
   nombreElements={entites.length}
 >
-  <TableauDesEntites {entites} />
+  <TableauDesEntites
+    {entites}
+    {selectionnable}
+    {siretsSelectionnes}
+    {onSelectionChange}
+  />
 </AccordeonGroupe>
