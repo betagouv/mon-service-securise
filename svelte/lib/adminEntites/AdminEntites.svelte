@@ -1,7 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { api } from './adminEntites.api';
-  import type { EntiteSupervisee } from './adminEntites.types';
+  import type {
+    AdminEntitesProps,
+    EntiteSupervisee,
+  } from './adminEntites.types';
+  import type { GroupeEntites } from '../groupes/groupes.d';
+  import { apiGroupesEntites } from '../groupes/groupesEntites.api';
+  import AccordeonDesEntites from './AccordeonDesEntites.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import Tuiles from './Tuiles.svelte';
   import TableauDesEntites from './TableauDesEntites.svelte';
@@ -10,7 +16,10 @@
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
   import Loader from '../ui/Loader.svelte';
 
+  let { avecGroupesEntites }: AdminEntitesProps = $props();
+
   let mesEntites: Array<EntiteSupervisee> = $state([]);
+  let groupes: GroupeEntites[] = $state([]);
   let recherche = $state('');
   let enCoursChargement = $state(false);
 
@@ -20,7 +29,12 @@
 
   const rafraichis = async () => {
     enCoursChargement = true;
-    mesEntites = await api.entitesDansMonPerimetre();
+    const [entitesLues, groupesLus] = await Promise.all([
+      api.entitesDansMonPerimetre(),
+      avecGroupesEntites ? apiGroupesEntites.lisGroupes() : [],
+    ]);
+    mesEntites = entitesLues;
+    groupes = groupesLus;
     enCoursChargement = false;
   };
 
@@ -33,6 +47,20 @@
         e.siret.includes(rechercheNormalisee)
     )
   );
+
+  let groupesTries = $derived(
+    [...groupes].sort((a, b) => a.libelle.localeCompare(b.libelle))
+  );
+
+  const entitesDuGroupe = (groupe: GroupeEntites) =>
+    mesEntitesFiltrees.filter((e) => groupe.siretsAssocies.includes(e.siret));
+
+  let entitesSansGroupe = $derived.by(() => {
+    const siretsDansDesGroupes = new Set(
+      groupes.flatMap((g) => g.siretsAssocies)
+    );
+    return mesEntitesFiltrees.filter((e) => !siretsDansDesGroupes.has(e.siret));
+  });
 </script>
 
 <Toaster />
@@ -53,6 +81,13 @@
   </div>
 {:else if recherche.length > 0 && mesEntitesFiltrees.length === 0}
   <AucunResultatRecherche onclick={() => (recherche = '')} />
+{:else if groupesTries.length > 0}
+  <div class="contenu-groupes">
+    {#each groupesTries as groupe (groupe.id)}
+      <AccordeonDesEntites {groupe} entites={entitesDuGroupe(groupe)} />
+    {/each}
+    <AccordeonDesEntites entites={entitesSansGroupe} ouvertParDefaut />
+  </div>
 {:else}
   <TableauDesEntites entites={mesEntitesFiltrees} />
 {/if}
@@ -75,6 +110,12 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
+  }
+
+  .contenu-groupes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   h1 {
