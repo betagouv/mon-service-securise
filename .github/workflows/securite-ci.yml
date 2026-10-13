@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
 
       - name: Checkov GitHub Action
-        uses: bridgecrewio/checkov-action@5798bad4f6dd9c1fb67ae3ec10d42d8fb67037c4 # v12.3126.0
+        uses: bridgecrewio/checkov-action@7b1bd992e2c40a3404e3511944aeb8d014703d9a # v12.3129.0
         with:
           output_format: cli,sarif
           output_file_path: console,results.sarif
