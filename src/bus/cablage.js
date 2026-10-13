@@ -98,6 +98,7 @@ import { consigneGroupeServicesCreeDansJournal } from './abonnements/consigneGro
 import { consigneGroupeServicesSupprimeDansJournal } from './abonnements/consigneGroupeServicesSupprimeDansJournal.js';
 import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consigneServicesDuGroupeModifiesDansJournal.js';
 import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
+import { consigneNouvelUtilisateurDansCrm } from './abonnements/reporting-bizdev/consigneNouvelUtilisateurDansCrm.js';
 import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
 import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
 import { EvenementGroupeEntitesSupprime } from './evenementGroupeEntitesSupprime.js';
@@ -219,6 +220,7 @@ const cableTousLesAbonnes = (
     }),
     relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
+    consigneNouvelUtilisateurDansCrm(),
   ]);
 
   busEvenements.abonne(
