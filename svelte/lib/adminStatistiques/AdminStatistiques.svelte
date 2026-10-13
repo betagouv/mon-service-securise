@@ -511,6 +511,7 @@
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 24px;
     }
 
     .ligne-un-tiers-deux-tiers {
