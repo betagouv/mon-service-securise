@@ -9,6 +9,7 @@ block variables
 block append scripts
   +moduleAvecVersion('/statique/adminStatistiques.mjs')
   +composantSvelte('adminStatistiques.js')
+  +donneesPartagees('avec-groupes-entites', featureFlags.avecGroupesEntites)
   +donneesPartagees('referentiel', {
     categoriesMesures: referentiel.categoriesMesures(),
     statutsMesures: referentiel.statutsMesures(),

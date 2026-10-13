@@ -55,4 +55,5 @@ export type ReferentielStatistiques = {
 
 export type AdminStatistiquesProps = {
   referentiel: ReferentielStatistiques;
+  avecGroupesEntites: boolean;
 };

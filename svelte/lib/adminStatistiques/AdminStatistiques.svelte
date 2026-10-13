@@ -13,7 +13,11 @@
   import PieChart from './charts/PieChart.svelte';
   import LineChart from './charts/LineChart.svelte';
   import { singulierPluriel } from '../outils/string';
-  import { CategorieMesure, type IdNiveauDeSecurite } from '../ui/types.d';
+  import {
+    CategorieMesure,
+    type Entite,
+    type IdNiveauDeSecurite,
+  } from '../ui/types.d';
   import type { EntiteSupervisee } from '../adminEntites/adminEntites.types';
   import CarteChiffreCle from './CarteChiffreCle.svelte';
   import BarChart from './charts/BarChart.svelte';
@@ -21,17 +25,68 @@
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
   import Loader from '../ui/Loader.svelte';
+  import { apiGroupesEntites } from '../groupes/groupesEntites.api';
+  import type { GroupeEntites } from '../groupes/groupes.d';
 
   interface Props {
     referentiel: ReferentielStatistiques;
     modeVisiteGuidee?: boolean;
+    avecGroupesEntites?: boolean;
   }
 
-  let { referentiel, modeVisiteGuidee = false }: Props = $props();
+  let {
+    referentiel,
+    avecGroupesEntites = false,
+    modeVisiteGuidee = false,
+  }: Props = $props();
 
   let statistiques: Statistiques | undefined = $state();
   let entites: Array<EntiteSupervisee> = $state([]);
+  let groupes: GroupeEntites[] = $state([]);
   let enCoursChargement = $state(false);
+
+  let siretsDansDesGroupes = $derived(
+    new Set(groupes.flatMap((g) => g.siretsAssocies))
+  );
+
+  let entitesSansGroupe = $derived(
+    entites.filter((e) => !siretsDansDesGroupes.has(e.siret))
+  );
+
+  let groupesAvecEntitesTries = $derived(
+    groupes
+      .filter((g) => g.siretsAssocies.length > 0)
+      .sort((a, b) => a.libelle.localeCompare(b.libelle))
+  );
+
+  const selectionEntites = $derived.by(() => {
+    const entiteEnOption = (e: Entite) => ({
+      value: e.siret,
+      label: e.nom ?? e.siret,
+    });
+
+    if (avecGroupesEntites && groupesAvecEntitesTries.length > 0) {
+      const groupesDOptions = groupesAvecEntitesTries.map((g) => ({
+        legend: g.libelle,
+        options: entites
+          .filter((e) => g.siretsAssocies.includes(e.siret))
+          .map(entiteEnOption),
+      }));
+      if (entitesSansGroupe.length > 0) {
+        groupesDOptions.push({
+          legend: 'Sans groupe',
+          options: entitesSansGroupe.map(entiteEnOption),
+        });
+      }
+      return groupesDOptions;
+    } else {
+      return [
+        {
+          options: entites.map(entiteEnOption),
+        },
+      ];
+    }
+  });
 
   const rafraichisStatistiques = async () => {
     enCoursChargement = true;
@@ -45,12 +100,24 @@
   onMount(async () => {
     if (!modeVisiteGuidee) {
       await rafraichisStatistiques();
-      entites = await apiEntites.entitesDansMonPerimetre();
+      await rafraichisEntitesEtGroupes();
     } else {
       statistiques = donneesVisiteGuidee.statistiques;
       entites = donneesVisiteGuidee.entites;
+      groupes = [];
     }
   });
+
+  const rafraichisEntitesEtGroupes = async () => {
+    enCoursChargement = true;
+    const [entitesLues, groupesLus] = await Promise.all([
+      apiEntites.entitesDansMonPerimetre(),
+      avecGroupesEntites ? apiGroupesEntites.lisGroupes() : [],
+    ]);
+    entites = entitesLues;
+    groupes = groupesLus;
+    enCoursChargement = false;
+  };
 
   let parNiveauDeSecurite = $derived.by(() => {
     if (!statistiques) return { x: [], y: [] };
@@ -210,41 +277,46 @@
 </div>
 {#if statistiques}
   <div class="conteneur-filtres invisible-print">
-    <lab-anssi-multi-select
+    <dsfr-combobox
+      id="combobox-besoins"
+      multiple
       label="Besoins de sécurité"
-      options={[
+      option-groups={JSON.stringify([
         {
-          id: 'niveau1',
-          value: 'niveau1',
-          label: 'Basiques',
+          options: [
+            {
+              value: 'niveau1',
+              label: 'Basiques',
+            },
+            {
+              value: 'niveau2',
+              label: 'Modérés',
+            },
+            {
+              value: 'niveau3',
+              label: 'Avancés',
+            },
+          ],
         },
-        {
-          id: 'niveau2',
-          value: 'niveau2',
-          label: 'Modérés',
-        },
-        {
-          id: 'niveau3',
-          value: 'niveau3',
-          label: 'Avancés',
-        },
-      ]}
+      ])}
       placeholder="Séléctionner un/des besoins"
+      searchable={false}
+      select-all-button
       values={filtreNiveauxSecurite}
-      onvaluechanged={(e: CustomEvent<IdNiveauDeSecurite[]>) =>
+      onvalueschanged={(e: CustomEvent<IdNiveauDeSecurite[]>) =>
         filtreParNiveauxSecurite(e.detail)}
-    ></lab-anssi-multi-select>
-    <lab-anssi-multi-select
+    ></dsfr-combobox>
+    <dsfr-combobox
+      id="combobox-entites"
+      multiple
       label="Entités"
-      options={entites.map((entite) => ({
-        id: entite.siret,
-        value: entite.siret,
-        label: entite.nom ?? entite.siret,
-      }))}
       placeholder="Sélectionner une/des entités"
+      option-groups={JSON.stringify(selectionEntites)}
+      searchable
+      select-all-button
       values={filtreEntites}
-      onvaluechanged={(e: CustomEvent<string[]>) => filtreParEntites(e.detail)}
-    ></lab-anssi-multi-select>
+      onvalueschanged={(e: CustomEvent<string[]>) => filtreParEntites(e.detail)}
+    ></dsfr-combobox>
   </div>
 {/if}
 {#if enCoursChargement}
@@ -389,6 +461,7 @@
     width: 100%;
     padding: 32px 20px;
     overflow: auto;
+    height: 100%;
   }
 
   :global(main) {
@@ -416,10 +489,6 @@
   .conteneur-filtres {
     display: flex;
     gap: 16px;
-
-    lab-anssi-multi-select {
-      width: fit-content;
-    }
   }
 
   .conteneur-loader {
