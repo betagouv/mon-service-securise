@@ -1,6 +1,7 @@
 import expect from 'expect.js';
 import {
   chiffrement,
+  crm,
   mss,
   statique,
 } from '../../src/adaptateurs/adaptateurEnvironnement.js';
@@ -80,6 +81,26 @@ describe("L'adaptateur environnement", () => {
       process.env = { URL_BASE_API_MSS: 'https://api.example.org' };
 
       expect(mss().urlDocumentationApi()).to.be('https://api.example.org/docs');
+    });
+  });
+
+  describe("sur demande de l'URL de base du CRM", () => {
+    it("retourne l'URL de la variable d'environnement", () => {
+      process.env = {
+        REPORTING_TWENTY_CRM_URL_BASE: 'https://crm.example.org',
+      };
+
+      expect(crm().urlBase().toString()).to.be('https://crm.example.org/');
+    });
+
+    it("jette une erreur quand la variable d'environnement est absente", () => {
+      process.env = {};
+
+      expect(() => crm().urlBase()).to.throwError((e) => {
+        expect(e.message).to.be(
+          "La variable d'environnement de l'URL de base du CRM Twenty est absente."
+        );
+      });
     });
   });
 
