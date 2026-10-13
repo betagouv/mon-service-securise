@@ -38,6 +38,15 @@
       "allowedVersions": "<7.0.0"
     },
     {
+      "description": "typescript-eslint 8.71.1 introduit des faux positifs no-unused-vars sur les props $bindable() des composants Svelte (cf. PR #3269). Corrigé a priori en 8.71.2 (typescript-eslint#12989). Règle à retirer une fois une version ultérieure mergée.",
+      "matchPackageNames": [
+        "typescript-eslint",
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser"
+      ],
+      "allowedVersions": "!/^8\\.71\\.1$/"
+    },
+    {
       "description": "pnpm ne doit pas dépasser la v11 : Clever Cloud ne gère pas encore pnpm v12. À relever manuellement dès que Clever Cloud supporte pnpm v12.",
       "matchPackageNames": ["pnpm"],
       "allowedVersions": "<12.0.0"
