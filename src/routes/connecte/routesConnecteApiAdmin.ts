@@ -2,11 +2,7 @@ import express from 'express';
 import z from 'zod';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
-import {
-  valideBody,
-  valideParams,
-  valideQuery,
-} from '../../http/validePayloads.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaAttributionRoleServices,
   schemaDeleteAdmin,
@@ -287,13 +283,13 @@ const routesConnecteApiAdmin = ({
     }
   );
 
-  routes.get(
+  routes.post(
     '/statistiques',
-    valideQuery(schemaStatistiquesAdmin),
+    valideBody(schemaStatistiquesAdmin),
     async (requete, reponse) => {
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
-      const { filtreNiveauxSecurite, filtreEntites } = requete.query as z.infer<
+      const { filtreNiveauxSecurite, filtreEntites } = requete.body as z.infer<
         typeof schemaStatistiquesAdmin
       >;
 

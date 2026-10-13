@@ -635,7 +635,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/api/admin/statistiques`', () => {
+  describe('quand requête POST sur `/api/admin/statistiques`', () => {
     const unService = unServiceV2().construis();
     const U1 = unUUIDRandom();
 
@@ -651,7 +651,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
 
     it("récupère les services de l'utilisateur", async () => {
-      await testeur.get('/api/admin/statistiques');
+      await testeur.post('/api/admin/statistiques', {});
 
       expect(
         testeur.serviceAdministrationOrganisations().servicesDe
@@ -665,7 +665,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
 
     it("retourne la réponse de l'adaptateur de statistiques admin", async () => {
-      const { status, body } = await testeur.get('/api/admin/statistiques');
+      const { status, body } = await testeur.post(
+        '/api/admin/statistiques',
+        {}
+      );
 
       expect(status).toBe(200);
       expect(body).toEqual({
@@ -684,9 +687,10 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         return {};
       };
 
-      const { status } = await testeur.get(
-        '/api/admin/statistiques?filtreNiveauxSecurite=niveau1&filtreNiveauxSecurite=niveau2&filtreEntites=13000766900018'
-      );
+      const { status } = await testeur.post('/api/admin/statistiques', {
+        filtreNiveauxSecurite: ['niveau1', 'niveau2'],
+        filtreEntites: ['13000766900018'],
+      });
 
       expect(status).toBe(200);
       expect(filtresRecus).toEqual({
@@ -695,7 +699,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
       });
     });
 
-    it('normalise en tableau un filtre reçu avec une seule valeur', async () => {
+    it('utilise des filtres vides quand le corps de la requête n’en contient pas', async () => {
       let filtresRecus;
       testeur.serviceStatistiquesAdmin().statistiques = async (
         _idUtilisateur: UUID,
@@ -705,28 +709,7 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
         return {};
       };
 
-      const { status } = await testeur.get(
-        '/api/admin/statistiques?filtreNiveauxSecurite=niveau1&filtreEntites=13000766900018'
-      );
-
-      expect(status).toBe(200);
-      expect(filtresRecus).toEqual({
-        filtreNiveauxSecurite: ['niveau1'],
-        filtreEntites: ['13000766900018'],
-      });
-    });
-
-    it('utilise des filtres vides quand la requête n’en contient pas', async () => {
-      let filtresRecus;
-      testeur.serviceStatistiquesAdmin().statistiques = async (
-        _idUtilisateur: UUID,
-        filtres: unknown
-      ) => {
-        filtresRecus = filtres;
-        return {};
-      };
-
-      const { status } = await testeur.get('/api/admin/statistiques');
+      const { status } = await testeur.post('/api/admin/statistiques', {});
 
       expect(status).toBe(200);
       expect(filtresRecus).toEqual({
@@ -736,25 +719,25 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
     });
 
     it('refuse un niveau de sécurité inconnu', async () => {
-      const { status } = await testeur.get(
-        '/api/admin/statistiques?filtreNiveauxSecurite=niveauInconnu'
-      );
+      const { status } = await testeur.post('/api/admin/statistiques', {
+        filtreNiveauxSecurite: ['niveauInconnu'],
+      });
 
       expect(status).toBe(400);
     });
 
     it('refuse un SIRET invalide', async () => {
-      const { status } = await testeur.get(
-        '/api/admin/statistiques?filtreEntites=pasUnSiret'
-      );
+      const { status } = await testeur.post('/api/admin/statistiques', {
+        filtreEntites: ['pasUnSiret'],
+      });
 
       expect(status).toBe(400);
     });
 
     it('refuse un filtre inconnu', async () => {
-      const { status } = await testeur.get(
-        '/api/admin/statistiques?filtreInconnu=valeur'
-      );
+      const { status } = await testeur.post('/api/admin/statistiques', {
+        filtreInconnu: 'valeur',
+      });
 
       expect(status).toBe(400);
     });
