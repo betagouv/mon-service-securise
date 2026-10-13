@@ -4,6 +4,14 @@ import { depotVide } from '../../depots/depotVide.js';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 
+const CDN_UI_KIT =
+  'https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com';
+
+const versionUiKitChargee = (page: string) =>
+  page.match(
+    /src="https:\/\/lab-anssi-ui-kit-prod-s3-assets\.cellar-c2\.services\.clever-cloud\.com\/(\d+\.\d+\.\d+)\/lab-anssi-ui-kit\.iife\.js"/
+  )?.[1];
+
 describe("Les routes de documentation de l'API publique", () => {
   let depotDonnees: DepotDonnees;
 
@@ -61,11 +69,10 @@ describe("Les routes de documentation de l'API publique", () => {
     it('charge le UI Kit dans une version figée, sans dépendre du DSFR', async () => {
       const reponse = await request(uneApp()).get('/docs');
 
+      const version = versionUiKitChargee(reponse.text);
+      expect(version).toBeDefined();
       expect(reponse.text).toContain(
-        'src="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js"'
-      );
-      expect(reponse.text).toContain(
-        'href="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/dsfr-variables.css"'
+        `href="${CDN_UI_KIT}/${version}/dsfr-variables.css"`
       );
       expect(reponse.text).not.toContain('@gouvfr/dsfr');
     });
@@ -94,11 +101,13 @@ describe("Les routes de documentation de l'API publique", () => {
 
       const csp = reponse.headers['content-security-policy'];
       expect(csp).toContain("default-src 'none'");
+      const version = versionUiKitChargee(reponse.text);
+      expect(version).toBeDefined();
       expect(csp).toContain(
-        'script-src https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js'
+        `script-src ${CDN_UI_KIT}/${version}/lab-anssi-ui-kit.iife.js`
       );
       expect(csp).toContain(
-        "style-src 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/ https://mss.example.org/"
+        `style-src 'unsafe-inline' ${CDN_UI_KIT}/${version}/ https://mss.example.org/`
       );
       expect(csp).toContain('font-src https://mss.example.org/');
       expect(csp).toContain(
