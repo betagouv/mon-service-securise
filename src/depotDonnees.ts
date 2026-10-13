@@ -227,6 +227,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     persistance: adaptateurPersistanceTS,
     depotAdminsOrganisations,
     depotSuperviseurs,
+    busEvenements,
   });
 
   const {
