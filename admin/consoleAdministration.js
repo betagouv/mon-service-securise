@@ -624,12 +624,22 @@ class ConsoleAdministration {
     }
 
     await this.depotDonnees.supprimeUtilisateur(utilisateur.id);
+
     const groupes = await this.depotDonnees.lisGroupesDe(utilisateur.id);
     await Promise.all(
       groupes.map((g) =>
         this.depotDonnees.supprimeGroupe(g.donnees().id, utilisateur.id)
       )
     );
+    const groupesEntites = await this.depotDonnees.lisGroupesEntitesDe(
+      utilisateur.id
+    );
+    await Promise.all(
+      groupesEntites.map((g) =>
+        this.depotDonnees.supprimeGroupeEntites(g.donnees().id, utilisateur.id)
+      )
+    );
+
     await this.adaptateurMail.supprimeContact(utilisateur.email);
 
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
