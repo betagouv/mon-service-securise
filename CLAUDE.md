@@ -6,6 +6,8 @@ Ce fichier résume l'architecture du backend (dossier `src/`). Pour l'installati
 
 Ne **JAMAIS** accéder ou tenter d'accéder au fichier `.env` à la racine du projet.
 
+Ne **JAMAIS** utiliser `npx` : toujours `pnpm exec <outil>` (ex. `pnpm exec eslint …`). `npx` déclenche le hook `preinstall` et un `pnpm install` complet.
+
 ## Vue d'ensemble
 
 - **Runtime** : Node.js (version dans `.nvmrc`), TypeScript + JavaScript (migration progressive JS → TS).
