@@ -22,7 +22,7 @@ importers:
         version: 2.3.0(debug@4.4.3(supports-color@10.2.2))(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)
       '@lab-anssi/ui-kit':
         specifier: 1.60.9
-        version: 1.60.9(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+        version: 1.60.9(svelte@5.57.2(@typescript-eslint/types@8.71.0))
       '@myriaddreamin/typst-ts-node-compiler':
         specifier: 0.7.0
         version: 0.7.0
@@ -31,7 +31,7 @@ importers:
         version: 2.6.2
       '@sentry/node':
         specifier: ^10.0.0
-        version: 10.76.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)
+        version: 10.76.1(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)
       '@tiptap/core':
         specifier: ^3.31.3
         version: 3.31.4(@tiptap/pm@3.31.4)
@@ -124,7 +124,7 @@ importers:
         version: 13.7.7
       svelte:
         specifier: ^5.54.0
-        version: 5.57.1(@typescript-eslint/types@8.71.0)
+        version: 5.57.2(@typescript-eslint/types@8.71.0)
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -152,10 +152,10 @@ importers:
         version: 1.63.0
       '@sentry/vite-plugin':
         specifier: ^5.1.1
-        version: 5.4.0(rollup@4.50.0)(supports-color@10.2.2)
+        version: 5.4.1(rollup@4.50.0)(supports-color@10.2.2)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^7.0.0
-        version: 7.3.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
+        version: 7.3.1(svelte@5.57.2(@typescript-eslint/types@8.71.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
       '@tsconfig/svelte':
         specifier: ^5.0.8
         version: 5.0.8
@@ -215,7 +215,7 @@ importers:
         version: 2.32.0(@typescript-eslint/parser@8.71.0(eslint@10.12.0(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3))(eslint-import-resolver-typescript@4.4.5)(eslint@10.12.0(supports-color@10.2.2))(supports-color@10.2.2)
       eslint-plugin-svelte:
         specifier: ^3.15.2
-        version: 3.23.0(eslint@10.12.0(supports-color@10.2.2))(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+        version: 3.23.0(eslint@10.12.0(supports-color@10.2.2))(svelte@5.57.2(@typescript-eslint/types@8.71.0))
       expect.js:
         specifier: ^0.3.1
         version: 0.3.1
@@ -248,7 +248,7 @@ importers:
         version: 3.9.9
       prettier-plugin-svelte:
         specifier: ^4.0.0
-        version: 4.1.1(prettier@3.9.9)(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+        version: 4.1.1(prettier@3.9.9)(svelte@5.57.2(@typescript-eslint/types@8.71.0))
       sass:
         specifier: ^1.98.0
         version: 1.105.1
@@ -257,10 +257,10 @@ importers:
         version: 7.3.1(supports-color@10.2.2)
       svelte-check:
         specifier: ^4.4.5
-        version: 4.7.6(picomatch@4.0.7)(svelte@5.57.1(@typescript-eslint/types@8.71.0))(typescript@6.0.3)
+        version: 4.7.6(picomatch@4.0.7)(svelte@5.57.2(@typescript-eslint/types@8.71.0))(typescript@6.0.3)
       svelte-eslint-parser:
         specifier: ^1.6.0
-        version: 1.8.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+        version: 1.8.1(svelte@5.57.2(@typescript-eslint/types@8.71.0))
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -1262,8 +1262,8 @@ packages:
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
-  '@sentry/bundler-plugins@10.70.0':
-    resolution: {integrity: sha512-M+a32VOZVeTUxF+QecQ+OHYj8hb5FeppKwwWpTQ9cfS6ixgoNUK7/B7NhB2XbfxE3F1BcGvOxyS+AB+fvPfSRQ==}
+  '@sentry/bundler-plugins@10.76.1':
+    resolution: {integrity: sha512-c7e95RhbJ5h03bughsgw7yhpIv/RKnIfxWQynCgRLXDHfksQGQsq4ias59v3zwg5AuifvnbDKUNfUxAbnWN41g==}
     engines: {node: '>= 18'}
     peerDependencies:
       rollup: '>=3.2.0'
@@ -1330,16 +1330,12 @@ packages:
     resolution: {integrity: sha512-fO9PLmHdVURcSPUpWCItWAtgKiMwGdJHbovoSEyLplX5sxs2ugvI4CBPTrkkgqhObnZOD0CnWBKDzSVQYBKEyQ==}
     engines: {node: '>=14'}
 
-  '@sentry/core@10.70.0':
-    resolution: {integrity: sha512-ozhCTDqg89oB4XmWfAwuHshABpvT7AkRpaPnogopPfMAaI61G1t8EKCJ4W7aum8JSBonlfyjPCyW5oYZFm0KvA==}
+  '@sentry/core@10.76.1':
+    resolution: {integrity: sha512-WZ1D30FDrvZPWcEgbCgaVHROBOaVGxNUcEeF5O5xRAdGu6UB7Epg+CQBeoatw/SxEctQq0BPbMIwtBgbe1QK3g==}
     engines: {node: '>=18'}
 
-  '@sentry/core@10.76.0':
-    resolution: {integrity: sha512-H9irBNXHdkgvl86EKlQrPTGYyzvI8GUZ8eoWLay9IuqqZC6pWesf0nH7z/glxKBo7BEw3PIG+unQByHugBnsCg==}
-    engines: {node: '>=18'}
-
-  '@sentry/node-core@10.76.0':
-    resolution: {integrity: sha512-JCLrnn9otQV0xbj7xkgosj732LrVY2LXjYLhfE0WH6DZHRU1nLGcoxyPxWH9l0NkrQYA2KLNiAMn3FmcA98lNw==}
+  '@sentry/node-core@10.76.1':
+    resolution: {integrity: sha512-5IPAqITJle2wFn+7nkCiWchC9TfdEU2GrH0uS/WmTC7vc64YGAyPK/UZ0qzCU0MUPNH5anYGtUK4EMzlpdmWGQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
@@ -1359,24 +1355,24 @@ packages:
       '@opentelemetry/sdk-trace-base':
         optional: true
 
-  '@sentry/node@10.76.0':
-    resolution: {integrity: sha512-qWt0301wRws9HtbGsOmXapS69cIL5Ald8ZurKsGrqbQ65Ls7QqwS8ZeSS47PRLeJzpQT0xfr4+uNNm6R4hqyjQ==}
+  '@sentry/node@10.76.1':
+    resolution: {integrity: sha512-caXHUb8pI7Gd9FIwe3soqGWpnTxVVaV15iYk+rueKsBBeUNETLCU6PzwTyD6tQ3WbkhTGYbSGYYLINtj2IroEA==}
     engines: {node: '>=18'}
 
-  '@sentry/opentelemetry@10.76.0':
-    resolution: {integrity: sha512-elMhLZQ56fBUbES7nnZ53tJMuchLPdx8ibQqtEIUGrhSkl4PD0yC1xKP/btQjmIi16GrzZUJlKDbcOc+0o8ZIw==}
+  '@sentry/opentelemetry@10.76.1':
+    resolution: {integrity: sha512-nfEQ4ALfEXGpYulXTPIOxE4QL3wsXPhlcCBbkgWmkozIT6D3s3vpjtRJsF//xrIkrAMm4OdV25fVqMhEkbJTGA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
       '@opentelemetry/core': ^1.30.1 || ^2.1.0
       '@opentelemetry/sdk-trace-base': ^1.30.1 || ^2.1.0
 
-  '@sentry/server-utils@10.76.0':
-    resolution: {integrity: sha512-PJT8i3xsaSEAwVjgVrVClpFVB9+caxn4AVlUbgjt3/NwkoggKmSaoSUq5vpvzFPO11H1V+50qz9xxCw9gc9EzQ==}
+  '@sentry/server-utils@10.76.1':
+    resolution: {integrity: sha512-E4BHBU2F975eQW/eo4w73DvxN2LNac3wqWzd8lvk4A6jXt8nJwtGSxxdPaTM0Il82aJkbZXJ3IIO/Px6rlX+lQ==}
     engines: {node: '>=18'}
 
-  '@sentry/vite-plugin@5.4.0':
-    resolution: {integrity: sha512-fFJgCxs5hDyAm9BbZJ+LbA+LK2tjX5OoD0v0ARU4StR6KQmGUduoPs69yJ9AfqZ0om3Rlp5JDliiwFcNkasORA==}
+  '@sentry/vite-plugin@5.4.1':
+    resolution: {integrity: sha512-poFfn3sQbSFaZpXH8CG27D0eNtDD64wFEniQCb853e7huko9vOl4UP3BjT3vsrnmVuRqagnbxItza10MOC7ysA==}
     engines: {node: '>= 18'}
 
   '@sveltejs/acorn-typescript@1.0.13':
@@ -3992,8 +3988,8 @@ packages:
       svelte:
         optional: true
 
-  svelte@5.57.1:
-    resolution: {integrity: sha512-Uqj49lWKB+iSSnneuwiYYJ7MZgkB+eXr0LXBhv4uDuAkXqnWmq65Sxflfvp0Lc6MdKjMUxGaeOKWJqz5SNiVIA==}
+  svelte@5.57.2:
+    resolution: {integrity: sha512-1YiPCAXT0Ct6g1vOMmSLa0Nsc3QRMvtDF32ihgglGVrugIuIK38RyDiFNXVDhtQ81TJjSO57NdMw6DyYLqSGDQ==}
     engines: {node: '>=18'}
 
   tarn@3.1.2:
@@ -4778,9 +4774,9 @@ snapshots:
       - debug
       - supports-color
 
-  '@lab-anssi/ui-kit@1.60.9(svelte@5.57.1(@typescript-eslint/types@8.71.0))':
+  '@lab-anssi/ui-kit@1.60.9(svelte@5.57.2(@typescript-eslint/types@8.71.0))':
     dependencies:
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
 
   '@myriaddreamin/typst-ts-node-compiler-android-arm-eabi@0.7.0':
     optional: true
@@ -5121,11 +5117,11 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@sentry/bundler-plugins@10.70.0(rollup@4.50.0)(supports-color@10.2.2)':
+  '@sentry/bundler-plugins@10.76.1(rollup@4.50.0)(supports-color@10.2.2)':
     dependencies:
       '@babel/core': 7.29.7(supports-color@10.2.2)
       '@sentry/cli': 2.58.6(supports-color@10.2.2)
-      '@sentry/core': 10.70.0
+      '@sentry/core': 10.76.1
       dotenv: 17.4.2
       find-up: 5.0.0
       glob: 13.0.6
@@ -5182,19 +5178,15 @@ snapshots:
 
   '@sentry/conventions@0.16.0': {}
 
-  '@sentry/core@10.70.0':
+  '@sentry/core@10.76.1':
     dependencies:
       '@sentry/conventions': 0.16.0
 
-  '@sentry/core@10.76.0':
+  '@sentry/node-core@10.76.1(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@sentry/conventions': 0.16.0
-
-  '@sentry/node-core@10.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))':
-    dependencies:
-      '@sentry/conventions': 0.16.0
-      '@sentry/core': 10.76.0
-      '@sentry/opentelemetry': 10.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
+      '@sentry/core': 10.76.1
+      '@sentry/opentelemetry': 10.76.1(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
       import-in-the-middle: 3.4.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
@@ -5202,38 +5194,38 @@ snapshots:
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2)
       '@opentelemetry/sdk-trace-base': 2.11.0(@opentelemetry/api@1.9.1)
 
-  '@sentry/node@10.76.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)':
+  '@sentry/node@10.76.1(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@10.2.2)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2)
       '@opentelemetry/sdk-trace-base': 2.11.0(@opentelemetry/api@1.9.1)
       '@sentry/conventions': 0.16.0
-      '@sentry/core': 10.76.0
-      '@sentry/node-core': 10.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
-      '@sentry/opentelemetry': 10.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
-      '@sentry/server-utils': 10.76.0
+      '@sentry/core': 10.76.1
+      '@sentry/node-core': 10.76.1(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@10.2.2))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
+      '@sentry/opentelemetry': 10.76.1(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))
+      '@sentry/server-utils': 10.76.1
       import-in-the-middle: 3.4.0
     transitivePeerDependencies:
       - '@opentelemetry/core'
       - '@opentelemetry/exporter-trace-otlp-http'
       - supports-color
 
-  '@sentry/opentelemetry@10.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))':
+  '@sentry/opentelemetry@10.76.1(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.11.0(@opentelemetry/api@1.9.1)
       '@sentry/conventions': 0.16.0
-      '@sentry/core': 10.76.0
+      '@sentry/core': 10.76.1
 
-  '@sentry/server-utils@10.76.0':
+  '@sentry/server-utils@10.76.1':
     dependencies:
       '@sentry/conventions': 0.16.0
-      '@sentry/core': 10.76.0
+      '@sentry/core': 10.76.1
 
-  '@sentry/vite-plugin@5.4.0(rollup@4.50.0)(supports-color@10.2.2)':
+  '@sentry/vite-plugin@5.4.1(rollup@4.50.0)(supports-color@10.2.2)':
     dependencies:
-      '@sentry/bundler-plugins': 10.70.0(rollup@4.50.0)(supports-color@10.2.2)
+      '@sentry/bundler-plugins': 10.76.1(rollup@4.50.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - encoding
       - rollup
@@ -5246,12 +5238,12 @@ snapshots:
 
   '@sveltejs/load-config@0.2.3': {}
 
-  '@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))':
+  '@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.71.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       deepmerge: 4.3.1
       magic-string: 1.2.3
       obug: 2.1.4
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
       vite: 8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1)
       vitefu: 1.1.3(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
 
@@ -6386,7 +6378,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-svelte@3.23.0(eslint@10.12.0(supports-color@10.2.2))(svelte@5.57.1(@typescript-eslint/types@8.71.0)):
+  eslint-plugin-svelte@3.23.0(eslint@10.12.0(supports-color@10.2.2))(svelte@5.57.2(@typescript-eslint/types@8.71.0)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0(supports-color@10.2.2))
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -6398,9 +6390,9 @@ snapshots:
       postcss-load-config: 3.1.4(postcss@8.5.26)
       postcss-safe-parser: 7.0.1(postcss@8.5.26)
       semver: 7.8.5
-      svelte-eslint-parser: 1.8.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+      svelte-eslint-parser: 1.8.1(svelte@5.57.2(@typescript-eslint/types@8.71.0))
     optionalDependencies:
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
     transitivePeerDependencies:
       - ts-node
 
@@ -7471,10 +7463,10 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@4.1.1(prettier@3.9.9)(svelte@5.57.1(@typescript-eslint/types@8.71.0)):
+  prettier-plugin-svelte@4.1.1(prettier@3.9.9)(svelte@5.57.2(@typescript-eslint/types@8.71.0)):
     dependencies:
       prettier: 3.9.9
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
 
   prettier@3.9.9: {}
 
@@ -8063,7 +8055,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@4.7.6(picomatch@4.0.7)(svelte@5.57.1(@typescript-eslint/types@8.71.0))(typescript@6.0.3):
+  svelte-check@4.7.6(picomatch@4.0.7)(svelte@5.57.2(@typescript-eslint/types@8.71.0))(typescript@6.0.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@sveltejs/load-config': 0.2.3
@@ -8071,12 +8063,12 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.7)
       picocolors: 1.1.1
       sade: 1.8.1
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
       typescript: 6.0.3
     transitivePeerDependencies:
       - picomatch
 
-  svelte-eslint-parser@1.8.1(svelte@5.57.1(@typescript-eslint/types@8.71.0)):
+  svelte-eslint-parser@1.8.1(svelte@5.57.2(@typescript-eslint/types@8.71.0)):
     dependencies:
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -8086,9 +8078,9 @@ snapshots:
       postcss-selector-parser: 7.1.6
       semver: 7.8.5
     optionalDependencies:
-      svelte: 5.57.1(@typescript-eslint/types@8.71.0)
+      svelte: 5.57.2(@typescript-eslint/types@8.71.0)
 
-  svelte@5.57.1(@typescript-eslint/types@8.71.0):
+  svelte@5.57.2(@typescript-eslint/types@8.71.0):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       '@jridgewell/sourcemap-codec': 1.6.0
