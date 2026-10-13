@@ -3,6 +3,10 @@ import { PersistanceTS } from '../adaptateurs/persistanceTS.interface.js';
 import { GroupeEntites } from '../modeles/groupeEntites.js';
 import { DepotDonneesAdminsOrganisations } from './depotDonneesAdminsOrganisations.js';
 import { DepotDonneesSuperviseurs } from './depotDonneesSuperviseurs.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { EvenementGroupeEntitesCree } from '../bus/evenementGroupeEntitesCree.js';
+import { EvenementGroupeEntitesSupprime } from '../bus/evenementGroupeEntitesSupprime.js';
+import { EvenementEntitesDuGroupeModifiees } from '../bus/evenementEntitesDuGroupeModifiees.js';
 import {
   ErreurEntiteNonAdministre,
   ErreurGroupeEntitesDejaExistant,
@@ -13,19 +17,23 @@ export class DepotDonneesGroupesEntites {
   private readonly persistance: PersistanceTS;
   private readonly depotAdminsOrganisations: DepotDonneesAdminsOrganisations;
   private readonly depotSuperviseurs: DepotDonneesSuperviseurs;
+  private readonly busEvenements: BusEvenements;
 
   constructor({
     persistance,
     depotAdminsOrganisations,
     depotSuperviseurs,
+    busEvenements,
   }: {
     persistance: PersistanceTS;
     depotAdminsOrganisations: DepotDonneesAdminsOrganisations;
     depotSuperviseurs: DepotDonneesSuperviseurs;
+    busEvenements: BusEvenements;
   }) {
     this.persistance = persistance;
     this.depotAdminsOrganisations = depotAdminsOrganisations;
     this.depotSuperviseurs = depotSuperviseurs;
+    this.busEvenements = busEvenements;
   }
 
   async nouveauGroupeEntites(idUtilisateur: UUID, libelle: string) {
@@ -33,6 +41,8 @@ export class DepotDonneesGroupesEntites {
 
     await this.verifieLibelleDisponible(groupe);
     await this.persistance.sauvegardeGroupeEntites(groupe.donnees());
+
+    await this.busEvenements.publie(new EvenementGroupeEntitesCree({ groupe }));
 
     return groupe;
   }
@@ -58,9 +68,13 @@ export class DepotDonneesGroupesEntites {
   }
 
   async supprimeGroupeEntites(idGroupe: UUID, idUtilisateur: UUID) {
-    await this.lisGroupeEntitesDe(idUtilisateur, idGroupe);
+    const groupe = await this.lisGroupeEntitesDe(idUtilisateur, idGroupe);
 
     await this.persistance.supprimeGroupeEntites(idGroupe);
+
+    await this.busEvenements.publie(
+      new EvenementGroupeEntitesSupprime({ groupe })
+    );
   }
 
   async associeEntitesAuxGroupes(
@@ -76,6 +90,8 @@ export class DepotDonneesGroupesEntites {
         this.persistance.associeEntitesAuGroupe(idGroupe, sirets)
       )
     );
+
+    await this.publieEntitesDesGroupesModifiees(idUtilisateur, idsGroupes);
   }
 
   async supprimeAssociationEntitesAuGroupe(
@@ -87,6 +103,26 @@ export class DepotDonneesGroupesEntites {
     await this.lisGroupeEntitesDe(idUtilisateur, idGroupe);
 
     await this.persistance.supprimeAssociationEntitesAuGroupe(idGroupe, sirets);
+
+    await this.publieEntitesDesGroupesModifiees(idUtilisateur, [idGroupe]);
+  }
+
+  private async publieEntitesDesGroupesModifiees(
+    idUtilisateur: UUID,
+    idsGroupes: UUID[]
+  ) {
+    const groupesAJour = await this.lisGroupesEntitesDe(idUtilisateur);
+    const groupesModifies = groupesAJour.filter((g) =>
+      idsGroupes.includes(g.donnees().id)
+    );
+
+    await Promise.all(
+      groupesModifies.map((groupe) =>
+        this.busEvenements.publie(
+          new EvenementEntitesDuGroupeModifiees({ groupe })
+        )
+      )
+    );
   }
 
   private async verifieEntitesDansLePerimetre(

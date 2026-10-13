@@ -10,12 +10,19 @@ import {
   ErreurEntiteNonAdministre,
   ErreurGroupeEntitesInexistant,
 } from '../../src/erreurs.ts';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { EvenementGroupeEntitesCree } from '../../src/bus/evenementGroupeEntitesCree.ts';
+import { EvenementGroupeEntitesSupprime } from '../../src/bus/evenementGroupeEntitesSupprime.ts';
+import { EvenementEntitesDuGroupeModifiees } from '../../src/bus/evenementEntitesDuGroupeModifiees.ts';
 
 describe("Le dépôt de données des groupes d'entités", () => {
   let persistance: PersistanceTS;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   beforeEach(() => {
     persistance = unePersistanceMemoireTS().construis();
+    busEvenements = fabriqueBusPourLesTests();
   });
 
   const unDepot = () =>
@@ -25,6 +32,7 @@ describe("Le dépôt de données des groupes d'entités", () => {
         persistance,
       }),
       depotSuperviseurs: new DepotDonneesSuperviseurs({ persistance }),
+      busEvenements: busEvenements as unknown as BusEvenements,
     });
 
   describe("sur demande d'un nouveau groupe", () => {
@@ -37,6 +45,17 @@ describe("Le dépôt de données des groupes d'entités", () => {
       expect(groupe).toBeInstanceOf(GroupeEntites);
       const [groupeLu] = await persistance.lisGroupesEntitesDe(unUUID('U'), []);
       expect(groupeLu).toEqual(groupe.donnees());
+    });
+
+    it('publie un évènement de groupe créé sur le bus', async () => {
+      const groupe = await unDepot().nouveauGroupeEntites(
+        unUUID('U'),
+        'Région Nord'
+      );
+
+      expect(
+        busEvenements.recupereEvenement(EvenementGroupeEntitesCree)
+      ).toEqual(new EvenementGroupeEntitesCree({ groupe }));
     });
 
     it("refuse un libellé déjà utilisé par l'utilisateur, espaces superflus compris", async () => {
@@ -205,6 +224,20 @@ describe("Le dépôt de données des groupes d'entités", () => {
       expect(groupes).toEqual([]);
     });
 
+    it('publie un évènement de groupe supprimé sur le bus', async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupeEntites(
+        unUUID('U'),
+        'Région Nord'
+      );
+
+      await depot.supprimeGroupeEntites(groupe.donnees().id, unUUID('U'));
+
+      expect(
+        busEvenements.recupereEvenement(EvenementGroupeEntitesSupprime)
+      ).toEqual(new EvenementGroupeEntitesSupprime({ groupe }));
+    });
+
     it("refuse de supprimer le groupe d'un autre utilisateur", async () => {
       const depot = unDepot();
       const groupe = await depot.nouveauGroupeEntites(
@@ -227,6 +260,57 @@ describe("Le dépôt de données des groupes d'entités", () => {
           { siret: '22222222200022' },
         ])
         .construis();
+    });
+
+    it('publie un évènement par groupe dont les entités sont modifiées, avec ses entités associées à jour', async () => {
+      const depot = unDepot();
+      const nord = await depot.nouveauGroupeEntites(unUUID('U'), 'Région Nord');
+      const sud = await depot.nouveauGroupeEntites(unUUID('U'), 'Région Sud');
+      await depot.associeEntitesAuxGroupes(
+        unUUID('U'),
+        [sud.donnees().id],
+        ['11111111100011']
+      );
+      busEvenements.videEvenements();
+
+      await depot.associeEntitesAuxGroupes(
+        unUUID('U'),
+        [nord.donnees().id, sud.donnees().id],
+        ['22222222200022']
+      );
+
+      const evenements = busEvenements.recupereEvenements(
+        EvenementEntitesDuGroupeModifiees
+      );
+      expect(
+        evenements.map((e) => [
+          e.groupe.donnees().id,
+          e.groupe.donnees().siretsAssocies.length,
+        ])
+      ).toEqual([
+        [nord.donnees().id, 1],
+        [sud.donnees().id, 2],
+      ]);
+    });
+
+    it("ne publie pas d'évènement si l'association est refusée", async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupeEntites(
+        unUUID('U'),
+        'Région Nord'
+      );
+
+      await expect(
+        depot.associeEntitesAuxGroupes(
+          unUUID('U'),
+          [groupe.donnees().id],
+          ['99999999900099']
+        )
+      ).rejects.toThrow();
+
+      expect(
+        busEvenements.nAPasRecuUnEvenement(EvenementEntitesDuGroupeModifiees)
+      ).toBe(true);
     });
 
     it('ajoute une entité dans un groupe', async () => {
@@ -295,6 +379,34 @@ describe("Le dépôt de données des groupes d'entités", () => {
           { siret: '22222222200022' },
         ])
         .construis();
+    });
+
+    it('publie un évènement de modification des entités du groupe, avec ses entités associées à jour', async () => {
+      const depot = unDepot();
+      const groupe = await depot.nouveauGroupeEntites(
+        unUUID('U'),
+        'Région Nord'
+      );
+      await depot.associeEntitesAuxGroupes(
+        unUUID('U'),
+        [groupe.donnees().id],
+        ['11111111100011', '22222222200022']
+      );
+      busEvenements.videEvenements();
+
+      await depot.supprimeAssociationEntitesAuGroupe(
+        unUUID('U'),
+        groupe.donnees().id,
+        ['11111111100011']
+      );
+
+      const evenement = busEvenements.recupereEvenement(
+        EvenementEntitesDuGroupeModifiees
+      );
+      expect(evenement?.groupe.donnees().id).toBe(groupe.donnees().id);
+      expect(evenement?.groupe.donnees().siretsAssocies).toEqual([
+        '22222222200022',
+      ]);
     });
 
     it("retire une entité d'un groupe", async () => {
