@@ -80,6 +80,10 @@ const inventaire: Record<
     occurrences: 2,
     couvertPar: 'migreLesEvenementsDuJournal',
   },
+  'src/modeles/journalMSS/evenementGroupeEntitesSupprime.ts': {
+    occurrences: 2,
+    couvertPar: 'migreLesEvenementsDuJournal',
+  },
   'src/modeles/journalMSS/evenementGroupeServicesCree.ts': {
     occurrences: 2,
     couvertPar: 'migreLesEvenementsDuJournal',

@@ -100,6 +100,8 @@ import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consi
 import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
 import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
 import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
+import { EvenementGroupeEntitesSupprime } from './evenementGroupeEntitesSupprime.js';
+import { consigneGroupeEntitesSupprimeDansJournal } from './abonnements/consigneGroupeEntitesSupprimeDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -385,6 +387,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementGroupeEntitesCree,
     consigneGroupeEntitesCreeDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementGroupeEntitesSupprime,
+    consigneGroupeEntitesSupprimeDansJournal({ adaptateurJournal })
   );
 };
 

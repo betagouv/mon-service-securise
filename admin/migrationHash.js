@@ -294,6 +294,7 @@ class MigrationHash {
             };
             break;
           case 'GROUPE_ENTITES_CREE':
+          case 'GROUPE_ENTITES_SUPPRIME':
           case 'GROUPE_SERVICES_CREE':
           case 'GROUPE_SERVICES_SUPPRIME':
           case 'SERVICES_DU_GROUPE_MODIFIES':
