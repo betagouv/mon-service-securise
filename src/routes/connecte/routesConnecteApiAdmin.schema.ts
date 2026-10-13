@@ -26,17 +26,11 @@ export const schemaRetraitAccesServices = z.strictObject({
   idsServices: z.array(z.uuid()).min(1),
 });
 
-const filtreEnTableau = <TZod extends z.ZodType>(valeur: TZod) =>
-  z
-    .union([z.array(valeur), valeur])
-    .default([])
-    .transform((filtre) => (Array.isArray(filtre) ? filtre : [filtre]));
-
 export const schemaStatistiquesAdmin = z.strictObject({
-  filtreNiveauxSecurite: filtreEnTableau(
-    z.enum(Object.keys(questionsV2.niveauSecurite))
-  ),
-  filtreEntites: filtreEnTableau(schemaSiret.siret()),
+  filtreNiveauxSecurite: z
+    .array(z.enum(Object.keys(questionsV2.niveauSecurite)))
+    .default([]),
+  filtreEntites: z.array(schemaSiret.siret()).default([]),
 });
 
 export const schemaPutPerimetreAdmin = z.strictObject({
