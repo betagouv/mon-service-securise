@@ -15,7 +15,14 @@ export const crm = () => ({
   estActif: () =>
     process.env.REPORTING_TWENTY_CRM_EST_ACTIF?.trim().toLowerCase() === 'true',
   cleApi: () => process.env.REPORTING_TWENTY_CRM_CLE_API,
-  urlBase: () => new URL(process.env.REPORTING_TWENTY_CRM_URL_BASE),
+  urlBase: () => {
+    if (!process.env.REPORTING_TWENTY_CRM_URL_BASE)
+      throw new Error(
+        "La variable d'environnement de l'URL de base du CRM Twenty est absente."
+      );
+
+    return new URL(process.env.REPORTING_TWENTY_CRM_URL_BASE);
+  },
 });
 
 const journalMSS = () => ({
