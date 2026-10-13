@@ -98,6 +98,8 @@ import { consigneGroupeServicesCreeDansJournal } from './abonnements/consigneGro
 import { consigneGroupeServicesSupprimeDansJournal } from './abonnements/consigneGroupeServicesSupprimeDansJournal.js';
 import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consigneServicesDuGroupeModifiesDansJournal.js';
 import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
+import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
+import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -378,6 +380,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementServicesDuGroupeModifies,
     consigneServicesDuGroupeModifiesDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementGroupeEntitesCree,
+    consigneGroupeEntitesCreeDansJournal({ adaptateurJournal })
   );
 };
 
