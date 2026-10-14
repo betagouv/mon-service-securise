@@ -641,6 +641,7 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(autorisationsU2.length).to.be(1);
       expect(autorisationsU2[0]).to.eql({
         estAdmin: false,
+        estSuperviseur: false,
         estProprietaire: true,
         id: idAutorisationU2,
         idService: idService2,
@@ -735,6 +736,7 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(autorisationsAdmin.length).to.be(1);
       expect(autorisationsAdmin[0]).to.eql({
         estAdmin: true,
+        estSuperviseur: false,
         estProprietaire: true,
         id: idAutorisation,
         idService: idServiceAdministre,
