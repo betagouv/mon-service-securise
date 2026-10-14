@@ -20,6 +20,7 @@ class ConstructeurAutorisation {
 
   deProprietaire(idUtilisateur, idService) {
     this.donnees.estAdmin = false;
+    this.donnees.estSuperviseur = false;
     this.donnees.estProprietaire = true;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -28,6 +29,16 @@ class ConstructeurAutorisation {
 
   dAdmin(idUtilisateur, idService) {
     this.donnees.estAdmin = true;
+    this.donnees.estSuperviseur = false;
+    this.donnees.estProprietaire = true;
+    this.donnees.idUtilisateur = idUtilisateur;
+    this.donnees.idService = idService;
+    return this;
+  }
+
+  deSuperviseur(idUtilisateur, idService) {
+    this.donnees.estAdmin = false;
+    this.donnees.estSuperviseur = true;
     this.donnees.estProprietaire = true;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -36,6 +47,7 @@ class ConstructeurAutorisation {
 
   deContributeur(idUtilisateur, idService) {
     this.donnees.estAdmin = false;
+    this.donnees.estSuperviseur = false;
     this.donnees.estProprietaire = false;
     this.donnees.idUtilisateur = idUtilisateur;
     this.donnees.idService = idService;
@@ -55,6 +67,9 @@ class ConstructeurAutorisation {
   construis() {
     if (this.donnees.estAdmin) {
       return Autorisation.NouvelleAutorisationAdmin(this.donnees);
+    }
+    if (this.donnees.estSuperviseur) {
+      return Autorisation.NouvelleAutorisationSuperviseur(this.donnees);
     }
     return this.donnees.estProprietaire
       ? Autorisation.NouvelleAutorisationProprietaire(this.donnees)

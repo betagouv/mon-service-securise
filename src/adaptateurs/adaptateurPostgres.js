@@ -226,7 +226,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
 
                LEFT JOIN (SELECT (a.donnees ->>'idService')::uuid AS id_service,
                           json_agg(
-                                to_jsonb(u) || jsonb_build_object('estAdmin', (a.donnees ->>'estAdmin')::boolean) || jsonb_build_object('estProprietaire', (a.donnees ->>'estProprietaire')::boolean)
+                                to_jsonb(u) || jsonb_build_object('estAdmin', (a.donnees ->>'estAdmin')::boolean) || jsonb_build_object('estSuperviseur', COALESCE((a.donnees ->>'estSuperviseur')::boolean, false)) || jsonb_build_object('estProprietaire', (a.donnees ->>'estProprietaire')::boolean)
                           ) AS utilisateurs
                           FROM autorisations a
                                  JOIN utilisateurs u ON (a.donnees ->>'idUtilisateur')::uuid = u.id
