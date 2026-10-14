@@ -52,10 +52,12 @@ class ServiceSupervision {
     await this.relieServiceEtSuperviseurs(service);
   }
 
-  async rattacheEntiteAuSuperviseur(siret: string, idSuperviseur: UUID) {
-    await this.ajouteSiretAuSuperviseur(siret, idSuperviseur);
+  async rattacheEntitesAuSuperviseur(sirets: string[], idSuperviseur: UUID) {
+    await this.ajouteSiretsAuSuperviseur(sirets, idSuperviseur);
 
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+    const servicesParSiret =
+      await this.depotDonnees.tousLesServicesAvecSirets(sirets);
+    const services = [...servicesParSiret.values()].flat();
 
     await Promise.all(
       services.map((service: Service) =>
@@ -64,18 +66,22 @@ class ServiceSupervision {
     );
   }
 
-  private async ajouteSiretAuSuperviseur(siret: string, idSuperviseur: UUID) {
-    let superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
-    if (!superviseur) {
-      superviseur = Superviseur.nouveau(idSuperviseur);
-    }
+  private async ajouteSiretsAuSuperviseur(
+    sirets: string[],
+    idSuperviseur: UUID
+  ) {
+    const superviseur =
+      (await this.depotDonnees.lisSuperviseur(idSuperviseur)) ??
+      Superviseur.nouveau(idSuperviseur);
 
-    const donneesEntite = await Entite.completeDonnees(
-      { siret },
-      this.adaptateurRechercheEntite
+    const donneesEntites = await Promise.all(
+      sirets.map((siret) =>
+        Entite.completeDonnees({ siret }, this.adaptateurRechercheEntite)
+      )
     );
-
-    superviseur.supervise(new Entite(donneesEntite));
+    donneesEntites.forEach((donnees) =>
+      superviseur.supervise(new Entite(donnees))
+    );
 
     await this.depotDonnees.sauvegardeSuperviseur(superviseur);
   }

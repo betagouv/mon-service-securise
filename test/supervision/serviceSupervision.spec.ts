@@ -5,6 +5,7 @@ import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
 import Superviseur from '../../src/modeles/superviseur.ts';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
 
 describe('Le service de supervision', () => {
   let adaptateurSupervision: AdaptateurSupervision;
@@ -21,13 +22,14 @@ describe('Le service de supervision', () => {
       lisSuperviseursPour: async () => {},
       lisSuperviseur: async () => undefined,
       sauvegardeSuperviseur: async () => {},
-      tousLesServicesAvecSiret: async () => [],
+      tousLesServicesAvecSirets: async () => new Map(),
       supprimeSuperviseur: async () => {},
     } as unknown as DepotDonnees;
     serviceSupervision = new ServiceSupervision({
       depotDonnees,
       adaptateurSupervision,
-      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurRechercheEntite:
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise,
     });
   });
 
@@ -136,6 +138,25 @@ describe('Le service de supervision', () => {
   });
 
   describe("sur demande d'attachement d'une entité à un superviseur", () => {
+    it('ajoute toutes les entités au superviseur en une seule sauvegarde', async () => {
+      const superviseursSauvegardes: Superviseur[] = [];
+      depotDonnees.sauvegardeSuperviseur = async (s: Superviseur) => {
+        superviseursSauvegardes.push(s);
+      };
+
+      await serviceSupervision.rattacheEntitesAuSuperviseur(
+        ['SIRET-A', 'SIRET-B'],
+        unUUID('S')
+      );
+
+      expect(superviseursSauvegardes).toHaveLength(1);
+      expect(
+        superviseursSauvegardes[0]
+          .donnees()
+          .entitesSupervisees.map((e) => e.siret)
+      ).toEqual(['SIRET-A', 'SIRET-B']);
+    });
+
     it("crée le superviseur s'il n'existe pas", async () => {
       let superviseurSauvegarde: Superviseur | undefined;
       depotDonnees.lisSuperviseur = async () => undefined;
@@ -143,8 +164,8 @@ describe('Le service de supervision', () => {
         superviseurSauvegarde = s;
       };
 
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        'SIRET-123',
+      await serviceSupervision.rattacheEntitesAuSuperviseur(
+        ['SIRET-123'],
         unUUID('S')
       );
 
@@ -162,8 +183,8 @@ describe('Le service de supervision', () => {
         superviseurSauvegarde = s;
       };
 
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        'SIRET-123',
+      await serviceSupervision.rattacheEntitesAuSuperviseur(
+        ['SIRET-123'],
         unUUID('S')
       );
 
@@ -174,7 +195,8 @@ describe('Le service de supervision', () => {
 
     it("complète les données de l'entité grâce à la recherche entreprise", async () => {
       let siretRecu;
-      const adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
+      const adaptateurRechercheEntite =
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise;
       adaptateurRechercheEntite.rechercheOrganisations = async (siret) => {
         siretRecu = siret;
         return [];
@@ -185,8 +207,8 @@ describe('Le service de supervision', () => {
         adaptateurRechercheEntite,
       });
 
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        'SIRET-123',
+      await serviceSupervision.rattacheEntitesAuSuperviseur(
+        ['SIRET-123'],
         unUUID('S')
       );
 
@@ -197,7 +219,8 @@ describe('Le service de supervision', () => {
       const service = unService()
         .avecOrganisationResponsable({ siret: 'SIRET-123' })
         .construis();
-      depotDonnees.tousLesServicesAvecSiret = async () => [service];
+      depotDonnees.tousLesServicesAvecSirets = async () =>
+        new Map([['SIRET-123', [service]]]);
       depotDonnees.lisSuperviseursPour = async () => [
         Superviseur.hydrate({
           idUtilisateur: unUUID('S'),
@@ -209,8 +232,8 @@ describe('Le service de supervision', () => {
         serviceRecu = s;
       };
 
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        'SIRET-123',
+      await serviceSupervision.rattacheEntitesAuSuperviseur(
+        ['SIRET-123'],
         unUUID('S')
       );
 

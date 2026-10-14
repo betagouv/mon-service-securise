@@ -20,7 +20,7 @@ function modifieRattachementServiceEtAdmins({
       ancienneDescription.organisationResponsable.siret
     )
       return;
-    await serviceAdministrationOrganisations.rattacheLesAdministrateursDe(
+    await serviceAdministrationOrganisations.rattacheLesSuperviseursEtLesAdministrateursDe(
       service
     );
   };
