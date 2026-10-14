@@ -19,6 +19,7 @@
   import { pageCourante } from './store/pageCourante.store';
   import { propsPourPage } from './PagesService.props';
   import { afficheTitrePageServiceStore } from './store/afficheTitrePageService.store';
+  import { actionsTitrePageServiceStore } from './store/actionsTitrePageService.store';
   import { donneesVisiteGuidee } from './donneesVisiteGuidees';
   import type { RisquesV1 } from '../risquesV2/risquesV2.d';
 
@@ -165,10 +166,13 @@
           {@const donneesPage = metadonneesPages[pageActive]}
           {@const Composant = donneesPage?.composant}
           {#if $afficheTitrePageServiceStore}
-            <h1>
-              <span>{donneesPage?.titre}</span>
-            </h1>
-            <h2>{donneesPage?.sousTitre}</h2>
+            <div class="entete-titre">
+              <div>
+                <h1>{donneesPage?.titre}</h1>
+                <h2>{donneesPage?.sousTitre}</h2>
+              </div>
+              {@render $actionsTitrePageServiceStore?.()}
+            </div>
           {/if}
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
             <Composant
@@ -205,24 +209,31 @@
         flex-direction: column;
         flex-grow: 1;
 
-        h1 {
-          font-size: 1.75rem;
-          line-height: 2.25rem;
-          font-weight: bold;
-          text-align: left;
-          margin: 0 0 8px 0;
+        .entete-titre {
           display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
           gap: 12px;
-          align-items: flex-end;
-        }
 
-        h2 {
-          font-size: 1rem;
-          line-height: 1.5rem;
-          font-weight: normal;
-          text-align: left;
-          margin: 12px 0 0 0;
-          max-width: 750px;
+          h1 {
+            font-size: 1.75rem;
+            line-height: 2.25rem;
+            font-weight: bold;
+            text-align: left;
+            margin: 0 0 8px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+          }
+
+          h2 {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: normal;
+            text-align: left;
+            margin: 12px 0 0 0;
+            max-width: 750px;
+          }
         }
 
         .conteneur-composant-page {
