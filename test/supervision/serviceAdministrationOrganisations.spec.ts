@@ -34,6 +34,7 @@ import { EvenementAccesUtilisateurAdministreRetires } from '../../src/bus/evenem
 import { EvenementAdminNommeSurOrganisation } from '../../src/bus/evenementAdminNommeSurOrganisation.ts';
 import { EvenementAdminRetireDeOrganisation } from '../../src/bus/evenementAdminRetireDeOrganisation.ts';
 import { AdaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
+import { AdaptateurRechercheEntreprise } from '../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
 
 type Surcharge = Partial<
   ConstructorParameters<typeof ServiceAdministrationOrganisations>[0]
@@ -81,7 +82,8 @@ describe("Le service de gestion des admins d'organisation", () => {
       adaptateurEnvironnement,
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
-      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurRechercheEntite:
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise,
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
       ...surcharge,
     });
@@ -91,7 +93,8 @@ describe("Le service de gestion des admins d'organisation", () => {
     new ServiceAdministrationOrganisations({
       adaptateurUUID: fabriqueAdaptateurUUID(),
       depotDonnees: depotComplet,
-      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurRechercheEntite:
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise,
       adaptateurMail: fabriqueAdaptateurMailMemoire(),
       busEvenements: busEvenements as unknown as BusEvenements,
       adaptateurEnvironnement,
@@ -143,6 +146,89 @@ describe("Le service de gestion des admins d'organisation", () => {
         idService
       );
       expect(autorisationSupprimee).toBeUndefined();
+    });
+  });
+
+  describe("sur demande de rattachement d'un service à ses superviseurs", () => {
+    const idSuperviseur = unUUID('5');
+
+    beforeEach(async () => {
+      await depotComplet.sauvegardeSuperviseur(
+        Superviseur.hydrate({
+          idUtilisateur: idSuperviseur,
+          entitesSupervisees: [entite],
+        })
+      );
+    });
+
+    it('crée les autorisations superviseurs correspondantes', async () => {
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      await administrationOrganisations.rattacheLesSuperviseursDe(unService);
+
+      const autorisation = await depotComplet.autorisationPour(
+        idSuperviseur,
+        idService
+      );
+      expect(autorisation.estUnSuperviseur()).toBe(true);
+    });
+
+    it('transforme en autorisation de superviseur une autorisation existante', async () => {
+      const autorisationExistante = uneAutorisation()
+        .deProprietaire(idSuperviseur, idService)
+        .construis();
+      await depotComplet.sauvegardeAutorisation(autorisationExistante);
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      await administrationOrganisations.rattacheLesSuperviseursDe(unService);
+
+      const autorisationsDuSuperviseur = (
+        await depotComplet.autorisationsDuService(idService)
+      ).filter((a: Autorisation) => a.designeUtilisateur(idSuperviseur));
+      expect(autorisationsDuSuperviseur).toHaveLength(1);
+      expect(autorisationsDuSuperviseur[0].id).toBe(autorisationExistante.id);
+      expect(autorisationsDuSuperviseur[0].estUnSuperviseur()).toBe(true);
+    });
+
+    it('supprime les autorisations des anciens superviseurs', async () => {
+      const idAncienSuperviseur = unUUIDRandom();
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation()
+          .deSuperviseur(idAncienSuperviseur, idService)
+          .construis()
+      );
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      await administrationOrganisations.rattacheLesSuperviseursDe(unService);
+
+      const autorisationSupprimee = await depotComplet.autorisationPour(
+        idAncienSuperviseur,
+        idService
+      );
+      expect(autorisationSupprimee).toBeUndefined();
+    });
+
+    it("l'emporte sur le rattachement d'un admin qui est aussi superviseur de l'entité", async () => {
+      await depotComplet.sauvegardeSuperviseur(
+        Superviseur.hydrate({
+          idUtilisateur: idAdmin,
+          entitesSupervisees: [entite],
+        })
+      );
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation().deProprietaire(idAdmin, idService).construis()
+      );
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      await administrationOrganisations.rattacheLesSuperviseursDe(unService);
+      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+
+      const autorisation = await depotComplet.autorisationPour(
+        idAdmin,
+        idService
+      );
+      expect(autorisation.estUnSuperviseur()).toBe(true);
+      expect(autorisation.estUnAdmin()).toBe(false);
     });
   });
 
