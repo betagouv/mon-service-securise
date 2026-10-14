@@ -4,7 +4,7 @@ import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { chargeComposantSvelte } from './chargeComposantSvelte.js';
 import { construisModeleDocumentation } from './modeleDocumentation.js';
 
-const UI_KIT_VERSION = '1.63.0';
+const UI_KIT_VERSION = '1.63.3';
 
 export const SOURCES_EXTERNES = {
   uiKit: `https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/${UI_KIT_VERSION}/`,
