@@ -87,20 +87,67 @@ export class ServiceAdministrationOrganisations {
     await this.supprimeAutorisationsAdminObsoletes(service);
   }
 
+  async rattacheLesSuperviseursDe(service: Service) {
+    const lesSuperviseurs = await this.depotDonnees.lisSuperviseursPour(
+      service.siretDeOrganisation()
+    );
+    const autorisationsExistantes: Autorisation[] =
+      await this.depotDonnees.autorisationsDuService(service.id);
+
+    const nouvellesAutorisations = lesSuperviseurs.map((superviseur) => {
+      const idSuperviseur = superviseur.donnees().idUtilisateur;
+      const existante = autorisationsExistantes.find((a) =>
+        a.designeUtilisateur(idSuperviseur)
+      );
+
+      return Autorisation.NouvelleAutorisationSuperviseur({
+        id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
+        idService: service.id,
+        idUtilisateur: idSuperviseur,
+      });
+    });
+
+    await this.sauvegardeAutorisations(nouvellesAutorisations);
+    await this.supprimeAutorisationsSuperviseurObsoletes(
+      service,
+      lesSuperviseurs.map((s) => s.donnees().idUtilisateur)
+    );
+  }
+
   private async supprimeAutorisationsAdminObsoletes(service: Service) {
     const adminsActuels = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
-    const idAdminsActuels = adminsActuels.map(
-      (admin) => admin.donnees().idUtilisateur
-    );
 
+    await this.supprimeAutorisationsObsoletes(
+      service,
+      (a) => a.estUnAdmin(),
+      adminsActuels.map((admin) => admin.donnees().idUtilisateur)
+    );
+  }
+
+  private async supprimeAutorisationsSuperviseurObsoletes(
+    service: Service,
+    idSuperviseursActuels: UUID[]
+  ) {
+    await this.supprimeAutorisationsObsoletes(
+      service,
+      (a) => a.estUnSuperviseur(),
+      idSuperviseursActuels
+    );
+  }
+
+  private async supprimeAutorisationsObsoletes(
+    service: Service,
+    estDuRoleConcerne: (autorisation: Autorisation) => boolean,
+    idUtilisateursActuels: UUID[]
+  ) {
     const autorisationsDuService: Autorisation[] =
       await this.depotDonnees.autorisationsDuService(service.id);
 
     const autorisationsASupprimer = autorisationsDuService
-      .filter((a) => a.estAdmin)
-      .filter((a) => !idAdminsActuels.includes(a.idUtilisateur));
+      .filter(estDuRoleConcerne)
+      .filter((a) => !idUtilisateursActuels.includes(a.idUtilisateur));
 
     await Promise.all(
       autorisationsASupprimer.map((a) =>
@@ -113,13 +160,21 @@ export class ServiceAdministrationOrganisations {
   }
 
   private async fabriqueAutorisationsAdminPourService(service: Service) {
-    const lesAdmins = await this.depotDonnees.lisAdminsPour(
-      service.siretDeOrganisation()
+    const siret = service.siretDeOrganisation();
+    const [lesAdmins, lesSuperviseurs] = await Promise.all([
+      this.depotDonnees.lisAdminsPour(siret),
+      this.depotDonnees.lisSuperviseursPour(siret),
+    ]);
+    const idSuperviseurs = lesSuperviseurs.map(
+      (s) => s.donnees().idUtilisateur
+    );
+    const lesAdminsNonSuperviseurs = lesAdmins.filter(
+      (admin) => !idSuperviseurs.includes(admin.donnees().idUtilisateur)
     );
     const autorisationsExistantes =
       await this.depotDonnees.autorisationsDuService(service.id);
 
-    return lesAdmins.map((admin) => {
+    return lesAdminsNonSuperviseurs.map((admin) => {
       const idAdmin = admin.donnees().idUtilisateur;
       const existante = autorisationsExistantes.find((a: Autorisation) =>
         a.designeUtilisateur(idAdmin)
