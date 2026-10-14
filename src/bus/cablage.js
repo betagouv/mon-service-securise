@@ -59,6 +59,7 @@ import EvenementServiceV1MigreEnV2 from './evenementServiceV1MigreEnV2.js';
 import EvenementSimulationMigrationReferentielCreee from './evenementSimulationMigrationReferentielCreee.js';
 import { consigneSimulationMigrationReferentielCreee } from './abonnements/consigneSimulationMigrationReferentielCreeeDansJournal.js';
 import { rattacheServiceEtAdmins } from './abonnements/rattacheServiceEtAdmins.js';
+import { rattacheServiceEtSuperviseurs } from './abonnements/rattacheServiceEtSuperviseurs.js';
 import { ServiceAdministrationOrganisations } from '../supervision/serviceAdministrationOrganisations.js';
 import { modifieRattachementServiceEtAdmins } from './abonnements/modifieRattachementServiceEtAdmins.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtilisateurAdministreAttribue.js';
@@ -152,6 +153,7 @@ const cableTousLesAbonnes = (
     }),
     relieServiceEtSuperviseurs({ serviceSupervision }),
     rattacheServiceEtAdmins({ serviceAdministrationOrganisations }),
+    rattacheServiceEtSuperviseurs({ serviceAdministrationOrganisations }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureModifieeEnMasse, [
