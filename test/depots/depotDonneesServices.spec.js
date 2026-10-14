@@ -264,6 +264,24 @@ describe('Le dépôt de données des services', () => {
       expect(contributeurs[1].estProprietaire).to.be(true);
     });
 
+    it('sait si un contributeur est superviseur', async () => {
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(unService(r).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deSuperviseur('U1', 'S1').donnees
+        );
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      const service = await depot.service('S1');
+
+      expect(service.contributeurs[0].estSuperviseur).to.be(true);
+    });
+
     it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
       const r = Referentiel.creeReferentielVide();
       const chiffrement = unAdaptateurChiffrementQuiWrap();

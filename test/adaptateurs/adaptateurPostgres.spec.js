@@ -136,6 +136,19 @@ describe("L'adaptateur persistance Postgres", () => {
     return idAutorisation;
   }
 
+  async function insereAutorisationSuperviseur(idUtilisateur, idService) {
+    const idAutorisation = genereUUID();
+    const autorisation = Autorisation.NouvelleAutorisationSuperviseur({
+      idUtilisateur,
+      idService,
+    });
+    await persistance.ajouteAutorisation(
+      idAutorisation,
+      autorisation.donneesAPersister()
+    );
+    return idAutorisation;
+  }
+
   describe('concernant la lecture complète de service', () => {
     it("sait lire les suggestions d'action d'un service", async () => {
       const idService = await insereService('siret-1');
@@ -173,6 +186,33 @@ describe("L'adaptateur persistance Postgres", () => {
       const proprietaire = services[0].utilisateurs[0];
       expect(proprietaire.id).to.be(idUtilisateur);
       expect(proprietaire.estAdmin).to.be(true);
+    });
+
+    it("considère qu'un contributeur n'est pas superviseur si son autorisation ne le précise pas", async () => {
+      const idService = await insereService('siret-1');
+      const idUtilisateur = await insereUtilisateur();
+      await persistance.ajouteAutorisation(genereUUID(), {
+        idUtilisateur,
+        idService,
+        estProprietaire: true,
+        droits: {},
+      });
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].utilisateurs[0].estSuperviseur).to.be(false);
+    });
+
+    it("sait dire qu'un contributeur est superviseur", async () => {
+      const idService = await insereService('siret-1');
+      const idUtilisateur = await insereUtilisateur();
+      await insereAutorisationSuperviseur(idUtilisateur, idService);
+
+      const services = await persistance.servicesComplets({ idService });
+
+      const proprietaire = services[0].utilisateurs[0];
+      expect(proprietaire.id).to.be(idUtilisateur);
+      expect(proprietaire.estSuperviseur).to.be(true);
     });
 
     it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {
