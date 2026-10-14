@@ -98,20 +98,16 @@ export class ServiceAdministrationOrganisations {
       idSuperviseur
     );
 
-    await Promise.all(
-      sirets.map((siret) => this.rattacheLesServicesDeLEntite(siret))
-    );
+    await this.rattacheLesServicesDesEntites(sirets);
   }
 
   async revoqueSuperviseur(idSuperviseur: UUID) {
     const superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
     const anciensSiretsSupervises =
       superviseur?.donnees().entitesSupervisees.map((e) => e.siret) ?? [];
-    const servicesSupervises = (
-      await Promise.all(
-        anciensSiretsSupervises.map(this.depotDonnees.tousLesServicesAvecSiret)
-      )
-    ).flat();
+    const servicesSupervises = await this.servicesDesEntites(
+      anciensSiretsSupervises
+    );
     ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
       servicesSupervises,
       idSuperviseur
@@ -119,18 +115,28 @@ export class ServiceAdministrationOrganisations {
 
     await this.serviceSupervision.revoqueSuperviseur(idSuperviseur);
 
-    await Promise.all(
-      servicesSupervises.map((service: Service) =>
-        this.rattacheLesSuperviseursEtLesAdministrateursDe(service)
-      )
+    await this.rattacheLesSuperviseursEtLesAdministrateursDesServices(
+      servicesSupervises
     );
   }
 
-  private async rattacheLesServicesDeLEntite(siret: string) {
-    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+  private async servicesDesEntites(sirets: string[]): Promise<Service[]> {
+    const servicesParSiret =
+      await this.depotDonnees.tousLesServicesAvecSirets(sirets);
+    return [...servicesParSiret.values()].flat();
+  }
 
+  private async rattacheLesServicesDesEntites(sirets: string[]) {
+    const services = await this.servicesDesEntites(sirets);
+
+    await this.rattacheLesSuperviseursEtLesAdministrateursDesServices(services);
+  }
+
+  private async rattacheLesSuperviseursEtLesAdministrateursDesServices(
+    services: Service[]
+  ) {
     await Promise.all(
-      services.map((service: Service) =>
+      services.map((service) =>
         this.rattacheLesSuperviseursEtLesAdministrateursDe(service)
       )
     );
