@@ -1,10 +1,9 @@
 <script lang="ts">
-  type ModeAffichage = 'Résumé' | 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
+  type ModeAffichage = 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
   interface Props {
     mode: ModeAffichage;
     afficheInfoBesoinsSecurite?: boolean;
     activeBoutonEnregistrer?: boolean;
-    onModifier?: () => void;
     onEnregistrer?: () => void;
     onAnnuler?: () => void;
   }
@@ -15,71 +14,47 @@
     activeBoutonEnregistrer = true,
     onAnnuler,
     onEnregistrer,
-    onModifier,
   }: Props = $props();
 </script>
 
 <div class="barre-actions">
   <div class="les-boutons">
-    {#if mode === 'Résumé'}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <lab-anssi-bouton
-        titre="Modifier le service"
-        variante="primaire"
-        taille="md"
-        icone="edit-line"
-        positionIcone="droite"
-        onclick={() => onModifier?.()}
-      ></lab-anssi-bouton>
-    {:else if mode === 'Édition' || mode === 'MiseÀJourForcéeBesoinsSécurité'}
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <lab-anssi-bouton
-        titre="Enregistrer les modifications"
-        variante="primaire"
-        taille="md"
-        icone="save-line"
-        positionIcone="gauche"
-        actif={activeBoutonEnregistrer}
-        onclick={() => onEnregistrer?.()}
-      ></lab-anssi-bouton>
-      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-      <lab-anssi-bouton
-        titre={mode === 'Édition' ? 'Annuler' : 'Annuler les modifications'}
-        variante="tertiaire"
-        taille="md"
-        positionIcone="sans"
-        onclick={() => onAnnuler?.()}
-      ></lab-anssi-bouton>
-      {#if afficheInfoBesoinsSecurite}
-        <span class="attention-aux-besoins">
-          <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />
-          En modifiant ce service, ses besoins en sécurité pourront être réévalués.
-        </span>
-      {/if}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Enregistrer les modifications"
+      size="md"
+      icon="save-line"
+      has-icon
+      disabled={!activeBoutonEnregistrer}
+      onclick={() => onEnregistrer?.()}
+    ></dsfr-button>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label={mode === 'Édition' ? 'Annuler' : 'Annuler les modifications'}
+      kind="tertiary"
+      size="md"
+      onclick={() => onAnnuler?.()}
+    ></dsfr-button>
+    {#if afficheInfoBesoinsSecurite}
+      <span class="attention-aux-besoins">
+        <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />
+        En modifiant ce service, ses besoins en sécurité pourront être réévalués.
+      </span>
     {/if}
   </div>
 </div>
 
 <style lang="scss">
   .barre-actions {
-    position: sticky;
-    bottom: 0;
-    background: white;
-    border-top: 1px solid #ddd;
-    padding: 24px 0;
-    margin-left: -72px;
-    margin-right: -24px;
-    margin-bottom: -24px;
+    margin-bottom: 8px;
 
     .les-boutons {
-      padding: 0 72px;
-
       display: flex;
       align-items: center;
       gap: 16px;
 
-      lab-anssi-bouton {
-        flex-shrink: 0;
+      dsfr-button {
+        white-space: nowrap;
       }
 
       .attention-aux-besoins {

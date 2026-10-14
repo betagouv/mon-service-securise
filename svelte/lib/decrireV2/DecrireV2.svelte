@@ -29,6 +29,7 @@
   import type { MiseAJour } from '../creationV2/creationV2.api';
   import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
   import type { AxiosError } from 'axios';
+  import { actionsTitrePageServiceStore } from '../pagesService/store/actionsTitrePageService.store';
 
   const ChampsImpactantsLeNiveauDeSecurite: string[] = [
     'volumetrieDonneesTraitees',
@@ -92,6 +93,11 @@
     niveauDeSecuriteMinimal =
       await niveauSecuriteMinimalRequis(descriptionEditable);
   };
+
+  onMount(() => {
+    actionsTitrePageServiceStore.set(boutonModifierLeService);
+    return () => actionsTitrePageServiceStore.set(undefined);
+  });
 
   onMount(async () => {
     await rafraichisNiveauSecuriteMinimal();
@@ -159,6 +165,22 @@
     }
   };
 </script>
+
+{#snippet boutonModifierLeService()}
+  {#if !lectureSeule && mode === 'Résumé'}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+    <dsfr-button
+      label="Modifier le service"
+      size="md"
+      icon="edit-line"
+      icon-place="left"
+      has-icon
+      onclick={() => {
+        mode = 'Édition';
+      }}
+    ></dsfr-button>
+  {/if}
+{/snippet}
 
 <div class="conteneur-decrire-v2">
   {#if doitFinaliserDescription}
@@ -236,14 +258,6 @@
     </div>
   {/if}
 
-  {#if !lectureSeule && mode === 'Résumé'}
-    <BarreActions
-      mode="Résumé"
-      onModifier={() => {
-        mode = 'Édition';
-      }}
-    />
-  {/if}
   {#if mode === 'Édition'}
     <BarreActions
       activeBoutonEnregistrer={descriptionEstComplete}
@@ -314,5 +328,9 @@
 
   .conteneur-info-maj-necessaire {
     margin-bottom: 24px;
+  }
+
+  dsfr-button {
+    white-space: nowrap;
   }
 </style>
