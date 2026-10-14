@@ -645,18 +645,30 @@ class ConsoleAdministration {
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
   }
 
+  serviceAdministrationOrganisations() {
+    return new ServiceAdministrationOrganisations({
+      depotDonnees: this.depotDonnees,
+      adaptateurUUID: fabriqueAdaptateurUUID(),
+      adaptateurMail: this.adaptateurMail,
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      busEvenements: this.busEvenements,
+      adaptateurEnvironnement,
+      serviceSupervision: new ServiceSupervision({
+        depotDonnees: this.depotDonnees,
+        adaptateurSupervision: this.adaptateurSupervision,
+        adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      }),
+    });
+  }
+
   async supprimeSupervisionDeUtilisateur(idUtilisateur) {
     console.log(
       `Suppression des droits de supervision pour l'utilisateur ${idUtilisateur}`
     );
 
-    const serviceSupervision = new ServiceSupervision({
-      depotDonnees: this.depotDonnees,
-      adaptateurSupervision: this.adaptateurSupervision,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-    });
-
-    await serviceSupervision.revoqueSuperviseur(idUtilisateur);
+    await this.serviceAdministrationOrganisations().revoqueSuperviseur(
+      idUtilisateur
+    );
   }
 
   async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
@@ -667,23 +679,11 @@ class ConsoleAdministration {
         `Impossible de trouve l'utilisateur avec l'email ${emailSuperviseur}`
       );
 
-    const serviceSupervision = new ServiceSupervision({
-      depotDonnees: this.depotDonnees,
-      adaptateurSupervision: this.adaptateurSupervision,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-    });
-
-    /* eslint-disable no-restricted-syntax */
-    /* eslint-disable no-await-in-loop */
-    for (const siret of sirets) {
-      console.log(`Ajout du SIRET ${siret}`);
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        siret,
-        superviseur.id
-      );
-    }
-    /* eslint-enable no-restricted-syntax */
-    /* eslint-enable no-await-in-loop */
+    console.log(`Ajout de ${sirets.length} SIRET`);
+    await this.serviceAdministrationOrganisations().ajouteEntitesAuSuperviseur(
+      superviseur.id,
+      sirets
+    );
   }
 
   async ajouteSiretsAAdmin(emailAdmin, sirets) {
@@ -693,14 +693,7 @@ class ConsoleAdministration {
         `Impossible de trouve l'utilisateur avec l'email ${emailAdmin}`
       );
 
-    const serviceAdminOrgas = new ServiceAdministrationOrganisations({
-      depotDonnees: this.depotDonnees,
-      adaptateurUUID: fabriqueAdaptateurUUID(),
-      adaptateurMail: this.adaptateurMail,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-      busEvenements: this.busEvenements,
-      adaptateurEnvironnement,
-    });
+    const serviceAdminOrgas = this.serviceAdministrationOrganisations();
 
     console.log(`Ajout de ${sirets.length} SIRET`);
     await serviceAdminOrgas.nommeAdmin(
