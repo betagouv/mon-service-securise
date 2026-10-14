@@ -167,6 +167,15 @@ describe('Une autorisation', () => {
       );
     });
 
+    it("retourne 'SUPERVISEUR' si l'utilisateur est superviseur du service", async () => {
+      const autorisationSuperviseur =
+        Autorisation.NouvelleAutorisationSuperviseur(donneesAutorisation);
+
+      expect(autorisationSuperviseur.resumeNiveauDroit()).toBe(
+        Autorisation.RESUME_NIVEAU_DROIT.SUPERVISEUR
+      );
+    });
+
     it("retourne 'PROPRIETAIRE' si l'utilisateur est propriétaire du service", async () => {
       const autorisationProprietaire =
         Autorisation.NouvelleAutorisationProprietaire(donneesAutorisation);
@@ -274,6 +283,7 @@ describe('Une autorisation', () => {
 
       expect(autorisationContributeur.donneesAPersister()).toEqual({
         estAdmin: false,
+        estSuperviseur: false,
         estProprietaire: false,
         id: unUUID('a'),
         idService: unUUID('s'),
@@ -300,6 +310,7 @@ describe('Une autorisation', () => {
       expect(autorisationProprietaire.donneesAPersister()).toEqual({
         estProprietaire: true,
         estAdmin: false,
+        estSuperviseur: false,
         id: unUUID('a'),
         idService: unUUID('s'),
         idUtilisateur: unUUID('u'),
@@ -322,6 +333,20 @@ describe('Une autorisation', () => {
       });
 
       expect(autorisationAdmin.donneesAPersister().estAdmin).toBe(true);
+    });
+
+    it('connaît ses données pour une autorisation de superviseur', () => {
+      const autorisationSuperviseur =
+        Autorisation.NouvelleAutorisationSuperviseur({
+          ...donneesAutorisation,
+          id: unUUID('a'),
+          idService: unUUID('s'),
+          idUtilisateur: unUUID('u'),
+        });
+
+      expect(autorisationSuperviseur.donneesAPersister().estSuperviseur).toBe(
+        true
+      );
     });
   });
 
@@ -406,6 +431,22 @@ describe('Une autorisation', () => {
 
       expect(nouvelleAutorisationAdmin.estAdmin).toBe(true);
       expect(nouvelleAutorisationAdmin.estProprietaire).toBe(true);
+    });
+  });
+
+  describe('pour un superviseur', () => {
+    const donnees = {
+      id: unUUID('a'),
+      idService: unUUID('s'),
+      idUtilisateur: unUUID('u'),
+    };
+
+    it('a la propriété estSuperviseur et estProprietaire à true', () => {
+      const nouvelleAutorisationSuperviseur =
+        Autorisation.NouvelleAutorisationSuperviseur(donnees);
+
+      expect(nouvelleAutorisationSuperviseur.estSuperviseur).toBe(true);
+      expect(nouvelleAutorisationSuperviseur.estProprietaire).toBe(true);
     });
   });
 });
