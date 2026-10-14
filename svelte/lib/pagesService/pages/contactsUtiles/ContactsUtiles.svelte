@@ -263,13 +263,6 @@
   }
 
   .barre-actions {
-    position: sticky;
-    bottom: 0;
-    background: white;
-    border-top: 1px solid #ddd;
-    padding: 24px 72px;
-    margin-left: -72px;
-    margin-right: -24px;
-    margin-bottom: -24px;
+    margin-bottom: 8px;
   }
 </style>
