@@ -8,7 +8,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
 
   beforeEach(() => {
     serviceAdministrationOrganisations = {
-      rattacheLesAdministrateursDe: vi.fn(),
+      rattacheLesSuperviseursEtLesAdministrateursDe: vi.fn(),
     } as unknown as ServiceAdministrationOrganisations;
   });
 
@@ -30,11 +30,11 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     });
 
     expect(
-      serviceAdministrationOrganisations.rattacheLesAdministrateursDe
+      serviceAdministrationOrganisations.rattacheLesSuperviseursEtLesAdministrateursDe
     ).not.toHaveBeenCalled();
   });
 
-  it("délègue au service d'administration des organisations la modification du rattachement si le SIRET a changé", async () => {
+  it("délègue au service d'administration des organisations la modification du rattachement aux superviseurs et aux admins si le SIRET a changé", async () => {
     const service = unService()
       .avecId('S1')
       .avecOrganisationResponsable({
@@ -53,7 +53,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     });
 
     expect(
-      serviceAdministrationOrganisations.rattacheLesAdministrateursDe
+      serviceAdministrationOrganisations.rattacheLesSuperviseursEtLesAdministrateursDe
     ).toHaveBeenCalledWith(service);
   });
 });

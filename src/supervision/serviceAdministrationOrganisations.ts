@@ -33,6 +33,7 @@ import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/
 import { EvenementAdminNommeSurOrganisation } from '../bus/evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from '../bus/evenementAdminRetireDeOrganisation.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
+import ServiceSupervision from './serviceSupervision.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -52,6 +53,7 @@ export class ServiceAdministrationOrganisations {
   private readonly adaptateurMail: AdaptateurMail;
   private readonly busEvenements: BusEvenements;
   private readonly adaptateurEnvironnement: AdaptateurEnvironnement;
+  private readonly serviceSupervision: ServiceSupervision;
   private readonly procedureSuppressionContributeurAdmin: ProcedureSuppressionContributeurAdmin;
 
   constructor({
@@ -61,6 +63,7 @@ export class ServiceAdministrationOrganisations {
     adaptateurMail,
     busEvenements,
     adaptateurEnvironnement,
+    serviceSupervision,
   }: {
     depotDonnees: DepotDonnees;
     adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
@@ -68,6 +71,7 @@ export class ServiceAdministrationOrganisations {
     adaptateurMail: AdaptateurMail;
     busEvenements: BusEvenements;
     adaptateurEnvironnement: AdaptateurEnvironnement;
+    serviceSupervision: ServiceSupervision;
   }) {
     this.depotDonnees = depotDonnees;
     this.adaptateurRechercheEntite = adaptateurRechercheEntite;
@@ -75,6 +79,7 @@ export class ServiceAdministrationOrganisations {
     this.adaptateurMail = adaptateurMail;
     this.busEvenements = busEvenements;
     this.adaptateurEnvironnement = adaptateurEnvironnement;
+    this.serviceSupervision = serviceSupervision;
     this.procedureSuppressionContributeurAdmin =
       new ProcedureSuppressionContributeurAdmin({ depotDonnees });
   }
@@ -85,6 +90,55 @@ export class ServiceAdministrationOrganisations {
 
     await this.sauvegardeAutorisations(nouvellesAutorisations);
     await this.supprimeAutorisationsAdminObsoletes(service);
+  }
+
+  async ajouteEntitesAuSuperviseur(idSuperviseur: UUID, sirets: string[]) {
+    await this.serviceSupervision.rattacheEntitesAuSuperviseur(
+      sirets,
+      idSuperviseur
+    );
+
+    await Promise.all(
+      sirets.map((siret) => this.rattacheLesServicesDeLEntite(siret))
+    );
+  }
+
+  async revoqueSuperviseur(idSuperviseur: UUID) {
+    const superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
+    const anciensSiretsSupervises =
+      superviseur?.donnees().entitesSupervisees.map((e) => e.siret) ?? [];
+    const servicesSupervises = (
+      await Promise.all(
+        anciensSiretsSupervises.map(this.depotDonnees.tousLesServicesAvecSiret)
+      )
+    ).flat();
+    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
+      servicesSupervises,
+      idSuperviseur
+    );
+
+    await this.serviceSupervision.revoqueSuperviseur(idSuperviseur);
+
+    await Promise.all(
+      servicesSupervises.map((service: Service) =>
+        this.rattacheLesSuperviseursEtLesAdministrateursDe(service)
+      )
+    );
+  }
+
+  private async rattacheLesServicesDeLEntite(siret: string) {
+    const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+
+    await Promise.all(
+      services.map((service: Service) =>
+        this.rattacheLesSuperviseursEtLesAdministrateursDe(service)
+      )
+    );
+  }
+
+  async rattacheLesSuperviseursEtLesAdministrateursDe(service: Service) {
+    await this.rattacheLesSuperviseursDe(service);
+    await this.rattacheLesAdministrateursDe(service);
   }
 
   async rattacheLesSuperviseursDe(service: Service) {

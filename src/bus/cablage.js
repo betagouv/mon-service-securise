@@ -137,6 +137,7 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntite: adaptateurRechercheEntreprise,
       busEvenements,
       adaptateurEnvironnement,
+      serviceSupervision,
     });
 
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
