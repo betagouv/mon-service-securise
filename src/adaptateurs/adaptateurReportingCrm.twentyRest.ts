@@ -19,12 +19,23 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     }
   }
 
+  private entetes() {
+    return {
+      Authorization: `Bearer ${this.cleApi}`,
+      'Content-Type': 'application/json',
+    };
+  }
+
+  private async recupere(chemin: string, filtre: string) {
+    return axios.get(new URL(chemin, this.urlCrm).toString(), {
+      headers: this.entetes(),
+      params: { filter: filtre },
+    });
+  }
+
   private async poste(chemin: string, corps: object) {
     return axios.post(new URL(chemin, this.urlCrm).toString(), corps, {
-      headers: {
-        Authorization: `Bearer ${this.cleApi}`,
-        'Content-Type': 'application/json',
-      },
+      headers: this.entetes(),
     });
   }
 
@@ -37,12 +48,27 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
   }
 
   async consigneEntiteUtilisatrice(entite: Entite): Promise<IdEntiteCRM> {
+    const idExistant = await this.idEntiteExistante(entite.siret);
+    if (idExistant) return idExistant;
+
     // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.poste('/rest/donneesMssEntitesUtilisatricess', {
       name: entite.nom,
       siret: entite.siret,
     });
     return reponse.data.data.createDonneesMssEntitesUtilisatrices.id;
+  }
+
+  private async idEntiteExistante(
+    siret: string
+  ): Promise<IdEntiteCRM | undefined> {
+    // Oui, il y a bien 2 "s" à la fin
+    const reponse = await this.recupere(
+      '/rest/donneesMssEntitesUtilisatricess',
+      `siret[eq]:"${siret}"`
+    );
+    const [entiteExistante] = reponse.data.data.donneesMssEntitesUtilisatricess;
+    return entiteExistante?.id;
   }
 
   // eslint-disable-next-line class-methods-use-this
