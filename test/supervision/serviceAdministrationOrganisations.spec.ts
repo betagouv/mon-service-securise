@@ -812,6 +812,7 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
         .ajouteSuperviseurSurPerimetre(idSuperviseur, ['SIRET-1'])
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId(idSuperviseur).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU2).donnees)
         .ajouteUnService(
@@ -845,6 +846,16 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(utilisateurs).toHaveLength(2);
       expect(utilisateurs[0].id).toBe(idU1);
       expect(utilisateurs[1].id).toBe(idU2);
+    });
+
+    it('ne retourne pas, à un admin, les superviseurs de ses services', async () => {
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation().deSuperviseur(idSuperviseur, idS1).construis()
+      );
+
+      const utilisateurs = await service.utilisateursDansLePerimetreDe(idAdmin);
+
+      expect(utilisateurs.map((u) => u.id)).not.toContain(idSuperviseur);
     });
 
     it("retourne les administrateurs du périmètre d'un superviseur", async () => {
@@ -999,11 +1010,15 @@ describe("Le service de gestion des admins d'organisation", () => {
     const idAutreAdmin = unUUID('A2');
     const idS1 = unUUID('S1');
     const idS2 = unUUID('S2');
+    const idSuperviseurAussiContributeur = unUUID('SC');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
         .ajouteAdminSurPerimetre(idAutreAdmin, ['SIRET-1'])
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId(idSuperviseurAussiContributeur).donnees
+        )
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAutreAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
@@ -1053,6 +1068,28 @@ describe("Le service de gestion des admins d'organisation", () => {
         service.attribueRoleAUtilisateurAdministre(
           idAdmin,
           idAutreAdmin,
+          Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
+          [idS1]
+        )
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
+    it("jette une erreur si l'utilisateur cible est superviseur d'un des services ciblés", async () => {
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation()
+          .deSuperviseur(idSuperviseurAussiContributeur, idS1)
+          .construis()
+      );
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation()
+          .deContributeur(idSuperviseurAussiContributeur, idS2)
+          .construis()
+      );
+
+      await expect(
+        service.attribueRoleAUtilisateurAdministre(
+          idAdmin,
+          idSuperviseurAussiContributeur,
           Autorisation.RESUME_NIVEAU_DROIT.PROPRIETAIRE,
           [idS1]
         )
@@ -1148,6 +1185,8 @@ describe("Le service de gestion des admins d'organisation", () => {
     const idU1 = unUUID('U1');
     const idAutreAdmin = unUUID('A2');
     const idS1 = unUUID('S1');
+    const idS2 = unUUID('S2');
+    const idSuperviseurAussiContributeur = unUUID('SC');
 
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
@@ -1156,7 +1195,11 @@ describe("Le service de gestion des admins d'organisation", () => {
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idAutreAdmin).donnees)
         .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId(idSuperviseurAussiContributeur).donnees
+        )
         .ajouteUnService(unServiceV2().avecId(idS1).donnees)
+        .ajouteUnService(unServiceV2().avecId(idS2).donnees)
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
         .ajouteUneAutorisation(
           uneAutorisation().dAdmin(idAutreAdmin, idS1).donnees
@@ -1192,6 +1235,30 @@ describe("Le service de gestion des admins d'organisation", () => {
     it("jette une erreur si l'utilisateur cible est admin d'un des services ciblés", async () => {
       await expect(
         service.retireAccesUtilisateurAdministre(idAdmin, idAutreAdmin, [idS1])
+      ).rejects.toThrow(EchecAutorisation);
+    });
+
+    it("jette une erreur si l'utilisateur cible est superviseur d'un des services ciblés", async () => {
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation().dAdmin(idAdmin, idS2).construis()
+      );
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation()
+          .deSuperviseur(idSuperviseurAussiContributeur, idS1)
+          .construis()
+      );
+      await depotComplet.sauvegardeAutorisation(
+        uneAutorisation()
+          .deContributeur(idSuperviseurAussiContributeur, idS2)
+          .construis()
+      );
+
+      await expect(
+        service.retireAccesUtilisateurAdministre(
+          idAdmin,
+          idSuperviseurAussiContributeur,
+          [idS1]
+        )
       ).rejects.toThrow(EchecAutorisation);
     });
 

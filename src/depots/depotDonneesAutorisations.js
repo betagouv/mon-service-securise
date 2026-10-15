@@ -149,10 +149,10 @@ const creeDepot = (config = {}) => {
         throw new ErreurSuppressionImpossible(
           `L'utilisateur "${idUtilisateurCourant}" ne peut pas supprimer sa propre autorisation`
         );
-      const cibleEstAdmin = (
+      const cibleDecouleDUnPerimetre = (
         await autorisationPour(idContributeur, idService)
-      ).estUnAdmin();
-      if (cibleEstAdmin)
+      ).decouleDUnPerimetre();
+      if (cibleDecouleDUnPerimetre)
         throw new ErreurSuppressionImpossible(
           `L'utilisateur "${idContributeur}" ne peut pas être supprimé`
         );

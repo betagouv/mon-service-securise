@@ -518,7 +518,7 @@ const routesConnecteApi = ({
 
         if (
           !autorisationActeur.peutGererContributeurs() ||
-          autorisationCible.estUnAdmin()
+          autorisationCible.decouleDUnPerimetre()
         )
           throw new EchecAutorisation();
       };

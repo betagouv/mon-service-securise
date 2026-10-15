@@ -449,4 +449,27 @@ describe('Une autorisation', () => {
       expect(nouvelleAutorisationSuperviseur.estProprietaire).toBe(true);
     });
   });
+
+  describe("sur demande si l'autorisation découle d'un périmètre d'entités (admin ou superviseur)", () => {
+    it("c'est le cas d'une autorisation d'admin", () => {
+      const autorisation =
+        Autorisation.NouvelleAutorisationAdmin(donneesAutorisation);
+
+      expect(autorisation.decouleDUnPerimetre()).toBe(true);
+    });
+
+    it("c'est le cas d'une autorisation de superviseur", () => {
+      const autorisation =
+        Autorisation.NouvelleAutorisationSuperviseur(donneesAutorisation);
+
+      expect(autorisation.decouleDUnPerimetre()).toBe(true);
+    });
+
+    it("ce n'est pas le cas d'une autorisation de propriétaire", () => {
+      const autorisation =
+        Autorisation.NouvelleAutorisationProprietaire(donneesAutorisation);
+
+      expect(autorisation.decouleDUnPerimetre()).toBe(false);
+    });
+  });
 });
