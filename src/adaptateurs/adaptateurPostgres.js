@@ -472,6 +472,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
         ON u.id::TEXT = a.donnees->>'idUtilisateur'
         WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
           AND a.donnees->>'estAdmin' <> 'true'
+          AND a.donnees->>'estSuperviseur' <> 'true'
           AND a.donnees->>'idUtilisateur' != ?
       `,
       [idProprietaire, idProprietaire]
@@ -1004,6 +1005,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
           JOIN services AS s ON s.id = (a.donnees->>'idService')::uuid
           WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
             AND a.donnees->>'idUtilisateur' != ?
+            AND COALESCE((a.donnees->>'estSuperviseur')::boolean, false) = false
           UNION ALL
           SELECT u.id, u.donnees, ao.siret_hash
           FROM admins_organisations ao
@@ -1029,6 +1031,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
             FROM autorisations a3
             WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
                 AND a3.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+                AND COALESCE((a3.donnees->>'estSuperviseur')::boolean, false) = false
           ) AS autorisations
         FROM mes_utilisateurs_administres AS u
       `,

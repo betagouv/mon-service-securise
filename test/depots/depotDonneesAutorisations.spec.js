@@ -395,6 +395,25 @@ describe('Le dépôt de données des autorisations', () => {
       }
     });
 
+    it("empêche l'utilisateur de supprimer un superviseur", async () => {
+      const autorisationPourABC = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().deSuperviseur('S1', 'ABC').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('P1', 'ABC').donnees
+        )
+        .construis();
+      const depot = creeDepot(autorisationPourABC);
+
+      try {
+        await depot.supprimeContributeur('S1', 'ABC', 'P1');
+        expect().to.fail('La demande aurait dû lever une erreur');
+      } catch (e) {
+        expect(e).to.be.an(ErreurSuppressionImpossible);
+      }
+    });
+
     it('supprime le contributeur', async () => {
       const avecUneAutorisation = unePersistanceMemoire()
         .ajouteUnService(

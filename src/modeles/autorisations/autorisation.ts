@@ -264,4 +264,8 @@ export class Autorisation extends Base {
   estUnSuperviseur() {
     return !!this.estSuperviseur;
   }
+
+  decouleDUnPerimetre() {
+    return this.estUnAdmin() || this.estUnSuperviseur();
+  }
 }
