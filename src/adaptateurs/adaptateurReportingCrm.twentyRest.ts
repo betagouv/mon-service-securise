@@ -92,8 +92,14 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     return entiteExistante?.id;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async consigneUtilisateur(): Promise<void> {
-    throw new Error('Non implémenté');
+  async consigneUtilisateur(
+    email: string,
+    idEntite: IdEntiteCRM
+  ): Promise<void> {
+    // Oui, il y a bien 2 "s" à la fin
+    await this.client.post('/rest/donneesMssUtilisateursInscritss', {
+      name: email,
+      entiteId: idEntite,
+    });
   }
 }
