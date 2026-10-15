@@ -50,6 +50,7 @@
     LIBELLES_REFERENTIELS_EXTERNES,
     type ReferentielExterne,
   } from '../referentielsExternesDeMesures/referentielsExternes';
+  import EncartApplicationMesuresAServices from './applicationMesuresAServices/EncartApplicationMesuresAServices.svelte';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -57,6 +58,8 @@
     typesService: ReferentielTypesService;
     capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
     modeVisiteGuidee?: boolean;
+    utilisateurEstAdmin?: boolean;
+    utilisateurEstSuperviseur?: boolean;
   }
 
   let {
@@ -65,6 +68,8 @@
     typesService,
     capaciteAjoutDeMesure,
     modeVisiteGuidee = false,
+    utilisateurEstAdmin = false,
+    utilisateurEstSuperviseur = false,
   }: Props = $props();
 
   onMount(async () => {
@@ -371,6 +376,10 @@
   referentielStatuts={statuts}
   referentielTypesService={typesService}
 />
+
+{#if (utilisateurEstAdmin || utilisateurEstSuperviseur) && !$servicesAvecMesuresAssocieesEnCoursDeChargement}
+  <EncartApplicationMesuresAServices referentielTypesService={typesService} />
+{/if}
 
 <Tableau
   colonnes={[

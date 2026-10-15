@@ -62,10 +62,10 @@ describe("Les routes de documentation de l'API publique", () => {
       const reponse = await request(uneApp()).get('/docs');
 
       expect(reponse.text).toContain(
-        'src="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js"'
+        'src="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.63.3/lab-anssi-ui-kit.iife.js"'
       );
       expect(reponse.text).toContain(
-        'href="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/dsfr-variables.css"'
+        'href="https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.63.3/dsfr-variables.css"'
       );
       expect(reponse.text).not.toContain('@gouvfr/dsfr');
     });
@@ -95,10 +95,10 @@ describe("Les routes de documentation de l'API publique", () => {
       const csp = reponse.headers['content-security-policy'];
       expect(csp).toContain("default-src 'none'");
       expect(csp).toContain(
-        'script-src https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/lab-anssi-ui-kit.iife.js'
+        'script-src https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.63.3/lab-anssi-ui-kit.iife.js'
       );
       expect(csp).toContain(
-        "style-src 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.60.9/ https://mss.example.org/"
+        "style-src 'unsafe-inline' https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.63.3/ https://mss.example.org/"
       );
       expect(csp).toContain('font-src https://mss.example.org/');
       expect(csp).toContain(
