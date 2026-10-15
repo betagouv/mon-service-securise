@@ -29,7 +29,7 @@ import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRole
 import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAccesUtilisateurAdministreRetires.js';
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
-import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
+import { ProcedureSuppressionContributeurDePerimetre } from '../modeles/autorisations/procedureSuppressionContributeurDePerimetre.js';
 import { EvenementAdminNommeSurOrganisation } from '../bus/evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from '../bus/evenementAdminRetireDeOrganisation.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
@@ -54,7 +54,7 @@ export class ServiceAdministrationOrganisations {
   private readonly busEvenements: BusEvenements;
   private readonly adaptateurEnvironnement: AdaptateurEnvironnement;
   private readonly serviceSupervision: ServiceSupervision;
-  private readonly procedureSuppressionContributeurAdmin: ProcedureSuppressionContributeurAdmin;
+  private readonly procedureSuppressionContributeurDePerimetre: ProcedureSuppressionContributeurDePerimetre;
 
   constructor({
     depotDonnees,
@@ -80,8 +80,8 @@ export class ServiceAdministrationOrganisations {
     this.busEvenements = busEvenements;
     this.adaptateurEnvironnement = adaptateurEnvironnement;
     this.serviceSupervision = serviceSupervision;
-    this.procedureSuppressionContributeurAdmin =
-      new ProcedureSuppressionContributeurAdmin({ depotDonnees });
+    this.procedureSuppressionContributeurDePerimetre =
+      new ProcedureSuppressionContributeurDePerimetre({ depotDonnees });
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
@@ -217,7 +217,7 @@ export class ServiceAdministrationOrganisations {
 
     await Promise.all(
       autorisationsASupprimer.map((a) =>
-        this.procedureSuppressionContributeurAdmin.execute(
+        this.procedureSuppressionContributeurDePerimetre.execute(
           a.idUtilisateur,
           a.idService
         )
