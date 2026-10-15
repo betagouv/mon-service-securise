@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 import { UUID } from '../typesBasiques.js';
@@ -12,28 +11,6 @@ const logueErreur = (
     Object.entries(infosDeContexte).forEach(([cle, valeur]) =>
       Sentry.setExtra(cle, valeur)
     );
-
-    if (axios.isAxiosError(erreur)) {
-      Sentry.captureException(erreur, {
-        extra: {
-          message: erreur.message,
-          name: erreur.name,
-          code: erreur.code,
-          response: {
-            status: erreur.response?.status,
-            headers: erreur.response?.headers,
-            data: erreur.response?.data,
-          },
-          request: {
-            method: erreur.request?.method,
-            body: erreur.request?.body,
-            path: erreur.request?.path,
-            protocol: erreur.request?.protocol,
-          },
-        },
-      });
-      return;
-    }
 
     Sentry.captureException(erreur);
   });
