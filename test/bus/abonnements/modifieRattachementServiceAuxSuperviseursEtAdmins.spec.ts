@@ -1,9 +1,9 @@
 import { unService } from '../../constructeurs/constructeurService.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { ServiceAdministrationOrganisations } from '../../../src/supervision/serviceAdministrationOrganisations.ts';
-import { modifieRattachementServiceEtAdmins } from '../../../src/bus/abonnements/modifieRattachementServiceEtAdmins.ts';
+import { modifieRattachementServiceAuxSuperviseursEtAdmins } from '../../../src/bus/abonnements/modifieRattachementServiceAuxSuperviseursEtAdmins.ts';
 
-describe("L'abonné en charge de modifier le rattachement entre un service modifié et ses admins", () => {
+describe("L'abonné en charge de modifier le rattachement entre un service modifié et ses superviseurs et admins", () => {
   let serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
       .deLOrganisation({ siret: 'unSIRET' })
       .construis();
 
-    await modifieRattachementServiceEtAdmins({
+    await modifieRattachementServiceAuxSuperviseursEtAdmins({
       serviceAdministrationOrganisations,
     })({
       service,
@@ -45,7 +45,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
       .deLOrganisation({ siret: 'unAutreSIRET' })
       .construis();
 
-    await modifieRattachementServiceEtAdmins({
+    await modifieRattachementServiceAuxSuperviseursEtAdmins({
       serviceAdministrationOrganisations,
     })({
       service,

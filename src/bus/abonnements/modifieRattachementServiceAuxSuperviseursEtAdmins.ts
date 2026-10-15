@@ -3,7 +3,7 @@ import DescriptionService from '../../modeles/descriptionService.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { ServiceAdministrationOrganisations } from '../../supervision/serviceAdministrationOrganisations.js';
 
-function modifieRattachementServiceEtAdmins({
+function modifieRattachementServiceAuxSuperviseursEtAdmins({
   serviceAdministrationOrganisations,
 }: {
   serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
@@ -26,4 +26,4 @@ function modifieRattachementServiceEtAdmins({
   };
 }
 
-export { modifieRattachementServiceEtAdmins };
+export { modifieRattachementServiceAuxSuperviseursEtAdmins };

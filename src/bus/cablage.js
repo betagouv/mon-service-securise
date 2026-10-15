@@ -61,7 +61,7 @@ import { consigneSimulationMigrationReferentielCreee } from './abonnements/consi
 import { rattacheServiceEtAdmins } from './abonnements/rattacheServiceEtAdmins.js';
 import { rattacheServiceEtSuperviseurs } from './abonnements/rattacheServiceEtSuperviseurs.js';
 import { ServiceAdministrationOrganisations } from '../supervision/serviceAdministrationOrganisations.js';
-import { modifieRattachementServiceEtAdmins } from './abonnements/modifieRattachementServiceEtAdmins.js';
+import { modifieRattachementServiceAuxSuperviseursEtAdmins } from './abonnements/modifieRattachementServiceAuxSuperviseursEtAdmins.js';
 import { EvenementRoleUtilisateurAdministreAttribue } from './evenementRoleUtilisateurAdministreAttribue.js';
 import { consigneRoleUtilisateurAdministreAttribueDansJournal } from './abonnements/consigneRoleUtilisateurAdministreAttribueDansJournal.js';
 import { EvenementAccesUtilisateurAdministreRetires } from './evenementAccesUtilisateurAdministreRetires.js';
@@ -197,7 +197,9 @@ const cableTousLesAbonnes = (
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     modifieLienServiceEtSuperviseurs({ serviceSupervision }),
-    modifieRattachementServiceEtAdmins({ serviceAdministrationOrganisations }),
+    modifieRattachementServiceAuxSuperviseursEtAdmins({
+      serviceAdministrationOrganisations,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementAutorisationsServiceModifiees, [

@@ -11,9 +11,10 @@ import { AdaptateurPersistance } from '../../../src/adaptateurs/adaptateurPersis
 import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
-import { ProcedureSuppressionContributeurAdmin } from '../../../src/modeles/autorisations/procedureSuppressionContributeurAdmin.ts';
+import { ProcedureSuppressionContributeurDePerimetre } from '../../../src/modeles/autorisations/procedureSuppressionContributeurDePerimetre.ts';
+import { AdaptateurRechercheEntreprise } from '../../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
 
-describe("La procédure de suppression d'un contributeur admin", () => {
+describe("La procédure de suppression d'un contributeur admin ou superviseur", () => {
   const idUtilisateurAdmin = unUUID('U');
   const idService = unUUID('S');
   let depotDonnees: DepotDonnees;
@@ -33,14 +34,15 @@ describe("La procédure de suppression d'un contributeur admin", () => {
       adaptateurEnvironnement,
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
-      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurRechercheEntite:
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise,
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
   });
 
   it("délègue au dépôt de données la suppression de l'autorisation du contributeur admin", async () => {
-    const procedure = new ProcedureSuppressionContributeurAdmin({
+    const procedure = new ProcedureSuppressionContributeurDePerimetre({
       depotDonnees,
     });
 
@@ -56,7 +58,7 @@ describe("La procédure de suppression d'un contributeur admin", () => {
   it('délègue au dépôt de données la dissociation des modèles de mesure spécifique pour cet utilisateur et ce service', async () => {
     depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService =
       vi.fn();
-    const procedure = new ProcedureSuppressionContributeurAdmin({
+    const procedure = new ProcedureSuppressionContributeurDePerimetre({
       depotDonnees,
     });
 
