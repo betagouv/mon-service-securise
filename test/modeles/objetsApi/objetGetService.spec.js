@@ -55,6 +55,7 @@ describe("L'objet d'API de `GET /service`", () => {
         .avecPostes(['RSSI']).donnees,
       estProprietaire: false,
       estAdmin: false,
+      estSuperviseur: false,
     })
     .ajouteUnContributeur({
       ...unUtilisateur()
@@ -64,6 +65,7 @@ describe("L'objet d'API de `GET /service`", () => {
         .avecPostes(['Maire']).donnees,
       estProprietaire: true,
       estAdmin: false,
+      estSuperviseur: false,
     })
     .avecDossiers([
       unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
@@ -96,6 +98,7 @@ describe("L'objet d'API de `GET /service`", () => {
           estUtilisateurCourant: false,
           estProprietaire: false,
           estAdmin: false,
+          estSuperviseur: false,
         },
         {
           id: 'B',
@@ -105,6 +108,7 @@ describe("L'objet d'API de `GET /service`", () => {
           estUtilisateurCourant: false,
           estProprietaire: true,
           estAdmin: false,
+          estSuperviseur: false,
         },
       ],
       statutHomologation: {
@@ -117,6 +121,7 @@ describe("L'objet d'API de `GET /service`", () => {
       nombreContributeurs: 1 + 1,
       estProprietaire: false,
       estAdmin: false,
+      estSuperviseur: false,
       documentsPdfDisponibles: ['syntheseSecurite'],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
@@ -242,6 +247,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const [admin] = pointDeVueDuNonAdmin.contributeurs;
       expect(admin).to.eql({
         estAdmin: true,
+        estSuperviseur: false,
         estProprietaire: true,
         estUtilisateurCourant: false,
         id: 'ADMIN',
@@ -261,6 +267,58 @@ describe("L'objet d'API de `GET /service`", () => {
       const [admin] = pointDeVueDeAdminLuiMeme.contributeurs;
       expect(admin.id).to.be('ADMIN');
       expect(admin.prenomNom).to.be('Jean Dupont');
+    });
+  });
+
+  describe('concernant les contributeurs superviseurs', () => {
+    const serviceAvecSuperviseurS = unService(referentiel)
+      .ajouteUnContributeur({
+        ...unUtilisateur().avecId('SUPERVISEUR').quiSAppelle('Jean Dupont')
+          .donnees,
+        estSuperviseur: true,
+      })
+      .construis();
+
+    it('masque leurs informations, dans un soucis de confidentialité', () => {
+      const pointDeVueDuNonSuperviseur = objetGetService.donnees(
+        serviceAvecSuperviseurS,
+        uneAutorisation().deProprietaire('B', '123').construis(),
+        referentiel
+      );
+
+      const [superviseur] = pointDeVueDuNonSuperviseur.contributeurs;
+      expect(superviseur).to.eql({
+        estAdmin: false,
+        estSuperviseur: true,
+        estProprietaire: true,
+        estUtilisateurCourant: false,
+        id: 'SUPERVISEUR',
+        initiales: 'S',
+        poste: '',
+        prenomNom: 'Superviseur',
+      });
+    });
+
+    it("indique que l'utilisateur courant est superviseur du service", () => {
+      const pointDeVueDuSuperviseur = objetGetService.donnees(
+        serviceAvecSuperviseurS,
+        uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
+        referentiel
+      );
+
+      expect(pointDeVueDuSuperviseur.estSuperviseur).to.be(true);
+    });
+
+    it("donne quand même les informations du superviseur s'il s'agit de l'utilisateur courant", () => {
+      const pointDeVueDuSuperviseurLuiMeme = objetGetService.donnees(
+        serviceAvecSuperviseurS,
+        uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
+        referentiel
+      );
+
+      const [superviseur] = pointDeVueDuSuperviseurLuiMeme.contributeurs;
+      expect(superviseur.prenomNom).to.be('Jean Dupont');
+      expect(superviseur.estSuperviseur).to.be(true);
     });
   });
 
