@@ -5,6 +5,14 @@ import { type Droits } from './modeles/autorisations/gestionDroits.js';
 class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurApiBrevo extends Error {}
+class ErreurApiTwenty extends Error {
+  constructor(corpsRequete: unknown, messages: string[], cause: Error) {
+    super(
+      `Twenty a refusé la requête (400) : ${messages?.join(' / ')}\nCorps envoyé : ${corpsRequete}`,
+      { cause }
+    );
+  }
+}
 class ErreurDroitsIncoherents extends Error {}
 class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
   constructor(idUtilisateur: UUID, idServices: UUID[], droitsRequis: Droits) {
@@ -139,6 +147,7 @@ export {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurApiBrevo,
+  ErreurApiTwenty,
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
