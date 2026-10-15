@@ -36,6 +36,7 @@ export type Utilisateur = {
   email: string;
   estUtilisateurCourant: boolean;
   estAdmin?: boolean;
+  estSuperviseur?: boolean;
 };
 
 type Invisible = 0;

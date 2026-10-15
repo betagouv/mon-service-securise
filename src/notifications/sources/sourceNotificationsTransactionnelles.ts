@@ -106,9 +106,8 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
     const contributeur: Contributeur = service.contributeurParId(
       n.donnees().idActeur
     );
-    const nomActeur = contributeur.estAdmin
-      ? 'Un administrateur'
-      : contributeur.prenomNom();
+    const nomActeur =
+      SourceNotificationsTransactionnelles.nomAffichable(contributeur);
 
     const { titre, sousTitre, lien } =
       service.referentiel.notificationTransactionnelle(n.donnees().type);
@@ -187,5 +186,11 @@ export class SourceNotificationsTransactionnelles implements SourceNotifications
       }),
       lien: lien({ idService, idMesure: '' }),
     };
+  }
+
+  private static nomAffichable(contributeur: Contributeur) {
+    if (contributeur.estAdmin) return 'Un administrateur';
+    if (contributeur.estSuperviseur) return 'Un superviseur';
+    return contributeur.prenomNom();
   }
 }
