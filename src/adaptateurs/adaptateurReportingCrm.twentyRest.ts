@@ -1,6 +1,10 @@
 import axios from 'axios';
-import { AdaptateurReportingCrm } from './adaptateurReportingCrm.interface.js';
-import { CrmImportEnMasse } from '../bus/abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
+import {
+  AdaptateurReportingCrm,
+  CrmImportEnMasse,
+  IdEntiteCRM,
+} from './adaptateurReportingCrm.interface.js';
+import Entite from '../modeles/entite.js';
 
 export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
   constructor(
@@ -15,20 +19,34 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     }
   }
 
-  async consigneImportEnMasse(data: CrmImportEnMasse): Promise<void> {
-    await axios.post(
-      // Oui, il y a bien 2 "s" à la fin
-      new URL('/rest/donneesMssImportsDeServicess', this.urlCrm).toString(),
-      {
-        name: data.emailUtilisateur,
-        nombreDeServices: data.nbServices,
+  private async poste(chemin: string, corps: object) {
+    return axios.post(new URL(chemin, this.urlCrm).toString(), corps, {
+      headers: {
+        Authorization: `Bearer ${this.cleApi}`,
+        'Content-Type': 'application/json',
       },
-      {
-        headers: {
-          Authorization: `Bearer ${this.cleApi}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    });
+  }
+
+  async consigneImportEnMasse(data: CrmImportEnMasse): Promise<void> {
+    // Oui, il y a bien 2 "s" à la fin
+    await this.poste('/rest/donneesMssImportsDeServicess', {
+      name: data.emailUtilisateur,
+      nombreDeServices: data.nbServices,
+    });
+  }
+
+  async consigneEntiteUtilisatrice(entite: Entite): Promise<IdEntiteCRM> {
+    // Oui, il y a bien 2 "s" à la fin
+    const reponse = await this.poste('/rest/donneesMssEntitesUtilisatricess', {
+      name: entite.nom,
+      siret: entite.siret,
+    });
+    return reponse.data.data.createDonneesMssEntitesUtilisatrices.id;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async consigneUtilisateur(): Promise<void> {
+    throw new Error('Non implémenté');
   }
 }

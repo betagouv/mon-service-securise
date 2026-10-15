@@ -1,9 +1,12 @@
 import EvenementUtilisateurInscrit from '../../evenementUtilisateurInscrit.js';
+import { AdaptateurReportingCrm } from '../../../adaptateurs/adaptateurReportingCrm.interface.js';
 
-/* eslint-disable no-console */
+type Config = {
+  reportingCrm: Pick<AdaptateurReportingCrm, 'consigneEntiteUtilisatrice'>;
+};
 
-export function consigneNouvelUtilisateurDansCrm() {
+export function consigneNouvelUtilisateurDansCrm({ reportingCrm }: Config) {
   return async (e: EvenementUtilisateurInscrit) => {
-    console.log('[CRM] Nouvel utilisateur inscrit', e.utilisateur.email);
+    await reportingCrm.consigneEntiteUtilisatrice(e.utilisateur.entite);
   };
 }

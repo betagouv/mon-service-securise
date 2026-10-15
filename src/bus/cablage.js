@@ -220,7 +220,7 @@ const cableTousLesAbonnes = (
     }),
     relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
-    consigneNouvelUtilisateurDansCrm(),
+    consigneNouvelUtilisateurDansCrm({ reportingCrm: adaptateurReportingCrm }),
   ]);
 
   busEvenements.abonne(
