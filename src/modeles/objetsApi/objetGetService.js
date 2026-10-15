@@ -26,12 +26,24 @@ const donnees = (service, autorisation, referentiel) => {
       service.descriptionService.organisationResponsable.siret,
     contributeurs: service.contributeurs.map((c) => {
       const designeLuiMeme = autorisation.designeUtilisateur(c.idUtilisateur);
-      const doitMasquerPourConfidentialite = c.estAdmin && !designeLuiMeme;
 
-      if (doitMasquerPourConfidentialite)
+      if (c.estSuperviseur && !designeLuiMeme)
+        return {
+          estAdmin: false,
+          estSuperviseur: true,
+          estProprietaire: true,
+          estUtilisateurCourant: false,
+          id: c.idUtilisateur,
+          prenomNom: 'Superviseur',
+          initiales: 'S',
+          poste: '',
+        };
+
+      if (c.estAdmin && !designeLuiMeme)
         return {
           estAdmin: true,
           estProprietaire: true,
+          estSuperviseur: false,
           estUtilisateurCourant: false,
           id: c.idUtilisateur,
           prenomNom: 'Administrateur',
@@ -47,6 +59,7 @@ const donnees = (service, autorisation, referentiel) => {
         estUtilisateurCourant: designeLuiMeme,
         estProprietaire: c.estProprietaire,
         estAdmin: c.estAdmin,
+        estSuperviseur: c.estSuperviseur,
       };
     }),
     ...(autorisation.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION) && {
@@ -62,6 +75,7 @@ const donnees = (service, autorisation, referentiel) => {
     }),
     nombreContributeurs: service.contributeurs.length,
     estAdmin: autorisation.estUnAdmin(),
+    estSuperviseur: autorisation.estUnSuperviseur(),
     estProprietaire: autorisation.estProprietaire,
     documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
     permissions: {

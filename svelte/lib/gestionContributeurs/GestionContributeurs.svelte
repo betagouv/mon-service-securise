@@ -32,11 +32,12 @@
           {@const contributeurPasSoiMeme = !contributeur.estUtilisateurCourant}
           {@const utilisateurPeutGererLesContributeurs =
             $serviceUnique.permissions.gestionContributeurs}
-          {@const contributeurPasUnAdmin = !contributeur.estAdmin}
+          {@const contributeurNeDecoulePasDUnPerimetre =
+            !contributeur.estAdmin && !contributeur.estSuperviseur}
           <LigneContributeur
             droitsModifiables={contributeurPasSoiMeme &&
               utilisateurPeutGererLesContributeurs &&
-              contributeurPasUnAdmin}
+              contributeurNeDecoulePasDUnPerimetre}
             utilisateur={contributeur}
           />
         {/each}

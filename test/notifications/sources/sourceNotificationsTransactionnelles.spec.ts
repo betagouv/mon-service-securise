@@ -12,6 +12,7 @@ import { unServiceV2 } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { AdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
+import { AdaptateurRechercheEntreprise } from '../../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
 
 describe('Les notifications transactionnelles', () => {
   let depotDonnees: DepotDonnees;
@@ -26,7 +27,8 @@ describe('Les notifications transactionnelles', () => {
       adaptateurEnvironnement,
       referentielV2: creeReferentielV2(),
       serviceCgu: { versionActuelle: () => '1' },
-      adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+      adaptateurRechercheEntite:
+        fauxAdaptateurRechercheEntreprise() as AdaptateurRechercheEntreprise,
       busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
     });
     adaptateurHorloge = {
@@ -205,6 +207,26 @@ describe('Les notifications transactionnelles', () => {
 
         expect(notifications[0].sousTitre).toBe(
           "Un administrateur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
+        );
+      });
+
+      it("masque le nom d'un superviseur", async () => {
+        depotDonnees.services = async () => [
+          unServiceV2()
+            .avecNomService('Mairie de Bordeaux')
+            .avecId(idService)
+            .ajouteUnContributeur({
+              ...unUtilisateur().avecId(idActeur).quiSAppelle('Jean Acteur')
+                .donnees,
+              estSuperviseur: true,
+            })
+            .construis(),
+        ];
+
+        const notifications = await laSource().notificationsPour(idUtilisateur);
+
+        expect(notifications[0].sousTitre).toBe(
+          "Un superviseur vous a mentionné sur la mesure « Etablir la liste de l'ensemble des services et données à protéger » de [Mairie de Bordeaux]"
         );
       });
     });

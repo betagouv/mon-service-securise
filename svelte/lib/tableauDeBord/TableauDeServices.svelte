@@ -103,6 +103,13 @@
             accent="blue-cumulus"
             size="sm"
           ></dsfr-badge>
+        {:else if service.estSuperviseur}
+          <dsfr-badge
+            label="Superviseur"
+            type="accent"
+            accent="orange-terre-battue"
+            size="sm"
+          ></dsfr-badge>
         {:else if service.estProprietaire}
           <EtiquetteProprietaire />
         {/if}

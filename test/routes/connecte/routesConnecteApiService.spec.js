@@ -390,6 +390,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         nombreContributeurs: 2,
         estProprietaire: false,
         estAdmin: false,
+        estSuperviseur: false,
         documentsPdfDisponibles: ['syntheseSecurite'],
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
