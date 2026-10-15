@@ -101,13 +101,19 @@ export class ServiceAdministrationOrganisations {
     await this.rattacheLesServicesDesEntites(sirets);
   }
 
-  async revoqueSuperviseur(idSuperviseur: UUID) {
-    const superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
-    const anciensSiretsSupervises =
-      superviseur?.donnees().entitesSupervisees.map((e) => e.siret) ?? [];
-    const servicesSupervises = await this.servicesDesEntites(
-      anciensSiretsSupervises
+  async servicesSupervisesPar(idSuperviseur: UUID): Promise<Service[]> {
+    return this.servicesDesEntites(
+      await this.siretsSupervisesPar(idSuperviseur)
     );
+  }
+
+  private async siretsSupervisesPar(idSuperviseur: UUID): Promise<string[]> {
+    const superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
+    return superviseur?.donnees().entitesSupervisees.map((e) => e.siret) ?? [];
+  }
+
+  async revoqueSuperviseur(idSuperviseur: UUID) {
+    const servicesSupervises = await this.servicesSupervisesPar(idSuperviseur);
     ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
       servicesSupervises,
       idSuperviseur

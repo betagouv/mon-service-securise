@@ -285,6 +285,34 @@ describe("Le service de gestion des admins d'organisation", () => {
     });
   });
 
+  describe('sur demande des services supervisés par un superviseur', () => {
+    const idSuperviseur = unUUID('5');
+
+    it('retourne les services de ses entités', async () => {
+      await depotComplet.sauvegardeSuperviseur(
+        Superviseur.hydrate({
+          idUtilisateur: idSuperviseur,
+          entitesSupervisees: [entite],
+        })
+      );
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      const services =
+        await administrationOrganisations.servicesSupervisesPar(idSuperviseur);
+
+      expect(services.map((s) => s.id)).toEqual([idService]);
+    });
+
+    it("retourne une liste vide si l'utilisateur n'est pas superviseur", async () => {
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+
+      const services =
+        await administrationOrganisations.servicesSupervisesPar(unUUIDRandom());
+
+      expect(services).toEqual([]);
+    });
+  });
+
   describe("sur demande de révocation d'un superviseur", () => {
     const idSuperviseur = unUUID('5');
 
