@@ -3,19 +3,38 @@ import EvenementUtilisateurInscrit from '../../../../src/bus/evenementUtilisateu
 import { unUtilisateur } from '../../../constructeurs/constructeurUtilisateur.js';
 
 describe("L'abonné qui consigne un nouvel utilisateur dans le CRM", () => {
-  it("consigne l'entité de l'utilisateur", async () => {
-    const reportingTest = { consigneEntiteUtilisatrice: vi.fn() };
+  const reportingTest = () => ({
+    consigneEntiteUtilisatrice: vi.fn().mockResolvedValue('id-entite-crm'),
+    consigneUtilisateur: vi.fn(),
+  });
+
+  const uneInscription = () => {
     const utilisateur = unUtilisateur()
+      .avecEmail('jean.dupont@mail.fr')
       .quiTravaillePourUneEntiteAvecSiret('12345678900011')
       .construis();
-    const uneInscription = new EvenementUtilisateurInscrit({ utilisateur });
+    return new EvenementUtilisateurInscrit({ utilisateur });
+  };
 
-    await consigneNouvelUtilisateurDansCrm({ reportingCrm: reportingTest })(
-      uneInscription
+  it("consigne l'entité de l'utilisateur", async () => {
+    const reportingCrm = reportingTest();
+    const inscription = uneInscription();
+
+    await consigneNouvelUtilisateurDansCrm({ reportingCrm })(inscription);
+
+    expect(reportingCrm.consigneEntiteUtilisatrice).toHaveBeenCalledWith(
+      inscription.utilisateur.entite
     );
+  });
 
-    expect(reportingTest.consigneEntiteUtilisatrice).toHaveBeenCalledWith(
-      utilisateur.entite
+  it("consigne l'utilisateur rattaché à son entité dans le CRM", async () => {
+    const reportingCrm = reportingTest();
+
+    await consigneNouvelUtilisateurDansCrm({ reportingCrm })(uneInscription());
+
+    expect(reportingCrm.consigneUtilisateur).toHaveBeenCalledWith(
+      'jean.dupont@mail.fr',
+      'id-entite-crm'
     );
   });
 });
