@@ -50,7 +50,7 @@
     LIBELLES_REFERENTIELS_EXTERNES,
     type ReferentielExterne,
   } from '../referentielsExternesDeMesures/referentielsExternes';
-  import EncartApplicationMesuresAServices from './EncartApplicationMesuresAServices.svelte';
+  import EncartApplicationMesuresAServices from './applicationMesuresAServices/EncartApplicationMesuresAServices.svelte';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -378,11 +378,7 @@
 />
 
 {#if (utilisateurEstAdmin || utilisateurEstSuperviseur) && !$servicesAvecMesuresAssocieesEnCoursDeChargement}
-  <EncartApplicationMesuresAServices
-    {categories}
-    referentielStatuts={statuts}
-    referentielTypesService={typesService}
-  />
+  <EncartApplicationMesuresAServices referentielTypesService={typesService} />
 {/if}
 
 <Tableau
