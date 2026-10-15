@@ -300,7 +300,7 @@ const routesConnecteApiService = ({
       }
 
       const ciblee = await depotDonnees.autorisation(idAutorisation);
-      if (ciblee.estUnAdmin()) {
+      if (ciblee.decouleDUnPerimetre()) {
         reponse.sendStatus(403);
         return;
       }

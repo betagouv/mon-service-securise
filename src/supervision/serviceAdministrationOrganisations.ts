@@ -377,7 +377,7 @@ export class ServiceAdministrationOrganisations {
       idsServices
     );
 
-    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+    ServiceAdministrationOrganisations.verifieNeConcernePasUneAutorisationDePerimetre(
       autorisationsExistantes
     );
 
@@ -438,7 +438,7 @@ export class ServiceAdministrationOrganisations {
       idsServices
     );
 
-    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+    ServiceAdministrationOrganisations.verifieNeConcernePasUneAutorisationDePerimetre(
       autorisationsConcernees
     );
 
@@ -487,10 +487,10 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  private static verifieNeConcernePasAutorisationAdmin(
+  private static verifieNeConcernePasUneAutorisationDePerimetre(
     autorisationsConcernees: Autorisation[]
   ) {
-    if (autorisationsConcernees.some((a) => a.estAdmin)) {
+    if (autorisationsConcernees.some((a) => a.decouleDUnPerimetre())) {
       throw new EchecAutorisation();
     }
   }

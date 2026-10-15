@@ -1154,6 +1154,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.status).to.equal(403);
     });
 
+    it('jette une erreur si le contributeur est superviseur', async () => {
+      testeur.depotDonnees().autorisationPour = async () =>
+        uneAutorisation().deSuperviseur().construis();
+
+      const idService = unUUIDRandom();
+      const reponse = await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide(idService)}`
+      );
+
+      expect(reponse.status).to.equal(403);
+    });
+
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", async () => {
       const contributeurSimple = uneAutorisation().deContributeur().construis();
       testeur.depotDonnees().autorisationPour = async () => contributeurSimple;

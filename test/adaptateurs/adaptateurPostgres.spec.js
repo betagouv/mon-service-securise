@@ -568,6 +568,19 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(lesContributeurs.length).to.be(0);
     });
+
+    it('exclue les autorisations superviseur dans un souci de confidentialité', async () => {
+      const idService = await insereService('siret-1');
+      const proprietaire = await insereUtilisateur();
+      await insereAutorisation(proprietaire, idService);
+      const superviseur = await insereUtilisateur();
+      await insereAutorisationSuperviseur(superviseur, idService);
+
+      const lesContributeurs =
+        await persistance.contributeursDesServicesDe(proprietaire);
+
+      expect(lesContributeurs.length).to.be(0);
+    });
   });
 
   describe('concernant la lecture des utilisateurs administrés par un utilisateur', () => {
@@ -604,6 +617,26 @@ describe("L'adaptateur persistance Postgres", () => {
       const utilisateurs = await persistance.utilisateursAdministresPar(admin);
 
       expect(utilisateurs.map((u) => u.id)).not.to.contain(admin);
+    });
+
+    it("ne retourne pas un utilisateur qui n'est que superviseur des services administrés", async () => {
+      const superviseur = await insereUtilisateur();
+      await insereAutorisationSuperviseur(superviseur, idService1);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      expect(utilisateurs.map((u) => u.id)).not.to.contain(superviseur);
+    });
+
+    it("ne précise pas les autorisations de superviseur d'un utilisateur aussi contributeur", async () => {
+      const superviseur = await insereUtilisateur();
+      await insereAutorisationSuperviseur(superviseur, idService1);
+      await insereAutorisationContributeur(superviseur, idService2);
+
+      const utilisateurs = await persistance.utilisateursAdministresPar(admin);
+
+      const { autorisations } = utilisateurs.find((u) => u.id === superviseur);
+      expect(autorisations.map((a) => a.idService)).to.eql([idService2]);
     });
 
     it('retourne les contributeurs sans doublon', async () => {

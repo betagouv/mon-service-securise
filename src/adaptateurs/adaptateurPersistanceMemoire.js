@@ -733,7 +733,8 @@ const nouvelAdaptateur = (
     const autorisationsDesUtilisateurs = donnees.autorisations.filter(
       (a) =>
         servicesAdministres.includes(a.idService) &&
-        a.idUtilisateur !== idUtilisateur
+        a.idUtilisateur !== idUtilisateur &&
+        !a.estSuperviseur
     );
     const contributeurs = autorisationsDesUtilisateurs.map(
       (a) => a.idUtilisateur
