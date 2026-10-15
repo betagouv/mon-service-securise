@@ -6,6 +6,18 @@ import {
   IdEntiteCRM,
 } from './adaptateurReportingCrm.interface.js';
 import Entite from '../modeles/entite.js';
+import { ErreurApiTwenty } from '../erreurs.js';
+
+const rendsExplicite400 = (erreur: unknown): never => {
+  if (axios.isAxiosError(erreur) && erreur.response?.status === 400) {
+    throw new ErreurApiTwenty(
+      erreur.config?.data,
+      erreur.response.data?.messages,
+      erreur
+    );
+  }
+  throw erreur;
+};
 
 class ClientHttpCrm {
   constructor(
@@ -28,13 +40,17 @@ class ClientHttpCrm {
   });
 
   get = (chemin: string, filtre: string) =>
-    axios.get(this.url(chemin), {
-      headers: this.entetes(),
-      params: { filter: filtre },
-    });
+    axios
+      .get(this.url(chemin), {
+        headers: this.entetes(),
+        params: { filter: filtre },
+      })
+      .catch(rendsExplicite400);
 
   post = (chemin: string, corps: object) =>
-    axios.post(this.url(chemin), corps, { headers: this.entetes() });
+    axios
+      .post(this.url(chemin), corps, { headers: this.entetes() })
+      .catch(rendsExplicite400);
 }
 
 export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
