@@ -1,6 +1,7 @@
 import { UUID } from '../../../typesBasiques.js';
 import Utilisateur from '../../../modeles/utilisateur.js';
 import EvenementServicesImportes from '../../evenementServicesImportes.js';
+import { CrmImportEnMasse } from '../../../adaptateurs/adaptateurReportingCrm.interface.js';
 
 type Config = {
   reportingCrm: {
@@ -9,11 +10,6 @@ type Config = {
   depotDonnees: {
     utilisateur: (idUtilisateur: UUID) => Promise<Utilisateur>;
   };
-};
-
-export type CrmImportEnMasse = {
-  emailUtilisateur: string;
-  nbServices: number;
 };
 
 export function consigneImportDeServicesDansCrm({
