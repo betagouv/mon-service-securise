@@ -4,6 +4,10 @@
   import Modale from '../../ui/Modale.svelte';
   import { singulierPluriel } from '../../outils/string';
   import TableauServicesPourApplication from './TableauServicesPourApplication.svelte';
+  import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
+  import { associeServicesModeleMesureSpecifique } from '../listeMesures.api';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
 
   let elementModale: Modale | undefined = $state();
 
@@ -16,6 +20,37 @@
 
   export const affiche = () => {
     elementModale?.affiche();
+  };
+
+  let modelesEtServicesConcernes = $derived(
+    $modelesMesureSpecifique
+      .map((m) => [
+        m.id,
+        services
+          .filter(
+            (s) => !s.mesuresSpecifiques.map((ms) => ms.idModele).includes(m.id)
+          )
+          .map((s) => s.id),
+      ])
+      .filter(([_, idsServices]) => idsServices.length > 0)
+  );
+
+  const appliqueAuxServices = async () => {
+    await Promise.all(
+      modelesEtServicesConcernes.map(([idModele, idServices]) => {
+        associeServicesModeleMesureSpecifique(
+          idModele as string,
+          idServices as string[]
+        );
+      })
+    );
+    elementModale?.ferme();
+    toasterStore.succes(
+      'Succès',
+      'Toutes vos mesures spécifiques sont désormais appliquées à tous vos services.'
+    );
+    await servicesAvecMesuresAssociees.rafraichis();
+    await modelesMesureSpecifique.rafraichis();
   };
 </script>
 
@@ -58,7 +93,7 @@
         `Confirmer l'application aux ${services.length} services`,
         services.length
       )}
-      onclick={() => {}}
+      onclick={async () => appliqueAuxServices()}
     ></dsfr-button>
   {/snippet}
 </Modale>
