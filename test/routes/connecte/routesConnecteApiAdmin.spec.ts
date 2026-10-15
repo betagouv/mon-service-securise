@@ -641,21 +641,28 @@ describe('Le serveur MSS des routes /api/admin/*', () => {
 
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: U1 });
-      testeur.serviceAdministrationOrganisations().servicesDe = vi.fn(() => [
-        unService,
-      ]);
+      testeur.depotDonnees().estAdmin = async () => true;
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      testeur.depotDonnees().services = vi.fn(async () => [unService]);
       testeur.serviceStatistiquesAdmin().statistiques = vi.fn(() => ({
         servicesParType: { niveau1: 4 },
         servicesParNiveauSecurite: { api: 1 },
       }));
     });
 
+    it("renvoie une erreur 403 si l'utilisateur courant n'est ni superviseur ni admin", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      testeur.depotDonnees().estAdmin = async () => false;
+
+      const { status } = await testeur.get('/api/admin/statistiques');
+
+      expect(status).toBe(403);
+    });
+
     it("récupère les services de l'utilisateur", async () => {
       await testeur.get('/api/admin/statistiques');
 
-      expect(
-        testeur.serviceAdministrationOrganisations().servicesDe
-      ).toHaveBeenCalledWith(U1);
+      expect(testeur.depotDonnees().services).toHaveBeenCalledWith(U1);
       expect(
         testeur.serviceStatistiquesAdmin().statistiques
       ).toHaveBeenCalledWith([unService], {
