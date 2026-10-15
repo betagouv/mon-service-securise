@@ -165,7 +165,7 @@ const creeDepot = (config = {}) => {
     await publieAutorisationsDuService(idService);
   };
 
-  const supprimeContributeurAdmin = async (idContributeur, idService) => {
+  const supprimeContributeurParSysteme = async (idContributeur, idService) => {
     const verifieAutorisationExiste = async () => {
       const existe = await autorisationExiste(idContributeur, idService);
       if (!existe) {
@@ -214,7 +214,7 @@ const creeDepot = (config = {}) => {
     autorisationsDuService,
     sauvegardeAutorisation,
     supprimeContributeur,
-    supprimeContributeurAdmin,
+    supprimeContributeurParSysteme,
   };
 };
 

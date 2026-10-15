@@ -294,7 +294,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     autorisationsDuService,
     sauvegardeAutorisation,
     supprimeContributeur,
-    supprimeContributeurAdmin,
+    supprimeContributeurParSysteme,
   } = depotAutorisations;
 
   const {
@@ -478,7 +478,7 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     sauvegardeSimulationMigrationReferentiel,
     supprimeBrouillonService,
     supprimeContributeur,
-    supprimeContributeurAdmin,
+    supprimeContributeurParSysteme,
     supprimeDesMesuresAssocieesAuModele,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
