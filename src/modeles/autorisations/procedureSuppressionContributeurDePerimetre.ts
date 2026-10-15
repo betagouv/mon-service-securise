@@ -13,6 +13,9 @@ export class ProcedureSuppressionContributeurDePerimetre {
       idUtilisateur,
       idService
     );
-    await this.depotDonnees.supprimeContributeurAdmin(idUtilisateur, idService);
+    await this.depotDonnees.supprimeContributeurParSysteme(
+      idUtilisateur,
+      idService
+    );
   }
 }

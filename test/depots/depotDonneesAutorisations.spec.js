@@ -499,14 +499,14 @@ describe('Le dépôt de données des autorisations', () => {
     });
   });
 
-  describe("sur demande de suppression d'un contributeur administrateur", () => {
+  describe("sur demande de suppression d'un contributeur par le système", () => {
     it("vérifie que l'autorisation de contribution existe", async () => {
       const sansAutorisations = unePersistanceMemoire().construis();
 
       const depot = creeDepot(sansAutorisations);
 
       try {
-        await depot.supprimeContributeurAdmin('000', 'ABC');
+        await depot.supprimeContributeurParSysteme('000', 'ABC');
         expect().to.fail('La demande aurait dû lever une erreur');
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
@@ -532,7 +532,7 @@ describe('Le dépôt de données des autorisations', () => {
       const avant = await depot.autorisationPour('U1', 'S1');
       expect(avant).not.to.be(undefined);
 
-      await depot.supprimeContributeurAdmin('U1', 'S1');
+      await depot.supprimeContributeurParSysteme('U1', 'S1');
 
       const apres = await depot.autorisationPour('U1', 'S1');
       expect(apres).to.be(undefined);
@@ -559,7 +559,7 @@ describe('Le dépôt de données des autorisations', () => {
         depotServices
       );
 
-      await depot.supprimeContributeurAdmin('U1', 'S1');
+      await depot.supprimeContributeurParSysteme('U1', 'S1');
 
       expect(idServiceRecu).to.be('S1');
       expect(idUtilisateurRecu).to.be('U1');
@@ -582,7 +582,7 @@ describe('Le dépôt de données des autorisations', () => {
         .construis();
       const depot = creeDepot(avecDeuxExistantes, null, bus);
 
-      await depot.supprimeContributeurAdmin('U1', 'S1');
+      await depot.supprimeContributeurParSysteme('U1', 'S1');
 
       expect(
         bus.recupereEvenement(EvenementAutorisationsServiceModifiees)
