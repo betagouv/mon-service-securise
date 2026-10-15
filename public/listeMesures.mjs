@@ -1,6 +1,7 @@
 import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
+  const utilisateurConnecte = lisDonneesPartagees('utilisateur-connecte');
   const statuts = lisDonneesPartagees('referentiel-statuts-mesures');
   const categories = lisDonneesPartagees('referentiel-categories-mesures');
   const typesService = lisDonneesPartagees('referentiel-types-service');
@@ -20,6 +21,8 @@ $(() => {
         capaciteAjoutDeMesure: {
           nombreMaximum: nombreMaximumModelesMesureSpecifique,
         },
+        utilisateurEstAdmin: utilisateurConnecte.estAdmin,
+        utilisateurEstSuperviseur: utilisateurConnecte.estSuperviseur,
       },
     })
   );

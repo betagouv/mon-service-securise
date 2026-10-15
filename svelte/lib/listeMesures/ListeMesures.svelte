@@ -57,6 +57,8 @@
     typesService: ReferentielTypesService;
     capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
     modeVisiteGuidee?: boolean;
+    utilisateurEstAdmin?: boolean;
+    utilisateurEstSuperviseur?: boolean;
   }
 
   let {
@@ -65,6 +67,8 @@
     typesService,
     capaciteAjoutDeMesure,
     modeVisiteGuidee = false,
+    utilisateurEstAdmin = false,
+    utilisateurEstSuperviseur = false,
   }: Props = $props();
 
   onMount(async () => {
