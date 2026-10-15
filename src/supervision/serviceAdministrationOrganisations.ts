@@ -643,21 +643,4 @@ export class ServiceAdministrationOrganisations {
       );
     }
   }
-
-  async servicesDe(idUtilisateur: UUID): Promise<Array<Service>> {
-    if (await this.depotDonnees.estAdmin(idUtilisateur)) {
-      return this.depotDonnees.services(idUtilisateur);
-    }
-    const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
-    if (!superviseur) return [];
-
-    const siretsSupervises = superviseur
-      ?.donnees()
-      .entitesSupervisees.map((e) => e.siret);
-
-    const servicesParSiret =
-      await this.depotDonnees.tousLesServicesAvecSirets(siretsSupervises);
-
-    return [...servicesParSiret.values()].flat();
-  }
 }
