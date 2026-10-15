@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import axios from 'axios';
 import {
   AdaptateurReportingCrm,
@@ -6,7 +7,7 @@ import {
 } from './adaptateurReportingCrm.interface.js';
 import Entite from '../modeles/entite.js';
 
-export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
+class ClientHttpCrm {
   constructor(
     private readonly cleApi: string,
     private readonly urlCrm: URL
@@ -19,29 +20,33 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     }
   }
 
-  private entetes() {
-    return {
-      Authorization: `Bearer ${this.cleApi}`,
-      'Content-Type': 'application/json',
-    };
-  }
+  private url = (chemin: string) => new URL(chemin, this.urlCrm).toString();
 
-  private async recupere(chemin: string, filtre: string) {
-    return axios.get(new URL(chemin, this.urlCrm).toString(), {
+  private entetes = () => ({
+    Authorization: `Bearer ${this.cleApi}`,
+    'Content-Type': 'application/json',
+  });
+
+  get = (chemin: string, filtre: string) =>
+    axios.get(this.url(chemin), {
       headers: this.entetes(),
       params: { filter: filtre },
     });
-  }
 
-  private async poste(chemin: string, corps: object) {
-    return axios.post(new URL(chemin, this.urlCrm).toString(), corps, {
-      headers: this.entetes(),
-    });
+  post = (chemin: string, corps: object) =>
+    axios.post(this.url(chemin), corps, { headers: this.entetes() });
+}
+
+export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
+  private readonly client: ClientHttpCrm;
+
+  constructor(cleApi: string, urlCrm: URL) {
+    this.client = new ClientHttpCrm(cleApi, urlCrm);
   }
 
   async consigneImportEnMasse(data: CrmImportEnMasse): Promise<void> {
     // Oui, il y a bien 2 "s" à la fin
-    await this.poste('/rest/donneesMssImportsDeServicess', {
+    await this.client.post('/rest/donneesMssImportsDeServicess', {
       name: data.emailUtilisateur,
       nombreDeServices: data.nbServices,
     });
@@ -52,10 +57,10 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     if (idExistant) return idExistant;
 
     // Oui, il y a bien 2 "s" à la fin
-    const reponse = await this.poste('/rest/donneesMssEntitesUtilisatricess', {
-      name: entite.nom,
-      siret: entite.siret,
-    });
+    const reponse = await this.client.post(
+      '/rest/donneesMssEntitesUtilisatricess',
+      { name: entite.nom, siret: entite.siret }
+    );
     return reponse.data.data.createDonneesMssEntitesUtilisatrices.id;
   }
 
@@ -63,7 +68,7 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     siret: string
   ): Promise<IdEntiteCRM | undefined> {
     // Oui, il y a bien 2 "s" à la fin
-    const reponse = await this.recupere(
+    const reponse = await this.client.get(
       '/rest/donneesMssEntitesUtilisatricess',
       `siret[eq]:"${siret}"`
     );
