@@ -1,21 +1,18 @@
 <script lang="ts">
-  import type { ReferentielStatut, ReferentielTypesService } from '../ui/types';
-  import type { ListeMesuresProps } from './listeMesures.d';
-  import { modelesMesureSpecifique } from '../ui/stores/modelesMesureSpecifique.store';
-  import { servicesAvecMesuresAssociees } from './servicesAssocies/servicesAvecMesuresAssociees.store';
-  import { singulierPluriel } from '../outils/string';
+  import type { ReferentielTypesService } from '../../ui/types';
+  import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
+  import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import { singulierPluriel } from '../../outils/string';
   import ModaleApplicationMesuresAServices from './ModaleApplicationMesuresAServices.svelte';
 
   interface Props {
-    referentielStatuts: ReferentielStatut;
     referentielTypesService: ReferentielTypesService;
-    categories: ListeMesuresProps['categories'];
   }
 
-  let { referentielStatuts, referentielTypesService, categories }: Props =
-    $props();
+  let { referentielTypesService }: Props = $props();
 
-  let modaleApplicationMesures: ModaleApplicationMesuresAServices | undefined;
+  let modaleApplicationMesures: ModaleApplicationMesuresAServices | undefined =
+    $state();
 
   let modelesAppliquesAuxServices = $derived(
     Object.fromEntries(
@@ -39,8 +36,6 @@
 {#if servicesSansToutesLesMesuresAppliquees.length > 0}
   <ModaleApplicationMesuresAServices
     bind:this={modaleApplicationMesures}
-    {categories}
-    {referentielStatuts}
     {referentielTypesService}
     services={servicesSansToutesLesMesuresAppliquees}
   />
@@ -56,6 +51,7 @@
         `les ${$modelesMesureSpecifique.length} mesures ajoutées appliquées`,
         $modelesMesureSpecifique.length
       )}
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <dsfr-button
         kind="secondary"
         label="Appliquer à tous les services"
