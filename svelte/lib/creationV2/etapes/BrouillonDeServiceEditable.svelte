@@ -223,6 +223,7 @@
           donnees.siret = siret;
           await champModifie('siret', siret);
         }}
+        afficheLabel
         label="Organisation responsable du projet*"
         disabled={seulementNomServiceEditable}
       />
