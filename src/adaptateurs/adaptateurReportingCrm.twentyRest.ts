@@ -23,7 +23,7 @@ const rendsExplicite400 = (erreur: unknown): never => {
 // Twenty accepte au plus 100 requêtes par minute : 1 requête toutes les 600 ms.
 const INTERVALLE_ENTRE_REQUETES_EN_MS = 600;
 
-class ClientHttpCrm {
+export class ClientHttpCrm {
   private readonly cadence = enCadence(
     INTERVALLE_ENTRE_REQUETES_EN_MS,
     (requete: () => Promise<AxiosResponse>) => requete()
@@ -48,12 +48,9 @@ class ClientHttpCrm {
     'Content-Type': 'application/json',
   });
 
-  get = (chemin: string, filtre: string) =>
+  get = (chemin: string, params: Record<string, string | number>) =>
     this.cadence(() =>
-      axios.get(this.url(chemin), {
-        headers: this.entetes(),
-        params: { filter: filtre },
-      })
+      axios.get(this.url(chemin), { headers: this.entetes(), params })
     ).catch(rendsExplicite400);
 
   post = (chemin: string, corps: object) =>
@@ -95,7 +92,7 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.client.get(
       '/rest/donneesMssEntitesUtilisatricess',
-      `siret[eq]:"${siret}"`
+      { filter: `siret[eq]:"${siret}"` }
     );
     const [entiteExistante] = reponse.data.data.donneesMssEntitesUtilisatricess;
     return entiteExistante?.id;
@@ -118,7 +115,7 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.client.get(
       '/rest/donneesMssUtilisateursInscritss',
-      `name[eq]:"${email}"`
+      { filter: `name[eq]:"${email}"` }
     );
     return reponse.data.data.donneesMssUtilisateursInscritss.length > 0;
   }
