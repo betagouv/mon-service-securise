@@ -434,16 +434,17 @@ const creeDepot = (config = {}) => {
   };
 
   const supprimeService = async (idService) => {
-    const { contributeurs: avantSuppression } = await p.lis.un(idService);
+    const serviceAvantSuppression = await p.lis.un(idService);
 
     await p.supprime(idService);
 
     await busEvenements.publie(
       new EvenementServiceSupprime({
         idService,
-        autorisations: avantSuppression.map((u) => ({
+        autorisations: serviceAvantSuppression.contributeurs.map((u) => ({
           idUtilisateur: u.idUtilisateur,
         })),
+        siret: serviceAvantSuppression.siretDeOrganisation(),
       })
     );
   };

@@ -278,6 +278,10 @@ const cableTousLesAbonnes = (
     delieServiceEtSuperviseurs({ serviceSupervision }),
     supprimeSuggestionsActions({ depotDonnees }),
     supprimeNotificationsTransactionnelles({ depotDonnees }),
+    metAJourNombreDeServicesDeLEntiteDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServicesImportes, [
