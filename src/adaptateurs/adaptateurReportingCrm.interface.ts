@@ -12,4 +12,8 @@ export interface AdaptateurReportingCrm {
   consigneImportEnMasse: (data: CrmImportEnMasse) => Promise<void>;
   consigneEntiteUtilisatrice(entite: Entite): Promise<IdEntiteCRM>;
   consigneUtilisateur(email: string, idEntite?: IdEntiteCRM): Promise<void>;
+  consigneNombreDeServicesDeLEntite(
+    siret: string,
+    nombreDeServices: number
+  ): Promise<void>;
 }
