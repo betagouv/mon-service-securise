@@ -57,6 +57,11 @@ export class ClientHttpCrm {
     this.cadence(() =>
       axios.post(this.url(chemin), corps, { headers: this.entetes() })
     ).catch(rendsExplicite400);
+
+  patch = (chemin: string, corps: object) =>
+    this.cadence(() =>
+      axios.patch(this.url(chemin), corps, { headers: this.entetes() })
+    ).catch(rendsExplicite400);
 }
 
 export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
@@ -84,6 +89,20 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
       { name: entite.nom, siret: entite.siret }
     );
     return reponse.data.data.createDonneesMssEntitesUtilisatrices.id;
+  }
+
+  async consigneNombreDeServicesDeLEntite(
+    siret: string,
+    nombreDeServices: number
+  ): Promise<void> {
+    const idEntite = await this.idEntiteExistante(siret);
+    if (!idEntite) return;
+
+    // Oui, il y a bien 2 "s" à la fin
+    await this.client.patch(
+      `/rest/donneesMssEntitesUtilisatricess/${idEntite}`,
+      { nombreDeServices }
+    );
   }
 
   private async idEntiteExistante(
