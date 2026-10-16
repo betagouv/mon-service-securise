@@ -37,4 +37,36 @@ describe("L'abonné qui consigne un nouvel utilisateur dans le CRM", () => {
       'id-entite-crm'
     );
   });
+
+  describe("quand l'utilisateur n'a pas de SIRET", () => {
+    const uneInscriptionSansSiret = () => {
+      const utilisateur = unUtilisateur()
+        .avecEmail('jean.dupont@mail.fr')
+        .construis();
+      return new EvenementUtilisateurInscrit({ utilisateur });
+    };
+
+    it("ne consigne pas d'entité", async () => {
+      const reportingCrm = reportingTest();
+
+      await consigneNouvelUtilisateurDansCrm({ reportingCrm })(
+        uneInscriptionSansSiret()
+      );
+
+      expect(reportingCrm.consigneEntiteUtilisatrice).not.toHaveBeenCalled();
+    });
+
+    it("consigne l'utilisateur sans entité", async () => {
+      const reportingCrm = reportingTest();
+
+      await consigneNouvelUtilisateurDansCrm({ reportingCrm })(
+        uneInscriptionSansSiret()
+      );
+
+      expect(reportingCrm.consigneUtilisateur).toHaveBeenCalledWith(
+        'jean.dupont@mail.fr',
+        undefined
+      );
+    });
+  });
 });
