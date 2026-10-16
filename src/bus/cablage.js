@@ -99,6 +99,7 @@ import { consigneGroupeServicesSupprimeDansJournal } from './abonnements/consign
 import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consigneServicesDuGroupeModifiesDansJournal.js';
 import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
 import { consigneNouvelUtilisateurDansCrm } from './abonnements/reporting-bizdev/consigneNouvelUtilisateurDansCrm.js';
+import { metAJourNombreDeServicesDeLEntiteDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDeServicesDeLEntiteDansCrm.js';
 import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
 import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
 import { EvenementGroupeEntitesSupprime } from './evenementGroupeEntitesSupprime.js';
@@ -153,6 +154,10 @@ const cableTousLesAbonnes = (
     }),
     relieServiceEtSuperviseurs({ serviceSupervision }),
     rattacheServiceEtAdmins({ serviceAdministrationOrganisations }),
+    metAJourNombreDeServicesDeLEntiteDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureModifieeEnMasse, [
