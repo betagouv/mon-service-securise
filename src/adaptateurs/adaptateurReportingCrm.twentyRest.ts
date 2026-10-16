@@ -94,7 +94,7 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
 
   async consigneUtilisateur(
     email: string,
-    idEntite: IdEntiteCRM
+    idEntite?: IdEntiteCRM
   ): Promise<void> {
     if (await this.utilisateurExiste(email)) return;
 

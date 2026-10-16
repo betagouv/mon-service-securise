@@ -25,7 +25,7 @@ export class AdaptateurReportingCrmMemoire implements AdaptateurReportingCrm {
   // eslint-disable-next-line class-methods-use-this
   async consigneUtilisateur(
     email: string,
-    idEntite: IdEntiteCRM
+    idEntite?: IdEntiteCRM
   ): Promise<void> {
     console.log('📝 [REPORTING CRM] Utilisateur');
     console.dir({ email, idEntite });

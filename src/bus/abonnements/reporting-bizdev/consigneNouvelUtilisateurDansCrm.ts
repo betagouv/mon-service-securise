@@ -10,9 +10,10 @@ type Config = {
 
 export function consigneNouvelUtilisateurDansCrm({ reportingCrm }: Config) {
   return async ({ utilisateur }: EvenementUtilisateurInscrit) => {
-    const idEntite = await reportingCrm.consigneEntiteUtilisatrice(
-      utilisateur.entite
-    );
+    const aUnSiret = !!utilisateur.entite?.siret;
+    const idEntite = aUnSiret
+      ? await reportingCrm.consigneEntiteUtilisatrice(utilisateur.entite)
+      : undefined;
     await reportingCrm.consigneUtilisateur(utilisateur.email, idEntite);
   };
 }
