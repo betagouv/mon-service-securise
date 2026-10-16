@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { enCadence } from '../utilitaires/pThrottle.js';
 import {
   AdaptateurReportingCrm,
   CrmImportEnMasse,
@@ -19,7 +20,15 @@ const rendsExplicite400 = (erreur: unknown): never => {
   throw erreur;
 };
 
+// Twenty accepte au plus 100 requêtes par minute : 1 requête toutes les 600 ms.
+const INTERVALLE_ENTRE_REQUETES_EN_MS = 600;
+
 class ClientHttpCrm {
+  private readonly cadence = enCadence(
+    INTERVALLE_ENTRE_REQUETES_EN_MS,
+    (requete: () => Promise<AxiosResponse>) => requete()
+  );
+
   constructor(
     private readonly cleApi: string,
     private readonly urlCrm: URL
@@ -40,17 +49,17 @@ class ClientHttpCrm {
   });
 
   get = (chemin: string, filtre: string) =>
-    axios
-      .get(this.url(chemin), {
+    this.cadence(() =>
+      axios.get(this.url(chemin), {
         headers: this.entetes(),
         params: { filter: filtre },
       })
-      .catch(rendsExplicite400);
+    ).catch(rendsExplicite400);
 
   post = (chemin: string, corps: object) =>
-    axios
-      .post(this.url(chemin), corps, { headers: this.entetes() })
-      .catch(rendsExplicite400);
+    this.cadence(() =>
+      axios.post(this.url(chemin), corps, { headers: this.entetes() })
+    ).catch(rendsExplicite400);
 }
 
 export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
