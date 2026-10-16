@@ -292,11 +292,17 @@ const routesConnecteApiAdmin = ({
       const { filtreNiveauxSecurite, filtreEntites } = requete.body as z.infer<
         typeof schemaStatistiquesAdmin
       >;
+      const [estAdmin, estSuperviseur] = await Promise.all([
+        depotDonnees.estAdmin(idUtilisateurCourant),
+        depotDonnees.estSuperviseur(idUtilisateurCourant),
+      ]);
 
-      const services =
-        await serviceAdministrationOrganisations.servicesDe(
-          idUtilisateurCourant
-        );
+      if (!estAdmin && !estSuperviseur) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      const services = await depotDonnees.services(idUtilisateurCourant);
       reponse.json(
         await serviceStatistiquesAdmin.statistiques(services, {
           filtreNiveauxSecurite: filtreNiveauxSecurite as Array<NiveauSecurite>,

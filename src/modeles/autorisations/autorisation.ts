@@ -17,6 +17,7 @@ const { LECTURE, ECRITURE } = Permissions;
 export type DonneesAutorisation = {
   estProprietaire: boolean;
   estAdmin?: boolean;
+  estSuperviseur?: boolean;
   id: UUID;
   idUtilisateur: UUID;
   idService: UUID;
@@ -29,6 +30,7 @@ export type Role =
 export class Autorisation extends Base {
   readonly id!: UUID;
   readonly estAdmin?: boolean;
+  readonly estSuperviseur?: boolean;
   readonly idUtilisateur!: UUID;
   readonly idService!: UUID;
 
@@ -44,7 +46,7 @@ export class Autorisation extends Base {
         'idService',
         'droits',
       ],
-      proprietesAtomiquesFacultatives: ['estAdmin'],
+      proprietesAtomiquesFacultatives: ['estAdmin', 'estSuperviseur'],
     });
     this.renseigneProprietes(donnees);
   }
@@ -73,6 +75,19 @@ export class Autorisation extends Base {
       droits: tousDroitsEnEcriture(),
       estProprietaire: true,
       estAdmin: true,
+    });
+
+  static NouvelleAutorisationSuperviseur = (
+    donnees: Omit<
+      DonneesAutorisation,
+      'droits' | 'estProprietaire' | 'estSuperviseur'
+    >
+  ) =>
+    new Autorisation({
+      ...donnees,
+      droits: tousDroitsEnEcriture(),
+      estProprietaire: true,
+      estSuperviseur: true,
     });
 
   aLaPermission(niveau: NiveauPermission, rubrique: Rubrique) {
@@ -106,6 +121,7 @@ export class Autorisation extends Base {
     const { RESUME_NIVEAU_DROIT } = Autorisation;
 
     if (this.estAdmin) return RESUME_NIVEAU_DROIT.ADMIN;
+    if (this.estSuperviseur) return RESUME_NIVEAU_DROIT.SUPERVISEUR;
     if (this.estProprietaire) return RESUME_NIVEAU_DROIT.PROPRIETAIRE;
 
     const tousNiveaux = Object.values(Permissions).reduce(
@@ -136,6 +152,7 @@ export class Autorisation extends Base {
     return {
       estProprietaire: this.estProprietaire,
       estAdmin: this.estUnAdmin(),
+      estSuperviseur: this.estUnSuperviseur(),
       id: this.id,
       idService: this.idService,
       idUtilisateur: this.idUtilisateur,
@@ -145,6 +162,7 @@ export class Autorisation extends Base {
 
   static RESUME_NIVEAU_DROIT = {
     ADMIN: 'ADMIN',
+    SUPERVISEUR: 'SUPERVISEUR',
     PROPRIETAIRE: 'PROPRIETAIRE',
     ECRITURE: 'ECRITURE',
     LECTURE: 'LECTURE',
@@ -241,5 +259,13 @@ export class Autorisation extends Base {
 
   estUnAdmin() {
     return !!this.estAdmin;
+  }
+
+  estUnSuperviseur() {
+    return !!this.estSuperviseur;
+  }
+
+  decouleDUnPerimetre() {
+    return this.estUnAdmin() || this.estUnSuperviseur();
   }
 }

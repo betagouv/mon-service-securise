@@ -1,14 +1,14 @@
 import { unService } from '../../constructeurs/constructeurService.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { ServiceAdministrationOrganisations } from '../../../src/supervision/serviceAdministrationOrganisations.ts';
-import { modifieRattachementServiceEtAdmins } from '../../../src/bus/abonnements/modifieRattachementServiceEtAdmins.ts';
+import { modifieRattachementServiceAuxSuperviseursEtAdmins } from '../../../src/bus/abonnements/modifieRattachementServiceAuxSuperviseursEtAdmins.ts';
 
-describe("L'abonné en charge de modifier le rattachement entre un service modifié et ses admins", () => {
+describe("L'abonné en charge de modifier le rattachement entre un service modifié et ses superviseurs et admins", () => {
   let serviceAdministrationOrganisations: ServiceAdministrationOrganisations;
 
   beforeEach(() => {
     serviceAdministrationOrganisations = {
-      rattacheLesAdministrateursDe: vi.fn(),
+      rattacheLesSuperviseursEtLesAdministrateursDe: vi.fn(),
     } as unknown as ServiceAdministrationOrganisations;
   });
 
@@ -22,7 +22,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
       .deLOrganisation({ siret: 'unSIRET' })
       .construis();
 
-    await modifieRattachementServiceEtAdmins({
+    await modifieRattachementServiceAuxSuperviseursEtAdmins({
       serviceAdministrationOrganisations,
     })({
       service,
@@ -30,11 +30,11 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     });
 
     expect(
-      serviceAdministrationOrganisations.rattacheLesAdministrateursDe
+      serviceAdministrationOrganisations.rattacheLesSuperviseursEtLesAdministrateursDe
     ).not.toHaveBeenCalled();
   });
 
-  it("délègue au service d'administration des organisations la modification du rattachement si le SIRET a changé", async () => {
+  it("délègue au service d'administration des organisations la modification du rattachement aux superviseurs et aux admins si le SIRET a changé", async () => {
     const service = unService()
       .avecId('S1')
       .avecOrganisationResponsable({
@@ -45,7 +45,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
       .deLOrganisation({ siret: 'unAutreSIRET' })
       .construis();
 
-    await modifieRattachementServiceEtAdmins({
+    await modifieRattachementServiceAuxSuperviseursEtAdmins({
       serviceAdministrationOrganisations,
     })({
       service,
@@ -53,7 +53,7 @@ describe("L'abonné en charge de modifier le rattachement entre un service modif
     });
 
     expect(
-      serviceAdministrationOrganisations.rattacheLesAdministrateursDe
+      serviceAdministrationOrganisations.rattacheLesSuperviseursEtLesAdministrateursDe
     ).toHaveBeenCalledWith(service);
   });
 });

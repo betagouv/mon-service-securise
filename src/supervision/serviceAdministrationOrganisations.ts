@@ -29,10 +29,11 @@ import { EvenementRoleUtilisateurAdministreAttribue } from '../bus/evenementRole
 import { EvenementAccesUtilisateurAdministreRetires } from '../bus/evenementAccesUtilisateurAdministreRetires.js';
 import { ProcedureSuppressionContributeur } from '../modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabrique } from '../modeles/autorisations/fabriqueAutorisation.js';
-import { ProcedureSuppressionContributeurAdmin } from '../modeles/autorisations/procedureSuppressionContributeurAdmin.js';
+import { ProcedureSuppressionContributeurDePerimetre } from '../modeles/autorisations/procedureSuppressionContributeurDePerimetre.js';
 import { EvenementAdminNommeSurOrganisation } from '../bus/evenementAdminNommeSurOrganisation.js';
 import { EvenementAdminRetireDeOrganisation } from '../bus/evenementAdminRetireDeOrganisation.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
+import ServiceSupervision from './serviceSupervision.js';
 
 export type DonneesEntiteSupervisee = DonneesEntite & {
   administrateurs: Array<{
@@ -52,7 +53,8 @@ export class ServiceAdministrationOrganisations {
   private readonly adaptateurMail: AdaptateurMail;
   private readonly busEvenements: BusEvenements;
   private readonly adaptateurEnvironnement: AdaptateurEnvironnement;
-  private readonly procedureSuppressionContributeurAdmin: ProcedureSuppressionContributeurAdmin;
+  private readonly serviceSupervision: ServiceSupervision;
+  private readonly procedureSuppressionContributeurDePerimetre: ProcedureSuppressionContributeurDePerimetre;
 
   constructor({
     depotDonnees,
@@ -61,6 +63,7 @@ export class ServiceAdministrationOrganisations {
     adaptateurMail,
     busEvenements,
     adaptateurEnvironnement,
+    serviceSupervision,
   }: {
     depotDonnees: DepotDonnees;
     adaptateurRechercheEntite: AdaptateurRechercheEntreprise;
@@ -68,6 +71,7 @@ export class ServiceAdministrationOrganisations {
     adaptateurMail: AdaptateurMail;
     busEvenements: BusEvenements;
     adaptateurEnvironnement: AdaptateurEnvironnement;
+    serviceSupervision: ServiceSupervision;
   }) {
     this.depotDonnees = depotDonnees;
     this.adaptateurRechercheEntite = adaptateurRechercheEntite;
@@ -75,8 +79,9 @@ export class ServiceAdministrationOrganisations {
     this.adaptateurMail = adaptateurMail;
     this.busEvenements = busEvenements;
     this.adaptateurEnvironnement = adaptateurEnvironnement;
-    this.procedureSuppressionContributeurAdmin =
-      new ProcedureSuppressionContributeurAdmin({ depotDonnees });
+    this.serviceSupervision = serviceSupervision;
+    this.procedureSuppressionContributeurDePerimetre =
+      new ProcedureSuppressionContributeurDePerimetre({ depotDonnees });
   }
 
   async rattacheLesAdministrateursDe(service: Service) {
@@ -87,24 +92,132 @@ export class ServiceAdministrationOrganisations {
     await this.supprimeAutorisationsAdminObsoletes(service);
   }
 
+  async ajouteEntitesAuSuperviseur(idSuperviseur: UUID, sirets: string[]) {
+    await this.serviceSupervision.rattacheEntitesAuSuperviseur(
+      sirets,
+      idSuperviseur
+    );
+
+    await this.rattacheLesServicesDesEntites(sirets);
+  }
+
+  async servicesSupervisesPar(idSuperviseur: UUID): Promise<Service[]> {
+    return this.servicesDesEntites(
+      await this.siretsSupervisesPar(idSuperviseur)
+    );
+  }
+
+  private async siretsSupervisesPar(idSuperviseur: UUID): Promise<string[]> {
+    const superviseur = await this.depotDonnees.lisSuperviseur(idSuperviseur);
+    return superviseur?.donnees().entitesSupervisees.map((e) => e.siret) ?? [];
+  }
+
+  async revoqueSuperviseur(idSuperviseur: UUID) {
+    const servicesSupervises = await this.servicesSupervisesPar(idSuperviseur);
+    ServiceAdministrationOrganisations.verifieNEstPasSeulProprietaireDesServices(
+      servicesSupervises,
+      idSuperviseur
+    );
+
+    await this.serviceSupervision.revoqueSuperviseur(idSuperviseur);
+
+    await this.rattacheLesSuperviseursEtLesAdministrateursDesServices(
+      servicesSupervises
+    );
+  }
+
+  private async servicesDesEntites(sirets: string[]): Promise<Service[]> {
+    const servicesParSiret =
+      await this.depotDonnees.tousLesServicesAvecSirets(sirets);
+    return [...servicesParSiret.values()].flat();
+  }
+
+  private async rattacheLesServicesDesEntites(sirets: string[]) {
+    const services = await this.servicesDesEntites(sirets);
+
+    await this.rattacheLesSuperviseursEtLesAdministrateursDesServices(services);
+  }
+
+  private async rattacheLesSuperviseursEtLesAdministrateursDesServices(
+    services: Service[]
+  ) {
+    await Promise.all(
+      services.map((service) =>
+        this.rattacheLesSuperviseursEtLesAdministrateursDe(service)
+      )
+    );
+  }
+
+  async rattacheLesSuperviseursEtLesAdministrateursDe(service: Service) {
+    await this.rattacheLesSuperviseursDe(service);
+    await this.rattacheLesAdministrateursDe(service);
+  }
+
+  async rattacheLesSuperviseursDe(service: Service) {
+    const lesSuperviseurs = await this.depotDonnees.lisSuperviseursPour(
+      service.siretDeOrganisation()
+    );
+    const autorisationsExistantes: Autorisation[] =
+      await this.depotDonnees.autorisationsDuService(service.id);
+
+    const nouvellesAutorisations = lesSuperviseurs.map((superviseur) => {
+      const idSuperviseur = superviseur.donnees().idUtilisateur;
+      const existante = autorisationsExistantes.find((a) =>
+        a.designeUtilisateur(idSuperviseur)
+      );
+
+      return Autorisation.NouvelleAutorisationSuperviseur({
+        id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
+        idService: service.id,
+        idUtilisateur: idSuperviseur,
+      });
+    });
+
+    await this.sauvegardeAutorisations(nouvellesAutorisations);
+    await this.supprimeAutorisationsSuperviseurObsoletes(
+      service,
+      lesSuperviseurs.map((s) => s.donnees().idUtilisateur)
+    );
+  }
+
   private async supprimeAutorisationsAdminObsoletes(service: Service) {
     const adminsActuels = await this.depotDonnees.lisAdminsPour(
       service.siretDeOrganisation()
     );
-    const idAdminsActuels = adminsActuels.map(
-      (admin) => admin.donnees().idUtilisateur
-    );
 
+    await this.supprimeAutorisationsObsoletes(
+      service,
+      (a) => a.estUnAdmin(),
+      adminsActuels.map((admin) => admin.donnees().idUtilisateur)
+    );
+  }
+
+  private async supprimeAutorisationsSuperviseurObsoletes(
+    service: Service,
+    idSuperviseursActuels: UUID[]
+  ) {
+    await this.supprimeAutorisationsObsoletes(
+      service,
+      (a) => a.estUnSuperviseur(),
+      idSuperviseursActuels
+    );
+  }
+
+  private async supprimeAutorisationsObsoletes(
+    service: Service,
+    estDuRoleConcerne: (autorisation: Autorisation) => boolean,
+    idUtilisateursActuels: UUID[]
+  ) {
     const autorisationsDuService: Autorisation[] =
       await this.depotDonnees.autorisationsDuService(service.id);
 
     const autorisationsASupprimer = autorisationsDuService
-      .filter((a) => a.estAdmin)
-      .filter((a) => !idAdminsActuels.includes(a.idUtilisateur));
+      .filter(estDuRoleConcerne)
+      .filter((a) => !idUtilisateursActuels.includes(a.idUtilisateur));
 
     await Promise.all(
       autorisationsASupprimer.map((a) =>
-        this.procedureSuppressionContributeurAdmin.execute(
+        this.procedureSuppressionContributeurDePerimetre.execute(
           a.idUtilisateur,
           a.idService
         )
@@ -113,13 +226,21 @@ export class ServiceAdministrationOrganisations {
   }
 
   private async fabriqueAutorisationsAdminPourService(service: Service) {
-    const lesAdmins = await this.depotDonnees.lisAdminsPour(
-      service.siretDeOrganisation()
+    const siret = service.siretDeOrganisation();
+    const [lesAdmins, lesSuperviseurs] = await Promise.all([
+      this.depotDonnees.lisAdminsPour(siret),
+      this.depotDonnees.lisSuperviseursPour(siret),
+    ]);
+    const idSuperviseurs = lesSuperviseurs.map(
+      (s) => s.donnees().idUtilisateur
+    );
+    const lesAdminsNonSuperviseurs = lesAdmins.filter(
+      (admin) => !idSuperviseurs.includes(admin.donnees().idUtilisateur)
     );
     const autorisationsExistantes =
       await this.depotDonnees.autorisationsDuService(service.id);
 
-    return lesAdmins.map((admin) => {
+    return lesAdminsNonSuperviseurs.map((admin) => {
       const idAdmin = admin.donnees().idUtilisateur;
       const existante = autorisationsExistantes.find((a: Autorisation) =>
         a.designeUtilisateur(idAdmin)
@@ -262,7 +383,7 @@ export class ServiceAdministrationOrganisations {
       idsServices
     );
 
-    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+    ServiceAdministrationOrganisations.verifieNeConcernePasUneAutorisationDePerimetre(
       autorisationsExistantes
     );
 
@@ -323,7 +444,7 @@ export class ServiceAdministrationOrganisations {
       idsServices
     );
 
-    ServiceAdministrationOrganisations.verifieNeConcernePasAutorisationAdmin(
+    ServiceAdministrationOrganisations.verifieNeConcernePasUneAutorisationDePerimetre(
       autorisationsConcernees
     );
 
@@ -372,10 +493,10 @@ export class ServiceAdministrationOrganisations {
     );
   }
 
-  private static verifieNeConcernePasAutorisationAdmin(
+  private static verifieNeConcernePasUneAutorisationDePerimetre(
     autorisationsConcernees: Autorisation[]
   ) {
-    if (autorisationsConcernees.some((a) => a.estAdmin)) {
+    if (autorisationsConcernees.some((a) => a.decouleDUnPerimetre())) {
       throw new EchecAutorisation();
     }
   }
@@ -521,22 +642,5 @@ export class ServiceAdministrationOrganisations {
         nouvelAdmin!.email
       );
     }
-  }
-
-  async servicesDe(idUtilisateur: UUID): Promise<Array<Service>> {
-    if (await this.depotDonnees.estAdmin(idUtilisateur)) {
-      return this.depotDonnees.services(idUtilisateur);
-    }
-    const superviseur = await this.depotDonnees.lisSuperviseur(idUtilisateur);
-    if (!superviseur) return [];
-
-    const siretsSupervises = superviseur
-      ?.donnees()
-      .entitesSupervisees.map((e) => e.siret);
-
-    const servicesParSiret =
-      await this.depotDonnees.tousLesServicesAvecSirets(siretsSupervises);
-
-    return [...servicesParSiret.values()].flat();
   }
 }

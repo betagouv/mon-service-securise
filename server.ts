@@ -147,6 +147,7 @@ const serviceAdministrationOrganisations =
     adaptateurMail,
     busEvenements,
     adaptateurEnvironnement,
+    serviceSupervision,
   });
 
 const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });

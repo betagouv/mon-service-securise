@@ -1,7 +1,7 @@
 import { UUID } from '../../typesBasiques.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 
-export class ProcedureSuppressionContributeurAdmin {
+export class ProcedureSuppressionContributeurDePerimetre {
   private readonly depotDonnees: DepotDonnees;
 
   constructor({ depotDonnees }: { depotDonnees: DepotDonnees }) {
@@ -13,6 +13,9 @@ export class ProcedureSuppressionContributeurAdmin {
       idUtilisateur,
       idService
     );
-    await this.depotDonnees.supprimeContributeurAdmin(idUtilisateur, idService);
+    await this.depotDonnees.supprimeContributeurParSysteme(
+      idUtilisateur,
+      idService
+    );
   }
 }

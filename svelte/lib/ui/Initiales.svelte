@@ -54,6 +54,14 @@
     color: var(--text-label-blue-cumulus);
   }
 
+  .SUPERVISEUR {
+    background: var(--background-contrast-orange-terre-battue);
+  }
+
+  .initiales.SUPERVISEUR {
+    color: var(--text-label-orange-terre-battue);
+  }
+
   .PROPRIETAIRE {
     background: var(--role-proprietaire);
   }

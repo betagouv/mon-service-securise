@@ -149,10 +149,10 @@ const creeDepot = (config = {}) => {
         throw new ErreurSuppressionImpossible(
           `L'utilisateur "${idUtilisateurCourant}" ne peut pas supprimer sa propre autorisation`
         );
-      const cibleEstAdmin = (
+      const cibleDecouleDUnPerimetre = (
         await autorisationPour(idContributeur, idService)
-      ).estUnAdmin();
-      if (cibleEstAdmin)
+      ).decouleDUnPerimetre();
+      if (cibleDecouleDUnPerimetre)
         throw new ErreurSuppressionImpossible(
           `L'utilisateur "${idContributeur}" ne peut pas être supprimé`
         );
@@ -165,7 +165,7 @@ const creeDepot = (config = {}) => {
     await publieAutorisationsDuService(idService);
   };
 
-  const supprimeContributeurAdmin = async (idContributeur, idService) => {
+  const supprimeContributeurParSysteme = async (idContributeur, idService) => {
     const verifieAutorisationExiste = async () => {
       const existe = await autorisationExiste(idContributeur, idService);
       if (!existe) {
@@ -214,7 +214,7 @@ const creeDepot = (config = {}) => {
     autorisationsDuService,
     sauvegardeAutorisation,
     supprimeContributeur,
-    supprimeContributeurAdmin,
+    supprimeContributeurParSysteme,
   };
 };
 

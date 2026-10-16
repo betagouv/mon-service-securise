@@ -37,12 +37,19 @@ import EvenementCguAcceptees from '../src/modeles/journalMSS/evenementCguAccepte
 import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAdministrationOrganisations.js';
 import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
+import { enCadence } from '../src/utilitaires/pThrottle.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
   cyan: (txt) => process.stdout.write(`\x1b[36m${txt}\x1b[0m`),
   vert: (txt) => process.stdout.write(`\x1b[92m${txt}\x1b[0m`),
   rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
+};
+
+const barreDeProgression = (courant, total, largeur = 30) => {
+  const remplie =
+    total === 0 ? largeur : Math.round((courant / total) * largeur);
+  return `[${'█'.repeat(remplie)}${'░'.repeat(largeur - remplie)}]`;
 };
 
 class ConsoleAdministration {
@@ -645,18 +652,89 @@ class ConsoleAdministration {
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
   }
 
+  serviceAdministrationOrganisations() {
+    return new ServiceAdministrationOrganisations({
+      depotDonnees: this.depotDonnees,
+      adaptateurUUID: fabriqueAdaptateurUUID(),
+      adaptateurMail: this.adaptateurMail,
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      busEvenements: this.busEvenements,
+      adaptateurEnvironnement,
+      serviceSupervision: new ServiceSupervision({
+        depotDonnees: this.depotDonnees,
+        adaptateurSupervision: this.adaptateurSupervision,
+        adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      }),
+    });
+  }
+
+  async rattrapageAutorisationsSuperviseurs(pauseEntreServicesEnMs = 1000) {
+    const idsSuperviseurs = (
+      await knexMSS('superviseurs').distinct('id_superviseur')
+    ).map((ligne) => ligne.id_superviseur);
+    const nbSuperviseurs = idsSuperviseurs.length;
+    log.jaune(`${nbSuperviseurs} superviseurs à rattacher à leurs services\n`);
+
+    const serviceAdminOrgas = this.serviceAdministrationOrganisations();
+    const rattacheEnCadence = enCadence(pauseEntreServicesEnMs, (service) =>
+      serviceAdminOrgas.rattacheLesSuperviseursDe(service)
+    );
+    const idsServicesTraites = new Set();
+    const erreurs = [];
+
+    const afficheProgression = (indexSuperviseur, indexService, nbServices) =>
+      log.cyan(
+        `\r${barreDeProgression(indexSuperviseur, nbSuperviseurs)} ` +
+          `superviseur ${indexSuperviseur}/${nbSuperviseurs} · ` +
+          `service ${indexService}/${nbServices}   `
+      );
+
+    /* eslint-disable no-restricted-syntax, no-await-in-loop */
+    for (const [index, idSuperviseur] of idsSuperviseurs.entries()) {
+      const services =
+        await serviceAdminOrgas.servicesSupervisesPar(idSuperviseur);
+      const servicesATraiter = services.filter(
+        (s) => !idsServicesTraites.has(s.id)
+      );
+
+      for (const [indexService, service] of servicesATraiter.entries()) {
+        afficheProgression(index, indexService + 1, servicesATraiter.length);
+        try {
+          await rattacheEnCadence(service);
+        } catch (e) {
+          erreurs.push({ idSuperviseur, idService: service.id, erreur: e });
+        }
+        idsServicesTraites.add(service.id);
+      }
+      afficheProgression(
+        index + 1,
+        servicesATraiter.length,
+        servicesATraiter.length
+      );
+    }
+    /* eslint-enable no-restricted-syntax, no-await-in-loop */
+
+    log.jaune(`\n${idsServicesTraites.size} services traités\n`);
+    if (erreurs.length === 0) {
+      log.vert('Rattrapage terminé sans erreur\n');
+      return;
+    }
+    log.rouge(`${erreurs.length} services en erreur :\n`);
+    erreurs.forEach(({ idSuperviseur, idService, erreur }) =>
+      log.rouge(
+        `- service ${idService} (superviseur ${idSuperviseur}) : ${erreur.message}\n`
+      )
+    );
+  }
+
   async supprimeSupervisionDeUtilisateur(idUtilisateur) {
     console.log(
       `Suppression des droits de supervision pour l'utilisateur ${idUtilisateur}`
     );
 
-    const serviceSupervision = new ServiceSupervision({
-      depotDonnees: this.depotDonnees,
-      adaptateurSupervision: this.adaptateurSupervision,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-    });
-
-    await serviceSupervision.revoqueSuperviseur(idUtilisateur);
+    await this.serviceAdministrationOrganisations().revoqueSuperviseur(
+      idUtilisateur
+    );
   }
 
   async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
@@ -667,23 +745,11 @@ class ConsoleAdministration {
         `Impossible de trouve l'utilisateur avec l'email ${emailSuperviseur}`
       );
 
-    const serviceSupervision = new ServiceSupervision({
-      depotDonnees: this.depotDonnees,
-      adaptateurSupervision: this.adaptateurSupervision,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-    });
-
-    /* eslint-disable no-restricted-syntax */
-    /* eslint-disable no-await-in-loop */
-    for (const siret of sirets) {
-      console.log(`Ajout du SIRET ${siret}`);
-      await serviceSupervision.rattacheEntiteAuSuperviseur(
-        siret,
-        superviseur.id
-      );
-    }
-    /* eslint-enable no-restricted-syntax */
-    /* eslint-enable no-await-in-loop */
+    console.log(`Ajout de ${sirets.length} SIRET`);
+    await this.serviceAdministrationOrganisations().ajouteEntitesAuSuperviseur(
+      superviseur.id,
+      sirets
+    );
   }
 
   async ajouteSiretsAAdmin(emailAdmin, sirets) {
@@ -693,14 +759,7 @@ class ConsoleAdministration {
         `Impossible de trouve l'utilisateur avec l'email ${emailAdmin}`
       );
 
-    const serviceAdminOrgas = new ServiceAdministrationOrganisations({
-      depotDonnees: this.depotDonnees,
-      adaptateurUUID: fabriqueAdaptateurUUID(),
-      adaptateurMail: this.adaptateurMail,
-      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-      busEvenements: this.busEvenements,
-      adaptateurEnvironnement,
-    });
+    const serviceAdminOrgas = this.serviceAdministrationOrganisations();
 
     console.log(`Ajout de ${sirets.length} SIRET`);
     await serviceAdminOrgas.nommeAdmin(

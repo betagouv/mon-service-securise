@@ -4,6 +4,7 @@
 
   const STATUS_DROITS: Record<ResumeNiveauDroit, string> = {
     ADMIN: 'Admin',
+    SUPERVISEUR: 'Superviseur',
     PROPRIETAIRE: 'Propriétaire',
     ECRITURE: 'Édition',
     LECTURE: 'Lecture',
@@ -163,6 +164,11 @@
   .ADMIN {
     background: var(--background-contrast-blue-cumulus);
     color: var(--text-label-blue-cumulus);
+  }
+
+  .SUPERVISEUR {
+    background: var(--background-contrast-orange-terre-battue);
+    color: var(--text-label-orange-terre-battue);
   }
 
   .PROPRIETAIRE {
