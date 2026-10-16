@@ -1290,7 +1290,13 @@ describe('Le dépôt de données des services', () => {
           { id: '000', donnees: { email: 'contributeur@mail.fr' } },
         ],
         services: [
-          { id: '111', descriptionService: { nomService: 'Un service' } },
+          {
+            id: '111',
+            descriptionService: {
+              nomService: 'Un service',
+              organisationResponsable: { siret: '12345678900011' },
+            },
+          },
         ],
         autorisations: [
           uneAutorisation().avecId('123').deProprietaire('999', '111').donnees,
@@ -1317,6 +1323,7 @@ describe('Le dépôt de données des services', () => {
       expect(recu.autorisations.length).to.be(2);
       expect(recu.autorisations[0].idUtilisateur).to.eql('999');
       expect(recu.autorisations[1].idUtilisateur).to.eql('000');
+      expect(recu.siret).to.be('12345678900011');
     });
   });
 

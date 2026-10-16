@@ -1,5 +1,6 @@
 import { metAJourNombreDeServicesDeLEntiteDansCrm } from '../../../../src/bus/abonnements/reporting-bizdev/metAJourNombreDeServicesDeLEntiteDansCrm.ts';
 import { EvenementNouveauServiceCree } from '../../../../src/bus/evenementNouveauServiceCree.ts';
+import EvenementServiceSupprime from '../../../../src/bus/evenementServiceSupprime.js';
 import { unService } from '../../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../../constructeurs/constructeurUtilisateur.js';
 
@@ -59,5 +60,45 @@ describe("L'abonné qui met à jour le nombre de services de l'entité dans le C
     expect(
       reportingCrm.consigneNombreDeServicesDeLEntite
     ).not.toHaveBeenCalled();
+  });
+
+  describe('quand un service est supprimé', () => {
+    const uneSuppressionDeService = (siret?: string) =>
+      new EvenementServiceSupprime({
+        idService: 'id-service',
+        autorisations: [],
+        siret,
+      });
+
+    it("consigne le nombre de services restant dans l'entité", async () => {
+      const reportingCrm = reportingTest();
+      const depotDonnees = depotTest();
+
+      await metAJourNombreDeServicesDeLEntiteDansCrm({
+        reportingCrm,
+        depotDonnees,
+      })(uneSuppressionDeService('12345678900011'));
+
+      expect(
+        depotDonnees.denombreServicesEtUtilisateursParSiret
+      ).toHaveBeenCalledWith(['12345678900011']);
+      expect(
+        reportingCrm.consigneNombreDeServicesDeLEntite
+      ).toHaveBeenCalledWith('12345678900011', 4);
+    });
+
+    it("ne consigne rien quand le service supprimé n'avait pas de SIRET", async () => {
+      const reportingCrm = reportingTest();
+      const depotDonnees = depotTest();
+
+      await metAJourNombreDeServicesDeLEntiteDansCrm({
+        reportingCrm,
+        depotDonnees,
+      })(uneSuppressionDeService(undefined));
+
+      expect(
+        reportingCrm.consigneNombreDeServicesDeLEntite
+      ).not.toHaveBeenCalled();
+    });
   });
 });
