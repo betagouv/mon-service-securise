@@ -96,10 +96,21 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     email: string,
     idEntite: IdEntiteCRM
   ): Promise<void> {
+    if (await this.utilisateurExiste(email)) return;
+
     // Oui, il y a bien 2 "s" à la fin
     await this.client.post('/rest/donneesMssUtilisateursInscritss', {
       name: email,
       entiteId: idEntite,
     });
+  }
+
+  private async utilisateurExiste(email: string): Promise<boolean> {
+    // Oui, il y a bien 2 "s" à la fin
+    const reponse = await this.client.get(
+      '/rest/donneesMssUtilisateursInscritss',
+      `name[eq]:"${email}"`
+    );
+    return reponse.data.data.donneesMssUtilisateursInscritss.length > 0;
   }
 }
