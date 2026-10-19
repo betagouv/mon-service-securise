@@ -160,18 +160,23 @@ export class ServiceAdministrationOrganisations {
     const autorisationsExistantes: Autorisation[] =
       await this.depotDonnees.autorisationsDuService(service.id);
 
-    const nouvellesAutorisations = lesSuperviseurs.map((superviseur) => {
-      const idSuperviseur = superviseur.donnees().idUtilisateur;
-      const existante = autorisationsExistantes.find((a) =>
-        a.designeUtilisateur(idSuperviseur)
-      );
+    const nouvellesAutorisations = lesSuperviseurs
+      .map((superviseur) => {
+        const idSuperviseur = superviseur.donnees().idUtilisateur;
+        const existante = autorisationsExistantes.find((a) =>
+          a.designeUtilisateur(idSuperviseur)
+        );
 
-      return Autorisation.NouvelleAutorisationSuperviseur({
-        id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
-        idService: service.id,
-        idUtilisateur: idSuperviseur,
-      });
-    });
+        const dejaSuperviseur = existante?.estUnSuperviseur();
+        if (dejaSuperviseur) return null;
+
+        return Autorisation.NouvelleAutorisationSuperviseur({
+          id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
+          idService: service.id,
+          idUtilisateur: idSuperviseur,
+        });
+      })
+      .filter((a) => a !== null);
 
     await this.sauvegardeAutorisations(nouvellesAutorisations);
     await this.supprimeAutorisationsSuperviseurObsoletes(
