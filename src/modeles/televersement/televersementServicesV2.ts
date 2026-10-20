@@ -110,6 +110,8 @@ class TeleversementServicesV2 {
           dureeHomologation: decision.dureeValidite as DureeValidite,
         });
         dossierMetier.declareImporte();
+        dossierMetier.enregistreFinalisation();
+        await depotDonnees.enregistreDossier(idService, dossierMetier);
         await busEvenements.publie(
           new EvenementDossierHomologationImporte({
             idService,
@@ -117,8 +119,6 @@ class TeleversementServicesV2 {
             idUtilisateur,
           })
         );
-        dossierMetier.enregistreFinalisation();
-        await depotDonnees.enregistreDossier(idService, dossierMetier);
       }
 
       await depotDonnees.ajouteSuggestionAction(
