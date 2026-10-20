@@ -1,12 +1,12 @@
 /* eslint-disable no-console, no-await-in-loop, no-restricted-syntax */
 import { crm } from '../src/adaptateurs/adaptateurEnvironnement.js';
-import { ClientHttpCrm } from '../src/adaptateurs/reportingCrm/adaptateurReportingCrm.twentyRest.js';
 import { IdEntiteCRM } from '../src/adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
 import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
 import * as depotDonneesUtilisateurs from '../src/depots/depotDonneesUtilisateurs.js';
 import Utilisateur from '../src/modeles/utilisateur.js';
+import { ClientHttpCrm } from '../src/adaptateurs/reportingCrm/clientHttpCrm.js';
 
 type ErreurPaquet = { paquet: number; raison: string };
 
