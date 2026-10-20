@@ -23,6 +23,13 @@ const rendsExplicite400 = (erreur: unknown): never => {
 // Twenty accepte au plus 100 requêtes par minute : 1 requête toutes les 600 ms.
 const INTERVALLE_ENTRE_REQUETES_EN_MS = 600;
 
+// Oui, il y a bien 2 "s" à la fin : Twenty ajoute un "s" au nom des objets pour former leur pluriel.
+const OBJETS_TWENTY = {
+  importsDeServices: 'donneesMssImportsDeServicess',
+  entitesUtilisatrices: 'donneesMssEntitesUtilisatricess',
+  utilisateursInscrits: 'donneesMssUtilisateursInscritss',
+} as const;
+
 export class ClientHttpCrm {
   private readonly cadence = enCadence(
     INTERVALLE_ENTRE_REQUETES_EN_MS,
@@ -72,8 +79,7 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
   }
 
   async consigneImportEnMasse(data: CrmImportEnMasse): Promise<void> {
-    // Oui, il y a bien 2 "s" à la fin
-    await this.client.post('/rest/donneesMssImportsDeServicess', {
+    await this.client.post(`/rest/${OBJETS_TWENTY.importsDeServices}`, {
       name: data.emailUtilisateur,
       nombreDeServices: data.nbServices,
     });
@@ -83,9 +89,8 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     const idExistant = await this.idEntiteExistante(entite.siret);
     if (idExistant) return idExistant;
 
-    // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.client.post(
-      '/rest/donneesMssEntitesUtilisatricess',
+      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}`,
       { name: entite.nom, siret: entite.siret }
     );
     return reponse.data.data.createDonneesMssEntitesUtilisatrices.id;
@@ -98,9 +103,8 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     const idEntite = await this.idEntiteExistante(siret);
     if (!idEntite) return;
 
-    // Oui, il y a bien 2 "s" à la fin
     await this.client.patch(
-      `/rest/donneesMssEntitesUtilisatricess/${idEntite}`,
+      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}/${idEntite}`,
       { nombreDeServices }
     );
   }
@@ -112,9 +116,8 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     const idEntite = await this.idEntiteExistante(siret);
     if (!idEntite) return;
 
-    // Oui, il y a bien 2 "s" à la fin
     await this.client.patch(
-      `/rest/donneesMssEntitesUtilisatricess/${idEntite}`,
+      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}/${idEntite}`,
       { nombreDHomologations }
     );
   }
@@ -122,12 +125,12 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
   private async idEntiteExistante(
     siret: string
   ): Promise<IdEntiteCRM | undefined> {
-    // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.client.get(
-      '/rest/donneesMssEntitesUtilisatricess',
+      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}`,
       { filter: `siret[eq]:"${siret}"` }
     );
-    const [entiteExistante] = reponse.data.data.donneesMssEntitesUtilisatricess;
+    const [entiteExistante] =
+      reponse.data.data[OBJETS_TWENTY.entitesUtilisatrices];
     return entiteExistante?.id;
   }
 
@@ -137,19 +140,17 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
   ): Promise<void> {
     if (await this.utilisateurExiste(email)) return;
 
-    // Oui, il y a bien 2 "s" à la fin
-    await this.client.post('/rest/donneesMssUtilisateursInscritss', {
+    await this.client.post(`/rest/${OBJETS_TWENTY.utilisateursInscrits}`, {
       name: email,
       entiteId: idEntite,
     });
   }
 
   private async utilisateurExiste(email: string): Promise<boolean> {
-    // Oui, il y a bien 2 "s" à la fin
     const reponse = await this.client.get(
-      '/rest/donneesMssUtilisateursInscritss',
+      `/rest/${OBJETS_TWENTY.utilisateursInscrits}`,
       { filter: `name[eq]:"${email}"` }
     );
-    return reponse.data.data.donneesMssUtilisateursInscritss.length > 0;
+    return reponse.data.data[OBJETS_TWENTY.utilisateursInscrits].length > 0;
   }
 }
