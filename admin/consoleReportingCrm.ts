@@ -1,21 +1,30 @@
 /* eslint-disable no-console, no-await-in-loop, no-restricted-syntax */
-import { crm } from '../src/adaptateurs/adaptateurEnvironnement.js';
+import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
 import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
-import * as depotDonneesUtilisateurs from '../src/depots/depotDonneesUtilisateurs.js';
-import Utilisateur from '../src/modeles/utilisateur.js';
+import { fabriqueAdaptateurUUID } from '../src/adaptateurs/adaptateurUUID.js';
+import * as adaptateurRechercheEntrepriseAPI from '../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
+import { fabriqueAdaptateurGestionErreur } from '../src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { ClientHttpCrm } from '../src/adaptateurs/reportingCrm/clientHttpCrm.js';
-import { UUID } from '../src/typesBasiques.js';
+import BusEvenements from '../src/bus/busEvenements.js';
+import * as DepotDonnees from '../src/depotDonnees.js';
+import donneesReferentiel from '../donneesReferentiel.js';
+import * as Referentiel from '../src/referentiel.js';
+import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
+import { fabriqueServiceCgu } from '../src/serviceCgu.js';
+import Service from '../src/modeles/service.js';
 
 type ErreurPaquet = { paquet: number; raison: string };
 
-type UtilisateurCrm = { id: string; name: string };
+type EntiteCrm = { id: string; siret?: string };
 
-type MiseAJourUtilisateurCrm = {
-  id: string;
-  nbServicesEnProprietaire: number;
+type CompteursEntite = {
+  nombreDeServices: number;
+  nombreDHomologations: number;
 };
+
+type MiseAJourEntiteCrm = { id: string } & CompteursEntite;
 
 // Twenty accepte au plus 60 enregistrements par requête batch.
 const TAILLE_MAX_PAQUET = 60;
@@ -23,145 +32,165 @@ const TAILLE_MAX_PAQUET = 60;
 // En lecture, Twenty renvoie au plus 200 enregistrements par page.
 const TAILLE_MAX_PAGE_LECTURE = 200;
 
-// Oui, il y a bien 2 "s" à la fin : Twenty ajoute un "s" au nom des objets pour former leur pluriel.
-const UTILISATEURS_INSCRITS = 'donneesMssUtilisateursInscritss';
+// Les services d'un lot sont chargés et déchiffrés en entier pour compter leurs dossiers.
+const TAILLE_LOT_SIRETS = 100;
 
-const enPaquets = <T>(elements: T[]): T[][] =>
-  Array.from(
-    { length: Math.ceil(elements.length / TAILLE_MAX_PAQUET) },
-    (_, index) =>
-      elements.slice(index * TAILLE_MAX_PAQUET, (index + 1) * TAILLE_MAX_PAQUET)
+// Oui, il y a bien 2 "s" à la fin : Twenty ajoute un "s" au nom des objets pour former leur pluriel.
+const ENTITES_UTILISATRICES = 'donneesMssEntitesUtilisatricess';
+
+const decoupe = <T>(elements: T[], taille: number): T[][] =>
+  Array.from({ length: Math.ceil(elements.length / taille) }, (_, index) =>
+    elements.slice(index * taille, (index + 1) * taille)
   );
 
 export class ConsoleReportingCrm {
   private readonly clientCrm: ClientHttpCrm;
 
-  private readonly persistance: {
-    toutesLesAutorisationsDeProprietaire: () => Promise<
-      { idService: UUID; idUtilisateur: UUID }[]
-    >;
-  };
-
-  private readonly depotUtilisateurs: {
-    tousUtilisateurs: () => Promise<Utilisateur[]>;
+  private readonly depotDonnees: {
+    denombreServicesEtUtilisateursParSiret: (
+      sirets: string[]
+    ) => Promise<Map<string, { nombreServices: number }>>;
+    tousLesServicesAvecSirets: (
+      sirets: string[]
+    ) => Promise<Map<string, Service[]>>;
   };
 
   constructor() {
+    const { crm } = adaptateurEnvironnement;
     this.clientCrm = new ClientHttpCrm(crm().cleApi()!, crm().urlBase());
-    this.persistance = AdaptateurPostgres.nouvelAdaptateur({});
-    this.depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
+    const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+    this.depotDonnees = DepotDonnees.creeDepot({
+      adaptateurEnvironnement,
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
       adaptateurJWT: fabriqueAdaptateurJWT(),
-      adaptateurPersistance: this.persistance,
+      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({
+        knexSurcharge: undefined,
+      }),
+      adaptateurUUID: fabriqueAdaptateurUUID(),
+      referentiel,
+      referentielV2: fabriqueReferentiel().v2(),
+      adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+      busEvenements: new BusEvenements({
+        adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
+      }),
+      serviceCgu: fabriqueServiceCgu({ referentiel }),
     });
   }
 
-  async rattrapeNombreDeServicesEnProprietaire({ simulation = true } = {}) {
-    const nombreParIdUtilisateur =
-      await this.nombreDeServicesEnProprietaireParUtilisateur();
-    const idsMssParEmail = new Map(
-      (await this.depotUtilisateurs.tousUtilisateurs()).map((u) => [
-        u.email,
-        u.id,
-      ])
-    );
+  async rattrapeCompteursDesEntites({ simulation = true } = {}) {
+    const entitesDuCrm = await this.toutesLesEntitesDuCrm();
+    const sansSiret = entitesDuCrm.filter((e) => !e.siret);
+    const avecSiret = entitesDuCrm.filter((e) => !!e.siret);
 
-    const utilisateursDuCrm = await this.tousLesUtilisateursDuCrm();
-    const inconnusDeMss = utilisateursDuCrm.filter(
-      ({ name }) => !idsMssParEmail.has(name)
-    );
-    const misesAJour = utilisateursDuCrm
-      .filter(({ name }) => idsMssParEmail.has(name))
-      .map(({ id, name }) => ({
-        id,
-        email: name,
-        nbServicesEnProprietaire:
-          nombreParIdUtilisateur.get(idsMssParEmail.get(name)!) ?? 0,
-      }));
+    const compteurs = await this.compteursParSiret([
+      ...new Set(avecSiret.map((e) => e.siret!)),
+    ]);
+    const misesAJour = avecSiret.map(({ id, siret }) => ({
+      id,
+      ...compteurs.get(siret!)!,
+    }));
 
     if (simulation) {
-      ConsoleReportingCrm.afficheSimulation(misesAJour, inconnusDeMss);
+      ConsoleReportingCrm.afficheSimulation(misesAJour, avecSiret, sansSiret);
       return;
     }
 
-    await this.metsAJourEnPaquets(
-      misesAJour.map(({ id, nbServicesEnProprietaire }) => ({
-        id,
-        nbServicesEnProprietaire,
-      }))
-    );
+    await this.metsAJourEnPaquets(misesAJour);
   }
 
-  private static afficheSimulation(
-    misesAJour: (MiseAJourUtilisateurCrm & { email: string })[],
-    inconnusDeMss: UtilisateurCrm[]
-  ) {
-    const avecAuMoinsUnService = misesAJour.filter(
-      (m) => m.nbServicesEnProprietaire > 0
-    );
-    console.log('🧪 Simulation : rien n’est envoyé au CRM');
-    console.log(
-      `👤 ${misesAJour.length} utilisateurs du CRM à mettre à jour, dont ${avecAuMoinsUnService.length} propriétaires d’au moins un service`
-    );
-    console.table(
-      [...misesAJour]
-        .sort((a, b) => b.nbServicesEnProprietaire - a.nbServicesEnProprietaire)
-        .slice(0, 20)
-        .map(({ email, nbServicesEnProprietaire }) => ({
-          email,
-          nbServicesEnProprietaire,
-        }))
-    );
-    if (inconnusDeMss.length > 0) {
-      console.log(
-        `⚠️  ${inconnusDeMss.length} utilisateurs du CRM inconnus de MSS, ignorés`
-      );
-      console.table(inconnusDeMss.map(({ name }) => ({ email: name })));
-    }
-    console.log(
-      '▶️  Pour envoyer : await crm.rattrapeNombreDeServicesEnProprietaire({ simulation: false })'
-    );
-  }
-
-  private async nombreDeServicesEnProprietaireParUtilisateur() {
-    const autorisations =
-      await this.persistance.toutesLesAutorisationsDeProprietaire();
-    const nombreParIdUtilisateur = new Map<UUID, number>();
-    autorisations.forEach(({ idUtilisateur }) =>
-      nombreParIdUtilisateur.set(
-        idUtilisateur,
-        (nombreParIdUtilisateur.get(idUtilisateur) ?? 0) + 1
-      )
-    );
-    return nombreParIdUtilisateur;
-  }
-
-  private async tousLesUtilisateursDuCrm(): Promise<UtilisateurCrm[]> {
-    const utilisateurs: UtilisateurCrm[] = [];
+  private async toutesLesEntitesDuCrm(): Promise<EntiteCrm[]> {
+    const entites: EntiteCrm[] = [];
     let curseur: string | undefined;
     let page = 0;
     do {
       const reponse = await this.clientCrm.get(
-        `/rest/${UTILISATEURS_INSCRITS}`,
-        { limit: TAILLE_MAX_PAGE_LECTURE, starting_after: curseur }
+        `/rest/${ENTITES_UTILISATRICES}`,
+        {
+          limit: TAILLE_MAX_PAGE_LECTURE,
+          ...(curseur && { starting_after: curseur }),
+        }
       );
-      utilisateurs.push(...reponse.data.data[UTILISATEURS_INSCRITS]);
+      entites.push(...reponse.data.data[ENTITES_UTILISATRICES]);
       page += 1;
       process.stdout.write(
-        `\r\x1b[K📥 Lecture du CRM : page ${page}, ${utilisateurs.length} utilisateurs lus`
+        `\r\x1b[K📥 Lecture du CRM : page ${page}, ${entites.length} entités lues`
       );
       const { hasNextPage, endCursor } = reponse.data.pageInfo;
       curseur = hasNextPage ? endCursor : undefined;
     } while (curseur);
     console.log();
-    return utilisateurs;
+    return entites;
+  }
+
+  private async compteursParSiret(
+    sirets: string[]
+  ): Promise<Map<string, CompteursEntite>> {
+    const compteurs = new Map<string, CompteursEntite>();
+    const lots = decoupe(sirets, TAILLE_LOT_SIRETS);
+
+    for (const [index, lot] of lots.entries()) {
+      process.stdout.write(
+        `\r\x1b[K🧮 Calcul dans MSS : lot ${index + 1}/${lots.length}`
+      );
+      const denombrements =
+        await this.depotDonnees.denombreServicesEtUtilisateursParSiret(lot);
+      const servicesParSiret =
+        await this.depotDonnees.tousLesServicesAvecSirets(lot);
+
+      lot.forEach((siret) =>
+        compteurs.set(siret, {
+          nombreDeServices: denombrements.get(siret)!.nombreServices,
+          nombreDHomologations: servicesParSiret
+            .get(siret)!
+            .reduce((total, s) => total + s.nombreDossiers(), 0),
+        })
+      );
+    }
+    console.log();
+    return compteurs;
+  }
+
+  private static afficheSimulation(
+    misesAJour: MiseAJourEntiteCrm[],
+    avecSiret: EntiteCrm[],
+    sansSiret: EntiteCrm[]
+  ) {
+    const siretParId = new Map(avecSiret.map((e) => [e.id, e.siret]));
+    const avecServices = misesAJour.filter((m) => m.nombreDeServices > 0);
+    const avecHomologations = misesAJour.filter(
+      (m) => m.nombreDHomologations > 0
+    );
+
+    console.log('🧪 Simulation : rien n’est envoyé au CRM');
+    console.log(
+      `🏢 ${misesAJour.length} entités du CRM à mettre à jour, dont ${avecServices.length} avec au moins un service et ${avecHomologations.length} avec au moins une homologation`
+    );
+    console.table(
+      [...misesAJour]
+        .sort((a, b) => b.nombreDeServices - a.nombreDeServices)
+        .slice(0, 20)
+        .map(({ id, nombreDeServices, nombreDHomologations }) => ({
+          siret: siretParId.get(id),
+          nombreDeServices,
+          nombreDHomologations,
+        }))
+    );
+    if (sansSiret.length > 0) {
+      console.log(
+        `⚠️  ${sansSiret.length} entités du CRM sans SIRET, ignorées`
+      );
+      console.table(sansSiret.map(({ id }) => ({ id })));
+    }
+    console.log(
+      '▶️  Pour envoyer : await crm.rattrapeCompteursDesEntites({ simulation: false })'
+    );
   }
 
   // Avec `upsert=true`, Twenty met à jour chaque enregistrement reconnu par son `id`, avec ses propres valeurs.
-  private async metsAJourEnPaquets(misesAJour: MiseAJourUtilisateurCrm[]) {
-    const paquets = enPaquets(misesAJour);
+  private async metsAJourEnPaquets(misesAJour: MiseAJourEntiteCrm[]) {
+    const paquets = decoupe(misesAJour, TAILLE_MAX_PAQUET);
     console.log(
-      `👤 ${misesAJour.length} utilisateurs à mettre à jour, en ${paquets.length} paquets`
+      `🏢 ${misesAJour.length} entités à mettre à jour, en ${paquets.length} paquets`
     );
 
     const erreurs: ErreurPaquet[] = [];
@@ -169,7 +198,7 @@ export class ConsoleReportingCrm {
       process.stdout.write(`\r\x1b[KPaquet ${index + 1}/${paquets.length}`);
       try {
         await this.clientCrm.post(
-          `/rest/batch/${UTILISATEURS_INSCRITS}?upsert=true`,
+          `/rest/batch/${ENTITES_UTILISATRICES}?upsert=true`,
           paquet
         );
       } catch (e) {
