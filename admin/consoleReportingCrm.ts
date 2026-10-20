@@ -1,7 +1,7 @@
 /* eslint-disable no-console, no-await-in-loop, no-restricted-syntax */
 import { crm } from '../src/adaptateurs/adaptateurEnvironnement.js';
-import { ClientHttpCrm } from '../src/adaptateurs/adaptateurReportingCrm.twentyRest.js';
-import { IdEntiteCRM } from '../src/adaptateurs/adaptateurReportingCrm.interface.js';
+import { ClientHttpCrm } from '../src/adaptateurs/reportingCrm/adaptateurReportingCrm.twentyRest.js';
+import { IdEntiteCRM } from '../src/adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
 import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';

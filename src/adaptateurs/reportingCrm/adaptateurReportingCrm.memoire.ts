@@ -3,7 +3,7 @@ import {
   CrmImportEnMasse,
   IdEntiteCRM,
 } from './adaptateurReportingCrm.interface.js';
-import Entite from '../modeles/entite.js';
+import Entite from '../../modeles/entite.js';
 
 /* eslint-disable no-console */
 

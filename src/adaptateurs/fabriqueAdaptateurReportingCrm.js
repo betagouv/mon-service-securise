@@ -1,6 +1,6 @@
 import * as environnement from './adaptateurEnvironnement.js';
-import { AdaptateurReportingCrmTwentyRest } from './adaptateurReportingCrm.twentyRest.js';
-import { AdaptateurReportingCrmMemoire } from './adaptateurReportingCrm.memoire.js';
+import { AdaptateurReportingCrmTwentyRest } from './reportingCrm/adaptateurReportingCrm.twentyRest.js';
+import { AdaptateurReportingCrmMemoire } from './reportingCrm/adaptateurReportingCrm.memoire.js';
 
 export const fabriqueAdaptateurReportingCrm = () =>
   environnement.crm().estActif()
