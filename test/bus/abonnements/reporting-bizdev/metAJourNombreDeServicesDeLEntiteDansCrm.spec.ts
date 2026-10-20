@@ -3,6 +3,7 @@ import { EvenementNouveauServiceCree } from '../../../../src/bus/evenementNouvea
 import EvenementServiceSupprime from '../../../../src/bus/evenementServiceSupprime.js';
 import { unService } from '../../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../../constructeurs/constructeurUtilisateur.js';
+import { unUUID } from '../../../constructeurs/UUID.js';
 
 describe("L'abonné qui met à jour le nombre de services de l'entité dans le CRM", () => {
   const reportingTest = () => ({
@@ -65,7 +66,7 @@ describe("L'abonné qui met à jour le nombre de services de l'entité dans le C
   describe('quand un service est supprimé', () => {
     const uneSuppressionDeService = (siret?: string) =>
       new EvenementServiceSupprime({
-        idService: 'id-service',
+        idService: unUUID('S'),
         autorisations: [],
         siret,
       });

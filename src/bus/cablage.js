@@ -301,6 +301,10 @@ const cableTousLesAbonnes = (
       reportingCrm: adaptateurReportingCrm,
       depotDonnees,
     }),
+    metAJourNombreDeServicesEnProprietaireDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServicesImportes, [
