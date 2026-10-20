@@ -101,6 +101,7 @@ import { consigneServicesDuGroupeModifiesDansJournal } from './abonnements/consi
 import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/consigneImportDeServicesDansCrm.js';
 import { consigneNouvelUtilisateurDansCrm } from './abonnements/reporting-bizdev/consigneNouvelUtilisateurDansCrm.js';
 import { metAJourNombreDeServicesDeLEntiteDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDeServicesDeLEntiteDansCrm.js';
+import { metAJourNombreDHomologationsDeLEntiteDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDHomologationsDeLEntiteDansCrm.js';
 import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
 import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
 import { EvenementGroupeEntitesSupprime } from './evenementGroupeEntitesSupprime.js';
@@ -258,6 +259,10 @@ const cableTousLesAbonnes = (
       adaptateurHorloge,
     }),
     envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }),
+    metAJourNombreDHomologationsDeLEntiteDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationImporte, [
@@ -273,6 +278,10 @@ const cableTousLesAbonnes = (
     consigneNotificationsExpirationHomologation({
       depotDonnees,
       adaptateurHorloge,
+    }),
+    metAJourNombreDHomologationsDeLEntiteDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
     }),
   ]);
 
