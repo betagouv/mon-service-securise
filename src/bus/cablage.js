@@ -102,6 +102,7 @@ import { consigneImportDeServicesDansCrm } from './abonnements/reporting-bizdev/
 import { consigneNouvelUtilisateurDansCrm } from './abonnements/reporting-bizdev/consigneNouvelUtilisateurDansCrm.js';
 import { metAJourNombreDeServicesDeLEntiteDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDeServicesDeLEntiteDansCrm.js';
 import { metAJourNombreDHomologationsDeLEntiteDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDHomologationsDeLEntiteDansCrm.js';
+import { metAJourNombreDeServicesEnProprietaireDansCrm } from './abonnements/reporting-bizdev/metAJourNombreDeServicesEnProprietaireDansCrm.js';
 import { EvenementGroupeEntitesCree } from './evenementGroupeEntitesCree.js';
 import { consigneGroupeEntitesCreeDansJournal } from './abonnements/consigneGroupeEntitesCreeDansJournal.js';
 import { EvenementGroupeEntitesSupprime } from './evenementGroupeEntitesSupprime.js';
@@ -212,6 +213,10 @@ const cableTousLesAbonnes = (
   busEvenements.abonnePlusieurs(EvenementAutorisationsServiceModifiees, [
     consigneAutorisationsModifieesDansJournal({ adaptateurJournal }),
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
+    metAJourNombreDeServicesEnProprietaireDansCrm({
+      reportingCrm: adaptateurReportingCrm,
+      depotDonnees,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurModifie, [
