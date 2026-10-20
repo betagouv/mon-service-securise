@@ -1,5 +1,6 @@
 import { metAJourNombreDeServicesEnProprietaireDansCrm } from '../../../../src/bus/abonnements/reporting-bizdev/metAJourNombreDeServicesEnProprietaireDansCrm.ts';
 import { EvenementAutorisationsServiceModifiees } from '../../../../src/bus/evenementAutorisationsServiceModifiees.js';
+import EvenementServiceSupprime from '../../../../src/bus/evenementServiceSupprime.js';
 import { Autorisation } from '../../../../src/modeles/autorisations/autorisation.js';
 import Utilisateur from '../../../../src/modeles/utilisateur.js';
 import { uneAutorisation } from '../../../constructeurs/constructeurAutorisation.js';
@@ -76,6 +77,37 @@ describe("L'abonné qui met à jour le nombre de services en propriétaire des c
       depotDonnees,
     })(uneModificationDAutorisations());
 
+    expect(
+      reportingCrm.consigneNombreDeServicesEnProprietaire
+    ).toHaveBeenCalledWith('marie@beta.gouv.fr', 0);
+  });
+
+  it("consigne le nombre de services en propriétaire des anciens contributeurs d'un service supprimé", async () => {
+    const reportingCrm = reportingTest();
+    const depotDonnees = depotTest({
+      [jean.id]: [
+        uneAutorisation().deProprietaire(jean.id, unUUID('A')).construis(),
+      ],
+      [marie.id]: [],
+    });
+
+    await metAJourNombreDeServicesEnProprietaireDansCrm({
+      reportingCrm,
+      depotDonnees,
+    })(
+      new EvenementServiceSupprime({
+        idService: unUUID('S'),
+        autorisations: [
+          { idUtilisateur: jean.id },
+          { idUtilisateur: marie.id },
+        ],
+        siret: '12345678900011',
+      })
+    );
+
+    expect(
+      reportingCrm.consigneNombreDeServicesEnProprietaire
+    ).toHaveBeenCalledWith('jean@beta.gouv.fr', 1);
     expect(
       reportingCrm.consigneNombreDeServicesEnProprietaire
     ).toHaveBeenCalledWith('marie@beta.gouv.fr', 0);

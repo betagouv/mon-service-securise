@@ -1,4 +1,5 @@
 import { EvenementAutorisationsServiceModifiees } from '../../evenementAutorisationsServiceModifiees.js';
+import EvenementServiceSupprime from '../../evenementServiceSupprime.js';
 import { AdaptateurReportingCrm } from '../../../adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 import { fabriqueAdaptateurGestionErreur } from '../../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { Autorisation } from '../../../modeles/autorisations/autorisation.js';
@@ -35,7 +36,9 @@ export function metAJourNombreDeServicesEnProprietaireDansCrm({
     );
   };
 
-  return async ({ autorisations }: EvenementAutorisationsServiceModifiees) => {
+  return async ({
+    autorisations,
+  }: EvenementAutorisationsServiceModifiees | EvenementServiceSupprime) => {
     const rapportExecution = await Promise.allSettled(
       autorisations.map(({ idUtilisateur }) =>
         consigneLeNombreDeServicesEnProprietaire(idUtilisateur)
