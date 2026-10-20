@@ -1,6 +1,6 @@
 import { EvenementNouveauServiceCree } from '../../evenementNouveauServiceCree.js';
 import EvenementServiceSupprime from '../../evenementServiceSupprime.js';
-import { AdaptateurReportingCrm } from '../../../adaptateurs/adaptateurReportingCrm.interface.js';
+import { AdaptateurReportingCrm } from '../../../adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 
 type Denombrement = { nombreServices: number; nombreUtilisateurs: number };
 

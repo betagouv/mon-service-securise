@@ -1,7 +1,7 @@
 import { UUID } from '../../../typesBasiques.js';
 import Utilisateur from '../../../modeles/utilisateur.js';
 import EvenementServicesImportes from '../../evenementServicesImportes.js';
-import { CrmImportEnMasse } from '../../../adaptateurs/adaptateurReportingCrm.interface.js';
+import { CrmImportEnMasse } from '../../../adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 
 type Config = {
   reportingCrm: {

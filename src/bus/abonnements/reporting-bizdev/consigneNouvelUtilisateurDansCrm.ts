@@ -1,5 +1,5 @@
 import EvenementUtilisateurInscrit from '../../evenementUtilisateurInscrit.js';
-import { AdaptateurReportingCrm } from '../../../adaptateurs/adaptateurReportingCrm.interface.js';
+import { AdaptateurReportingCrm } from '../../../adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 
 type Config = {
   reportingCrm: Pick<

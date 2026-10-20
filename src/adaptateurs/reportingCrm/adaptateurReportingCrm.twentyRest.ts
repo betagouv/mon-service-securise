@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import axios, { AxiosResponse } from 'axios';
-import { enCadence } from '../utilitaires/pThrottle.js';
+import { enCadence } from '../../utilitaires/pThrottle.js';
 import {
   AdaptateurReportingCrm,
   CrmImportEnMasse,
   IdEntiteCRM,
 } from './adaptateurReportingCrm.interface.js';
-import Entite from '../modeles/entite.js';
-import { ErreurApiTwenty } from '../erreurs.js';
+import Entite from '../../modeles/entite.js';
+import { ErreurApiTwenty } from '../../erreurs.js';
 
 const rendsExplicite400 = (erreur: unknown): never => {
   if (axios.isAxiosError(erreur) && erreur.response?.status === 400) {

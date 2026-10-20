@@ -1,5 +1,5 @@
-import Entite from '../modeles/entite.js';
-import { UUID } from '../typesBasiques.js';
+import Entite from '../../modeles/entite.js';
+import { UUID } from '../../typesBasiques.js';
 
 export type IdEntiteCRM = UUID;
 
