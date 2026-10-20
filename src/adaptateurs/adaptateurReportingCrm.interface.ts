@@ -16,4 +16,8 @@ export interface AdaptateurReportingCrm {
     siret: string,
     nombreDeServices: number
   ): Promise<void>;
+  consigneNombreDHomologationsDeLEntite(
+    siret: string,
+    nombreDHomologations: number
+  ): Promise<void>;
 }

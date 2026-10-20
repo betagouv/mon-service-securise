@@ -39,4 +39,13 @@ export class AdaptateurReportingCrmMemoire implements AdaptateurReportingCrm {
     console.log("📝 [REPORTING CRM] Nombre de services de l'entité");
     console.dir({ siret, nombreDeServices });
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async consigneNombreDHomologationsDeLEntite(
+    siret: string,
+    nombreDHomologations: number
+  ): Promise<void> {
+    console.log("📝 [REPORTING CRM] Nombre d'homologations de l'entité");
+    console.dir({ siret, nombreDHomologations });
+  }
 }

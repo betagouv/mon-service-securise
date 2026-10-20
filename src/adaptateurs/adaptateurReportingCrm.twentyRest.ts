@@ -105,6 +105,20 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     );
   }
 
+  async consigneNombreDHomologationsDeLEntite(
+    siret: string,
+    nombreDHomologations: number
+  ): Promise<void> {
+    const idEntite = await this.idEntiteExistante(siret);
+    if (!idEntite) return;
+
+    // Oui, il y a bien 2 "s" à la fin
+    await this.client.patch(
+      `/rest/donneesMssEntitesUtilisatricess/${idEntite}`,
+      { nombreDHomologations }
+    );
+  }
+
   private async idEntiteExistante(
     siret: string
   ): Promise<IdEntiteCRM | undefined> {
