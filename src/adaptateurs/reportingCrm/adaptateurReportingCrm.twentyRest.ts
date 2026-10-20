@@ -88,11 +88,32 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     });
   }
 
+  async consigneNombreDeServicesEnProprietaire(
+    email: string,
+    nombreDeServicesEnProprietaire: number
+  ): Promise<void> {
+    const idUtilisateur = await this.idUtilisateurExistant(email);
+    if (!idUtilisateur) return;
+
+    await this.client.patch(
+      `/rest/${OBJETS_TWENTY.utilisateursInscrits}/${idUtilisateur}`,
+      { nbServicesEnProprietaire: nombreDeServicesEnProprietaire }
+    );
+  }
+
   private async utilisateurExiste(email: string): Promise<boolean> {
+    return !!(await this.idUtilisateurExistant(email));
+  }
+
+  private async idUtilisateurExistant(
+    email: string
+  ): Promise<string | undefined> {
     const reponse = await this.client.get(
       `/rest/${OBJETS_TWENTY.utilisateursInscrits}`,
       { filter: `name[eq]:"${email}"` }
     );
-    return reponse.data.data[OBJETS_TWENTY.utilisateursInscrits].length > 0;
+    const [utilisateurExistant] =
+      reponse.data.data[OBJETS_TWENTY.utilisateursInscrits];
+    return utilisateurExistant?.id;
   }
 }
