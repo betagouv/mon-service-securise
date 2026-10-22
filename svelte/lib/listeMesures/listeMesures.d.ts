@@ -25,6 +25,8 @@ export type ListeMesuresProps = {
   categories: { id: string; label: string }[];
   typesService: ReferentielTypesService;
   capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  utilisateurEstAdmin: boolean;
+  utilisateurEstSuperviseur: boolean;
 };
 
 export type RapportTeleversementProps = {
