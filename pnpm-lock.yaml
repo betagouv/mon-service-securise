@@ -176,8 +176,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       '@lab-anssi/lib':
-        specifier: ^2.2.1
-        version: 2.3.0(debug@4.4.3(supports-color@10.2.2))(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)
+        specifier: ^3.0.1
+        version: 3.0.1(debug@4.4.3(supports-color@10.2.2))(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)
       '@lab-anssi/ui-kit':
         specifier: 1.63.3
         version: 1.63.3(svelte@5.57.2(@typescript-eslint/types@8.71.0))
@@ -883,8 +883,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lab-anssi/lib@2.3.0':
-    resolution: {integrity: sha512-lQRoiaXyHvTyZaYWwa8UwYJGjD10sFgWc+sNGBWk+4tO0B7djFQcPTnuOeR4wJztiN9bpDDpCEhtmfd2MRhgRw==}
+  '@lab-anssi/lib@3.0.1':
+    resolution: {integrity: sha512-seUJvaIfrSbwoYYEsh/D6hYuy12N7pRtmpLe5ckbmc2gwlD1UNVps+jIrF5Ahtf6LLvqRUbVHlrTVAaZSNVOJA==}
     peerDependencies:
       express: ~5.2.1
 
@@ -2747,6 +2747,9 @@ packages:
   formidable@3.5.4:
     resolution: {integrity: sha512-YikH+7CUTOtP44ZTnUhR7Ic2UASBPOqmaRkRKxRbywPTe5VxF7RRCck4af9wutiZ/QKM5nME9Bie2fFaPz5Gug==}
     engines: {node: '>=14.0.0'}
+
+  forwarded-parse@2.1.2:
+    resolution: {integrity: sha512-alTFZZQDKMporBH77856pXgzhEzaUVmLCDk+egLgIgHst3Tpndzz8MnKe+GzRJRfvVdn69HhpW7cmXzvtLvJAw==}
 
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
@@ -4920,12 +4923,13 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lab-anssi/lib@2.3.0(debug@4.4.3(supports-color@10.2.2))(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)':
+  '@lab-anssi/lib@3.0.1(debug@4.4.3(supports-color@10.2.2))(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
       axios: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       express: 5.2.1(supports-color@10.2.2)
       express-ipfilter: 1.4.0
       express-rate-limit: 8.7.1(express@5.2.1(supports-color@10.2.2))(supports-color@10.2.2)
+      forwarded-parse: 2.1.2
       html-entities: 2.6.0
       marked: 13.0.3
     transitivePeerDependencies:
@@ -6763,6 +6767,8 @@ snapshots:
       '@paralleldrive/cuid2': 2.2.2
       dezalgo: 1.0.4
       once: 1.4.0
+
+  forwarded-parse@2.1.2: {}
 
   forwarded@0.2.0: {}
 
