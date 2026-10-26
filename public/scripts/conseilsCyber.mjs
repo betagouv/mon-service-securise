@@ -8,10 +8,10 @@ $(() => {
     href: `/articles/${a.slug}`,
   }));
   const couleurs = {
-    '0cef9600-977a-4817-9735-8717942a4920': {
+    'mise-en-oeuvre-des-mesures': {
       accent: 'blue-cumulus',
     },
-    '09d78fb4-fe9a-4f60-9dd7-91232e98d419': {
+    'securisation-et-homologation': {
       accent: 'pink-macaron',
     },
   };

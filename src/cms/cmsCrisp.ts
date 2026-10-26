@@ -42,13 +42,13 @@ class CmsCrispMss extends CmsCrisp {
   }
 
   async recupereSectionsBlog() {
-    return this.recupereSectionsCategorie(
+    return this.recupereSectionsParChemin(
       this.adaptateurEnvironnement.crisp().idCategorieBlog()!
     );
   }
 
   async recupereArticlesBlog() {
-    return this.recupereArticlesCategorie(
+    return this.recupereArticlesParChemin(
       this.adaptateurEnvironnement.crisp().idCategorieBlog()!
     );
   }
