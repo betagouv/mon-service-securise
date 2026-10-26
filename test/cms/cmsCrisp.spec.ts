@@ -14,7 +14,7 @@ describe('Le CMS Crisp', () => {
       crisp: () => ({
         idSite: () => 'id-site',
         cleApi: () => 'cle',
-        idCategorieBlog: () => 'id-blog',
+        idCategorieBlog: () => 'blog',
       }),
     } as unknown as AdaptateurEnvironnement;
   });
@@ -34,7 +34,7 @@ describe('Le CMS Crisp', () => {
       const article = await cmsCrisp.recupereArticleBlog('un-slug');
 
       expect(slugUtilise).toBe('un-slug');
-      expect(idCategorieUtilise).toBe('id-blog');
+      expect(idCategorieUtilise).toBe('blog');
       expect(article).toBe('article-avec-slug');
     });
   });
@@ -42,16 +42,16 @@ describe('Le CMS Crisp', () => {
   describe('sur demande des sections de la catégorie `blog`', () => {
     it('utilise le cms crisp pour récupérer les sections', async () => {
       const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
-      let idCategorieUtilise;
+      let cheminUtilise;
 
-      cmsCrisp.recupereSectionsCategorie = async (idCategorie) => {
-        idCategorieUtilise = idCategorie;
+      cmsCrisp.recupereSectionsParChemin = async (chemin) => {
+        cheminUtilise = chemin;
         return 'sections' as unknown as SectionCrisp[];
       };
 
       const sections = await cmsCrisp.recupereSectionsBlog();
 
-      expect(idCategorieUtilise).toBe('id-blog');
+      expect(cheminUtilise).toBe('blog');
       expect(sections).toBe('sections');
     });
   });
@@ -59,16 +59,16 @@ describe('Le CMS Crisp', () => {
   describe('sur demande des articles de la catégorie `blog`', () => {
     it('utilise le cms crisp pour récupérer les articles', async () => {
       const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
-      let idCategorieUtilise;
+      let cheminUtilise;
 
-      cmsCrisp.recupereArticlesCategorie = async (idCategorie) => {
-        idCategorieUtilise = idCategorie;
+      cmsCrisp.recupereArticlesParChemin = async (chemin) => {
+        cheminUtilise = chemin;
         return 'articles-de-la-categorie' as unknown as ResumeArticleCrispAvecSlug[];
       };
 
       const articles = await cmsCrisp.recupereArticlesBlog();
 
-      expect(idCategorieUtilise).toBe('id-blog');
+      expect(cheminUtilise).toBe('blog');
       expect(articles).toBe('articles-de-la-categorie');
     });
   });
@@ -113,11 +113,11 @@ describe('Le CMS Crisp', () => {
             adaptateurEnvironnement: adaptateurEnvironnementAvecIdArticle,
           });
 
-          let idArticleRecu;
-          cmsCrisp.adaptateurCmsCrisp.recupereArticle = async (
-            idArticleRecupere
+          let cheminRecu;
+          cmsCrisp.adaptateurCmsCrisp.recupereArticleParChemin = async (
+            cheminRecupere
           ) => {
-            idArticleRecu = idArticleRecupere;
+            cheminRecu = cheminRecupere;
             return {
               contenuMarkdown: '',
               titre: '',
@@ -128,7 +128,7 @@ describe('Le CMS Crisp', () => {
           // @ts-expect-error On force l'appel
           await cmsCrisp[nomMethodeCMS]();
 
-          expect(idArticleRecu).toBe(idArticle);
+          expect(cheminRecu).toBe(idArticle);
         });
       }
     );
