@@ -91,7 +91,7 @@
     ongletActif = $bindable('servicesAssocies'),
   }: Props = $props();
 
-  let donneesModeleMesureEdite = $state(structuredClone(modeleMesure));
+  let donneesModeleMesureEdite = $state($state.snapshot(modeleMesure));
   let mesureAEteEditee = $derived(
     modeleMesure.description !== donneesModeleMesureEdite.description ||
       modeleMesure.descriptionLongue !==
