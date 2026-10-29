@@ -312,7 +312,6 @@
     background: #dbeeff;
     text-align: left;
     padding: 32px;
-    overflow: hidden;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
