@@ -21,13 +21,18 @@ export const idsNotificationTransactionnelleDansRecapitulatif = [
   'echeanceMesureBientotExpiree',
   'echeanceMesureExpiree',
 ] as const;
-
 export type IdNotificationTransactionnelleDansRecapitulatif =
   (typeof idsNotificationTransactionnelleDansRecapitulatif)[number];
 
+export const idsPreferenceRecapitulatifAdmin = [
+  'nouveauxServicesAjoutesAuPerimetre',
+] as const;
+export type IdPreferenceRecapitulatifAdmin =
+  (typeof idsPreferenceRecapitulatifAdmin)[number];
+
 type PreferencesRecapitulatif = Record<
   | IdNotificationTransactionnelleDansRecapitulatif
-  | 'nouveauxServicesAjoutesAuPerimetre',
+  | IdPreferenceRecapitulatifAdmin,
   boolean
 >;
 
