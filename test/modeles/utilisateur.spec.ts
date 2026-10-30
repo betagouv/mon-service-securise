@@ -622,7 +622,7 @@ describe('Un utilisateur', () => {
     });
   });
 
-  describe("concernant ses préférences de communication pour l'email hebdomadaire", () => {
+  describe('concernant ses préférences de communication pour les récapitulatifs par email (hebdomadaire et mensuel)', () => {
     it('par défaut, consent à tous les sujets du récapitulatif', () => {
       const utilisateur = unUtilisateur().construis();
 
@@ -631,6 +631,7 @@ describe('Un utilisateur', () => {
         mentionDansMesure: true,
         responsableMesure: true,
         echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
       });
     });
 
@@ -646,6 +647,7 @@ describe('Un utilisateur', () => {
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
       });
     });
 
@@ -659,6 +661,7 @@ describe('Un utilisateur', () => {
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
       });
     });
 
@@ -673,6 +676,7 @@ describe('Un utilisateur', () => {
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
       });
     });
 
@@ -693,6 +697,7 @@ describe('Un utilisateur', () => {
         responsableMesure: true,
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
         unePreference: false,
       });
     });
