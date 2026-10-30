@@ -85,7 +85,7 @@
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.0",
     "@playwright/test": "^1.59.1",
-    "@sentry/vite-plugin": "^5.1.1",
+    "@sentry/vite-plugin": "^11.0.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tsconfig/svelte": "^5.0.8",
     "@types/bcrypt": "^6.0.0",
