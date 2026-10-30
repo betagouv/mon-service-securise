@@ -58,6 +58,7 @@ export type DonneesUtilisateur = {
   estimationNombreServices: EstimationNombreServices;
   postes: Array<string>;
   entite: Partial<DonneesEntite>;
+  // TODO : le "Hebdomadaire" est de trop désormais… il faudrait une migration + renommage.
   preferencesRecapitulatifHebdomadaire?: PreferencesRecapitulatif;
 };
 

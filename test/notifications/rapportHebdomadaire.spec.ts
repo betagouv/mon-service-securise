@@ -123,7 +123,7 @@ describe('Le service de rapport hebdomadaire', () => {
             unUtilisateur()
               .avecId(unUUID('U'))
               .avecEmail('jean.valjean@mail.fr')
-              .avecPreferencesRapportHebdomadaire({ [type]: false }).donnees
+              .avecPreferencesDeRecapitulatif({ [type]: false }).donnees
           )
           .construis() as unknown as AdaptateurPersistance;
         depotDonnees = leDepot();
@@ -262,7 +262,7 @@ describe('Le service de rapport hebdomadaire', () => {
         unUtilisateur()
           .avecId(unUUID('U'))
           .avecEmail('jean.valjean@mail.fr')
-          .avecPreferencesRapportHebdomadaire({
+          .avecPreferencesDeRecapitulatif({
             responsableMesure: false,
             mentionDansMesure: false,
             echeanceMesureBientotExpiree: false,
