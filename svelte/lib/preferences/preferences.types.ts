@@ -7,6 +7,7 @@ declare global {
 export type PreferencesProps = {
   consentements: Consentements;
   recapitulatifHebdomadaire: RecapitulatifHebdomadaire;
+  peutGererPreferencesDuPerimetre: boolean;
 };
 
 export type Consentements = {
