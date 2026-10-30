@@ -1,16 +1,19 @@
-import Service from '../modeles/service.js';
+import Service from '../../modeles/service.js';
 import {
   NiveauSecurite,
   TypeDeService,
-} from '../../donneesReferentielMesuresV2.js';
-import { UUID } from '../typesBasiques.js';
-import { IdCategorieMesure, IdTypeService } from '../referentiel.types.js';
-import { AdaptateurChiffrement } from './adaptateurChiffrement.interface.js';
-import { AdaptateurJournalMSS } from './adaptateurJournalMSS.interface.js';
-import Dossiers from '../modeles/dossiers.js';
-import Dossier from '../modeles/dossier.js';
-import { StatutMesure } from '../modeles/mesure.js';
-import { TousReferentiels } from '../referentiel.interface.js';
+} from '../../../donneesReferentielMesuresV2.js';
+import { UUID } from '../../typesBasiques.js';
+import { IdCategorieMesure, IdTypeService } from '../../referentiel.types.js';
+import { AdaptateurChiffrement } from '../adaptateurChiffrement.interface.js';
+import {
+  AdaptateurJournalMSS,
+  EvolutionMensuelle,
+} from '../adaptateurJournalMSS.interface.js';
+import Dossiers from '../../modeles/dossiers.js';
+import Dossier from '../../modeles/dossier.js';
+import { StatutMesure } from '../../modeles/mesure.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
@@ -275,7 +278,9 @@ export class ServiceStatistiquesAdmin {
     }, repartitionVide);
   }
 
-  private async evolutionNombreServices(services: Array<Service>) {
+  private async evolutionNombreServices(
+    services: Array<Service>
+  ): Promise<EvolutionMensuelle> {
     const idsHaches = services.map((s) =>
       this.adaptateurChiffrement.hacheSha256(s.id)
     );

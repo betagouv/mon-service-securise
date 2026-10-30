@@ -21,7 +21,7 @@ import {
   ErreurSuppressionImpossible,
   ErreurUtilisateurNonAdministre,
 } from '../../erreurs.js';
-import { ServiceStatistiquesAdmin } from '../../adaptateurs/serviceStatistiquesAdmin.js';
+import { ServiceStatistiquesAdmin } from '../../adaptateurs/statistiques/serviceStatistiquesAdmin.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { routesConnecteApiAdminGroupesEntites } from './routesConnecteApiAdminGroupesEntites.js';

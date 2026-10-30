@@ -1,4 +1,4 @@
-import { ServiceStatistiquesAdmin } from '../../src/adaptateurs/serviceStatistiquesAdmin.ts';
+import { ServiceStatistiquesAdmin } from '../../src/adaptateurs/statistiques/serviceStatistiquesAdmin.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.ts';
 import {
