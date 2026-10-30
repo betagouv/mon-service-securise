@@ -164,13 +164,27 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
     it("délègue au dépôt de données la lecture des informations de l'utilisateur", async () => {
       let idRecu;
+      let verifieSiEstAdmin;
+      let verifieSiEstSuperviseur;
+
       testeur.depotDonnees().utilisateur = (idUtilisateur) => {
         idRecu = idUtilisateur;
         return unUtilisateur().construis();
       };
+      testeur.depotDonnees().estAdmin = (idUtilisateur) => {
+        verifieSiEstAdmin = idUtilisateur;
+        return false;
+      };
+      testeur.depotDonnees().estSuperviseur = (idUtilisateur) => {
+        verifieSiEstSuperviseur = idUtilisateur;
+        return false;
+      };
 
       await testeur.get(`/preferences`);
+
       expect(idRecu).to.be('U1');
+      expect(verifieSiEstAdmin).to.be('U1');
+      expect(verifieSiEstSuperviseur).to.be('U1');
     });
 
     it('passe les préférences de communication au rendu de la page', async () => {
@@ -187,6 +201,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           echeanceMesureExpiree: true,
           nouveauxServicesAjoutesAuPerimetre: true,
         },
+        peutGererPreferencesDuPerimetre: false,
       });
     });
   });

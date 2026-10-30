@@ -6,6 +6,7 @@ $(() => {
     pixelDeSuiviAccepte,
     transactionnelAccepte,
     preferencesRecapitulatif,
+    peutGererPreferencesDuPerimetre,
   } = lisDonneesPartagees('donnees-preferences');
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-preferences', {
@@ -16,6 +17,7 @@ $(() => {
           transactionnelAccepte,
         },
         recapitulatifHebdomadaire: preferencesRecapitulatif,
+        peutGererPreferencesDuPerimetre,
       },
     })
   );
