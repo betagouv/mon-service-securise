@@ -14,6 +14,7 @@ import Dossiers from '../../modeles/dossiers.js';
 import Dossier from '../../modeles/dossier.js';
 import { StatutMesure } from '../../modeles/mesure.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
+import { EvolutionNombreServices } from './evolutionNombreServices.js';
 
 export interface LecteurServices {
   servicesDeUtilisateur(idUtilisateur: UUID): Promise<Array<Service>>;
@@ -281,11 +282,10 @@ export class ServiceStatistiquesAdmin {
   private async evolutionNombreServices(
     services: Array<Service>
   ): Promise<EvolutionMensuelle> {
-    const idsHaches = services.map((s) =>
-      this.adaptateurChiffrement.hacheSha256(s.id)
-    );
-
-    return this.adaptateurJournalMSS.evolutionNombreServices(idsHaches);
+    return new EvolutionNombreServices({
+      adaptateurChiffrement: this.adaptateurChiffrement,
+      adaptateurJournalMSS: this.adaptateurJournalMSS,
+    }).donnees(services);
   }
 
   private async evolutionNombreOrganisations(services: Array<Service>) {
