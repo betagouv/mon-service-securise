@@ -58,13 +58,16 @@
   {#snippet entete()}
     <h4>Vérifiez avant d'appliquer vos mesures</h4>
     <p>
-      {singulierPluriel(
-        'La mesure',
-        `Les ${$modelesMesureSpecifique.length} mesures`,
-        $modelesMesureSpecifique.length
-      )} de l'onglet « Mes mesures ajoutées » seront associées aux services qui ne
-      les ont pas encore. Elles seront ajoutées avec le statut «&nbsp;À lancer&nbsp;»
-      ; les statuts et précisions déjà renseignés ne seront pas modifiés.
+      {#if $modelesMesureSpecifique.length === 1}
+        La mesure de l'onglet «&nbsp;Mes mesures ajoutées&nbsp;» sera associée
+        aux services qui ne l'ont pas encore. Elles sera ajoutée avec le statut
+        «&nbsp;À lancer&nbsp;»&nbsp;;
+      {:else}
+        Les {$modelesMesureSpecifique.length} mesures de l'onglet «&nbsp;Mes mesures
+        ajoutées&nbsp;» seront associées aux services qui ne les ont pas encore. Elles
+        seront ajoutées avec le statut «&nbsp;À lancer&nbsp;» ;
+      {/if}
+      les statuts et précisions déjà renseignés ne seront pas modifiés.
     </p>
   {/snippet}
   {#snippet contenu()}
