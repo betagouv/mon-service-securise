@@ -26,7 +26,8 @@ export type IdNotificationTransactionnelleDansRecapitulatif =
   (typeof idsNotificationTransactionnelleDansRecapitulatif)[number];
 
 type PreferencesRecapitulatif = Record<
-  IdNotificationTransactionnelleDansRecapitulatif,
+  | IdNotificationTransactionnelleDansRecapitulatif
+  | 'nouveauxServicesAjoutesAuPerimetre',
   boolean
 >;
 
@@ -35,6 +36,7 @@ const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   responsableMesure: true,
   echeanceMesureBientotExpiree: true,
   echeanceMesureExpiree: true,
+  nouveauxServicesAjoutesAuPerimetre: true,
 };
 
 export type DonneesUtilisateur = {
