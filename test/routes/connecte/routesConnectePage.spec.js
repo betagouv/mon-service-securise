@@ -185,6 +185,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           responsableMesure: true,
           echeanceMesureBientotExpiree: true,
           echeanceMesureExpiree: true,
+          nouveauxServicesAjoutesAuPerimetre: true,
         },
       });
     });
