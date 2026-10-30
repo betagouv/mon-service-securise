@@ -11,6 +11,7 @@ import {
   schemaMesureSpecifique,
 } from '../../http/schemas/mesure.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
+import { idsPreferenceRecapitulatifAdmin } from '../../modeles/utilisateur.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
@@ -31,6 +32,7 @@ export const schemaPutPreferencesRecapitulatifUtilisateur = (
   Object.fromEntries(
     referentiel
       .identifiantsNotificationsTransactionnelles()
+      .concat(idsPreferenceRecapitulatifAdmin)
       .map((id) => [id, z.boolean().optional()])
   );
 
