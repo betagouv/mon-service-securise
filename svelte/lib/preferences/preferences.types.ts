@@ -6,7 +6,7 @@ declare global {
 
 export type PreferencesProps = {
   consentements: Consentements;
-  recapitulatifHebdomadaire: RecapitulatifHebdomadaire;
+  preferencesRecapitulatif: PreferencesRecapitulatif;
   peutGererPreferencesDuPerimetre: boolean;
 };
 
@@ -16,9 +16,16 @@ export type Consentements = {
   pixelDeSuiviAccepte: boolean;
 };
 
+export type PreferencesRecapitulatif = RecapitulatifHebdomadaire &
+  RecapitulatifMensuel;
+
 export type RecapitulatifHebdomadaire = {
   mentionDansMesure: boolean;
   responsableMesure: boolean;
   echeanceMesureBientotExpiree: boolean;
   echeanceMesureExpiree: boolean;
+};
+
+export type RecapitulatifMensuel = {
+  nouveauxServicesAjoutesAuPerimetre: boolean;
 };
