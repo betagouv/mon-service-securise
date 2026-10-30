@@ -27,9 +27,9 @@
   let idModeles = $derived(new Set($modelesMesureSpecifique.map((m) => m.id)));
 
   let servicesSansToutesLesMesuresAppliquees = $derived(
-    $servicesAvecMesuresAssociees.filter(
-      (s) => !modelesAppliquesAuxServices[s.id].isSupersetOf(idModeles)
-    )
+    $servicesAvecMesuresAssociees
+      .filter((s) => s.peutEtreModifie)
+      .filter((s) => !modelesAppliquesAuxServices[s.id].isSupersetOf(idModeles))
   );
 </script>
 
