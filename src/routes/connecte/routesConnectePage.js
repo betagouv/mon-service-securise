@@ -54,7 +54,13 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
-      const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
+
+      const [utilisateur, estAdmin, estSuperviseur] = await Promise.all([
+        depotDonnees.utilisateur(idUtilisateur),
+        depotDonnees.estAdmin(idUtilisateur),
+        depotDonnees.estSuperviseur(idUtilisateur),
+      ]);
+
       const { infolettreAcceptee, pixelDeSuiviAccepte, transactionnelAccepte } =
         utilisateur;
       reponse.render('preferences', {
@@ -62,6 +68,7 @@ const routesConnectePage = ({
         pixelDeSuiviAccepte,
         transactionnelAccepte,
         preferencesRecapitulatif: utilisateur.preferencesRecapitulatif(),
+        peutGererPreferencesDuPerimetre: estAdmin || estSuperviseur,
       });
     }
   );
