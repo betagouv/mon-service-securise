@@ -8,6 +8,7 @@
   import { associeServicesModeleMesureSpecifique } from '../listeMesures.api';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import ChargementEnCours from '../../ui/ChargementEnCours.svelte';
 
   let elementModale: Modale | undefined = $state();
 
@@ -35,22 +36,37 @@
       .filter(([_, idsServices]) => idsServices.length > 0)
   );
 
+  let etatModale: 'IDLE' | 'APPLICATION_EN_COURS' = $state('IDLE');
+  let indexModeleEnCoursDApplication: number = $state(0);
+
   const appliqueAuxServices = async () => {
-    await Promise.all(
-      modelesEtServicesConcernes.map(([idModele, idServices]) => {
-        associeServicesModeleMesureSpecifique(
+    etatModale = 'APPLICATION_EN_COURS';
+    indexModeleEnCoursDApplication = 0;
+
+    try {
+      for (const [idModele, idServices] of modelesEtServicesConcernes) {
+        indexModeleEnCoursDApplication++;
+        await associeServicesModeleMesureSpecifique(
           idModele as string,
           idServices as string[]
         );
-      })
-    );
-    elementModale?.ferme();
-    toasterStore.succes(
-      'Succès',
-      'Toutes vos mesures spécifiques sont désormais appliquées à tous vos services.'
-    );
-    await servicesAvecMesuresAssociees.rafraichis();
-    await modelesMesureSpecifique.rafraichis();
+      }
+      elementModale?.ferme();
+      toasterStore.succes(
+        'Succès',
+        'Toutes vos mesures spécifiques sont désormais appliquées à tous vos services.'
+      );
+      await servicesAvecMesuresAssociees.rafraichis();
+      await modelesMesureSpecifique.rafraichis();
+    } catch {
+      elementModale?.ferme();
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        'Merci de recharger la page'
+      );
+    } finally {
+      etatModale = 'IDLE';
+    }
   };
 </script>
 
@@ -71,15 +87,28 @@
     </p>
   {/snippet}
   {#snippet contenu()}
-    <div class="contenu">
-      <h4>
-        {singulierPluriel(
-          'Le service suivant va',
-          `Les ${services.length} services suivants vont`,
-          services.length
-        )} recevoir les mesures manquantes
-      </h4>
-      <TableauServicesPourApplication {referentielTypesService} {services} />
+    <div
+      class="contenu"
+      class:application-en-cours={etatModale === 'APPLICATION_EN_COURS'}
+    >
+      {#if etatModale === 'IDLE'}
+        <h4>
+          {singulierPluriel(
+            'Le service suivant va',
+            `Les ${services.length} services suivants vont`,
+            services.length
+          )} recevoir les mesures manquantes
+        </h4>
+        <TableauServicesPourApplication {referentielTypesService} {services} />
+      {/if}
+
+      {#if etatModale === 'APPLICATION_EN_COURS'}
+        <ChargementEnCours />
+        <p class="avancement">
+          Mesure <span class="chiffre">{indexModeleEnCoursDApplication}</span>
+          sur {modelesEtServicesConcernes.length}…
+        </p>
+      {/if}
     </div>
   {/snippet}
   {#snippet actions()}
@@ -88,6 +117,7 @@
       kind="tertiary"
       label="Annuler"
       onclick={() => elementModale?.ferme()}
+      disabled={etatModale === 'APPLICATION_EN_COURS'}
     ></dsfr-button>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <dsfr-button
@@ -97,6 +127,7 @@
         services.length
       )}
       onclick={async () => appliqueAuxServices()}
+      disabled={etatModale === 'APPLICATION_EN_COURS'}
     ></dsfr-button>
   {/snippet}
 </Modale>
@@ -118,6 +149,25 @@
 
   .contenu {
     margin-top: 24px;
+
+    &.application-en-cours {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+
+      .avancement {
+        margin-top: 90px;
+      }
+
+      .chiffre {
+        font-variant-numeric: tabular-nums;
+        display: inline-block;
+        min-width: 2ch;
+        text-align: right;
+      }
+    }
   }
 
   p {
