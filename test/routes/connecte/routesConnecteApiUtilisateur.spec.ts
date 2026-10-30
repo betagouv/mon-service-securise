@@ -358,9 +358,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     ])('sauvegarde la nouvelle préférence `%s`', async (clePreference) => {
       const reponse = await testeur.put(
         '/api/utilisateur/preferences/consentements',
-        {
-          [clePreference]: true,
-        }
+        { [clePreference]: true }
       );
 
       expect(reponse.status).toBe(200);
@@ -400,9 +398,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     it('jette une erreur si la payload est invalide', async () => {
       const reponse = await testeur.put(
         '/api/utilisateur/preferences/recapitulatif',
-        {
-          pasValide: 42,
-        }
+        { pasValide: 42 }
       );
 
       expect(reponse.status).toBe(400);

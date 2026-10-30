@@ -36,9 +36,13 @@ const inventaire: Record<
     occurrences: 1,
     couvertPar: 'migreLesHashDeLaSupervision',
   },
-  'src/adaptateurs/serviceStatistiquesAdmin.ts': {
-    occurrences: 4,
+  'src/adaptateurs/statistiques/serviceStatistiquesAdmin.ts': {
+    occurrences: 3,
     couvertPar: 'migreLesEvenementsDuJournal',
+  },
+  'src/adaptateurs/statistiques/evolutionNombreServices.ts': {
+    occurrences: 1,
+    couvertPar: 'aucun hash persisté',
   },
   'src/modeles/journalMSS/evenementAccesUtilisateurAdministreRetires.ts': {
     occurrences: 3,

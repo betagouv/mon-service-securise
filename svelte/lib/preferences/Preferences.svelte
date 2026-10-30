@@ -1,10 +1,26 @@
 <script lang="ts">
-  import type { PreferencesProps } from './preferences.types';
+  import type {
+    PreferencesProps,
+    RecapitulatifHebdomadaire,
+    RecapitulatifMensuel,
+  } from './preferences.types';
   import PreferencesNotificationsParEmail from './blocsPreferences/PreferencesNotificationsParEmail.svelte';
   import PreferencesConsentements from './blocsPreferences/PreferencesConsentements.svelte';
   import PreferencesRecapitulatifHebdomadaire from './blocsPreferences/PreferencesRecapitulatifHebdomadaire.svelte';
+  import PreferencesRecapitulatifMensuel from './blocsPreferences/PreferencesRecapitulatifMensuel.svelte';
 
-  let { consentements, recapitulatifHebdomadaire }: PreferencesProps = $props();
+  let {
+    consentements,
+    preferencesRecapitulatif,
+    peutGererPreferencesDuPerimetre,
+  }: PreferencesProps = $props();
+
+  let recapitulatifHebdomadaire: RecapitulatifHebdomadaire = $derived(
+    preferencesRecapitulatif
+  );
+  let recapitulatifMensuel: RecapitulatifMensuel = $derived(
+    preferencesRecapitulatif
+  );
 </script>
 
 <h1>Préférences</h1>
@@ -14,8 +30,15 @@
 </p>
 <div class="conteneur-blocs">
   <PreferencesRecapitulatifHebdomadaire {recapitulatifHebdomadaire} />
+
+  {#if peutGererPreferencesDuPerimetre}
+    <hr />
+    <PreferencesRecapitulatifMensuel {recapitulatifMensuel} />
+  {/if}
+
   <hr />
   <PreferencesNotificationsParEmail />
+
   <hr />
   <PreferencesConsentements {consentements} />
 </div>

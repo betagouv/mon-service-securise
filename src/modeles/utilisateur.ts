@@ -21,12 +21,18 @@ export const idsNotificationTransactionnelleDansRecapitulatif = [
   'echeanceMesureBientotExpiree',
   'echeanceMesureExpiree',
 ] as const;
-
 export type IdNotificationTransactionnelleDansRecapitulatif =
   (typeof idsNotificationTransactionnelleDansRecapitulatif)[number];
 
+export const idsPreferenceRecapitulatifAdmin = [
+  'nouveauxServicesAjoutesAuPerimetre',
+] as const;
+export type IdPreferenceRecapitulatifAdmin =
+  (typeof idsPreferenceRecapitulatifAdmin)[number];
+
 type PreferencesRecapitulatif = Record<
-  IdNotificationTransactionnelleDansRecapitulatif,
+  | IdNotificationTransactionnelleDansRecapitulatif
+  | IdPreferenceRecapitulatifAdmin,
   boolean
 >;
 
@@ -35,6 +41,7 @@ const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   responsableMesure: true,
   echeanceMesureBientotExpiree: true,
   echeanceMesureExpiree: true,
+  nouveauxServicesAjoutesAuPerimetre: true,
 };
 
 export type DonneesUtilisateur = {
@@ -51,6 +58,7 @@ export type DonneesUtilisateur = {
   estimationNombreServices: EstimationNombreServices;
   postes: Array<string>;
   entite: Partial<DonneesEntite>;
+  // TODO : le "Hebdomadaire" est de trop désormais… il faudrait une migration + renommage.
   preferencesRecapitulatifHebdomadaire?: PreferencesRecapitulatif;
 };
 
