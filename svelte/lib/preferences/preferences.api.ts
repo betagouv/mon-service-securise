@@ -1,6 +1,6 @@
 import type {
   Consentements,
-  RecapitulatifHebdomadaire,
+  PreferencesRecapitulatif,
 } from './preferences.types';
 
 export const api = {
@@ -8,6 +8,6 @@ export const api = {
     consentements: Partial<Consentements>
   ) => axios.put('/api/utilisateur/preferences/consentements', consentements),
   sauvegardePreferencesRecapitulatif: async (
-    recapitulatif: Partial<RecapitulatifHebdomadaire>
+    recapitulatif: Partial<PreferencesRecapitulatif>
   ) => axios.put('/api/utilisateur/preferences/recapitulatif', recapitulatif),
 };

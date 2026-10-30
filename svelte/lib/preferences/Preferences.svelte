@@ -1,10 +1,17 @@
 <script lang="ts">
-  import type { PreferencesProps } from './preferences.types';
+  import type {
+    PreferencesProps,
+    RecapitulatifHebdomadaire,
+  } from './preferences.types';
   import PreferencesNotificationsParEmail from './blocsPreferences/PreferencesNotificationsParEmail.svelte';
   import PreferencesConsentements from './blocsPreferences/PreferencesConsentements.svelte';
   import PreferencesRecapitulatifHebdomadaire from './blocsPreferences/PreferencesRecapitulatifHebdomadaire.svelte';
 
-  let { consentements, recapitulatifHebdomadaire }: PreferencesProps = $props();
+  let { consentements, preferencesRecapitulatif }: PreferencesProps = $props();
+
+  let recapitulatifHebdomadaire: RecapitulatifHebdomadaire = $derived(
+    preferencesRecapitulatif
+  );
 </script>
 
 <h1>Préférences</h1>
