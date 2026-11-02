@@ -20,6 +20,7 @@ const nouvelAdaptateur = (): AdaptateurJournalMSS => {
     dateDerniereMiseAJourServices: async () => [],
     evolutionNombreServices: async () => [],
     evolutionNombreOrganisations: async () => [],
+    servicesCreesDansIntervalle: async () => [],
   };
 };
 
