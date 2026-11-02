@@ -180,6 +180,10 @@ const inventaire: Record<
     occurrences: 9,
     couvertPar: 'aucun hash persisté',
   },
+  'src/notifications/rapportMensuel.ts': {
+    occurrences: 1,
+    couvertPar: 'aucun hash persisté',
+  },
 };
 
 const racineDuProjet = fileURLToPath(new URL('../../', import.meta.url));
