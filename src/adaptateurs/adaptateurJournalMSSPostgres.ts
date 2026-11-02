@@ -87,4 +87,29 @@ export class AdaptateurJournalMSSPostgres implements AdaptateurJournalMSS {
       ({ derniere_date: date }: { derniere_date: Date }) => date
     );
   }
+
+  async servicesCreesDansIntervalle(
+    idsServicesHaches: string[],
+    intervalle: { debut: Date; fin: Date }
+  ) {
+    if (idsServicesHaches.length === 0) return [];
+
+    const resultat = await this.knex.raw(
+      `
+            SELECT
+                donnees->>'idService' AS "idService"
+            FROM journal_mss.evenements
+            WHERE type = 'NOUVEAU_SERVICE_CREE'
+            AND donnees->>'idService' IS NOT NULL
+              AND donnees->>'idService' = ANY(:idsServicesHaches)
+              AND date >= date_trunc('day', :debut::timestamptz)
+              AND date < date_trunc('day', :fin::timestamptz) + interval '1 day'
+            ORDER BY date
+    `,
+      { idsServicesHaches, debut: intervalle.debut, fin: intervalle.fin }
+    );
+    return resultat.rows.map(
+      ({ idService }: { idService: string }) => idService
+    );
+  }
 }

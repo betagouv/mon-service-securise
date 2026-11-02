@@ -311,4 +311,57 @@ describe("L'adaptateur Postgres du Journal MSS", () => {
       expect(resultat).toEqual([]);
     });
   });
+
+  describe('sur demande du nombre de services créés sur une période', () => {
+    const unServiceCree = (idService: string, date: string) => ({
+      date,
+      type: 'NOUVEAU_SERVICE_CREE',
+      donnees: { idService },
+    });
+
+    it('retrouve les services créés sur la période incluant ceux des jours ciblés', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
+        unServiceCree('S2', '2026-05-20T08:32:14.474Z'),
+        unServiceCree('S3', '2026-04-12T08:32:14.474Z'),
+        unServiceCree('S4', '2026-05-22T18:32:14.474Z'),
+      ]);
+
+      const resultat = await journalMSS.servicesCreesDansIntervalle(
+        ['S1', 'S2', 'S3', 'S4'],
+        {
+          debut: new Date('2026-05-18T09:32:14.474Z'),
+          fin: new Date('2026-05-22T08:32:14.474Z'),
+        }
+      );
+
+      expect(resultat).toEqual(['S1', 'S2', 'S4']);
+    });
+
+    it("ne retourne rien quand aucun service n'a été créé", async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+
+      expect(
+        await journalMSS.servicesCreesDansIntervalle(['S1'], {
+          debut: new Date('2026-05-18T09:32:14.474Z'),
+          fin: new Date('2026-05-22T08:32:14.474Z'),
+        })
+      ).toEqual([]);
+    });
+
+    it('ne retourne rien quand aucun service n’est demandé', async () => {
+      const journalMSS = new AdaptateurJournalMSSPostgres(trx);
+      await trx('journal_mss.evenements').insert([
+        unServiceCree('S1', '2026-05-18T08:32:18.660Z'),
+      ]);
+
+      expect(
+        await journalMSS.servicesCreesDansIntervalle([], {
+          debut: new Date('2026-05-18T09:32:14.474Z'),
+          fin: new Date('2026-05-22T08:32:14.474Z'),
+        })
+      ).toEqual([]);
+    });
+  });
 });

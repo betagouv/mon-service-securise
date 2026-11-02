@@ -17,4 +17,8 @@ export interface AdaptateurJournalMSS {
   dateDerniereMiseAJourServices: (
     idsServicesHaches: Array<string>
   ) => Promise<Date[]>;
+  servicesCreesDansIntervalle(
+    idsServicesHaches: string[],
+    intervalle: { debut: Date; fin: Date }
+  ): Promise<Array<string>>;
 }
