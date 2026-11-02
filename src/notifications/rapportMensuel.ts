@@ -18,8 +18,10 @@ export type Configuration = {
   depotDonnees: {
     tousLesAdmins: () => Promise<AdminOrganisations[]>;
     tousLesSuperviseurs: () => Promise<Superviseur[]>;
-    utilisateur: (id: UUID) => Promise<Utilisateur>;
-    tousLesServicesAvecSirets: (sirets: string[]) => Promise<Service[]>;
+    utilisateur: (id: UUID) => Promise<Utilisateur | undefined>;
+    tousLesServicesAvecSirets: (
+      sirets: string[]
+    ) => Promise<Map<string, Service[]>>;
   };
   adaptateurJournal: {
     servicesCreesDansIntervalle(
@@ -64,8 +66,8 @@ export class RapportMensuel {
       );
       const services =
         await this.depotDonnees.tousLesServicesAvecSirets(perimetre);
-      const idServicesHaches = services.map((s) =>
-        this.adaptateurChiffrement.hacheSha256(s.id)
+      const idServicesHaches = [...services.values().flatMap((s) => s)].map(
+        (s) => this.adaptateurChiffrement.hacheSha256(s.id)
       );
 
       const nouveauxDansIntervalle =
@@ -88,7 +90,7 @@ export class RapportMensuel {
 
     for (const id of ids) {
       const utilisateur = await this.depotDonnees.utilisateur(id);
-      utilisateurs.push(utilisateur);
+      utilisateurs.push(utilisateur!);
     }
 
     return utilisateurs.filter(

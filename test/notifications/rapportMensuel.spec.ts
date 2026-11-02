@@ -9,6 +9,7 @@ import { unAdminOrganisations } from '../constructeurs/constructeurAdminOrganisa
 import { unSuperviseur } from '../constructeurs/constructeurSuperviseur.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import Service from '../../src/modeles/service.js';
 
 describe('Le service de rapport mensuel', () => {
   let configuration: Configuration;
@@ -27,13 +28,17 @@ describe('Le service de rapport mensuel', () => {
             .construis(),
         ],
         tousLesServicesAvecSirets: async (sirets: string[]) => {
-          const services = [];
+          const services = new Map<string, Service[]>();
           if (sirets.includes('SIRET-A1')) {
-            services.push(unServiceV2().avecId(unUUID('S1')).construis());
+            services.set('SIRET-A1', [
+              unServiceV2().avecId(unUUID('S1')).construis(),
+            ]);
           }
           if (sirets.includes('SIRET-S1')) {
-            services.push(unServiceV2().avecId(unUUID('S2')).construis());
-            services.push(unServiceV2().avecId(unUUID('S3')).construis());
+            services.set('SIRET-S1', [
+              unServiceV2().avecId(unUUID('S2')).construis(),
+              unServiceV2().avecId(unUUID('S3')).construis(),
+            ]);
           }
 
           if (!services) throw new Error('SIRET inconnu');
