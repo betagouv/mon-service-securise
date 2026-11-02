@@ -83,6 +83,10 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     );
   }
 
+  async tousLesSuperviseurs(): Promise<DonneesSuperviseur[]> {
+    return structuredClone(this.donnees.superviseurs);
+  }
+
   async estSuperviseur(idUtilisateur: UUID): Promise<boolean> {
     return this.donnees.superviseurs.some(
       (s) => s.idUtilisateur === idUtilisateur

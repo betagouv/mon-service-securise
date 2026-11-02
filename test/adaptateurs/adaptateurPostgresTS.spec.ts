@@ -58,6 +58,17 @@ describe("L'adaptateur persistance Postgres", () => {
     });
   };
 
+  const ajouteSuperviseurSur = async (
+    idSuperviseur: string,
+    entite: DonneesEntite
+  ) => {
+    await trx.table('superviseurs').insert({
+      id_superviseur: idSuperviseur,
+      siret_hash: chiffrement.hacheSha256(entite.siret),
+      donnees: await chiffrement.chiffre(entite),
+    });
+  };
+
   const insereUneNotification = async (
     donnees: Partial<DonneesNotificationTransactionnelle>
   ) => {
@@ -254,6 +265,35 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(admins).toEqual([
         { idUtilisateur: idAdmin1, entitesAdministrees: [entiteA] },
         { idUtilisateur: idAdmin2, entitesAdministrees: [entiteA, entiteB] },
+      ]);
+    });
+  });
+
+  describe('sur demande de lecture de tous les superviseurs', () => {
+    const entiteA = { nom: 'entiteA', siret: 'SIRET-A', departement: '75' };
+    const entiteB = { nom: 'entiteB', siret: 'SIRET-B', departement: '44' };
+
+    it("retourne une liste vide s'il n'existe aucun superviseur", async () => {
+      const superviseurs = await persistance.tousLesSuperviseurs();
+
+      expect(superviseurs).toEqual([]);
+    });
+
+    it('retourne chaque superviseur avec toutes ses entités supervisées déchiffrées', async () => {
+      const idSuperviseur1 = unUUID('a');
+      const idSuperviseur2 = unUUID('b');
+      await ajouteSuperviseurSur(idSuperviseur2, entiteA);
+      await ajouteSuperviseurSur(idSuperviseur1, entiteA);
+      await ajouteSuperviseurSur(idSuperviseur2, entiteB);
+
+      const superviseurs = await persistance.tousLesSuperviseurs();
+
+      expect(superviseurs).toEqual([
+        { idUtilisateur: idSuperviseur1, entitesSupervisees: [entiteA] },
+        {
+          idUtilisateur: idSuperviseur2,
+          entitesSupervisees: [entiteA, entiteB],
+        },
       ]);
     });
   });

@@ -513,6 +513,8 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     estSuperviseur: depotSuperviseurs.estSuperviseur.bind(depotSuperviseurs),
     lisSuperviseursPour:
       depotSuperviseurs.lisSuperviseursPour.bind(depotSuperviseurs),
+    tousLesSuperviseurs:
+      depotSuperviseurs.tousLesSuperviseurs.bind(depotSuperviseurs),
     supprimeSuperviseur:
       depotSuperviseurs.supprimeSuperviseur.bind(depotSuperviseurs),
     lisNotifications: depotNotificationsTransactionnelles.lisNotifications.bind(

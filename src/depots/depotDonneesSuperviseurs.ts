@@ -25,6 +25,12 @@ export class DepotDonneesSuperviseurs {
     return donnees.map((d) => Superviseur.hydrate(d));
   }
 
+  async tousLesSuperviseurs(): Promise<Superviseur[]> {
+    const donnees = await this.persistance.tousLesSuperviseurs();
+
+    return donnees.map((d) => Superviseur.hydrate(d));
+  }
+
   async supprimeSuperviseur(idUtilisateur: UUID): Promise<void> {
     await this.persistance.supprimeSuperviseur(idUtilisateur);
   }
