@@ -547,6 +547,9 @@ const creeDepot = (config: ConfigDepotDonnees) => {
     lisAdminsPourSirets: depotAdminsOrganisations.lisAdminsPourSirets.bind(
       depotAdminsOrganisations
     ),
+    tousLesAdmins: depotAdminsOrganisations.tousLesAdmins.bind(
+      depotAdminsOrganisations
+    ),
     sauvegardeAdminOrganisations:
       depotAdminsOrganisations.sauvegardeAdminOrganisations.bind(
         depotAdminsOrganisations
