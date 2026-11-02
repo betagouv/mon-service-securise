@@ -71,4 +71,5 @@ export interface PersistanceTS {
     sirets: string[]
   ) => Promise<void>;
   tousLesAdmins: () => Promise<DonneesAdminOrganisations[]>;
+  tousLesSuperviseurs: () => Promise<DonneesSuperviseur[]>;
 }

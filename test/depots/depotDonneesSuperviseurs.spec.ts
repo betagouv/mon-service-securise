@@ -64,6 +64,25 @@ describe('Le dépôt de données des superviseurs', () => {
     });
   });
 
+  it('peut lire tous les superviseurs', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteSuperviseurSurPerimetre(unUUID('S1'), [{ siret: 'siret-A' }])
+      .ajouteSuperviseurSurPerimetre(unUUID('S2'), [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesSuperviseurs({ persistance });
+
+    const superviseurs = await depot.tousLesSuperviseurs();
+
+    expect(superviseurs).toHaveLength(2);
+    expect(superviseurs[0]).toBeInstanceOf(Superviseur);
+    expect(superviseurs[0].donnees().idUtilisateur).toBe(unUUID('S1'));
+    expect(superviseurs[1]).toBeInstanceOf(Superviseur);
+    expect(superviseurs[1].donnees().idUtilisateur).toBe(unUUID('S2'));
+  });
+
   describe("sur demande de vérification qu'un utilisateur est superviseur", () => {
     it('retourne vrai si le superviseur existe', async () => {
       const persistance = unePersistanceMemoireTS()
