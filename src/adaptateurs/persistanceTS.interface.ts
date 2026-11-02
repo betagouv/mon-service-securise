@@ -70,4 +70,5 @@ export interface PersistanceTS {
     idGroupe: UUID,
     sirets: string[]
   ) => Promise<void>;
+  tousLesAdmins: () => Promise<DonneesAdminOrganisations[]>;
 }

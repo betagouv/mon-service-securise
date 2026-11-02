@@ -80,6 +80,34 @@ export class AdaptateurPostgresTS implements PersistanceTS {
     return { idUtilisateur, entitesAdministrees: entitesDechiffrees };
   }
 
+  async tousLesAdmins(): Promise<DonneesAdminOrganisations[]> {
+    const chaqueLigne: { idUtilisateur: UUID; donnees: DonneesChiffrees }[] =
+      await this.knex(TABLES.ADMINS_ORGANISATIONS)
+        .select({ idUtilisateur: 'id_utilisateur', donnees: 'donnees' })
+        .orderBy('id_utilisateur');
+
+    const lignesDechiffrees = await Promise.all(
+      chaqueLigne.map(async ({ idUtilisateur, donnees }) => ({
+        idUtilisateur,
+        entite: await this.chiffrement.dechiffre<DonneesEntite>(donnees),
+      }))
+    );
+
+    const entitesParAdmin = lignesDechiffrees.reduce(
+      (parAdmin, { idUtilisateur, entite }) =>
+        parAdmin.set(idUtilisateur, [
+          ...(parAdmin.get(idUtilisateur) ?? []),
+          entite,
+        ]),
+      new Map<UUID, DonneesEntite[]>()
+    );
+
+    return [...entitesParAdmin].map(([idUtilisateur, entitesAdministrees]) => ({
+      idUtilisateur,
+      entitesAdministrees,
+    }));
+  }
+
   async lisSuperviseur(
     idUtilisateur: UUID
   ): Promise<DonneesSuperviseur | undefined> {

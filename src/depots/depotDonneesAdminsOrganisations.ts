@@ -1,4 +1,7 @@
-import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganisations.js';
+import {
+  AdminOrganisations,
+  DonneesAdminOrganisations,
+} from '../modeles/gestionOrganisations/adminOrganisations.js';
 import { UUID } from '../typesBasiques.js';
 
 import { PersistanceTS } from '../adaptateurs/persistanceTS.interface.js';
@@ -44,5 +47,12 @@ export class DepotDonneesAdminsOrganisations {
     const admin = await this.lisAdminOrganisations(idUtilisateur);
 
     return admin !== undefined;
+  }
+
+  async tousLesAdmins() {
+    return (await this.persistance.tousLesAdmins()).map(
+      (donnees: DonneesAdminOrganisations) =>
+        AdminOrganisations.hydrate(donnees)
+    );
   }
 }

@@ -1,7 +1,7 @@
 import Knex from 'knex';
 import ClientPgLite from 'knex-pglite';
 import 'tsx/esm'; // Pour que `knex.migrate.latest()` s'exécute dans un écosytème où il comprend typescript. Car dans les tests, `tsc` ne s'exécute jamais.
-import { unUUIDRandom } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 import { AdaptateurPostgresTS } from '../../src/adaptateurs/adaptateurPostgresTS.ts';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.ts';
 import { PersistanceTS } from '../../src/adaptateurs/persistanceTS.interface.js';
@@ -12,6 +12,7 @@ import {
 import { DonneesCleApi } from '../../src/modeles/cleApi.ts';
 import { DonneesGroupeServices } from '../../src/modeles/groupeServices.ts';
 import { DonneesGroupeEntites } from '../../src/modeles/groupeEntites.ts';
+import { DonneesEntite } from '../../src/modeles/entite.ts';
 
 describe("L'adaptateur persistance Postgres", () => {
   let knex: Knex.Knex;
@@ -48,6 +49,14 @@ describe("L'adaptateur persistance Postgres", () => {
     siretsAssocies: [],
     ...donnees,
   });
+
+  const ajouteAdminSur = async (idAdmin: string, entite: DonneesEntite) => {
+    await trx.table('admins_organisations').insert({
+      id_utilisateur: idAdmin,
+      siret_hash: chiffrement.hacheSha256(entite.siret),
+      donnees: await chiffrement.chiffre(entite),
+    });
+  };
 
   const insereUneNotification = async (
     donnees: Partial<DonneesNotificationTransactionnelle>
@@ -158,14 +167,6 @@ describe("L'adaptateur persistance Postgres", () => {
     const entiteA = { nom: 'entiteA', siret: 'SIRET-A', departement: '75' };
     const entiteB = { nom: 'entiteB', siret: 'SIRET-B', departement: '44' };
 
-    const ajouteAdminSur = async (idAdmin: string, entite: typeof entiteA) => {
-      await trx.table('admins_organisations').insert({
-        id_utilisateur: idAdmin,
-        siret_hash: chiffrement.hacheSha256(entite.siret),
-        donnees: await chiffrement.chiffre(entite),
-      });
-    };
-
     it('associe à chaque SIRET demandé ses admins', async () => {
       const idAdmin1 = unUUIDRandom();
       const idAdmin2 = unUUIDRandom();
@@ -225,6 +226,32 @@ describe("L'adaptateur persistance Postgres", () => {
       const parSiret = await persistance.lisAdminsOrganisations(['SIRET-A']);
 
       expect(parSiret.get('SIRET-A')).toEqual([
+        { idUtilisateur: idAdmin1, entitesAdministrees: [entiteA] },
+        { idUtilisateur: idAdmin2, entitesAdministrees: [entiteA, entiteB] },
+      ]);
+    });
+  });
+
+  describe('sur demande de lecture de tous les admins', () => {
+    const entiteA = { nom: 'entiteA', siret: 'SIRET-A', departement: '75' };
+    const entiteB = { nom: 'entiteB', siret: 'SIRET-B', departement: '44' };
+
+    it("retourne une liste vide s'il n'existe aucun admin", async () => {
+      const admins = await persistance.tousLesAdmins();
+
+      expect(admins).toEqual([]);
+    });
+
+    it('retourne chaque admin avec toutes ses entités administrées déchiffrées', async () => {
+      const idAdmin1 = unUUID('a');
+      const idAdmin2 = unUUID('b');
+      await ajouteAdminSur(idAdmin2, entiteA);
+      await ajouteAdminSur(idAdmin1, entiteA);
+      await ajouteAdminSur(idAdmin2, entiteB);
+
+      const admins = await persistance.tousLesAdmins();
+
+      expect(admins).toEqual([
         { idUtilisateur: idAdmin1, entitesAdministrees: [entiteA] },
         { idUtilisateur: idAdmin2, entitesAdministrees: [entiteA, entiteB] },
       ]);

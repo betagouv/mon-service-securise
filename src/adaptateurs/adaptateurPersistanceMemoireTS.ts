@@ -62,6 +62,10 @@ export class AdaptateurPersistanceMemoireTS implements PersistanceTS {
     );
   }
 
+  async tousLesAdmins(): Promise<DonneesAdminOrganisations[]> {
+    return structuredClone(this.donnees.adminsOrganisations);
+  }
+
   async sauvegardeAdminOrganisations(
     donnees: DonneesAdminOrganisations
   ): Promise<void> {

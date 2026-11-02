@@ -141,4 +141,26 @@ describe("Le dépôt de données « mode OO » des adminitrateurs d'organisation
       expect(await depot.estAdmin(unUUID('X'))).toBe(false);
     });
   });
+
+  it('peut lire tous les admins', async () => {
+    const persistance = unePersistanceMemoireTS()
+      .ajouteAdminSurPerimetre(unUUID('A1'), [{ siret: 'siret-A' }])
+      .ajouteAdminSurPerimetre(unUUID('A2'), [{ siret: 'siret-B' }])
+      .ajouteAdminSurPerimetre(unUUID('A3'), [
+        { siret: 'siret-B' },
+        { siret: 'siret-A' },
+      ])
+      .construis();
+    const depot = new DepotDonneesAdminsOrganisations({ persistance });
+
+    const admins = await depot.tousLesAdmins();
+
+    expect(admins).toHaveLength(3);
+    expect(admins[0]).toBeInstanceOf(AdminOrganisations);
+    expect(admins[0].donnees().idUtilisateur).toBe(unUUID('A1'));
+    expect(admins[1]).toBeInstanceOf(AdminOrganisations);
+    expect(admins[1].donnees().idUtilisateur).toBe(unUUID('A2'));
+    expect(admins[2]).toBeInstanceOf(AdminOrganisations);
+    expect(admins[2].donnees().idUtilisateur).toBe(unUUID('A3'));
+  });
 });
