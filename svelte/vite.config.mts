@@ -30,9 +30,11 @@ export default defineConfig({
     sentryVitePlugin({
       disable:
         !process.env.SENTRY_AUTH_TOKEN || process.env.NODE_ENV !== 'production',
+      url: process.env.SENTRY_URL,
       org: process.env.SENTRY_ORGANISATION,
       project: process.env.SENTRY_PROJET,
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: false,
     }),
   ],
   root: './lib',
