@@ -10,6 +10,9 @@ import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
 import { RapportMensuel } from '../../src/notifications/rapportMensuel.js';
 import * as adaptateurRechercheEntrepriseAPI from '../../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
 import fabriqueAdaptateurJournalMSS from '../../src/adaptateurs/fabriqueAdaptateurJournalMSS.js';
+import { enCadence } from '../../src/utilitaires/pThrottle.js';
+import { ContenuRapportMensuel } from '../../src/adaptateurs/adaptateurMail.interface.js';
+import { fabriqueAdaptateurMail } from '../../src/adaptateurs/fabriqueAdaptateurMail.js';
 
 const maintenant = () =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -38,6 +41,7 @@ const tache = async (): Promise<string[]> => {
   const referentielV2 = fabriqueReferentiel().v2();
   const serviceCgu = fabriqueServiceCgu({ referentiel });
   const adaptateurJournal = fabriqueAdaptateurJournalMSS();
+  const adaptateurMail = fabriqueAdaptateurMail();
   const depotDonnees = DepotDonnees.creeDepot({
     adaptateurChiffrement,
     adaptateurEnvironnement,
@@ -58,8 +62,23 @@ const tache = async (): Promise<string[]> => {
   const donnees = await rapportMensuel.donnees(
     intervalleDuMoisPrecedent(new Date())
   );
+  trace.push(`✉️ ${donnees.length} email(s) à envoyer`);
 
-  trace.push(`👷‍♀️ Il faut envoyer le rapport avec les données ${donnees}`);
+  const envoieUnRapport = async (
+    destinataire: string,
+    contenu: ContenuRapportMensuel
+  ) => adaptateurMail.envoieRapportMensuel(destinataire, contenu);
+  const envoieEnCadence = enCadence(150, envoieUnRapport);
+
+  await Promise.all(
+    donnees.map((d) =>
+      envoieEnCadence(d.email, {
+        nbNouveauxServices: d.nbNouveauxServicesDansPerimetre,
+      })
+    )
+  );
+
+  trace.push('✅ Tout a été envoyé');
 
   return trace;
 };
@@ -74,6 +93,7 @@ const main = async () => {
     rapport.push(`⏰ Début : ${maintenant()}`);
 
     const rapportTache = await tache();
+
     rapport.push(...rapportTache);
   } catch (error: unknown) {
     const e = error as Error;

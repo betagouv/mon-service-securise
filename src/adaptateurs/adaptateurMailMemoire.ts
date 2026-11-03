@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import { emailMemoire } from './adaptateurEnvironnement.js';
-import { AdaptateurMail } from './adaptateurMail.interface.js';
+import {
+  AdaptateurMail,
+  ContenuRapportMensuel,
+} from './adaptateurMail.interface.js';
 
 const fabriqueAdaptateurMailMemoire = () => {
   const doitLoguer = emailMemoire().logEmailDansConsole();
@@ -65,6 +68,13 @@ const fabriqueAdaptateurMailMemoire = () => {
     contenu: string
   ) => {
     envoyer(`Envoi du rapport hebdomadaire pour ${destinataire}`, contenu);
+  };
+
+  const envoieRapportMensuel = async (
+    destinataire: string,
+    contenu: ContenuRapportMensuel
+  ) => {
+    envoyer(`Envoi du rapport mensuel pour ${destinataire}`, contenu);
   };
 
   const envoieNotificationExpirationHomologation = async (
@@ -152,6 +162,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieNotificationExpirationHomologation,
     envoieMessageNominationAdmin,
     envoieRapportHebdomadaire,
+    envoieRapportMensuel,
     recupereEntreprise,
     recupereEntrepriseDuContact,
     recupereIdentifiantContact,
