@@ -28,4 +28,5 @@ export type RecapitulatifHebdomadaire = {
 
 export type RecapitulatifMensuel = {
   nouveauxServicesAjoutesAuPerimetre: boolean;
+  nouveauxServicesSansToutesMesuresSpecifiques: boolean;
 };
