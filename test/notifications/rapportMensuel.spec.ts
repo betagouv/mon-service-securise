@@ -165,4 +165,27 @@ describe('Le service de rapport mensuel', () => {
       { email: 'active@email.fr', nbNouveauxServicesDansPerimetre: 2 },
     ]);
   });
+
+  it("ignore les utilisateurs qui n'ont pas de nouveaux services dans l'intervalle", async () => {
+    configuration.adaptateurJournal.servicesCreesDansIntervalle = async (
+      idsServicesHaches: string[]
+    ): Promise<Array<string>> => {
+      if (idsServicesHaches.includes(`${unUUID('S1')}-haché256`)) return [];
+      if (idsServicesHaches.includes(`${unUUID('S2')}-haché256`))
+        return [`${unUUID('S2')}-haché256`, `${unUUID('S3')}-haché256`];
+      throw new Error('id service haché attendu');
+    };
+
+    const donnees = await new RapportMensuel(configuration).donnees({
+      debut: new Date('2026-10-01'),
+      fin: new Date('2026-10-31'),
+    });
+
+    expect(donnees).toEqual([
+      {
+        email: 'superviseur@email.fr',
+        nbNouveauxServicesDansPerimetre: 2,
+      },
+    ]);
+  });
 });
