@@ -1,5 +1,5 @@
 import { fabriqueAdaptateurGestionErreur } from '../../src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
-import { fabriqueReporting } from '../../src/adaptateurs/adaptateurReporting.interface.js';
+import { fabriqueReportingTechnique } from '../../src/adaptateurs/adaptateurReportingTechnique.interface.js';
 import * as DepotDonnees from '../../src/depotDonnees.js';
 import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
@@ -84,7 +84,7 @@ const tache = async (): Promise<string[]> => {
 };
 
 const main = async () => {
-  const reporting = fabriqueReporting();
+  const reporting = fabriqueReportingTechnique();
   const rapport: string[] = [];
   let codeRetour = 0;
 
