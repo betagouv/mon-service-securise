@@ -76,10 +76,11 @@ export class RapportMensuel {
           intervalle
         );
 
-      resultat.push({
-        email: utilisateur.email,
-        nbNouveauxServicesDansPerimetre: nouveauxDansIntervalle.length,
-      });
+      if (nouveauxDansIntervalle.length > 0)
+        resultat.push({
+          email: utilisateur.email,
+          nbNouveauxServicesDansPerimetre: nouveauxDansIntervalle.length,
+        });
     }
 
     return resultat;
