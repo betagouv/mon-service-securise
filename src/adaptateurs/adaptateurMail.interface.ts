@@ -2,6 +2,10 @@ import { UUID } from '../typesBasiques.js';
 
 type IdEntreprise = string;
 
+export type ContenuRapportMensuel = {
+  nbNouveauxServices: number;
+};
+
 export interface AdaptateurMail {
   creeContact(
     destinataire: string,
@@ -56,6 +60,11 @@ export interface AdaptateurMail {
   envoieRapportHebdomadaire(
     destinataire: string,
     contenu: string
+  ): Promise<void>;
+
+  envoieRapportMensuel(
+    destinataire: string,
+    contenu: ContenuRapportMensuel
   ): Promise<void>;
 
   inscrisEmailsTransactionnels(destinataire: string): Promise<void>;

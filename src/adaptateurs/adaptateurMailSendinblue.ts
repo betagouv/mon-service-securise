@@ -3,7 +3,10 @@ import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErre
 import { enCadence } from '../utilitaires/pThrottle.js';
 import { UUID } from '../typesBasiques.js';
 import { ErreurApiBrevo } from '../erreurs.js';
-import { AdaptateurMail } from './adaptateurMail.interface.js';
+import {
+  AdaptateurMail,
+  ContenuRapportMensuel,
+} from './adaptateurMail.interface.js';
 
 const enteteJSON = {
   headers: {
@@ -300,6 +303,16 @@ const envoieRapportHebdomadaire = (destinataire: string, contenu: string) =>
     { contenu }
   );
 
+const envoieRapportMensuel = (
+  destinataire: string,
+  contenu: ContenuRapportMensuel
+) =>
+  envoieEmail(
+    destinataire,
+    parseInt(process.env.SENDINBLUE_TEMPLATE_RAPPORT_MENSUEL as string, 10),
+    { nb_nouveaux_services: contenu.nbNouveauxServices }
+  );
+
 const recupereIdentifiantContact = async (email: string) => {
   const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
   const idContact = reponse?.data?.id;
@@ -471,6 +484,7 @@ export const adaptateurMailSendinblue = {
   envoieMessageInvitationInscription,
   envoieMessageNominationAdmin,
   envoieRapportHebdomadaire,
+  envoieRapportMensuel,
   envoieNotificationExpirationHomologation:
     envoieNotificationExpirationHomologationCadencee,
   recupereEntreprise,
