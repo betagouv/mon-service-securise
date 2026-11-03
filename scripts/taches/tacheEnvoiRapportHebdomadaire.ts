@@ -10,7 +10,7 @@ import { fabriqueReferentiel } from '../../src/fabriqueReferentiel.js';
 import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
 import { enCadence } from '../../src/utilitaires/pThrottle.js';
 import { adaptateurMailSendinblue } from '../../src/adaptateurs/adaptateurMailSendinblue.js';
-import { fabriqueReporting } from '../../src/adaptateurs/adaptateurReporting.interface.js';
+import { fabriqueReportingTechnique } from '../../src/adaptateurs/adaptateurReportingTechnique.interface.js';
 
 const maintenant = () =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -60,7 +60,7 @@ const tache = async () => {
 };
 
 const main = async () => {
-  const reporting = fabriqueReporting();
+  const reporting = fabriqueReportingTechnique();
   const rapport: string[] = [];
   let codeRetour = 0;
 

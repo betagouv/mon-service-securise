@@ -173,14 +173,21 @@ const consoleAdmin = () => ({
   idConsoleAdmin: () => process.env.GESTION_ORGANISATIONS_ID_CONSOLE_ADMIN,
 });
 
-const mattermost = () => ({
+const reportingTechnique = () => ({
+  typeActif: () =>
+    process.env.REPORTING_TECHNIQUE_TYPE_ACTIF?.trim().toUpperCase(),
   urlWebhookCanalReporting: () => {
-    if (!process.env.MATTERMOST_URL_WEBHOOK_CANAL_REPORTING)
-      throw new Error(
-        "La variable d'environnement de l'URL du webhook Mattermost de reporting est absente."
+    if (
+      reportingTechnique().typeActif() === 'MATTERMOST' &&
+      process.env.REPORTING_TECHNIQUE_MATTERMOST_URL_WEBHOOK_CANAL_REPORTING
+    ) {
+      return new URL(
+        process.env.REPORTING_TECHNIQUE_MATTERMOST_URL_WEBHOOK_CANAL_REPORTING
       );
-
-    return new URL(process.env.MATTERMOST_URL_WEBHOOK_CANAL_REPORTING);
+    }
+    throw new Error(
+      "La variable d'environnement de l'URL du webhook Mattermost de reporting est absente ou le type de reporting actif n'est pas MATTERMOST."
+    );
   },
 });
 
@@ -195,10 +202,10 @@ export {
   JWT,
   journalMSS,
   matomo,
-  mattermost,
   modeMaintenance,
   mss,
   oidc,
+  reportingTechnique,
   sendinblue,
   sentry,
   statique,

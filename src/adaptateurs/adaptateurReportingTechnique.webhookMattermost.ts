@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Reporting } from './adaptateurReporting.interface.js';
-import { mattermost } from './adaptateurEnvironnement.js';
+import { ReportingTechnique } from './adaptateurReportingTechnique.interface.js';
+import { reportingTechnique } from './adaptateurEnvironnement.js';
 
-export class ReportingWebhookMattermost implements Reporting {
+export class ReportingTechniqueWebhookMattermost implements ReportingTechnique {
   private readonly urlWebhookReporting: URL;
 
   constructor() {
-    this.urlWebhookReporting = mattermost().urlWebhookCanalReporting();
+    this.urlWebhookReporting = reportingTechnique().urlWebhookCanalReporting();
   }
 
   async envoie(rapport: string[]): Promise<void> {
