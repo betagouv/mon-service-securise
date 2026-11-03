@@ -30,9 +30,7 @@ const intervalleDuMoisPrecedent = (aujourdhui: Date) => {
   };
 };
 
-const tache = async (): Promise<string[]> => {
-  const trace: string[] = [];
-
+const fabriqueRapport = (): RapportMensuel => {
   const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
   const adaptateurJWT = fabriqueAdaptateurJWT();
   const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
@@ -41,7 +39,6 @@ const tache = async (): Promise<string[]> => {
   const referentielV2 = fabriqueReferentiel().v2();
   const serviceCgu = fabriqueServiceCgu({ referentiel });
   const adaptateurJournal = fabriqueAdaptateurJournalMSS();
-  const adaptateurMail = fabriqueAdaptateurMail();
   const depotDonnees = DepotDonnees.creeDepot({
     adaptateurChiffrement,
     adaptateurEnvironnement,
@@ -53,17 +50,24 @@ const tache = async (): Promise<string[]> => {
     referentielV2,
   });
 
-  const rapportMensuel = new RapportMensuel({
-    depotDonnees,
+  return new RapportMensuel({
     adaptateurChiffrement,
     adaptateurJournal,
+    depotDonnees,
   });
+};
+
+const tache = async (): Promise<string[]> => {
+  const trace: string[] = [];
+
+  const rapportMensuel = fabriqueRapport();
 
   const donnees = await rapportMensuel.donnees(
     intervalleDuMoisPrecedent(new Date())
   );
   trace.push(`✉️ ${donnees.length} email(s) à envoyer`);
 
+  const adaptateurMail = fabriqueAdaptateurMail();
   const envoieUnRapport = async (
     destinataire: string,
     contenu: ContenuRapportMensuel
