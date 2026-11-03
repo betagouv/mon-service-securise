@@ -2922,8 +2922,8 @@ packages:
     resolution: {integrity: sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==}
     engines: {node: '>= 0.10'}
 
-  ip-address@10.7.0:
-    resolution: {integrity: sha512-BGFsyJd5mpXp3rK6jIdADLNgpJUK1jnjzvYF8lK+VyDab9JAmqN0YOKDdP17HlgKb2+ehPgDc8EtnRLbGCAMhA==}
+  ip-address@10.7.5:
+    resolution: {integrity: sha512-t2v0rkILYv9WXmSL7TpAaU3HXgaFYOPUcH3QHgwQ++gpJuH3bqyMy4Fvt/DJCTKwzH3Cf+bAp5W/mFL39KPLzA==}
     engines: {node: '>= 12'}
 
   ip6@0.2.11:
@@ -6497,7 +6497,7 @@ snapshots:
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
       express: 5.3.0(supports-color@10.2.2)
-      ip-address: 10.7.0
+      ip-address: 10.7.5
     transitivePeerDependencies:
       - supports-color
 
@@ -6777,7 +6777,7 @@ snapshots:
 
   interpret@2.2.0: {}
 
-  ip-address@10.7.0: {}
+  ip-address@10.7.5: {}
 
   ip6@0.2.11: {}
 
