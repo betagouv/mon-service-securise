@@ -4,6 +4,7 @@ type IdEntreprise = string;
 
 export type ContenuRapportMensuel = {
   nbNouveauxServices: number;
+  nbNouveauxServicesSansMesuresAppliquees: number;
 };
 
 export interface AdaptateurMail {

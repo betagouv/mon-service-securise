@@ -13,6 +13,7 @@ import fabriqueAdaptateurJournalMSS from '../../src/adaptateurs/fabriqueAdaptate
 import { enCadence } from '../../src/utilitaires/pThrottle.js';
 import { ContenuRapportMensuel } from '../../src/adaptateurs/adaptateurMail.interface.js';
 import { fabriqueAdaptateurMail } from '../../src/adaptateurs/fabriqueAdaptateurMail.js';
+import { ServicesSansMesuresAppliquees } from '../../src/notifications/servicesSansMesuresAppliquees.js';
 
 const maintenant = () =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -50,10 +51,15 @@ const fabriqueRapport = (): RapportMensuel => {
     referentielV2,
   });
 
+  const servicesSansMesuresAppliquees = new ServicesSansMesuresAppliquees({
+    depotDonnees,
+  });
+
   return new RapportMensuel({
     adaptateurChiffrement,
     adaptateurJournal,
     depotDonnees,
+    servicesSansMesuresAppliquees,
   });
 };
 
@@ -78,6 +84,8 @@ const tache = async (): Promise<string[]> => {
     donnees.map((d) =>
       envoieEnCadence(d.email, {
         nbNouveauxServices: d.nbNouveauxServicesDansPerimetre,
+        nbNouveauxServicesSansMesuresAppliquees:
+          d.nbNouveauxServicesSansTousModelesMesureAppliques || 0,
       })
     )
   );

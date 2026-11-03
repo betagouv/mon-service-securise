@@ -310,7 +310,11 @@ const envoieRapportMensuel = (
   envoieEmail(
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_RAPPORT_MENSUEL as string, 10),
-    { nb_nouveaux_services: contenu.nbNouveauxServices }
+    {
+      nb_nouveaux_services: contenu.nbNouveauxServices,
+      nb_nouveaux_services_sans_mesures_appliquees:
+        contenu.nbNouveauxServicesSansMesuresAppliquees,
+    }
   );
 
 const recupereIdentifiantContact = async (email: string) => {
