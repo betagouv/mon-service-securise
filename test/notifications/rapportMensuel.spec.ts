@@ -10,6 +10,7 @@ import { unSuperviseur } from '../constructeurs/constructeurSuperviseur.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import Service from '../../src/modeles/service.js';
+import { ServicesSansMesuresAppliquees } from '../../src/notifications/servicesSansMesuresAppliquees.ts';
 
 describe('Le service de rapport mensuel', () => {
   let configuration: Configuration;
@@ -50,11 +51,19 @@ describe('Le service de rapport mensuel', () => {
             return unUtilisateur()
               .avecId(idUtilisateur)
               .avecEmail('admin@email.fr')
+              .avecPreferencesDeRecapitulatif({
+                nouveauxServicesAjoutesAuPerimetre: true,
+                nouveauxServicesSansToutesMesuresSpecifiques: true,
+              })
               .construis();
           if (idUtilisateur === unUUID('S'))
             return unUtilisateur()
               .avecId(idUtilisateur)
               .avecEmail('superviseur@email.fr')
+              .avecPreferencesDeRecapitulatif({
+                nouveauxServicesAjoutesAuPerimetre: true,
+                nouveauxServicesSansToutesMesuresSpecifiques: true,
+              })
               .construis();
 
           throw new Error('A ou S attendu');
@@ -81,6 +90,9 @@ describe('Le service de rapport mensuel', () => {
         },
       },
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      servicesSansMesuresAppliquees: {
+        calculePour: async (_: UUID, services: Service[]) => services,
+      } as ServicesSansMesuresAppliquees,
     };
   });
 
@@ -93,10 +105,12 @@ describe('Le service de rapport mensuel', () => {
     expect(donnees).toContainEqual({
       email: 'admin@email.fr',
       nbNouveauxServicesDansPerimetre: 1,
+      nbNouveauxServicesSansTousModelesMesureAppliques: 1,
     });
     expect(donnees).toContainEqual({
       email: 'superviseur@email.fr',
       nbNouveauxServicesDansPerimetre: 2,
+      nbNouveauxServicesSansTousModelesMesureAppliques: 2,
     });
   });
 
@@ -150,6 +164,7 @@ describe('Le service de rapport mensuel', () => {
           .avecEmail('active@email.fr')
           .avecPreferencesDeRecapitulatif({
             nouveauxServicesAjoutesAuPerimetre: true,
+            nouveauxServicesSansToutesMesuresSpecifiques: true,
           })
           .construis();
 
@@ -162,7 +177,11 @@ describe('Le service de rapport mensuel', () => {
     });
 
     expect(donnees).toEqual([
-      { email: 'active@email.fr', nbNouveauxServicesDansPerimetre: 2 },
+      {
+        email: 'active@email.fr',
+        nbNouveauxServicesDansPerimetre: 2,
+        nbNouveauxServicesSansTousModelesMesureAppliques: 2,
+      },
     ]);
   });
 
@@ -185,7 +204,69 @@ describe('Le service de rapport mensuel', () => {
       {
         email: 'superviseur@email.fr',
         nbNouveauxServicesDansPerimetre: 2,
+        nbNouveauxServicesSansTousModelesMesureAppliques: 2,
       },
     ]);
+  });
+
+  it('appelle le service de calcul des services sans tous modeles appliqués avec la liste des services nouvellement créés', async () => {
+    configuration.depotDonnees.tousLesAdmins = async () => [];
+    configuration.adaptateurJournal.servicesCreesDansIntervalle =
+      async (): Promise<Array<string>> => [`${unUUID('S2')}-haché256`];
+    configuration.servicesSansMesuresAppliquees.calculePour = vi.fn(
+      (_, services) => services
+    );
+
+    await new RapportMensuel(configuration).donnees({
+      debut: new Date('2026-10-01'),
+      fin: new Date('2026-10-31'),
+    });
+
+    expect(
+      configuration.servicesSansMesuresAppliquees.calculePour
+    ).toHaveBeenCalledWith(unUUID('S'), [
+      expect.objectContaining({ id: unUUID('S2') }),
+    ]);
+  });
+
+  it("n'ajoute pas la propriété du nombre de services sans mesures appliquées si l'utilisateur n'a pas activé la préférence", async () => {
+    configuration.depotDonnees.utilisateur = async (idUtilisateur: UUID) => {
+      if (idUtilisateur === unUUID('A'))
+        return unUtilisateur()
+          .avecId(idUtilisateur)
+          .avecEmail('desactive@email.fr')
+          .avecPreferencesDeRecapitulatif({
+            nouveauxServicesAjoutesAuPerimetre: true,
+            nouveauxServicesSansToutesMesuresSpecifiques: false,
+          })
+          .construis();
+      if (idUtilisateur === unUUID('S'))
+        return unUtilisateur()
+          .avecId(idUtilisateur)
+          .avecEmail('active@email.fr')
+          .avecPreferencesDeRecapitulatif({
+            nouveauxServicesAjoutesAuPerimetre: true,
+            nouveauxServicesSansToutesMesuresSpecifiques: true,
+          })
+          .construis();
+
+      throw new Error('A ou S attendu');
+    };
+
+    const donnees = await new RapportMensuel(configuration).donnees({
+      debut: new Date('2026-10-01'),
+      fin: new Date('2026-10-31'),
+    });
+
+    expect(donnees).toContainEqual({
+      email: 'active@email.fr',
+      nbNouveauxServicesDansPerimetre: 2,
+      nbNouveauxServicesSansTousModelesMesureAppliques: 2,
+    });
+
+    expect(donnees).toContainEqual({
+      email: 'desactive@email.fr',
+      nbNouveauxServicesDansPerimetre: 1,
+    });
   });
 });
