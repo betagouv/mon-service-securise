@@ -15,13 +15,26 @@
     untrack(() => recapitulatifMensuel.nouveauxServicesAjoutesAuPerimetre)
   );
 
+  let nouveauxServicesSansToutesMesuresSpecifiques = $state(
+    untrack(
+      () => recapitulatifMensuel.nouveauxServicesSansToutesMesuresSpecifiques
+    )
+  );
+
   let tousLesRecapitulatifs = $derived(nouveauxServicesAjoutesAuPerimetre);
 
   const basculeTousRecapitulatifs = async (e: CustomEvent<boolean>) => {
-    const valeurConsentement = e.detail;
-    nouveauxServicesAjoutesAuPerimetre = valeurConsentement;
+    await basculeNouveauxServices(e.detail);
+  };
+
+  const basculeNouveauxServices = async (valeur: boolean) => {
+    nouveauxServicesAjoutesAuPerimetre = valeur;
+    if (!valeur) {
+      nouveauxServicesSansToutesMesuresSpecifiques = valeur;
+    }
     await api.sauvegardePreferencesRecapitulatif({
       nouveauxServicesAjoutesAuPerimetre,
+      nouveauxServicesSansToutesMesuresSpecifiques,
     });
   };
 </script>
@@ -47,11 +60,39 @@
     icone="computer-line"
     avecBordure
     valeur={nouveauxServicesAjoutesAuPerimetre}
+    onvaleurmodifiee={basculeNouveauxServices}
+  />
+  <LignePreference
+    titre="Un service n’a pas mes mesures"
+    icone="warning-line"
+    inactif={!nouveauxServicesAjoutesAuPerimetre}
+    valeur={nouveauxServicesSansToutesMesuresSpecifiques}
     onvaleurmodifiee={async (valeur) => {
-      nouveauxServicesAjoutesAuPerimetre = valeur;
+      nouveauxServicesSansToutesMesuresSpecifiques = valeur;
       await api.sauvegardePreferencesRecapitulatif({
-        nouveauxServicesAjoutesAuPerimetre,
+        nouveauxServicesSansToutesMesuresSpecifiques,
       });
     }}
-  />
+  >
+    {#snippet contenuRicheSousTitre()}
+      Le nombre de services qui n’ont pas toutes les mesures que vous avez
+      ajoutées. Même réglage que la case de la fenêtre «&nbsp;Appliquer à tous
+      les services&nbsp;».
+      {#if !nouveauxServicesAjoutesAuPerimetre}<div class="message-info">
+          <lab-anssi-icone taille="sm" nom="info-line"></lab-anssi-icone>La
+          notification sur les mesures manquantes est désactivée, car elle
+          dépend de la notification sur les nouveaux services.
+        </div>{/if}
+    {/snippet}
+  </LignePreference>
 </BlocPreferences>
+
+<style lang="scss">
+  .message-info {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    color: #0063cb;
+    margin-top: 16px;
+  }
+</style>
