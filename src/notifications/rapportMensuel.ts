@@ -4,6 +4,7 @@ import { AdminOrganisations } from '../modeles/gestionOrganisations/adminOrganis
 import Superviseur from '../modeles/superviseur.js';
 import Service from '../modeles/service.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
+import { ServicesSansMesuresAppliquees } from './servicesSansMesuresAppliquees.js';
 
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
@@ -12,6 +13,7 @@ import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.inte
 export type DonneesRapportMensuel = {
   email: string;
   nbNouveauxServicesDansPerimetre: number;
+  nbNouveauxServicesSansTousModelesMesureAppliques?: number;
 };
 
 export type Configuration = {
@@ -30,16 +32,20 @@ export type Configuration = {
     ): Promise<Array<string>>;
   };
   adaptateurChiffrement: AdaptateurChiffrement;
+  servicesSansMesuresAppliquees: ServicesSansMesuresAppliquees;
 };
+
 export class RapportMensuel {
   private readonly depotDonnees;
   private readonly adaptateurJournal;
   private readonly adaptateurChiffrement;
+  private readonly servicesSansMesuresAppliquees;
 
   constructor(config: Configuration) {
     this.depotDonnees = config.depotDonnees;
     this.adaptateurJournal = config.adaptateurJournal;
     this.adaptateurChiffrement = config.adaptateurChiffrement;
+    this.servicesSansMesuresAppliquees = config.servicesSansMesuresAppliquees;
   }
 
   async donnees(intervalle: {
@@ -56,7 +62,7 @@ export class RapportMensuel {
     const idsUniques = [...new Set([...idAdmins, ...idsSuperviseurs])];
     const utilisateurs = await this.recupereLesUtilisateurs(idsUniques);
 
-    const resultat = [];
+    const resultat: DonneesRapportMensuel[] = [];
 
     for (const utilisateur of utilisateurs) {
       const perimetre = this.#perimetreUtilisateur(
@@ -64,23 +70,50 @@ export class RapportMensuel {
         admins,
         superviseurs
       );
+
       const services =
         await this.depotDonnees.tousLesServicesAvecSirets(perimetre);
-      const idServicesHaches = [...services.values().flatMap((s) => s)].map(
-        (s) => this.adaptateurChiffrement.hacheSha256(s.id)
+
+      const serviceViaIdHache = Object.fromEntries(
+        [...services.values().flatMap((s) => s)].map((s) => [
+          this.adaptateurChiffrement.hacheSha256(s.id),
+          s,
+        ])
       );
 
-      const nouveauxDansIntervalle =
+      const idHachesServicesNouveauxDansIntervalle =
         await this.adaptateurJournal.servicesCreesDansIntervalle(
-          idServicesHaches,
+          Object.keys(serviceViaIdHache),
           intervalle
         );
 
-      if (nouveauxDansIntervalle.length > 0)
-        resultat.push({
+      if (idHachesServicesNouveauxDansIntervalle.length > 0) {
+        const ligne: DonneesRapportMensuel = {
           email: utilisateur.email,
-          nbNouveauxServicesDansPerimetre: nouveauxDansIntervalle.length,
-        });
+          nbNouveauxServicesDansPerimetre:
+            idHachesServicesNouveauxDansIntervalle.length,
+        };
+
+        if (
+          utilisateur.preferencesRecapitulatif()
+            .nouveauxServicesSansToutesMesuresSpecifiques
+        ) {
+          const servicesNouveauxDansIntervalle =
+            idHachesServicesNouveauxDansIntervalle.map(
+              (idHache) => serviceViaIdHache[idHache]
+            );
+
+          const servicesSansTousModelesAppliques =
+            await this.servicesSansMesuresAppliquees.calculePour(
+              utilisateur.id,
+              servicesNouveauxDansIntervalle
+            );
+
+          ligne.nbNouveauxServicesSansTousModelesMesureAppliques =
+            servicesSansTousModelesAppliques.length;
+        }
+        resultat.push(ligne);
+      }
     }
 
     return resultat;
