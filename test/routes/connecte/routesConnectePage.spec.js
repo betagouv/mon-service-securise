@@ -200,6 +200,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           echeanceMesureBientotExpiree: true,
           echeanceMesureExpiree: true,
           nouveauxServicesAjoutesAuPerimetre: true,
+          nouveauxServicesSansToutesMesuresSpecifiques: false,
         },
         peutGererPreferencesDuPerimetre: false,
       });

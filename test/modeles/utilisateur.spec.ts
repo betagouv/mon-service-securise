@@ -623,7 +623,7 @@ describe('Un utilisateur', () => {
   });
 
   describe('concernant ses préférences de communication pour les récapitulatifs par email (hebdomadaire et mensuel)', () => {
-    it('par défaut, consent à tous les sujets du récapitulatif', () => {
+    it('par défaut, consent à tous les sujets du récapitulatif sauf les mesures ajoutées aux nouveaux services', () => {
       const utilisateur = unUtilisateur().construis();
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
@@ -632,14 +632,16 @@ describe('Un utilisateur', () => {
         responsableMesure: true,
         echeanceMesureExpiree: true,
         nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: false,
       });
     });
 
-    it('peut désactiver un sujet du récapitulatif', () => {
+    it('peut activer ou désactiver un sujet du récapitulatif', () => {
       const utilisateur = unUtilisateur().construis();
 
       utilisateur.metAJourPreferencesRecapitulatif({
         mentionDansMesure: false,
+        nouveauxServicesSansToutesMesuresSpecifiques: true,
       });
 
       expect(utilisateur.preferencesRecapitulatif()).toEqual({
@@ -648,6 +650,7 @@ describe('Un utilisateur', () => {
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
         nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: true,
       });
     });
 
@@ -662,6 +665,7 @@ describe('Un utilisateur', () => {
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
         nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: false,
       });
     });
 
@@ -677,6 +681,7 @@ describe('Un utilisateur', () => {
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
         nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: false,
       });
     });
 
@@ -698,6 +703,7 @@ describe('Un utilisateur', () => {
         echeanceMesureBientotExpiree: true,
         echeanceMesureExpiree: true,
         nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: false,
         unePreference: false,
       });
     });

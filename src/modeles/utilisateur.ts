@@ -26,6 +26,7 @@ export type IdNotificationTransactionnelleDansRecapitulatif =
 
 export const idsPreferenceRecapitulatifAdmin = [
   'nouveauxServicesAjoutesAuPerimetre',
+  'nouveauxServicesSansToutesMesuresSpecifiques',
 ] as const;
 export type IdPreferenceRecapitulatifAdmin =
   (typeof idsPreferenceRecapitulatifAdmin)[number];
@@ -42,6 +43,7 @@ const PREFERENCES_RECAPITULATIF_PAR_DEFAUT: PreferencesRecapitulatif = {
   echeanceMesureBientotExpiree: true,
   echeanceMesureExpiree: true,
   nouveauxServicesAjoutesAuPerimetre: true,
+  nouveauxServicesSansToutesMesuresSpecifiques: false,
 };
 
 export type DonneesUtilisateur = {
