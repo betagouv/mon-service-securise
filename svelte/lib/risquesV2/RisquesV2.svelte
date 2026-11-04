@@ -334,7 +334,13 @@
   {niveauxVraisemblance}
 />
 
-<ModaleRisquesANSSI bind:this={modaleRisquesANSSI} {risques} {idService} />
+<ModaleRisquesANSSI
+  bind:this={modaleRisquesANSSI}
+  {risques}
+  {idService}
+  {vecteursRisque}
+  {categoriesObjectifsVises}
+/>
 
 <style lang="scss">
   /* Annule la couleur `fond-pale` positionnée par le pug */

@@ -2,15 +2,25 @@
   import Modale from '../../ui/Modale.svelte';
   import type { TousRisques } from '../risquesV2.d';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
+  import type {
+    ReferentielCategoriesObjectifsVises,
+    ReferentielVecteursRisque,
+  } from '../../risques/risques';
+  import AccordeonGroupe from '../../ui/AccordeonGroupe.svelte';
+  import CartoucheCategorieRisque from '../../ui/CartoucheCategorieRisque.svelte';
+  import { mappingNomCategories } from '../kit/kit';
 
   let elementModale: Modale | undefined;
 
   interface Props {
     idService: string;
     risques: TousRisques;
+    vecteursRisque: ReferentielVecteursRisque;
+    categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
   }
 
-  let { idService, risques }: Props = $props();
+  let { idService, risques, vecteursRisque, categoriesObjectifsVises }: Props =
+    $props();
 
   let idTabActive: number = $state(0);
 
@@ -70,6 +80,33 @@
             libellePastille="5"
           />
         </div>
+        <div slot="panel-1">
+          {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
+            {@const vecteur = vecteursRisque[idVecteur]}
+            <AccordeonGroupe
+              libelle={vecteur.intitule}
+              ouvert
+              nombreElements={Object.keys(vecteur.intitulesObjectifsVises)
+                .length}
+            >
+              <div class="contenu-accordeon">
+                {#each Object.entries(vecteur.intitulesObjectifsVises) as [idObjectif, objectif] (idObjectif)}
+                  <div class="contenu-objectif">
+                    <div>{vecteur.intitule} {objectif}</div>
+                    <div class="badges">
+                      {#each categoriesObjectifsVises[idObjectif] as categorie (categorie)}
+                        <CartoucheCategorieRisque
+                          libelleCategorie={mappingNomCategories[categorie]}
+                        />
+                      {/each}
+                    </div>
+                  </div>
+                {/each}
+              </div>
+              <div></div>
+            </AccordeonGroupe>
+          {/each}
+        </div>
       </dsfr-tabs>
     </div>
   {/snippet}
@@ -89,6 +126,29 @@
     max-width: 792px;
     max-height: 800px;
     width: calc(100% - 48px);
+  }
+
+  .contenu-accordeon {
+    margin-top: 2rem;
+    border: 1px solid #929292;
+    border-top: none;
+    margin-bottom: 64px;
+
+    .contenu-objectif {
+      padding: 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .badges {
+        display: flex;
+        gap: 8px;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #929292;
+      }
+    }
   }
 
   h4 {
