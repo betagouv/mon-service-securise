@@ -22,6 +22,7 @@ import {
 } from '../donneesComplementairesReferentielMesuresV2.js';
 import { TypeService } from '../svelte/lib/creationV2/creationV2.types.js';
 import {
+  CategorieRisque,
   ConfigurationRisqueV2,
   IdRisqueV2,
 } from './moteurRisques/v2/risquesV2.types.js';
@@ -47,6 +48,8 @@ import {
 } from './mesures/referentielsExternes/donneesReferentielMesuresCyFun23.js';
 import { correspondanceMesuresReCyfVersCyFun23 } from './mesures/referentielsExternes/correspondanceMesuresReCyfVersCyFun23.js';
 import { configurationRisqueV2 } from './moteurRisques/v2/risqueV2.configuration.js';
+import { categoriesObjectifsVises as categoriesObjectifsVisesV2 } from './moteurRisques/v2/categoriesObjectifsVises.js';
+import { IdObjectifVise } from './moteurRisques/v2/selectionObjectifsVises.types.js';
 
 export type EntiteConcernee = 'EI' | 'EE';
 
@@ -150,6 +153,7 @@ type MethodesSpecifiquesReferentielV2 = {
   typeService: (type: TypeDeService) => { nom: string; exemple: string };
   typesService: () => Record<TypeDeService, { nom: string; exemple: string }>;
   vecteursRisquesV2: () => ConfigurationRisqueV2;
+  categoriesObjectifsVises: () => Record<IdObjectifVise, CategorieRisque[]>;
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -230,6 +234,8 @@ export const creeReferentielV2 = (
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
 
   const vecteursRisquesV2 = () => donnees.vecteursRisquesV2;
+
+  const categoriesObjectifsVises = () => categoriesObjectifsVisesV2;
 
   const porteursSinguliersDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].porteursSinguliers;
@@ -341,6 +347,7 @@ export const creeReferentielV2 = (
     reglesMoteurV2,
     thematiqueDeMesure,
     vecteursRisquesV2,
+    categoriesObjectifsVises,
     version: () => 'v2',
   };
 };

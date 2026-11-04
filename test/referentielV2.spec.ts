@@ -71,5 +71,14 @@ describe('Le référentiel V2', () => {
         expect(referentiel.reglesMoteurV2()[0].reference).toBe('RECENSEMENT.1');
       });
     });
+
+    it('connaît les catégories de risque de chaque objectif visé', () => {
+      const referentiel = creeReferentielV2();
+
+      expect(referentiel.categoriesObjectifsVises().OV2).toEqual([
+        'confidentialite',
+        'integrite',
+      ]);
+    });
   });
 });
