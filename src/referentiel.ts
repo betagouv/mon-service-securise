@@ -555,6 +555,7 @@ const creeReferentiel = (
   const porteursSinguliersDeMesure = () => undefined;
   const thematiqueDeMesure = () => undefined;
   const vecteursRisquesV2 = () => undefined;
+  const categoriesObjectifsVises = () => undefined;
   const referentielsExternesDeMesure = () => undefined;
 
   valideDonnees();
@@ -679,6 +680,7 @@ const creeReferentiel = (
     descriptionsEcheanceRenouvellement,
     thematiqueDeMesure,
     vecteursRisquesV2,
+    categoriesObjectifsVises,
     version: () => 'v1',
   };
 };
