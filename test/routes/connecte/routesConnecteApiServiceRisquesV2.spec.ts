@@ -166,6 +166,7 @@ describe('Les routes /service/:id/risques/v2', () => {
       gravite: 3,
       graviteBrute: 4,
       commentaire: 'un commentaire',
+      idModele: 'V12OV3',
     };
 
     it('recherche le service correspondant', async () => {
@@ -200,6 +201,10 @@ describe('Les routes /service/:id/risques/v2', () => {
       { cle: 'gravite', valeur: 10 },
       { cle: 'graviteBrute', valeur: 12 },
       { cle: 'commentaire', valeur: 1234 },
+      { cle: 'idModele', valeur: 1234 },
+      { cle: 'idModele', valeur: 'abcd' },
+      { cle: 'idModele', valeur: 'V145OV1' },
+      { cle: 'idModele', valeur: 'V14OV14' },
     ])(
       'jette une erreur si la propriété $cle est invalide',
       async ({ cle, valeur }) => {
@@ -244,6 +249,7 @@ describe('Les routes /service/:id/risques/v2', () => {
         vraisemblance: 1,
         gravite: 3,
         commentaire: 'un commentaire',
+        idModele: 'V12OV3',
       });
     });
   });
