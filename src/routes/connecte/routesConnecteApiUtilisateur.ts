@@ -154,5 +154,18 @@ export const routesConnecteApiUtilisateur = ({
     }
   );
 
+  routes.get(
+    '/utilisateur/preferences/recapitulatif',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
+      const utilisateur = (await depotDonnees.utilisateur(
+        idUtilisateur
+      )) as Utilisateur;
+
+      reponse.status(200).send(utilisateur.preferencesRecapitulatif());
+    }
+  );
+
   return routes;
 };
