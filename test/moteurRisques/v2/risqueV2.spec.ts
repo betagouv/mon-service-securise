@@ -218,6 +218,8 @@ describe('Un risque V2', () => {
 
     expect(r1.toJSON()).toEqual({
       id: 'R1',
+      idVecteur: 'V1',
+      idsObjectifsVises: ['OV1'],
       intitule: 'V1 avec OV1',
       description: 'Description V1',
       exemple: 'Exemple V1',

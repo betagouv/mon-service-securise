@@ -36,6 +36,8 @@ export type JSONRisqueV2 = {
   desactive?: boolean;
   commentaire?: string;
   mesuresAssociees: Array<IdMesureV2>;
+  idVecteur: IdVecteurRisque;
+  idsObjectifsVises: Array<IdObjectifVise>;
 };
 
 export class RisqueV2 {
@@ -88,6 +90,8 @@ export class RisqueV2 {
       desactive: this.desactive,
       commentaire: this.commentaire,
       mesuresAssociees: this.idsMesuresAssociees,
+      idVecteur: this.idVecteur,
+      idsObjectifsVises: Object.keys(this.objectifsVises) as IdObjectifVise[],
     };
   }
 
