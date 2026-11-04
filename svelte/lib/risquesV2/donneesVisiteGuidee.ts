@@ -13,6 +13,8 @@ const r2: Risque = {
   vraisemblance: 4,
   categories: ['confidentialite', 'integrite', 'disponibilite'],
   mesuresAssociees: ['MCO_MCS.1', 'MCO_MCS.17', 'MCO_MCS.3', 'MCO_MCS.4'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V2',
 };
 
 const r4: Risque = {
@@ -29,6 +31,8 @@ const r4: Risque = {
   categories: ['confidentialite', 'integrite', 'disponibilite'],
   desactive: false,
   mesuresAssociees: ['MCO_MCS.1', 'MCO_MCS.17', 'MCO_MCS.5', 'SUPERVISION.7'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V4',
 };
 
 const r5: Risque = {
@@ -45,6 +49,8 @@ const r5: Risque = {
   categories: ['confidentialite', 'integrite'],
   desactive: false,
   mesuresAssociees: ['RH.2', 'DISTANCE.2'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V5',
 };
 
 const r6: Risque = {
@@ -60,6 +66,8 @@ const r6: Risque = {
   vraisemblance: 4,
   categories: ['confidentialite', 'integrite', 'disponibilite'],
   mesuresAssociees: ['RH.2', 'DISTANCE.2', 'SUPERVISION.7'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V6',
 };
 
 const r12: Risque = {
@@ -75,6 +83,8 @@ const r12: Risque = {
   vraisemblance: 4,
   categories: ['disponibilite'],
   mesuresAssociees: ['CLOISON.4', 'FILTRE.1', 'SUPERVISION.7'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V12',
 };
 
 const r13: Risque = {
@@ -90,6 +100,8 @@ const r13: Risque = {
   vraisemblance: 4,
   categories: ['confidentialite', 'integrite', 'disponibilite'],
   mesuresAssociees: ['DEV.1', 'AUDIT.6', 'AUDIT.2'],
+  idsObjectifsVises: ['OV1'],
+  idVecteur: 'V13',
 };
 
 const risquesDeLaVisite = [r2, r4, r5, r6, r12, r13];
