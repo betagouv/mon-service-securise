@@ -13,11 +13,17 @@
 
   let { referentielTypesService = undefined, services }: Props = $props();
 
+  let idModelesDeMesuresDeUtilisateur = $derived(
+    $modelesMesureSpecifique.map((m) => m.id)
+  );
+
   let modelesAppliquesAuxServices = $derived(
     Object.fromEntries(
       $servicesAvecMesuresAssociees.map((s) => [
         s.id,
-        s.mesuresSpecifiques.map((ms) => ms.idModele).filter((id) => !!id),
+        s.mesuresSpecifiques
+          .map((ms) => ms.idModele)
+          .filter((id) => id && idModelesDeMesuresDeUtilisateur.includes(id)),
       ])
     )
   );
