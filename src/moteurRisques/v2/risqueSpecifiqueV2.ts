@@ -12,6 +12,7 @@ export type DonneesRisqueSpecifiqueV2 = {
   risqueBrut: { gravite: Gravite; vraisemblance: Vraisemblance };
   gravite: Gravite;
   vraisemblance: Vraisemblance;
+  idModele?: string;
   commentaire?: string;
 };
 
@@ -32,6 +33,7 @@ export class RisqueSpecifiqueV2 {
   };
   private gravite: Gravite;
   private vraisemblance: Vraisemblance;
+  private readonly idModele?: string;
   private commentaire?: string;
 
   constructor(donnees: DonneesRisqueSpecifiqueV2) {
@@ -43,6 +45,7 @@ export class RisqueSpecifiqueV2 {
     this.risqueBrut = donnees.risqueBrut;
     this.gravite = donnees.gravite;
     this.vraisemblance = donnees.vraisemblance;
+    this.idModele = donnees.idModele;
     this.commentaire = donnees.commentaire;
   }
 
@@ -57,6 +60,7 @@ export class RisqueSpecifiqueV2 {
       vraisemblance: this.vraisemblance,
       graviteBrute: this.risqueBrut.gravite,
       vraisemblanceBrute: this.risqueBrut.vraisemblance,
+      idModele: this.idModele,
       commentaire: this.commentaire,
     };
   }
@@ -71,6 +75,7 @@ export class RisqueSpecifiqueV2 {
       risqueBrut: this.risqueBrut,
       gravite: this.gravite,
       vraisemblance: this.vraisemblance,
+      idModele: this.idModele,
       commentaire: this.commentaire,
     };
   }

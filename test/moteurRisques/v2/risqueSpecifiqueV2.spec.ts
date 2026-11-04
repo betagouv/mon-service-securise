@@ -5,6 +5,7 @@ describe('Le risque spécifique V2', () => {
   it('peut se sérialiser en JSON', () => {
     const risqueSpecifique = new RisqueSpecifiqueV2({
       id: unUUID('a'),
+      idModele: 'R1',
       identifiantNumerique: 'RS1',
       intitule: 'intitule',
       description: 'description',
@@ -17,6 +18,7 @@ describe('Le risque spécifique V2', () => {
 
     expect(risqueSpecifique.toJSON()).toEqual({
       id: unUUID('a'),
+      idModele: 'R1',
       intitule: 'intitule',
       identifiantNumerique: 'RS1',
       description: 'description',
@@ -32,6 +34,7 @@ describe('Le risque spécifique V2', () => {
   it('connait ses données à persister', () => {
     const risqueSpecifique = new RisqueSpecifiqueV2({
       id: unUUID('a'),
+      idModele: 'R1',
       intitule: 'intitule',
       identifiantNumerique: 'RS1',
       description: 'description',
@@ -44,6 +47,7 @@ describe('Le risque spécifique V2', () => {
 
     expect(risqueSpecifique.donneesSerialisees()).toEqual({
       id: unUUID('a'),
+      idModele: 'R1',
       intitule: 'intitule',
       identifiantNumerique: 'RS1',
       description: 'description',
