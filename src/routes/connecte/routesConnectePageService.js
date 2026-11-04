@@ -65,7 +65,7 @@ const routesConnectePageService = ({
           : 'service/descriptionService';
 
       reponse.render(template, {
-        referentiel,
+        referentiel: service.referentiel,
         service,
         etapeActive: 'descriptionService',
         departements,
@@ -85,7 +85,7 @@ const routesConnectePageService = ({
       const { service } = requete;
 
       reponse.render('service/pagesService', {
-        referentiel,
+        referentiel: service.referentiel,
         service,
         etapeActive: 'mesures',
       });
@@ -187,7 +187,7 @@ const routesConnectePageService = ({
       reponse.render('service/pagesService', {
         service,
         etapeActive: 'indiceCyber',
-        referentiel,
+        referentiel: service.referentiel,
       });
     }
   );
@@ -201,7 +201,7 @@ const routesConnectePageService = ({
       reponse.render('service/pagesService', {
         service,
         etapeActive: 'rolesResponsabilites',
-        referentiel,
+        referentiel: service.referentiel,
       });
     }
   );
@@ -214,7 +214,7 @@ const routesConnectePageService = ({
       const { service } = requete;
 
       reponse.render('service/pagesService', {
-        referentiel,
+        referentiel: service.referentiel,
         service,
         etapeActive: 'risques',
       });
@@ -231,7 +231,7 @@ const routesConnectePageService = ({
       reponse.render('service/pagesService', {
         service,
         etapeActive: 'dossiers',
-        referentiel,
+        referentiel: service.referentiel,
       });
     }
   );
@@ -252,7 +252,7 @@ const routesConnectePageService = ({
       reponse.render('service/pagesService', {
         service,
         etapeActive: 'dossiers',
-        referentiel,
+        referentiel: service.referentiel,
       });
     }
   );
