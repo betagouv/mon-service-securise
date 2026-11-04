@@ -8,6 +8,7 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaPostRisqueSpecifiqueV2,
   schemaPutRisqueGeneralV2,
+  schemaPutRisqueSpecifiqueV2,
 } from './routesConnecteApiService.schema.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
@@ -84,6 +85,7 @@ const routesConnecteApiServiceRisquesV2 = ({
         vraisemblanceBrute,
         gravite,
         vraisemblance,
+        idModele,
         commentaire,
       } = requete.body;
 
@@ -97,6 +99,7 @@ const routesConnecteApiServiceRisquesV2 = ({
         },
         gravite,
         vraisemblance,
+        idModele,
         commentaire,
       };
 
@@ -112,7 +115,7 @@ const routesConnecteApiServiceRisquesV2 = ({
     middleware.chargeAutorisationsService,
     // @ts-expect-error problème de typage incompréhensible avec les requetes express et zod
     valideParams(z.looseObject({ idRisque: z.uuid() })),
-    valideBody(z.strictObject(schemaPostRisqueSpecifiqueV2(referentielV2))),
+    valideBody(z.strictObject(schemaPutRisqueSpecifiqueV2(referentielV2))),
     async (requete, reponse) => {
       const { service } = requete as unknown as RequestRouteConnecteService;
 
