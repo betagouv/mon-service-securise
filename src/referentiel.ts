@@ -554,6 +554,7 @@ const creeReferentiel = (
   // Seulement supporté par le référentiel v2.
   const porteursSinguliersDeMesure = () => undefined;
   const thematiqueDeMesure = () => undefined;
+  const vecteursRisquesV2 = () => undefined;
   const referentielsExternesDeMesure = () => undefined;
 
   valideDonnees();
@@ -677,6 +678,7 @@ const creeReferentiel = (
     descriptionsDelaiAvantImpactCritique,
     descriptionsEcheanceRenouvellement,
     thematiqueDeMesure,
+    vecteursRisquesV2,
     version: () => 'v1',
   };
 };

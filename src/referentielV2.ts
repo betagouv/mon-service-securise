@@ -21,7 +21,10 @@ import {
   donneesComplementairesMesureV2,
 } from '../donneesComplementairesReferentielMesuresV2.js';
 import { TypeService } from '../svelte/lib/creationV2/creationV2.types.js';
-import { IdRisqueV2 } from './moteurRisques/v2/risquesV2.types.js';
+import {
+  ConfigurationRisqueV2,
+  IdRisqueV2,
+} from './moteurRisques/v2/risquesV2.types.js';
 import { donneesReferentielRisquesV2 } from '../donneesReferentielRisquesV2.js';
 import {
   type IdMesureReCyf,
@@ -43,6 +46,7 @@ import {
   mesuresCyFun23,
 } from './mesures/referentielsExternes/donneesReferentielMesuresCyFun23.js';
 import { correspondanceMesuresReCyfVersCyFun23 } from './mesures/referentielsExternes/correspondanceMesuresReCyfVersCyFun23.js';
+import { configurationRisqueV2 } from './moteurRisques/v2/risqueV2.configuration.js';
 
 export type EntiteConcernee = 'EI' | 'EE';
 
@@ -69,6 +73,7 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
   risquesV2: typeof donneesReferentielRisquesV2;
+  vecteursRisquesV2: ConfigurationRisqueV2;
   donneesReferentielsExternesMesures: {
     AE2690: {
       mesures: Record<string, DonneesReferentielsMesuresAE2690>;
@@ -144,6 +149,7 @@ type MethodesSpecifiquesReferentielV2 = {
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
   typeService: (type: TypeDeService) => { nom: string; exemple: string };
   typesService: () => Record<TypeDeService, { nom: string; exemple: string }>;
+  vecteursRisquesV2: () => ConfigurationRisqueV2;
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -154,6 +160,7 @@ export const creeReferentielV2 = (
     mesures: mesuresV2,
     donneesComplementairesMesures: donneesComplementairesMesureV2,
     risquesV2: donneesReferentielRisquesV2,
+    vecteursRisquesV2: configurationRisqueV2,
     donneesReferentielsExternesMesures: {
       AE2690: {
         mesures: mesuresAE2690,
@@ -221,6 +228,8 @@ export const creeReferentielV2 = (
   const typesService = () => donnees.typeDeService;
 
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
+
+  const vecteursRisquesV2 = () => donnees.vecteursRisquesV2;
 
   const porteursSinguliersDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].porteursSinguliers;
@@ -331,6 +340,7 @@ export const creeReferentielV2 = (
     typesService,
     reglesMoteurV2,
     thematiqueDeMesure,
+    vecteursRisquesV2,
     version: () => 'v2',
   };
 };

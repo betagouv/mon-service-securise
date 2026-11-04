@@ -49,6 +49,15 @@ export type ReferentielPagesService = {
     descriptions: ReferentielRisques;
     matrice: MatriceNiveauxRisque;
     niveaux: ReferentielNiveauxRisque;
+    vecteurs: Record<
+      string,
+      {
+        intitule: string;
+        description: string;
+        exemple: string;
+        intitulesObjectifsVises: Record<string, string>;
+      }
+    >;
   };
   dossiers: {
     statutsHomologation: Record<string, { libelle: string }>;
