@@ -443,4 +443,47 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       }
     );
   });
+
+  describe('quand requête GET sur `/api/utilisateur/preferences/recapitulatif`', () => {
+    let idUtilisateur: UUID;
+
+    beforeEach(async () => {
+      const u = await testeur
+        .depotDonnees()
+        .nouvelUtilisateur({ email: 'jean.dujardin@beta.gouv.fr' });
+      idUtilisateur = u.id;
+      await testeur
+        .depotDonnees()
+        .metsAJourUtilisateur(
+          idUtilisateur,
+          unUtilisateur().avecId(idUtilisateur).donnees
+        );
+      testeur.middleware().reinitialise({ idUtilisateur });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          testeur.app(),
+          '/api/utilisateur/preferences/recapitulatif'
+        );
+    });
+
+    it('retourne la représentation JSON des préférences de récapitulatif', async () => {
+      const reponse = await testeur.get(
+        '/api/utilisateur/preferences/recapitulatif'
+      );
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.body).to.eql({
+        mentionDansMesure: true,
+        responsableMesure: true,
+        echeanceMesureBientotExpiree: true,
+        echeanceMesureExpiree: true,
+        nouveauxServicesAjoutesAuPerimetre: true,
+        nouveauxServicesSansToutesMesuresSpecifiques: false,
+      });
+    });
+  });
 });

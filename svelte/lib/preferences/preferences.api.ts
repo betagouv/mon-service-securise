@@ -10,4 +10,7 @@ export const api = {
   sauvegardePreferencesRecapitulatif: async (
     recapitulatif: Partial<PreferencesRecapitulatif>
   ) => axios.put('/api/utilisateur/preferences/recapitulatif', recapitulatif),
+  recuperePreferencesRecapitulatif:
+    async (): Promise<PreferencesRecapitulatif> =>
+      (await axios.get('/api/utilisateur/preferences/recapitulatif')).data,
 };

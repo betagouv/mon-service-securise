@@ -9,6 +9,7 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import ChargementEnCours from '../../ui/ChargementEnCours.svelte';
+  import EncartPreferenceMailMensuel from './EncartPreferenceMailMensuel.svelte';
 
   let elementModale: Modale | undefined = $state();
 
@@ -87,6 +88,7 @@
     </p>
   {/snippet}
   {#snippet contenu()}
+    <EncartPreferenceMailMensuel />
     <div
       class="contenu"
       class:application-en-cours={etatModale === 'APPLICATION_EN_COURS'}
