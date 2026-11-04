@@ -9,13 +9,7 @@ import {
   IdRisqueV2,
 } from './risquesV2.types.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
-
-const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
-  ['OV1', ['integrite']],
-  ['OV2', ['confidentialite', 'integrite']],
-  ['OV3', ['disponibilite']],
-  ['OV4', ['integrite']],
-]);
+import { categoriesObjectifsVises } from './categoriesObjectifsVises.js';
 
 export type DonneesRisqueV2 = {
   desactive?: boolean;
@@ -113,9 +107,8 @@ export class RisqueV2 {
   private getCategories(): CategorieRisque[] {
     return [
       ...new Set(
-        Object.keys(this.objectifsVises).flatMap(
-          (ov) =>
-            ovVersCategories.get(ov as IdObjectifVise) as CategorieRisque[]
+        (Object.keys(this.objectifsVises) as IdObjectifVise[]).flatMap(
+          (ov) => categoriesObjectifsVises[ov]
         )
       ),
     ];
