@@ -4,7 +4,9 @@
     type ReferentielCategories,
     type ReferentielGravites,
     type ReferentielNiveauxRisque,
+    type ReferentielCategoriesObjectifsVises,
     type ReferentielRisques,
+    type ReferentielVecteursRisque,
     type ReferentielVraisemblances,
   } from './risques.d';
   import type { RisquesV1 as TypeRisquesV1 } from '../risquesV2/risquesV2.d';
@@ -30,6 +32,8 @@
     avecRisquesV2: boolean;
     versionService: VersionService | undefined;
     modeVisiteGuidee?: boolean;
+    vecteursRisque: ReferentielVecteursRisque;
+    categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
   }
 
   let {
@@ -43,6 +47,8 @@
     referentielRisques,
     matriceNiveauxRisque,
     niveauxRisque,
+    vecteursRisque,
+    categoriesObjectifsVises,
     visible,
     versionService,
     avecRisquesV2,
@@ -62,6 +68,8 @@
     {avecRisquesV2}
     {versionService}
     {modeVisiteGuidee}
+    {vecteursRisque}
+    {categoriesObjectifsVises}
   />
 {:else}
   <RisquesV1

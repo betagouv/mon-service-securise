@@ -10,7 +10,9 @@
   import LegendeMatrice from './matrice/LegendeMatrice.svelte';
   import TiroirRisqueSpecifiqueV2 from './tiroir/TiroirRisqueSpecifiqueV2.svelte';
   import type {
+    ReferentielCategoriesObjectifsVises,
     ReferentielGravites,
+    ReferentielVecteursRisque,
     ReferentielVraisemblances,
   } from '../risques/risques.d';
   import Bouton from '../ui/Bouton.svelte';
@@ -35,6 +37,8 @@
     idService: string;
     risquesV1: RisquesV1;
     statuts: ReferentielStatut;
+    vecteursRisque: ReferentielVecteursRisque;
+    categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
     visible: Record<EtapeService, boolean>;
@@ -48,6 +52,8 @@
     idService,
     risquesV1,
     statuts,
+    vecteursRisque,
+    categoriesObjectifsVises,
     niveauxGravite,
     niveauxVraisemblance,
     visible,

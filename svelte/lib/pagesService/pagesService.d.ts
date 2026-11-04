@@ -7,7 +7,9 @@ import type {
   NiveauGravite,
   ReferentielCategories,
   ReferentielNiveauxRisque,
+  ReferentielCategoriesObjectifsVises,
   ReferentielRisques,
+  ReferentielVecteursRisque,
   ReferentielVraisemblances,
 } from '../risques/risques.d';
 import type { EtapeParcoursHomologation } from './pages/parcoursHomologation/parcoursHomologation.types';
@@ -49,15 +51,8 @@ export type ReferentielPagesService = {
     descriptions: ReferentielRisques;
     matrice: MatriceNiveauxRisque;
     niveaux: ReferentielNiveauxRisque;
-    vecteurs: Record<
-      string,
-      {
-        intitule: string;
-        description: string;
-        exemple: string;
-        intitulesObjectifsVises: Record<string, string>;
-      }
-    >;
+    vecteurs: ReferentielVecteursRisque;
+    categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
   };
   dossiers: {
     statutsHomologation: Record<string, { libelle: string }>;

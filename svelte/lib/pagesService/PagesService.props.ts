@@ -48,6 +48,9 @@ export const propsPourPage = (
         niveauxVraisemblance: props.referentiel.risques.vraisemblances,
         referentielRisques: props.referentiel.risques.descriptions,
         matriceNiveauxRisque: props.referentiel.risques.matrice,
+        vecteursRisque: props.referentiel.risques.vecteurs,
+        categoriesObjectifsVises:
+          props.referentiel.risques.categoriesObjectifsVises,
         niveauxRisque: props.referentiel.risques.niveaux,
         risquesV1,
         statuts: props.referentiel.mesures.statuts,
