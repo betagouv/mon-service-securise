@@ -75,6 +75,18 @@ export type ReferentielNiveauxRisque = Record<
   DescriptionNiveauRisque
 >;
 
+export type ReferentielVecteursRisque = Record<
+  string,
+  {
+    intitule: string;
+    description: string;
+    exemple: string;
+    intitulesObjectifsVises: Record<string, string>;
+  }
+>;
+
+export type ReferentielCategoriesObjectifsVises = Record<string, string[]>;
+
 export type DescriptionNiveauRisque = {
   libelle: string;
   description: string;
