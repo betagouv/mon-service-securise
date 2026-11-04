@@ -29,6 +29,7 @@
   } from './matrice/matrice';
   import { ciblage, cibleDeVisiteGuidee } from '../visiteGuideeSPA/ciblage';
   import { donneesVisiteGuidee } from './donneesVisiteGuidee';
+  import ModaleRisquesANSSI from './modale/ModaleRisquesANSSI.svelte';
 
   interface Props {
     idService: string;
@@ -103,8 +104,9 @@
   };
 
   let modaleCartographies: ModaleCartographies | undefined;
-
+  let modaleRisquesANSSI: ModaleRisquesANSSI | undefined;
   let modaleAnciensRisques: ModaleAnciensRisques | undefined;
+
   const afficheModaleAnciensRisques = () => {
     modaleAnciensRisques?.affiche();
   };
@@ -246,48 +248,57 @@
   <div class="entete-conteneur-tableau">
     <div class="titres">
       <h2>Risques</h2>
-      <div class="sous-titre">
-        <span>
-          Le tableau ci-dessous présente le détail des risques, accompagné de
-          leur gravité et de leur vraisemblance résiduelle actuelles. Pour les
-          risques ANSSI, le niveau de vraisemblance est déterminé
-          automatiquement à partir des mesures traitées. Le niveau de gravité
-          est proposé à titre indicatif et peut être ajusté selon votre
-          appréciation.
-        </span>
-        {#if aDesRisquesV1}
-          <br />
-          <br />
-          <span
-            >Seuls les risques de la dernière version sont pris en compte ;
-            l'ancienne version reste consultable en lecture seule.</span
-          >
-          <Bouton
-            type="lien-dsfr"
-            titre="En savoir plus"
-            onclick={afficheModaleAnciensRisques}
-          />
-        {/if}
+      <div class="actions">
+        <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Voir la liste des risques ANSSI"
+          kind="tertiary"
+          size="md"
+          has-icon
+          icon="list-check"
+          icon-place="left"
+          onclick={() => modaleRisquesANSSI?.affiche()}
+        ></dsfr-button>
+        <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+        <dsfr-button
+          label="Ajouter un risque"
+          kind="primary"
+          size="md"
+          has-icon
+          icon="add-line"
+          icon-place="left"
+          disabled={estLectureSeule}
+          onclick={() =>
+            tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+              idService,
+              niveauxGravite,
+              niveauxVraisemblance,
+              estLectureSeule,
+            })}
+        ></dsfr-button>
       </div>
     </div>
-    <div class="actions">
-      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
-      <dsfr-button
-        label="Ajouter un risque"
-        kind="primary"
-        size="md"
-        has-icon
-        icon="add-line"
-        icon-place="left"
-        disabled={estLectureSeule}
-        onclick={() =>
-          tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
-            idService,
-            niveauxGravite,
-            niveauxVraisemblance,
-            estLectureSeule,
-          })}
-      ></dsfr-button>
+    <div class="sous-titre">
+      <span>
+        Le tableau ci-dessous présente le détail des risques, accompagné de leur
+        gravité et de leur vraisemblance résiduelle actuelles. Pour les risques
+        ANSSI, le niveau de vraisemblance est déterminé automatiquement à partir
+        des mesures traitées. Le niveau de gravité est proposé à titre indicatif
+        et peut être ajusté selon votre appréciation.
+      </span>
+      {#if aDesRisquesV1}
+        <br />
+        <br />
+        <span
+          >Seuls les risques de la dernière version sont pris en compte ;
+          l'ancienne version reste consultable en lecture seule.</span
+        >
+        <Bouton
+          type="lien-dsfr"
+          titre="En savoir plus"
+          onclick={afficheModaleAnciensRisques}
+        />
+      {/if}
     </div>
   </div>
 
@@ -316,6 +327,8 @@
   {niveauxGravite}
   {niveauxVraisemblance}
 />
+
+<ModaleRisquesANSSI bind:this={modaleRisquesANSSI} {risques} {idService} />
 
 <style lang="scss">
   /* Annule la couleur `fond-pale` positionnée par le pug */
@@ -416,12 +429,23 @@
     .entete-conteneur-tableau {
       margin-top: 24px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
+      flex-direction: column;
+      gap: 12px;
 
       dsfr-button {
         white-space: nowrap;
+      }
+
+      .titres {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+
+        .actions {
+          display: flex;
+          gap: 10px;
+        }
       }
     }
 
