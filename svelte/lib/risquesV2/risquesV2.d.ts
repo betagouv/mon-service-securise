@@ -26,6 +26,8 @@ export type Risque = {
   desactive?: boolean;
   commentaire?: string;
   mesuresAssociees: string[];
+  idVecteur: string;
+  idsObjectifsVises: string[];
 };
 
 export type TousRisques = {
