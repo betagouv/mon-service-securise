@@ -156,8 +156,9 @@
             <AccordeonGroupe
               libelle={vecteur.intitule}
               ouvert
-              nombreElements={Object.keys(vecteur.intitulesObjectifsVises)
-                .length}
+              libellePastille={Object.keys(
+                vecteur.intitulesObjectifsVises
+              ).length.toString()}
             >
               <div class="contenu-accordeon">
                 {#each Object.entries(vecteur.intitulesObjectifsVises) as [idObjectif, objectif] (idObjectif)}

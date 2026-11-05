@@ -92,7 +92,7 @@
   bind:this={accordeon}
   bind:ouvert={estOuvert}
   libelle={groupe ? groupe.libelle : 'Sans groupe'}
-  nombreElements={servicesAAfficher.length + brouillonsAAfficher.length}
+  libellePastille={`${servicesAAfficher.length + brouillonsAAfficher.length}`}
   {texteSelection}
   onRetireSelection={retireServicesDuGroupe}
 >

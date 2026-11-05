@@ -74,7 +74,7 @@
   bind:this={accordeon}
   bind:ouvert={estOuvert}
   libelle={groupe ? groupe.libelle : 'Sans groupe'}
-  nombreElements={entites.length}
+  libellePastille={entites.length.toString()}
   {texteSelection}
   onRetireSelection={retireEntitesDuGroupe}
 >
