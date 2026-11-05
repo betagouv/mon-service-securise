@@ -1,23 +1,16 @@
 <script lang="ts">
   import Modale from '../../ui/Modale.svelte';
-  import type {
-    Niveau,
-    Risque,
-    RisqueSpecifiqueV2,
-    TousRisques,
+  import {
+    idLigne,
+    type RisqueApplique,
+    type TousRisques,
   } from '../risquesV2.d';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import type {
     ReferentielCategoriesObjectifsVises,
     ReferentielVecteursRisque,
   } from '../../risques/risques';
-  import AccordeonGroupe from '../../ui/AccordeonGroupe.svelte';
-  import CartoucheCategorieRisque from '../../ui/CartoucheCategorieRisque.svelte';
-  import { mappingNomCategories } from '../kit/kit';
-  import CartoucheIdentifiantRisque from '../kit/CartoucheIdentifiantRisque.svelte';
-  import CartoucheIdentifiantRisqueSpecifiqueV2 from '../kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
-  import { ajouteRisqueSpecifiqueV2 } from '../risquesV2.api';
-  import { toasterStore } from '../../ui/stores/toaster.store';
+  import ContenuOngletListeRisquesANSSI from './ContenuOngletListeRisquesANSSI.svelte';
 
   let elementModale: Modale | undefined;
 
@@ -48,23 +41,39 @@
     },
   ];
 
-  let vecteurObjectifViseVersRisqueApplique = $derived(
+  const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
+    idTabActive = e.detail.index;
+  };
+
+  let idVecteurVersIdLigneVersRisqueApplique = $derived(
     Object.fromEntries(
-      Object.entries(vecteursRisque)
-        .flatMap(([idVecteur, vecteur]) =>
-          Object.keys(vecteur.intitulesObjectifsVises).map((idObjectif) => ({
-            idVecteur,
-            idObjectif,
-          }))
-        )
-        .map(({ idVecteur, idObjectif }) => [
-          idLigne(idVecteur, idObjectif),
-          risqueCorrespondantA(idVecteur, idObjectif),
-        ])
+      Object.entries(vecteursRisque).map(([idVecteur, vecteur]) => [
+        idVecteur,
+        Object.fromEntries(
+          Object.keys(vecteur.intitulesObjectifsVises).map((idObjectif) => [
+            idLigne(idVecteur, idObjectif),
+            risqueCorrespondantA(idVecteur, idObjectif),
+          ])
+        ),
+      ])
     )
   );
 
-  const risqueCorrespondantA = (idVecteur: string, idObjectif: string) => {
+  let nombreToutesLignes = $derived(
+    Object.values(idVecteurVersIdLigneVersRisqueApplique).flatMap((v) =>
+      Object.keys(v)
+    ).length
+  );
+  let nombreLignesAppliquees = $derived(
+    Object.values(idVecteurVersIdLigneVersRisqueApplique).flatMap((ligne) =>
+      Object.values(ligne).filter((risqueApplique) => !!risqueApplique)
+    ).length
+  );
+
+  const risqueCorrespondantA = (
+    idVecteur: string,
+    idObjectif: string
+  ): RisqueApplique => {
     const risqueSpecifique = risques.risquesSpecifiques.find(
       (rs) => rs.idModele === idLigne(idVecteur, idObjectif)
     );
@@ -87,32 +96,6 @@
     return undefined;
   };
 
-  const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
-    idTabActive = e.detail.index;
-  };
-
-  const idLigne = (idVecteur: string, idObjectif: string): string =>
-    `${idVecteur}${idObjectif}`;
-
-  const creeRisqueSpecifiqueCorrespondant = async (
-    idVecteur: string,
-    idObjectif: string
-  ) => {
-    const vecteur = vecteursRisque[idVecteur];
-    const intitule = `${vecteur.intitule} ${vecteur.intitulesObjectifsVises[idObjectif]}`;
-    await ajouteRisqueSpecifiqueV2(idService, {
-      categories: categoriesObjectifsVises[idObjectif],
-      intitule,
-      gravite: 0 as Niveau,
-      graviteBrute: 0 as Niveau,
-      vraisemblance: 0 as Niveau,
-      vraisemblanceBrute: 0 as Niveau,
-      idModele: idLigne(idVecteur, idObjectif),
-    });
-    toasterStore.succes('Succès', `Le risque ${intitule} a été ajouté.`);
-    document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
-  };
-
   export const affiche = () => {
     elementModale?.affiche();
   };
@@ -121,8 +104,8 @@
 <Modale id="modale-risques-anssi" bind:this={elementModale}>
   {#snippet contenu()}
     <h4>
-      <lab-anssi-icone nom="arrow-right-line" taille="lg"></lab-anssi-icone> Liste
-      des risques ANSSI
+      <lab-anssi-icone nom="arrow-right-line" taille="lg"></lab-anssi-icone>
+      Liste des risques ANSSI
     </h4>
     <div class="contenu-modale">
       <p>
@@ -147,66 +130,63 @@
           <TitreOngletDSFR
             active={idTabActive === 0}
             libelle={configurationsTabs[0].label}
-            libellePastille="5"
+            libellePastille={nombreToutesLignes.toString()}
+          />
+        </div>
+        <div slot="tab-2">
+          <TitreOngletDSFR
+            active={idTabActive === 1}
+            libelle={configurationsTabs[1].label}
+            libellePastille={nombreLignesAppliquees.toString()}
+          />
+        </div>
+        <div slot="tab-3">
+          <TitreOngletDSFR
+            active={idTabActive === 2}
+            libelle={configurationsTabs[2].label}
+            libellePastille={`${nombreToutesLignes - nombreLignesAppliquees}`}
           />
         </div>
         <div slot="panel-1">
           {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
-            {@const vecteur = vecteursRisque[idVecteur]}
-            <AccordeonGroupe
-              libelle={vecteur.intitule}
-              ouvert
-              libellePastille={Object.keys(
-                vecteur.intitulesObjectifsVises
-              ).length.toString()}
-            >
-              <div class="contenu-accordeon">
-                {#each Object.entries(vecteur.intitulesObjectifsVises) as [idObjectif, objectif] (idObjectif)}
-                  <div class="contenu-objectif">
-                    <div>{vecteur.intitule} {objectif}</div>
-                    <div class="risque-correspondant">
-                      {#if vecteurObjectifViseVersRisqueApplique[idLigne(idVecteur, idObjectif)]}
-                        {@const risqueApplique =
-                          vecteurObjectifViseVersRisqueApplique[
-                            idLigne(idVecteur, idObjectif)
-                          ]}
-                        {#if risqueApplique!.type === 'ANSSI'}
-                          <CartoucheIdentifiantRisque
-                            risque={risqueApplique! as Risque}
-                          />
-                        {:else}
-                          <CartoucheIdentifiantRisqueSpecifiqueV2
-                            risque={risqueApplique! as RisqueSpecifiqueV2}
-                          />
-                        {/if}
-                      {:else}
-                        <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-                        <dsfr-button
-                          kind="secondary"
-                          label="Ajouter"
-                          has-icon
-                          icon-place="left"
-                          icon="add-line"
-                          onclick={async () =>
-                            creeRisqueSpecifiqueCorrespondant(
-                              idVecteur,
-                              idObjectif
-                            )}
-                        ></dsfr-button>
-                      {/if}
-                    </div>
-                    <div class="badges">
-                      {#each categoriesObjectifsVises[idObjectif] as categorie (categorie)}
-                        <CartoucheCategorieRisque
-                          libelleCategorie={mappingNomCategories[categorie]}
-                        />
-                      {/each}
-                    </div>
-                  </div>
-                {/each}
-              </div>
-              <div></div>
-            </AccordeonGroupe>
+            <ContenuOngletListeRisquesANSSI
+              etat="tous"
+              {idService}
+              {idVecteur}
+              {vecteursRisque}
+              {categoriesObjectifsVises}
+              idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
+                idVecteur
+              ]}
+            />
+          {/each}
+        </div>
+        <div slot="panel-2">
+          {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
+            <ContenuOngletListeRisquesANSSI
+              etat="appliques"
+              {idService}
+              {idVecteur}
+              {vecteursRisque}
+              {categoriesObjectifsVises}
+              idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
+                idVecteur
+              ]}
+            />
+          {/each}
+        </div>
+        <div slot="panel-3">
+          {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
+            <ContenuOngletListeRisquesANSSI
+              etat="nonAppliques"
+              {idService}
+              {idVecteur}
+              {vecteursRisque}
+              {categoriesObjectifsVises}
+              idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
+                idVecteur
+              ]}
+            />
           {/each}
         </div>
       </dsfr-tabs>
@@ -228,36 +208,6 @@
     max-width: 792px;
     max-height: 800px;
     width: calc(100% - 48px);
-  }
-
-  .contenu-accordeon {
-    margin-top: 2rem;
-    border: 1px solid #929292;
-    border-top: none;
-    margin-bottom: 64px;
-
-    .contenu-objectif {
-      padding: 8px 16px;
-      display: grid;
-      grid-template-columns: auto 196px;
-      gap: 8px;
-      align-items: center;
-
-      .risque-correspondant {
-        grid-column: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
-      }
-
-      .badges {
-        display: flex;
-        gap: 8px;
-      }
-
-      &:not(:last-child) {
-        border-bottom: 1px solid #929292;
-      }
-    }
   }
 
   h4 {

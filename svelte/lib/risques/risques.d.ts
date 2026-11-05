@@ -75,15 +75,14 @@ export type ReferentielNiveauxRisque = Record<
   DescriptionNiveauRisque
 >;
 
-export type ReferentielVecteursRisque = Record<
-  string,
-  {
-    intitule: string;
-    description: string;
-    exemple: string;
-    intitulesObjectifsVises: Record<string, string>;
-  }
->;
+export type ReferentielVecteursRisque = Record<string, VecteurRisque>;
+
+export type VecteurRisque = {
+  intitule: string;
+  description: string;
+  exemple: string;
+  intitulesObjectifsVises: Record<string, string>;
+};
 
 export type ReferentielCategoriesObjectifsVises = Record<string, string[]>;
 
