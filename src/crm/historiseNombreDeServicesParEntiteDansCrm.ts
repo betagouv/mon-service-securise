@@ -1,15 +1,19 @@
 import { AdaptateurReportingCrm } from '../adaptateurs/reportingCrm/adaptateurReportingCrm.interface.js';
 import Service from '../modeles/service.js';
+import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
 
 export type Configuration = {
   adaptateurCrm: AdaptateurReportingCrm;
+  adaptateurGestionErreur: AdaptateurGestionErreur;
 };
 
 export class HistoriseNombreDeServicesParEntiteDansCrm {
   private readonly crm: AdaptateurReportingCrm;
+  private readonly gestionErreur: AdaptateurGestionErreur;
 
   constructor(config: Configuration) {
     this.crm = config.adaptateurCrm;
+    this.gestionErreur = config.adaptateurGestionErreur;
   }
 
   async execute(services: Service[]): Promise<void> {
@@ -21,7 +25,9 @@ export class HistoriseNombreDeServicesParEntiteDansCrm {
 
     await Promise.all(
       [...parSiret.entries()].map(([siret, nbServices]) =>
-        this.crm.historiseNombreDeServices(siret, nbServices)
+        this.crm
+          .historiseNombreDeServices(siret, nbServices)
+          .catch((erreur) => this.gestionErreur.logueErreur(erreur, { siret }))
       )
     );
   }
