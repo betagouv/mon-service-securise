@@ -176,18 +176,22 @@
           {/each}
         </div>
         <div slot="panel-3">
-          {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
-            <ContenuOngletListeRisquesANSSI
-              etat="nonAppliques"
-              {idService}
-              {idVecteur}
-              {vecteursRisque}
-              {categoriesObjectifsVises}
-              idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
-                idVecteur
-              ]}
-            />
-          {/each}
+          {#if nombreToutesLignes === nombreLignesAppliquees}
+            <p>Tous les risques sont appliqués.</p>
+          {:else}
+            {#each Object.keys(vecteursRisque) as idVecteur (idVecteur)}
+              <ContenuOngletListeRisquesANSSI
+                etat="nonAppliques"
+                {idService}
+                {idVecteur}
+                {vecteursRisque}
+                {categoriesObjectifsVises}
+                idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
+                  idVecteur
+                ]}
+              />
+            {/each}
+          {/if}
         </div>
       </dsfr-tabs>
     </div>
