@@ -4,7 +4,7 @@
 
   interface Props {
     libelle: string;
-    nombreElements: number;
+    libellePastille: string;
     ouvert?: boolean;
     texteSelection?: string;
     onRetireSelection?: () => Promise<void>;
@@ -13,7 +13,7 @@
 
   let {
     libelle,
-    nombreElements,
+    libellePastille,
     ouvert = $bindable(false),
     texteSelection,
     onRetireSelection,
@@ -38,7 +38,7 @@
   <button class:ouvert onclick={() => (ouvert = !ouvert)}>
     <lab-anssi-icone nom="folder-2-line" taille="md"></lab-anssi-icone>
     <span>{libelle}</span>
-    <Pastille contenu={`${nombreElements}`} active={ouvert} />
+    <Pastille contenu={libellePastille} active={ouvert} />
     <lab-anssi-icone class="fleche" nom="arrow-up-s-line" taille="md"
     ></lab-anssi-icone>
   </button>
