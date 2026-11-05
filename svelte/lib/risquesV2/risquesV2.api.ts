@@ -30,8 +30,13 @@ export const metsAJourRisque = async (
 export const ajouteRisqueSpecifiqueV2 = async (
   idService: string,
   donnees: DonneesRisqueSpecifiqueV2
-) => {
-  await axios.post(`/api/service/${idService}/risques/v2/specifiques`, donnees);
+): Promise<{ id: string; identifiantNumerique: string }> => {
+  return (
+    await axios.post(
+      `/api/service/${idService}/risques/v2/specifiques`,
+      donnees
+    )
+  ).data;
 };
 
 export const metsAJourRisqueSpecifiqueV2 = async (

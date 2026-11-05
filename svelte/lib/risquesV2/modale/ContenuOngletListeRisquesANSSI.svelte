@@ -44,7 +44,7 @@
   ) => {
     const vecteur = vecteursRisque[idVecteur];
     const intitule = `${vecteur.intitule} ${vecteur.intitulesObjectifsVises[idObjectif]}`;
-    await ajouteRisqueSpecifiqueV2(idService, {
+    const { identifiantNumerique } = await ajouteRisqueSpecifiqueV2(idService, {
       categories: categoriesObjectifsVises[idObjectif],
       intitule,
       gravite: 0 as Niveau,
@@ -53,7 +53,10 @@
       vraisemblanceBrute: 0 as Niveau,
       idModele: idLigne(idVecteur, idObjectif),
     });
-    toasterStore.succes('Succès', `Le risque ${intitule} a été ajouté.`);
+    toasterStore.succes(
+      `Risque spécifique ${identifiantNumerique} ajouté à votre service`,
+      `Renseignez sa gravité et sa vraisemblance : le moteur de risques ne les calcule pas.`
+    );
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
   };
 
@@ -113,6 +116,7 @@
                   has-icon
                   icon-place="left"
                   icon="add-line"
+                  size="sm"
                   onclick={async () =>
                     creeRisqueSpecifiqueCorrespondant(idVecteur, idObjectif)}
                 ></dsfr-button>
