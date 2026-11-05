@@ -19,18 +19,6 @@ describe('Le serveur MSS des routes privées /api/cles-api', () => {
         });
     });
 
-    it("répond 404 si l'utilisateur n'a pas accès à la fonctionnalité", async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecAccesCreationCleApi: () => false,
-      });
-
-      const reponse = await testeur.post('/api/cles-api', {
-        dureeValiditeEnJours: 30,
-      });
-
-      expect(reponse.status).toBe(404);
-    });
-
     it('refuse une durée de validité qui ne fait pas partie des choix proposés', async () => {
       const reponse = await testeur.post('/api/cles-api', {
         dureeValiditeEnJours: 45,
@@ -78,16 +66,6 @@ describe('Le serveur MSS des routes privées /api/cles-api', () => {
           method: 'delete',
           url: `/api/cles-api/${unUUIDRandom()}`,
         });
-    });
-
-    it("répond 404 si l'utilisateur n'a pas accès à la fonctionnalité", async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecAccesCreationCleApi: () => false,
-      });
-
-      const reponse = await testeur.delete(`/api/cles-api/${unUUIDRandom()}`);
-
-      expect(reponse.status).toBe(404);
     });
 
     it("refuse un identifiant qui n'est pas un UUID", async () => {

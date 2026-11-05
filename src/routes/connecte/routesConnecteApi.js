@@ -406,7 +406,6 @@ const routesConnecteApi = ({
     middleware.verificationAcceptationCGU,
     routesConnecteApiCleApi({
       depotDonnees,
-      adaptateurEnvironnement,
     })
   );
 

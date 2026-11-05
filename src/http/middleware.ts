@@ -124,9 +124,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
 
       reponse.locals.featureFlags = {
         ...reponse.locals.featureFlags,
-        avecCreationCleApi: adaptateurEnvironnement
-          .featureFlag()
-          .avecAccesCreationCleApi(utilisateurCourant.id),
       };
     }
     suite();
