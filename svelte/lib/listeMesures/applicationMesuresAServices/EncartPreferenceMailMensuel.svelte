@@ -2,23 +2,26 @@
   import { onMount } from 'svelte';
   import { api } from '../../preferences/preferences.api';
 
-  let preferenceActivee = $state(false);
+  let preferenceVoirMesures = $state(false);
   let messageSauvegardeAffiche = $state(false);
   let messageErreurAffiche = $state(false);
 
   onMount(async () => {
     const recapitulatif = await api.recuperePreferencesRecapitulatif();
-    preferenceActivee =
+    preferenceVoirMesures =
       recapitulatif.nouveauxServicesSansToutesMesuresSpecifiques;
   });
 
   const metsAJourPreference = async (e: CustomEvent<boolean>) => {
     messageSauvegardeAffiche = false;
     messageErreurAffiche = false;
-    preferenceActivee = e.detail;
+    preferenceVoirMesures = e.detail;
     try {
       await api.sauvegardePreferencesRecapitulatif({
-        nouveauxServicesSansToutesMesuresSpecifiques: preferenceActivee,
+        ...(preferenceVoirMesures
+          ? { nouveauxServicesAjoutesAuPerimetre: true }
+          : {}),
+        nouveauxServicesSansToutesMesuresSpecifiques: preferenceVoirMesures,
       });
       messageSauvegardeAffiche = true;
     } catch (e) {
@@ -32,10 +35,10 @@
   <h5>Préférence de notifications</h5>
   <dsfr-checkbox
     id="preference-activee"
-    checked={preferenceActivee}
+    checked={preferenceVoirMesures}
     onvaluechanged={metsAJourPreference}
     label="Me prévenir par e-mail quand un service n’a pas mes mesures"
-    hint="Notification à l’ajout d’un service et récapitulatif par e-mail une fois par mois. Ce choix est enregistré dès que vous cochez ou décochez la case."
+    hint="Recevez un récapitulatif mensuel des services sans vos mesures, incluant les nouveaux services ajoutés à votre périmètre. Votre choix est enregistré dès que vous cochez ou décochez la case."
   >
   </dsfr-checkbox>
   <div class="choix-enregistre" class:visible={messageSauvegardeAffiche}>
@@ -56,6 +59,10 @@
     background-color: #f6f6f6;
     border-radius: 8px;
     padding: 16px;
+
+    dsfr-checkbox {
+      max-width: 750px;
+    }
 
     h5 {
       color: #161616;
