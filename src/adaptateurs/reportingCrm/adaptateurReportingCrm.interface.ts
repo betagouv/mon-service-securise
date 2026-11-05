@@ -8,12 +8,16 @@ export type CrmImportEnMasse = {
   nbServices: number;
 };
 
+export type HistorisationNombreDeServices = {
+  siret: string;
+  nombreDeServices: number;
+};
+
 export interface AdaptateurReportingCrm {
   consigneImportEnMasse: (data: CrmImportEnMasse) => Promise<void>;
   consigneEntiteUtilisatrice(entite: Entite): Promise<IdEntiteCRM>;
   historiseNombreDeServices(
-    siret: string,
-    nbServiceADate: number
+    historisations: HistorisationNombreDeServices[]
   ): Promise<void>;
   consigneUtilisateur(email: string, idEntite?: IdEntiteCRM): Promise<void>;
   consigneNombreDeServicesDeLEntite(

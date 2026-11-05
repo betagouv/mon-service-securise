@@ -23,12 +23,14 @@ export class HistoriseNombreDeServicesParEntiteDansCrm {
       return map;
     }, new Map<string, number>());
 
-    await Promise.all(
-      [...parSiret.entries()].map(([siret, nbServices]) =>
-        this.crm
-          .historiseNombreDeServices(siret, nbServices)
-          .catch((erreur) => this.gestionErreur.logueErreur(erreur, { siret }))
-      )
+    const historisations = [...parSiret.entries()].map(
+      ([siret, nombreDeServices]) => ({ siret, nombreDeServices })
     );
+
+    try {
+      await this.crm.historiseNombreDeServices(historisations);
+    } catch (erreur) {
+      this.gestionErreur.logueErreur(erreur as Error);
+    }
   }
 }

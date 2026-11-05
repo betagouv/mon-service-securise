@@ -26,46 +26,34 @@ describe('La consignation du nombre de services dans le CRM', () => {
 
     await consigne.execute(lesServices);
 
-    expect(crmDeTest.historiseNombreDeServices).toHaveBeenCalledWith(
-      'SIR-1',
-      3
-    );
-    expect(crmDeTest.historiseNombreDeServices).toHaveBeenCalledWith(
-      'SIR-2',
-      1
+    expect(crmDeTest.historiseNombreDeServices).toHaveBeenCalledExactlyOnceWith(
+      [
+        { siret: 'SIR-1', nombreDeServices: 3 },
+        { siret: 'SIR-2', nombreDeServices: 1 },
+      ]
     );
   });
 
-  it("logue chaque erreur du CRM à l'adaptateur de gestion d'erreur", async () => {
+  it("logue l'erreur du CRM à l'adaptateur de gestion d'erreur sans la propager", async () => {
     const crmDeTest = fabriqueAdaptateurReportingCrm();
     crmDeTest.historiseNombreDeServices = vi
       .fn()
-      .mockRejectedValueOnce(new Error('Échec SIR-1'))
-      .mockRejectedValueOnce(new Error('Échec SIR-2'));
+      .mockRejectedValue(new Error('Échec CRM'));
     const adaptateurGestionErreur = {
       logueErreur: vi.fn(),
     } as unknown as AdaptateurGestionErreur;
-
-    const lesServices = [
-      unServiceV2().avecOrganisationResponsable({ siret: 'SIR-1' }).construis(),
-      unServiceV2().avecOrganisationResponsable({ siret: 'SIR-2' }).construis(),
-    ];
 
     const consigne = new HistoriseNombreDeServicesParEntiteDansCrm({
       adaptateurCrm: crmDeTest,
       adaptateurGestionErreur,
     });
 
-    await consigne.execute(lesServices);
+    await consigne.execute([
+      unServiceV2().avecOrganisationResponsable({ siret: 'SIR-1' }).construis(),
+    ]);
 
-    expect(adaptateurGestionErreur.logueErreur).toHaveBeenCalledTimes(2);
-    expect(adaptateurGestionErreur.logueErreur).toHaveBeenCalledWith(
-      new Error('Échec SIR-1'),
-      { siret: 'SIR-1' }
-    );
-    expect(adaptateurGestionErreur.logueErreur).toHaveBeenCalledWith(
-      new Error('Échec SIR-2'),
-      { siret: 'SIR-2' }
+    expect(adaptateurGestionErreur.logueErreur).toHaveBeenCalledExactlyOnceWith(
+      new Error('Échec CRM')
     );
   });
 });

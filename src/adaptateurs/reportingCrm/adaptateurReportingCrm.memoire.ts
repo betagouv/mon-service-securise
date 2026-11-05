@@ -1,6 +1,7 @@
 import {
   AdaptateurReportingCrm,
   CrmImportEnMasse,
+  HistorisationNombreDeServices,
   IdEntiteCRM,
 } from './adaptateurReportingCrm.interface.js';
 import Entite from '../../modeles/entite.js';
@@ -54,10 +55,9 @@ export class AdaptateurReportingCrmMemoire implements AdaptateurReportingCrm {
   }
 
   async historiseNombreDeServices(
-    siret: string,
-    nbServiceADate: number
+    historisations: HistorisationNombreDeServices[]
   ): Promise<void> {
-    console.log('📝 [REPORTING CRM] Nouveau nombre de services');
-    console.dir({ siret, nbServiceADate });
+    console.log('📝 [REPORTING CRM] Historisation du nombre de services');
+    console.dir(historisations);
   }
 }
