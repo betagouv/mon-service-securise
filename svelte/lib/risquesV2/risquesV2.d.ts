@@ -86,10 +86,10 @@ export type DonneesRisqueSpecifiqueV2 = {
   graviteBrute: Niveau;
   vraisemblanceBrute: Niveau;
   commentaire?: string;
+  idModele?: string;
 };
 
 export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & {
   id: UUID;
   identifiantNumerique: string;
-  idModele?: string;
 };
