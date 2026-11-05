@@ -70,13 +70,8 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
   private async idEntiteExistante(
     siret: string
   ): Promise<IdEntiteCRM | undefined> {
-    const reponse = await this.client.get(
-      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}`,
-      { filter: `siret[eq]:"${siret}"` }
-    );
-    const [entiteExistante] =
-      reponse.data.data[OBJETS_TWENTY.entitesUtilisatrices];
-    return entiteExistante?.id;
+    const idsCrmParSiret = await this.idsEntitesExistantes([siret]);
+    return idsCrmParSiret.get(siret);
   }
 
   async consigneUtilisateur(
