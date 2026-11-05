@@ -1,16 +1,13 @@
 <script lang="ts">
   import Modale from '../../ui/Modale.svelte';
-  import {
-    idLigne,
-    type RisqueApplique,
-    type TousRisques,
-  } from '../risquesV2.d';
+  import { type TousRisques } from '../risquesV2.d';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import type {
     ReferentielCategoriesObjectifsVises,
     ReferentielVecteursRisque,
   } from '../../risques/risques';
   import ContenuOngletListeRisquesANSSI from './ContenuOngletListeRisquesANSSI.svelte';
+  import { risquesAppliques } from '../risquesAppliques';
 
   let elementModale: Modale | undefined;
 
@@ -46,17 +43,7 @@
   };
 
   let idVecteurVersIdLigneVersRisqueApplique = $derived(
-    Object.fromEntries(
-      Object.entries(vecteursRisque).map(([idVecteur, vecteur]) => [
-        idVecteur,
-        Object.fromEntries(
-          Object.keys(vecteur.intitulesObjectifsVises).map((idObjectif) => [
-            idLigne(idVecteur, idObjectif),
-            risqueCorrespondantA(idVecteur, idObjectif),
-          ])
-        ),
-      ])
-    )
+    risquesAppliques(risques, vecteursRisque)
   );
 
   let nombreToutesLignes = $derived(
@@ -69,32 +56,6 @@
       Object.values(ligne).filter((risqueApplique) => !!risqueApplique)
     ).length
   );
-
-  const risqueCorrespondantA = (
-    idVecteur: string,
-    idObjectif: string
-  ): RisqueApplique => {
-    const risqueSpecifique = risques.risquesSpecifiques.find(
-      (rs) => rs.idModele === idLigne(idVecteur, idObjectif)
-    );
-    if (risqueSpecifique) {
-      return {
-        type: 'specifique',
-        ...risqueSpecifique,
-      };
-    }
-    const risque = risques.risques.find(
-      (r) =>
-        r.idVecteur === idVecteur && r.idsObjectifsVises.includes(idObjectif)
-    );
-    if (risque) {
-      return {
-        type: 'ANSSI',
-        ...risque,
-      };
-    }
-    return undefined;
-  };
 
   export const affiche = () => {
     elementModale?.affiche();
