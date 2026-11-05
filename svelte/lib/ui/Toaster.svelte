@@ -1,10 +1,20 @@
 <script lang="ts">
   import { toasterStore } from './stores/toaster.store';
   import Toast from './Toast.svelte';
+
+  const afficheAuPremierPlan =
+    (nombreToasts: number) => (element: HTMLElement) => {
+      if (nombreToasts > 0) element.showPopover();
+      return () => element.hidePopover();
+    };
 </script>
 
 {#if $toasterStore.queue.length}
-  <aside id="conteneur-toasts">
+  <aside
+    id="conteneur-toasts"
+    popover="manual"
+    {@attach afficheAuPremierPlan($toasterStore.queue.length)}
+  >
     {#each $toasterStore.queue as { niveau, contenu, titre, id, timeout, avecInterpolationHTMLDangereuse = false, boutonAction } (id)}
       <Toast
         {niveau}
@@ -20,17 +30,20 @@
   </aside>
 {/if}
 
-<style>
+<style lang="scss">
   aside {
     position: fixed;
-    right: 36px;
-    top: 0;
+    inset: 0 36px auto auto;
+    margin: 0;
+    padding: 2em 0 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
     width: 540px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 1em;
-    padding-top: 2em;
     z-index: 1002;
   }
 </style>
