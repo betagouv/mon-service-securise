@@ -27,6 +27,7 @@
     font-size: 0.75rem;
     line-height: 1rem;
     font-weight: 400;
+    white-space: nowrap;
 
     &.active {
       background: var(--bleu-mise-en-avant);
