@@ -103,9 +103,15 @@ const routesConnecteApiServiceRisquesV2 = ({
         commentaire,
       };
 
-      await depotDonnees.ajouteRisqueSpecifiqueV2(service.id, donnees);
+      const risque = await depotDonnees.ajouteRisqueSpecifiqueV2(
+        service.id,
+        donnees
+      );
 
-      reponse.sendStatus(201);
+      reponse.status(201).json({
+        id: risque.id,
+        identifiantNumerique: risque.identifiantNumerique,
+      });
     }
   );
 

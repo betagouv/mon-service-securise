@@ -827,14 +827,17 @@ const creeDepot = (config = {}) => {
   const ajouteRisqueSpecifiqueV2 = async (idService, donneesRisque) => {
     const s = await p.lis.un(idService);
     const idRisqueV2 = adaptateurUUID.genereUUID();
+    const risque = { ...donneesRisque, id: idRisqueV2 };
 
-    s.ajouteRisqueSpecifiqueV2({ ...donneesRisque, id: idRisqueV2 });
+    s.ajouteRisqueSpecifiqueV2(risque);
 
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
 
     busEvenements.publie(
       new EvenementRisquesV2ServiceModifies(s.id, s.risquesV2)
     );
+
+    return risque;
   };
 
   const metsAJourRisqueSpecifiqueV2 = async (

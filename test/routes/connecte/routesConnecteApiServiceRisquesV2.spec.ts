@@ -229,14 +229,20 @@ describe('Les routes /service/:id/risques/v2', () => {
       ) => {
         idServiceRecu = idService;
         donneesRisqueRecues = donneesRisque;
+        return {
+          id: unUUID('RS'),
+          identifiantNumerique: 'RS1',
+          ...donneesRisquesSpecifiquesValides,
+        };
       };
 
-      const { status } = await testeur.post(
+      const { status, body } = await testeur.post(
         '/api/service/456/risques/v2/specifiques',
         donneesRisquesSpecifiquesValides
       );
 
       expect(status).toBe(201);
+      expect(body).toEqual({ id: unUUID('RS'), identifiantNumerique: 'RS1' });
       expect(idServiceRecu).toBe('456');
       expect(donneesRisqueRecues).toEqual({
         intitule: 'Initulé du risque',
