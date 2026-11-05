@@ -16,6 +16,14 @@ const rendsExplicite400 = (erreur: unknown): never => {
 // Twenty accepte au plus 100 requêtes par minute : 1 requête toutes les 600 ms.
 const INTERVALLE_ENTRE_REQUETES_EN_MS = 600;
 
+// Twenty refuse les requêtes qui manipulent plus de 60 enregistrements à la fois.
+const TAILLE_MAX_LOT = 60;
+
+const enLots = <T>(elements: T[]): T[][] =>
+  Array.from({ length: Math.ceil(elements.length / TAILLE_MAX_LOT) }, (_, i) =>
+    elements.slice(i * TAILLE_MAX_LOT, (i + 1) * TAILLE_MAX_LOT)
+  );
+
 export class ClientHttpCrm {
   private readonly cadence = enCadence(
     INTERVALLE_ENTRE_REQUETES_EN_MS,
@@ -55,4 +63,18 @@ export class ClientHttpCrm {
     this.cadence(() =>
       axios.patch(this.url(chemin), corps, { headers: this.entetes() })
     ).catch(rendsExplicite400);
+
+  getBatch = <T>(
+    chemin: string,
+    valeurs: T[],
+    paramsDuLot: (lot: T[]) => Record<string, string | number>
+  ) =>
+    Promise.all(
+      enLots(valeurs).map((lot) =>
+        this.get(chemin, { ...paramsDuLot(lot), limit: TAILLE_MAX_LOT })
+      )
+    );
+
+  postBatch = (chemin: string, enregistrements: object[]) =>
+    Promise.all(enLots(enregistrements).map((lot) => this.post(chemin, lot)));
 }

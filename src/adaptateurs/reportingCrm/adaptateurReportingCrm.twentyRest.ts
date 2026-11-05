@@ -1,6 +1,7 @@
 import {
   AdaptateurReportingCrm,
   CrmImportEnMasse,
+  HistorisationNombreDeServices,
   IdEntiteCRM,
 } from './adaptateurReportingCrm.interface.js';
 import Entite from '../../modeles/entite.js';
@@ -11,6 +12,8 @@ const OBJETS_TWENTY = {
   importsDeServices: 'donneesMssImportsDeServicess',
   entitesUtilisatrices: 'donneesMssEntitesUtilisatricess',
   utilisateursInscrits: 'donneesMssUtilisateursInscritss',
+  historisationsDuNombreDeServices:
+    'donneesMssHistorisationDuNombreDeServicess',
 } as const;
 
 export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm {
@@ -101,9 +104,42 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  historiseNombreDeServices(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async historiseNombreDeServices(
+    historisations: HistorisationNombreDeServices[]
+  ): Promise<void> {
+    const sirets = historisations.map(({ siret }) => siret);
+    const idsCrmParSiret = await this.idsEntitesExistantes(sirets);
+    const dateHistorisation = new Date().toISOString();
+
+    const enregistrements = historisations
+      .filter(({ siret }) => idsCrmParSiret.has(siret))
+      .map(({ siret, nombreDeServices }) => ({
+        dateHistorisation,
+        entiteMssId: idsCrmParSiret.get(siret),
+        nombreDeServices,
+      }));
+
+    await this.client.postBatch(
+      `/rest/batch/${OBJETS_TWENTY.historisationsDuNombreDeServices}`,
+      enregistrements
+    );
+  }
+
+  async idsEntitesExistantes(
+    sirets: string[]
+  ): Promise<Map<string, IdEntiteCRM>> {
+    const reponses = await this.client.getBatch(
+      `/rest/${OBJETS_TWENTY.entitesUtilisatrices}`,
+      sirets,
+      (lot) => ({
+        filter: `siret[in]:[${lot.map((siret) => `"${siret}"`).join(',')}]`,
+      })
+    );
+    const entites: { id: IdEntiteCRM; siret: string }[] = reponses.flatMap(
+      (reponse) => reponse.data.data[OBJETS_TWENTY.entitesUtilisatrices]
+    );
+
+    return new Map(entites.map(({ id, siret }) => [siret, id]));
   }
 
   private async utilisateurExiste(email: string): Promise<boolean> {
