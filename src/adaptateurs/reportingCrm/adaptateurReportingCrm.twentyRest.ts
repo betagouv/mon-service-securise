@@ -101,6 +101,11 @@ export class AdaptateurReportingCrmTwentyRest implements AdaptateurReportingCrm 
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  historiseNombreDeServices(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
   private async utilisateurExiste(email: string): Promise<boolean> {
     return !!(await this.idUtilisateurExistant(email));
   }
