@@ -205,7 +205,7 @@
 
 <style lang="scss">
   :global(#modale-risques-anssi) {
-    max-width: 792px;
+    max-width: 820px;
     max-height: 800px;
     width: calc(100% - 48px);
   }
