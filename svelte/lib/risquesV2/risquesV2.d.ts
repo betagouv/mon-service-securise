@@ -93,3 +93,11 @@ export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & {
   id: UUID;
   identifiantNumerique: string;
 };
+
+export type RisqueApplique =
+  | undefined
+  | (RisqueSpecifiqueV2 & { type: 'specifique' })
+  | (Risque & { type: 'ANSSI' });
+
+export const idLigne = (idVecteur: string, idObjectif: string): string =>
+  `${idVecteur}${idObjectif}`;
