@@ -1,6 +1,6 @@
 <script lang="ts">
   import Modale from '../../ui/Modale.svelte';
-  import type { TousRisques } from '../risquesV2.d';
+  import type { RisqueSpecifiqueV2, TousRisques, Risque } from '../risquesV2.d';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import type {
     ReferentielCategoriesObjectifsVises,
@@ -9,6 +9,8 @@
   import AccordeonGroupe from '../../ui/AccordeonGroupe.svelte';
   import CartoucheCategorieRisque from '../../ui/CartoucheCategorieRisque.svelte';
   import { mappingNomCategories } from '../kit/kit';
+  import CartoucheIdentifiantRisque from '../kit/CartoucheIdentifiantRisque.svelte';
+  import CartoucheIdentifiantRisqueSpecifiqueV2 from '../kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
 
   let elementModale: Modale | undefined;
 
@@ -38,6 +40,45 @@
       label: 'Non appliqués',
     },
   ];
+
+  let vecteurObjectifViseVersRisqueApplique = $derived(
+    Object.fromEntries(
+      Object.entries(vecteursRisque)
+        .flatMap(([idVecteur, vecteur]) =>
+          Object.keys(vecteur.intitulesObjectifsVises).map((idObjectif) => ({
+            idVecteur,
+            idObjectif,
+          }))
+        )
+        .map(({ idVecteur, idObjectif }) => [
+          `${idVecteur}-${idObjectif}`,
+          risqueCorrespondantA(idVecteur, idObjectif),
+        ])
+    )
+  );
+
+  const risqueCorrespondantA = (idVecteur: string, idObjectif: string) => {
+    const risqueSpecifique = risques.risquesSpecifiques.find(
+      (rs) => rs.idModele === `${idVecteur}-${idObjectif}`
+    );
+    if (risqueSpecifique) {
+      return {
+        type: 'specifique',
+        ...risqueSpecifique,
+      };
+    }
+    const risque = risques.risques.find(
+      (r) =>
+        r.idVecteur === idVecteur && r.idsObjectifsVises.includes(idObjectif)
+    );
+    if (risque) {
+      return {
+        type: 'ANSSI',
+        ...risque,
+      };
+    }
+    return undefined;
+  };
 
   const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
     idTabActive = e.detail.index;
@@ -99,6 +140,23 @@
                           libelleCategorie={mappingNomCategories[categorie]}
                         />
                       {/each}
+                    </div>
+                    <div class="risque-correspondant">
+                      {#if vecteurObjectifViseVersRisqueApplique[`${idVecteur}-${idObjectif}`]}
+                        {@const risqueApplique =
+                          vecteurObjectifViseVersRisqueApplique[
+                            `${idVecteur}-${idObjectif}`
+                          ]}
+                        {#if risqueApplique!.type === 'ANSSI'}
+                          <CartoucheIdentifiantRisque
+                            risque={risqueApplique! as Risque}
+                          />
+                        {:else}
+                          <CartoucheIdentifiantRisqueSpecifiqueV2
+                            risque={risqueApplique! as RisqueSpecifiqueV2}
+                          />
+                        {/if}
+                      {/if}
                     </div>
                   </div>
                 {/each}
