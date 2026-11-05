@@ -91,4 +91,5 @@ export type DonneesRisqueSpecifiqueV2 = {
 export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & {
   id: UUID;
   identifiantNumerique: string;
+  idModele?: string;
 };
