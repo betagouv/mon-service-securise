@@ -73,10 +73,8 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
       { label: "Mon tableau de bord", href: "/tableauDeBord", icon: "layout-line" },
       { label: "Mon profil", href: "/profil", icon: "account-circle-line" },
       { label: "Mes préférences", href: "/preferences", icon: "notification-3-line" },
+      { label: "Mes clés d'API", href: "/profil/cle-api", icon: "lock-line" },
     ];
-    if (featureFlags.avecCreationCleApi) {
-      liensMonEspace.push({ label: "Mes clés d'API", href: "/profil/cle-api", icon: "lock-line" });
-    }
     const peutVoirGroupesEntites = featureFlags.avecGroupesEntites && estConnecte && (utilisateurConnecte.estAdmin || utilisateurConnecte.estSuperviseur);
     if (featureFlags.avecGroupesServices || peutVoirGroupesEntites) {
       liensMonEspace.push({ label: "Mes groupes", href: "/profil/groupes", icon: "folder-2-line" });

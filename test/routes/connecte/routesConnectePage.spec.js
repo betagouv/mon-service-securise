@@ -250,28 +250,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       const { cles } = donneesPartagees(reponse.text, 'donnees-cle-api');
       expect(cles.map((c) => c.id)).to.eql(['valide']);
     });
-
-    describe("concernant l'accès restreint par le feature flag de création de clé d'API", () => {
-      it("répond 404 si l'adaptateur environnement refuse l'accès à l'utilisateur", async () => {
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecAccesCreationCleApi: () => false,
-        });
-
-        const reponse = await testeur.get('/profil/cle-api');
-
-        expect(reponse.status).to.be(404);
-      });
-
-      it("répond 200 si l'adaptateur environnement autorise l'utilisateur", async () => {
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecAccesCreationCleApi: () => true,
-        });
-
-        const reponse = await testeur.get('/profil/cle-api');
-
-        expect(reponse.status).to.be(200);
-      });
-    });
   });
 
   describe('concernant le menu utilisateur', () => {

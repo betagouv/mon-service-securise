@@ -130,7 +130,6 @@ const testeurMss = () => {
       featureFlag: () => ({
         avecRisquesV2: () => true,
         avecGestionDesOrganisations: () => true,
-        avecAccesCreationCleApi: () => true,
         avecGroupesServices: () => true,
         avecGroupesEntites: () => true,
       }),

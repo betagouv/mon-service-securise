@@ -93,13 +93,6 @@ const featureFlag = () => ({
     process.env.FEATURE_FLAG_AVEC_GROUPES_SERVICES === 'true',
   avecGroupesEntites: () =>
     process.env.FEATURE_FLAG_AVEC_GROUPES_ENTITES === 'true',
-  avecAccesCreationCleApi: (idUtilisateur) => {
-    const idsUtilisateursAutorises = (
-      process.env.FEATURE_FLAG_IDS_UTILISATEURS_CREATION_CLE_API?.split(',') ??
-      []
-    ).map((id) => id.trim());
-    return idsUtilisateursAutorises.includes(idUtilisateur);
-  },
 });
 
 const statique = () => ({
