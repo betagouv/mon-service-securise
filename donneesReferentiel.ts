@@ -83,6 +83,17 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
       titreCta: 'Découvrir',
     },
+    {
+      id: 'apiPublique',
+      dateDeDeploiement: '2026-11-05 08:00:00Z',
+      lien: '/profil/cle-api',
+      titre: 'Découvrez l’API MonServiceSécurisé',
+      sousTitre:
+        'Avec l’API, suivez vos services dans vos tableaux de bord et reportings, sans export ni copier-coller.',
+      image: 'apiPublique.svg',
+      canalDiffusion: 'centreNotifications',
+      titreCta: 'Découvrir',
+    },
   ],
 
   tachesCompletudeProfil: [
