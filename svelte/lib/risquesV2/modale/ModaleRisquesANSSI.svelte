@@ -1,6 +1,11 @@
 <script lang="ts">
   import Modale from '../../ui/Modale.svelte';
-  import type { RisqueSpecifiqueV2, TousRisques, Risque } from '../risquesV2.d';
+  import type {
+    Niveau,
+    Risque,
+    RisqueSpecifiqueV2,
+    TousRisques,
+  } from '../risquesV2.d';
   import TitreOngletDSFR from '../../ui/TitreOngletDSFR.svelte';
   import type {
     ReferentielCategoriesObjectifsVises,
@@ -11,6 +16,8 @@
   import { mappingNomCategories } from '../kit/kit';
   import CartoucheIdentifiantRisque from '../kit/CartoucheIdentifiantRisque.svelte';
   import CartoucheIdentifiantRisqueSpecifiqueV2 from '../kit/CartoucheIdentifiantRisqueSpecifiqueV2.svelte';
+  import { ajouteRisqueSpecifiqueV2 } from '../risquesV2.api';
+  import { toasterStore } from '../../ui/stores/toaster.store';
 
   let elementModale: Modale | undefined;
 
@@ -51,7 +58,7 @@
           }))
         )
         .map(({ idVecteur, idObjectif }) => [
-          `${idVecteur}-${idObjectif}`,
+          idLigne(idVecteur, idObjectif),
           risqueCorrespondantA(idVecteur, idObjectif),
         ])
     )
@@ -59,7 +66,7 @@
 
   const risqueCorrespondantA = (idVecteur: string, idObjectif: string) => {
     const risqueSpecifique = risques.risquesSpecifiques.find(
-      (rs) => rs.idModele === `${idVecteur}-${idObjectif}`
+      (rs) => rs.idModele === idLigne(idVecteur, idObjectif)
     );
     if (risqueSpecifique) {
       return {
@@ -82,6 +89,28 @@
 
   const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
     idTabActive = e.detail.index;
+  };
+
+  const idLigne = (idVecteur: string, idObjectif: string): string =>
+    `${idVecteur}${idObjectif}`;
+
+  const creeRisqueSpecifiqueCorrespondant = async (
+    idVecteur: string,
+    idObjectif: string
+  ) => {
+    const vecteur = vecteursRisque[idVecteur];
+    const intitule = `${vecteur.intitule} ${vecteur.intitulesObjectifsVises[idObjectif]}`;
+    await ajouteRisqueSpecifiqueV2(idService, {
+      categories: categoriesObjectifsVises[idObjectif],
+      intitule,
+      gravite: 0 as Niveau,
+      graviteBrute: 0 as Niveau,
+      vraisemblance: 0 as Niveau,
+      vraisemblanceBrute: 0 as Niveau,
+      idModele: idLigne(idVecteur, idObjectif),
+    });
+    toasterStore.succes('Succès', `Le risque ${intitule} a été ajouté.`);
+    document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
   };
 
   export const affiche = () => {
@@ -134,18 +163,11 @@
                 {#each Object.entries(vecteur.intitulesObjectifsVises) as [idObjectif, objectif] (idObjectif)}
                   <div class="contenu-objectif">
                     <div>{vecteur.intitule} {objectif}</div>
-                    <div class="badges">
-                      {#each categoriesObjectifsVises[idObjectif] as categorie (categorie)}
-                        <CartoucheCategorieRisque
-                          libelleCategorie={mappingNomCategories[categorie]}
-                        />
-                      {/each}
-                    </div>
                     <div class="risque-correspondant">
-                      {#if vecteurObjectifViseVersRisqueApplique[`${idVecteur}-${idObjectif}`]}
+                      {#if vecteurObjectifViseVersRisqueApplique[idLigne(idVecteur, idObjectif)]}
                         {@const risqueApplique =
                           vecteurObjectifViseVersRisqueApplique[
-                            `${idVecteur}-${idObjectif}`
+                            idLigne(idVecteur, idObjectif)
                           ]}
                         {#if risqueApplique!.type === 'ANSSI'}
                           <CartoucheIdentifiantRisque
@@ -156,7 +178,28 @@
                             risque={risqueApplique! as RisqueSpecifiqueV2}
                           />
                         {/if}
+                      {:else}
+                        <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+                        <dsfr-button
+                          kind="secondary"
+                          label="Ajouter"
+                          has-icon
+                          icon-place="left"
+                          icon="add-line"
+                          onclick={async () =>
+                            creeRisqueSpecifiqueCorrespondant(
+                              idVecteur,
+                              idObjectif
+                            )}
+                        ></dsfr-button>
                       {/if}
+                    </div>
+                    <div class="badges">
+                      {#each categoriesObjectifsVises[idObjectif] as categorie (categorie)}
+                        <CartoucheCategorieRisque
+                          libelleCategorie={mappingNomCategories[categorie]}
+                        />
+                      {/each}
                     </div>
                   </div>
                 {/each}
@@ -194,9 +237,16 @@
 
     .contenu-objectif {
       padding: 8px 16px;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: auto 196px;
       gap: 8px;
+      align-items: center;
+
+      .risque-correspondant {
+        grid-column: 2;
+        grid-row-start: 1;
+        grid-row-end: 3;
+      }
 
       .badges {
         display: flex;
