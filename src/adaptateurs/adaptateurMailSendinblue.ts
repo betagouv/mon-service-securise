@@ -352,6 +352,15 @@ const recupereEntrepriseDuContact = async (idContact: string) => {
   return idEntreprise ?? null;
 };
 
+const recupereEntreprisesDuContact = async (idContact: string) => {
+  const reponse = await axios.get(
+    `${urlBase}/companies?linkedContactsIds=${idContact}`,
+    enteteJSON
+  );
+  const entreprises: { id: string }[] = reponse?.data?.items ?? [];
+  return entreprises.map(({ id }) => id);
+};
+
 const relieContactAEntreprise = async (
   idContact: string,
   idEntreprise: string
@@ -493,6 +502,7 @@ export const adaptateurMailSendinblue = {
     envoieNotificationExpirationHomologationCadencee,
   recupereEntreprise,
   recupereEntrepriseDuContact,
+  recupereEntreprisesDuContact,
   recupereIdentifiantContact,
   relieContactAEntreprise,
   supprimeContact,

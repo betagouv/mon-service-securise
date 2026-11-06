@@ -112,6 +112,16 @@ const fabriqueAdaptateurMailMemoire = () => {
     return 'ID-ENTREPRISE-FACTICE';
   };
 
+  const recupereEntreprisesDuContact = async (
+    idContact: string
+  ): Promise<string[]> => {
+    if (doitLoguer)
+      console.log(
+        `Récupération des entreprises Brevo pour le contact ${idContact}`
+      );
+    return [];
+  };
+
   const relieContactAEntreprise = async (
     idContact: string,
     idEntreprise: string
@@ -165,6 +175,7 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieRapportMensuel,
     recupereEntreprise,
     recupereEntrepriseDuContact,
+    recupereEntreprisesDuContact,
     recupereIdentifiantContact,
     relieContactAEntreprise,
     supprimeContact,
