@@ -86,7 +86,7 @@ export interface AdaptateurMail {
 
   recupereEntreprise(siret: string): Promise<IdEntreprise>;
 
-  recupereEntrepriseDuContact(idContact: string): Promise<IdEntreprise>;
+  recupereEntreprisesDuContact(idContact: string): Promise<IdEntreprise[]>;
 
   recupereIdentifiantContact(email: string): Promise<string>;
 
@@ -96,9 +96,4 @@ export interface AdaptateurMail {
   ): Promise<void>;
 
   supprimeContact(email: string): Promise<void>;
-
-  supprimeLienEntreContactEtEntreprise(
-    idContact: string,
-    idEntreprise: IdEntreprise
-  ): Promise<void>;
 }

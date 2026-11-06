@@ -21,7 +21,6 @@ import { supprimeNotificationsExpirationHomologation } from './abonnements/suppr
 import { envoieMailFelicitationHomologation } from './abonnements/envoieMailFelicitationHomologation.js';
 import { relieEntrepriseEtContactBrevo } from './abonnements/relieEntrepriseEtContactBrevo.js';
 import CrmBrevo from '../crm/crmBrevo.js';
-import { modifieLienEntrepriseEtContactBrevo } from './abonnements/modifieLienEntrepriseEtContactBrevo.js';
 import { metAJourContactBrevoDuContributeur } from './abonnements/metAJourContactBrevoDuContributeur.js';
 import { metAJourContactsBrevoDesContributeurs } from './abonnements/metAJourContactsBrevoDesContributeurs.js';
 import { metAJourEstimationNombreServicesContactBrevo } from './abonnements/metAJourEstimationNombreServicesContactBrevo.js';
@@ -227,7 +226,7 @@ const cableTousLesAbonnes = (
     consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
     }),
-    modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
+    relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
     metAJourContactBrevoDeLUtilisateur({ crmBrevo }),
     metAJourParrainage({ depotDonnees }),

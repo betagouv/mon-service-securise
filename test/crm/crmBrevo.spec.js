@@ -135,77 +135,37 @@ describe('Le CRM Brevo', () => {
         expect(donneesRecues.idContact).to.be('C1');
         expect(donneesRecues.idEntreprise).to.be('E1');
       });
-    });
-  });
-  describe('sur demande de suppression de lien entre un utilisateur et son entreprise', () => {
-    let utilisateur;
 
-    beforeEach(() => {
-      utilisateur = unUtilisateur()
-        .avecEmail('jean.dujardin@beta.gouv.com')
-        .construis();
-    });
-    it("lève une exception s'il ne reçoit pas d'utilisateur", async () => {
-      try {
-        await crmBrevo.supprimerLienEntrepriseContact(null);
+      it("relie l'utilisateur à l'entreprise même s'il est déjà lié à d'autres entreprises", async () => {
+        let idEntrepriseReliee;
+        adaptateurMail.recupereEntreprise = async () => 'E1';
+        adaptateurMail.recupereEntreprisesDuContact = async () => ['AUTRE'];
+        adaptateurMail.relieContactAEntreprise = async (_, idEntreprise) => {
+          idEntrepriseReliee = idEntreprise;
+        };
 
-        expect().fail("L'instanciation aurait dû lever une exception.");
-      } catch (e) {
-        expect(e.message).to.be(
-          "Impossible de relier une entreprise et un contact sans avoir l'utilisateur en paramètre."
-        );
-      }
-    });
-    it("recupère l'identifiant Brevo de l'utilisateur via son email", async () => {
-      let emailRecu;
-      adaptateurMail.recupereIdentifiantContact = async (email) => {
-        emailRecu = email;
-      };
+        await crmBrevo.creerLienEntrepriseContact(utilisateur);
 
-      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+        expect(idEntrepriseReliee).to.be('E1');
+      });
 
-      expect(emailRecu).to.be('jean.dujardin@beta.gouv.com');
-    });
-    it("recupère l'entreprise liée à l'utilisateur", async () => {
-      let idRecu;
-      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
-      adaptateurMail.recupereEntrepriseDuContact = async (id) => {
-        idRecu = id;
-      };
+      it("ne relie pas l'utilisateur à l'entreprise s'il y est déjà lié", async () => {
+        let idContactInterroge;
+        let relieAppele = false;
+        adaptateurMail.recupereEntreprise = async () => 'E1';
+        adaptateurMail.recupereEntreprisesDuContact = async (idContact) => {
+          idContactInterroge = idContact;
+          return ['AUTRE', 'E1'];
+        };
+        adaptateurMail.relieContactAEntreprise = async () => {
+          relieAppele = true;
+        };
 
-      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
+        await crmBrevo.creerLienEntrepriseContact(utilisateur);
 
-      expect(idRecu).to.be('C1');
-    });
-    it("supprime le lien s'il existe", async () => {
-      let idEntrepriseRecu;
-      let idContactRecu;
-      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
-      adaptateurMail.recupereEntrepriseDuContact = async () => 'E1';
-      adaptateurMail.supprimeLienEntreContactEtEntreprise = async (
-        idContact,
-        idEntreprise
-      ) => {
-        idContactRecu = idContact;
-        idEntrepriseRecu = idEntreprise;
-      };
-
-      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
-
-      expect(idContactRecu).to.be('C1');
-      expect(idEntrepriseRecu).to.be('E1');
-    });
-    it('ne supprime pas de lien inexistant', async () => {
-      let suppressionAppelee = false;
-      adaptateurMail.recupereIdentifiantContact = async () => 'C1';
-      adaptateurMail.recupereEntrepriseDuContact = async () => undefined;
-      adaptateurMail.supprimeLienEntreContactEtEntreprise = async () => {
-        suppressionAppelee = true;
-      };
-
-      await crmBrevo.supprimerLienEntrepriseContact(utilisateur);
-
-      expect(suppressionAppelee).to.be(false);
+        expect(idContactInterroge).to.be('C1');
+        expect(relieAppele).to.be(false);
+      });
     });
   });
 
