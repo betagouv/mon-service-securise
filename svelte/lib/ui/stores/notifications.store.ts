@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
+import type { AxiosError } from 'axios';
 import type { Notification, TypeNotification } from '../types.d';
 
 type Notifications = {
   pourCentreNotifications: Notification[];
   pourPage: Notification[];
 };
-const { subscribe, set } = writable<Notifications>({
+const { subscribe, set, update } = writable<Notifications>({
   pourCentreNotifications: [],
   pourPage: [],
 });
@@ -43,7 +44,19 @@ export const storeNotifications = {
     await storeNotifications.rafraichis();
   },
   supprime: async (type: TypeNotification, id: string) => {
-    await axios.delete(`/api/notifications/${routes[type]}/${id}`);
-    await storeNotifications.rafraichis();
+    update((notifications) => ({
+      ...notifications,
+      pourCentreNotifications: notifications.pourCentreNotifications.filter(
+        (n) => n.id !== id
+      ),
+    }));
+    try {
+      await axios.delete(`/api/notifications/${routes[type]}/${id}`);
+    } catch (e) {
+      const dejaSupprimee = (e as AxiosError).response?.status === 404;
+      if (dejaSupprimee) return;
+
+      await storeNotifications.rafraichis();
+    }
   },
 };
