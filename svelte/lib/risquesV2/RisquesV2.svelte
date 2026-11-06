@@ -340,6 +340,7 @@
   {idService}
   {vecteursRisque}
   {categoriesObjectifsVises}
+  {estLectureSeule}
 />
 
 <style lang="scss">
