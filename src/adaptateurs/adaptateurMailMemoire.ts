@@ -104,14 +104,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     return 'ID-ENTREPRISE-FACTICE';
   };
 
-  const recupereEntrepriseDuContact = async (idContact: string) => {
-    if (doitLoguer)
-      console.log(
-        `Récupération de l'entreprise Brevo pour le contact ${idContact}`
-      );
-    return 'ID-ENTREPRISE-FACTICE';
-  };
-
   const recupereEntreprisesDuContact = async (
     idContact: string
   ): Promise<string[]> => {
@@ -129,16 +121,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     if (doitLoguer)
       console.log(
         `Relie l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
-      );
-  };
-
-  const supprimeLienEntreContactEtEntreprise = async (
-    idContact: string,
-    idEntreprise: string
-  ) => {
-    if (doitLoguer)
-      console.log(
-        `Supprime le lien entre l'utilisateur ${idContact} à l'entreprise Brevo ${idEntreprise}`
       );
   };
 
@@ -174,12 +156,10 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieRapportHebdomadaire,
     envoieRapportMensuel,
     recupereEntreprise,
-    recupereEntrepriseDuContact,
     recupereEntreprisesDuContact,
     recupereIdentifiantContact,
     relieContactAEntreprise,
     supprimeContact,
-    supprimeLienEntreContactEtEntreprise,
   } satisfies AdaptateurMail;
 };
 

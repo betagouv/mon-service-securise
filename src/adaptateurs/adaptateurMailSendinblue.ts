@@ -339,19 +339,6 @@ const recupereEntreprise = async (siret: string) => {
   return idEntreprise ?? null;
 };
 
-const recupereEntrepriseDuContact = async (idContact: string) => {
-  const reponse = await axios.get(
-    `${urlBase}/companies?linkedContactsIds=${idContact}`,
-    enteteJSON
-  );
-  if (reponse?.data?.items.length > 1)
-    throw new ErreurApiBrevo(
-      `Plusieurs entreprise pour le contact: ${idContact}`
-    );
-  const idEntreprise = reponse?.data?.items[0]?.id;
-  return idEntreprise ?? null;
-};
-
 const recupereEntreprisesDuContact = async (idContact: string) => {
   const reponse = await axios.get(
     `${urlBase}/companies?linkedContactsIds=${idContact}`,
@@ -377,27 +364,6 @@ const relieContactAEntreprise = async (
       'Erreur renvoyée par API Brevo': erreur.response?.data,
       'identifiant entreprise': idEntreprise,
       'identifiant contact à lier': idContact,
-    });
-    throw e;
-  }
-};
-
-const supprimeLienEntreContactEtEntreprise = async (
-  idContact: string,
-  idEntreprise: string
-) => {
-  try {
-    await axios.patch(
-      `${urlBase}/companies/link-unlink/${idEntreprise}`,
-      { unlinkContactIds: [idContact] },
-      enteteJSON
-    );
-  } catch (e) {
-    const erreur = e as ErreurBrevo;
-    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
-      'Erreur renvoyée par API Brevo': erreur.response?.data,
-      'identifiant entreprise': idEntreprise,
-      'identifiant contact à délier': idContact,
     });
     throw e;
   }
@@ -501,10 +467,8 @@ export const adaptateurMailSendinblue = {
   envoieNotificationExpirationHomologation:
     envoieNotificationExpirationHomologationCadencee,
   recupereEntreprise,
-  recupereEntrepriseDuContact,
   recupereEntreprisesDuContact,
   recupereIdentifiantContact,
   relieContactAEntreprise,
   supprimeContact,
-  supprimeLienEntreContactEtEntreprise,
 } satisfies AdaptateurMail;
