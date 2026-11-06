@@ -83,4 +83,75 @@ describe('Le store de notifications', () => {
       expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
     });
   });
+
+  describe('sur demande de suppression', () => {
+    const notificationASupprimer = {
+      id: 'ID1',
+      type: 'mention',
+      canalDiffusion: 'centreNotifications',
+    };
+    const notificationAConserver = {
+      id: 'ID2',
+      type: 'nouveaute',
+      canalDiffusion: 'centreNotifications',
+    };
+
+    beforeEach(async () => {
+      vi.mocked(axios.get).mockResolvedValue({
+        data: {
+          notifications: [notificationASupprimer, notificationAConserver],
+        },
+      });
+      await storeNotifications.rafraichis();
+      vi.mocked(axios.get).mockClear();
+    });
+
+    const idsDuCentreNotifications = () =>
+      get(storeNotifications).pourCentreNotifications.map((n) => n.id);
+
+    it('retire la notification du store sans attendre la réponse du serveur', () => {
+      vi.mocked(axios.delete).mockReturnValue(new Promise(() => {}));
+
+      storeNotifications.supprime('mention', 'ID1');
+
+      expect(idsDuCentreNotifications()).toStrictEqual(['ID2']);
+    });
+
+    it('appelle la route de suppression correspondant au type de notification', async () => {
+      vi.mocked(axios.delete).mockResolvedValue({});
+
+      await storeNotifications.supprime('mention', 'ID1');
+
+      expect(vi.mocked(axios.delete)).toHaveBeenCalledWith(
+        '/api/notifications/transactionnelles/ID1'
+      );
+    });
+
+    it('ne rafraichit pas le store si la suppression réussit', async () => {
+      vi.mocked(axios.delete).mockResolvedValue({});
+
+      await storeNotifications.supprime('mention', 'ID1');
+
+      expect(vi.mocked(axios.get)).not.toHaveBeenCalled();
+      expect(idsDuCentreNotifications()).toStrictEqual(['ID2']);
+    });
+
+    it('considère une notification déjà supprimée (404) comme une suppression réussie', async () => {
+      vi.mocked(axios.delete).mockRejectedValue({ response: { status: 404 } });
+
+      await storeNotifications.supprime('mention', 'ID1');
+
+      expect(vi.mocked(axios.get)).not.toHaveBeenCalled();
+      expect(idsDuCentreNotifications()).toStrictEqual(['ID2']);
+    });
+
+    it('rafraichit le store depuis le serveur si la suppression échoue', async () => {
+      vi.mocked(axios.delete).mockRejectedValue({ response: { status: 500 } });
+
+      await storeNotifications.supprime('mention', 'ID1');
+
+      expect(vi.mocked(axios.get)).toHaveBeenCalledWith('/api/notifications');
+      expect(idsDuCentreNotifications()).toStrictEqual(['ID1', 'ID2']);
+    });
+  });
 });

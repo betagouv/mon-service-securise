@@ -11,9 +11,8 @@
     if (!elements || !Array.isArray(elements)) {
       return;
     }
-    const clicInterieur =
-      elements.includes(e.target as HTMLElement) ||
-      elements.some((el) => el.contains(e.target as Node));
+    const cheminDuClic = e.composedPath();
+    const clicInterieur = elements.some((el) => cheminDuClic.includes(el));
     if (!clicInterieur) doitEtreOuvert = false;
   };
 </script>
