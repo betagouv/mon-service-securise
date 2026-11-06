@@ -54,6 +54,12 @@ class CrmBrevo {
       );
     }
 
+    const entreprisesDejaLiees =
+      await this.adaptateurMail.recupereEntreprisesDuContact(
+        idUtilisateurBrevo
+      );
+    if (entreprisesDejaLiees.includes(idEntrepriseBrevo)) return;
+
     await this.adaptateurMail.relieContactAEntreprise(
       idUtilisateurBrevo,
       idEntrepriseBrevo

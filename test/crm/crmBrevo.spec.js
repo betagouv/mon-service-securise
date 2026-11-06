@@ -135,6 +135,37 @@ describe('Le CRM Brevo', () => {
         expect(donneesRecues.idContact).to.be('C1');
         expect(donneesRecues.idEntreprise).to.be('E1');
       });
+
+      it("relie l'utilisateur à l'entreprise même s'il est déjà lié à d'autres entreprises", async () => {
+        let idEntrepriseReliee;
+        adaptateurMail.recupereEntreprise = async () => 'E1';
+        adaptateurMail.recupereEntreprisesDuContact = async () => ['AUTRE'];
+        adaptateurMail.relieContactAEntreprise = async (_, idEntreprise) => {
+          idEntrepriseReliee = idEntreprise;
+        };
+
+        await crmBrevo.creerLienEntrepriseContact(utilisateur);
+
+        expect(idEntrepriseReliee).to.be('E1');
+      });
+
+      it("ne relie pas l'utilisateur à l'entreprise s'il y est déjà lié", async () => {
+        let idContactInterroge;
+        let relieAppele = false;
+        adaptateurMail.recupereEntreprise = async () => 'E1';
+        adaptateurMail.recupereEntreprisesDuContact = async (idContact) => {
+          idContactInterroge = idContact;
+          return ['AUTRE', 'E1'];
+        };
+        adaptateurMail.relieContactAEntreprise = async () => {
+          relieAppele = true;
+        };
+
+        await crmBrevo.creerLienEntrepriseContact(utilisateur);
+
+        expect(idContactInterroge).to.be('C1');
+        expect(relieAppele).to.be(false);
+      });
     });
   });
   describe('sur demande de suppression de lien entre un utilisateur et son entreprise', () => {
