@@ -88,6 +88,8 @@ export interface AdaptateurMail {
 
   recupereEntrepriseDuContact(idContact: string): Promise<IdEntreprise>;
 
+  recupereEntreprisesDuContact(idContact: string): Promise<IdEntreprise[]>;
+
   recupereIdentifiantContact(email: string): Promise<string>;
 
   relieContactAEntreprise(
