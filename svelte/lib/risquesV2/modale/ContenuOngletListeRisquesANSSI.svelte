@@ -25,6 +25,7 @@
     categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
     idVecteur: string;
     idLigneVersRisqueApplique: Record<string, RisqueApplique>;
+    estLectureSeule: boolean;
   }
 
   let {
@@ -34,6 +35,7 @@
     categoriesObjectifsVises,
     idVecteur,
     idLigneVersRisqueApplique,
+    estLectureSeule,
   }: Props = $props();
 
   let vecteur = $derived(vecteursRisque[idVecteur]);
@@ -117,6 +119,7 @@
                   icon-place="left"
                   icon="add-line"
                   size="sm"
+                  disabled={estLectureSeule}
                   onclick={async () =>
                     creeRisqueSpecifiqueCorrespondant(idVecteur, idObjectif)}
                 ></dsfr-button>

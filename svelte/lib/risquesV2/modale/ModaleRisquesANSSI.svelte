@@ -16,26 +16,23 @@
     risques: TousRisques;
     vecteursRisque: ReferentielVecteursRisque;
     categoriesObjectifsVises: ReferentielCategoriesObjectifsVises;
+    estLectureSeule: boolean;
   }
 
-  let { idService, risques, vecteursRisque, categoriesObjectifsVises }: Props =
-    $props();
+  let {
+    idService,
+    risques,
+    vecteursRisque,
+    categoriesObjectifsVises,
+    estLectureSeule,
+  }: Props = $props();
 
   let idTabActive: number = $state(0);
 
   const configurationsTabs = [
-    {
-      id: 'tous',
-      label: 'Tous',
-    },
-    {
-      id: 'appliques',
-      label: 'Appliqués',
-    },
-    {
-      id: 'non-appliques',
-      label: 'Non appliqués',
-    },
+    { id: 'tous', label: 'Tous' },
+    { id: 'appliques', label: 'Appliqués' },
+    { id: 'non-appliques', label: 'Non appliqués' },
   ];
 
   const gereChangementTab = (e: CustomEvent<{ index: number }>) => {
@@ -119,6 +116,7 @@
               idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
                 idVecteur
               ]}
+              {estLectureSeule}
             />
           {/each}
         </div>
@@ -133,6 +131,7 @@
               idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
                 idVecteur
               ]}
+              {estLectureSeule}
             />
           {/each}
         </div>
@@ -150,6 +149,7 @@
                 idLigneVersRisqueApplique={idVecteurVersIdLigneVersRisqueApplique[
                   idVecteur
                 ]}
+                {estLectureSeule}
               />
             {/each}
           {/if}
