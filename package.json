@@ -72,6 +72,7 @@
     "papaparse": "^5.5.2",
     "pdf-lib": "^1.17.1",
     "pg": "^8.8.0",
+    "pptx-automizer": "0.9.4",
     "pug": "^3.0.3",
     "string-strip-html": "^13.0.0",
     "svelte": "^5.54.0",
