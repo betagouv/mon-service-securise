@@ -37,6 +37,7 @@ class ErreurJWTInvalide extends Error {}
 class ErreurJWTManquant extends Error {}
 class ErreurValeurSelIncoherente extends Error {}
 class ErreurVersionSelInvalide extends Error {}
+class ErreurTechniqueProConnect extends Error {}
 
 class ErreurModele extends Error {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
@@ -220,4 +221,5 @@ export {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
   ErreurFichierXlsInvalide,
+  ErreurTechniqueProConnect,
 };
