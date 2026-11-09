@@ -77,3 +77,9 @@ export const remplirChamp = async (
   await page.keyboard.type(valeur);
   await page.keyboard.press('Tab');
 };
+
+export const navigueSurTableauDeBord = async (page: Page) => {
+  await navigueSurPageConnectee('/tableauDeBord', page);
+  await fermeModaleNouveauReferentielSiPresente(page);
+  await fermeModaleVisiteGuideeSiPresente(page);
+};
