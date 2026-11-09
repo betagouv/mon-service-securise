@@ -5,15 +5,22 @@ import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironneme
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { AdaptateurPowerpoint } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
+import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
+import { dateYYYYMMDD } from '../../utilitaires/date.js';
+
+const CONTENT_TYPE_PPTX =
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 
 export const routesConnecteApiServicePowerpoint = ({
   middleware,
   adaptateurEnvironnement,
   adaptateurPowerpoint,
+  adaptateurHorloge,
 }: {
   middleware: Middleware;
   adaptateurEnvironnement: AdaptateurEnvironnement;
   adaptateurPowerpoint: AdaptateurPowerpoint;
+  adaptateurHorloge: AdaptateurHorloge;
 }) => {
   const routes = express.Router();
 
@@ -41,7 +48,11 @@ export const routesConnecteApiServicePowerpoint = ({
       try {
         const support =
           await adaptateurPowerpoint.genereSupportCommissionHomologation();
-        reponse.send(support);
+        const dateDuJour = dateYYYYMMDD(adaptateurHorloge.maintenant());
+        reponse
+          .attachment(`MSS_support_commission_homologation_${dateDuJour}.pptx`)
+          .contentType(CONTENT_TYPE_PPTX)
+          .send(support);
       } catch (erreur) {
         suite(erreur);
       }

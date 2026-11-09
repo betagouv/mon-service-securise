@@ -1,3 +1,4 @@
+import supertest from 'supertest';
 import testeurMSS from '../testeurMSS.js';
 import {
   Permissions,
@@ -8,12 +9,26 @@ import {
   unServiceV2,
 } from '../../constructeurs/constructeurService.js';
 import { VersionService } from '../../../src/modeles/versionService.js';
+import {
+  verifieNomFichierServi,
+  verifieTypeFichierServiEstPPTX,
+} from '../../aides/verifieFichierServi.js';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
   const testeur = testeurMSS();
+
+  const recupereFichierBinaire = (url: string) =>
+    supertest(testeur.app())
+      .get(url)
+      .buffer(true)
+      .parse((reponse, callback) => {
+        const morceaux: Buffer[] = [];
+        reponse.on('data', (morceau: Buffer) => morceaux.push(morceau));
+        reponse.on('end', () => callback(null, Buffer.concat(morceaux)));
+      });
 
   beforeEach(() => testeur.initialise());
 
@@ -80,12 +95,29 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
           async () => Buffer.from('contenu pptx');
 
-        const reponse = await testeur.get(
+        const reponse = await recupereFichierBinaire(
           '/api/service/456/pptx/supportCommissionHomologation.pptx'
         );
 
         expect(reponse.status).toBe(200);
         expect(reponse.body.toString()).toBe('contenu pptx');
+      });
+
+      it('sert un fichier de type pptx', async () => {
+        await verifieTypeFichierServiEstPPTX(
+          testeur.app(),
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+      });
+
+      it('sert un fichier dont le nom contient la date du jour en format court', async () => {
+        testeur.adaptateurHorloge().maintenant = () => new Date(2026, 10, 9);
+
+        await verifieNomFichierServi(
+          testeur.app(),
+          '/api/service/456/pptx/supportCommissionHomologation.pptx',
+          'MSS_support_commission_homologation_20261109.pptx'
+        );
       });
     });
   });

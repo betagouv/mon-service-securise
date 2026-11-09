@@ -29,9 +29,17 @@ const verifieTypeFichierServiEstPDF = (app, url) =>
 const verifieTypeFichierServiEstZIP = (app, url) =>
   verifieTypeFichierServi(app, url, 'application/zip');
 
+const verifieTypeFichierServiEstPPTX = (app, url) =>
+  verifieTypeFichierServi(
+    app,
+    url,
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+  );
+
 export {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
   verifieTypeFichierServiEstPDF,
+  verifieTypeFichierServiEstPPTX,
   verifieTypeFichierServiEstZIP,
 };

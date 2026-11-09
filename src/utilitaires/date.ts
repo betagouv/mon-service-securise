@@ -17,13 +17,14 @@ const dateEnFrancais = (chaineDate: string | Date) => {
   return date.toLocaleString('fr-FR', { dateStyle: 'short' });
 };
 
-const dateEnIso = (chaineDate: string) => {
+const dateEnIso = (chaineDate: string | Date) => {
   const date = new Date(chaineDate);
   // On utilise le standard canadien pour obtenir le format YYYY-MM-DD
   return date.toLocaleString('fr-CA', { dateStyle: 'short' });
 };
 
-const dateYYYYMMDD = (date: string) => dateEnIso(date).replaceAll('-', '');
+const dateYYYYMMDD = (date: string | Date) =>
+  dateEnIso(date).replaceAll('-', '');
 
 const dateInvalide = (chaineDate: string) =>
   Number.isNaN(new Date(chaineDate).valueOf());

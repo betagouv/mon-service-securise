@@ -71,6 +71,7 @@ const routesConnecteApiService = ({
       middleware,
       adaptateurEnvironnement,
       adaptateurPowerpoint,
+      adaptateurHorloge,
     })
   );
 
