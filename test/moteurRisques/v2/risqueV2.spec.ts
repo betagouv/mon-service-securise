@@ -107,7 +107,7 @@ describe('Un risque V2', () => {
       expect(risque.intitule).toBe("Intitulé du risque V1 avec l'OV1");
     });
 
-    it('joins les intitulés de tous les objectifs visés avec un connecteur de conjonction', () => {
+    it('joins les intitulés de tous les objectifs visés avec un connecteur de disjonction', () => {
       const configurationV1 = {
         V1: {
           intitule: 'Intitulé du risque V1',
@@ -131,7 +131,7 @@ describe('Un risque V2', () => {
       );
 
       expect(risque.intitule).toBe(
-        "Intitulé du risque V1 avec l'OV1, avec l'OV2 et avec l'OV3"
+        "Intitulé du risque V1 avec l'OV1, avec l'OV2 ou avec l'OV3"
       );
     });
   });
