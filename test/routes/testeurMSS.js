@@ -132,6 +132,7 @@ const testeurMss = () => {
         avecGestionDesOrganisations: () => true,
         avecGroupesServices: () => true,
         avecGroupesEntites: () => true,
+        avecSupportCommissionPptx: () => true,
       }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
