@@ -12,7 +12,6 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
   async genereSupportCommissionHomologation({
-    nomService,
     dateCreation,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
@@ -25,7 +24,6 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       .load(NOM_TEMPLATE, 'modele');
 
     presentation.addSlide('modele', SLIDE_COUVERTURE, (slide) => {
-      slide.modifyElement('nom-service', modify.setText(nomService));
       slide.modifyElement(
         'date-creation',
         modify.replaceText({

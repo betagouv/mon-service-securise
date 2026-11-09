@@ -1,5 +1,4 @@
 export type DonneesSupportCommissionHomologation = {
-  nomService: string;
   dateCreation: Date;
 };
 
