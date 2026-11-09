@@ -153,6 +153,7 @@ const creeServeur = ({
     middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesNonConnecteOidc({
       adaptateurOidc,
+      adaptateurGestionErreur,
       adaptateurJWT,
       depotDonnees,
       middleware,

@@ -1,11 +1,11 @@
 import express, { Request } from 'express';
 import { z } from 'zod';
 import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
-import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { serviceApresAuthentification } from '../../utilisateur/serviceApresAuthentification.js';
 import { executeurApresAuthentification } from '../../utilisateur/executeurApresAuthentification.js';
 import { valideQuery } from '../../http/validePayloads.js';
 import { AdaptateurOidc } from '../../adaptateurs/adaptateurOidc.interface.js';
+import { AdaptateurGestionErreur } from '../../adaptateurs/adaptateurGestionErreur.interface.js';
 import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { Middleware } from '../../http/middleware.interface.js';
@@ -20,6 +20,7 @@ import { garantitUnMFA } from '../../oidc/acr.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
+  adaptateurGestionErreur,
   adaptateurJWT,
   depotDonnees,
   middleware,
@@ -29,6 +30,7 @@ const routesNonConnecteOidc = ({
   serviceAnnuaire,
 }: {
   adaptateurOidc: AdaptateurOidc;
+  adaptateurGestionErreur: AdaptateurGestionErreur;
   adaptateurJWT: AdaptateurJWT;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
@@ -108,7 +110,7 @@ const routesNonConnecteOidc = ({
         connexionAvecMFA,
       });
     } catch (e) {
-      fabriqueAdaptateurGestionErreur().logueErreur(e as Error);
+      adaptateurGestionErreur.logueErreur(e as Error);
       reponse.status(401).send("Erreur d'authentification");
     }
   });
