@@ -44,9 +44,10 @@ export const metsAJourRisqueSpecifiqueV2 = async (
   idRisque: string,
   donnees: DonneesRisqueSpecifiqueV2
 ) => {
+  const { idModele: _, ...donneesMisesAJour } = donnees;
   await axios.put(
     `/api/service/${idService}/risques/v2/specifiques/${idRisque}`,
-    donnees
+    donneesMisesAJour
   );
 };
 
