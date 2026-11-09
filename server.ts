@@ -161,6 +161,13 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     referentielV2,
     adaptateurMail,
     adaptateurPdf: new AdaptateurPdfTypst(),
+    adaptateurPowerpoint: {
+      genereSupportCommissionHomologation: async () => {
+        throw new Error(
+          'Support de commission PowerPoint pas encore implémenté'
+        );
+      },
+    },
     adaptateurTamponHomologation,
     adaptateurHorloge,
     adaptateurGestionErreur,

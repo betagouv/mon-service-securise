@@ -46,6 +46,7 @@ const routesConnecteApiService = ({
   referentielV2,
   adaptateurHorloge,
   adaptateurPdf,
+  adaptateurPowerpoint,
   adaptateurTamponHomologation,
   adaptateurZip,
   adaptateurJournal,
@@ -66,7 +67,11 @@ const routesConnecteApiService = ({
   );
 
   routes.use(
-    routesConnecteApiServicePowerpoint({ middleware, adaptateurEnvironnement })
+    routesConnecteApiServicePowerpoint({
+      middleware,
+      adaptateurEnvironnement,
+      adaptateurPowerpoint,
+    })
   );
 
   routes.use(

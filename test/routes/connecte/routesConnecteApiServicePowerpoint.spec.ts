@@ -3,7 +3,10 @@ import {
   Permissions,
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import { VersionService } from '../../../src/modeles/versionService.js';
 
 const { LECTURE } = Permissions;
@@ -62,6 +65,27 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
       expect(reponse.status).toBe(422);
       expect(reponse.body).toEqual({
         erreur: { code: 'SERVICE_V1_NON_SUPPORTE' },
+      });
+    });
+
+    describe('pour un service V2', () => {
+      beforeEach(() => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2().avecId('456').construis(),
+        });
+      });
+
+      it("sert le support généré par l'adaptateur PowerPoint", async () => {
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async () => Buffer.from('contenu pptx');
+
+        const reponse = await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body.toString()).toBe('contenu pptx');
       });
     });
   });
