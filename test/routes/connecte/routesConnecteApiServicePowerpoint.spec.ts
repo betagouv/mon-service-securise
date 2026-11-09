@@ -13,6 +13,7 @@ import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstPPTX,
 } from '../../aides/verifieFichierServi.js';
+import { DonneesSupportCommissionHomologation } from '../../../src/adaptateurs/adaptateurPowerpoint.interface.ts';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -87,7 +88,10 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
       beforeEach(() => {
         // @ts-expect-error on ne recharge que le nécessaire
         testeur.middleware().reinitialise({
-          serviceARenvoyer: unServiceV2().avecId('456').construis(),
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecNomService('Mon super service')
+            .construis(),
         });
       });
 
@@ -118,6 +122,26 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           '/api/service/456/pptx/supportCommissionHomologation.pptx',
           'MSS_support_commission_homologation_20261109.pptx'
         );
+      });
+
+      it("transmet à l'adaptateur le nom du service et la date du jour", async () => {
+        const maintenant = new Date(2026, 10, 9);
+        testeur.adaptateurHorloge().maintenant = () => maintenant;
+        let donneesRecues;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues).toEqual({
+          nomService: 'Mon super service',
+          dateCreation: maintenant,
+        });
       });
     });
   });
