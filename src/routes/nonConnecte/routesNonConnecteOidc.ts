@@ -17,6 +17,7 @@ import {
 import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
 import { cookieProConnect } from '../../oidc/cookies.js';
 import { garantitUnMFA } from '../../oidc/acr.js';
+import { ErreurTechniqueProConnect } from '../../erreurs.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -110,7 +111,9 @@ const routesNonConnecteOidc = ({
         connexionAvecMFA,
       });
     } catch (e) {
-      adaptateurGestionErreur.logueErreur(e as Error);
+      const onVeutLoguer = !(e instanceof ErreurTechniqueProConnect);
+      if (onVeutLoguer) adaptateurGestionErreur.logueErreur(e as Error);
+
       reponse.status(401).send("Erreur d'authentification");
     }
   });

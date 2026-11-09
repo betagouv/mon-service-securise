@@ -11,6 +11,7 @@ import { donneesPartagees } from '../../aides/http.js';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
 import Utilisateur from '../../../src/modeles/utilisateur.js';
+import { ErreurTechniqueProConnect } from '../../../src/erreurs.ts';
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
@@ -179,6 +180,33 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       await testeur.get('/oidc/apres-authentification');
 
       expect(erreurLoguee).toBe(erreur);
+    });
+
+    describe('quand ProConnect rencontre une erreur technique', () => {
+      beforeEach(() => {
+        testeur.adaptateurOidc().recupereJeton = async () => {
+          throw new ErreurTechniqueProConnect();
+        };
+      });
+
+      it("ne logue pas l'erreur", async () => {
+        let erreurLoguee: Error | undefined;
+        testeur.adaptateurGestionErreur().logueErreur = (e: Error) => {
+          erreurLoguee = e;
+        };
+
+        await testeur.get('/oidc/apres-authentification');
+
+        expect(erreurLoguee).toBeUndefined();
+      });
+
+      it('répond toujours une 401', async () => {
+        await testeur.verifieRequeteGenereErreurHTTP(
+          401,
+          "Erreur d'authentification",
+          '/oidc/apres-authentification'
+        );
+      });
     });
 
     it("enrichit la session avec l'`id_token`", async () => {
