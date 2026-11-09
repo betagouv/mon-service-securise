@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
+import { routesConnecteApiServicePowerpoint } from './routesConnecteApiServicePowerpoint.js';
 import {
   EchecAutorisation,
   ErreurDonneesObligatoiresManquantes,
@@ -63,6 +64,8 @@ const routesConnecteApiService = ({
       referentiel,
     })
   );
+
+  routes.use(routesConnecteApiServicePowerpoint({ middleware }));
 
   routes.use(
     routesConnecteApiServiceActivitesMesure({
