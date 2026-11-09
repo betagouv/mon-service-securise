@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { oidc } from './adaptateurEnvironnement.js';
 import { cookieProConnect } from '../oidc/cookies.js';
 import { ACR_GARANTISSANT_MFA } from '../oidc/acr.js';
+import { ErreurTechniqueProConnect } from '../erreurs.js';
 
 const configurationOidc = oidc();
 
@@ -62,6 +63,12 @@ const estUneMethodeAuthentificationAvecMFA = (
   methodesAuthentification: MethodeAuthentification[]
 ) => methodesAuthentification.includes('mfa');
 
+const estUneErreurTechniqueProConnect = (erreur: unknown) =>
+  erreur instanceof client.AuthorizationResponseError &&
+  erreur.error === 'invalid_request' &&
+  erreur.error_description ===
+    'authentication aborted due to a technical error on the authorization server';
+
 const recupereJeton = async (requete: Request) => {
   const configuration = await recupereConfiguration();
   const urlCourante = new URL(
@@ -70,11 +77,16 @@ const recupereJeton = async (requete: Request) => {
   );
 
   const { nonce, state } = cookieProConnect.recupere(requete);
-  const token = await client.authorizationCodeGrant(
-    configuration,
-    urlCourante,
-    { expectedNonce: nonce, expectedState: state }
-  );
+  const token = await client
+    .authorizationCodeGrant(configuration, urlCourante, {
+      expectedNonce: nonce,
+      expectedState: state,
+    })
+    .catch((e) => {
+      if (estUneErreurTechniqueProConnect(e))
+        throw new ErreurTechniqueProConnect();
+      throw e;
+    });
 
   const { amr, acr } = token.claims()!;
   const connexionAvecMFA =
@@ -111,6 +123,7 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
 };
 
 export {
+  estUneErreurTechniqueProConnect,
   estUneMethodeAuthentificationAvecMFA,
   genereDemandeAutorisation,
   genereDemandeDeconnexion,
