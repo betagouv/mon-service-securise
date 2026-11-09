@@ -3,6 +3,7 @@ import {
   AdaptateurPowerpoint,
   DonneesSupportCommissionHomologation,
 } from './adaptateurPowerpoint.interface.js';
+import { dateEnFrancais } from '../utilitaires/date.js';
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const SLIDE_COUVERTURE = 1;
@@ -12,6 +13,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
 
   async genereSupportCommissionHomologation({
     nomService,
+    dateCreation,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -24,6 +26,13 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
 
     presentation.addSlide('modele', SLIDE_COUVERTURE, (slide) => {
       slide.modifyElement('nom-service', modify.setText(nomService));
+      slide.modifyElement(
+        'date-creation',
+        modify.replaceText({
+          replace: 'dateCreation',
+          by: { text: dateEnFrancais(dateCreation) },
+        })
+      );
     });
 
     const archive = await presentation.getJSZip();

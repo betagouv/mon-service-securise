@@ -37,5 +37,16 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         '<a:t>Mon super service</a:t>'
       );
     });
+
+    it('écrit la date de création au format court, après son libellé', async () => {
+      const pptx = await adaptateur.genereSupportCommissionHomologation({
+        nomService: 'Mon super service',
+        dateCreation: new Date(2026, 10, 9),
+      });
+
+      const couverture = await contenuSlide(pptx, 1);
+      expect(couverture).toContain('<a:t>Date de création : </a:t>');
+      expect(couverture).toContain('<a:t>09/11/2026</a:t>');
+    });
   });
 });
