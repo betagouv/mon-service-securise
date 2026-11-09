@@ -141,7 +141,7 @@
             descriptionEditable.niveauSecurite
           )
         : 'Les informations de votre service ont été mises à jour avec succès.';
-      toasterStore.succes('Mise à jour réussie', messageSucces);
+      toasterStore.succes('Mise à jour réussie', messageSucces, true);
 
       copiePourRestauration = $state.snapshot(descriptionEditable);
       retourAuModeResume();
