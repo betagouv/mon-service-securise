@@ -36,6 +36,7 @@ import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 import { fabriqueAdaptateurMail } from './src/adaptateurs/fabriqueAdaptateurMail.js';
 import { fabriqueAdaptateurAuditAdminOrganisations } from './src/adaptateurs/fabriqueAdaptateurAuditAdminOrganisations.js';
 import { AdaptateurPdfTypst } from './src/adaptateurs/adaptateurPdf.typst.js';
+import { AdaptateurPowerpointAutomizer } from './src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { fabriqueServiceStatistiquesAdmin } from './src/adaptateurs/fabriqueServiceStatistiquesAdmin.js';
 import { fabriqueAdaptateurReportingCrm } from './src/adaptateurs/fabriqueAdaptateurReportingCrm.js';
 
@@ -161,13 +162,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     referentielV2,
     adaptateurMail,
     adaptateurPdf: new AdaptateurPdfTypst(),
-    adaptateurPowerpoint: {
-      genereSupportCommissionHomologation: async () => {
-        throw new Error(
-          'Support de commission PowerPoint pas encore implémenté'
-        );
-      },
-    },
+    adaptateurPowerpoint: new AdaptateurPowerpointAutomizer(),
     adaptateurTamponHomologation,
     adaptateurHorloge,
     adaptateurGestionErreur,
