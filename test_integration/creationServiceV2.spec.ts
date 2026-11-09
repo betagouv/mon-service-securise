@@ -1,19 +1,12 @@
 import { expect, Page, test } from '@playwright/test';
 import {
-  fermeModaleNouveauReferentielSiPresente,
-  fermeModaleVisiteGuideeSiPresente,
   navigueSurPageConnectee,
+  navigueSurTableauDeBord,
   remplirChamp,
 } from './aideAuxTests.js';
 
 const cliquerSuivant = (page: Page) =>
   page.getByRole('button', { name: 'Suivant' }).click();
-
-const navigueSurTableauDeBord = async (page: Page) => {
-  await navigueSurPageConnectee('/tableauDeBord', page);
-  await fermeModaleNouveauReferentielSiPresente(page);
-  await fermeModaleVisiteGuideeSiPresente(page);
-};
 
 let idService: string;
 let nomService: string;
