@@ -111,7 +111,7 @@ Pas encore vérifié :
 
 - **L'idée de la brique 3** (image placée dans le template et remplacée à la génération) : illustration du niveau de besoin (slide 8), jauges et radar (slide 18). L'implémentation passera par pptx-automizer plutôt que par `remplaceImageNommee`, si son remplacement d'image fonctionne.
 - **Pipeline Typst → SVG → PNG** (brique 4) : seulement pour le radar et les jauges, si on les génère en image. Il n'est plus utilisé pour les matrices ni pour les barres.
-- **Câblage MSS** : route `GET /api/service/:id/powerpoint/supportCommissionHomologation.pptx`, droits `Autorisation.DROITS_DOSSIER_DECISION_PDF`, injection `server.ts` → `mss.js` → `routesConnecteApi` → `routesConnecteApiService`, stub dans `testeurMSS`.
+- **Câblage MSS** : route `GET /api/service/:id/pptx/supportCommissionHomologation.pptx`, droits `Autorisation.DROITS_DOSSIER_DECISION_PDF`, injection `server.ts` → `mss.js` → `routesConnecteApi` → `routesConnecteApiService`, stub dans `testeurMSS`.
 
 ## Ce qui change par rapport au POC
 

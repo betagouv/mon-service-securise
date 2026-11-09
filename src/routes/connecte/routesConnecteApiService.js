@@ -65,7 +65,9 @@ const routesConnecteApiService = ({
     })
   );
 
-  routes.use(routesConnecteApiServicePowerpoint({ middleware }));
+  routes.use(
+    routesConnecteApiServicePowerpoint({ middleware, adaptateurEnvironnement })
+  );
 
   routes.use(
     routesConnecteApiServiceActivitesMesure({
