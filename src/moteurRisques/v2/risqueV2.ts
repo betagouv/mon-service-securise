@@ -92,7 +92,7 @@ export class RisqueV2 {
   private genereIntitule(): string {
     const formatteurListe = new Intl.ListFormat('fr', {
       style: 'long',
-      type: 'conjunction',
+      type: 'disjunction',
     });
 
     const vecteur = this.configuration[this.idVecteur];
