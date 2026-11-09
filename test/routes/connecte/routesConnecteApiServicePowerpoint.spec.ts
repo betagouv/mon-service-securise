@@ -90,10 +90,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
       beforeEach(() => {
         // @ts-expect-error on ne recharge que le nécessaire
         testeur.middleware().reinitialise({
-          serviceARenvoyer: unServiceV2()
-            .avecId('456')
-            .avecNomService('Mon super service')
-            .construis(),
+          serviceARenvoyer: unServiceV2().avecId('456').construis(),
         });
       });
 
@@ -126,7 +123,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         );
       });
 
-      it("transmet à l'adaptateur le nom du service et la date du jour", async () => {
+      it("transmet à l'adaptateur la date du jour", async () => {
         const maintenant = new Date(2026, 10, 9);
         testeur.adaptateurHorloge().maintenant = () => maintenant;
         let donneesRecues;
@@ -140,13 +137,11 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           '/api/service/456/pptx/supportCommissionHomologation.pptx'
         );
 
-        expect(donneesRecues).toEqual({
-          nomService: 'Mon super service',
-          dateCreation: maintenant,
-        });
+        expect(donneesRecues).toEqual({ dateCreation: maintenant });
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
+        testeur.adaptateurHorloge().maintenant = () => new Date(2026, 10, 9);
         const vraiAdaptateur = new AdaptateurPowerpointAutomizer();
         testeur.adaptateurPowerpoint().genereSupportCommissionHomologation = (
           donnees: DonneesSupportCommissionHomologation
@@ -157,7 +152,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         );
 
         expect(await contenuSlide(reponse.body, 1)).toContain(
-          '<a:t>Mon super service</a:t>'
+          '<a:t>09/11/2026</a:t>'
         );
       });
     });
