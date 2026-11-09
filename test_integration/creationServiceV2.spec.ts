@@ -107,13 +107,9 @@ test.describe.serial('Création de service v2', () => {
 
       await page.getByRole('button', { name: 'Documents' }).click();
 
-      const carteZip = page
-        .locator('.document-telechargeable')
-        .filter({ hasText: 'Tous les documents' });
-
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        carteZip.getByRole('link', { name: 'Télécharger' }).click(),
+        page.getByRole('link', { name: 'Tous les documents' }).click(),
       ]);
 
       expect(download.suggestedFilename()).toMatch(/^MSS_decision_.*\.zip$/);
