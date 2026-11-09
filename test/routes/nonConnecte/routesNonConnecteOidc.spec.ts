@@ -166,6 +166,21 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
     });
 
+    it("logue l'erreur de récupération du jeton", async () => {
+      const erreur = new Error('Erreur de récupération du jeton');
+      testeur.adaptateurOidc().recupereJeton = async () => {
+        throw erreur;
+      };
+      let erreurLoguee: Error | undefined;
+      testeur.adaptateurGestionErreur().logueErreur = (e: Error) => {
+        erreurLoguee = e;
+      };
+
+      await testeur.get('/oidc/apres-authentification');
+
+      expect(erreurLoguee).toBe(erreur);
+    });
+
     it("enrichit la session avec l'`id_token`", async () => {
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
