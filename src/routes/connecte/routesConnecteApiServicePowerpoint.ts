@@ -46,9 +46,13 @@ export const routesConnecteApiServicePowerpoint = ({
       }
 
       try {
+        const maintenant = adaptateurHorloge.maintenant();
         const support =
-          await adaptateurPowerpoint.genereSupportCommissionHomologation();
-        const dateDuJour = dateYYYYMMDD(adaptateurHorloge.maintenant());
+          await adaptateurPowerpoint.genereSupportCommissionHomologation({
+            nomService: service.nomService(),
+            dateCreation: maintenant,
+          });
+        const dateDuJour = dateYYYYMMDD(maintenant);
         reponse
           .attachment(`MSS_support_commission_homologation_${dateDuJour}.pptx`)
           .contentType(CONTENT_TYPE_PPTX)

@@ -1,3 +1,10 @@
+export type DonneesSupportCommissionHomologation = {
+  nomService: string;
+  dateCreation: Date;
+};
+
 export interface AdaptateurPowerpoint {
-  genereSupportCommissionHomologation: () => Promise<Buffer>;
+  genereSupportCommissionHomologation: (
+    donnees: DonneesSupportCommissionHomologation
+  ) => Promise<Buffer>;
 }

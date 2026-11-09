@@ -97,7 +97,7 @@ Conséquences :
 | À lancer            | 1447800            | 1257300             |
 | Statut à définir    | 2340843            | 2150343             |
 
-Autre constat sur le template, pour le designer :
+Autre constat sur le template :
 
 - Le nom du service (slide 1) garde le style « à compléter » (fond gris, souligné orange) alors qu'il est prérempli : à passer en italique.
 
@@ -123,7 +123,7 @@ Pas encore vérifié :
 
 Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la donnée → la forme nommée dans le template → un test qui relit le pptx généré.
 
-0. **Template** (sans code) : formes dynamiques nommées, style prérempli. Peut avancer slide par slide, en parallèle.
+0. ~~**Template**~~ : le designer ne fera plus de modifications. **C'est l'équipe qui retouche le template**, au fil des PR : chaque PR renomme et restyle uniquement les formes de ses slides, dans le même commit que le code qui les utilise. Le template versionné (`src/vuesPowerpoint/supportCommissionHomologation.pptx`) est la source de vérité. Retouches possibles directement dans le XML, ou dans PowerPoint (volet Sélection pour renommer). Contrôle du rendu dans PowerPoint dès qu'une PR touche au style.
 1. **Squelette de bout en bout** : feature flag (404 si désactivé), dépendance pptx-automizer, interface et implémentation de l'adaptateur, template réduit à la slide 1 (nom du service, date de création), route réservée aux services V2, injection, spec de la route et test qui relit le pptx. Pas de bouton dans l'interface.
 2. **Slide 5, contexte** : création de `vueSupportCommission` et des champs de description.
 3. **Slide 8, besoins de sécurité** : niveau, condition « supérieur à l'ANSSI », exposition, données identifiées, illustration selon le niveau (remplacement d'image à valider).
@@ -142,7 +142,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 - [x] Lib retenue : pptx-automizer.
 - [x] Barres de la slide 19 : en XML (`setPosition`).
-- [ ] Listes : formes nommées (testé) ou tableaux natifs (`setTable`, non testé). À décider avec le designer avant la PR 5.
+- [x] Listes : formes nommées (testé). Pas de tableaux natifs : le template n'en contient pas et on ne refait pas la mise en page.
 - [ ] Remplacement d'image avec pptx-automizer : à valider en PR 3.
 - [x] Largeur des pastilles de statut : largeur fixe par statut, reprise de la légende de la slide 19.
 - [ ] Pastilles de statut sous Microsoft PowerPoint : à revérifier avec les largeurs par statut.
