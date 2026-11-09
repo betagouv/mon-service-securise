@@ -14,6 +14,8 @@ import {
   verifieTypeFichierServiEstPPTX,
 } from '../../aides/verifieFichierServi.js';
 import { DonneesSupportCommissionHomologation } from '../../../src/adaptateurs/adaptateurPowerpoint.interface.ts';
+import { AdaptateurPowerpointAutomizer } from '../../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
+import { contenuSlide } from '../../aides/lecturePptx.js';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -142,6 +144,21 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           nomService: 'Mon super service',
           dateCreation: maintenant,
         });
+      });
+
+      it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
+        const vraiAdaptateur = new AdaptateurPowerpointAutomizer();
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation = (
+          donnees: DonneesSupportCommissionHomologation
+        ) => vraiAdaptateur.genereSupportCommissionHomologation(donnees);
+
+        const reponse = await recupereFichierBinaire(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(await contenuSlide(reponse.body, 1)).toContain(
+          '<a:t>Mon super service</a:t>'
+        );
       });
     });
   });
