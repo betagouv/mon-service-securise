@@ -113,6 +113,29 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
+    it('resserre les lignes et réduit le texte des pièces pour que la liste tienne au-dessus de la légende', async () => {
+      const douzePieces = Array.from(
+        { length: 12 },
+        (_, index) => `Pièce ${index + 1}`
+      );
+      const pptx = await genereSupport({ piecesDuDossier: douzePieces });
+
+      const commission = await contenuSlide(pptx, 3);
+      const ordonneesDesSeparateurs = [
+        ...commission.matchAll(
+          /name="piece-\d+-separateur"(?:(?!<\/p:sp>).)*<a:off x="\d+" y="(\d+)"\/>/gs
+        ),
+      ].map(([, ordonnee]) => Number(ordonnee));
+      const basDeLaHuitiemeLigneDuTemplate = 3878461 + 8 * 661987;
+      expect(Math.max(...ordonneesDesSeparateurs)).toBeLessThanOrEqual(
+        basDeLaHuitiemeLigneDuTemplate
+      );
+      const [, taillePolice] = commission.match(
+        /<a:rPr [^>]*sz="(\d+)"[^>]*>(?:(?!<\/a:r>).)*<a:t>Pièce 12<\/a:t>/s
+      )!;
+      expect(Number(taillePolice)).toBeLessThan(1950);
+    });
+
     it('écrit la date de création au format court, après son libellé', async () => {
       const pptx = await genereSupport();
 
