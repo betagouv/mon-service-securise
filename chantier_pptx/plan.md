@@ -127,13 +127,14 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 0. ~~**Template**~~ : le designer ne fera plus de modifications. **C'est l'équipe qui retouche le template**, au fil des PR : chaque PR renomme et restyle uniquement les formes de ses slides, dans le même commit que le code qui les utilise. Le template versionné (`src/vuesPowerpoint/supportCommissionHomologation.pptx`) est la source de vérité. Retouches possibles directement dans le XML, ou dans PowerPoint (volet Sélection pour renommer). Contrôle du rendu dans PowerPoint dès qu'une PR touche au style.
 1. **Squelette de bout en bout** : feature flag (404 si désactivé), dépendance pptx-automizer, interface et implémentation de l'adaptateur, template réduit à la slide 1 (date de création), route réservée aux services V2, injection, spec de la route et test qui relit le pptx. Pas de bouton dans l'interface.
-2. **Slide 3, commission** (en attente de la réponse définitive du produit sur les pièces) :
-   - 2a : le support contient couverture, sommaire (statique) et slide 3, dans l'ordre ;
-   - 2b : refus si pas de dossier courant ;
-   - 2c : autorité d'homologation (nom, fonction de l'étape 1) ; si non renseignée, « Prénom Nom, fonction » en style à compléter ;
-   - 2d : pièces du dossier calculées par une vue pure, toutes décochées (☐) pour l'instant : « Présent support de commission », « Décision d'homologation à signer », « Avis écrits de … », « Synthèse de la sécurité du service (MonServiceSécurisé) », « Rapport d'audit, si réalisé », « Analyse de risque, si réalisée » (remplace l'AIPD) ;
-   - 2e : ligne « Avis écrits de A, B et C » : noms des avis de l'étape 2 mis bout à bout, dans l'ordre, sans doublon ; ligne retirée s'il n'y a pas d'avis ;
-   - 2f : documents de l'étape 3 ajoutés à la suite, avec ajout de lignes au-delà des 6 du template (PowerPoint réduit la police si besoin).
+2. ~~**Commission et pièces du dossier**~~ (fait) — maquette V4 de la designer : la slide 3 d'origine est remplacée par trois slides du template (numéros de fichier, utilisés par pptx-automizer) :
+   - **slide 31, composition de la commission** : autorité d'homologation de l'étape 1 en italique, ou « Prénom Nom, fonction » à compléter si elle n'est pas renseignée (les deux versions sont superposées dans le template, l'adaptateur retire l'inutile) ;
+   - **slide 32, première page des pièces** : 16 lignes (colonne de gauche puis de droite), chacune avec une version préremplie (case, intitulé, source) et une version à compléter ; les lignes 3 et 4 de gauche sont hautes, pour les intitulés longs ;
+   - **slide 34, page de pièces « suite »** : même page, avec des lignes régulières dans les deux colonnes ;
+   - **slide 33, page de pièces vide** : 16 lignes à compléter, ajoutée en dernière page quand le nombre total de lignes est un multiple de 16 ;
+   - pièces (`piecesDuDossier`, `{ intitule, source, cochee }`) : « Présent support de commission » et « Décision d'homologation à signer » (cochées), « Avis écrits de A, B et C » (collaborateurs des avis de l'étape 2, sans doublon, absente sans avis), « Synthèse de la sécurité du service (MonServiceSécurisé) », « Rapport d'audit, si réalisé », « Analyse de risque, si réalisée » (source MonServiceSécurisé), puis les documents de l'étape 3 (source « Utilisateur ») ;
+   - pagination : 16 lignes par page, dernière page complétée par des lignes à remplir, « k/N » dans le titre seulement s'il y a plusieurs pages (exemple réel : 43 documents → 4 pages) ;
+   - refus de la route sans dossier en cours (422 `AUCUN_DOSSIER_COURANT`).
    - Les PR suivantes ajoutent leurs slides dans l'ordre du template, avec les slides statiques qui les précèdent. Jamais de données fictives de la maquette dans le support généré.
      2bis. **Slide 5, contexte** : création de `vueSupportCommission` et des champs de description.
 3. **Slide 8, besoins de sécurité** : niveau, condition « supérieur à l'ANSSI », exposition, données identifiées, illustration selon le niveau (remplacement d'image à valider).
@@ -150,8 +151,8 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 ## Points ouverts
 
-- [ ] Slide 3 : au-delà de 8 pièces du dossier, la liste chevauche la légende en bas de slide. Réduire l'espacement ou la taille du texte, ou couper la liste ? En attente de la réponse du produit sur les pièces.
-- [ ] Slide 3 : cases à cocher des pièces, toutes décochées pour l'instant (en attente du produit).
+- [x] Pièces du dossier : 16 lignes par page avec pagination (maquette V4), plus de réduction de police.
+- [x] Cases des pièces : support de commission et décision cochés, les autres décochés.
 - [x] Lib retenue : pptx-automizer.
 - [x] Barres de la slide 19 : en XML (`setPosition`).
 - [x] Listes : formes nommées (testé). Pas de tableaux natifs : le template n'en contient pas et on ne refait pas la mise en page.
