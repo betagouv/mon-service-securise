@@ -35,7 +35,7 @@ export const routesConnecteApiServicePowerpoint = ({
   routes.get(
     '/:id/pptx/supportCommissionHomologation.pptx',
     middleware.trouveService(Autorisation.DROITS_DOSSIER_DECISION_PDF),
-    async (requete, reponse, suite) => {
+    async (requete, reponse) => {
       const { service } = requete as unknown as RequestRouteConnecteService;
 
       if (service.version() === VersionService.v1) {
@@ -45,20 +45,16 @@ export const routesConnecteApiServicePowerpoint = ({
         return;
       }
 
-      try {
-        const maintenant = adaptateurHorloge.maintenant();
-        const support =
-          await adaptateurPowerpoint.genereSupportCommissionHomologation({
-            dateCreation: maintenant,
-          });
-        const dateDuJour = dateYYYYMMDD(maintenant);
-        reponse
-          .attachment(`MSS_support_commission_homologation_${dateDuJour}.pptx`)
-          .contentType(CONTENT_TYPE_PPTX)
-          .send(support);
-      } catch (erreur) {
-        suite(erreur);
-      }
+      const maintenant = adaptateurHorloge.maintenant();
+      const support =
+        await adaptateurPowerpoint.genereSupportCommissionHomologation({
+          dateCreation: maintenant,
+        });
+      const dateDuJour = dateYYYYMMDD(maintenant);
+      reponse
+        .attachment(`MSS_support_commission_homologation_${dateDuJour}.pptx`)
+        .contentType(CONTENT_TYPE_PPTX)
+        .send(support);
     }
   );
 
