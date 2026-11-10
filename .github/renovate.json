@@ -13,7 +13,7 @@
   "schedule": ["* * * * 2"],
   "timezone": "Europe/Paris",
   "constraints": {
-    "node": "24.x"
+    "node": "26.x"
   },
   "packageRules": [
     {
@@ -22,15 +22,15 @@
       "enabled": false
     },
     {
-      "description": "@types/node ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24). À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
+      "description": "@types/node ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 26). À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
       "matchPackageNames": ["@types/node"],
-      "allowedVersions": "<25.0.0"
+      "allowedVersions": "<27.0.0"
     },
     {
-      "description": "L'image Docker node (Dockerfile de dev) ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 24) : la contrainte \"constraints.node\" ne s'applique qu'au manager npm, pas dockerfile. À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
+      "description": "L'image Docker node (Dockerfile de dev) ne doit pas dépasser la version majeure de Node définie dans .nvmrc (actuellement 26) : la contrainte \"constraints.node\" ne s'applique qu'au manager npm, pas dockerfile. À relever manuellement dès que .nvmrc est mis à jour vers une nouvelle version majeure.",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["docker.io/node"],
-      "allowedVersions": "<25.0.0"
+      "allowedVersions": "<27.0.0"
     },
     {
       "description": "typescript ne doit pas dépasser la v6 : typescript-eslint (peerDependencies typescript actuel : >=4.8.4 <6.1.0) ne supporte pas encore TS 7, ce qui fait échouer le lint en CI. À relever manuellement dès que typescript-eslint supporte TS 7.",
