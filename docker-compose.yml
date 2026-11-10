@@ -11,7 +11,7 @@ x-app: &configuration-base
 
 services:
   mss-db:
-    image: docker.io/postgres:14
+    image: docker.io/postgres:18
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
@@ -19,7 +19,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - dbvol:/var/lib/postgresql/data
+      - dbvol-pg18:/var/lib/postgresql
 
   test:
     <<: *configuration-base
@@ -58,5 +58,5 @@ networks:
 
 volumes:
   node_modules:
-  dbvol:
+  dbvol-pg18:
     driver: local

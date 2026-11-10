@@ -47,10 +47,10 @@
       "allowedVersions": "!/^8\\.71\\.1$/"
     },
     {
-      "description": "postgres ne doit pas dépasser la version majeure utilisée en production (actuellement 14, cf. docker-compose.yml). À relever manuellement lors d'une montée de version PostgreSQL planifiée.",
+      "description": "postgres ne doit pas dépasser la version majeure utilisée en production (actuellement 18, cf. docker-compose.yml). À relever manuellement lors d'une montée de version PostgreSQL planifiée.",
       "matchPackageNames": ["docker.io/postgres"],
       "matchDatasources": ["docker"],
-      "allowedVersions": "<15.0.0"
+      "allowedVersions": "<19.0.0"
     },
     {
       "description": "lockFileMaintenance",
