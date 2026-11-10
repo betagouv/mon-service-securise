@@ -1,7 +1,11 @@
 import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.js';
 import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   Permissions,
@@ -392,11 +396,46 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         estAdmin: false,
         estSuperviseur: false,
         documentsPdfDisponibles: ['syntheseSecurite'],
+        supportCommissionPptxDisponible: false,
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
         actionRecommandee: { autorisee: false, id: 'simulerReferentielV2' },
         niveauSecurite: 'niveau1',
         pourcentageCompletude: 0,
+      });
+    });
+
+    describe('concernant le support de commission PowerPoint', () => {
+      beforeEach(() => {
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDossiers([unDossier(creeReferentielV2()).donnees])
+            .construis(),
+          autorisationACharger: uneAutorisation()
+            .avecDroits({ [HOMOLOGUER]: LECTURE })
+            .construis(),
+        });
+      });
+
+      it('indique qu’il est disponible quand la fonctionnalité est active', async () => {
+        const reponse = await testeur.get('/api/service/456');
+
+        expect(reponse.body.supportCommissionPptxDisponible).to.be(true);
+      });
+
+      it('indique qu’il n’est pas disponible quand la fonctionnalité est désactivée', async () => {
+        const featureFlagsActifs = testeur
+          .adaptateurEnvironnement()
+          .featureFlag();
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          ...featureFlagsActifs,
+          avecSupportCommissionPptx: () => false,
+        });
+
+        const reponse = await testeur.get('/api/service/456');
+
+        expect(reponse.body.supportCommissionPptxDisponible).to.be(false);
       });
     });
 

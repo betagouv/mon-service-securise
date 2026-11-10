@@ -6,7 +6,10 @@ import {
   Permissions,
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { dateEnFrancais } from '../../../src/utilitaires/date.js';
@@ -14,6 +17,14 @@ import Mesures from '../../../src/modeles/mesures.js';
 
 const { HOMOLOGUER, DECRIRE, SECURISER } = Rubriques;
 const { LECTURE, ECRITURE } = Permissions;
+
+const unAdaptateurEnvironnement = ({
+  avecSupportCommissionPptx = false,
+} = {}) => ({
+  featureFlag: () => ({
+    avecSupportCommissionPptx: () => avecSupportCommissionPptx,
+  }),
+});
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
@@ -84,7 +95,14 @@ describe("L'objet d'API de `GET /service`", () => {
     .construis();
 
   it('fournit les données nécessaires', () => {
-    expect(objetGetService.donnees(service, autorisation, referentiel)).to.eql({
+    expect(
+      objetGetService.donnees(
+        service,
+        autorisation,
+        referentiel,
+        unAdaptateurEnvironnement()
+      )
+    ).to.eql({
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
@@ -123,12 +141,42 @@ describe("L'objet d'API de `GET /service`", () => {
       estAdmin: false,
       estSuperviseur: false,
       documentsPdfDisponibles: ['syntheseSecurite'],
+      supportCommissionPptxDisponible: false,
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
       actionRecommandee: { id: 'simulerReferentielV2', autorisee: true },
       niveauSecurite: 'niveau1',
       pourcentageCompletude: 0.5,
       version: 'v1',
+    });
+  });
+
+  describe('concernant le support de commission PowerPoint', () => {
+    const serviceV2AvecDossierEnCours = () =>
+      unServiceV2()
+        .avecDossiers([unDossier(referentiel).donnees])
+        .construis();
+
+    it('indique qu’il est disponible quand la fonctionnalité est active et que le service le permet', () => {
+      const donnees = objetGetService.donnees(
+        serviceV2AvecDossierEnCours(),
+        autorisation,
+        referentiel,
+        unAdaptateurEnvironnement({ avecSupportCommissionPptx: true })
+      );
+
+      expect(donnees.supportCommissionPptxDisponible).to.be(true);
+    });
+
+    it('indique qu’il n’est pas disponible quand la fonctionnalité n’est pas active', () => {
+      const donnees = objetGetService.donnees(
+        serviceV2AvecDossierEnCours(),
+        autorisation,
+        referentiel,
+        unAdaptateurEnvironnement()
+      );
+
+      expect(donnees.supportCommissionPptxDisponible).to.be(false);
     });
   });
 
@@ -142,7 +190,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       unServiceAvecDossierBientotExpire,
       autorisation,
-      referentiel
+      referentiel,
+      unAdaptateurEnvironnement()
     );
 
     const dans3jours = dateEnFrancais(
@@ -159,7 +208,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansHomologuer,
-      referentiel
+      referentiel,
+      unAdaptateurEnvironnement()
     );
 
     expect(donnees.statutHomologation).to.be(undefined);
@@ -173,7 +223,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansDecrire,
-      referentiel
+      referentiel,
+      unAdaptateurEnvironnement()
     );
 
     expect(donnees.niveauSecurite).to.be(undefined);
@@ -187,7 +238,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansSecuriser,
-      referentiel
+      referentiel,
+      unAdaptateurEnvironnement()
     );
 
     expect(donnees.pourcentageCompletude).to.be(undefined);
@@ -223,7 +275,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       serviceAvecDossierFinalise,
       autorisation,
-      referentielDeuxEtapes
+      referentielDeuxEtapes,
+      unAdaptateurEnvironnement()
     );
 
     expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
@@ -241,7 +294,8 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuNonAdmin = objetGetService.donnees(
         serviceAvecAdminA,
         uneAutorisation().deProprietaire('B', '123').construis(),
-        referentiel
+        referentiel,
+        unAdaptateurEnvironnement()
       );
 
       const [admin] = pointDeVueDuNonAdmin.contributeurs;
@@ -261,7 +315,8 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDeAdminLuiMeme = objetGetService.donnees(
         serviceAvecAdminA,
         uneAutorisation().dAdmin('ADMIN', '123').construis(),
-        referentiel
+        referentiel,
+        unAdaptateurEnvironnement()
       );
 
       const [admin] = pointDeVueDeAdminLuiMeme.contributeurs;
@@ -283,7 +338,8 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuNonSuperviseur = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deProprietaire('B', '123').construis(),
-        referentiel
+        referentiel,
+        unAdaptateurEnvironnement()
       );
 
       const [superviseur] = pointDeVueDuNonSuperviseur.contributeurs;
@@ -303,7 +359,8 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuSuperviseur = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
-        referentiel
+        referentiel,
+        unAdaptateurEnvironnement()
       );
 
       expect(pointDeVueDuSuperviseur.estSuperviseur).to.be(true);
@@ -313,7 +370,8 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuSuperviseurLuiMeme = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
-        referentiel
+        referentiel,
+        unAdaptateurEnvironnement()
       );
 
       const [superviseur] = pointDeVueDuSuperviseurLuiMeme.contributeurs;
@@ -337,7 +395,8 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           uneAutorisation().deProprietaire('A', '123').construis(),
-          referentiel
+          referentiel,
+          unAdaptateurEnvironnement()
         ).permissions
       ).to.eql({ gestionContributeurs: true });
     });
@@ -356,7 +415,8 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           autorisation,
-          referentiel
+          referentiel,
+          unAdaptateurEnvironnement()
         ).permissions
       ).to.eql({ gestionContributeurs: false });
     });
