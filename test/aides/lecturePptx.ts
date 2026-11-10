@@ -77,3 +77,31 @@ export const partiesDeclareesAbsentes = async (pptx: Buffer) => {
     (partie) => !archive.file(partie.slice(1))
   );
 };
+
+const SIGNATURE_ENTREE_REPERTOIRE_CENTRAL = 0x02014b50;
+const METHODE_SANS_COMPRESSION = 0;
+
+export const fichiersNonCompresses = (pptx: Buffer) => {
+  const nonCompresses: string[] = [];
+  let position = pptx.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02]));
+  while (
+    position >= 0 &&
+    pptx.readUInt32LE(position) === SIGNATURE_ENTREE_REPERTOIRE_CENTRAL
+  ) {
+    const methode = pptx.readUInt16LE(position + 10);
+    const tailleNonCompressee = pptx.readUInt32LE(position + 24);
+    const longueurNom = pptx.readUInt16LE(position + 28);
+    const longueurExtra = pptx.readUInt16LE(position + 30);
+    const longueurCommentaire = pptx.readUInt16LE(position + 32);
+    const nom = pptx.toString(
+      'utf8',
+      position + 46,
+      position + 46 + longueurNom
+    );
+    if (methode === METHODE_SANS_COMPRESSION && tailleNonCompressee > 0) {
+      nonCompresses.push(nom);
+    }
+    position += 46 + longueurNom + longueurExtra + longueurCommentaire;
+  }
+  return nonCompresses;
+};
