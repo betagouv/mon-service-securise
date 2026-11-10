@@ -16,7 +16,6 @@ import {
 import { DonneesSupportCommissionHomologation } from '../../../src/adaptateurs/adaptateurPowerpoint.interface.ts';
 import { AdaptateurPowerpointAutomizer } from '../../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { contenuSlide } from '../../aides/lecturePptx.js';
-import { piecesDuDossier } from '../../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
@@ -190,7 +189,22 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         });
       });
 
-      it("transmet à l'adaptateur les pièces du dossier", async () => {
+      it("transmet à l'adaptateur les pièces du dossier en cours", async () => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDossiers([
+              unDossier(creeReferentielV2()).avecAvis([
+                {
+                  collaborateurs: ['Jean Dupond'],
+                  statut: 'favorable',
+                  dureeValidite: 'unAn',
+                },
+              ]).donnees,
+            ])
+            .construis(),
+        });
         let donneesRecues: DonneesSupportCommissionHomologation | undefined;
         testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
           async (donnees: DonneesSupportCommissionHomologation) => {
@@ -202,7 +216,9 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           '/api/service/456/pptx/supportCommissionHomologation.pptx'
         );
 
-        expect(donneesRecues?.piecesDuDossier).toEqual(piecesDuDossier());
+        expect(donneesRecues?.piecesDuDossier).toContain(
+          'Avis écrits de Jean Dupond'
+        );
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
