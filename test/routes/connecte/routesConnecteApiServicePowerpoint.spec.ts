@@ -218,6 +218,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
 
         expect(donneesRecues?.piecesDuDossier).toContainEqual({
           intitule: 'Avis écrits de Jean Dupond',
+          intituleAbrege: 'Avis écrits des collaborateurs',
           source: 'Utilisateur',
           cochee: false,
         });

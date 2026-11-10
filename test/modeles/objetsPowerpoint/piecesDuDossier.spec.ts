@@ -61,6 +61,7 @@ describe('Les pièces du dossier transmises avant la commission', () => {
 
     expect(piecesDuDossier(dossier)[2]).toEqual({
       intitule: 'Avis écrits de Jean Dupond, Marie Martin et Paul Durand',
+      intituleAbrege: 'Avis écrits des collaborateurs',
       source: 'Utilisateur',
       cochee: false,
     });

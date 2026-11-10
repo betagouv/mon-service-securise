@@ -2,6 +2,7 @@ import Dossier from '../dossier.js';
 
 export type PieceDuDossier = {
   intitule: string;
+  intituleAbrege?: string;
   source: 'MonServiceSécurisé' | 'Utilisateur';
   cochee: boolean;
 };
@@ -27,9 +28,12 @@ const avisEcrits = (dossier: Dossier) => {
   const collaborateurs = dossier.avis.nomsDesCollaborateurs();
   return collaborateurs.length > 0
     ? [
-        pieceUtilisateur(
-          `Avis écrits de ${listeEnFrancais.format(collaborateurs)}`
-        ),
+        {
+          ...pieceUtilisateur(
+            `Avis écrits de ${listeEnFrancais.format(collaborateurs)}`
+          ),
+          intituleAbrege: 'Avis écrits des collaborateurs',
+        },
       ]
     : [];
 };
