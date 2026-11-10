@@ -12,8 +12,7 @@ const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
 const SLIDE_MEMBRES_COMMISSION = 31;
-const SLIDE_PREMIERE_PAGE_PIECES = 32;
-const SLIDE_PAGE_PIECES_SUITE = 34;
+const SLIDE_PAGE_PIECES = 34;
 const SLIDE_PAGE_PIECES_VIDE = 33;
 
 const FORMES_AUTORITE_A_COMPLETER = [
@@ -167,9 +166,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     const avecPageVide = laDernierePageEstPleine(piecesDuDossier);
     const nombrePages = pages.length + (avecPageVide ? 1 : 0);
     pages.forEach((piecesDeLaPage, index) => {
-      const slideDeLaPage =
-        index === 0 ? SLIDE_PREMIERE_PAGE_PIECES : SLIDE_PAGE_PIECES_SUITE;
-      presentation.addSlide(MODELE, slideDeLaPage, (slide) => {
+      presentation.addSlide(MODELE, SLIDE_PAGE_PIECES, (slide) => {
         ecrisNumeroDePage(slide, index + 1, nombrePages);
         ecrisPiecesDuDossier(slide, piecesDeLaPage);
       });
