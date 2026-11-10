@@ -3,6 +3,8 @@ import { contenuSlide, nombreDeSlides } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 
 describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
+  const POSITION_SLIDE_PIECES = 4;
+
   const adaptateur = new AdaptateurPowerpointAutomizer();
 
   const genereSupport = (
@@ -15,15 +17,18 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire et la composition de la commission', async () => {
+    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission et les pièces du dossier', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(3);
+      expect(await nombreDeSlides(pptx)).toBe(4);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
       expect(await contenuSlide(pptx, 2)).toContain('<a:t>Sommaire</a:t>');
       expect(await contenuSlide(pptx, 3)).toContain(
+        '<a:t>Composition de la commission</a:t>'
+      );
+      expect(await contenuSlide(pptx, 4)).toContain(
         '<a:t>Composition de la commission et contenu du dossier</a:t>'
       );
     });
@@ -63,7 +68,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         piecesDuDossier: ['Première pièce', 'Deuxième pièce'],
       });
 
-      const commission = await contenuSlide(pptx, 3);
+      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
       expect(commission).toMatch(
         /name="piece-1-texte".*<a:t>Première pièce<\/a:t>.*name="piece-2-texte".*<a:t>Deuxième pièce<\/a:t>/s
       );
@@ -74,7 +79,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         piecesDuDossier: ['Première pièce', 'Deuxième pièce'],
       });
 
-      const commission = await contenuSlide(pptx, 3);
+      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
       expect(commission).toContain('name="piece-2-separateur"');
       expect(commission).not.toMatch(/name="piece-[3-6]-/);
     });
@@ -93,7 +98,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ],
       });
 
-      const commission = await contenuSlide(pptx, 3);
+      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
       const ordonneeDuTexte = (piece: string) => {
         const [, ordonnee] = commission.match(
           new RegExp(
@@ -120,7 +125,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
       const pptx = await genereSupport({ piecesDuDossier: douzePieces });
 
-      const commission = await contenuSlide(pptx, 3);
+      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
       const ordonneesDesSeparateurs = [
         ...commission.matchAll(
           /name="piece-\d+-separateur"(?:(?!<\/p:sp>).)*<a:off x="\d+" y="(\d+)"\/>/gs

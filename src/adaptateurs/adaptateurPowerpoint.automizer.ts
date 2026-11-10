@@ -10,7 +10,8 @@ const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
-const SLIDE_COMMISSION = 3;
+const SLIDE_MEMBRES_COMMISSION = 31;
+const ANCIENNE_SLIDE_COMMISSION_ET_PIECES = 3;
 
 const FORMES_AUTORITE_A_COMPLETER = [
   'autorite-homologation-a-completer-fond',
@@ -34,6 +35,18 @@ const retireCelluleAutoriteRenseignee = (slide: ISlide) => {
 
 const retireCelluleAutoriteACompleter = (slide: ISlide) => {
   FORMES_AUTORITE_A_COMPLETER.forEach((forme) => slide.removeElement(forme));
+};
+
+const ecrisAutoriteHomologation = (
+  slide: ISlide,
+  autorite: AutoriteHomologation | undefined
+) => {
+  if (autorite) {
+    remplisCelluleAutoriteRenseignee(slide, autorite);
+    retireCelluleAutoriteACompleter(slide);
+  } else {
+    retireCelluleAutoriteRenseignee(slide);
+  }
 };
 
 const NOMBRE_LIGNES_PIECES_DU_TEMPLATE = 6;
@@ -116,17 +129,19 @@ const ajouteLigneDePieceSousLeTemplate = (
   const derniereLigne = `piece-${NOMBRE_LIGNES_PIECES_DU_TEMPLATE}`;
   slide.addElement(
     MODELE,
-    SLIDE_COMMISSION,
+    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
     `${derniereLigne}-case`,
     caseEtTexte
   );
-  slide.addElement(MODELE, SLIDE_COMMISSION, `${derniereLigne}-texte`, [
-    modify.setText(piece),
-    ...caseEtTexte,
-  ]);
   slide.addElement(
     MODELE,
-    SLIDE_COMMISSION,
+    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
+    `${derniereLigne}-texte`,
+    [modify.setText(piece), ...caseEtTexte]
+  );
+  slide.addElement(
+    MODELE,
+    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
     `${derniereLigne}-separateur`,
     separateur
   );
@@ -186,16 +201,18 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       );
     });
     presentation.addSlide(MODELE, SLIDE_SOMMAIRE);
-    presentation.addSlide(MODELE, SLIDE_COMMISSION, (slide) => {
-      if (autorite) {
-        remplisCelluleAutoriteRenseignee(slide, autorite);
-        retireCelluleAutoriteACompleter(slide);
-      } else {
-        retireCelluleAutoriteRenseignee(slide);
-      }
-      ecrisPiecesDuDossier(slide, piecesDuDossier);
-      retireLignesDePiecesInutilisees(slide, piecesDuDossier.length);
+    presentation.addSlide(MODELE, SLIDE_MEMBRES_COMMISSION, (slide) => {
+      ecrisAutoriteHomologation(slide, autorite);
     });
+    presentation.addSlide(
+      MODELE,
+      ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
+      (slide) => {
+        ecrisAutoriteHomologation(slide, autorite);
+        ecrisPiecesDuDossier(slide, piecesDuDossier);
+        retireLignesDePiecesInutilisees(slide, piecesDuDossier.length);
+      }
+    );
 
     const archive = await presentation.getJSZip();
     return archive.generateAsync({ type: 'nodebuffer' });
