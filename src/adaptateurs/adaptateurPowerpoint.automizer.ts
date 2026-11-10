@@ -271,6 +271,17 @@ const retireLesPartiesDesSlidesRetirees = async (archive: JSZip) => {
     .forEach((relations) => archive.remove(relations.name));
 };
 
+const TYPES_DE_CONTENU = '[Content_Types].xml';
+
+const retireLesDeclarationsDesPartiesAbsentes = async (archive: JSZip) => {
+  const typesDeContenu = await archive.file(TYPES_DE_CONTENU)!.async('string');
+  const sansPartiesAbsentes = typesDeContenu.replace(
+    /<Override [^>]*PartName="\/([^"]+)"[^>]*\/>/g,
+    (declaration, partie) => (archive.file(partie) ? declaration : '')
+  );
+  archive.file(TYPES_DE_CONTENU, sansPartiesAbsentes);
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -318,6 +329,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
 
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);
+    await retireLesDeclarationsDesPartiesAbsentes(archive);
     return archive.generateAsync({ type: 'nodebuffer' });
   }
 }
