@@ -24,6 +24,7 @@ export const donneesVisiteGuidee = {
       estAdmin: false,
       estSuperviseur: false,
       documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+      supportCommissionPptxDisponible: false,
       permissions: {
         gestionContributeurs: true,
       },
