@@ -16,6 +16,8 @@ import {
 import { DonneesSupportCommissionHomologation } from '../../../src/adaptateurs/adaptateurPowerpoint.interface.ts';
 import { AdaptateurPowerpointAutomizer } from '../../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { contenuSlide } from '../../aides/lecturePptx.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -86,11 +88,30 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
       });
     });
 
-    describe('pour un service V2', () => {
+    it("répond 422 si le service n'a pas de dossier d'homologation en cours", async () => {
+      // @ts-expect-error on ne recharge que le nécessaire
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unServiceV2().avecId('456').construis(),
+      });
+
+      const reponse = await testeur.get(
+        '/api/service/456/pptx/supportCommissionHomologation.pptx'
+      );
+
+      expect(reponse.status).toBe(422);
+      expect(reponse.body).toEqual({
+        erreur: { code: 'AUCUN_DOSSIER_COURANT' },
+      });
+    });
+
+    describe("pour un service V2 avec un dossier d'homologation en cours", () => {
       beforeEach(() => {
         // @ts-expect-error on ne recharge que le nécessaire
         testeur.middleware().reinitialise({
-          serviceARenvoyer: unServiceV2().avecId('456').construis(),
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDossiers([unDossier(creeReferentielV2()).donnees])
+            .construis(),
         });
       });
 

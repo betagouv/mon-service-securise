@@ -45,6 +45,11 @@ export const routesConnecteApiServicePowerpoint = ({
         return;
       }
 
+      if (!service.dossierCourant()) {
+        reponse.status(422).json({ erreur: { code: 'AUCUN_DOSSIER_COURANT' } });
+        return;
+      }
+
       const maintenant = adaptateurHorloge.maintenant();
       const support =
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
