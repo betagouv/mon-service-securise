@@ -20,6 +20,17 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
+    it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
+      const pptx = await adaptateur.genereSupportCommissionHomologation({
+        dateCreation: new Date(2026, 10, 9),
+        autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
+      });
+
+      expect(await contenuSlide(pptx, 3)).toContain(
+        '<a:t>Jean Dupond, RSSI</a:t>'
+      );
+    });
+
     it('écrit la date de création au format court, après son libellé', async () => {
       const pptx = await adaptateur.genereSupportCommissionHomologation({
         dateCreation: new Date(2026, 10, 9),

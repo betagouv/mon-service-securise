@@ -15,6 +15,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
 
   async genereSupportCommissionHomologation({
     dateCreation,
+    autorite,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -35,7 +36,14 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       );
     });
     presentation.addSlide('modele', SLIDE_SOMMAIRE);
-    presentation.addSlide('modele', SLIDE_COMMISSION);
+    presentation.addSlide('modele', SLIDE_COMMISSION, (slide) => {
+      if (autorite) {
+        slide.modifyElement(
+          'autorite-homologation',
+          modify.setText(`${autorite.nom}, ${autorite.fonction}`)
+        );
+      }
+    });
 
     const archive = await presentation.getJSZip();
     return archive.generateAsync({ type: 'nodebuffer' });
