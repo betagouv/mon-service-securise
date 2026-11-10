@@ -1,4 +1,5 @@
 import JSZip from 'jszip';
+import path from 'node:path';
 
 const lisFichier = (archive: JSZip, chemin: string) =>
   archive.file(chemin)!.async('string');
@@ -36,5 +37,36 @@ export const partiesDeclarees = async (pptx: Buffer) => {
   const typesDeContenu = await lisFichier(archive, '[Content_Types].xml');
   return [...typesDeContenu.matchAll(/<Override [^>]*PartName="([^"]+)"/g)].map(
     ([, partie]) => partie
+  );
+};
+
+const dossierSourceDesRelations = (cheminDesRelations: string) =>
+  path.posix.dirname(path.posix.dirname(cheminDesRelations));
+
+export const relationsCassees = async (pptx: Buffer) => {
+  const archive = await JSZip.loadAsync(pptx);
+  const fichiersDeRelations = Object.keys(archive.files).filter((chemin) =>
+    chemin.endsWith('.rels')
+  );
+
+  const relationsParFichier = await Promise.all(
+    fichiersDeRelations.map(async (fichier) => ({
+      fichier,
+      relations: await lisFichier(archive, fichier),
+    }))
+  );
+
+  return relationsParFichier.flatMap(({ fichier, relations }) =>
+    [...relations.matchAll(/<Relationship [^>]*>/g)]
+      .map(([relation]) => relation)
+      .filter((relation) => !relation.includes('TargetMode="External"'))
+      .map((relation) => relation.match(/Target="([^"]+)"/)![1])
+      .filter((cible) => {
+        const chemin = cible.startsWith('/')
+          ? cible.slice(1)
+          : path.posix.join(dossierSourceDesRelations(fichier), cible);
+        return !archive.file(chemin);
+      })
+      .map((cible) => `${fichier} -> ${cible}`)
   );
 };
