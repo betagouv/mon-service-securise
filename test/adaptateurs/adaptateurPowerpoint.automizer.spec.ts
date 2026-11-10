@@ -79,6 +79,40 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(commission).not.toMatch(/name="piece-[3-6]-/);
     });
 
+    it('ajoute des lignes de pièces sous la dernière ligne du template quand la liste la dépasse', async () => {
+      const pptx = await genereSupport({
+        piecesDuDossier: [
+          'Pièce 1',
+          'Pièce 2',
+          'Pièce 3',
+          'Pièce 4',
+          'Pièce 5',
+          'Pièce 6',
+          'Pièce 7',
+          'Pièce 8',
+        ],
+      });
+
+      const commission = await contenuSlide(pptx, 3);
+      const ordonneeDuTexte = (piece: string) => {
+        const [, ordonnee] = commission.match(
+          new RegExp(
+            `<a:off x="\\d+" y="(\\d+)"/>(?:(?!</p:sp>).)*<a:t>${piece}</a:t>`,
+            's'
+          )
+        )!;
+        return Number(ordonnee);
+      };
+      const pasEntreDeuxLignes =
+        ordonneeDuTexte('Pièce 6') - ordonneeDuTexte('Pièce 5');
+      expect(ordonneeDuTexte('Pièce 7') - ordonneeDuTexte('Pièce 6')).toBe(
+        pasEntreDeuxLignes
+      );
+      expect(ordonneeDuTexte('Pièce 8') - ordonneeDuTexte('Pièce 7')).toBe(
+        pasEntreDeuxLignes
+      );
+    });
+
     it('écrit la date de création au format court, après son libellé', async () => {
       const pptx = await genereSupport();
 
