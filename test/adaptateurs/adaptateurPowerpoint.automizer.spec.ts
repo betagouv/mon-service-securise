@@ -181,6 +181,23 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
+      it('ajoute une page entièrement à compléter quand les pièces remplissent exactement leurs pages', async () => {
+        const seizePieces = Array.from({ length: 16 }, (_, index) =>
+          unePiece(`Pièce ${index + 1}`)
+        );
+        const pptx = await genereSupport({ piecesDuDossier: seizePieces });
+
+        expect(await nombreDeSlides(pptx)).toBe(5);
+        expect(
+          titreDeLaPage(await contenuSlide(pptx, POSITION_SLIDE_PIECES))
+        ).toBe('Pièces du dossier transmises avant la séance 1/2');
+        const pageVide = await contenuSlide(pptx, POSITION_SLIDE_PIECES + 1);
+        expect(titreDeLaPage(pageVide)).toBe(
+          'Pièces du dossier transmises avant la séance 2/2'
+        );
+        expect(pageVide).not.toContain('Prérempli par MonServiceSécurisé');
+      });
+
       it('utilise des lignes régulières sur les pages suivantes', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
