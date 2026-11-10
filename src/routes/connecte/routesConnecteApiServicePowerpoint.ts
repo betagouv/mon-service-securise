@@ -9,6 +9,7 @@ import {
   AutoriteHomologation,
 } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
 import Dossier from '../../modeles/dossier.js';
+import { piecesDuDossier } from '../../modeles/objetsPowerpoint/piecesDuDossier.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 
@@ -67,6 +68,7 @@ export const routesConnecteApiServicePowerpoint = ({
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
           dateCreation: maintenant,
           autorite: autoriteHomologation(dossierCourant),
+          piecesDuDossier: piecesDuDossier(),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse
