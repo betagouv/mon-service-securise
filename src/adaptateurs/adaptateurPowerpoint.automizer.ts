@@ -30,6 +30,29 @@ const retireCelluleAutoriteACompleter = (slide: ISlide) => {
   FORMES_AUTORITE_A_COMPLETER.forEach((forme) => slide.removeElement(forme));
 };
 
+const NOMBRE_LIGNES_PIECES_DU_TEMPLATE = 6;
+
+const ecrisPiecesDuDossier = (slide: ISlide, pieces: string[]) => {
+  pieces.forEach((piece, index) => {
+    slide.modifyElement(`piece-${index + 1}-texte`, modify.setText(piece));
+  });
+};
+
+const retireLignesDePiecesInutilisees = (
+  slide: ISlide,
+  nombrePieces: number
+) => {
+  for (
+    let numeroLigne = nombrePieces + 1;
+    numeroLigne <= NOMBRE_LIGNES_PIECES_DU_TEMPLATE;
+    numeroLigne += 1
+  ) {
+    ['case', 'texte', 'separateur'].forEach((partie) =>
+      slide.removeElement(`piece-${numeroLigne}-${partie}`)
+    );
+  }
+};
+
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
@@ -41,6 +64,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   async genereSupportCommissionHomologation({
     dateCreation,
     autorite,
+    piecesDuDossier,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -68,6 +92,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       } else {
         retireCelluleAutoriteRenseignee(slide);
       }
+      ecrisPiecesDuDossier(slide, piecesDuDossier);
+      retireLignesDePiecesInutilisees(slide, piecesDuDossier.length);
     });
 
     const archive = await presentation.getJSZip();
