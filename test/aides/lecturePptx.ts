@@ -70,3 +70,10 @@ export const relationsCassees = async (pptx: Buffer) => {
       .map((cible) => `${fichier} -> ${cible}`)
   );
 };
+
+export const partiesDeclareesAbsentes = async (pptx: Buffer) => {
+  const archive = await JSZip.loadAsync(pptx);
+  return (await partiesDeclarees(pptx)).filter(
+    (partie) => !archive.file(partie.slice(1))
+  );
+};

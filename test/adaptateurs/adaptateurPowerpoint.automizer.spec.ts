@@ -3,6 +3,7 @@ import {
   contenuSlide,
   nombreDeSlides,
   partiesDeclarees,
+  partiesDeclareesAbsentes,
   relationsCassees,
 } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
@@ -299,6 +300,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const pptx = await genereSupport();
 
         expect(await relationsCassees(pptx)).toEqual([]);
+      });
+
+      it('ne déclare aucune partie absente du fichier', async () => {
+        const pptx = await genereSupport();
+
+        expect(await partiesDeclareesAbsentes(pptx)).toEqual([]);
       });
     });
   });
