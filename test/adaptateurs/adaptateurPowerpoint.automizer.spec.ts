@@ -198,23 +198,24 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(pageVide).not.toContain('Prérempli par MonServiceSécurisé');
       });
 
-      it('utilise des lignes régulières sur les pages suivantes', async () => {
+      it('utilise des lignes régulières sur toutes les pages', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
         );
         const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
 
-        const deuxiemePage = await contenuSlide(
-          pptx,
-          POSITION_SLIDE_PIECES + 1
-        );
-        const ordonnee = (numero: number) =>
+        const ordonneeDansLaPage = (page: string) => (numero: number) =>
           Number(
-            ligne(deuxiemePage, numero, 'case').match(
-              /<a:off x="\d+" y="(\d+)"/
-            )![1]
+            ligne(page, numero, 'case').match(/<a:off x="\d+" y="(\d+)"/)![1]
           );
-        expect(ordonnee(3) - ordonnee(2)).toBe(ordonnee(11) - ordonnee(10));
+        const pages = [
+          await contenuSlide(pptx, POSITION_SLIDE_PIECES),
+          await contenuSlide(pptx, POSITION_SLIDE_PIECES + 1),
+        ];
+        pages.forEach((page) => {
+          const ordonnee = ordonneeDansLaPage(page);
+          expect(ordonnee(4) - ordonnee(3)).toBe(ordonnee(12) - ordonnee(11));
+        });
       });
     });
 
