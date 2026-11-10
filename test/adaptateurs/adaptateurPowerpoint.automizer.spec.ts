@@ -1,5 +1,9 @@
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
-import { contenuSlide, nombreDeSlides } from '../aides/lecturePptx.js';
+import {
+  contenuSlide,
+  nombreDeSlides,
+  partiesDeclarees,
+} from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 
@@ -277,6 +281,18 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const couverture = await contenuSlide(pptx, 1);
       expect(couverture).toContain('<a:t>Date de création : </a:t>');
       expect(couverture).toContain('<a:t>09/11/2026</a:t>');
+    });
+
+    describe('produit un fichier que PowerPoint ouvre sans le réparer', () => {
+      it('ne déclare chaque partie du fichier qu’une seule fois', async () => {
+        const pptx = await genereSupport();
+
+        const parties = await partiesDeclarees(pptx);
+        const doublons = parties.filter(
+          (partie, index) => parties.indexOf(partie) !== index
+        );
+        expect(doublons).toEqual([]);
+      });
     });
   });
 });

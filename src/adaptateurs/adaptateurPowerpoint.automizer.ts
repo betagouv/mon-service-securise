@@ -11,9 +11,9 @@ const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
-const SLIDE_MEMBRES_COMMISSION = 31;
-const SLIDE_PAGE_PIECES = 34;
-const SLIDE_PAGE_PIECES_VIDE = 33;
+const SLIDE_MEMBRES_COMMISSION = 30;
+const SLIDE_PAGE_PIECES = 32;
+const SLIDE_PAGE_PIECES_VIDE = 31;
 
 const FORMES_AUTORITE_A_COMPLETER = [
   'autorite-homologation-a-completer-fond',
