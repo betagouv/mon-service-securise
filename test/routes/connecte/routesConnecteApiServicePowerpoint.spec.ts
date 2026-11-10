@@ -161,6 +161,34 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         expect(donneesRecues).toEqual({ dateCreation: maintenant });
       });
 
+      it("transmet à l'adaptateur l'autorité d'homologation du dossier en cours", async () => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDossiers([
+              unDossier(creeReferentielV2()).avecAutorite('Jean Dupond', 'RSSI')
+                .donnees,
+            ])
+            .construis(),
+        });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues?.autorite).toEqual({
+          nom: 'Jean Dupond',
+          fonction: 'RSSI',
+        });
+      });
+
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
         testeur.adaptateurHorloge().maintenant = () => new Date(2026, 10, 9);
         const vraiAdaptateur = new AdaptateurPowerpointAutomizer();
