@@ -1,10 +1,25 @@
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
-import { contenuSlide } from '../aides/lecturePptx.js';
+import { contenuSlide, nombreDeSlides } from '../aides/lecturePptx.js';
 
 describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const adaptateur = new AdaptateurPowerpointAutomizer();
 
   describe('quand il génère le support de commission d’homologation', () => {
+    it('contient, dans l’ordre, la couverture, le sommaire et la composition de la commission', async () => {
+      const pptx = await adaptateur.genereSupportCommissionHomologation({
+        dateCreation: new Date(2026, 10, 9),
+      });
+
+      expect(await nombreDeSlides(pptx)).toBe(3);
+      expect(await contenuSlide(pptx, 1)).toContain(
+        '<a:t>Support de commission d’homologation</a:t>'
+      );
+      expect(await contenuSlide(pptx, 2)).toContain('<a:t>Sommaire</a:t>');
+      expect(await contenuSlide(pptx, 3)).toContain(
+        '<a:t>Composition de la commission et contenu du dossier</a:t>'
+      );
+    });
+
     it('écrit la date de création au format court, après son libellé', async () => {
       const pptx = await adaptateur.genereSupportCommissionHomologation({
         dateCreation: new Date(2026, 10, 9),
