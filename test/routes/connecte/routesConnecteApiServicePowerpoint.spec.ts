@@ -16,6 +16,7 @@ import {
 import { DonneesSupportCommissionHomologation } from '../../../src/adaptateurs/adaptateurPowerpoint.interface.ts';
 import { AdaptateurPowerpointAutomizer } from '../../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { contenuSlide } from '../../aides/lecturePptx.js';
+import { piecesDuDossier } from '../../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
@@ -147,7 +148,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
       it("transmet à l'adaptateur la date du jour", async () => {
         const maintenant = new Date(2026, 10, 9);
         testeur.adaptateurHorloge().maintenant = () => maintenant;
-        let donneesRecues;
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
         testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
           async (donnees: DonneesSupportCommissionHomologation) => {
             donneesRecues = donnees;
@@ -158,7 +159,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           '/api/service/456/pptx/supportCommissionHomologation.pptx'
         );
 
-        expect(donneesRecues).toEqual({ dateCreation: maintenant });
+        expect(donneesRecues?.dateCreation).toEqual(maintenant);
       });
 
       it("transmet à l'adaptateur l'autorité d'homologation du dossier en cours", async () => {
@@ -187,6 +188,21 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           nom: 'Jean Dupond',
           fonction: 'RSSI',
         });
+      });
+
+      it("transmet à l'adaptateur les pièces du dossier", async () => {
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues?.piecesDuDossier).toEqual(piecesDuDossier());
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {

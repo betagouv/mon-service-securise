@@ -6,6 +6,7 @@ export type AutoriteHomologation = {
 export type DonneesSupportCommissionHomologation = {
   dateCreation: Date;
   autorite?: AutoriteHomologation;
+  piecesDuDossier: string[];
 };
 
 export interface AdaptateurPowerpoint {
