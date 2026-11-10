@@ -1,7 +1,6 @@
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { contenuSlide, nombreDeSlides } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
-import { piecesDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 
 describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const adaptateur = new AdaptateurPowerpointAutomizer();
@@ -11,7 +10,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   ) =>
     adaptateur.genereSupportCommissionHomologation({
       dateCreation: new Date(2026, 10, 9),
-      piecesDuDossier: piecesDuDossier(),
+      piecesDuDossier: ['Une pièce du dossier'],
       ...donnees,
     });
 

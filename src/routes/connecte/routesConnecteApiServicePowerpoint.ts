@@ -68,7 +68,7 @@ export const routesConnecteApiServicePowerpoint = ({
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
           dateCreation: maintenant,
           autorite: autoriteHomologation(dossierCourant),
-          piecesDuDossier: piecesDuDossier(),
+          piecesDuDossier: piecesDuDossier(dossierCourant),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse
