@@ -7,7 +7,12 @@ const {
   DROITS_VOIR_MESURES,
 } = Autorisation;
 
-const donnees = (service, autorisation, referentiel) => {
+const donnees = (
+  service,
+  autorisation,
+  referentiel,
+  adaptateurEnvironnement
+) => {
   const enCoursEdition =
     service.dossiers.statutSaisie() === Dossiers.A_COMPLETER;
   const etapeCouranteAutorisee = referentiel.etapeDossierAutorisee(
@@ -78,6 +83,9 @@ const donnees = (service, autorisation, referentiel) => {
     estSuperviseur: autorisation.estUnSuperviseur(),
     estProprietaire: autorisation.estProprietaire,
     documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
+    supportCommissionPptxDisponible:
+      adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx() &&
+      service.supportCommissionPptxDisponible(autorisation),
     permissions: {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },
