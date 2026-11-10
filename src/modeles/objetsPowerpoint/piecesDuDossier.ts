@@ -26,7 +26,11 @@ const pieceUtilisateur = (intitule: string): PieceDuDossier => ({
 const avisEcrits = (dossier: Dossier) => {
   const collaborateurs = dossier.avis.nomsDesCollaborateurs();
   return collaborateurs.length > 0
-    ? [pieceMSS(`Avis écrits de ${listeEnFrancais.format(collaborateurs)}`)]
+    ? [
+        pieceUtilisateur(
+          `Avis écrits de ${listeEnFrancais.format(collaborateurs)}`
+        ),
+      ]
     : [];
 };
 
@@ -34,8 +38,8 @@ export const piecesDuDossier = (dossier: Dossier): PieceDuDossier[] => [
   pieceMSS('Présent support de commission', true),
   pieceMSS('Décision d’homologation à signer', true),
   ...avisEcrits(dossier),
-  pieceMSS('Synthèse de la sécurité du service (MonServiceSécurisé)'),
-  pieceMSS('Rapport d’audit, si réalisé'),
-  pieceMSS('Analyse de risque, si réalisée'),
+  pieceMSS('Synthèse de la sécurité du service'),
+  pieceUtilisateur('Rapport d’audit, si réalisé'),
+  pieceUtilisateur('Analyse de risque, si réalisée'),
   ...dossier.documents.documents.map((intitule) => pieceUtilisateur(intitule)),
 ];

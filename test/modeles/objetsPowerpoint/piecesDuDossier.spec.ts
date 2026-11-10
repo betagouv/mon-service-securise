@@ -34,18 +34,18 @@ describe('Les pièces du dossier transmises avant la commission', () => {
         cochee: true,
       },
       {
-        intitule: 'Synthèse de la sécurité du service (MonServiceSécurisé)',
+        intitule: 'Synthèse de la sécurité du service',
         source: 'MonServiceSécurisé',
         cochee: false,
       },
       {
         intitule: 'Rapport d’audit, si réalisé',
-        source: 'MonServiceSécurisé',
+        source: 'Utilisateur',
         cochee: false,
       },
       {
         intitule: 'Analyse de risque, si réalisée',
-        source: 'MonServiceSécurisé',
+        source: 'Utilisateur',
         cochee: false,
       },
     ]);
@@ -61,7 +61,7 @@ describe('Les pièces du dossier transmises avant la commission', () => {
 
     expect(piecesDuDossier(dossier)[2]).toEqual({
       intitule: 'Avis écrits de Jean Dupond, Marie Martin et Paul Durand',
-      source: 'MonServiceSécurisé',
+      source: 'Utilisateur',
       cochee: false,
     });
   });
