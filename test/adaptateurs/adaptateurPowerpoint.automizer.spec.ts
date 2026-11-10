@@ -75,6 +75,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('sur la page des pièces du dossier', () => {
+      const titreDeLaPage = (page: string) => {
+        const [titre] = page.match(
+          /name="titre-page-pieces"(?:(?!<\/p:sp>).)*<\/p:sp>/s
+        )!;
+        return [...titre.matchAll(/<a:t>([^<]*)<\/a:t>/g)]
+          .map(([, texte]) => texte)
+          .join('');
+      };
+
       const ligne = (page: string, numero: number, partie: string) =>
         page.match(
           new RegExp(
@@ -134,6 +143,61 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(page).toContain('name="piece-2-a-completer-intitule-texte"');
         expect(ligne(page, 2, 'case')).toContain('<a:t>☐</a:t>');
         expect(page).toContain('name="piece-16-a-completer-reference-texte"');
+      });
+
+      it('répartit les pièces sur plusieurs pages numérotées au-delà de 16', async () => {
+        const vingtPieces = Array.from({ length: 20 }, (_, index) =>
+          unePiece(`Pièce ${index + 1}`)
+        );
+        const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
+
+        expect(await nombreDeSlides(pptx)).toBe(5);
+        expect(
+          titreDeLaPage(await contenuSlide(pptx, POSITION_SLIDE_PIECES))
+        ).toBe('Pièces du dossier transmises avant la séance 1/2');
+        expect(
+          titreDeLaPage(await contenuSlide(pptx, POSITION_SLIDE_PIECES + 1))
+        ).toBe('Pièces du dossier transmises avant la séance 2/2');
+      });
+
+      it('commence la page suivante par les pièces restantes, puis la complète de lignes à remplir', async () => {
+        const vingtPieces = Array.from({ length: 20 }, (_, index) =>
+          unePiece(`Pièce ${index + 1}`)
+        );
+        const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
+
+        const deuxiemePage = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_PIECES + 1
+        );
+        expect(ligne(deuxiemePage, 1, 'intitule')).toContain(
+          '<a:t>Pièce 17</a:t>'
+        );
+        expect(ligne(deuxiemePage, 4, 'intitule')).toContain(
+          '<a:t>Pièce 20</a:t>'
+        );
+        expect(deuxiemePage).toContain(
+          'name="piece-5-a-completer-intitule-texte"'
+        );
+      });
+
+      it('utilise des lignes régulières sur les pages suivantes', async () => {
+        const vingtPieces = Array.from({ length: 20 }, (_, index) =>
+          unePiece(`Pièce ${index + 1}`)
+        );
+        const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
+
+        const deuxiemePage = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_PIECES + 1
+        );
+        const ordonnee = (numero: number) =>
+          Number(
+            ligne(deuxiemePage, numero, 'case').match(
+              /<a:off x="\d+" y="(\d+)"/
+            )![1]
+          );
+        expect(ordonnee(3) - ordonnee(2)).toBe(ordonnee(11) - ordonnee(10));
       });
     });
 

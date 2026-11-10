@@ -12,7 +12,8 @@ const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
 const SLIDE_MEMBRES_COMMISSION = 31;
-const SLIDE_PAGE_PIECES = 32;
+const SLIDE_PREMIERE_PAGE_PIECES = 32;
+const SLIDE_PAGE_PIECES_SUITE = 34;
 
 const FORMES_AUTORITE_A_COMPLETER = [
   'autorite-homologation-a-completer-fond',
@@ -103,10 +104,28 @@ const ecrisPiecesDuDossier = (slide: ISlide, pieces: PieceDuDossier[]) => {
   }
 };
 
-const ecrisNumeroDePage = (slide: ISlide) => {
+const decoupeEnPages = (pieces: PieceDuDossier[]) => {
+  const nombrePages = Math.max(
+    1,
+    Math.ceil(pieces.length / NOMBRE_LIGNES_PAR_PAGE_DE_PIECES)
+  );
+  return Array.from({ length: nombrePages }, (_, index) =>
+    pieces.slice(
+      index * NOMBRE_LIGNES_PAR_PAGE_DE_PIECES,
+      (index + 1) * NOMBRE_LIGNES_PAR_PAGE_DE_PIECES
+    )
+  );
+};
+
+const ecrisNumeroDePage = (
+  slide: ISlide,
+  numeroPage: number,
+  nombrePages: number
+) => {
+  const numerotation = nombrePages > 1 ? ` ${numeroPage}/${nombrePages}` : '';
   slide.modifyElement(
     'titre-page-pieces',
-    modify.replaceText({ replace: 'pagination', by: { text: '' } })
+    modify.replaceText({ replace: 'pagination', by: { text: numerotation } })
   );
 };
 
@@ -140,9 +159,14 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_MEMBRES_COMMISSION, (slide) => {
       ecrisAutoriteHomologation(slide, autorite);
     });
-    presentation.addSlide(MODELE, SLIDE_PAGE_PIECES, (slide) => {
-      ecrisNumeroDePage(slide);
-      ecrisPiecesDuDossier(slide, piecesDuDossier);
+    const pages = decoupeEnPages(piecesDuDossier);
+    pages.forEach((piecesDeLaPage, index) => {
+      const slideDeLaPage =
+        index === 0 ? SLIDE_PREMIERE_PAGE_PIECES : SLIDE_PAGE_PIECES_SUITE;
+      presentation.addSlide(MODELE, slideDeLaPage, (slide) => {
+        ecrisNumeroDePage(slide, index + 1, pages.length);
+        ecrisPiecesDuDossier(slide, piecesDeLaPage);
+      });
     });
 
     const archive = await presentation.getJSZip();
