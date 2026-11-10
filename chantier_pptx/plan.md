@@ -127,12 +127,12 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 0. ~~**Template**~~ : le designer ne fera plus de modifications. **C'est l'équipe qui retouche le template**, au fil des PR : chaque PR renomme et restyle uniquement les formes de ses slides, dans le même commit que le code qui les utilise. Le template versionné (`src/vuesPowerpoint/supportCommissionHomologation.pptx`) est la source de vérité. Retouches possibles directement dans le XML, ou dans PowerPoint (volet Sélection pour renommer). Contrôle du rendu dans PowerPoint dès qu'une PR touche au style.
 1. **Squelette de bout en bout** : feature flag (404 si désactivé), dépendance pptx-automizer, interface et implémentation de l'adaptateur, template réduit à la slide 1 (date de création), route réservée aux services V2, injection, spec de la route et test qui relit le pptx. Pas de bouton dans l'interface.
-2. ~~**Commission et pièces du dossier**~~ (fait) — maquette V4 de la designer : la slide 3 d'origine est remplacée par trois slides du template (numéros de fichier, utilisés par pptx-automizer) :
+2. ~~**Commission et pièces du dossier**~~ (fait) — maquette V4 de la designer : la slide 3 d'origine est remplacée par des slides du template (numéros de fichier, utilisés par pptx-automizer) :
    - **slide 31, composition de la commission** : autorité d'homologation de l'étape 1 en italique, ou « Prénom Nom, fonction » à compléter si elle n'est pas renseignée (les deux versions sont superposées dans le template, l'adaptateur retire l'inutile) ;
-   - **slide 32, première page des pièces** : 16 lignes (colonne de gauche puis de droite), chacune avec une version préremplie (case, intitulé, source) et une version à compléter ; les lignes 3 et 4 de gauche sont hautes, pour les intitulés longs ;
-   - **slide 34, page de pièces « suite »** : même page, avec des lignes régulières dans les deux colonnes ;
+   - **slide 34, page de pièces** (toutes les pages) : 16 lignes régulières (colonne de gauche puis de droite), chacune avec une version préremplie (case, intitulé, source) et une version à compléter, et un séparateur nommé ; les zones d'intitulé s'arrêtent avant la colonne « Source / réf. ». La slide 32 de la maquette (lignes hautes en première page) a été retirée : la synthèse tient désormais sur une ligne ;
    - **slide 33, page de pièces vide** : 16 lignes à compléter, ajoutée en dernière page quand le nombre total de lignes est un multiple de 16 ;
-   - pièces (`piecesDuDossier`, `{ intitule, source, cochee }`) : « Présent support de commission » et « Décision d'homologation à signer » (cochées), « Avis écrits de A, B et C » (collaborateurs des avis de l'étape 2, sans doublon, absente sans avis), « Synthèse de la sécurité du service (MonServiceSécurisé) », « Rapport d'audit, si réalisé », « Analyse de risque, si réalisée » (source MonServiceSécurisé), puis les documents de l'étape 3 (source « Utilisateur ») ;
+   - pièces (`piecesDuDossier`, `{ intitule, intituleAbrege?, source, cochee }`) : « Présent support de commission » et « Décision d'homologation à signer » (MonServiceSécurisé, cochées), « Avis écrits de A, B et C » (collaborateurs des avis de l'étape 2, sans doublon, absente sans avis ; Utilisateur), « Synthèse de la sécurité du service » (MonServiceSécurisé), « Rapport d'audit, si réalisé » et « Analyse de risque, si réalisée » (Utilisateur), puis les documents de l'étape 3 (Utilisateur) ;
+   - **ligne des avis à hauteur variable** : nombre de lignes de texte estimé par retour à la ligne mot par mot (40 caractères par ligne, calibré sur les rendus) ; de 1 à 3 lignes, la ligne grandit et les suivantes de la colonne descendent ; au-delà, intitulé abrégé « Avis écrits des collaborateurs » ;
    - pagination : 16 lignes par page, dernière page complétée par des lignes à remplir, « k/N » dans le titre seulement s'il y a plusieurs pages (exemple réel : 43 documents → 4 pages) ;
    - refus de la route sans dossier en cours (422 `AUCUN_DOSSIER_COURANT`).
    - Les PR suivantes ajoutent leurs slides dans l'ordre du template, avec les slides statiques qui les précèdent. Jamais de données fictives de la maquette dans le support généré.
@@ -151,6 +151,10 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 ## Points ouverts
 
+- [ ] **Intitulés longs des documents** (ex. « Document 13 avec un nom vraiment beaucoup … plus long ») : seule la ligne des avis a une hauteur variable. Un document au nom long est rétréci par LibreOffice (police minuscule) ou déborde sur la ligne suivante dans PowerPoint. Pistes discutées, rien de décidé :
+  - hauteur variable pour toutes les pièces, avec coupure « … » au-delà de 3 lignes de texte (un document n'a pas d'intitulé abrégé) ;
+  - pagination à la hauteur (chaque colonne prend autant de pièces qu'elle peut en contenir, une page peut avoir moins de 16 pièces, la page vide s'ajoute quand la dernière page est pleine), ou maintien de 16 pièces par page avec une hauteur totale plafonnée.
+- [ ] Estimation du nombre de lignes de texte : basée sur le nombre de caractères, pas sur la largeur réelle des lettres ; à confirmer dans PowerPoint.
 - [x] Pièces du dossier : 16 lignes par page avec pagination (maquette V4), plus de réduction de police.
 - [x] Cases des pièces : support de commission et décision cochés, les autres décochés.
 - [x] Lib retenue : pptx-automizer.
