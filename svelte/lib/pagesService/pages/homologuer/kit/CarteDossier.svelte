@@ -16,6 +16,7 @@
     avecTamponAccessible?: boolean;
     avecStatutHomologation?: boolean;
     documentsPdfDisponibles?: string[];
+    supportCommissionPptxDisponible?: boolean;
     peutSupprimer?: boolean;
   }
 
@@ -27,6 +28,7 @@
     avecTamponAccessible = false,
     avecStatutHomologation = false,
     documentsPdfDisponibles = [],
+    supportCommissionPptxDisponible = false,
     peutSupprimer = false,
   }: Props = $props();
 
@@ -153,7 +155,11 @@
           has-icon
           onclick={() =>
             tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-              service: { id: idService, documentsPdfDisponibles },
+              service: {
+                id: idService,
+                documentsPdfDisponibles,
+                supportCommissionPptxDisponible,
+              },
             })}
         ></dsfr-button>
       {/if}

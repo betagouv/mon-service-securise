@@ -8,6 +8,7 @@ const service: ServicePourPagesService = {
   nomService: 'Nom de mon service',
   organisationResponsable: 'Nom de mon entité',
   documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+  supportCommissionPptxDisponible: false,
 };
 
 const brouillonComplet: BrouillonServiceV2 = {

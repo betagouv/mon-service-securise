@@ -1,6 +1,6 @@
 <script lang="ts">
   interface Props {
-    type: 'PDF' | 'ZIP' | 'CSV';
+    type: 'PDF' | 'ZIP' | 'CSV' | 'PPTX';
     nom: string;
     description: string;
     cheminDocument?: string;

@@ -2,6 +2,7 @@
   export type DonneesServicePourTelechargementDocuments = {
     id: string;
     documentsPdfDisponibles: string[];
+    supportCommissionPptxDisponible?: boolean;
   };
 </script>
 
@@ -54,6 +55,14 @@
       nom="Décision d'homologation de sécurité"
       description="Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation."
       cheminDocument="dossierDecision.pdf"
+    />
+  {/if}
+  {#if service.supportCommissionPptxDisponible}
+    <DocumentTelechargeable
+      type="PPTX"
+      nom="Support de commission d'homologation"
+      description="Ce support réunit les éléments utiles à la commission pour décider de l'homologation du service : risques, indice cyber, mesures restantes et avis des membres."
+      href="/api/service/{idService}/pptx/supportCommissionHomologation.pptx?timestamp={Date.now()}"
     />
   {/if}
   {#if documentDisponible('archive')}
