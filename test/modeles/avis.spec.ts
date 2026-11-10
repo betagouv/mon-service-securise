@@ -45,17 +45,32 @@ describe("Un avis sur un dossier d'homologation", () => {
 
   it('est invalide si la durée de validité est inconnue dans le référentiel', () => {
     expect(
+      // @ts-expect-error on test sciemment une donnée fausse
       () => new Avis({ dureeValidite: 'dureeInvalide' }, referentiel)
-    ).toThrowError(ErreurDureeValiditeInvalide);
+    ).toThrow(ErreurDureeValiditeInvalide);
   });
 
   it('est invalide si le statut de validité est inconnu dans le référentiel', () => {
     expect(
       () =>
         new Avis(
+          // @ts-expect-error on test sciemment une donnée fausse
           { dureeValidite: 'unAn', statut: 'statutInvalide' },
           referentiel
         )
-    ).toThrowError(ErreurAvisInvalide);
+    ).toThrow(ErreurAvisInvalide);
+  });
+
+  it('connaît les noms des collaborateurs ayant renseigné l’avis', () => {
+    const avis = new Avis(
+      {
+        statut: 'favorable',
+        dureeValidite: 'unAn',
+        collaborateurs: ['Jean Dupond', 'Marie Martin'],
+      },
+      referentiel
+    );
+
+    expect(avis.nomsCollaborateurs()).toEqual(['Jean Dupond', 'Marie Martin']);
   });
 });

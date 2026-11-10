@@ -1,5 +1,9 @@
 import EtapeAvis from '../../../src/modeles/etapes/etapeAvis.js';
 import { creeReferentielVide } from '../../../src/referentiel.js';
+import {
+  IdEcheanceRenouvellement,
+  IdStatutAvis,
+} from '../../../src/referentiel.types.ts';
 
 describe('Une étape « Avis »', () => {
   const referentiel = creeReferentielVide();
@@ -88,7 +92,10 @@ describe('Une étape « Avis »', () => {
 
     describe("dans le cas où l'étape est déclarée avec avis", () => {
       it("n'est pas complète dès qu'un avis n'est pas saisi", () => {
-        const sansPrenomNom = { statut: 'favorable', dureeValidite: 'unAn' };
+        const sansPrenomNom = {
+          statut: 'favorable' as IdStatutAvis,
+          dureeValidite: 'unAn' as IdEcheanceRenouvellement,
+        };
         const avecAvisNonSaisis = new EtapeAvis(
           {
             avis: [sansPrenomNom],
@@ -118,5 +125,29 @@ describe('Une étape « Avis »', () => {
         expect(avecAvisSaisis.estComplete()).toBe(true);
       });
     });
+  });
+
+  it('connaît les noms des collaborateurs ayant renseigné les avis, dans l’ordre et sans doublon', () => {
+    const avisDe = (collaborateurs: string[]) => ({
+      collaborateurs,
+      statut: 'favorable' as IdStatutAvis,
+      dureeValidite: 'unAn' as IdEcheanceRenouvellement,
+    });
+    const etape = new EtapeAvis(
+      {
+        avis: [
+          avisDe(['Jean Dupond', 'Marie Martin']),
+          avisDe(['Marie Martin', 'Paul Durand']),
+        ],
+        avecAvis: true,
+      },
+      referentiel
+    );
+
+    expect(etape.nomsDesCollaborateurs()).toEqual([
+      'Jean Dupond',
+      'Marie Martin',
+      'Paul Durand',
+    ]);
   });
 });
