@@ -7,6 +7,8 @@ import { dateEnFrancais } from '../utilitaires/date.js';
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const SLIDE_COUVERTURE = 1;
+const SLIDE_SOMMAIRE = 2;
+const SLIDE_COMMISSION = 3;
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -32,6 +34,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         })
       );
     });
+    presentation.addSlide('modele', SLIDE_SOMMAIRE);
+    presentation.addSlide('modele', SLIDE_COMMISSION);
 
     const archive = await presentation.getJSZip();
     return archive.generateAsync({ type: 'nodebuffer' });
