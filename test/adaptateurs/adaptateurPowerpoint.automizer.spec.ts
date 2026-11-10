@@ -1,6 +1,13 @@
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import { contenuSlide, nombreDeSlides } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
+import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
+
+const unePiece = (intitule: string): PieceDuDossier => ({
+  intitule,
+  source: 'MonServiceSécurisé',
+  cochee: false,
+});
 
 describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const POSITION_SLIDE_PIECES = 4;
@@ -12,7 +19,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   ) =>
     adaptateur.genereSupportCommissionHomologation({
       dateCreation: new Date(2026, 10, 9),
-      piecesDuDossier: ['Une pièce du dossier'],
+      piecesDuDossier: [unePiece('Une pièce du dossier')],
       ...donnees,
     });
 
@@ -65,7 +72,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
     it('écrit les pièces du dossier, dans l’ordre, une par ligne', async () => {
       const pptx = await genereSupport({
-        piecesDuDossier: ['Première pièce', 'Deuxième pièce'],
+        piecesDuDossier: [
+          unePiece('Première pièce'),
+          unePiece('Deuxième pièce'),
+        ],
       });
 
       const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
@@ -76,7 +86,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
     it('retire les lignes de pièces au-delà de la liste', async () => {
       const pptx = await genereSupport({
-        piecesDuDossier: ['Première pièce', 'Deuxième pièce'],
+        piecesDuDossier: [
+          unePiece('Première pièce'),
+          unePiece('Deuxième pièce'),
+        ],
       });
 
       const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
@@ -87,14 +100,14 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('ajoute des lignes de pièces sous la dernière ligne du template quand la liste la dépasse', async () => {
       const pptx = await genereSupport({
         piecesDuDossier: [
-          'Pièce 1',
-          'Pièce 2',
-          'Pièce 3',
-          'Pièce 4',
-          'Pièce 5',
-          'Pièce 6',
-          'Pièce 7',
-          'Pièce 8',
+          unePiece('Pièce 1'),
+          unePiece('Pièce 2'),
+          unePiece('Pièce 3'),
+          unePiece('Pièce 4'),
+          unePiece('Pièce 5'),
+          unePiece('Pièce 6'),
+          unePiece('Pièce 7'),
+          unePiece('Pièce 8'),
         ],
       });
 
@@ -119,9 +132,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     it('resserre les lignes et réduit le texte des pièces pour que la liste tienne au-dessus de la légende', async () => {
-      const douzePieces = Array.from(
-        { length: 12 },
-        (_, index) => `Pièce ${index + 1}`
+      const douzePieces = Array.from({ length: 12 }, (_, index) =>
+        unePiece(`Pièce ${index + 1}`)
       );
       const pptx = await genereSupport({ piecesDuDossier: douzePieces });
 

@@ -1,23 +1,41 @@
 import Dossier from '../dossier.js';
 
+export type PieceDuDossier = {
+  intitule: string;
+  source: 'MonServiceSécurisé' | 'Utilisateur';
+  cochee: boolean;
+};
+
 const listeEnFrancais = new Intl.ListFormat('fr', {
   style: 'long',
   type: 'conjunction',
 });
 
+const pieceMSS = (intitule: string, cochee = false): PieceDuDossier => ({
+  intitule,
+  source: 'MonServiceSécurisé',
+  cochee,
+});
+
+const pieceUtilisateur = (intitule: string): PieceDuDossier => ({
+  intitule,
+  source: 'Utilisateur',
+  cochee: false,
+});
+
 const avisEcrits = (dossier: Dossier) => {
   const collaborateurs = dossier.avis.nomsDesCollaborateurs();
   return collaborateurs.length > 0
-    ? [`Avis écrits de ${listeEnFrancais.format(collaborateurs)}`]
+    ? [pieceMSS(`Avis écrits de ${listeEnFrancais.format(collaborateurs)}`)]
     : [];
 };
 
-export const piecesDuDossier = (dossier: Dossier): string[] => [
-  'Présent support de commission',
-  'Décision d’homologation à signer',
+export const piecesDuDossier = (dossier: Dossier): PieceDuDossier[] => [
+  pieceMSS('Présent support de commission', true),
+  pieceMSS('Décision d’homologation à signer', true),
   ...avisEcrits(dossier),
-  'Synthèse de la sécurité du service (MonServiceSécurisé)',
-  'Rapport d’audit, si réalisé',
-  'Analyse de risque, si réalisée',
-  ...dossier.documents.documents,
+  pieceMSS('Synthèse de la sécurité du service (MonServiceSécurisé)'),
+  pieceMSS('Rapport d’audit, si réalisé'),
+  pieceMSS('Analyse de risque, si réalisée'),
+  ...dossier.documents.documents.map((intitule) => pieceUtilisateur(intitule)),
 ];
