@@ -43,4 +43,16 @@ describe('Les pièces du dossier transmises avant la commission', () => {
       'Avis écrits de Jean Dupond, Marie Martin et Paul Durand'
     );
   });
+
+  it('se terminent par les documents ajoutés au dossier', () => {
+    const dossier = unDossier(referentiel)
+      .avecDocuments(['Charte informatique', 'Contrat d’hébergement'])
+      .construis();
+
+    expect(piecesDuDossier(dossier).slice(-3)).toEqual([
+      'Analyse de risque, si réalisée',
+      'Charte informatique',
+      'Contrat d’hébergement',
+    ]);
+  });
 });
