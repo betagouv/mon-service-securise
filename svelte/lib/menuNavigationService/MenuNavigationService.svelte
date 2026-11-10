@@ -5,6 +5,7 @@
     type DonneesServicePourTelechargementDocuments,
   } from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import { onMount } from 'svelte';
+  import { aDesDocumentsATelecharger } from '../ui/tiroirs/documentsATelecharger';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
   import { donneesServiceVisiteGuidee } from '../gestionContributeurs/modeVisiteGuidee/donneesVisiteGuidee';
@@ -85,7 +86,7 @@
             </a>
           </li>
         {/if}
-        {#if service.documentsPdfDisponibles?.length > 0}
+        {#if aDesDocumentsATelecharger(service)}
           <li>
             <button
               id="voir-telechargement"
