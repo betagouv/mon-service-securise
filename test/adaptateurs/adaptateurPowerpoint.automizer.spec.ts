@@ -3,6 +3,7 @@ import {
   contenuSlide,
   nombreDeSlides,
   partiesDeclarees,
+  relationsCassees,
 } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
@@ -292,6 +293,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           (partie, index) => parties.indexOf(partie) !== index
         );
         expect(doublons).toEqual([]);
+      });
+
+      it('ne contient aucune relation vers une partie absente du fichier', async () => {
+        const pptx = await genereSupport();
+
+        expect(await relationsCassees(pptx)).toEqual([]);
       });
     });
   });
