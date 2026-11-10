@@ -61,10 +61,46 @@ const PARTIES_LIGNE_A_COMPLETER = [
   'reference-texte',
 ];
 
+const LIGNES_PAR_COLONNE = 8;
+const CARACTERES_PAR_LIGNE_D_INTITULE = 40;
+const LIGNES_DE_TEXTE_MAX_D_UN_INTITULE = 3;
+const PAS_D_UNE_LIGNE_DE_TEXTE = 257175;
+const HAUTEUR_D_UNE_LIGNE_DE_TEXTE = 285750;
+const FORMES_LIGNE_REMPLIE = ['case', 'intitule', 'source', 'separateur'];
+const FORMES_LIGNE_A_COMPLETER = [
+  'case',
+  ...PARTIES_LIGNE_A_COMPLETER.map((partie) => `a-completer-${partie}`),
+  'separateur',
+];
+
+const nombreDeLignesDeTexte = (texte: string) =>
+  texte.split(' ').reduce(
+    ({ lignes, longueurLigneCourante }, mot) => {
+      const longueurAvecLeMot =
+        longueurLigneCourante === 0
+          ? mot.length
+          : longueurLigneCourante + 1 + mot.length;
+      return longueurAvecLeMot > CARACTERES_PAR_LIGNE_D_INTITULE
+        ? { lignes: lignes + 1, longueurLigneCourante: mot.length }
+        : { lignes, longueurLigneCourante: longueurAvecLeMot };
+    },
+    { lignes: 1, longueurLigneCourante: 0 }
+  ).lignes;
+
+const intituleAEcrire = (piece: PieceDuDossier) => {
+  if (!piece.intituleAbrege)
+    return { intitule: piece.intitule, lignesDeTexte: 1 };
+  const lignesDeTexte = nombreDeLignesDeTexte(piece.intitule);
+  return lignesDeTexte > LIGNES_DE_TEXTE_MAX_D_UN_INTITULE
+    ? { intitule: piece.intituleAbrege, lignesDeTexte: 1 }
+    : { intitule: piece.intitule, lignesDeTexte };
+};
+
 const remplisLigneAvecLaPiece = (
   slide: ISlide,
   numeroLigne: number,
-  piece: PieceDuDossier
+  piece: PieceDuDossier,
+  intitule: string
 ) => {
   slide.modifyElement(
     `piece-${numeroLigne}-case`,
@@ -72,7 +108,7 @@ const remplisLigneAvecLaPiece = (
   );
   slide.modifyElement(
     `piece-${numeroLigne}-intitule`,
-    modify.setText(piece.intitule)
+    modify.setText(intitule)
   );
   slide.modifyElement(
     `piece-${numeroLigne}-source`,
@@ -89,15 +125,69 @@ const laisseLigneACompleter = (slide: ISlide, numeroLigne: number) => {
   slide.removeElement(`piece-${numeroLigne}-source`);
 };
 
+const descendsLaLigne = (
+  slide: ISlide,
+  numeroLigne: number,
+  formes: string[],
+  decalage: number
+) => {
+  formes.forEach((forme) =>
+    slide.modifyElement(
+      `piece-${numeroLigne}-${forme}`,
+      modify.updatePosition({ y: decalage })
+    )
+  );
+};
+
+const agrandisLaLigne = (
+  slide: ISlide,
+  numeroLigne: number,
+  lignesDeTexteSupplementaires: number
+) => {
+  const agrandissement =
+    lignesDeTexteSupplementaires * PAS_D_UNE_LIGNE_DE_TEXTE;
+  slide.modifyElement(
+    `piece-${numeroLigne}-intitule`,
+    modify.updatePosition({
+      h: lignesDeTexteSupplementaires * HAUTEUR_D_UNE_LIGNE_DE_TEXTE,
+    })
+  );
+  ['case', 'source'].forEach((forme) =>
+    slide.modifyElement(
+      `piece-${numeroLigne}-${forme}`,
+      modify.updatePosition({ y: agrandissement / 2 })
+    )
+  );
+  slide.modifyElement(
+    `piece-${numeroLigne}-separateur`,
+    modify.updatePosition({ y: agrandissement })
+  );
+  return agrandissement;
+};
+
 const ecrisPiecesDuDossier = (slide: ISlide, pieces: PieceDuDossier[]) => {
+  let decalageDansLaColonne = 0;
   for (
     let numeroLigne = 1;
     numeroLigne <= NOMBRE_LIGNES_PAR_PAGE_DE_PIECES;
     numeroLigne += 1
   ) {
+    if (numeroLigne === LIGNES_PAR_COLONNE + 1) decalageDansLaColonne = 0;
     const piece = pieces[numeroLigne - 1];
+    const formes = piece ? FORMES_LIGNE_REMPLIE : FORMES_LIGNE_A_COMPLETER;
+    if (decalageDansLaColonne > 0) {
+      descendsLaLigne(slide, numeroLigne, formes, decalageDansLaColonne);
+    }
     if (piece) {
-      remplisLigneAvecLaPiece(slide, numeroLigne, piece);
+      const { intitule, lignesDeTexte } = intituleAEcrire(piece);
+      remplisLigneAvecLaPiece(slide, numeroLigne, piece, intitule);
+      if (lignesDeTexte > 1) {
+        decalageDansLaColonne += agrandisLaLigne(
+          slide,
+          numeroLigne,
+          lignesDeTexte - 1
+        );
+      }
     } else {
       laisseLigneACompleter(slide, numeroLigne);
     }

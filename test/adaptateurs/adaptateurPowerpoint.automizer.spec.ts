@@ -198,6 +198,58 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(pageVide).not.toContain('Prérempli par MonServiceSécurisé');
       });
 
+      describe('pour une pièce dont l’intitulé peut être abrégé', () => {
+        const PAS_D_UNE_LIGNE_DE_TEXTE = 257175;
+        const pieceAbregeable = (intitule: string): PieceDuDossier => ({
+          intitule,
+          intituleAbrege: 'Avis écrits des collaborateurs',
+          source: 'Utilisateur',
+          cochee: false,
+        });
+        const ordonnee = (page: string, numero: number, partie: string) =>
+          Number(
+            ligne(page, numero, partie).match(/<a:off x="\d+" y="(\d+)"/)![1]
+          );
+
+        it('agrandit sa ligne et descend les lignes suivantes de la colonne quand son intitulé tient sur deux lignes', async () => {
+          const pptx = await genereSupport({
+            piecesDuDossier: [
+              unePiece('Pièce 1'),
+              unePiece('Pièce 2'),
+              pieceAbregeable(
+                'Avis écrits de Jean Dupond, Marie Martin et Paul Durand'
+              ),
+              unePiece('Pièce 4'),
+            ],
+          });
+
+          const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
+          expect(
+            ordonnee(page, 3, 'separateur') - ordonnee(page, 11, 'separateur')
+          ).toBe(PAS_D_UNE_LIGNE_DE_TEXTE);
+          expect(ordonnee(page, 4, 'case') - ordonnee(page, 12, 'case')).toBe(
+            PAS_D_UNE_LIGNE_DE_TEXTE
+          );
+        });
+
+        it('écrit son intitulé abrégé, sur une seule ligne, quand l’intitulé complet dépasserait trois lignes', async () => {
+          const pptx = await genereSupport({
+            piecesDuDossier: [
+              pieceAbregeable(
+                'Avis écrits de Jean Dupond, Marie Martin, Paul Durand, Sophie Bernard, Lucas Petit, Emma Moreau, Hugo Laurent, Léa Fournier, Nathan Girard et Chloé Garnier'
+              ),
+              unePiece('Pièce 2'),
+            ],
+          });
+
+          const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
+          expect(ligne(page, 1, 'intitule')).toContain(
+            '<a:t>Avis écrits des collaborateurs</a:t>'
+          );
+          expect(ordonnee(page, 2, 'case')).toBe(ordonnee(page, 10, 'case'));
+        });
+      });
+
       it('utilise des lignes régulières sur toutes les pages', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
