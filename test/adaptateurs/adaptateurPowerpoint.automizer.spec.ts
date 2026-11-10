@@ -35,8 +35,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(await contenuSlide(pptx, 3)).toContain(
         '<a:t>Composition de la commission</a:t>'
       );
-      expect(await contenuSlide(pptx, 4)).toContain(
-        '<a:t>Composition de la commission et contenu du dossier</a:t>'
+      const pagePieces = await contenuSlide(pptx, 4);
+      expect(pagePieces).toContain(
+        '<a:t>Pièces du dossier transmises avant la séance</a:t>'
+      );
+      expect(pagePieces).not.toContain(
+        'Composition de la commission et contenu du dossier'
       );
     });
 
@@ -70,87 +74,67 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
-    it('écrit les pièces du dossier, dans l’ordre, une par ligne', async () => {
-      const pptx = await genereSupport({
-        piecesDuDossier: [
-          unePiece('Première pièce'),
-          unePiece('Deuxième pièce'),
-        ],
-      });
-
-      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-      expect(commission).toMatch(
-        /name="piece-1-texte".*<a:t>Première pièce<\/a:t>.*name="piece-2-texte".*<a:t>Deuxième pièce<\/a:t>/s
-      );
-    });
-
-    it('retire les lignes de pièces au-delà de la liste', async () => {
-      const pptx = await genereSupport({
-        piecesDuDossier: [
-          unePiece('Première pièce'),
-          unePiece('Deuxième pièce'),
-        ],
-      });
-
-      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-      expect(commission).toContain('name="piece-2-separateur"');
-      expect(commission).not.toMatch(/name="piece-[3-6]-/);
-    });
-
-    it('ajoute des lignes de pièces sous la dernière ligne du template quand la liste la dépasse', async () => {
-      const pptx = await genereSupport({
-        piecesDuDossier: [
-          unePiece('Pièce 1'),
-          unePiece('Pièce 2'),
-          unePiece('Pièce 3'),
-          unePiece('Pièce 4'),
-          unePiece('Pièce 5'),
-          unePiece('Pièce 6'),
-          unePiece('Pièce 7'),
-          unePiece('Pièce 8'),
-        ],
-      });
-
-      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-      const ordonneeDuTexte = (piece: string) => {
-        const [, ordonnee] = commission.match(
+    describe('sur la page des pièces du dossier', () => {
+      const ligne = (page: string, numero: number, partie: string) =>
+        page.match(
           new RegExp(
-            `<a:off x="\\d+" y="(\\d+)"/>(?:(?!</p:sp>).)*<a:t>${piece}</a:t>`,
+            `name="piece-${numero}-${partie}"(?:(?!</p:sp>).)*</p:sp>`,
             's'
           )
-        )!;
-        return Number(ordonnee);
-      };
-      const pasEntreDeuxLignes =
-        ordonneeDuTexte('Pièce 6') - ordonneeDuTexte('Pièce 5');
-      expect(ordonneeDuTexte('Pièce 7') - ordonneeDuTexte('Pièce 6')).toBe(
-        pasEntreDeuxLignes
-      );
-      expect(ordonneeDuTexte('Pièce 8') - ordonneeDuTexte('Pièce 7')).toBe(
-        pasEntreDeuxLignes
-      );
-    });
+        )?.[0] ?? '';
 
-    it('resserre les lignes et réduit le texte des pièces pour que la liste tienne au-dessus de la légende', async () => {
-      const douzePieces = Array.from({ length: 12 }, (_, index) =>
-        unePiece(`Pièce ${index + 1}`)
-      );
-      const pptx = await genereSupport({ piecesDuDossier: douzePieces });
+      it('écrit l’intitulé, la source et la case de chaque pièce', async () => {
+        const pptx = await genereSupport({
+          piecesDuDossier: [
+            {
+              intitule: 'Présent support de commission',
+              source: 'MonServiceSécurisé',
+              cochee: true,
+            },
+            {
+              intitule: 'Charte informatique',
+              source: 'Utilisateur',
+              cochee: false,
+            },
+          ],
+        });
 
-      const commission = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-      const ordonneesDesSeparateurs = [
-        ...commission.matchAll(
-          /name="piece-\d+-separateur"(?:(?!<\/p:sp>).)*<a:off x="\d+" y="(\d+)"\/>/gs
-        ),
-      ].map(([, ordonnee]) => Number(ordonnee));
-      const basDeLaHuitiemeLigneDuTemplate = 3878461 + 8 * 661987;
-      expect(Math.max(...ordonneesDesSeparateurs)).toBeLessThanOrEqual(
-        basDeLaHuitiemeLigneDuTemplate
-      );
-      const [, taillePolice] = commission.match(
-        /<a:rPr [^>]*sz="(\d+)"[^>]*>(?:(?!<\/a:r>).)*<a:t>Pièce 12<\/a:t>/s
-      )!;
-      expect(Number(taillePolice)).toBeLessThan(1950);
+        const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
+        expect(ligne(page, 1, 'case')).toContain('<a:t>☑</a:t>');
+        expect(ligne(page, 1, 'intitule')).toContain(
+          '<a:t>Présent support de commission</a:t>'
+        );
+        expect(ligne(page, 1, 'source')).toContain(
+          '<a:t>MonServiceSécurisé</a:t>'
+        );
+        expect(ligne(page, 2, 'case')).toContain('<a:t>☐</a:t>');
+        expect(ligne(page, 2, 'intitule')).toContain(
+          '<a:t>Charte informatique</a:t>'
+        );
+        expect(ligne(page, 2, 'source')).toContain('<a:t>Utilisateur</a:t>');
+      });
+
+      it('retire la version à compléter des lignes remplies', async () => {
+        const pptx = await genereSupport({
+          piecesDuDossier: [unePiece('Une pièce')],
+        });
+
+        const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
+        expect(page).not.toContain('name="piece-1-a-completer-');
+      });
+
+      it('laisse les lignes au-delà des pièces à compléter par le projet', async () => {
+        const pptx = await genereSupport({
+          piecesDuDossier: [unePiece('Une pièce')],
+        });
+
+        const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
+        expect(page).not.toContain('name="piece-2-intitule"');
+        expect(page).not.toContain('name="piece-2-source"');
+        expect(page).toContain('name="piece-2-a-completer-intitule-texte"');
+        expect(ligne(page, 2, 'case')).toContain('<a:t>☐</a:t>');
+        expect(page).toContain('name="piece-16-a-completer-reference-texte"');
+      });
     });
 
     it('écrit la date de création au format court, après son libellé', async () => {

@@ -1,4 +1,4 @@
-import { Automizer, ISlide, modify, XmlElement } from 'pptx-automizer';
+import { Automizer, ISlide, modify } from 'pptx-automizer';
 import {
   AdaptateurPowerpoint,
   AutoriteHomologation,
@@ -12,7 +12,7 @@ const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
 const SLIDE_MEMBRES_COMMISSION = 31;
-const ANCIENNE_SLIDE_COMMISSION_ET_PIECES = 3;
+const SLIDE_PAGE_PIECES = 32;
 
 const FORMES_AUTORITE_A_COMPLETER = [
   'autorite-homologation-a-completer-fond',
@@ -50,129 +50,64 @@ const ecrisAutoriteHomologation = (
   }
 };
 
-const NOMBRE_LIGNES_PIECES_DU_TEMPLATE = 6;
-const NOMBRE_LIGNES_PIECES_SANS_REDUCTION = 8;
-const HAUT_DE_LA_LISTE_DE_PIECES = 3878461;
-const PAS_ENTRE_DEUX_LIGNES_DE_PIECES = 661987;
-const ECART_ENTRE_HAUT_DE_LIGNE_ET_TEXTE = 190500;
+const NOMBRE_LIGNES_PAR_PAGE_DE_PIECES = 16;
+const PARTIES_LIGNE_A_COMPLETER = [
+  'intitule-fond',
+  'intitule-trait',
+  'intitule-texte',
+  'reference-fond',
+  'reference-trait',
+  'reference-texte',
+];
 
-type DispositionDesPieces = { pas: number; echelle: number };
-
-const dispositionDesPieces = (nombrePieces: number): DispositionDesPieces => {
-  const nombreLignesARepartir = Math.max(
-    nombrePieces,
-    NOMBRE_LIGNES_PIECES_SANS_REDUCTION
-  );
-  const pas =
-    (PAS_ENTRE_DEUX_LIGNES_DE_PIECES * NOMBRE_LIGNES_PIECES_SANS_REDUCTION) /
-    nombreLignesARepartir;
-  return { pas, echelle: pas / PAS_ENTRE_DEUX_LIGNES_DE_PIECES };
-};
-
-const reduisLaPolice = (echelle: number) => (forme: XmlElement) => {
-  ['a:rPr', 'a:endParaRPr'].forEach((balise) =>
-    Array.from(forme.getElementsByTagName(balise)).forEach((proprietes) => {
-      const taille = proprietes.getAttribute('sz');
-      if (taille) {
-        proprietes.setAttribute(
-          'sz',
-          String(Math.round(Number(taille) * echelle))
-        );
-      }
-    })
-  );
-};
-
-const positionsDeLaLigne = (
-  numeroLigne: number,
-  { pas, echelle }: DispositionDesPieces
-) => {
-  const hautDeLigne = HAUT_DE_LA_LISTE_DE_PIECES + (numeroLigne - 1) * pas;
-  return {
-    caseEtTexte: [
-      modify.setPosition({
-        y: hautDeLigne + ECART_ENTRE_HAUT_DE_LIGNE_ET_TEXTE * echelle,
-      }),
-      reduisLaPolice(echelle),
-    ],
-    separateur: modify.setPosition({ y: hautDeLigne + pas }),
-  };
-};
-
-const ecrisPieceDansUneLigneDuTemplate = (
+const remplisLigneAvecLaPiece = (
   slide: ISlide,
-  piece: PieceDuDossier,
   numeroLigne: number,
-  disposition: DispositionDesPieces
+  piece: PieceDuDossier
 ) => {
-  const { caseEtTexte, separateur } = positionsDeLaLigne(
-    numeroLigne,
-    disposition
+  slide.modifyElement(
+    `piece-${numeroLigne}-case`,
+    modify.setText(piece.cochee ? '☑' : '☐')
   );
-  slide.modifyElement(`piece-${numeroLigne}-case`, caseEtTexte);
-  slide.modifyElement(`piece-${numeroLigne}-texte`, [
-    modify.setText(piece.intitule),
-    ...caseEtTexte,
-  ]);
-  slide.modifyElement(`piece-${numeroLigne}-separateur`, separateur);
+  slide.modifyElement(
+    `piece-${numeroLigne}-intitule`,
+    modify.setText(piece.intitule)
+  );
+  slide.modifyElement(
+    `piece-${numeroLigne}-source`,
+    modify.setText(piece.source)
+  );
+  PARTIES_LIGNE_A_COMPLETER.forEach((partie) =>
+    slide.removeElement(`piece-${numeroLigne}-a-completer-${partie}`)
+  );
 };
 
-const ajouteLigneDePieceSousLeTemplate = (
-  slide: ISlide,
-  piece: PieceDuDossier,
-  numeroLigne: number,
-  disposition: DispositionDesPieces
-) => {
-  const { caseEtTexte, separateur } = positionsDeLaLigne(
-    numeroLigne,
-    disposition
-  );
-  const derniereLigne = `piece-${NOMBRE_LIGNES_PIECES_DU_TEMPLATE}`;
-  slide.addElement(
-    MODELE,
-    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
-    `${derniereLigne}-case`,
-    caseEtTexte
-  );
-  slide.addElement(
-    MODELE,
-    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
-    `${derniereLigne}-texte`,
-    [modify.setText(piece.intitule), ...caseEtTexte]
-  );
-  slide.addElement(
-    MODELE,
-    ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
-    `${derniereLigne}-separateur`,
-    separateur
-  );
+const laisseLigneACompleter = (slide: ISlide, numeroLigne: number) => {
+  slide.modifyElement(`piece-${numeroLigne}-case`, modify.setText('☐'));
+  slide.removeElement(`piece-${numeroLigne}-intitule`);
+  slide.removeElement(`piece-${numeroLigne}-source`);
 };
 
 const ecrisPiecesDuDossier = (slide: ISlide, pieces: PieceDuDossier[]) => {
-  const disposition = dispositionDesPieces(pieces.length);
-  pieces.forEach((piece, index) => {
-    const numeroLigne = index + 1;
-    if (numeroLigne <= NOMBRE_LIGNES_PIECES_DU_TEMPLATE) {
-      ecrisPieceDansUneLigneDuTemplate(slide, piece, numeroLigne, disposition);
-    } else {
-      ajouteLigneDePieceSousLeTemplate(slide, piece, numeroLigne, disposition);
-    }
-  });
-};
-
-const retireLignesDePiecesInutilisees = (
-  slide: ISlide,
-  nombrePieces: number
-) => {
   for (
-    let numeroLigne = nombrePieces + 1;
-    numeroLigne <= NOMBRE_LIGNES_PIECES_DU_TEMPLATE;
+    let numeroLigne = 1;
+    numeroLigne <= NOMBRE_LIGNES_PAR_PAGE_DE_PIECES;
     numeroLigne += 1
   ) {
-    ['case', 'texte', 'separateur'].forEach((partie) =>
-      slide.removeElement(`piece-${numeroLigne}-${partie}`)
-    );
+    const piece = pieces[numeroLigne - 1];
+    if (piece) {
+      remplisLigneAvecLaPiece(slide, numeroLigne, piece);
+    } else {
+      laisseLigneACompleter(slide, numeroLigne);
+    }
   }
+};
+
+const ecrisNumeroDePage = (slide: ISlide) => {
+  slide.modifyElement(
+    'titre-page-pieces',
+    modify.replaceText({ replace: 'pagination', by: { text: '' } })
+  );
 };
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
@@ -205,15 +140,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_MEMBRES_COMMISSION, (slide) => {
       ecrisAutoriteHomologation(slide, autorite);
     });
-    presentation.addSlide(
-      MODELE,
-      ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
-      (slide) => {
-        ecrisAutoriteHomologation(slide, autorite);
-        ecrisPiecesDuDossier(slide, piecesDuDossier);
-        retireLignesDePiecesInutilisees(slide, piecesDuDossier.length);
-      }
-    );
+    presentation.addSlide(MODELE, SLIDE_PAGE_PIECES, (slide) => {
+      ecrisNumeroDePage(slide);
+      ecrisPiecesDuDossier(slide, piecesDuDossier);
+    });
 
     const archive = await presentation.getJSZip();
     return archive.generateAsync({ type: 'nodebuffer' });
