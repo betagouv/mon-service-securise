@@ -19,4 +19,5 @@ export const piecesDuDossier = (dossier: Dossier): string[] => [
   'Synthèse de la sécurité du service (MonServiceSécurisé)',
   'Rapport d’audit, si réalisé',
   'Analyse de risque, si réalisée',
+  ...dossier.documents.documents,
 ];
