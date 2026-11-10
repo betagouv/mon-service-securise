@@ -6,6 +6,9 @@ export type DonneeEtapeAutorite = {
 };
 
 class Autorite extends Etape {
+  nom?: string;
+  fonction?: string;
+
   constructor({ nom, fonction }: DonneeEtapeAutorite = {}) {
     super({ proprietesAtomiquesRequises: ['nom', 'fonction'] });
     this.renseigneProprietes({ nom, fonction });

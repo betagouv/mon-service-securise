@@ -4,12 +4,23 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
-import { AdaptateurPowerpoint } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
+import {
+  AdaptateurPowerpoint,
+  AutoriteHomologation,
+} from '../../adaptateurs/adaptateurPowerpoint.interface.js';
+import Dossier from '../../modeles/dossier.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 
 const CONTENT_TYPE_PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+
+const autoriteHomologation = ({
+  autorite,
+}: Dossier): AutoriteHomologation | undefined =>
+  autorite.estComplete()
+    ? { nom: autorite.nom!, fonction: autorite.fonction! }
+    : undefined;
 
 export const routesConnecteApiServicePowerpoint = ({
   middleware,
@@ -45,7 +56,8 @@ export const routesConnecteApiServicePowerpoint = ({
         return;
       }
 
-      if (!service.dossierCourant()) {
+      const dossierCourant = service.dossierCourant();
+      if (!dossierCourant) {
         reponse.status(422).json({ erreur: { code: 'AUCUN_DOSSIER_COURANT' } });
         return;
       }
@@ -54,6 +66,7 @@ export const routesConnecteApiServicePowerpoint = ({
       const support =
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
           dateCreation: maintenant,
+          autorite: autoriteHomologation(dossierCourant),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse
