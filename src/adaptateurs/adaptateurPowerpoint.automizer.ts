@@ -1,9 +1,34 @@
-import { Automizer, modify } from 'pptx-automizer';
+import { Automizer, ISlide, modify } from 'pptx-automizer';
 import {
   AdaptateurPowerpoint,
+  AutoriteHomologation,
   DonneesSupportCommissionHomologation,
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+
+const FORMES_AUTORITE_A_COMPLETER = [
+  'autorite-homologation-a-completer-fond',
+  'autorite-homologation-a-completer-trait',
+  'autorite-homologation-a-completer-texte',
+];
+
+const remplisCelluleAutoriteRenseignee = (
+  slide: ISlide,
+  autorite: AutoriteHomologation
+) => {
+  slide.modifyElement(
+    'autorite-homologation',
+    modify.setText(`${autorite.nom}, ${autorite.fonction}`)
+  );
+};
+
+const retireCelluleAutoriteRenseignee = (slide: ISlide) => {
+  slide.removeElement('autorite-homologation');
+};
+
+const retireCelluleAutoriteACompleter = (slide: ISlide) => {
+  FORMES_AUTORITE_A_COMPLETER.forEach((forme) => slide.removeElement(forme));
+};
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const SLIDE_COUVERTURE = 1;
@@ -38,10 +63,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide('modele', SLIDE_SOMMAIRE);
     presentation.addSlide('modele', SLIDE_COMMISSION, (slide) => {
       if (autorite) {
-        slide.modifyElement(
-          'autorite-homologation',
-          modify.setText(`${autorite.nom}, ${autorite.fonction}`)
-        );
+        remplisCelluleAutoriteRenseignee(slide, autorite);
+        retireCelluleAutoriteACompleter(slide);
+      } else {
+        retireCelluleAutoriteRenseignee(slide);
       }
     });
 

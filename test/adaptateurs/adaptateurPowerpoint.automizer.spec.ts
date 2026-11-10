@@ -31,6 +31,29 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
+    it("ne laisse pas l'autorité d'homologation à compléter quand elle est renseignée", async () => {
+      const pptx = await adaptateur.genereSupportCommissionHomologation({
+        dateCreation: new Date(2026, 10, 9),
+        autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
+      });
+
+      expect(await contenuSlide(pptx, 3)).not.toContain(
+        'autorite-homologation-a-completer'
+      );
+    });
+
+    it("laisse l'autorité d'homologation à compléter par le projet quand elle n'est pas renseignée", async () => {
+      const pptx = await adaptateur.genereSupportCommissionHomologation({
+        dateCreation: new Date(2026, 10, 9),
+      });
+
+      const commission = await contenuSlide(pptx, 3);
+      expect(commission).not.toContain('name="autorite-homologation"');
+      expect(commission).toContain(
+        'name="autorite-homologation-a-completer-texte"'
+      );
+    });
+
     it('écrit la date de création au format court, après son libellé', async () => {
       const pptx = await adaptateur.genereSupportCommissionHomologation({
         dateCreation: new Date(2026, 10, 9),
