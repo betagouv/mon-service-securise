@@ -528,6 +528,61 @@ describe('Un service', () => {
     });
   });
 
+  describe('sur demande de la disponibilité du support de commission PowerPoint', () => {
+    const autorisationHomologuerEnLecture = () =>
+      uneAutorisation()
+        .avecDroits({ [HOMOLOGUER]: LECTURE })
+        .construis();
+
+    it("est disponible pour un service V2 avec un dossier d'homologation en cours, avec le droit Homologuer en lecture", () => {
+      const service = unServiceV2()
+        .avecDossiers([unDossier(creeReferentielV2()).donnees])
+        .construis();
+
+      expect(
+        service.supportCommissionPptxDisponible(
+          autorisationHomologuerEnLecture()
+        )
+      ).toBe(true);
+    });
+
+    it("n'est pas disponible sans dossier d'homologation en cours", () => {
+      const service = unServiceV2().construis();
+
+      expect(
+        service.supportCommissionPptxDisponible(
+          autorisationHomologuerEnLecture()
+        )
+      ).toBe(false);
+    });
+
+    it("n'est pas disponible pour un service V1", () => {
+      const service = unService()
+        .avecVersion(VersionService.v1)
+        .avecDossiers([unDossier(Referentiel.creeReferentielVide()).donnees])
+        .construis();
+
+      expect(
+        service.supportCommissionPptxDisponible(
+          autorisationHomologuerEnLecture()
+        )
+      ).toBe(false);
+    });
+
+    it("n'est pas disponible sans le droit Homologuer en lecture", () => {
+      const service = unServiceV2()
+        .avecDossiers([unDossier(creeReferentielV2()).donnees])
+        .construis();
+      const autorisationSansDroit = uneAutorisation()
+        .avecDroits({})
+        .construis();
+
+      expect(
+        service.supportCommissionPptxDisponible(autorisationSansDroit)
+      ).toBe(false);
+    });
+  });
+
   it('connaît ses risques spécifiques', () => {
     const service = new Service({
       id: '123',
