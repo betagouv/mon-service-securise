@@ -23,11 +23,31 @@ describe('Les pièces du dossier transmises avant la commission', () => {
     const dossierSansAvis = unDossier(referentiel).construis();
 
     expect(piecesDuDossier(dossierSansAvis)).toEqual([
-      'Présent support de commission',
-      'Décision d’homologation à signer',
-      'Synthèse de la sécurité du service (MonServiceSécurisé)',
-      'Rapport d’audit, si réalisé',
-      'Analyse de risque, si réalisée',
+      {
+        intitule: 'Présent support de commission',
+        source: 'MonServiceSécurisé',
+        cochee: true,
+      },
+      {
+        intitule: 'Décision d’homologation à signer',
+        source: 'MonServiceSécurisé',
+        cochee: true,
+      },
+      {
+        intitule: 'Synthèse de la sécurité du service (MonServiceSécurisé)',
+        source: 'MonServiceSécurisé',
+        cochee: false,
+      },
+      {
+        intitule: 'Rapport d’audit, si réalisé',
+        source: 'MonServiceSécurisé',
+        cochee: false,
+      },
+      {
+        intitule: 'Analyse de risque, si réalisée',
+        source: 'MonServiceSécurisé',
+        cochee: false,
+      },
     ]);
   });
 
@@ -39,20 +59,25 @@ describe('Les pièces du dossier transmises avant la commission', () => {
       ])
       .construis();
 
-    expect(piecesDuDossier(dossier)[2]).toBe(
-      'Avis écrits de Jean Dupond, Marie Martin et Paul Durand'
-    );
+    expect(piecesDuDossier(dossier)[2]).toEqual({
+      intitule: 'Avis écrits de Jean Dupond, Marie Martin et Paul Durand',
+      source: 'MonServiceSécurisé',
+      cochee: false,
+    });
   });
 
-  it('se terminent par les documents ajoutés au dossier', () => {
+  it('se terminent par les documents ajoutés au dossier par l’utilisateur', () => {
     const dossier = unDossier(referentiel)
       .avecDocuments(['Charte informatique', 'Contrat d’hébergement'])
       .construis();
 
-    expect(piecesDuDossier(dossier).slice(-3)).toEqual([
-      'Analyse de risque, si réalisée',
-      'Charte informatique',
-      'Contrat d’hébergement',
+    expect(piecesDuDossier(dossier).slice(-2)).toEqual([
+      { intitule: 'Charte informatique', source: 'Utilisateur', cochee: false },
+      {
+        intitule: 'Contrat d’hébergement',
+        source: 'Utilisateur',
+        cochee: false,
+      },
     ]);
   });
 });

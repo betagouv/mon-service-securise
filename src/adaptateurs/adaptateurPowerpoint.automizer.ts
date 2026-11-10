@@ -5,6 +5,7 @@ import {
   DonneesSupportCommissionHomologation,
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
@@ -100,7 +101,7 @@ const positionsDeLaLigne = (
 
 const ecrisPieceDansUneLigneDuTemplate = (
   slide: ISlide,
-  piece: string,
+  piece: PieceDuDossier,
   numeroLigne: number,
   disposition: DispositionDesPieces
 ) => {
@@ -110,7 +111,7 @@ const ecrisPieceDansUneLigneDuTemplate = (
   );
   slide.modifyElement(`piece-${numeroLigne}-case`, caseEtTexte);
   slide.modifyElement(`piece-${numeroLigne}-texte`, [
-    modify.setText(piece),
+    modify.setText(piece.intitule),
     ...caseEtTexte,
   ]);
   slide.modifyElement(`piece-${numeroLigne}-separateur`, separateur);
@@ -118,7 +119,7 @@ const ecrisPieceDansUneLigneDuTemplate = (
 
 const ajouteLigneDePieceSousLeTemplate = (
   slide: ISlide,
-  piece: string,
+  piece: PieceDuDossier,
   numeroLigne: number,
   disposition: DispositionDesPieces
 ) => {
@@ -137,7 +138,7 @@ const ajouteLigneDePieceSousLeTemplate = (
     MODELE,
     ANCIENNE_SLIDE_COMMISSION_ET_PIECES,
     `${derniereLigne}-texte`,
-    [modify.setText(piece), ...caseEtTexte]
+    [modify.setText(piece.intitule), ...caseEtTexte]
   );
   slide.addElement(
     MODELE,
@@ -147,7 +148,7 @@ const ajouteLigneDePieceSousLeTemplate = (
   );
 };
 
-const ecrisPiecesDuDossier = (slide: ISlide, pieces: string[]) => {
+const ecrisPiecesDuDossier = (slide: ISlide, pieces: PieceDuDossier[]) => {
   const disposition = dispositionDesPieces(pieces.length);
   pieces.forEach((piece, index) => {
     const numeroLigne = index + 1;

@@ -216,9 +216,11 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           '/api/service/456/pptx/supportCommissionHomologation.pptx'
         );
 
-        expect(donneesRecues?.piecesDuDossier).toContain(
-          'Avis écrits de Jean Dupond'
-        );
+        expect(donneesRecues?.piecesDuDossier).toContainEqual({
+          intitule: 'Avis écrits de Jean Dupond',
+          source: 'MonServiceSécurisé',
+          cochee: false,
+        });
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
