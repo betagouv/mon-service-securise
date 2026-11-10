@@ -150,6 +150,8 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 ## Points ouverts
 
+- [ ] Slide 3 : au-delà de 8 pièces du dossier, la liste chevauche la légende en bas de slide. Réduire l'espacement ou la taille du texte, ou couper la liste ? En attente de la réponse du produit sur les pièces.
+- [ ] Slide 3 : cases à cocher des pièces, toutes décochées pour l'instant (en attente du produit).
 - [x] Lib retenue : pptx-automizer.
 - [x] Barres de la slide 19 : en XML (`setPosition`).
 - [x] Listes : formes nommées (testé). Pas de tableaux natifs : le template n'en contient pas et on ne refait pas la mise en page.
