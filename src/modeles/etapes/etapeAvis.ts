@@ -35,6 +35,11 @@ class EtapeAvis extends Etape {
     this.avis = [];
   }
 
+  nomsDesCollaborateurs() {
+    const tousLesNoms = this.avis.flatMap((a) => a.nomsCollaborateurs());
+    return [...new Set(tousLesNoms)];
+  }
+
   estComplete() {
     if (this.avecAvis === null) return false;
     return this.avecAvis

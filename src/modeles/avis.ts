@@ -34,6 +34,10 @@ class Avis extends InformationsService {
     this.renseigneProprietes(donnees);
   }
 
+  nomsCollaborateurs() {
+    return [...this.collaborateurs];
+  }
+
   static proprietesAtomiquesRequises() {
     return ['statut', 'dureeValidite'];
   }
