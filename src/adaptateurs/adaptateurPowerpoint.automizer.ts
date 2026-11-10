@@ -330,6 +330,9 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);
     await retireLesDeclarationsDesPartiesAbsentes(archive);
-    return archive.generateAsync({ type: 'nodebuffer' });
+    return archive.generateAsync({
+      type: 'nodebuffer',
+      compression: 'DEFLATE',
+    });
   }
 }

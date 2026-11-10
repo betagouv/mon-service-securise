@@ -1,6 +1,7 @@
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import {
   contenuSlide,
+  fichiersNonCompresses,
   nombreDeSlides,
   partiesDeclarees,
   partiesDeclareesAbsentes,
@@ -306,6 +307,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const pptx = await genereSupport();
 
         expect(await partiesDeclareesAbsentes(pptx)).toEqual([]);
+      });
+
+      it('compresse les fichiers de l’archive', async () => {
+        const pptx = await genereSupport();
+
+        expect(fichiersNonCompresses(pptx)).toEqual([]);
       });
     });
   });
