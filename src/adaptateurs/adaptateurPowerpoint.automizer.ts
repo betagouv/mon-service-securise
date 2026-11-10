@@ -14,6 +14,7 @@ const SLIDE_SOMMAIRE = 2;
 const SLIDE_MEMBRES_COMMISSION = 31;
 const SLIDE_PREMIERE_PAGE_PIECES = 32;
 const SLIDE_PAGE_PIECES_SUITE = 34;
+const SLIDE_PAGE_PIECES_VIDE = 33;
 
 const FORMES_AUTORITE_A_COMPLETER = [
   'autorite-homologation-a-completer-fond',
@@ -117,6 +118,9 @@ const decoupeEnPages = (pieces: PieceDuDossier[]) => {
   );
 };
 
+const laDernierePageEstPleine = (pieces: PieceDuDossier[]) =>
+  pieces.length > 0 && pieces.length % NOMBRE_LIGNES_PAR_PAGE_DE_PIECES === 0;
+
 const ecrisNumeroDePage = (
   slide: ISlide,
   numeroPage: number,
@@ -160,14 +164,21 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       ecrisAutoriteHomologation(slide, autorite);
     });
     const pages = decoupeEnPages(piecesDuDossier);
+    const avecPageVide = laDernierePageEstPleine(piecesDuDossier);
+    const nombrePages = pages.length + (avecPageVide ? 1 : 0);
     pages.forEach((piecesDeLaPage, index) => {
       const slideDeLaPage =
         index === 0 ? SLIDE_PREMIERE_PAGE_PIECES : SLIDE_PAGE_PIECES_SUITE;
       presentation.addSlide(MODELE, slideDeLaPage, (slide) => {
-        ecrisNumeroDePage(slide, index + 1, pages.length);
+        ecrisNumeroDePage(slide, index + 1, nombrePages);
         ecrisPiecesDuDossier(slide, piecesDeLaPage);
       });
     });
+    if (avecPageVide) {
+      presentation.addSlide(MODELE, SLIDE_PAGE_PIECES_VIDE, (slide) => {
+        ecrisNumeroDePage(slide, nombrePages, nombrePages);
+      });
+    }
 
     const archive = await presentation.getJSZip();
     return archive.generateAsync({ type: 'nodebuffer' });
