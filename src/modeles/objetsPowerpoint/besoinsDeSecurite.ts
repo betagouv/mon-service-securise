@@ -7,6 +7,7 @@ export type BesoinsDeSecurite = {
   demarche: string;
   niveauIndicatifAnssi: string;
   depasseRecommandation: boolean;
+  nomService: string;
 };
 
 const NIVEAUX: Record<
@@ -43,5 +44,6 @@ export const besoinsDeSecurite = (
     demarche: niveau.demarche,
     niveauIndicatifAnssi: NIVEAUX[description.estimeNiveauDeSecurite()].nom,
     depasseRecommandation: description.niveauSecuriteDepasseRecommandation(),
+    nomService: description.nomService,
   };
 };
