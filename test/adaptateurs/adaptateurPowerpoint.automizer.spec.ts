@@ -1116,6 +1116,85 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(couleurDuFond('risque-3-pastille')).toBe('F8785B');
       });
 
+      describe('pour les lignes de la liste des risques', () => {
+        const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT = 274320;
+        const MARGES_D_UNE_LIGNE = 76200 + 50800;
+        const ECART_ENTRE_LIGNES = 38100;
+
+        const intituleDe = (nombreDeLignes: number) =>
+          Array.from(
+            { length: nombreDeLignes },
+            () => 'Compromission d’un poste de travail utilisateur'
+          ).join(' ');
+
+        const listeAvecLesIntitules = async (intitules: string[]) =>
+          contenuSlide(
+            await genereSupport({
+              cartographiesDesRisques: {
+                ...cartographiesParDefaut,
+                bruts: intitules.map((intitule, index) => ({
+                  ...unRisque(`R${index + 1}`, 4, 4),
+                  intitule,
+                })),
+              },
+            }),
+            POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+          );
+
+        it('ajustent leur hauteur au nombre de lignes de leur intitulé, en 18 pt', async () => {
+          const cartographie = await listeAvecLesIntitules([
+            intituleDe(1),
+            intituleDe(2),
+            intituleDe(3),
+            intituleDe(4),
+          ]);
+
+          const hauteur = (numero: number) =>
+            cadreDeLaForme(cartographie, `risque-${numero}-fond`).hauteur;
+          [1, 2, 3, 4].forEach((lignes) =>
+            expect(hauteur(lignes)).toBe(
+              MARGES_D_UNE_LIGNE +
+                lignes * HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT
+            )
+          );
+        });
+
+        it('s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
+          const cartographie = await listeAvecLesIntitules([
+            intituleDe(3),
+            intituleDe(1),
+            intituleDe(2),
+          ]);
+
+          const fond = (numero: number) =>
+            cadreDeLaForme(cartographie, `risque-${numero}-fond`);
+          expect(fond(1).y).toBe(3190949);
+          [2, 3].forEach((numero) =>
+            expect(fond(numero).y).toBe(
+              fond(numero - 1).y + fond(numero - 1).hauteur + ECART_ENTRE_LIGNES
+            )
+          );
+        });
+
+        it('centrent la pastille et l’identifiant dans la ligne, et ajustent la zone de l’intitulé', async () => {
+          const cartographie = await listeAvecLesIntitules([
+            intituleDe(1),
+            intituleDe(3),
+          ]);
+
+          const cadre = (nom: string) => cadreDeLaForme(cartographie, nom);
+          const fond = cadre('risque-2-fond');
+          const pastille = cadre('risque-2-pastille');
+          expect(pastille.y).toBe(
+            fond.y + Math.floor((fond.hauteur - pastille.hauteur) / 2)
+          );
+          expect(cadre('risque-2-identifiant').y).toBe(pastille.y + 19050);
+          const intitule = cadre('risque-2-intitule');
+          expect(intitule.y).toBe(fond.y + 57150);
+          expect(intitule.hauteur).toBe(fond.hauteur - 76200);
+        });
+      });
+
       const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
         const [forme] = cartographie.match(
           new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
