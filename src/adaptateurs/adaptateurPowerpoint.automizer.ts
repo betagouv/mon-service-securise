@@ -349,6 +349,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         'contexte-hebergement',
         modify.setText(contexte.hebergement)
       );
+      slide.modifyElement(
+        'contexte-donnees-stockees',
+        modify.setText(contexte.donneesStockees)
+      );
     });
 
     const archive = await presentation.getJSZip();

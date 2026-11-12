@@ -74,4 +74,14 @@ describe('Le contexte du service présenté à la commission', () => {
       "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)"
     );
   });
+
+  it('décrit la localisation des données stockées avec le libellé du référentiel', () => {
+    const description = uneDescriptionV2Valide()
+      .avecLocalisationDonneesTraitees('horsUE')
+      .construis();
+
+    expect(contexteDuService(description).donneesStockees).toBe(
+      "En partie ou totalement hors de l'Union européenne"
+    );
+  });
 });
