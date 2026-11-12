@@ -51,6 +51,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     demarche: 'une démarche',
     niveauIndicatifAnssi: 'Un niveau indicatif',
     depasseRecommandation: true,
+    nomService: 'Un service',
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -600,6 +601,27 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(texteDeLaForme(besoins, 'besoins-demarche')).toBe(
           'DÉMARCHE INDICATIVE ADAPTÉE : INTERMÉDIAIRE'
+        );
+      });
+
+      it('écrit le nom du service et le niveau dans l’explication par le projet', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            nomService: 'Portail des démarches',
+            niveau: 'Modérés',
+          },
+        });
+
+        const explication = texteDeLaForme(
+          await contenuSlide(pptx, POSITION_SLIDE_BESOINS_DE_SECURITE),
+          'besoins-explication'
+        );
+        expect(explication).toContain(
+          'Dans le cadre du projet Portail des démarches, le système'
+        );
+        expect(explication).toContain(
+          'MonServiceSécurisé, soit Modérés, apparaît'
         );
       });
 

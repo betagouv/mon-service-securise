@@ -518,6 +518,13 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         })
       );
       ecrisEncartAnssi(slide, besoinsDeSecurite);
+      slide.modifyElement(
+        'besoins-explication',
+        modify.replaceText([
+          { replace: 'nomService', by: { text: besoinsDeSecurite.nomService } },
+          { replace: 'niveau', by: { text: besoinsDeSecurite.niveau } },
+        ])
+      );
     });
 
     const archive = await presentation.getJSZip();

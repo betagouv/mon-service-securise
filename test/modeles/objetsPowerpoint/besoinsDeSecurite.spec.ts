@@ -56,4 +56,14 @@ describe('Les besoins de sécurité présentés à la commission', () => {
     expect(besoins.depasseRecommandation).toBe(false);
     expect(besoins.niveauIndicatifAnssi).toBe('Basiques');
   });
+
+  it('nomment le service, pour l’explication par le projet', () => {
+    const description = uneDescriptionV2Valide()
+      .avecNomService('Portail des démarches')
+      .construis();
+
+    expect(besoinsDeSecurite(description).nomService).toBe(
+      'Portail des démarches'
+    );
+  });
 });
