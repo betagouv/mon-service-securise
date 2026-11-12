@@ -317,6 +317,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         expect(donneesRecues?.cartographiesDesRisques.bruts).toContainEqual({
           identifiant: 'RS1',
           intitule: 'Fuite des plannings',
+          description: '',
           gravite: 3,
           vraisemblance: 4,
           niveau: 'eleve',
