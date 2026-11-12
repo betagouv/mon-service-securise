@@ -11,6 +11,7 @@ import {
 import Dossier from '../../modeles/dossier.js';
 import { piecesDuDossier } from '../../modeles/objetsPowerpoint/piecesDuDossier.js';
 import { contexteDuService } from '../../modeles/objetsPowerpoint/contexteDuService.js';
+import { besoinsDeSecurite } from '../../modeles/objetsPowerpoint/besoinsDeSecurite.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
@@ -65,15 +66,16 @@ export const routesConnecteApiServicePowerpoint = ({
         return;
       }
 
+      const descriptionService =
+        service.descriptionService as DescriptionServiceV2;
       const maintenant = adaptateurHorloge.maintenant();
       const support =
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
           dateCreation: maintenant,
           autorite: autoriteHomologation(dossierCourant),
           piecesDuDossier: piecesDuDossier(dossierCourant),
-          contexte: contexteDuService(
-            service.descriptionService as DescriptionServiceV2
-          ),
+          contexte: contexteDuService(descriptionService),
+          besoinsDeSecurite: besoinsDeSecurite(descriptionService),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse

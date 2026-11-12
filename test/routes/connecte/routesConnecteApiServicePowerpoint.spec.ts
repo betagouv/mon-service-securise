@@ -254,6 +254,33 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         );
       });
 
+      it("transmet à l'adaptateur les besoins de sécurité du service", async () => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDescription(
+              uneDescriptionV2Valide()
+                .avecNiveauSecurite('niveau3')
+                .donneesDescription()
+            )
+            .avecDossiers([unDossier(creeReferentielV2()).donnees])
+            .construis(),
+        });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues?.besoinsDeSecurite.niveau).toBe('Avancés');
+      });
+
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
         testeur.adaptateurHorloge().maintenant = () => new Date(2026, 10, 9);
         const vraiAdaptateur = new AdaptateurPowerpointAutomizer();

@@ -10,6 +10,17 @@ import {
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
+import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
+
+const texteDeLaForme = (slide: string, nom: string) => {
+  const forme = slide.match(
+    new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
+  );
+  if (!forme) throw new Error(`Forme ${nom} absente de la slide`);
+  return [...forme[0].matchAll(/<a:t>([^<]*)<\/a:t>/g)]
+    .map(([, texte]) => texte)
+    .join('');
+};
 
 const unePiece = (intitule: string): PieceDuDossier => ({
   intitule,
@@ -21,6 +32,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const POSITION_SLIDE_PIECES = 4;
 
   const adaptateur = new AdaptateurPowerpointAutomizer();
+
+  const besoinsDeSecuriteParDefaut: BesoinsDeSecurite = {
+    niveau: 'Un niveau',
+  };
 
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
@@ -39,14 +54,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       dateCreation: new Date(2026, 10, 9),
       piecesDuDossier: [unePiece('Une pièce du dossier')],
       contexte: contexteParDefaut,
+      besoinsDeSecurite: besoinsDeSecuriteParDefaut,
       ...donnees,
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système et le contexte', async () => {
+    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse et les objectifs de sécurité', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(6);
+      expect(await nombreDeSlides(pptx)).toBe(9);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -67,6 +83,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
       expect(presentationDuSysteme).toContain('<a:t>Logo</a:t>');
       expect(await contenuSlide(pptx, 6)).toContain('<a:t>Contexte</a:t>');
+      expect(await contenuSlide(pptx, 7)).toContain(
+        '<a:t>Périmètre de l’analyse : Vue fonctionnelle</a:t>'
+      );
+      expect(await contenuSlide(pptx, 8)).toContain(
+        '<a:t>Périmètre de l’analyse : Description technique</a:t>'
+      );
+      expect(await contenuSlide(pptx, 9)).toContain(
+        '<a:t>Objectifs de sécurité, impacts et exposition</a:t>'
+      );
     });
 
     it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
@@ -505,6 +530,25 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
         expect(contexte).not.toContain('Des postes de travail');
         expect(contexte).toContain('<a:t>Un annuaire</a:t>');
+      });
+    });
+
+    describe('sur les objectifs de sécurité', () => {
+      const POSITION_SLIDE_BESOINS_DE_SECURITE = 9;
+
+      it('écrit le niveau de besoin de sécurité', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            niveau: 'Modérés',
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'besoins-niveau')).toBe('Modérés');
       });
     });
 
