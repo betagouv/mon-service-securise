@@ -27,7 +27,13 @@ export const metsAJourDescriptionService = async (
   const donneesAPI = {
     ...donnees,
     organisationResponsable: { siret: siret },
-    pointsAcces: donnees.pointsAcces.map((p) => ({ description: p })),
+    categoriesDonneesTraiteesSupplementaires:
+      donnees.categoriesDonneesTraiteesSupplementaires.filter(
+        (p) => p.trim().length > 0
+      ),
+    pointsAcces: donnees.pointsAcces
+      .filter((p) => p.trim().length > 0)
+      .map((p) => ({ description: p })),
   };
   return await axios.put(`/api/service-v2/${idService}`, donneesAPI);
 };
