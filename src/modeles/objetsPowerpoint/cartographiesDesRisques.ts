@@ -1,8 +1,7 @@
 import { RisquesV2 } from '../../moteurRisques/v2/risquesV2.js';
 import { Gravite } from '../../moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../moteurRisques/v2/vraisemblance/vraisemblance.types.js';
-
-export type NiveauDeRisque = 'faible' | 'moyen' | 'eleve' | 'nonEvalue';
+import { NiveauDeRisque, RisqueCartographie } from './risqueCartographie.js';
 
 const estRenseigne = (valeur: number) => valeur > 0;
 
@@ -16,15 +15,6 @@ const niveauDeRisque = (
   if (criticite <= 4 && vraisemblance < 3 && gravite < 4) return 'faible';
   if (criticite >= 8 && vraisemblance > 2 && gravite >= 2) return 'eleve';
   return 'moyen';
-};
-
-export type RisqueCartographie = {
-  identifiant: string;
-  intitule: string;
-  description: string;
-  gravite: Gravite;
-  vraisemblance: Vraisemblance;
-  niveau: NiveauDeRisque;
 };
 
 export type CartographiesDesRisques = {
