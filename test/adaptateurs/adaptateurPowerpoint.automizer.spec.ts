@@ -26,6 +26,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     organisation: 'Une organisation',
     statut: 'Un statut',
     urls: '',
+    typeDeProjet: 'Un type de projet',
   };
 
   const genereSupport = (
@@ -356,6 +357,19 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
         expect(contexte).not.toContain('https://rh.villeneuve.fr');
         expect(contexte).toContain('<a:t>https://rh.exemple.fr</a:t>');
+      });
+
+      it('écrit le type de projet', async () => {
+        const pptx = await genereSupport({
+          contexte: {
+            ...contexteParDefaut,
+            typeDeProjet: 'Application mobile',
+          },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(contexte).not.toContain('Service en ligne, Portail');
+        expect(contexte).toContain('<a:t>Application mobile</a:t>');
       });
     });
 

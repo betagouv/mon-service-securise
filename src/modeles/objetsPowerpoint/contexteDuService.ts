@@ -6,6 +6,7 @@ export type ContexteDuService = {
   organisation: string;
   statut: string;
   urls: string;
+  typeDeProjet: string;
 };
 
 const siretFormate = (siret: string) =>
@@ -21,4 +22,5 @@ export const contexteDuService = (
   organisation: organisation(description.organisationResponsable),
   statut: description.descriptionStatutDeploiement(),
   urls: description.pointsAcces.descriptions().join(', '),
+  typeDeProjet: description.descriptionTypeService(),
 });
