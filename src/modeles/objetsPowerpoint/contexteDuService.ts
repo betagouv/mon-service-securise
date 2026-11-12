@@ -9,6 +9,7 @@ export type ContexteDuService = {
   typeDeProjet: string;
   hebergement: string;
   donneesStockees: string;
+  securisations: string;
 };
 
 const siretFormate = (siret: string) =>
@@ -27,4 +28,5 @@ export const contexteDuService = (
   typeDeProjet: description.descriptionTypeService(),
   hebergement: description.descriptionTypeHebergement(),
   donneesStockees: description.descriptionLocalisationDonnees(),
+  securisations: description.descriptionSpecificitesProjet(),
 });

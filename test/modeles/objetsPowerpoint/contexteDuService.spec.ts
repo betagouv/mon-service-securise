@@ -84,4 +84,14 @@ describe('Le contexte du service présenté à la commission', () => {
       "En partie ou totalement hors de l'Union européenne"
     );
   });
+
+  it('décrit les sécurisations prévues avec les libellés du référentiel', () => {
+    const description = uneDescriptionV2Valide()
+      .avecSpecificitesProjet(['postesDeTravail', 'accesPhysiqueAuxBureaux'])
+      .construis();
+
+    expect(contexteDuService(description).securisations).toBe(
+      "Des postes de travail, L'accès physique des bureaux"
+    );
+  });
 });
