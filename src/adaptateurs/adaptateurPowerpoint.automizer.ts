@@ -1,18 +1,26 @@
-import {
-  Automizer,
-  ISlide,
-  modify,
-  XmlDocument,
-  XmlElement,
-} from 'pptx-automizer';
-import JSZip from 'jszip';
-import path from 'node:path';
+import { Automizer, ISlide, modify } from 'pptx-automizer';
 import {
   AdaptateurPowerpoint,
   AutoriteHomologation,
   DonneesSupportCommissionHomologation,
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+import {
+  changeLaTailleDePolice,
+  nombreDeLignesDeTexte,
+  Police,
+  policeQuiConvient,
+  tientDansLaPolice,
+  unParagrapheParLigne,
+} from './automizer/texte.js';
+import {
+  colore,
+  donneDesIdentifiantsUniquesAuxFormes,
+  ecrisNumeroDePage,
+  pointeLImageSur,
+  renommeLaForme,
+} from './automizer/formes.js';
+import { nettoieLArchive } from './automizer/nettoyageDeLArchive.js';
 import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
 import {
   CartographiesDesRisques,
@@ -100,39 +108,13 @@ const FORMES_LIGNE_A_COMPLETER = [
   'separateur',
 ];
 
-const nombreDeLignesDUnParagraphe = (
-  paragraphe: string,
-  caracteresParLigne: number
-) =>
-  paragraphe.split(' ').reduce(
-    ({ lignes, longueurLigneCourante }, mot) => {
-      const longueurAvecLeMot =
-        longueurLigneCourante === 0
-          ? mot.length
-          : longueurLigneCourante + 1 + mot.length;
-      return longueurAvecLeMot > caracteresParLigne
-        ? { lignes: lignes + 1, longueurLigneCourante: mot.length }
-        : { lignes, longueurLigneCourante: longueurAvecLeMot };
-    },
-    { lignes: 1, longueurLigneCourante: 0 }
-  ).lignes;
-
-const nombreDeLignesDeTexte = (
-  texte: string,
-  caracteresParLigne = CARACTERES_PAR_LIGNE_D_INTITULE
-) =>
-  texte
-    .split(/\r?\n/)
-    .reduce(
-      (lignes, paragraphe) =>
-        lignes + nombreDeLignesDUnParagraphe(paragraphe, caracteresParLigne),
-      0
-    );
-
 const intituleAEcrire = (piece: PieceDuDossier) => {
   if (!piece.intituleAbrege)
     return { intitule: piece.intitule, lignesDeTexte: 1 };
-  const lignesDeTexte = nombreDeLignesDeTexte(piece.intitule);
+  const lignesDeTexte = nombreDeLignesDeTexte(
+    piece.intitule,
+    CARACTERES_PAR_LIGNE_D_INTITULE
+  );
   return lignesDeTexte > LIGNES_DE_TEXTE_MAX_D_UN_INTITULE
     ? { intitule: piece.intituleAbrege, lignesDeTexte: 1 }
     : { intitule: piece.intitule, lignesDeTexte };
@@ -252,147 +234,11 @@ const decoupeEnPages = (pieces: PieceDuDossier[]) => {
 const laDernierePageEstPleine = (pieces: PieceDuDossier[]) =>
   pieces.length > 0 && pieces.length % NOMBRE_LIGNES_PAR_PAGE_DE_PIECES === 0;
 
-const ecrisNumeroDePage = (
-  slide: ISlide,
-  formeDuTitre: string,
-  numeroPage: number,
-  nombrePages: number
-) => {
-  const numerotation = nombrePages > 1 ? ` ${numeroPage}/${nombrePages}` : '';
-  slide.modifyElement(
-    formeDuTitre,
-    modify.replaceText({ replace: 'pagination', by: { text: numerotation } })
-  );
-};
-
-const partieSourceDesRelations = (cheminDesRelations: string) =>
-  path.posix.join(
-    path.posix.dirname(path.posix.dirname(cheminDesRelations)),
-    path.posix.basename(cheminDesRelations, '.rels')
-  );
-
-const relationsDeLaPartie = (cheminDeLaPartie: string) =>
-  path.posix.join(
-    path.posix.dirname(cheminDeLaPartie),
-    '_rels',
-    `${path.posix.basename(cheminDeLaPartie)}.rels`
-  );
-
-const slideDeLaNote = async (archive: JSZip, note: string) => {
-  const relations = archive.file(relationsDeLaPartie(note));
-  const contenu = relations ? await relations.async('string') : '';
-  const [, slide] = contenu.match(/Target="\.\.\/slides\/([^"]+)"/) ?? [];
-  return slide && `ppt/slides/${slide}`;
-};
-
-const notesDontLaSlideAEteRetiree = async (archive: JSZip) => {
-  const notes = archive
-    .file(/^ppt\/notesSlides\/notesSlide\d+\.xml$/)
-    .map(({ name }) => name);
-  const slides = await Promise.all(
-    notes.map((note) => slideDeLaNote(archive, note))
-  );
-  return notes.filter((_, index) => {
-    const slide = slides[index];
-    return !slide || !archive.file(slide);
-  });
-};
-
-const retireLesPartiesDesSlidesRetirees = async (archive: JSZip) => {
-  (await notesDontLaSlideAEteRetiree(archive)).forEach((note) =>
-    archive.remove(note)
-  );
-  archive
-    .file(/\/_rels\/[^/]+\.rels$/)
-    .filter(
-      (relations) =>
-        relations.name.startsWith('ppt/') &&
-        !archive.file(partieSourceDesRelations(relations.name))
-    )
-    .forEach((relations) => archive.remove(relations.name));
-};
-
-const RELATION_D_IMAGE =
-  /<Relationship [^>]*Id="([^"]+)"[^>]*Type="[^"]*\/image"[^>]*\/>/g;
-
-const retireLesRelationsDImagesInutiliseesDUneSlide = async (
-  archive: JSZip,
-  slide: string
-) => {
-  const cheminDesRelations = relationsDeLaPartie(slide);
-  const fichierDesRelations = archive.file(cheminDesRelations);
-  if (!fichierDesRelations) return;
-  const contenuDeLaSlide = await archive.file(slide)!.async('string');
-  const relations = await fichierDesRelations.async('string');
-  archive.file(
-    cheminDesRelations,
-    relations.replace(RELATION_D_IMAGE, (relation, idRelation) =>
-      contenuDeLaSlide.includes(`"${idRelation}"`) ? relation : ''
-    )
-  );
-};
-
-const retireLesRelationsDImagesInutilisees = async (archive: JSZip) => {
-  const slides = archive
-    .file(/^ppt\/slides\/slide\d+\.xml$/)
-    .map(({ name }) => name);
-  await Promise.all(
-    slides.map((slide) =>
-      retireLesRelationsDImagesInutiliseesDUneSlide(archive, slide)
-    )
-  );
-};
-
-const TYPES_DE_CONTENU = '[Content_Types].xml';
-
-const retireLesDeclarationsDesPartiesAbsentes = async (archive: JSZip) => {
-  const typesDeContenu = await archive.file(TYPES_DE_CONTENU)!.async('string');
-  const sansPartiesAbsentes = typesDeContenu.replace(
-    /<Override [^>]*PartName="\/([^"]+)"[^>]*\/>/g,
-    (declaration, partie) => (archive.file(partie) ? declaration : '')
-  );
-  archive.file(TYPES_DE_CONTENU, sansPartiesAbsentes);
-};
-
-type Police = {
-  taille: number;
-  caracteresParLigne: number;
-  lignes: number;
-};
-
 const POLICES_DE_LA_DESCRIPTION: Police[] = [
   { taille: 21, caracteresParLigne: 105, lignes: 2 },
   { taille: 16, caracteresParLigne: 120, lignes: 3 },
   { taille: 14, caracteresParLigne: 130, lignes: 4 },
 ];
-
-const changeLaTailleDePolice = (taille: number) => (forme: XmlElement) => {
-  ['a:rPr', 'a:endParaRPr'].forEach((balise) => {
-    Array.from(forme.getElementsByTagName(balise)).forEach((proprietes) =>
-      proprietes.setAttribute('sz', String(taille * 100))
-    );
-  });
-};
-
-const unParagrapheParLigne = (forme: XmlElement) => {
-  const [paragraphe] = Array.from(forme.getElementsByTagName('a:p'));
-  const [texte] = Array.from(paragraphe.getElementsByTagName('a:t'));
-  (texte.textContent ?? '').split(/\r?\n/).forEach((ligne) => {
-    const paragrapheDeLaLigne = paragraphe.cloneNode(true) as XmlElement;
-    paragrapheDeLaLigne.getElementsByTagName('a:t')[0].textContent = ligne;
-    paragraphe.parentNode!.insertBefore(paragrapheDeLaLigne, paragraphe);
-  });
-  paragraphe.parentNode!.removeChild(paragraphe);
-};
-
-const tientDansLaPolice = (
-  texte: string,
-  { caracteresParLigne, lignes }: Police
-) => nombreDeLignesDeTexte(texte, caracteresParLigne) <= lignes;
-
-const policeQuiConvient = (texte: string, polices: Police[]) =>
-  polices.find((police) => tientDansLaPolice(texte, police)) ??
-  polices[polices.length - 1];
 
 const coupeLaDescription = (description: string, police: Police) => {
   if (tientDansLaPolice(description, police)) return description;
@@ -657,28 +503,6 @@ const disposeLesPastillesDansLaCarte = (donneesIdentifiees: string[]) =>
   ).find(({ pastilles }) => tiennentDansLaCarte(pastilles)) ??
   disposeAvecLesAutresRegroupees(donneesIdentifiees);
 
-const renommeLaForme = (nom: string) => (forme: XmlElement) => {
-  forme.getElementsByTagName('p:cNvPr')[0].setAttribute('name', nom);
-};
-
-const donneDesIdentifiantsUniquesAuxFormes = (slide: XmlDocument) => {
-  const proprietesDesFormes = Array.from(slide.getElementsByTagName('p:cNvPr'));
-  let prochainIdentifiantLibre =
-    Math.max(
-      ...proprietesDesFormes.map((proprietes) =>
-        Number(proprietes.getAttribute('id'))
-      )
-    ) + 1;
-  const identifiantsVus = new Set<string>();
-  proprietesDesFormes.forEach((proprietes) => {
-    const identifiant = proprietes.getAttribute('id')!;
-    if (identifiantsVus.has(identifiant)) {
-      proprietes.setAttribute('id', String(prochainIdentifiantLibre));
-      prochainIdentifiantLibre += 1;
-    } else identifiantsVus.add(identifiant);
-  });
-};
-
 const ecrisLesDonneesIdentifiees = (
   slide: ISlide,
   donneesIdentifiees: string[]
@@ -702,10 +526,6 @@ const ecrisLesDonneesIdentifiees = (
   });
   slide.modify(donneDesIdentifiantsUniquesAuxFormes);
 };
-
-const pointeLImageSur =
-  (fichier: string) => (image: XmlElement, relation?: XmlElement) =>
-    modify.setRelationTarget(fichier)(image, relation!);
 
 const illustrationDuNiveau = (idNiveau: NiveauSecurite) => `${idNiveau}.png`;
 const ILLUSTRATIONS_DES_NIVEAUX = (
@@ -754,11 +574,6 @@ const COULEURS_DES_NIVEAUX_DE_RISQUE: Record<NiveauDeRisque, string> = {
   moyen: 'FAC63C',
   eleve: 'F8785B',
   nonEvalue: 'EEEEEE',
-};
-
-const colore = (couleur: string) => (forme: XmlElement) => {
-  const [proprietes] = Array.from(forme.getElementsByTagName('p:spPr'));
-  proprietes.getElementsByTagName('a:srgbClr')[0].setAttribute('val', couleur);
 };
 
 const CARACTERES_PAR_LIGNE_D_UN_INTITULE_DE_RISQUE = 48;
@@ -1033,9 +848,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     });
 
     const archive = await presentation.getJSZip();
-    await retireLesPartiesDesSlidesRetirees(archive);
-    await retireLesRelationsDImagesInutilisees(archive);
-    await retireLesDeclarationsDesPartiesAbsentes(archive);
+    await nettoieLArchive(archive);
     return archive.generateAsync({
       type: 'nodebuffer',
       compression: 'DEFLATE',
