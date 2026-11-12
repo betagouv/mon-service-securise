@@ -281,6 +281,48 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         expect(donneesRecues?.besoinsDeSecurite.niveau).toBe('Avancés');
       });
 
+      it("transmet à l'adaptateur les cartographies des risques du service", async () => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecRisquesV2({
+              risquesGeneraux: {},
+              risquesSpecifiques: [
+                {
+                  id: '11111111-1111-1111-1111-111111111111',
+                  identifiantNumerique: 'RS1',
+                  intitule: 'Fuite des plannings',
+                  categories: ['confidentialite'],
+                  risqueBrut: { gravite: 3, vraisemblance: 4 },
+                  gravite: 2,
+                  vraisemblance: 1,
+                },
+              ],
+            })
+            .avecDossiers([unDossier(creeReferentielV2()).donnees])
+            .construis(),
+        });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues?.cartographiesDesRisques.bruts).toContainEqual({
+          identifiant: 'RS1',
+          intitule: 'Fuite des plannings',
+          gravite: 3,
+          vraisemblance: 4,
+          niveau: 'eleve',
+        });
+      });
+
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
         testeur.adaptateurHorloge().maintenant = () => new Date(2026, 10, 9);
         const vraiAdaptateur = new AdaptateurPowerpointAutomizer();

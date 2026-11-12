@@ -14,6 +14,7 @@ import {
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
+import { RisqueCartographie } from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
 import {
   BesoinsDeSecurite,
@@ -348,19 +349,17 @@ const retireLesDeclarationsDesPartiesAbsentes = async (archive: JSZip) => {
   archive.file(TYPES_DE_CONTENU, sansPartiesAbsentes);
 };
 
-type PoliceDeLaDescription = {
+type Police = {
   taille: number;
   caracteresParLigne: number;
   lignes: number;
 };
 
-const POLICES_DE_LA_DESCRIPTION: PoliceDeLaDescription[] = [
+const POLICES_DE_LA_DESCRIPTION: Police[] = [
   { taille: 21, caracteresParLigne: 105, lignes: 2 },
   { taille: 16, caracteresParLigne: 120, lignes: 3 },
   { taille: 14, caracteresParLigne: 130, lignes: 4 },
 ];
-const POLICE_MINIMALE_DE_LA_DESCRIPTION =
-  POLICES_DE_LA_DESCRIPTION[POLICES_DE_LA_DESCRIPTION.length - 1];
 
 const changeLaTailleDePolice = (taille: number) => (forme: XmlElement) => {
   ['a:rPr', 'a:endParaRPr'].forEach((balise) => {
@@ -383,13 +382,14 @@ const unParagrapheParLigne = (forme: XmlElement) => {
 
 const tientDansLaPolice = (
   texte: string,
-  { caracteresParLigne, lignes }: PoliceDeLaDescription
+  { caracteresParLigne, lignes }: Police
 ) => nombreDeLignesDeTexte(texte, caracteresParLigne) <= lignes;
 
-const coupeLaDescription = (
-  description: string,
-  police: PoliceDeLaDescription
-) => {
+const policeQuiConvient = (texte: string, polices: Police[]) =>
+  polices.find((police) => tientDansLaPolice(texte, police)) ??
+  polices[polices.length - 1];
+
+const coupeLaDescription = (description: string, police: Police) => {
   if (tientDansLaPolice(description, police)) return description;
   const coupeA = (position: number) =>
     `${description.slice(0, position).trimEnd()}…`;
@@ -400,9 +400,7 @@ const coupeLaDescription = (
 };
 
 const policeDeLaDescription = (description: string) =>
-  POLICES_DE_LA_DESCRIPTION.find((police) =>
-    tientDansLaPolice(description, police)
-  ) ?? POLICE_MINIMALE_DE_LA_DESCRIPTION;
+  policeQuiConvient(description, POLICES_DE_LA_DESCRIPTION);
 
 const ecrisLaDescription = (slide: ISlide, description = '') => {
   const police = policeDeLaDescription(description);
@@ -709,6 +707,35 @@ const ILLUSTRATIONS_DES_NIVEAUX = (
   ['niveau1', 'niveau2', 'niveau3'] as NiveauSecurite[]
 ).map(illustrationDuNiveau);
 
+const POLICES_D_UNE_CASE_DE_LA_MATRICE: Police[] = [
+  { taille: 18, caracteresParLigne: 11, lignes: 3 },
+  { taille: 16, caracteresParLigne: 12, lignes: 3 },
+  { taille: 14, caracteresParLigne: 14, lignes: 4 },
+  { taille: 12, caracteresParLigne: 16, lignes: 4 },
+];
+const GRAVITES_DE_LA_MATRICE = [1, 2, 3, 4];
+const VRAISEMBLANCES_DE_LA_MATRICE = [1, 2, 3, 4];
+
+const ecrisLaMatrice = (slide: ISlide, risques: RisqueCartographie[]) => {
+  GRAVITES_DE_LA_MATRICE.forEach((gravite) =>
+    VRAISEMBLANCES_DE_LA_MATRICE.forEach((vraisemblance) => {
+      const identifiants = risques
+        .filter(
+          (risque) =>
+            risque.gravite === gravite && risque.vraisemblance === vraisemblance
+        )
+        .map(({ identifiant }) => identifiant);
+      const texte = identifiants.join(', ');
+      slide.modifyElement(`matrice-g${gravite}-v${vraisemblance}`, [
+        modify.setText(texte),
+        changeLaTailleDePolice(
+          policeQuiConvient(texte, POLICES_D_UNE_CASE_DE_LA_MATRICE).taille
+        ),
+      ]);
+    })
+  );
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -718,6 +745,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     piecesDuDossier,
     contexte,
     besoinsDeSecurite,
+    cartographiesDesRisques,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -821,7 +849,9 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
-    presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES);
+    presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
+      ecrisLaMatrice(slide, cartographiesDesRisques.bruts);
+    });
 
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);
