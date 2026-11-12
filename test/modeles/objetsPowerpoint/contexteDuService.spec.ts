@@ -11,4 +11,27 @@ describe('Le contexte du service présenté à la commission', () => {
       'Un portail de démarches en ligne'
     );
   });
+
+  it('présente l’organisation responsable par son nom et son SIRET formaté', () => {
+    const description = uneDescriptionV2Valide()
+      .avecOrganisationResponsable({
+        nom: 'Commune de Villeneuve',
+        siret: '12345678900010',
+      })
+      .construis();
+
+    expect(contexteDuService(description).organisation).toBe(
+      'Commune de Villeneuve (123 456 789 00010)'
+    );
+  });
+
+  it('présente l’organisation responsable par son seul SIRET formaté quand son nom est inconnu', () => {
+    const description = uneDescriptionV2Valide()
+      .avecOrganisationResponsable({ siret: '12345678900010' })
+      .construis();
+
+    expect(contexteDuService(description).organisation).toBe(
+      '123 456 789 00010'
+    );
+  });
 });
