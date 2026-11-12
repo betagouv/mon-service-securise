@@ -1,6 +1,10 @@
 import { Automizer, ISlide, modify } from 'pptx-automizer';
 import { MODELE, SLIDE_DESCRIPTION_DES_RISQUES } from '../template.js';
-import { RisqueCartographie } from '../../../modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import {
+  COULEURS_DES_NIVEAUX_DE_RISQUE,
+  RisqueCartographie,
+} from '../../../modeles/objetsPowerpoint/risqueCartographie.js';
+import { colore } from '../formes.js';
 
 const NOMBRE_DE_LIGNES_DE_LA_DESCRIPTION_DES_RISQUES = 7;
 const PARTIES_D_UNE_LIGNE_DE_DESCRIPTION = [
@@ -30,6 +34,10 @@ const ecrisLesLignes = (slide: ISlide, risques: RisqueCartographie[]) => {
       );
       return;
     }
+    slide.modifyElement(
+      forme('pastille'),
+      colore(COULEURS_DES_NIVEAUX_DE_RISQUE[risque.niveau])
+    );
     slide.modifyElement(
       forme('identifiant'),
       modify.setText(risque.identifiant)

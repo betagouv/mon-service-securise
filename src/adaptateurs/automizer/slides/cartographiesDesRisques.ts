@@ -1,10 +1,10 @@
 import { Automizer, ISlide, modify } from 'pptx-automizer';
 import { MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES } from '../template.js';
+import { CartographiesDesRisques } from '../../../modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import {
-  CartographiesDesRisques,
-  NiveauDeRisque,
+  COULEURS_DES_NIVEAUX_DE_RISQUE,
   RisqueCartographie,
-} from '../../../modeles/objetsPowerpoint/cartographiesDesRisques.js';
+} from '../../../modeles/objetsPowerpoint/risqueCartographie.js';
 import {
   changeLaTailleDePolice,
   nombreDeLignesDeTexte,
@@ -49,13 +49,6 @@ const PARTIES_D_UNE_LIGNE_DE_RISQUE = [
   'identifiant',
   'intitule',
 ];
-
-const COULEURS_DES_NIVEAUX_DE_RISQUE: Record<NiveauDeRisque, string> = {
-  faible: '84C14E',
-  moyen: 'FAC63C',
-  eleve: 'F8785B',
-  nonEvalue: 'EEEEEE',
-};
 
 const CARACTERES_PAR_LIGNE_D_UN_INTITULE_DE_RISQUE = 48;
 const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_D_UN_RISQUE = 274320;

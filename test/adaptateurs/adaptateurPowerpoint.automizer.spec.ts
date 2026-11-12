@@ -14,10 +14,8 @@ import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adap
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
 import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
-import {
-  CartographiesDesRisques,
-  RisqueCartographie,
-} from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
 
@@ -1463,6 +1461,34 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
         expect(description).not.toContain('name="description-risque-3-');
         expect(description).not.toContain('Un attaquant externe compromet');
+      });
+
+      it('colore la pastille de chaque risque selon son niveau à date', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            aDate: [
+              { ...unRisque('R1'), niveau: 'faible' },
+              { ...unRisque('R2'), niveau: 'moyen' },
+              { ...unRisque('R3'), niveau: 'eleve' },
+              { ...unRisque('RS1'), niveau: 'nonEvalue' },
+            ],
+          },
+        });
+
+        const description = await contenuSlide(
+          pptx,
+          POSITION_DESCRIPTION_DES_RISQUES
+        );
+        const couleurDuFond = (nom: string) =>
+          description
+            .match(new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's'))![0]
+            .match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1];
+        expect(
+          [1, 2, 3, 4].map((numero) =>
+            couleurDuFond(`description-risque-${numero}-pastille`)
+          )
+        ).toEqual(['84C14E', 'FAC63C', 'F8785B', 'EEEEEE']);
       });
     });
 
