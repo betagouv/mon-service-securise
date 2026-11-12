@@ -54,4 +54,14 @@ describe('Le contexte du service présenté à la commission', () => {
       'https://rh.exemple.fr, https://conges.exemple.fr'
     );
   });
+
+  it('décrit le type de projet avec les libellés du référentiel', () => {
+    const description = uneDescriptionV2Valide()
+      .avecTypesService(['serviceEnLigne', 'api'])
+      .construis();
+
+    expect(contexteDuService(description).typeDeProjet).toBe(
+      'Service en ligne, API'
+    );
+  });
 });
