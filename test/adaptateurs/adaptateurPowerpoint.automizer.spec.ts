@@ -99,10 +99,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et la cartographie des risques bruts', async () => {
+    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et les cartographies des risques bruts, à date et résiduels cible', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(13);
+      expect(await nombreDeSlides(pptx)).toBe(15);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -1204,8 +1204,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           const slides = await Promise.all(
             positions.map((position) => contenuSlide(pptx, position))
           );
-          return slides.filter((slide) =>
-            slide.includes('name="liste-risques-total"')
+          return slides.filter(
+            (slide) =>
+              slide.includes('name="liste-risques-total"') &&
+              texteDeLaForme(slide, 'cartographie-titre').startsWith(
+                'Cartographie des risques bruts'
+              )
           );
         };
 
@@ -1350,6 +1354,46 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(tailleDePoliceDeLaCase(cartographie, 'matrice-g4-v4')).toEqual([
           '1400',
+        ]);
+      });
+    });
+
+    describe('sur les cartographies à date et résiduelle cible', () => {
+      const unRisque = (identifiant: string): RisqueCartographie => ({
+        identifiant,
+        intitule: `Intitulé de ${identifiant}`,
+        gravite: 4,
+        vraisemblance: 4,
+        niveau: 'eleve',
+      });
+
+      it('suivent la cartographie brute, chacune avec son titre et ses risques', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            bruts: [unRisque('R1')],
+            aDate: [unRisque('R2')],
+            cibles: [unRisque('R3')],
+          },
+        });
+
+        const titreEtRisque = async (position: number) => {
+          const slide = await contenuSlide(pptx, position);
+          return [
+            texteDeLaForme(slide, 'cartographie-titre'),
+            texteDeLaForme(slide, 'risque-1-identifiant'),
+          ];
+        };
+        expect(await titreEtRisque(13)).toEqual([
+          'Cartographie des risques bruts',
+          'R1',
+        ]);
+        expect(await titreEtRisque(14)).toEqual([
+          'Cartographie des risques à date',
+          'R2',
+        ]);
+        expect(await titreEtRisque(15)).toEqual([
+          'Cartographie des risques résiduels cible',
+          'R3',
         ]);
       });
     });
