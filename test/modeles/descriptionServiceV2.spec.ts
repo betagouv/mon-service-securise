@@ -500,5 +500,14 @@ describe('Une description service V2', () => {
         'Hébergement interne (On-premise)'
       );
     });
+
+    it('sait décrire ses spécificités de projet', () => {
+      const description = uneDescriptionV2Valide()
+        .avecSpecificitesProjet(['postesDeTravail', 'annuaire'])
+        .construis();
+      expect(description.descriptionSpecificitesProjet()).toBe(
+        'Des postes de travail, Un annuaire'
+      );
+    });
   });
 });

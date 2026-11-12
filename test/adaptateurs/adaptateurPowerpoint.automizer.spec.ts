@@ -29,6 +29,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     typeDeProjet: 'Un type de projet',
     hebergement: 'Un hébergement',
     donneesStockees: 'Une localisation',
+    securisations: '',
   };
 
   const genereSupport = (
@@ -398,6 +399,16 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(contexte).toContain(
           "<a:t>En partie ou totalement hors de l'Union européenne</a:t>"
         );
+      });
+
+      it('écrit les sécurisations prévues', async () => {
+        const pptx = await genereSupport({
+          contexte: { ...contexteParDefaut, securisations: 'Un annuaire' },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(contexte).not.toContain('Des postes de travail');
+        expect(contexte).toContain('<a:t>Un annuaire</a:t>');
       });
     });
 

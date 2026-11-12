@@ -269,4 +269,10 @@ export class DescriptionServiceV2 {
   descriptionTypeHebergement() {
     return this.referentiel.descriptionTypeHebergement(this.typeHebergement);
   }
+
+  descriptionSpecificitesProjet() {
+    return this.specificitesProjet
+      .map((s) => this.referentiel.descriptionSpecificiteProjet(s))
+      .join(', ');
+  }
 }
