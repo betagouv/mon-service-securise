@@ -8,6 +8,7 @@ import {
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
+import { BesoinsDeSecurite } from '../modeles/objetsPowerpoint/besoinsDeSecurite.js';
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
@@ -367,6 +368,65 @@ const ecrisLaDescription = (slide: ISlide, description = '') => {
   ]);
 };
 
+const FORMES_ENCART_ANSSI = ['cadre', 'barre', 'icone', 'titre', 'texte'].map(
+  (partie) => `besoins-anssi-${partie}`
+);
+
+const BAS_DU_RESUME_DU_NIVEAU = 5251772 + 929506;
+const BAS_DE_L_ENCART_ANSSI = 6295579 + 1828577;
+const HAUT_DU_NIVEAU = 4661222;
+const ILLUSTRATION_DU_NIVEAU = {
+  x: 3028950,
+  y: 2918147,
+  largeur: 1714500,
+  hauteur: 1628775,
+};
+const ECART_ENTRE_ILLUSTRATION_ET_NIVEAU =
+  HAUT_DU_NIVEAU - (ILLUSTRATION_DU_NIVEAU.y + ILLUSTRATION_DU_NIVEAU.hauteur);
+
+const agrandisLIllustration = (slide: ISlide, descente: number) => {
+  const { x, y, largeur, hauteur } = ILLUSTRATION_DU_NIVEAU;
+  const nouvelleHauteur =
+    HAUT_DU_NIVEAU + descente - ECART_ENTRE_ILLUSTRATION_ET_NIVEAU - y;
+  const nouvelleLargeur = Math.round((nouvelleHauteur * largeur) / hauteur);
+  const axe = x + largeur / 2;
+  slide.modifyElement(
+    'besoins-illustration',
+    modify.setPosition({
+      x: Math.round(axe - nouvelleLargeur / 2),
+      y,
+      w: nouvelleLargeur,
+      h: nouvelleHauteur,
+    })
+  );
+};
+
+const occupeLaPlaceDeLEncartAnssi = (slide: ISlide) => {
+  const descente = BAS_DE_L_ENCART_ANSSI - BAS_DU_RESUME_DU_NIVEAU;
+  ['besoins-niveau', 'besoins-resume'].forEach((forme) =>
+    slide.modifyElement(forme, modify.updatePosition({ y: descente }))
+  );
+  agrandisLIllustration(slide, descente);
+};
+
+const ecrisEncartAnssi = (
+  slide: ISlide,
+  { niveauIndicatifAnssi, depasseRecommandation }: BesoinsDeSecurite
+) => {
+  if (!depasseRecommandation) {
+    FORMES_ENCART_ANSSI.forEach((forme) => slide.removeElement(forme));
+    occupeLaPlaceDeLEncartAnssi(slide);
+    return;
+  }
+  slide.modifyElement(
+    'besoins-anssi-titre',
+    modify.replaceText({
+      replace: 'niveauIndicatifAnssi',
+      by: { text: niveauIndicatifAnssi },
+    })
+  );
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -457,6 +517,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
           by: { text: besoinsDeSecurite.demarche.toLocaleUpperCase('fr') },
         })
       );
+      ecrisEncartAnssi(slide, besoinsDeSecurite);
     });
 
     const archive = await presentation.getJSZip();

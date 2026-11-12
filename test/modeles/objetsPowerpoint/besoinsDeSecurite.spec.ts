@@ -1,5 +1,8 @@
 import { besoinsDeSecurite } from '../../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
-import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
+import {
+  uneDescriptionDeNiveauDeSecuriteEstime1,
+  uneDescriptionV2Valide,
+} from '../../constructeurs/constructeurDescriptionServiceV2.js';
 
 describe('Les besoins de sécurité présentés à la commission', () => {
   it('nomment le niveau de besoin de sécurité du service', () => {
@@ -26,5 +29,31 @@ describe('Les besoins de sécurité présentés à la commission', () => {
       .construis();
 
     expect(besoinsDeSecurite(description).demarche).toBe('intermédiaire');
+  });
+
+  it('nomment le niveau identifié à titre indicatif par l’ANSSI', () => {
+    const description = uneDescriptionDeNiveauDeSecuriteEstime1()
+      .avecNiveauSecurite('niveau3')
+      .construis();
+
+    expect(besoinsDeSecurite(description).niveauIndicatifAnssi).toBe(
+      'Basiques'
+    );
+  });
+
+  it('indiquent que le niveau choisi dépasse celui identifié par l’ANSSI', () => {
+    const description = uneDescriptionDeNiveauDeSecuriteEstime1()
+      .avecNiveauSecurite('niveau3')
+      .construis();
+
+    expect(besoinsDeSecurite(description).depasseRecommandation).toBe(true);
+  });
+
+  it('indiquent que le niveau choisi ne dépasse pas celui identifié par l’ANSSI', () => {
+    const description = uneDescriptionDeNiveauDeSecuriteEstime1().construis();
+
+    const besoins = besoinsDeSecurite(description);
+    expect(besoins.depasseRecommandation).toBe(false);
+    expect(besoins.niveauIndicatifAnssi).toBe('Basiques');
   });
 });
