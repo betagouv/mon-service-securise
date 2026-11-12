@@ -446,6 +446,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         'besoins-niveau',
         modify.setText(besoinsDeSecurite.niveau)
       );
+      slide.modifyElement(
+        'besoins-resume',
+        modify.setText(besoinsDeSecurite.resume)
+      );
     });
 
     const archive = await presentation.getJSZip();

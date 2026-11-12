@@ -9,4 +9,14 @@ describe('Les besoins de sécurité présentés à la commission', () => {
 
     expect(besoinsDeSecurite(description).niveau).toBe('Modérés');
   });
+
+  it('résument le niveau de besoin de sécurité', () => {
+    const description = uneDescriptionV2Valide()
+      .avecNiveauSecurite('niveau1')
+      .construis();
+
+    expect(besoinsDeSecurite(description).resume).toBe(
+      "Les besoins de sécurité sont basiques en l'absence de données ou de fonctionnalités sensibles."
+    );
+  });
 });

@@ -35,6 +35,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
   const besoinsDeSecuriteParDefaut: BesoinsDeSecurite = {
     niveau: 'Un niveau',
+    resume: 'Un résumé',
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -549,6 +550,23 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           POSITION_SLIDE_BESOINS_DE_SECURITE
         );
         expect(texteDeLaForme(besoins, 'besoins-niveau')).toBe('Modérés');
+      });
+
+      it('écrit le résumé du niveau', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            resume: 'Les besoins de sécurité sont modérés.',
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'besoins-resume')).toBe(
+          'Les besoins de sécurité sont modérés.'
+        );
       });
     });
 
