@@ -736,6 +736,47 @@ const ecrisLaMatrice = (slide: ISlide, risques: RisqueCartographie[]) => {
   );
 };
 
+const NOMBRE_DE_LIGNES_DE_LA_LISTE_DES_RISQUES = 7;
+const PARTIES_D_UNE_LIGNE_DE_RISQUE = [
+  'fond',
+  'pastille',
+  'identifiant',
+  'intitule',
+];
+
+const nombreDeRisques = (nombre: number) =>
+  nombre > 1 ? `${nombre} RISQUES` : `${nombre} RISQUE`;
+
+const ecrisLaListeDesRisques = (
+  slide: ISlide,
+  risques: RisqueCartographie[]
+) => {
+  slide.modifyElement(
+    'liste-risques-total',
+    modify.setText(nombreDeRisques(risques.length))
+  );
+  Array.from(
+    { length: NOMBRE_DE_LIGNES_DE_LA_LISTE_DES_RISQUES },
+    (_, index) => index + 1
+  ).forEach((numeroLigne) => {
+    const risque = risques[numeroLigne - 1];
+    if (!risque) {
+      PARTIES_D_UNE_LIGNE_DE_RISQUE.forEach((partie) =>
+        slide.removeElement(`risque-${numeroLigne}-${partie}`)
+      );
+      return;
+    }
+    slide.modifyElement(
+      `risque-${numeroLigne}-identifiant`,
+      modify.setText(risque.identifiant)
+    );
+    slide.modifyElement(
+      `risque-${numeroLigne}-intitule`,
+      modify.setText(risque.intitule)
+    );
+  });
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -851,6 +892,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
     presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
       ecrisLaMatrice(slide, cartographiesDesRisques.bruts);
+      ecrisLaListeDesRisques(slide, cartographiesDesRisques.bruts);
     });
 
     const archive = await presentation.getJSZip();
