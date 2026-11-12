@@ -19,4 +19,12 @@ describe('Les besoins de sécurité présentés à la commission', () => {
       "Les besoins de sécurité sont basiques en l'absence de données ou de fonctionnalités sensibles."
     );
   });
+
+  it('indiquent la démarche indicative adaptée au niveau', () => {
+    const description = uneDescriptionV2Valide()
+      .avecNiveauSecurite('niveau2')
+      .construis();
+
+    expect(besoinsDeSecurite(description).demarche).toBe('intermédiaire');
+  });
 });

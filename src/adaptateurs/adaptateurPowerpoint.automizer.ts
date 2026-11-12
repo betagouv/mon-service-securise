@@ -450,6 +450,13 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         'besoins-resume',
         modify.setText(besoinsDeSecurite.resume)
       );
+      slide.modifyElement(
+        'besoins-demarche',
+        modify.replaceText({
+          replace: 'demarche',
+          by: { text: besoinsDeSecurite.demarche.toLocaleUpperCase('fr') },
+        })
+      );
     });
 
     const archive = await presentation.getJSZip();

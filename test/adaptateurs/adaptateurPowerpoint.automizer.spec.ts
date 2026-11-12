@@ -36,6 +36,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const besoinsDeSecuriteParDefaut: BesoinsDeSecurite = {
     niveau: 'Un niveau',
     resume: 'Un résumé',
+    demarche: 'une démarche',
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -566,6 +567,23 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(texteDeLaForme(besoins, 'besoins-resume')).toBe(
           'Les besoins de sécurité sont modérés.'
+        );
+      });
+
+      it('écrit la démarche indicative adaptée, en majuscules', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            demarche: 'intermédiaire',
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'besoins-demarche')).toBe(
+          'DÉMARCHE INDICATIVE ADAPTÉE : INTERMÉDIAIRE'
         );
       });
     });
