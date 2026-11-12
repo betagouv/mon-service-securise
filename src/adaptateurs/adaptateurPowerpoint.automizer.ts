@@ -14,7 +14,10 @@ import {
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
-import { RisqueCartographie } from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import {
+  NiveauDeRisque,
+  RisqueCartographie,
+} from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
 import {
   BesoinsDeSecurite,
@@ -744,6 +747,17 @@ const PARTIES_D_UNE_LIGNE_DE_RISQUE = [
   'intitule',
 ];
 
+const COULEURS_DES_NIVEAUX_DE_RISQUE: Record<NiveauDeRisque, string> = {
+  faible: '84C14E',
+  moyen: 'FAC63C',
+  eleve: 'F8785B',
+};
+
+const colore = (couleur: string) => (forme: XmlElement) => {
+  const [proprietes] = Array.from(forme.getElementsByTagName('p:spPr'));
+  proprietes.getElementsByTagName('a:srgbClr')[0].setAttribute('val', couleur);
+};
+
 const nombreDeRisques = (nombre: number) =>
   nombre > 1 ? `${nombre} RISQUES` : `${nombre} RISQUE`;
 
@@ -766,6 +780,10 @@ const ecrisLaListeDesRisques = (
       );
       return;
     }
+    slide.modifyElement(
+      `risque-${numeroLigne}-pastille`,
+      colore(COULEURS_DES_NIVEAUX_DE_RISQUE[risque.niveau])
+    );
     slide.modifyElement(
       `risque-${numeroLigne}-identifiant`,
       modify.setText(risque.identifiant)
