@@ -157,14 +157,15 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - données identifiées : **pastilles en flux** (elles se suivent puis passent à la ligne, largeur estimée d'après le texte, deux lignes pour un texte long), catégories du référentiel puis catégories libres ; une pastille modèle copiée par donnée (identifiants de formes renumérotés) ; si elles débordent de la carte, police réduite à 16 puis 14 pt, puis « et N autres » ;
    - illustration : **remplacée selon le niveau** par les illustrations MSS, converties en PNG (`src/vuesPowerpoint/illustrationsNiveaux/niveauN.png`, depuis `public/assets/images/niveauxSecurite/niveauN.svg`) ; cadre carré ; les relations d'image laissées par pptx-automizer sont retirées après génération.
 4. ~~**Spike sur la lib**~~ : fait, voir la section « Spike ».
-5. **Slides 9 à 12, 14 et 15 : historique (statique) et cartographies des risques** (fichiers `slide8.xml` à `slide11.xml`) :
-   - slides 9 (intercalaire « Historique »), 10 (tableau de l'historique, à compléter) et 11 (intercalaire « Risques et plan d'action ») statiques ; la slide 13 (description des risques) attend l'étape 6 ;
-   - une seule slide modèle (`slide11.xml`, risques bruts) pour les trois cartographies : brute (`risquesBruts`), à date (`risques`) et résiduelle cible (`risquesCibles`), le titre changeant ; les slides 14 et 15 de la maquette ne servent pas ;
-   - risques affichés, comme le front et l'annexe PDF : risques généraux non désactivés, puis risques spécifiques (évaluation brute pour la cartographie brute, à date pour les deux autres, faute d'évaluation cible) ;
-   - matrice : couleurs des cases statiques (identiques à `niveauRisqueV2`) ; une zone de texte par case avec les identifiants des risques ;
-   - liste à droite : une ligne par risque, pastille de la couleur de son niveau, intitulé ; « N RISQUES » au total ;
-   - liste : hauteur de chaque ligne selon la longueur de l'intitulé (48 caractères par ligne, de 1 à 4 lignes et plus), pastille colorée selon le niveau ; police des cases de la matrice réduite jusqu'à 12 pt quand une case contient beaucoup de risques ;
-   - **pagination à la hauteur** : chaque page prend autant de risques que la colonne peut en contenir ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre, comme les pièces du dossier.
+5. ~~**Slides 9 à 12, 14 et 15 : historique (statique) et cartographies des risques**~~ (fait) (fichiers `slide8.xml` à `slide11.xml`) :
+   - slides 9 (intercalaire « Historique »), 10 (tableau de l'historique, à compléter) et 11 (intercalaire « Risques et plan d'action ») statiques ; la slide 13 (description des risques) attend l'étape 6 et s'insérera entre la cartographie brute et la cartographie à date ;
+   - une seule slide modèle (`slide11.xml`) pour les trois cartographies : brute (`risquesBruts`), à date (`risques`) et résiduelle cible (`risquesCibles`) ; titre `{{titre}}{{pagination}}` (zone élargie, sans ajustement automatique) ; les slides 14 et 15 de la maquette ne servent pas ;
+   - risques affichés (`cartographiesDesRisques`), comme le front et l'annexe PDF : risques généraux non désactivés, puis risques spécifiques (évaluation brute pour la cartographie brute, à date pour les deux autres, faute d'évaluation cible) ;
+   - niveau d'un risque : faible, moyen ou élevé selon la règle de MSS ; **non évalué** quand la gravité ou la vraisemblance vaut 0 (risque spécifique non renseigné), avec une pastille grise `EEEEEE`, dans le support comme dans l'annexe PDF (qui le classait en faible) ; un risque non évalué n'apparaît pas dans la matrice ;
+   - matrice : couleurs des cases statiques ; une zone de texte par case (`matrice-gN-vM`) avec les identifiants des risques, police réduite de 18 jusqu'à 12 pt quand une case en contient beaucoup ;
+   - liste à droite : « N RISQUES » au total de la cartographie ; une ligne par risque, pastille colorée selon le niveau, intitulé en 18 pt sans ajustement automatique ; hauteur de chaque ligne selon la longueur de l'intitulé (48 caractères par ligne, 274 320 EMU par ligne de texte) ;
+   - **pagination à la hauteur** : chaque page prend autant de risques que la colonne peut en contenir au-dessus de la légende, 7 au plus (lignes du modèle) ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre ;
+   - refacto en attente (shelve) : règle du niveau déplacée dans `src/moteurRisques/v2/niveauRisque.ts` et utilisée par le front, le PDF et le support ; à réappliquer en y reportant le cas non évalué.
 6. **Slide 13, description des risques**.
 7. **Slide 18, indice cyber** : texte, puis jauges et radar en images.
 8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.
