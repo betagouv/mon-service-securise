@@ -93,4 +93,12 @@ describe('Les besoins de sécurité présentés à la commission', () => {
       'Plannings des agents',
     ]);
   });
+
+  it('identifient le niveau, pour choisir son illustration', () => {
+    const description = uneDescriptionV2Valide()
+      .avecNiveauSecurite('niveau2')
+      .construis();
+
+    expect(besoinsDeSecurite(description).idNiveau).toBe('niveau2');
+  });
 });

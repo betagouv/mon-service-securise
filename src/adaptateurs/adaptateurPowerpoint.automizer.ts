@@ -13,6 +13,7 @@ import {
   DonneesSupportCommissionHomologation,
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
 import {
   BesoinsDeSecurite,
@@ -301,6 +302,37 @@ const retireLesPartiesDesSlidesRetirees = async (archive: JSZip) => {
     .forEach((relations) => archive.remove(relations.name));
 };
 
+const RELATION_D_IMAGE =
+  /<Relationship [^>]*Id="([^"]+)"[^>]*Type="[^"]*\/image"[^>]*\/>/g;
+
+const retireLesRelationsDImagesInutiliseesDUneSlide = async (
+  archive: JSZip,
+  slide: string
+) => {
+  const cheminDesRelations = relationsDeLaPartie(slide);
+  const fichierDesRelations = archive.file(cheminDesRelations);
+  if (!fichierDesRelations) return;
+  const contenuDeLaSlide = await archive.file(slide)!.async('string');
+  const relations = await fichierDesRelations.async('string');
+  archive.file(
+    cheminDesRelations,
+    relations.replace(RELATION_D_IMAGE, (relation, idRelation) =>
+      contenuDeLaSlide.includes(`"${idRelation}"`) ? relation : ''
+    )
+  );
+};
+
+const retireLesRelationsDImagesInutilisees = async (archive: JSZip) => {
+  const slides = archive
+    .file(/^ppt\/slides\/slide\d+\.xml$/)
+    .map(({ name }) => name);
+  await Promise.all(
+    slides.map((slide) =>
+      retireLesRelationsDImagesInutiliseesDUneSlide(archive, slide)
+    )
+  );
+};
+
 const TYPES_DE_CONTENU = '[Content_Types].xml';
 
 const retireLesDeclarationsDesPartiesAbsentes = async (archive: JSZip) => {
@@ -385,9 +417,9 @@ const BAS_DU_RESUME_DU_NIVEAU = 5251772 + 929506;
 const BAS_DE_L_ENCART_ANSSI = 6295579 + 1828577;
 const HAUT_DU_NIVEAU = 4661222;
 const ILLUSTRATION_DU_NIVEAU = {
-  x: 3028950,
+  x: 3071812,
   y: 2918147,
-  largeur: 1714500,
+  largeur: 1628775,
   hauteur: 1628775,
 };
 const ECART_ENTRE_ILLUSTRATION_ET_NIVEAU =
@@ -664,6 +696,15 @@ const ecrisLesDonneesIdentifiees = (
   slide.modify(donneDesIdentifiantsUniquesAuxFormes);
 };
 
+const pointeLImageSur =
+  (fichier: string) => (image: XmlElement, relation?: XmlElement) =>
+    modify.setRelationTarget(fichier)(image, relation!);
+
+const illustrationDuNiveau = (idNiveau: NiveauSecurite) => `${idNiveau}.png`;
+const ILLUSTRATIONS_DES_NIVEAUX = (
+  ['niveau1', 'niveau2', 'niveau3'] as NiveauSecurite[]
+).map(illustrationDuNiveau);
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -681,7 +722,11 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       cleanup: true,
     })
       .loadRoot(NOM_TEMPLATE)
-      .load(NOM_TEMPLATE, MODELE);
+      .load(NOM_TEMPLATE, MODELE)
+      .loadMedia(
+        ILLUSTRATIONS_DES_NIVEAUX,
+        `${this.dossierTemplates}/illustrationsNiveaux`
+      );
 
     presentation.addSlide(MODELE, SLIDE_COUVERTURE, (slide) => {
       slide.modifyElement(
@@ -754,6 +799,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
           by: { text: besoinsDeSecurite.demarche.toLocaleUpperCase('fr') },
         })
       );
+      slide.modifyElement(
+        'besoins-illustration',
+        pointeLImageSur(illustrationDuNiveau(besoinsDeSecurite.idNiveau))
+      );
       ecrisEncartAnssi(slide, besoinsDeSecurite);
       ecrisLExposition(slide, besoinsDeSecurite.exposition);
       ecrisLesDonneesIdentifiees(slide, besoinsDeSecurite.donneesIdentifiees);
@@ -768,6 +817,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
 
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);
+    await retireLesRelationsDImagesInutilisees(archive);
     await retireLesDeclarationsDesPartiesAbsentes(archive);
     return archive.generateAsync({
       type: 'nodebuffer',

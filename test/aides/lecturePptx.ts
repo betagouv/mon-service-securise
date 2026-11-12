@@ -128,3 +128,26 @@ export const identifiantsDeFormesEnDouble = async (pptx: Buffer) => {
     ].map((identifiant) => `${chemin} : ${identifiant}`);
   });
 };
+
+export const imageDeLaForme = async (
+  pptx: Buffer,
+  position: number,
+  nom: string
+) => {
+  const archive = await JSZip.loadAsync(pptx);
+  const chemin = (await cheminsDesSlidesDansLOrdre(archive))[position - 1];
+  const slide = await lisFichier(archive, chemin);
+  const [, idRelation] = slide.match(
+    new RegExp(`name="${nom}"(?:(?!</p:pic>).)*r:embed="([^"]+)"`, 's')
+  )!;
+  const relations = await lisFichier(
+    archive,
+    `${path.posix.dirname(chemin)}/_rels/${path.posix.basename(chemin)}.rels`
+  );
+  const [, cible] = relations.match(
+    new RegExp(`Id="${idRelation}"[^>]*Target="([^"]+)"`)
+  )!;
+  return archive
+    .file(path.posix.join(path.posix.dirname(chemin), cible))!
+    .async('nodebuffer');
+};

@@ -1,8 +1,10 @@
+import { readFile } from 'node:fs/promises';
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import {
   contenuSlide,
   fichiersNonCompresses,
   identifiantsDeFormesEnDouble,
+  imageDeLaForme,
   nombreDeSlides,
   partiesDeclarees,
   partiesDeclareesAbsentes,
@@ -47,6 +49,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
   const adaptateur = new AdaptateurPowerpointAutomizer();
 
   const besoinsDeSecuriteParDefaut: BesoinsDeSecurite = {
+    idNiveau: 'niveau1',
     niveau: 'Un niveau',
     resume: 'Un résumé',
     demarche: 'une démarche',
@@ -577,6 +580,28 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(besoins, 'besoins-niveau')).toBe('Modérés');
       });
 
+      it('illustre le niveau avec l’illustration de MonServiceSécurisé', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            idNiveau: 'niveau2',
+          },
+        });
+
+        const illustration = await imageDeLaForme(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE,
+          'besoins-illustration'
+        );
+        expect(
+          illustration.equals(
+            await readFile(
+              'src/vuesPowerpoint/illustrationsNiveaux/niveau2.png'
+            )
+          )
+        ).toBe(true);
+      });
+
       it('écrit le résumé du niveau', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
@@ -952,10 +977,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const niveau = cadreDeLaForme(besoins, 'besoins-niveau');
         expect(illustration.y).toBe(2918147);
         expect(niveau.y - (illustration.y + illustration.hauteur)).toBe(114300);
-        expect(illustration.largeur / illustration.hauteur).toBeCloseTo(
-          1714500 / 1628775,
-          3
-        );
+        expect(illustration.largeur).toBe(illustration.hauteur);
         expect(illustration.x + illustration.largeur / 2).toBeCloseTo(
           3028950 + 1714500 / 2,
           -1
