@@ -1091,6 +1091,31 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
+      it('colore la pastille de chaque risque selon son niveau, comme les cases de la matrice', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [
+              { ...unRisque('R1', 1, 1), niveau: 'faible' },
+              { ...unRisque('R2', 4, 1), niveau: 'moyen' },
+              { ...unRisque('R3', 4, 4), niveau: 'eleve' },
+            ],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        const couleurDuFond = (nom: string) =>
+          cartographie
+            .match(new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's'))![0]
+            .match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1];
+        expect(couleurDuFond('risque-1-pastille')).toBe('84C14E');
+        expect(couleurDuFond('risque-2-pastille')).toBe('FAC63C');
+        expect(couleurDuFond('risque-3-pastille')).toBe('F8785B');
+      });
+
       const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
         const [forme] = cartographie.match(
           new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
