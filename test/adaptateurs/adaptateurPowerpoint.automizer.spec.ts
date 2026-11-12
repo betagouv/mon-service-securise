@@ -1046,6 +1046,51 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(cartographie).not.toContain('<a:t>R1, R5</a:t>');
       });
 
+      it('écrit le nombre de risques en tête de la liste', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [unRisque('R1', 3, 4), unRisque('RS1', 2, 1)],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        expect(texteDeLaForme(cartographie, 'liste-risques-total')).toBe(
+          '2 RISQUES'
+        );
+      });
+
+      it('écrit l’identifiant et l’intitulé de chaque risque, et retire les lignes inutilisées', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [unRisque('R1', 3, 4), unRisque('RS1', 2, 1)],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        expect(texteDeLaForme(cartographie, 'risque-1-identifiant')).toBe('R1');
+        expect(texteDeLaForme(cartographie, 'risque-1-intitule')).toBe(
+          'Intitulé de R1'
+        );
+        expect(texteDeLaForme(cartographie, 'risque-2-identifiant')).toBe(
+          'RS1'
+        );
+        expect(texteDeLaForme(cartographie, 'risque-2-intitule')).toBe(
+          'Intitulé de RS1'
+        );
+        expect(cartographie).not.toContain('name="risque-3-');
+        expect(cartographie).not.toContain(
+          'Compromission d’un poste de travail'
+        );
+      });
+
       const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
         const [forme] = cartographie.match(
           new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
