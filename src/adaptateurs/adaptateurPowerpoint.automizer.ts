@@ -253,12 +253,13 @@ const laDernierePageEstPleine = (pieces: PieceDuDossier[]) =>
 
 const ecrisNumeroDePage = (
   slide: ISlide,
+  formeDuTitre: string,
   numeroPage: number,
   nombrePages: number
 ) => {
   const numerotation = nombrePages > 1 ? ` ${numeroPage}/${nombrePages}` : '';
   slide.modifyElement(
-    'titre-page-pieces',
+    formeDuTitre,
     modify.replaceText({ replace: 'pagination', by: { text: numerotation } })
   );
 };
@@ -790,13 +791,37 @@ const disposeLesLignesDeRisque = (risques: RisqueCartographie[]) =>
 const nombreDeRisques = (nombre: number) =>
   nombre > 1 ? `${nombre} RISQUES` : `${nombre} RISQUE`;
 
+const BAS_DE_LA_LISTE_DES_RISQUES = 9786938 - 114300;
+
+const tiennentSurLaPage = (risques: RisqueCartographie[]) => {
+  const lignes = disposeLesLignesDeRisque(risques);
+  const derniere = lignes[lignes.length - 1];
+  return (
+    risques.length <= NOMBRE_DE_LIGNES_DE_LA_LISTE_DES_RISQUES &&
+    derniere.y + derniere.hauteur <= BAS_DE_LA_LISTE_DES_RISQUES
+  );
+};
+
+const decoupeLesRisquesEnPages = (risques: RisqueCartographie[]) =>
+  risques.reduce<RisqueCartographie[][]>(
+    (pages, risque) => {
+      const pageCourante = pages[pages.length - 1];
+      return pageCourante.length === 0 ||
+        tiennentSurLaPage([...pageCourante, risque])
+        ? [...pages.slice(0, -1), [...pageCourante, risque]]
+        : [...pages, [risque]];
+    },
+    [[]]
+  );
+
 const ecrisLaListeDesRisques = (
   slide: ISlide,
-  risques: RisqueCartographie[]
+  risques: RisqueCartographie[],
+  nombreTotalDeRisques: number
 ) => {
   slide.modifyElement(
     'liste-risques-total',
-    modify.setText(nombreDeRisques(risques.length))
+    modify.setText(nombreDeRisques(nombreTotalDeRisques))
   );
   const lignes = disposeLesLignesDeRisque(risques);
   Array.from(
@@ -891,13 +916,13 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     const nombrePages = pages.length + (avecPageVide ? 1 : 0);
     pages.forEach((piecesDeLaPage, index) => {
       presentation.addSlide(MODELE, SLIDE_PAGE_PIECES, (slide) => {
-        ecrisNumeroDePage(slide, index + 1, nombrePages);
+        ecrisNumeroDePage(slide, 'titre-page-pieces', index + 1, nombrePages);
         ecrisPiecesDuDossier(slide, piecesDeLaPage);
       });
     });
     if (avecPageVide) {
       presentation.addSlide(MODELE, SLIDE_PAGE_PIECES_VIDE, (slide) => {
-        ecrisNumeroDePage(slide, nombrePages, nombrePages);
+        ecrisNumeroDePage(slide, 'titre-page-pieces', nombrePages, nombrePages);
       });
     }
     presentation.addSlide(MODELE, SLIDE_PRESENTATION_DU_SYSTEME);
@@ -962,9 +987,19 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
-    presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
-      ecrisLaMatrice(slide, cartographiesDesRisques.bruts);
-      ecrisLaListeDesRisques(slide, cartographiesDesRisques.bruts);
+    const risquesBruts = cartographiesDesRisques.bruts;
+    const pagesDesRisques = decoupeLesRisquesEnPages(risquesBruts);
+    pagesDesRisques.forEach((risquesDeLaPage, index) => {
+      presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
+        ecrisNumeroDePage(
+          slide,
+          'cartographie-titre',
+          index + 1,
+          pagesDesRisques.length
+        );
+        ecrisLaMatrice(slide, risquesBruts);
+        ecrisLaListeDesRisques(slide, risquesDeLaPage, risquesBruts.length);
+      });
     });
 
     const archive = await presentation.getJSZip();

@@ -1195,6 +1195,108 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
+      describe('quand les risques ne tiennent pas sur une page', () => {
+        const pagesDeLaCartographie = async (pptx: Buffer) => {
+          const positions = Array.from(
+            { length: await nombreDeSlides(pptx) },
+            (_, index) => index + 1
+          );
+          const slides = await Promise.all(
+            positions.map((position) => contenuSlide(pptx, position))
+          );
+          return slides.filter((slide) =>
+            slide.includes('name="liste-risques-total"')
+          );
+        };
+
+        const identifiantsDeLaPage = (page: string) =>
+          [...page.matchAll(/name="risque-\d+-identifiant"/g)].map(([nom]) =>
+            texteDeLaForme(page, nom.slice(6, -1))
+          );
+
+        const intituleDeTroisLignes = Array.from(
+          { length: 3 },
+          () => 'Compromission d’un poste de travail utilisateur'
+        ).join(' ');
+
+        it('répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+          const huitRisques = Array.from({ length: 8 }, (_, index) => ({
+            ...unRisque(`R${index + 1}`, 4, 4),
+            intitule: intituleDeTroisLignes,
+          }));
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              bruts: huitRisques,
+            },
+          });
+
+          const pages = await pagesDeLaCartographie(pptx);
+          expect(pages).toHaveLength(2);
+          expect(identifiantsDeLaPage(pages[0])).toEqual([
+            'R1',
+            'R2',
+            'R3',
+            'R4',
+            'R5',
+            'R6',
+          ]);
+          expect(identifiantsDeLaPage(pages[1])).toEqual(['R7', 'R8']);
+        });
+
+        it('ne met pas plus de 7 risques par page, le nombre de lignes du modèle', async () => {
+          const neufRisquesCourts = Array.from({ length: 9 }, (_, index) =>
+            unRisque(`R${index + 1}`, 4, 4)
+          );
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              bruts: neufRisquesCourts,
+            },
+          });
+
+          const pages = await pagesDeLaCartographie(pptx);
+          expect(pages.map(identifiantsDeLaPage)).toEqual([
+            ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7'],
+            ['R8', 'R9'],
+          ]);
+        });
+
+        it('numérote les pages dans le titre', async () => {
+          const neufRisquesCourts = Array.from({ length: 9 }, (_, index) =>
+            unRisque(`R${index + 1}`, 4, 4)
+          );
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              bruts: neufRisquesCourts,
+            },
+          });
+
+          const pages = await pagesDeLaCartographie(pptx);
+          expect(
+            pages.map((page) => texteDeLaForme(page, 'cartographie-titre'))
+          ).toEqual([
+            'Cartographie des risques bruts 1/2',
+            'Cartographie des risques bruts 2/2',
+          ]);
+        });
+
+        it('ne numérote pas le titre quand les risques tiennent sur une page', async () => {
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              bruts: [unRisque('R1', 4, 4)],
+            },
+          });
+
+          const [page] = await pagesDeLaCartographie(pptx);
+          expect(texteDeLaForme(page, 'cartographie-titre')).toBe(
+            'Cartographie des risques bruts'
+          );
+        });
+      });
+
       const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
         const [forme] = cartographie.match(
           new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
