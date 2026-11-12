@@ -66,4 +66,19 @@ describe('Les besoins de sécurité présentés à la commission', () => {
       'Portail des démarches'
     );
   });
+
+  it('décrivent l’exposition du service', () => {
+    const description = uneDescriptionV2Valide()
+      .avecOuvertureSysteme('interne')
+      .avecAudienceCible('limitee')
+      .avecDureeDysfonctionnementAcceptable('moinsDe12h')
+      .construis();
+
+    expect(besoinsDeSecurite(description).exposition).toEqual({
+      ouverture: "Interne à l'organisation",
+      audience:
+        'Limitée : Utilisé par un petit nombre de personnes, souvent en interne.',
+      dureeDysfonctionnement: 'Moins de 12h',
+    });
+  });
 });
