@@ -59,7 +59,8 @@
     }),
     collaborateurs: () => ({
       versString: (collaborateurs: string[]) => collaborateurs.join('\n'),
-      versArray: (collaborateurs: string) => collaborateurs.split('\n'),
+      versArray: (collaborateurs: string) =>
+        collaborateurs.split('\n').filter((ligne) => ligne.trim().length > 0),
     }),
   };
 
