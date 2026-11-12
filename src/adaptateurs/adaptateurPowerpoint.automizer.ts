@@ -23,7 +23,8 @@ import {
   ajouteLesBesoinsDeSecurite,
   ILLUSTRATIONS_DES_NIVEAUX,
 } from './automizer/slides/besoinsDeSecurite.js';
-import { ajouteLesCartographiesDesRisques } from './automizer/slides/cartographiesDesRisques.js';
+import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
+import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -61,7 +62,22 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
-    ajouteLesCartographiesDesRisques(presentation, cartographiesDesRisques);
+    ajouteLaCartographieDesRisques(
+      presentation,
+      'bruts',
+      cartographiesDesRisques.bruts
+    );
+    ajouteLaDescriptionDesRisques(presentation, cartographiesDesRisques.aDate);
+    ajouteLaCartographieDesRisques(
+      presentation,
+      'aDate',
+      cartographiesDesRisques.aDate
+    );
+    ajouteLaCartographieDesRisques(
+      presentation,
+      'cibles',
+      cartographiesDesRisques.cibles
+    );
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);

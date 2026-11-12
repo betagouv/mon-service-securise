@@ -172,14 +172,12 @@ const ecrisLaListeDesRisques = (
   });
 };
 
-const TITRES_DES_CARTOGRAPHIES: {
-  cartographie: keyof CartographiesDesRisques;
-  titre: string;
-}[] = [
-  { cartographie: 'bruts', titre: 'Cartographie des risques bruts' },
-  { cartographie: 'aDate', titre: 'Cartographie des risques à date' },
-  { cartographie: 'cibles', titre: 'Cartographie des risques résiduels cible' },
-];
+const TITRES_DES_CARTOGRAPHIES: Record<keyof CartographiesDesRisques, string> =
+  {
+    bruts: 'Cartographie des risques bruts',
+    aDate: 'Cartographie des risques à date',
+    cibles: 'Cartographie des risques résiduels cible',
+  };
 
 const ecrisLeTitreDeLaCartographie = (
   slide: ISlide,
@@ -194,24 +192,22 @@ const ecrisLeTitreDeLaCartographie = (
   ecrisNumeroDePage(slide, 'cartographie-titre', numeroPage, nombrePages);
 };
 
-export const ajouteLesCartographiesDesRisques = (
+export const ajouteLaCartographieDesRisques = (
   presentation: Automizer,
-  cartographiesDesRisques: CartographiesDesRisques
+  cartographie: keyof CartographiesDesRisques,
+  risques: RisqueCartographie[]
 ) => {
-  TITRES_DES_CARTOGRAPHIES.forEach(({ cartographie, titre }) => {
-    const risques = cartographiesDesRisques[cartographie];
-    const pagesDesRisques = decoupeLesRisquesEnPages(risques);
-    pagesDesRisques.forEach((risquesDeLaPage, index) => {
-      presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
-        ecrisLeTitreDeLaCartographie(
-          slide,
-          titre,
-          index + 1,
-          pagesDesRisques.length
-        );
-        ecrisLaMatrice(slide, risques);
-        ecrisLaListeDesRisques(slide, risquesDeLaPage, risques.length);
-      });
+  const pagesDesRisques = decoupeLesRisquesEnPages(risques);
+  pagesDesRisques.forEach((risquesDeLaPage, index) => {
+    presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
+      ecrisLeTitreDeLaCartographie(
+        slide,
+        TITRES_DES_CARTOGRAPHIES[cartographie],
+        index + 1,
+        pagesDesRisques.length
+      );
+      ecrisLaMatrice(slide, risques);
+      ecrisLaListeDesRisques(slide, risquesDeLaPage, risques.length);
     });
   });
 };

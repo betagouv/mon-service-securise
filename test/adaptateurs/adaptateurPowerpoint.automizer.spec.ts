@@ -102,7 +102,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et les cartographies des risques bruts, à date et résiduels cible', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(15);
+      expect(await nombreDeSlides(pptx)).toBe(16);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -1389,7 +1389,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         niveau: 'eleve',
       });
 
-      it('suivent la cartographie brute, chacune avec son titre et ses risques', async () => {
+      it('suivent la cartographie brute et la description des risques, chacune avec son titre et ses risques', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             bruts: [unRisque('R1')],
@@ -1409,14 +1409,60 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'Cartographie des risques bruts',
           'R1',
         ]);
-        expect(await titreEtRisque(14)).toEqual([
+        expect(await titreEtRisque(15)).toEqual([
           'Cartographie des risques à date',
           'R2',
         ]);
-        expect(await titreEtRisque(15)).toEqual([
+        expect(await titreEtRisque(16)).toEqual([
           'Cartographie des risques résiduels cible',
           'R3',
         ]);
+      });
+    });
+
+    describe('sur la description des risques', () => {
+      const POSITION_DESCRIPTION_DES_RISQUES = 14;
+
+      const unRisque = (identifiant: string): RisqueCartographie => ({
+        identifiant,
+        intitule: `Intitulé de ${identifiant}`,
+        description: `Description de ${identifiant}`,
+        gravite: 2,
+        vraisemblance: 2,
+        niveau: 'faible',
+      });
+
+      it('suit la cartographie brute et décrit chaque risque à date, en retirant les lignes inutilisées', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            aDate: [unRisque('R1'), unRisque('RS1')],
+          },
+        });
+
+        const description = await contenuSlide(
+          pptx,
+          POSITION_DESCRIPTION_DES_RISQUES
+        );
+        expect(description).toContain('<a:t>Description des risques</a:t>');
+        expect(texteDeLaForme(description, 'description-risques-total')).toBe(
+          '2 risques'
+        );
+        expect(
+          [1, 2].map((numero) =>
+            ['identifiant', 'intitule', 'description'].map((partie) =>
+              texteDeLaForme(
+                description,
+                `description-risque-${numero}-${partie}`
+              )
+            )
+          )
+        ).toEqual([
+          ['R1', 'Intitulé de R1', 'Description de R1'],
+          ['RS1', 'Intitulé de RS1', 'Description de RS1'],
+        ]);
+        expect(description).not.toContain('name="description-risque-3-');
+        expect(description).not.toContain('Un attaquant externe compromet');
       });
     });
 
