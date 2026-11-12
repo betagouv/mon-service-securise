@@ -340,6 +340,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         modify.setText(contexte.organisation)
       );
       slide.modifyElement('contexte-statut', modify.setText(contexte.statut));
+      slide.modifyElement('contexte-urls', modify.setText(contexte.urls));
     });
 
     const archive = await presentation.getJSZip();
