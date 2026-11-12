@@ -166,11 +166,11 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - liste à droite : « N RISQUES » au total de la cartographie ; une ligne par risque, pastille colorée selon le niveau, intitulé en 18 pt sans ajustement automatique ; hauteur de chaque ligne selon la longueur de l'intitulé (48 caractères par ligne, 274 320 EMU par ligne de texte) ;
    - **pagination à la hauteur** : chaque page prend autant de risques que la colonne peut en contenir au-dessus de la légende, 7 au plus (lignes du modèle) ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre ;
    - refacto en attente (shelve) : règle du niveau déplacée dans `src/moteurRisques/v2/niveauRisque.ts` et utilisée par le front, le PDF et le support ; à réappliquer en y reportant le cas non évalué.
-6. **Slide 13, description des risques** (fichier `slide12.xml`), insérée entre la cartographie brute et la cartographie à date :
-   - mêmes risques que les cartographies (généraux non désactivés, puis spécifiques), repris de la liste à date avec leur description (configuration MSS pour un risque général, saisie de l'utilisateur pour un risque spécifique) ;
-   - « N risques » au total ; une ligne par risque : pastille colorée selon le **niveau à date**, intitulé, description ;
-   - hauteur de chaque ligne selon la plus haute des deux colonnes de texte (18 pt, sans ajustement automatique) ;
-   - pagination à la hauteur, 7 lignes au plus par page, « k/N » dans le titre, comme les cartographies.
+6. ~~**Slide 13, description des risques**~~ (fait) (fichier `slide12.xml`, module `automizer/slides/descriptionDesRisques.ts`), insérée entre la cartographie brute et la cartographie à date :
+   - mêmes risques que les cartographies (généraux non désactivés, puis spécifiques), repris de la liste à date avec leur description (configuration MSS pour un risque général, saisie de l'utilisateur pour un risque spécifique, vide sinon) ;
+   - « N risques » au total ; une ligne par risque : pastille colorée selon le **niveau à date** (couleurs partagées avec les cartographies dans `risqueCartographie.ts`), intitulé, description ;
+   - hauteur de chaque ligne selon la plus haute des deux colonnes (44 caractères par ligne pour l'intitulé, 85 pour la description, 274 320 EMU par ligne de texte) ; textes en 18 pt sans ajustement automatique, avec une marge avant le bord droit ; pastilles de même largeur, centrées ;
+   - pagination à la hauteur, 7 lignes au plus par page, « k/N » dans le titre ; le découpage en pages est partagé avec les cartographies (`automizer/pagination.ts`).
 7. **Slide 18, indice cyber** : texte, puis jauges et radar en images.
 8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.
 9. **Slide 20, exigences restantes** : mesures partielles et à lancer uniquement, statut coloré, échéance, porteurs (`partieResponsable`).
