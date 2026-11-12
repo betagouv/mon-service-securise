@@ -44,4 +44,14 @@ describe('Le contexte du service présenté à la commission', () => {
       'En ligne et accessible aux usagers et/ou agents'
     );
   });
+
+  it('liste les URL du projet, séparées par des virgules', () => {
+    const description = uneDescriptionV2Valide()
+      .avecPointsAcces(['https://rh.exemple.fr', 'https://conges.exemple.fr'])
+      .construis();
+
+    expect(contexteDuService(description).urls).toBe(
+      'https://rh.exemple.fr, https://conges.exemple.fr'
+    );
+  });
 });
