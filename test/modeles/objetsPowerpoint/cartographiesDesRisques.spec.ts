@@ -95,6 +95,7 @@ describe('Les cartographies des risques présentées à la commission', () => {
     expect(bruts[1]).toEqual({
       identifiant: 'RS1',
       intitule: 'Fuite des plannings',
+      description: '',
       gravite: 3,
       vraisemblance: 4,
       niveau: 'eleve',
@@ -160,5 +161,31 @@ describe('Les cartographies des risques présentées à la commission', () => {
     );
 
     expect(aDate[0].niveau).toBe('nonEvalue');
+  });
+
+  it('donnent la description de chaque risque, général ou spécifique', () => {
+    const risqueGeneral = new RisqueV2('V3', { OV1: 3 }, 2, [], {});
+    const { aDate } = cartographiesDesRisques(
+      desRisques({
+        risques: [risqueGeneral],
+        risquesSpecifiques: [
+          new RisqueSpecifiqueV2({
+            id: unUUID('a'),
+            identifiantNumerique: 'RS1',
+            intitule: 'Fuite des plannings',
+            description: 'Les plannings sont diffusés hors de la commune.',
+            categories: ['confidentialite'],
+            risqueBrut: { gravite: 3, vraisemblance: 4 },
+            gravite: 2,
+            vraisemblance: 1,
+          }),
+        ],
+      })
+    );
+
+    expect(aDate.map(({ description }) => description)).toEqual([
+      risqueGeneral.description,
+      'Les plannings sont diffusés hors de la commune.',
+    ]);
   });
 });

@@ -21,6 +21,7 @@ const niveauDeRisque = (
 export type RisqueCartographie = {
   identifiant: string;
   intitule: string;
+  description: string;
   gravite: Gravite;
   vraisemblance: Vraisemblance;
   niveau: NiveauDeRisque;
@@ -33,16 +34,13 @@ export type CartographiesDesRisques = {
 };
 
 const placeLeRisque = (
-  identifiant: string,
-  intitule: string,
-  gravite: Gravite,
-  vraisemblance: Vraisemblance
+  risque: Omit<RisqueCartographie, 'niveau' | 'description'> & {
+    description?: string;
+  }
 ): RisqueCartographie => ({
-  identifiant,
-  intitule,
-  gravite,
-  vraisemblance,
-  niveau: niveauDeRisque(gravite, vraisemblance),
+  ...risque,
+  description: risque.description ?? '',
+  niveau: niveauDeRisque(risque.gravite, risque.vraisemblance),
 });
 
 type JSONRisques = ReturnType<RisquesV2['toJSON']>;
@@ -50,29 +48,40 @@ type JSONRisques = ReturnType<RisquesV2['toJSON']>;
 const risquesGenerauxActifs = (risques: JSONRisques['risques']) =>
   risques
     .filter(({ desactive }) => !desactive)
-    .map(({ id, intitule, gravite, vraisemblance }) =>
-      placeLeRisque(id, intitule, gravite, vraisemblance)
+    .map(({ id, intitule, description, gravite, vraisemblance }) =>
+      placeLeRisque({
+        identifiant: id,
+        intitule,
+        description,
+        gravite,
+        vraisemblance,
+      })
     );
 
 const risquesSpecifiquesBruts = (
   risquesSpecifiques: JSONRisques['risquesSpecifiques']
 ) =>
-  risquesSpecifiques.map(
-    ({ identifiantNumerique, intitule, graviteBrute, vraisemblanceBrute }) =>
-      placeLeRisque(
-        identifiantNumerique,
-        intitule,
-        graviteBrute,
-        vraisemblanceBrute
-      )
+  risquesSpecifiques.map((risque) =>
+    placeLeRisque({
+      identifiant: risque.identifiantNumerique,
+      intitule: risque.intitule,
+      description: risque.description,
+      gravite: risque.graviteBrute,
+      vraisemblance: risque.vraisemblanceBrute,
+    })
   );
 
 const risquesSpecifiquesADate = (
   risquesSpecifiques: JSONRisques['risquesSpecifiques']
 ) =>
-  risquesSpecifiques.map(
-    ({ identifiantNumerique, intitule, gravite, vraisemblance }) =>
-      placeLeRisque(identifiantNumerique, intitule, gravite, vraisemblance)
+  risquesSpecifiques.map((risque) =>
+    placeLeRisque({
+      identifiant: risque.identifiantNumerique,
+      intitule: risque.intitule,
+      description: risque.description,
+      gravite: risque.gravite,
+      vraisemblance: risque.vraisemblance,
+    })
   );
 
 export const cartographiesDesRisques = (

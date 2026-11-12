@@ -1018,6 +1018,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       ): RisqueCartographie => ({
         identifiant,
         intitule: `Intitulé de ${identifiant}`,
+        description: `Description de ${identifiant}`,
         gravite,
         vraisemblance,
         niveau: 'moyen',
@@ -1382,6 +1383,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const unRisque = (identifiant: string): RisqueCartographie => ({
         identifiant,
         intitule: `Intitulé de ${identifiant}`,
+        description: `Description de ${identifiant}`,
         gravite: 4,
         vraisemblance: 4,
         niveau: 'eleve',
