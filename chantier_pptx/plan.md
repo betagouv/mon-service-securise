@@ -142,7 +142,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 **2bis. Slides 4 et 5, présentation du système et contexte** (fichiers `slide3.xml` et `slide4.xml` du template), insérées après les pièces du dossier. La slide 4 (logo à insérer) reste statique. La slide 5 est remplie depuis la description V2, avec les libellés du référentiel, dans un objet de `src/modeles/objetsPowerpoint/` (même motif que les pièces du dossier) :
 
-- description du SI : `presentation` (jusqu'à 2000 caractères) ; **police réduite selon la longueur**, jusqu'à un minimum lisible, puis coupure « … » (l'ajustement automatique de PowerPoint n'est recalculé qu'à la modification du texte) ;
+- description du SI : `presentation` (jusqu'à 2000 caractères) ; **police réduite selon la longueur**, jusqu'à un minimum lisible, puis coupure « … » (l'ajustement automatique de PowerPoint n'est recalculé qu'à la modification du texte). Calibré sur les rendus : 21 pt sur 2 lignes (105 caractères par ligne), 16 pt sur 3 lignes (120), 14 pt sur 4 lignes (130), coupure au-delà. Le cadre de texte couvre tout le fond blanc, texte centré verticalement, sans ajustement automatique ;
 - nom de l'organisation : nom et SIRET formaté (« Commune de Villeneuve (123 456 789 00010) ») ;
 - statut : description du `statutDeploiement` du référentiel V2 (« En ligne et accessible aux usagers et/ou agents » plutôt que « En production » de la maquette) ;
 - URL(s) du projet : `pointsAcces`, séparés par des virgules ;

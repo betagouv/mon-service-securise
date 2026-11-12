@@ -312,6 +312,20 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     describe('sur le contexte', () => {
       const POSITION_SLIDE_CONTEXTE = 6;
 
+      const formeDescription = (slide: string) =>
+        slide.match(
+          /name="contexte-description"(?:(?!<\/p:sp>).)*<\/p:sp>/s
+        )![0];
+
+      const taillesDePolice = (forme: string) => [
+        ...new Set(
+          [...forme.matchAll(/<a:rPr [^>]*sz="(\d+)"/g)].map(([, sz]) => sz)
+        ),
+      ];
+
+      const descriptionDe = (nombreDeMots: number) =>
+        Array.from({ length: nombreDeMots }, () => 'description').join(' ');
+
       it('remplace le placeholder par la description du système d’information', async () => {
         const pptx = await genereSupport({
           contexte: {
@@ -325,6 +339,88 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(contexte).toContain(
           '<a:t>Un portail de démarches en ligne</a:t>'
         );
+      });
+
+      it('réduit la police de la description à 16 pt quand elle dépasse deux lignes à 21 pt', async () => {
+        const pptx = await genereSupport({
+          contexte: { ...contexteParDefaut, description: descriptionDe(20) },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1600']);
+      });
+
+      it('réduit la police de la description à 14 pt quand elle dépasse trois lignes à 16 pt', async () => {
+        const pptx = await genereSupport({
+          contexte: { ...contexteParDefaut, description: descriptionDe(35) },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1400']);
+      });
+
+      it('compte chaque saut de ligne de la description comme une nouvelle ligne', async () => {
+        const pptx = await genereSupport({
+          contexte: {
+            ...contexteParDefaut,
+            description: 'Premier paragraphe\n\nSecond paragraphe',
+          },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1600']);
+      });
+
+      it('coupe la description par « … » quand elle dépasse quatre lignes à 14 pt', async () => {
+        const pptx = await genereSupport({
+          contexte: { ...contexteParDefaut, description: descriptionDe(60) },
+        });
+
+        const description = formeDescription(
+          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
+        );
+        const [, texte] = description.match(/<a:t>([^<]*)<\/a:t>/)!;
+        expect(texte).toBe(`${descriptionDe(40)}…`);
+        expect(taillesDePolice(description)).toEqual(['1400']);
+      });
+
+      it('coupe aussi la description aux sauts de ligne quand elle dépasse quatre lignes à 14 pt', async () => {
+        const pptx = await genereSupport({
+          contexte: {
+            ...contexteParDefaut,
+            description: 'Premier paragraphe\n\n\n\nDernier paragraphe',
+          },
+        });
+
+        const description = formeDescription(
+          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
+        );
+        expect(description).toContain('<a:t>Premier paragraphe…</a:t>');
+        expect(description).not.toContain('Dernier paragraphe');
+      });
+
+      it('écrit chaque ligne de la description dans son propre paragraphe', async () => {
+        const pptx = await genereSupport({
+          contexte: {
+            ...contexteParDefaut,
+            description: 'Premier paragraphe\n\nSecond paragraphe',
+          },
+        });
+
+        const description = formeDescription(
+          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
+        );
+        const paragraphes = [...description.matchAll(/<a:p>.*?<\/a:p>/gs)].map(
+          ([paragraphe]) =>
+            [...paragraphe.matchAll(/<a:t>([^<]*)<\/a:t>/g)]
+              .map(([, texte]) => texte)
+              .join('')
+        );
+        expect(paragraphes).toEqual([
+          'Premier paragraphe',
+          '',
+          'Second paragraphe',
+        ]);
       });
 
       it('écrit l’organisation responsable', async () => {

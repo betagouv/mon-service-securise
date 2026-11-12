@@ -1,4 +1,4 @@
-import { Automizer, ISlide, modify } from 'pptx-automizer';
+import { Automizer, ISlide, modify, XmlElement } from 'pptx-automizer';
 import JSZip from 'jszip';
 import path from 'node:path';
 import {
@@ -77,19 +77,34 @@ const FORMES_LIGNE_A_COMPLETER = [
   'separateur',
 ];
 
-const nombreDeLignesDeTexte = (texte: string) =>
-  texte.split(' ').reduce(
+const nombreDeLignesDUnParagraphe = (
+  paragraphe: string,
+  caracteresParLigne: number
+) =>
+  paragraphe.split(' ').reduce(
     ({ lignes, longueurLigneCourante }, mot) => {
       const longueurAvecLeMot =
         longueurLigneCourante === 0
           ? mot.length
           : longueurLigneCourante + 1 + mot.length;
-      return longueurAvecLeMot > CARACTERES_PAR_LIGNE_D_INTITULE
+      return longueurAvecLeMot > caracteresParLigne
         ? { lignes: lignes + 1, longueurLigneCourante: mot.length }
         : { lignes, longueurLigneCourante: longueurAvecLeMot };
     },
     { lignes: 1, longueurLigneCourante: 0 }
   ).lignes;
+
+const nombreDeLignesDeTexte = (
+  texte: string,
+  caracteresParLigne = CARACTERES_PAR_LIGNE_D_INTITULE
+) =>
+  texte
+    .split(/\r?\n/)
+    .reduce(
+      (lignes, paragraphe) =>
+        lignes + nombreDeLignesDUnParagraphe(paragraphe, caracteresParLigne),
+      0
+    );
 
 const intituleAEcrire = (piece: PieceDuDossier) => {
   if (!piece.intituleAbrege)
@@ -284,6 +299,71 @@ const retireLesDeclarationsDesPartiesAbsentes = async (archive: JSZip) => {
   archive.file(TYPES_DE_CONTENU, sansPartiesAbsentes);
 };
 
+type PoliceDeLaDescription = {
+  taille: number;
+  caracteresParLigne: number;
+  lignes: number;
+};
+
+const POLICES_DE_LA_DESCRIPTION: PoliceDeLaDescription[] = [
+  { taille: 21, caracteresParLigne: 105, lignes: 2 },
+  { taille: 16, caracteresParLigne: 120, lignes: 3 },
+  { taille: 14, caracteresParLigne: 130, lignes: 4 },
+];
+const POLICE_MINIMALE_DE_LA_DESCRIPTION =
+  POLICES_DE_LA_DESCRIPTION[POLICES_DE_LA_DESCRIPTION.length - 1];
+
+const changeLaTailleDePolice = (taille: number) => (forme: XmlElement) => {
+  ['a:rPr', 'a:endParaRPr'].forEach((balise) => {
+    Array.from(forme.getElementsByTagName(balise)).forEach((proprietes) =>
+      proprietes.setAttribute('sz', String(taille * 100))
+    );
+  });
+};
+
+const unParagrapheParLigne = (forme: XmlElement) => {
+  const [paragraphe] = Array.from(forme.getElementsByTagName('a:p'));
+  const [texte] = Array.from(paragraphe.getElementsByTagName('a:t'));
+  (texte.textContent ?? '').split(/\r?\n/).forEach((ligne) => {
+    const paragrapheDeLaLigne = paragraphe.cloneNode(true) as XmlElement;
+    paragrapheDeLaLigne.getElementsByTagName('a:t')[0].textContent = ligne;
+    paragraphe.parentNode!.insertBefore(paragrapheDeLaLigne, paragraphe);
+  });
+  paragraphe.parentNode!.removeChild(paragraphe);
+};
+
+const tientDansLaPolice = (
+  texte: string,
+  { caracteresParLigne, lignes }: PoliceDeLaDescription
+) => nombreDeLignesDeTexte(texte, caracteresParLigne) <= lignes;
+
+const coupeLaDescription = (
+  description: string,
+  police: PoliceDeLaDescription
+) => {
+  if (tientDansLaPolice(description, police)) return description;
+  const coupeA = (position: number) =>
+    `${description.slice(0, position).trimEnd()}…`;
+  const finsDeMots = [...description.matchAll(/\s/g)].map(({ index }) => index);
+  const derniereFinGardee =
+    finsDeMots.findLast((fin) => tientDansLaPolice(coupeA(fin), police)) ?? 0;
+  return coupeA(derniereFinGardee);
+};
+
+const policeDeLaDescription = (description: string) =>
+  POLICES_DE_LA_DESCRIPTION.find((police) =>
+    tientDansLaPolice(description, police)
+  ) ?? POLICE_MINIMALE_DE_LA_DESCRIPTION;
+
+const ecrisLaDescription = (slide: ISlide, description = '') => {
+  const police = policeDeLaDescription(description);
+  slide.modifyElement('contexte-description', [
+    modify.setText(coupeLaDescription(description, police)),
+    unParagrapheParLigne,
+    changeLaTailleDePolice(police.taille),
+  ]);
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -331,10 +411,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     }
     presentation.addSlide(MODELE, SLIDE_PRESENTATION_DU_SYSTEME);
     presentation.addSlide(MODELE, SLIDE_CONTEXTE, (slide) => {
-      slide.modifyElement(
-        'contexte-description',
-        modify.setText(contexte.description ?? '')
-      );
+      ecrisLaDescription(slide, contexte.description);
       slide.modifyElement(
         'contexte-organisation',
         modify.setText(contexte.organisation)
