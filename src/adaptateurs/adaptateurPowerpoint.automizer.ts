@@ -8,7 +8,10 @@ import {
 } from './adaptateurPowerpoint.interface.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
-import { BesoinsDeSecurite } from '../modeles/objetsPowerpoint/besoinsDeSecurite.js';
+import {
+  BesoinsDeSecurite,
+  ExpositionDuService,
+} from '../modeles/objetsPowerpoint/besoinsDeSecurite.js';
 
 const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
@@ -427,6 +430,42 @@ const ecrisEncartAnssi = (
   );
 };
 
+const CARACTERES_PAR_LIGNE_DE_L_OUVERTURE = 42;
+const HAUTEUR_D_UNE_LIGNE_DE_L_EXPOSITION = 308595;
+const FORMES_SOUS_L_OUVERTURE = [
+  'exposition-audience-libelle',
+  'exposition-audience',
+  'exposition-duree-libelle',
+  'exposition-duree',
+];
+
+const agrandisLOuvertureDUneLigne = (slide: ISlide) => {
+  slide.modifyElement(
+    'exposition-ouverture',
+    modify.updatePosition({ h: HAUTEUR_D_UNE_LIGNE_DE_L_EXPOSITION })
+  );
+  FORMES_SOUS_L_OUVERTURE.forEach((forme) =>
+    slide.modifyElement(
+      forme,
+      modify.updatePosition({ y: HAUTEUR_D_UNE_LIGNE_DE_L_EXPOSITION })
+    )
+  );
+};
+
+const ecrisLExposition = (
+  slide: ISlide,
+  { ouverture, audience, dureeDysfonctionnement }: ExpositionDuService
+) => {
+  slide.modifyElement('exposition-ouverture', modify.setText(ouverture));
+  if (nombreDeLignesDeTexte(ouverture, CARACTERES_PAR_LIGNE_DE_L_OUVERTURE) > 1)
+    agrandisLOuvertureDUneLigne(slide);
+  slide.modifyElement('exposition-audience', modify.setText(audience));
+  slide.modifyElement(
+    'exposition-duree',
+    modify.setText(dureeDysfonctionnement)
+  );
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -518,6 +557,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         })
       );
       ecrisEncartAnssi(slide, besoinsDeSecurite);
+      ecrisLExposition(slide, besoinsDeSecurite.exposition);
       slide.modifyElement(
         'besoins-explication',
         modify.replaceText([

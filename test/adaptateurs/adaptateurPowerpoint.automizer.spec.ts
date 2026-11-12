@@ -52,6 +52,11 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     niveauIndicatifAnssi: 'Un niveau indicatif',
     depasseRecommandation: true,
     nomService: 'Un service',
+    exposition: {
+      ouverture: 'Une ouverture',
+      audience: 'Une audience',
+      dureeDysfonctionnement: 'Une durée',
+    },
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -622,6 +627,69 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(explication).toContain(
           'MonServiceSécurisé, soit Modérés, apparaît'
+        );
+      });
+
+      it('écrit l’exposition du service', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            exposition: {
+              ouverture: 'Accessible depuis internet',
+              audience: 'Large : Utilisé à l’échelle nationale.',
+              dureeDysfonctionnement: 'Moins de 4h',
+            },
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'exposition-ouverture')).toBe(
+          'Accessible depuis internet'
+        );
+        expect(texteDeLaForme(besoins, 'exposition-audience')).toBe(
+          'Large : Utilisé à l’échelle nationale.'
+        );
+        expect(texteDeLaForme(besoins, 'exposition-duree')).toBe('Moins de 4h');
+      });
+
+      it('agrandit l’ouverture et descend l’audience et la durée d’une ligne quand l’ouverture dépasse une ligne', async () => {
+        const avecOuverture = async (ouverture: string) =>
+          contenuSlide(
+            await genereSupport({
+              besoinsDeSecurite: {
+                ...besoinsDeSecuriteParDefaut,
+                exposition: {
+                  ...besoinsDeSecuriteParDefaut.exposition,
+                  ouverture,
+                },
+              },
+            }),
+            POSITION_SLIDE_BESOINS_DE_SECURITE
+          );
+        const courte = await avecOuverture(
+          'Interne et ouvert à certains tiers'
+        );
+        const longue = await avecOuverture(
+          "Accessible à très peu de personnes en interne de l'organisation"
+        );
+
+        const HAUTEUR_D_UNE_LIGNE = 308595;
+        expect(cadreDeLaForme(longue, 'exposition-ouverture').hauteur).toBe(
+          cadreDeLaForme(courte, 'exposition-ouverture').hauteur +
+            HAUTEUR_D_UNE_LIGNE
+        );
+        [
+          'exposition-audience-libelle',
+          'exposition-audience',
+          'exposition-duree-libelle',
+          'exposition-duree',
+        ].forEach((forme) =>
+          expect(cadreDeLaForme(longue, forme).y).toBe(
+            cadreDeLaForme(courte, forme).y + HAUTEUR_D_UNE_LIGNE
+          )
         );
       });
 

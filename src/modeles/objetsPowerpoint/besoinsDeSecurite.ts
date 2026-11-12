@@ -1,6 +1,12 @@
 import { DescriptionServiceV2 } from '../descriptionServiceV2.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 
+export type ExpositionDuService = {
+  ouverture: string;
+  audience: string;
+  dureeDysfonctionnement: string;
+};
+
 export type BesoinsDeSecurite = {
   niveau: string;
   resume: string;
@@ -8,6 +14,7 @@ export type BesoinsDeSecurite = {
   niveauIndicatifAnssi: string;
   depasseRecommandation: boolean;
   nomService: string;
+  exposition: ExpositionDuService;
 };
 
 const NIVEAUX: Record<
@@ -45,5 +52,11 @@ export const besoinsDeSecurite = (
     niveauIndicatifAnssi: NIVEAUX[description.estimeNiveauDeSecurite()].nom,
     depasseRecommandation: description.niveauSecuriteDepasseRecommandation(),
     nomService: description.nomService,
+    exposition: {
+      ouverture: description.descriptionOuvertureSysteme(),
+      audience: description.descriptionAudienceCible(),
+      dureeDysfonctionnement:
+        description.descriptionDureeDysfonctionnementAcceptable(),
+    },
   };
 };

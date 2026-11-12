@@ -270,6 +270,20 @@ export class DescriptionServiceV2 {
     return this.referentiel.descriptionTypeHebergement(this.typeHebergement);
   }
 
+  descriptionOuvertureSysteme() {
+    return this.referentiel.descriptionOuvertureSysteme(this.ouvertureSysteme);
+  }
+
+  descriptionAudienceCible() {
+    return this.referentiel.descriptionAudienceCible(this.audienceCible);
+  }
+
+  descriptionDureeDysfonctionnementAcceptable() {
+    return this.referentiel.descriptionDelaiAvantImpactCritique(
+      this.dureeDysfonctionnementAcceptable
+    );
+  }
+
   descriptionSpecificitesProjet() {
     return this.specificitesProjet
       .map((s) => this.referentiel.descriptionSpecificiteProjet(s))

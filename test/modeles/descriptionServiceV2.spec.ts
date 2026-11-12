@@ -509,5 +509,32 @@ describe('Une description service V2', () => {
         'Des postes de travail, Un annuaire'
       );
     });
+
+    it('sait décrire l’ouverture de son système', () => {
+      const description = uneDescriptionV2Valide()
+        .avecOuvertureSysteme('interne')
+        .construis();
+      expect(description.descriptionOuvertureSysteme()).toBe(
+        "Interne à l'organisation"
+      );
+    });
+
+    it('sait décrire son audience cible', () => {
+      const description = uneDescriptionV2Valide()
+        .avecAudienceCible('limitee')
+        .construis();
+      expect(description.descriptionAudienceCible()).toBe(
+        'Limitée : Utilisé par un petit nombre de personnes, souvent en interne.'
+      );
+    });
+
+    it('sait décrire sa durée maximale acceptable de dysfonctionnement', () => {
+      const description = uneDescriptionV2Valide()
+        .avecDureeDysfonctionnementAcceptable('moinsDe12h')
+        .construis();
+      expect(description.descriptionDureeDysfonctionnementAcceptable()).toBe(
+        'Moins de 12h'
+      );
+    });
   });
 });
