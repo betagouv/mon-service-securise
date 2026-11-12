@@ -1491,6 +1491,76 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toEqual(['84C14E', 'FAC63C', 'F8785B', 'EEEEEE']);
       });
 
+      describe('quand les risques ne tiennent pas sur une page', () => {
+        const pagesDeLaDescription = async (pptx: Buffer) => {
+          const positions = Array.from(
+            { length: await nombreDeSlides(pptx) },
+            (_, index) => index + 1
+          );
+          const slides = await Promise.all(
+            positions.map((position) => contenuSlide(pptx, position))
+          );
+          return slides.filter((slide) =>
+            slide.includes('name="description-risques-total"')
+          );
+        };
+
+        const identifiantsDeLaPage = (page: string) =>
+          [
+            ...page.matchAll(/name="(description-risque-\d+-identifiant)"/g),
+          ].map(([, nom]) => texteDeLaForme(page, nom));
+
+        const descriptionDeTroisLignes = Array.from(
+          { length: 3 },
+          () =>
+            'Pour atteindre son objectif visé, un attaquant externe va compromettre'
+        ).join(' ');
+
+        const huitRisques = Array.from({ length: 8 }, (_, index) => ({
+          ...unRisque(`R${index + 1}`),
+          description: descriptionDeTroisLignes,
+        }));
+
+        it('répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              aDate: huitRisques,
+            },
+          });
+
+          const pages = await pagesDeLaDescription(pptx);
+          expect(pages.map(identifiantsDeLaPage)).toEqual([
+            ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7'],
+            ['R8'],
+          ]);
+          pages.forEach((page) =>
+            expect(texteDeLaForme(page, 'description-risques-total')).toBe(
+              '8 risques'
+            )
+          );
+        });
+
+        it('numérote les pages dans le titre', async () => {
+          const pptx = await genereSupport({
+            cartographiesDesRisques: {
+              ...cartographiesParDefaut,
+              aDate: huitRisques,
+            },
+          });
+
+          const pages = await pagesDeLaDescription(pptx);
+          expect(
+            pages.map((page) =>
+              texteDeLaForme(page, 'description-risques-titre')
+            )
+          ).toEqual([
+            'Description des risques 1/2',
+            'Description des risques 2/2',
+          ]);
+        });
+      });
+
       describe('pour les lignes de la description', () => {
         const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT = 274320;
         const MARGES_D_UNE_LIGNE = 76200 + 50800;

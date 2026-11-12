@@ -12,6 +12,7 @@ import {
   policeQuiConvient,
 } from '../texte.js';
 import { colore, ecrisNumeroDePage } from '../formes.js';
+import { decoupeEnPagesALaHauteur } from '../pagination.js';
 
 const POLICES_D_UNE_CASE_DE_LA_MATRICE: Police[] = [
   { taille: 18, caracteresParLigne: 11, lignes: 3 },
@@ -92,18 +93,6 @@ const tiennentSurLaPage = (risques: RisqueCartographie[]) => {
     derniere.y + derniere.hauteur <= BAS_DE_LA_LISTE_DES_RISQUES
   );
 };
-
-const decoupeLesRisquesEnPages = (risques: RisqueCartographie[]) =>
-  risques.reduce<RisqueCartographie[][]>(
-    (pages, risque) => {
-      const pageCourante = pages[pages.length - 1];
-      return pageCourante.length === 0 ||
-        tiennentSurLaPage([...pageCourante, risque])
-        ? [...pages.slice(0, -1), [...pageCourante, risque]]
-        : [...pages, [risque]];
-    },
-    [[]]
-  );
 
 const ecrisLaListeDesRisques = (
   slide: ISlide,
@@ -190,7 +179,7 @@ export const ajouteLaCartographieDesRisques = (
   cartographie: keyof CartographiesDesRisques,
   risques: RisqueCartographie[]
 ) => {
-  const pagesDesRisques = decoupeLesRisquesEnPages(risques);
+  const pagesDesRisques = decoupeEnPagesALaHauteur(risques, tiennentSurLaPage);
   pagesDesRisques.forEach((risquesDeLaPage, index) => {
     presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
       ecrisLeTitreDeLaCartographie(
