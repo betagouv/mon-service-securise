@@ -86,10 +86,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse et les objectifs de sécurité', async () => {
+    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et la cartographie des risques bruts', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(9);
+      expect(await nombreDeSlides(pptx)).toBe(13);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -118,6 +118,16 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
       expect(await contenuSlide(pptx, 9)).toContain(
         '<a:t>Objectifs de sécurité, impacts et exposition</a:t>'
+      );
+      const intercalaireHistorique = await contenuSlide(pptx, 10);
+      expect(intercalaireHistorique).toContain('<a:t>2. Historique</a:t>');
+      expect(intercalaireHistorique).toContain('<a:t>Logo</a:t>');
+      expect(await contenuSlide(pptx, 11)).toContain('<a:t>EVÈNEMENT</a:t>');
+      expect(await contenuSlide(pptx, 12)).toContain(
+        '<a:t>3. Détail : Risques et plan d’action</a:t>'
+      );
+      expect(await contenuSlide(pptx, 13)).toContain(
+        '<a:t>Cartographie des risques bruts</a:t>'
       );
     });
 

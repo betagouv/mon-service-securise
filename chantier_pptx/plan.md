@@ -157,7 +157,13 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - données identifiées : **pastilles en flux** (elles se suivent puis passent à la ligne, largeur estimée d'après le texte, deux lignes pour un texte long), catégories du référentiel puis catégories libres ; une pastille modèle copiée par donnée (identifiants de formes renumérotés) ; si elles débordent de la carte, police réduite à 16 puis 14 pt, puis « et N autres » ;
    - illustration : **remplacée selon le niveau** par les illustrations MSS, converties en PNG (`src/vuesPowerpoint/illustrationsNiveaux/niveauN.png`, depuis `public/assets/images/niveauxSecurite/niveauN.svg`) ; cadre carré ; les relations d'image laissées par pptx-automizer sont retirées après génération.
 4. ~~**Spike sur la lib**~~ : fait, voir la section « Spike ».
-5. **Slides 12, 14 et 15, matrices** : libellés des cases (brute, à date, cible), liste des risques, pastilles colorées selon le niveau.
+5. **Slides 9 à 12, 14 et 15 : historique (statique) et cartographies des risques** (fichiers `slide8.xml` à `slide11.xml`) :
+   - slides 9 (intercalaire « Historique »), 10 (tableau de l'historique, à compléter) et 11 (intercalaire « Risques et plan d'action ») statiques ; la slide 13 (description des risques) attend l'étape 6 ;
+   - une seule slide modèle (`slide11.xml`, risques bruts) pour les trois cartographies : brute (`risquesBruts`), à date (`risques`) et résiduelle cible (`risquesCibles`), le titre changeant ; les slides 14 et 15 de la maquette ne servent pas ;
+   - risques affichés, comme le front et l'annexe PDF : risques généraux non désactivés, puis risques spécifiques (évaluation brute pour la cartographie brute, à date pour les deux autres, faute d'évaluation cible) ;
+   - matrice : couleurs des cases statiques (identiques à `niveauRisqueV2`) ; une zone de texte par case avec les identifiants des risques ;
+   - liste à droite : une ligne par risque, pastille de la couleur de son niveau, intitulé ; « N RISQUES » au total ;
+   - **pagination** : 7 risques par page (le maximum garanti avec des intitulés de trois lignes) ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre, comme les pièces du dossier.
 6. **Slide 13, description des risques**.
 7. **Slide 18, indice cyber** : texte, puis jauges et radar en images.
 8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.

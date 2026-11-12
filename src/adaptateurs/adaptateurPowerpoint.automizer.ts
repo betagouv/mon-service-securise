@@ -29,6 +29,10 @@ const SLIDE_CONTEXTE = 4;
 const SLIDE_PERIMETRE_VUE_FONCTIONNELLE = 5;
 const SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE = 6;
 const SLIDE_BESOINS_DE_SECURITE = 7;
+const SLIDE_INTERCALAIRE_HISTORIQUE = 8;
+const SLIDE_HISTORIQUE = 9;
+const SLIDE_INTERCALAIRE_RISQUES = 10;
+const SLIDE_CARTOGRAPHIE_DES_RISQUES = 11;
 const SLIDE_MEMBRES_COMMISSION = 30;
 const SLIDE_PAGE_PIECES = 32;
 const SLIDE_PAGE_PIECES_VIDE = 31;
@@ -814,6 +818,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         ])
       );
     });
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_HISTORIQUE);
+    presentation.addSlide(MODELE, SLIDE_HISTORIQUE);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
+    presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES);
 
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);
