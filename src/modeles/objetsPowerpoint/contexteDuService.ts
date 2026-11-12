@@ -4,6 +4,7 @@ import Entite from '../entite.js';
 export type ContexteDuService = {
   description?: string;
   organisation: string;
+  statut: string;
 };
 
 const siretFormate = (siret: string) =>
@@ -17,4 +18,5 @@ export const contexteDuService = (
 ): ContexteDuService => ({
   description: description.presentation,
   organisation: organisation(description.organisationResponsable),
+  statut: description.descriptionStatutDeploiement(),
 });
