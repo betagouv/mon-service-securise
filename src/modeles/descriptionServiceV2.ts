@@ -265,4 +265,8 @@ export class DescriptionServiceV2 {
       this.statutDeploiement
     );
   }
+
+  descriptionTypeHebergement() {
+    return this.referentiel.descriptionTypeHebergement(this.typeHebergement);
+  }
 }

@@ -64,4 +64,14 @@ describe('Le contexte du service présenté à la commission', () => {
       'Service en ligne, API'
     );
   });
+
+  it('décrit l’hébergement avec le libellé du référentiel', () => {
+    const description = uneDescriptionV2Valide()
+      .avecTypeHebergement('saas')
+      .construis();
+
+    expect(contexteDuService(description).hebergement).toBe(
+      "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)"
+    );
+  });
 });
