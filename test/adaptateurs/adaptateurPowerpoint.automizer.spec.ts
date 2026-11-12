@@ -22,6 +22,18 @@ const texteDeLaForme = (slide: string, nom: string) => {
     .join('');
 };
 
+const cadreDeLaForme = (slide: string, nom: string) => {
+  const cadre = slide.match(
+    new RegExp(
+      `name="${nom}"(?:(?!</p:(?:sp|pic)>).)*?<a:off x="(\\d+)" y="(\\d+)"/>\\s*<a:ext cx="(\\d+)" cy="(\\d+)"/>`,
+      's'
+    )
+  );
+  if (!cadre) throw new Error(`Forme ${nom} absente de la slide`);
+  const [, x, y, largeur, hauteur] = cadre.map(Number);
+  return { x, y, largeur, hauteur };
+};
+
 const unePiece = (intitule: string): PieceDuDossier => ({
   intitule,
   source: 'MonServiceSécurisé',
@@ -37,6 +49,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     niveau: 'Un niveau',
     resume: 'Un résumé',
     demarche: 'une démarche',
+    niveauIndicatifAnssi: 'Un niveau indicatif',
+    depasseRecommandation: true,
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -537,6 +551,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
     describe('sur les objectifs de sécurité', () => {
       const POSITION_SLIDE_BESOINS_DE_SECURITE = 9;
+      const BAS_DE_L_ENCART_ANSSI = 6295579 + 1828577;
+      const DESCENTE_SANS_ENCART = BAS_DE_L_ENCART_ANSSI - (5251772 + 929506);
 
       it('écrit le niveau de besoin de sécurité', async () => {
         const pptx = await genereSupport({
@@ -584,6 +600,84 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(texteDeLaForme(besoins, 'besoins-demarche')).toBe(
           'DÉMARCHE INDICATIVE ADAPTÉE : INTERMÉDIAIRE'
+        );
+      });
+
+      it('nomme, dans l’encart, le niveau identifié à titre indicatif par l’ANSSI', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            niveauIndicatifAnssi: 'Basiques',
+            depasseRecommandation: true,
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'besoins-anssi-titre')).toBe(
+          'Ce niveau est supérieur à celui identifié à titre indicatif par l’ANSSI (Basiques).'
+        );
+      });
+
+      it('retire l’encart quand le niveau choisi n’est pas supérieur à celui identifié par l’ANSSI', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            depasseRecommandation: false,
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(besoins).not.toContain('name="besoins-anssi-');
+      });
+
+      it('descend le niveau et son résumé à la place de l’encart quand le niveau choisi est celui recommandé', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            depasseRecommandation: false,
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        const resume = cadreDeLaForme(besoins, 'besoins-resume');
+        expect(resume.y + resume.hauteur).toBe(BAS_DE_L_ENCART_ANSSI);
+        expect(cadreDeLaForme(besoins, 'besoins-niveau').y).toBe(
+          4661222 + DESCENTE_SANS_ENCART
+        );
+      });
+
+      it('agrandit l’illustration jusqu’au niveau, en gardant ses proportions et son axe, quand le niveau choisi est celui recommandé', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            depasseRecommandation: false,
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        const illustration = cadreDeLaForme(besoins, 'besoins-illustration');
+        const niveau = cadreDeLaForme(besoins, 'besoins-niveau');
+        expect(illustration.y).toBe(2918147);
+        expect(niveau.y - (illustration.y + illustration.hauteur)).toBe(114300);
+        expect(illustration.largeur / illustration.hauteur).toBeCloseTo(
+          1714500 / 1628775,
+          3
+        );
+        expect(illustration.x + illustration.largeur / 2).toBeCloseTo(
+          3028950 + 1714500 / 2,
+          -1
         );
       });
     });
