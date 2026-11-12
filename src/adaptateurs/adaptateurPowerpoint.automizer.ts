@@ -13,6 +13,8 @@ const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
 const MODELE = 'modele';
 const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
+const SLIDE_PRESENTATION_DU_SYSTEME = 3;
+const SLIDE_CONTEXTE = 4;
 const SLIDE_MEMBRES_COMMISSION = 30;
 const SLIDE_PAGE_PIECES = 32;
 const SLIDE_PAGE_PIECES_VIDE = 31;
@@ -289,6 +291,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     dateCreation,
     autorite,
     piecesDuDossier,
+    contexte,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -326,6 +329,13 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         ecrisNumeroDePage(slide, nombrePages, nombrePages);
       });
     }
+    presentation.addSlide(MODELE, SLIDE_PRESENTATION_DU_SYSTEME);
+    presentation.addSlide(MODELE, SLIDE_CONTEXTE, (slide) => {
+      slide.modifyElement(
+        'contexte-description',
+        modify.setText(contexte.description ?? '')
+      );
+    });
 
     const archive = await presentation.getJSZip();
     await retireLesPartiesDesSlidesRetirees(archive);

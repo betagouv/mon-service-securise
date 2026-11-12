@@ -10,6 +10,8 @@ import {
 } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
 import Dossier from '../../modeles/dossier.js';
 import { piecesDuDossier } from '../../modeles/objetsPowerpoint/piecesDuDossier.js';
+import { contexteDuService } from '../../modeles/objetsPowerpoint/contexteDuService.js';
+import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 
@@ -69,6 +71,9 @@ export const routesConnecteApiServicePowerpoint = ({
           dateCreation: maintenant,
           autorite: autoriteHomologation(dossierCourant),
           piecesDuDossier: piecesDuDossier(dossierCourant),
+          contexte: contexteDuService(
+            service.descriptionService as DescriptionServiceV2
+          ),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse
