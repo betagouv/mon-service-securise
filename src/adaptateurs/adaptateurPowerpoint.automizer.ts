@@ -15,6 +15,9 @@ const SLIDE_COUVERTURE = 1;
 const SLIDE_SOMMAIRE = 2;
 const SLIDE_PRESENTATION_DU_SYSTEME = 3;
 const SLIDE_CONTEXTE = 4;
+const SLIDE_PERIMETRE_VUE_FONCTIONNELLE = 5;
+const SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE = 6;
+const SLIDE_BESOINS_DE_SECURITE = 7;
 const SLIDE_MEMBRES_COMMISSION = 30;
 const SLIDE_PAGE_PIECES = 32;
 const SLIDE_PAGE_PIECES_VIDE = 31;
@@ -372,6 +375,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     autorite,
     piecesDuDossier,
     contexte,
+    besoinsDeSecurite,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -433,6 +437,14 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       slide.modifyElement(
         'contexte-securisations',
         modify.setText(contexte.securisations)
+      );
+    });
+    presentation.addSlide(MODELE, SLIDE_PERIMETRE_VUE_FONCTIONNELLE);
+    presentation.addSlide(MODELE, SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE);
+    presentation.addSlide(MODELE, SLIDE_BESOINS_DE_SECURITE, (slide) => {
+      slide.modifyElement(
+        'besoins-niveau',
+        modify.setText(besoinsDeSecurite.niveau)
       );
     });
 
