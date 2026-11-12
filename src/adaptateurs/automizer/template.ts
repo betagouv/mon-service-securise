@@ -1,0 +1,16 @@
+export const NOM_TEMPLATE = 'supportCommissionHomologation.pptx';
+export const MODELE = 'modele';
+export const SLIDE_COUVERTURE = 1;
+export const SLIDE_SOMMAIRE = 2;
+export const SLIDE_PRESENTATION_DU_SYSTEME = 3;
+export const SLIDE_CONTEXTE = 4;
+export const SLIDE_PERIMETRE_VUE_FONCTIONNELLE = 5;
+export const SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE = 6;
+export const SLIDE_BESOINS_DE_SECURITE = 7;
+export const SLIDE_INTERCALAIRE_HISTORIQUE = 8;
+export const SLIDE_HISTORIQUE = 9;
+export const SLIDE_INTERCALAIRE_RISQUES = 10;
+export const SLIDE_CARTOGRAPHIE_DES_RISQUES = 11;
+export const SLIDE_MEMBRES_COMMISSION = 30;
+export const SLIDE_PAGE_PIECES = 32;
+export const SLIDE_PAGE_PIECES_VIDE = 31;
