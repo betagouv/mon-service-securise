@@ -27,14 +27,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     adaptateur.genereSupportCommissionHomologation({
       dateCreation: new Date(2026, 10, 9),
       piecesDuDossier: [unePiece('Une pièce du dossier')],
+      contexte: {},
       ...donnees,
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission et les pièces du dossier', async () => {
+    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système et le contexte', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(4);
+      expect(await nombreDeSlides(pptx)).toBe(6);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -49,6 +50,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(pagePieces).not.toContain(
         'Composition de la commission et contenu du dossier'
       );
+      const presentationDuSysteme = await contenuSlide(pptx, 5);
+      expect(presentationDuSysteme).toContain(
+        '<a:t>1. Présentation du système</a:t>'
+      );
+      expect(presentationDuSysteme).toContain('<a:t>Logo</a:t>');
+      expect(await contenuSlide(pptx, 6)).toContain('<a:t>Contexte</a:t>');
     });
 
     it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
@@ -82,6 +89,19 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('sur la page des pièces du dossier', () => {
+      const nombreDePagesDePieces = async (pptx: Buffer) => {
+        const positions = Array.from(
+          { length: await nombreDeSlides(pptx) },
+          (_, index) => index + 1
+        );
+        const slides = await Promise.all(
+          positions.map((position) => contenuSlide(pptx, position))
+        );
+        return slides.filter((slide) =>
+          slide.includes('name="titre-page-pieces"')
+        ).length;
+      };
+
       const titreDeLaPage = (page: string) => {
         const [titre] = page.match(
           /name="titre-page-pieces"(?:(?!<\/p:sp>).)*<\/p:sp>/s
@@ -158,7 +178,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
 
-        expect(await nombreDeSlides(pptx)).toBe(5);
+        expect(await nombreDePagesDePieces(pptx)).toBe(2);
         expect(
           titreDeLaPage(await contenuSlide(pptx, POSITION_SLIDE_PIECES))
         ).toBe('Pièces du dossier transmises avant la séance 1/2');
@@ -194,7 +214,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         const pptx = await genereSupport({ piecesDuDossier: seizePieces });
 
-        expect(await nombreDeSlides(pptx)).toBe(5);
+        expect(await nombreDePagesDePieces(pptx)).toBe(2);
         expect(
           titreDeLaPage(await contenuSlide(pptx, POSITION_SLIDE_PIECES))
         ).toBe('Pièces du dossier transmises avant la séance 1/2');
@@ -275,6 +295,22 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           const ordonnee = ordonneeDansLaPage(page);
           expect(ordonnee(4) - ordonnee(3)).toBe(ordonnee(12) - ordonnee(11));
         });
+      });
+    });
+
+    describe('sur le contexte', () => {
+      const POSITION_SLIDE_CONTEXTE = 6;
+
+      it('remplace le placeholder par la description du système d’information', async () => {
+        const pptx = await genereSupport({
+          contexte: { description: 'Un portail de démarches en ligne' },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(contexte).not.toContain('Portail RH permettant');
+        expect(contexte).toContain(
+          '<a:t>Un portail de démarches en ligne</a:t>'
+        );
       });
     });
 

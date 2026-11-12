@@ -140,9 +140,22 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - **fichier ouvert sans réparation dans PowerPoint** : template renuméroté sans trou ; après génération, l'adaptateur retire les notes et les relations des slides du template non reprises, ainsi que les déclarations de parties absentes de `[Content_Types].xml` (pptx-automizer les laisse) ; archive compressée (DEFLATE, 248 Ko → 32 Ko). Des tests relisent la structure du fichier : pas de partie déclarée deux fois, pas de relation cassée, pas de partie déclarée absente, fichiers compressés.
    - Les PR suivantes ajoutent leurs slides dans l'ordre du template, avec les slides statiques qui les précèdent. Jamais de données fictives de la maquette dans le support généré.
 
-**2bis. Slide 5, contexte** : création de `vueSupportCommission` et des champs de description.
+**2bis. Slides 4 et 5, présentation du système et contexte** (fichiers `slide3.xml` et `slide4.xml` du template), insérées après les pièces du dossier. La slide 4 (logo à insérer) reste statique. La slide 5 est remplie depuis la description V2, avec les libellés du référentiel, dans un objet de `src/modeles/objetsPowerpoint/` (même motif que les pièces du dossier) :
 
-3. **Slide 8, besoins de sécurité** : niveau, condition « supérieur à l'ANSSI », exposition, données identifiées, illustration selon le niveau (remplacement d'image à valider).
+- description du SI : `presentation` (jusqu'à 2000 caractères) ; **police réduite selon la longueur**, jusqu'à un minimum lisible, puis coupure « … » (l'ajustement automatique de PowerPoint n'est recalculé qu'à la modification du texte) ;
+- nom de l'organisation : nom et SIRET formaté (« Commune de Villeneuve (123 456 789 00010) ») ;
+- statut : description du `statutDeploiement` du référentiel V2 (« En ligne et accessible aux usagers et/ou agents » plutôt que « En production » de la maquette) ;
+- URL(s) du projet : `pointsAcces`, séparés par des virgules ;
+- type de projet : `typeService` ; hébergement : `typeHebergement` ; données stockées : `localisationDonneesTraitees` ; sécurisations prévues : `specificitesProjet` ;
+- **champ non renseigné : laissé vide**.
+
+3. **Slides 6 à 8, périmètre de l'analyse (statiques) et besoins de sécurité** (fichiers `slide5.xml` à `slide7.xml`) :
+   - niveau (Basiques, Modérés, Avancés) et son résumé, démarche indicative adaptée (simplifiée, intermédiaire, renforcée), repris de `svelte/lib/niveauxDeSecurite/donneesNiveauxDeSecurite.ts` ;
+   - encart « supérieur à celui identifié par l'ANSSI (niveau estimé) » seulement si `niveauSecuriteDepasseRecommandation()`, sinon retiré ;
+   - explication par le projet : nom du service et niveau en italique ; « nature des services » et « type de données » restent à compléter ;
+   - exposition : ouverture du système, audience cible (« nom : description » du référentiel V2), durée maximale de dysfonctionnement ;
+   - données identifiées : **pastilles en flux** (elles se suivent puis passent à la ligne, largeur estimée d'après le texte), catégories du référentiel puis catégories libres ;
+   - illustration : **remplacée selon le niveau** par `public/assets/images/niveauxSecurite/niveauN.svg`, en dernier commit de l'étape (valide le remplacement d'image avec pptx-automizer).
 4. ~~**Spike sur la lib**~~ : fait, voir la section « Spike ».
 5. **Slides 12, 14 et 15, matrices** : libellés des cases (brute, à date, cible), liste des risques, pastilles colorées selon le niveau.
 6. **Slide 13, description des risques**.
