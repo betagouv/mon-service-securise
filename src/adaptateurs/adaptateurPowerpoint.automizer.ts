@@ -758,6 +758,35 @@ const colore = (couleur: string) => (forme: XmlElement) => {
   proprietes.getElementsByTagName('a:srgbClr')[0].setAttribute('val', couleur);
 };
 
+const CARACTERES_PAR_LIGNE_D_UN_INTITULE_DE_RISQUE = 48;
+const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_D_UN_RISQUE = 274320;
+const MARGES_VERTICALES_DE_L_INTITULE_DE_RISQUE = 76200;
+const MARGES_INTERIEURES_DE_L_INTITULE_DE_RISQUE = 50800;
+
+const hauteurDeLaLigneDuRisque = ({ intitule }: RisqueCartographie) =>
+  MARGES_VERTICALES_DE_L_INTITULE_DE_RISQUE +
+  MARGES_INTERIEURES_DE_L_INTITULE_DE_RISQUE +
+  nombreDeLignesDeTexte(
+    intitule,
+    CARACTERES_PAR_LIGNE_D_UN_INTITULE_DE_RISQUE
+  ) *
+    HAUTEUR_D_UNE_LIGNE_DE_TEXTE_D_UN_RISQUE;
+
+const HAUTEUR_D_UNE_PASTILLE_DE_RISQUE = 300038;
+const DECALAGE_DE_L_IDENTIFIANT_DANS_SA_PASTILLE = 19050;
+const MARGE_HAUTE_DE_L_INTITULE_DE_RISQUE = 57150;
+const HAUT_DE_LA_PREMIERE_LIGNE_DE_RISQUE = 3190949;
+const ECART_ENTRE_LIGNES_DE_RISQUE = 38100;
+
+const disposeLesLignesDeRisque = (risques: RisqueCartographie[]) =>
+  risques.reduce<{ y: number; hauteur: number }[]>((lignes, risque) => {
+    const precedente = lignes[lignes.length - 1];
+    const y = precedente
+      ? precedente.y + precedente.hauteur + ECART_ENTRE_LIGNES_DE_RISQUE
+      : HAUT_DE_LA_PREMIERE_LIGNE_DE_RISQUE;
+    return [...lignes, { y, hauteur: hauteurDeLaLigneDuRisque(risque) }];
+  }, []);
+
 const nombreDeRisques = (nombre: number) =>
   nombre > 1 ? `${nombre} RISQUES` : `${nombre} RISQUE`;
 
@@ -769,6 +798,7 @@ const ecrisLaListeDesRisques = (
     'liste-risques-total',
     modify.setText(nombreDeRisques(risques.length))
   );
+  const lignes = disposeLesLignesDeRisque(risques);
   Array.from(
     { length: NOMBRE_DE_LIGNES_DE_LA_LISTE_DES_RISQUES },
     (_, index) => index + 1
@@ -780,6 +810,30 @@ const ecrisLaListeDesRisques = (
       );
       return;
     }
+    const { y, hauteur } = lignes[numeroLigne - 1];
+    const yDeLaPastille =
+      y + Math.floor((hauteur - HAUTEUR_D_UNE_PASTILLE_DE_RISQUE) / 2);
+    slide.modifyElement(
+      `risque-${numeroLigne}-fond`,
+      modify.setPosition({ y, h: hauteur })
+    );
+    slide.modifyElement(
+      `risque-${numeroLigne}-pastille`,
+      modify.setPosition({ y: yDeLaPastille })
+    );
+    slide.modifyElement(
+      `risque-${numeroLigne}-identifiant`,
+      modify.setPosition({
+        y: yDeLaPastille + DECALAGE_DE_L_IDENTIFIANT_DANS_SA_PASTILLE,
+      })
+    );
+    slide.modifyElement(
+      `risque-${numeroLigne}-intitule`,
+      modify.setPosition({
+        y: y + MARGE_HAUTE_DE_L_INTITULE_DE_RISQUE,
+        h: hauteur - MARGES_VERTICALES_DE_L_INTITULE_DE_RISQUE,
+      })
+    );
     slide.modifyElement(
       `risque-${numeroLigne}-pastille`,
       colore(COULEURS_DES_NIVEAUX_DE_RISQUE[risque.niveau])

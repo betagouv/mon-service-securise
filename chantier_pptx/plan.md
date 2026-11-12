@@ -163,7 +163,8 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - risques affichés, comme le front et l'annexe PDF : risques généraux non désactivés, puis risques spécifiques (évaluation brute pour la cartographie brute, à date pour les deux autres, faute d'évaluation cible) ;
    - matrice : couleurs des cases statiques (identiques à `niveauRisqueV2`) ; une zone de texte par case avec les identifiants des risques ;
    - liste à droite : une ligne par risque, pastille de la couleur de son niveau, intitulé ; « N RISQUES » au total ;
-   - **pagination** : 7 risques par page (le maximum garanti avec des intitulés de trois lignes) ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre, comme les pièces du dossier.
+   - liste : hauteur de chaque ligne selon la longueur de l'intitulé (48 caractères par ligne, de 1 à 4 lignes et plus), pastille colorée selon le niveau ; police des cases de la matrice réduite jusqu'à 12 pt quand une case contient beaucoup de risques ;
+   - **pagination à la hauteur** : chaque page prend autant de risques que la colonne peut en contenir ; la slide se répète avec la matrice complète à gauche et « k/N » dans le titre, comme les pièces du dossier.
 6. **Slide 13, description des risques**.
 7. **Slide 18, indice cyber** : texte, puis jauges et radar en images.
 8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.
