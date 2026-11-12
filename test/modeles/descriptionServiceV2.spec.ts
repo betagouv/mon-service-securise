@@ -491,5 +491,14 @@ describe('Une description service V2', () => {
         .construis();
       expect(description.descriptionStatutDeploiement()).toBe('En conception');
     });
+
+    it('sait décrire son type d’hébergement', () => {
+      const description = uneDescriptionV2Valide()
+        .avecTypeHebergement('onPremise')
+        .construis();
+      expect(description.descriptionTypeHebergement()).toBe(
+        'Hébergement interne (On-premise)'
+      );
+    });
   });
 });
