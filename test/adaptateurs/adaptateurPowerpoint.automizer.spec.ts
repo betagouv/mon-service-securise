@@ -1490,6 +1490,104 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           )
         ).toEqual(['84C14E', 'FAC63C', 'F8785B', 'EEEEEE']);
       });
+
+      describe('pour les lignes de la description', () => {
+        const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT = 274320;
+        const MARGES_D_UNE_LIGNE = 76200 + 50800;
+        const ECART_ENTRE_LIGNES = 38100;
+        const motsRepetes = (mot: string, nombre: number) =>
+          Array.from({ length: nombre }, () => mot).join(' ');
+
+        const descriptionAvec = async (risques: RisqueCartographie[]) =>
+          contenuSlide(
+            await genereSupport({
+              cartographiesDesRisques: {
+                ...cartographiesParDefaut,
+                aDate: risques,
+              },
+            }),
+            POSITION_DESCRIPTION_DES_RISQUES
+          );
+
+        it('prennent la hauteur de la plus haute des deux colonnes de texte, en 18 pt', async () => {
+          const description = await descriptionAvec([
+            {
+              ...unRisque('R1'),
+              intitule: motsRepetes('intitulé', 20),
+              description: 'Courte',
+            },
+            {
+              ...unRisque('R2'),
+              intitule: 'Court',
+              description: motsRepetes('description', 40),
+            },
+          ]);
+
+          const hauteur = (numero: number) =>
+            cadreDeLaForme(
+              description,
+              `description-risque-${numero}-fond-intitule`
+            ).hauteur;
+          const lignesIntitule1 = 4;
+          const lignesDescription2 = 6;
+          expect(hauteur(1)).toBe(
+            MARGES_D_UNE_LIGNE +
+              lignesIntitule1 * HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT
+          );
+          expect(hauteur(2)).toBe(
+            MARGES_D_UNE_LIGNE +
+              lignesDescription2 * HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT
+          );
+        });
+
+        it('s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
+          const description = await descriptionAvec([
+            unRisque('R1'),
+            { ...unRisque('R2'), description: motsRepetes('description', 40) },
+            unRisque('R3'),
+          ]);
+
+          const fond = (numero: number) =>
+            cadreDeLaForme(
+              description,
+              `description-risque-${numero}-fond-reference`
+            );
+          expect(fond(1).y).toBe(2708970);
+          [2, 3].forEach((numero) =>
+            expect(fond(numero).y).toBe(
+              fond(numero - 1).y + fond(numero - 1).hauteur + ECART_ENTRE_LIGNES
+            )
+          );
+        });
+
+        it('alignent les fonds de la ligne, centrent la pastille et ajustent les zones de texte', async () => {
+          const description = await descriptionAvec([
+            unRisque('R1'),
+            { ...unRisque('R2'), description: motsRepetes('description', 40) },
+          ]);
+
+          const cadre = (partie: string) =>
+            cadreDeLaForme(description, `description-risque-2-${partie}`);
+          const fond = cadre('fond-reference');
+          ['fond-intitule', 'fond-description'].forEach((partie) =>
+            expect([cadre(partie).y, cadre(partie).hauteur]).toEqual([
+              fond.y,
+              fond.hauteur,
+            ])
+          );
+          const pastille = cadre('pastille');
+          expect(pastille.y).toBe(
+            fond.y + Math.floor((fond.hauteur - pastille.hauteur) / 2)
+          );
+          expect(cadre('identifiant').y).toBe(pastille.y + 19050);
+          ['intitule', 'description'].forEach((partie) =>
+            expect([cadre(partie).y, cadre(partie).hauteur]).toEqual([
+              fond.y + 38100,
+              fond.hauteur - 76200,
+            ])
+          );
+        });
+      });
     });
 
     it('écrit la date de création au format court, après son libellé', async () => {
