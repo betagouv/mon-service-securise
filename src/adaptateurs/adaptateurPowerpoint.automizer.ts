@@ -753,6 +753,7 @@ const COULEURS_DES_NIVEAUX_DE_RISQUE: Record<NiveauDeRisque, string> = {
   faible: '84C14E',
   moyen: 'FAC63C',
   eleve: 'F8785B',
+  nonEvalue: 'EEEEEE',
 };
 
 const colore = (couleur: string) => (forme: XmlElement) => {

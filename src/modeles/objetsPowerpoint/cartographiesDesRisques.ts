@@ -2,12 +2,16 @@ import { RisquesV2 } from '../../moteurRisques/v2/risquesV2.js';
 import { Gravite } from '../../moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../moteurRisques/v2/vraisemblance/vraisemblance.types.js';
 
-export type NiveauDeRisque = 'faible' | 'moyen' | 'eleve';
+export type NiveauDeRisque = 'faible' | 'moyen' | 'eleve' | 'nonEvalue';
+
+const estRenseigne = (valeur: number) => valeur > 0;
 
 const niveauDeRisque = (
   gravite: Gravite,
   vraisemblance: Vraisemblance
 ): NiveauDeRisque => {
+  if (!estRenseigne(gravite) || !estRenseigne(vraisemblance))
+    return 'nonEvalue';
   const criticite = gravite * vraisemblance;
   if (criticite <= 4 && vraisemblance < 3 && gravite < 4) return 'faible';
   if (criticite >= 8 && vraisemblance > 2 && gravite >= 2) return 'eleve';

@@ -3,6 +3,7 @@ import { RisquesV2 } from '../../../src/moteurRisques/v2/risquesV2.js';
 import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.js';
 import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.js';
 import { unUUID } from '../../constructeurs/UUID.js';
+import { Gravite } from '../../../src/moteurRisques/v2/graviteObjectifsVises.js';
 
 describe('Les cartographies des risques présentées à la commission', () => {
   const desRisques = ({
@@ -138,5 +139,26 @@ describe('Les cartographies des risques présentées à la commission', () => {
       { identifiant: 'R3', gravite: 3, vraisemblance: 1 },
       { identifiant: 'RS1', gravite: 2, vraisemblance: 1 },
     ]);
+  });
+
+  it('ne donnent pas de niveau à un risque spécifique dont la gravité ou la vraisemblance n’est pas renseignée', () => {
+    const nonRenseignee = 0 as Gravite;
+    const { aDate } = cartographiesDesRisques(
+      desRisques({
+        risquesSpecifiques: [
+          new RisqueSpecifiqueV2({
+            id: unUUID('a'),
+            identifiantNumerique: 'RS1',
+            intitule: 'Fuite des plannings',
+            categories: ['confidentialite'],
+            risqueBrut: { gravite: 3, vraisemblance: 4 },
+            gravite: nonRenseignee,
+            vraisemblance: 1,
+          }),
+        ],
+      })
+    );
+
+    expect(aDate[0].niveau).toBe('nonEvalue');
   });
 });
