@@ -4,7 +4,8 @@ import {
   COULEURS_DES_NIVEAUX_DE_RISQUE,
   RisqueCartographie,
 } from '../../../modeles/objetsPowerpoint/risqueCartographie.js';
-import { colore } from '../formes.js';
+import { colore, ecrisNumeroDePage } from '../formes.js';
+import { decoupeEnPagesALaHauteur } from '../pagination.js';
 import { nombreDeLignesDeTexte } from '../texte.js';
 
 const NOMBRE_DE_LIGNES_DE_LA_DESCRIPTION_DES_RISQUES = 7;
@@ -46,6 +47,17 @@ const disposeLesLignes = (risques: RisqueCartographie[]) =>
       : HAUT_DE_LA_PREMIERE_LIGNE;
     return [...lignes, { y, hauteur: hauteurDeLaLigne(risque) }];
   }, []);
+
+const BAS_DE_LA_DESCRIPTION_DES_RISQUES = 9786938 - 114300;
+
+const tiennentSurLaPage = (risques: RisqueCartographie[]) => {
+  const lignes = disposeLesLignes(risques);
+  const derniere = lignes[lignes.length - 1];
+  return (
+    risques.length <= NOMBRE_DE_LIGNES_DE_LA_DESCRIPTION_DES_RISQUES &&
+    derniere.y + derniere.hauteur <= BAS_DE_LA_DESCRIPTION_DES_RISQUES
+  );
+};
 
 const placeLaLigne = (
   slide: ISlide,
@@ -116,11 +128,20 @@ export const ajouteLaDescriptionDesRisques = (
   presentation: Automizer,
   risques: RisqueCartographie[]
 ) => {
-  presentation.addSlide(MODELE, SLIDE_DESCRIPTION_DES_RISQUES, (slide) => {
-    slide.modifyElement(
-      'description-risques-total',
-      modify.setText(nombreDeRisques(risques.length))
-    );
-    ecrisLesLignes(slide, risques);
+  const pages = decoupeEnPagesALaHauteur(risques, tiennentSurLaPage);
+  pages.forEach((risquesDeLaPage, index) => {
+    presentation.addSlide(MODELE, SLIDE_DESCRIPTION_DES_RISQUES, (slide) => {
+      ecrisNumeroDePage(
+        slide,
+        'description-risques-titre',
+        index + 1,
+        pages.length
+      );
+      slide.modifyElement(
+        'description-risques-total',
+        modify.setText(nombreDeRisques(risques.length))
+      );
+      ecrisLesLignes(slide, risquesDeLaPage);
+    });
   });
 };
