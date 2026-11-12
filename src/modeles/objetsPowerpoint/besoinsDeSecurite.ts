@@ -15,6 +15,7 @@ export type BesoinsDeSecurite = {
   depasseRecommandation: boolean;
   nomService: string;
   exposition: ExpositionDuService;
+  donneesIdentifiees: string[];
 };
 
 const NIVEAUX: Record<
@@ -58,5 +59,6 @@ export const besoinsDeSecurite = (
       dureeDysfonctionnement:
         description.descriptionDureeDysfonctionnementAcceptable(),
     },
+    donneesIdentifiees: description.descriptionsDonneesTraitees(),
   };
 };

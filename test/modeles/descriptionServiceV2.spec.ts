@@ -536,5 +536,20 @@ describe('Une description service V2', () => {
         'Moins de 12h'
       );
     });
+
+    it('sait décrire ses données traitées, catégories du référentiel puis catégories libres', () => {
+      const description = uneDescriptionV2Valide()
+        .avecCategoriesDonneesTraitees([
+          'documentsRHSensibles',
+          'donneesTechniques',
+        ])
+        .avecAutresDonneesTraitees(['Plannings des agents'])
+        .construis();
+      expect(description.descriptionsDonneesTraitees()).toEqual([
+        'Documents RH sensibles',
+        'Données techniques',
+        'Plannings des agents',
+      ]);
+    });
   });
 });

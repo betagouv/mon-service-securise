@@ -1,4 +1,10 @@
-import { Automizer, ISlide, modify, XmlElement } from 'pptx-automizer';
+import {
+  Automizer,
+  ISlide,
+  modify,
+  XmlDocument,
+  XmlElement,
+} from 'pptx-automizer';
 import JSZip from 'jszip';
 import path from 'node:path';
 import {
@@ -466,6 +472,198 @@ const ecrisLExposition = (
   );
 };
 
+const PASTILLE_MODELE_DE_DONNEE = 'donnee-identifiee';
+const PREMIERE_PASTILLE = { x: 12801600, y: 6411739 };
+const BAS_DE_LA_ZONE_DES_PASTILLES = 6030739 + 3303761 - 228600;
+const ECART_ENTRE_PASTILLES = 114300;
+const LARGEUR_D_UNE_LIGNE_DE_PASTILLES = 4381500;
+const MARGES_INTERIEURES_D_UNE_PASTILLE = 152400 + 25400;
+const MARGES_VERTICALES_D_UNE_PASTILLE = 95250 + 95250;
+const HAUTEUR_D_UNE_PASTILLE_D_UNE_LIGNE_EN_18_PT = 487635;
+const HAUTEUR_D_UNE_PASTILLE_DE_DEUX_LIGNES_EN_18_PT = 784771;
+const MARGE_DE_SECURITE_D_UNE_PASTILLE = 76200;
+const TAILLES_DE_POLICE_DES_PASTILLES = [18, 16, 14];
+
+const mesuresALaTaille = (taille: number) => {
+  const proportion = taille / 18;
+  const largeurMoyenneDUnCaractere = 118000 * proportion;
+  return {
+    taille,
+    largeurPrudenteDUnCaractere: 128000 * proportion,
+    hauteurDUnePastilleDUneLigne:
+      MARGES_VERTICALES_D_UNE_PASTILLE +
+      (HAUTEUR_D_UNE_PASTILLE_D_UNE_LIGNE_EN_18_PT -
+        MARGES_VERTICALES_D_UNE_PASTILLE) *
+        proportion,
+    hauteurDUneLigneSupplementaire:
+      (HAUTEUR_D_UNE_PASTILLE_DE_DEUX_LIGNES_EN_18_PT -
+        HAUTEUR_D_UNE_PASTILLE_D_UNE_LIGNE_EN_18_PT) *
+      proportion,
+    caracteresParLigne: Math.floor(
+      (LARGEUR_D_UNE_LIGNE_DE_PASTILLES - MARGES_INTERIEURES_D_UNE_PASTILLE) /
+        largeurMoyenneDUnCaractere
+    ),
+  };
+};
+type MesuresDesPastilles = ReturnType<typeof mesuresALaTaille>;
+
+const largeurDeLaPastille = (
+  donnee: string,
+  { largeurPrudenteDUnCaractere }: MesuresDesPastilles
+) =>
+  Math.min(
+    LARGEUR_D_UNE_LIGNE_DE_PASTILLES,
+    Math.round(
+      donnee.length * largeurPrudenteDUnCaractere +
+        MARGES_INTERIEURES_D_UNE_PASTILLE +
+        MARGE_DE_SECURITE_D_UNE_PASTILLE
+    )
+  );
+
+const hauteurDeLaPastille = (
+  donnee: string,
+  {
+    hauteurDUnePastilleDUneLigne,
+    hauteurDUneLigneSupplementaire,
+    caracteresParLigne,
+  }: MesuresDesPastilles
+) =>
+  Math.round(
+    hauteurDUnePastilleDUneLigne +
+      (nombreDeLignesDeTexte(donnee, caracteresParLigne) - 1) *
+        hauteurDUneLigneSupplementaire
+  );
+
+type Pastille = { x: number; y: number; largeur: number; hauteur: number };
+
+const tientSurLaLigne = (precedente: Pastille, largeur: number) =>
+  precedente.x + precedente.largeur + ECART_ENTRE_PASTILLES + largeur <=
+  PREMIERE_PASTILLE.x + LARGEUR_D_UNE_LIGNE_DE_PASTILLES;
+
+const pastilleSuivante = (
+  precedente: Pastille,
+  { largeur, hauteur }: Pick<Pastille, 'largeur' | 'hauteur'>
+): Pastille =>
+  tientSurLaLigne(precedente, largeur)
+    ? {
+        x: precedente.x + precedente.largeur + ECART_ENTRE_PASTILLES,
+        y: precedente.y,
+        largeur,
+        hauteur,
+      }
+    : {
+        x: PREMIERE_PASTILLE.x,
+        y: precedente.y + precedente.hauteur + ECART_ENTRE_PASTILLES,
+        largeur,
+        hauteur,
+      };
+
+const disposeLesPastilles = (
+  donneesIdentifiees: string[],
+  mesures: MesuresDesPastilles
+) =>
+  donneesIdentifiees.reduce<Pastille[]>((pastilles, donnee) => {
+    const taille = {
+      largeur: largeurDeLaPastille(donnee, mesures),
+      hauteur: hauteurDeLaPastille(donnee, mesures),
+    };
+    const precedente = pastilles[pastilles.length - 1];
+    return [
+      ...pastilles,
+      precedente
+        ? pastilleSuivante(precedente, taille)
+        : { ...PREMIERE_PASTILLE, ...taille },
+    ];
+  }, []);
+
+const tiennentDansLaCarte = (pastilles: Pastille[]) =>
+  pastilles.every(
+    ({ y, hauteur }) => y + hauteur <= BAS_DE_LA_ZONE_DES_PASTILLES
+  );
+
+const etLesAutres = (nombre: number) =>
+  nombre === 1 ? 'et 1 autre' : `et ${nombre} autres`;
+
+const disposition = (textes: string[], taille: number) => ({
+  taille,
+  textes,
+  pastilles: disposeLesPastilles(textes, mesuresALaTaille(taille)),
+});
+
+const disposeAvecLesAutresRegroupees = (donneesIdentifiees: string[]) => {
+  const tailleMinimale =
+    TAILLES_DE_POLICE_DES_PASTILLES[TAILLES_DE_POLICE_DES_PASTILLES.length - 1];
+  const nombresDePastillesGardees = Array.from(
+    { length: donneesIdentifiees.length },
+    (_, index) => donneesIdentifiees.length - 1 - index
+  );
+  const dispositions = nombresDePastillesGardees.map((nombre) =>
+    disposition(
+      [
+        ...donneesIdentifiees.slice(0, nombre),
+        etLesAutres(donneesIdentifiees.length - nombre),
+      ],
+      tailleMinimale
+    )
+  );
+  return (
+    dispositions.find(({ pastilles }) => tiennentDansLaCarte(pastilles)) ??
+    dispositions[dispositions.length - 1]
+  );
+};
+
+const disposeLesPastillesDansLaCarte = (donneesIdentifiees: string[]) =>
+  TAILLES_DE_POLICE_DES_PASTILLES.map((taille) =>
+    disposition(donneesIdentifiees, taille)
+  ).find(({ pastilles }) => tiennentDansLaCarte(pastilles)) ??
+  disposeAvecLesAutresRegroupees(donneesIdentifiees);
+
+const renommeLaForme = (nom: string) => (forme: XmlElement) => {
+  forme.getElementsByTagName('p:cNvPr')[0].setAttribute('name', nom);
+};
+
+const donneDesIdentifiantsUniquesAuxFormes = (slide: XmlDocument) => {
+  const proprietesDesFormes = Array.from(slide.getElementsByTagName('p:cNvPr'));
+  let prochainIdentifiantLibre =
+    Math.max(
+      ...proprietesDesFormes.map((proprietes) =>
+        Number(proprietes.getAttribute('id'))
+      )
+    ) + 1;
+  const identifiantsVus = new Set<string>();
+  proprietesDesFormes.forEach((proprietes) => {
+    const identifiant = proprietes.getAttribute('id')!;
+    if (identifiantsVus.has(identifiant)) {
+      proprietes.setAttribute('id', String(prochainIdentifiantLibre));
+      prochainIdentifiantLibre += 1;
+    } else identifiantsVus.add(identifiant);
+  });
+};
+
+const ecrisLesDonneesIdentifiees = (
+  slide: ISlide,
+  donneesIdentifiees: string[]
+) => {
+  slide.removeElement(PASTILLE_MODELE_DE_DONNEE);
+  const { taille, textes, pastilles } =
+    disposeLesPastillesDansLaCarte(donneesIdentifiees);
+  textes.forEach((texte, index) => {
+    const { x, y, largeur, hauteur } = pastilles[index];
+    slide.addElement(
+      MODELE,
+      SLIDE_BESOINS_DE_SECURITE,
+      PASTILLE_MODELE_DE_DONNEE,
+      [
+        modify.setText(texte),
+        renommeLaForme(`${PASTILLE_MODELE_DE_DONNEE}-${index + 1}`),
+        modify.setPosition({ x, y, w: largeur, h: hauteur }),
+        changeLaTailleDePolice(taille),
+      ]
+    );
+  });
+  slide.modify(donneDesIdentifiantsUniquesAuxFormes);
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -558,6 +756,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       );
       ecrisEncartAnssi(slide, besoinsDeSecurite);
       ecrisLExposition(slide, besoinsDeSecurite.exposition);
+      ecrisLesDonneesIdentifiees(slide, besoinsDeSecurite.donneesIdentifiees);
       slide.modifyElement(
         'besoins-explication',
         modify.replaceText([

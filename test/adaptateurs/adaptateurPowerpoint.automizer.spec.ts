@@ -2,6 +2,7 @@ import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurP
 import {
   contenuSlide,
   fichiersNonCompresses,
+  identifiantsDeFormesEnDouble,
   nombreDeSlides,
   partiesDeclarees,
   partiesDeclareesAbsentes,
@@ -57,6 +58,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       audience: 'Une audience',
       dureeDysfonctionnement: 'Une durée',
     },
+    donneesIdentifiees: [],
   };
 
   const contexteParDefaut: ContexteDuService = {
@@ -693,6 +695,195 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
+      it('écrit une pastille par donnée identifiée, à la place de la pastille modèle', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            donneesIdentifiees: [
+              'Documents RH sensibles',
+              'Plannings des agents',
+            ],
+          },
+        });
+
+        const besoins = await contenuSlide(
+          pptx,
+          POSITION_SLIDE_BESOINS_DE_SECURITE
+        );
+        expect(texteDeLaForme(besoins, 'donnee-identifiee-1')).toBe(
+          'Documents RH sensibles'
+        );
+        expect(texteDeLaForme(besoins, 'donnee-identifiee-2')).toBe(
+          'Plannings des agents'
+        );
+        expect(besoins).not.toContain('name="donnee-identifiee-3"');
+        expect(besoins).not.toContain('name="donnee-identifiee"');
+      });
+
+      describe('pour les pastilles des données identifiées', () => {
+        const ECART_ENTRE_PASTILLES = 114300;
+
+        const BAS_DE_LA_ZONE_DES_PASTILLES = 6030739 + 3303761 - 228600;
+
+        const slideAvecLesDonnees = async (donneesIdentifiees: string[]) =>
+          contenuSlide(
+            await genereSupport({
+              besoinsDeSecurite: {
+                ...besoinsDeSecuriteParDefaut,
+                donneesIdentifiees,
+              },
+            }),
+            POSITION_SLIDE_BESOINS_DE_SECURITE
+          );
+
+        const nomsDesPastilles = (besoins: string) =>
+          [...besoins.matchAll(/name="(donnee-identifiee-\d+)"/g)].map(
+            ([, nom]) => nom
+          );
+
+        const pastillesDe = async (donneesIdentifiees: string[]) => {
+          const besoins = await slideAvecLesDonnees(donneesIdentifiees);
+          return nomsDesPastilles(besoins).map((nom) =>
+            cadreDeLaForme(besoins, nom)
+          );
+        };
+
+        const taillesDePoliceDesPastilles = (besoins: string) => [
+          ...new Set(
+            nomsDesPastilles(besoins).flatMap((nom) =>
+              [
+                ...besoins
+                  .match(
+                    new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
+                  )![0]
+                  .matchAll(/<a:rPr [^>]*sz="(\d+)"/g),
+              ].map(([, sz]) => sz)
+            )
+          ),
+        ];
+
+        const basDesPastilles = (pastilles: { y: number; hauteur: number }[]) =>
+          Math.max(...pastilles.map(({ y, hauteur }) => y + hauteur));
+
+        const cinqDonnees = [
+          'Données d’identité',
+          'Documents RH sensibles',
+          'Données relatives à la situation familiale, économique et financière',
+          'Données techniques',
+          'Plannings des agents',
+        ];
+
+        it('gardent la police de 18 pt quand elles tiennent dans la carte', async () => {
+          const besoins = await slideAvecLesDonnees(['Données techniques']);
+
+          expect(taillesDePoliceDesPastilles(besoins)).toEqual(['1800']);
+        });
+
+        it('réduisent leur police pour tenir dans la carte quand elles débordent en 18 pt', async () => {
+          const besoins = await slideAvecLesDonnees([
+            'Données techniques',
+            'Documents RH sensibles',
+            'Données d’identité',
+            'Plannings des agents',
+            'Données sensibles',
+          ]);
+          const pastilles = nomsDesPastilles(besoins).map((nom) =>
+            cadreDeLaForme(besoins, nom)
+          );
+
+          const [taille] = taillesDePoliceDesPastilles(besoins);
+          expect(taillesDePoliceDesPastilles(besoins)).toHaveLength(1);
+          expect(Number(taille)).toBeLessThan(1800);
+          expect(basDesPastilles(pastilles)).toBeLessThanOrEqual(
+            BAS_DE_LA_ZONE_DES_PASTILLES
+          );
+        });
+
+        it('remplacent les dernières par « et N autres » quand elles débordent même en 14 pt', async () => {
+          const besoins = await slideAvecLesDonnees([
+            ...cinqDonnees,
+            'Agendas des élus',
+            'Comptes rendus de réunion',
+          ]);
+          const noms = nomsDesPastilles(besoins);
+          const pastilles = noms.map((nom) => cadreDeLaForme(besoins, nom));
+
+          expect(texteDeLaForme(besoins, noms[noms.length - 1])).toBe(
+            `et ${7 - (noms.length - 1)} autres`
+          );
+          expect(noms.length).toBeLessThan(7);
+          expect(basDesPastilles(pastilles)).toBeLessThanOrEqual(
+            BAS_DE_LA_ZONE_DES_PASTILLES
+          );
+        });
+
+        it('écrit « et 1 autre » au singulier', async () => {
+          const besoins = await slideAvecLesDonnees(cinqDonnees);
+          const noms = nomsDesPastilles(besoins);
+
+          expect(noms).toHaveLength(5);
+          expect(texteDeLaForme(besoins, noms[4])).toBe('et 1 autre');
+        });
+
+        it('les place côte à côte tant qu’elles tiennent sur la ligne', async () => {
+          const [premiere, seconde] = await pastillesDe([
+            'Données techniques',
+            'Agendas',
+          ]);
+
+          expect(seconde.y).toBe(premiere.y);
+          expect(seconde.x).toBe(
+            premiere.x + premiere.largeur + ECART_ENTRE_PASTILLES
+          );
+        });
+
+        it('adaptent leur largeur à leur texte', async () => {
+          const [courte] = await pastillesDe(['Données techniques']);
+          const [longue] = await pastillesDe([
+            'Données administratives et financières',
+          ]);
+
+          expect(longue.largeur).toBeGreaterThan(courte.largeur);
+        });
+
+        it('sont assez larges pour que leur texte tienne sur une ligne, au gras italique de 18 pt', async () => {
+          const LARGEUR_DE_DOCUMENTS_RH_SENSIBLES_AU_RENDU = 3048819;
+          const [pastille] = await pastillesDe(['Documents RH sensibles']);
+
+          expect(pastille.largeur).toBeGreaterThanOrEqual(
+            LARGEUR_DE_DOCUMENTS_RH_SENSIBLES_AU_RENDU
+          );
+        });
+
+        it('passent à la ligne quand la pastille ne tient plus sur la ligne', async () => {
+          const [premiere, , troisieme] = await pastillesDe([
+            'Données techniques',
+            'Agendas',
+            'Documents RH sensibles',
+          ]);
+
+          expect(troisieme.x).toBe(premiere.x);
+          expect(troisieme.y).toBe(
+            premiere.y + premiere.hauteur + ECART_ENTRE_PASTILLES
+          );
+        });
+
+        it('prennent toute la largeur et passent sur deux lignes quand leur texte dépasse une ligne', async () => {
+          const [courte] = await pastillesDe(['Données techniques']);
+          const [longue, suivante] = await pastillesDe([
+            'Données relatives à la situation familiale, économique et financière',
+            'Données techniques',
+          ]);
+
+          expect(longue.largeur).toBe(4381500);
+          expect(longue.hauteur).toBe(784771);
+          expect(suivante.y).toBe(
+            longue.y + longue.hauteur + ECART_ENTRE_PASTILLES
+          );
+          expect(courte.hauteur).toBe(487635);
+        });
+      });
+
       it('nomme, dans l’encart, le niveau identifié à titre indicatif par l’ANSSI', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
@@ -807,6 +998,20 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const pptx = await genereSupport();
 
         expect(fichiersNonCompresses(pptx)).toEqual([]);
+      });
+
+      it('donne un identifiant unique à chaque forme d’une slide', async () => {
+        const pptx = await genereSupport({
+          besoinsDeSecurite: {
+            ...besoinsDeSecuriteParDefaut,
+            donneesIdentifiees: [
+              'Documents RH sensibles',
+              'Plannings des agents',
+            ],
+          },
+        });
+
+        expect(await identifiantsDeFormesEnDouble(pptx)).toEqual([]);
       });
     });
   });

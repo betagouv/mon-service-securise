@@ -105,3 +105,26 @@ export const fichiersNonCompresses = (pptx: Buffer) => {
   }
   return nonCompresses;
 };
+
+export const identifiantsDeFormesEnDouble = async (pptx: Buffer) => {
+  const archive = await JSZip.loadAsync(pptx);
+  const chemins = await cheminsDesSlidesDansLOrdre(archive);
+  const slides = await Promise.all(
+    chemins.map(async (chemin) => ({
+      chemin,
+      xml: await lisFichier(archive, chemin),
+    }))
+  );
+  return slides.flatMap(({ chemin, xml }) => {
+    const identifiants = [...xml.matchAll(/<p:cNvPr id="(\d+)"/g)].map(
+      ([, identifiant]) => identifiant
+    );
+    return [
+      ...new Set(
+        identifiants.filter(
+          (identifiant, index) => identifiants.indexOf(identifiant) !== index
+        )
+      ),
+    ].map((identifiant) => `${chemin} : ${identifiant}`);
+  });
+};
