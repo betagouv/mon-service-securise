@@ -105,8 +105,8 @@ Autre constat sur le template :
 
 Pas encore vérifié :
 
-- l'ouverture du fichier dans Microsoft PowerPoint (rendu contrôlé uniquement avec LibreOffice) ;
-- le remplacement d'image (`ModifyImageHelper` ou `modify.setRelationTarget`) pour les slides 8 et 18 ;
+- ~~l'ouverture du fichier dans Microsoft PowerPoint~~ : vérifiée sur la PR 2 (voir les points ouverts) ;
+- ~~le remplacement d'image~~ : validé en PR 3 avec `loadMedia` et `modify.setRelationTarget` (slide 8) ; reste à faire pour la slide 18 ;
 - `modify.setTable` sur un tableau natif.
 
 ## Ce qu'on garde du POC
@@ -149,13 +149,13 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 - type de projet : `typeService` ; hébergement : `typeHebergement` ; données stockées : `localisationDonneesTraitees` ; sécurisations prévues : `specificitesProjet` ;
 - **champ non renseigné : laissé vide**.
 
-3. **Slides 6 à 8, périmètre de l'analyse (statiques) et besoins de sécurité** (fichiers `slide5.xml` à `slide7.xml`) :
+3. ~~**Slides 6 à 8, périmètre de l'analyse (statiques) et besoins de sécurité**~~ (fait) (fichiers `slide5.xml` à `slide7.xml`) :
    - niveau (Basiques, Modérés, Avancés) et son résumé, démarche indicative adaptée (simplifiée, intermédiaire, renforcée), repris de `svelte/lib/niveauxDeSecurite/donneesNiveauxDeSecurite.ts` ;
-   - encart « supérieur à celui identifié par l'ANSSI (niveau estimé) » seulement si `niveauSecuriteDepasseRecommandation()`, sinon retiré ;
-   - explication par le projet : nom du service et niveau en italique ; « nature des services » et « type de données » restent à compléter ;
-   - exposition : ouverture du système, audience cible (« nom : description » du référentiel V2), durée maximale de dysfonctionnement ;
-   - données identifiées : **pastilles en flux** (elles se suivent puis passent à la ligne, largeur estimée d'après le texte), catégories du référentiel puis catégories libres ;
-   - illustration : **remplacée selon le niveau** par `public/assets/images/niveauxSecurite/niveauN.svg`, en dernier commit de l'étape (valide le remplacement d'image avec pptx-automizer).
+   - encart « supérieur à celui identifié par l'ANSSI (niveau estimé) » seulement si le niveau choisi dépasse le niveau estimé (`depasseRecommandation`, le niveau indicatif est toujours fourni) ; sinon l'encart est retiré, l'illustration s'agrandit et le niveau et son résumé descendent à sa place, juste au-dessus de la démarche ;
+   - explication par le projet : nom du service et niveau en italique ; « nature des services » et « type de données » restent à compléter (soulignement en tirets et surlignage portés par le texte : Keynote affiche un soulignement plein sans fond, à vérifier dans PowerPoint) ;
+   - exposition : ouverture du système, audience cible (« nom : description » du référentiel V2, tel quel comme l'annexe PDF), durée maximale de dysfonctionnement ; quand l'ouverture dépasse une ligne (42 caractères), l'audience et la durée descendent d'une ligne ; zones de texte ramenées dans la carte ;
+   - données identifiées : **pastilles en flux** (elles se suivent puis passent à la ligne, largeur estimée d'après le texte, deux lignes pour un texte long), catégories du référentiel puis catégories libres ; une pastille modèle copiée par donnée (identifiants de formes renumérotés) ; si elles débordent de la carte, police réduite à 16 puis 14 pt, puis « et N autres » ;
+   - illustration : **remplacée selon le niveau** par les illustrations MSS, converties en PNG (`src/vuesPowerpoint/illustrationsNiveaux/niveauN.png`, depuis `public/assets/images/niveauxSecurite/niveauN.svg`) ; cadre carré ; les relations d'image laissées par pptx-automizer sont retirées après génération.
 4. ~~**Spike sur la lib**~~ : fait, voir la section « Spike ».
 5. **Slides 12, 14 et 15, matrices** : libellés des cases (brute, à date, cible), liste des risques, pastilles colorées selon le niveau.
 6. **Slide 13, description des risques**.
@@ -178,9 +178,9 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 - [x] Lib retenue : pptx-automizer.
 - [x] Barres de la slide 19 : en XML (`setPosition`).
 - [x] Listes : formes nommées (testé). Pas de tableaux natifs : le template n'en contient pas et on ne refait pas la mise en page.
-- [ ] Remplacement d'image avec pptx-automizer : à valider en PR 3.
+- [x] Remplacement d'image avec pptx-automizer : validé en PR 3 (`loadMedia` + `setRelationTarget`, PNG plutôt que SVG).
 - [x] Largeur des pastilles de statut : largeur fixe par statut, reprise de la légende de la slide 19.
 - [ ] Pastilles de statut sous Microsoft PowerPoint : à revérifier avec les largeurs par statut.
 - [ ] Réutilisation éventuelle des jauges ou du radar déjà présents dans `src/vuesPdf/syntheseSecurite.typ` : à vérifier.
-- [ ] Vérification sous Microsoft PowerPoint : faite sur le spike, la couverture et le fichier de la PR 2 (ouvert sans réparation) ; à refaire à chaque nouvelle slide, notamment le contexte (2bis) : retours à la ligne et tenue de la description dans le cadre.
+- [ ] Vérification sous Microsoft PowerPoint : faite sur le spike, la couverture et le fichier de la PR 2 (ouvert sans réparation) ; à refaire à chaque nouvelle slide, notamment le contexte (2bis) : retours à la ligne et tenue de la description dans le cadre ; les objectifs de sécurité (3) : soulignés en tirets de l'explication, largeur des pastilles, illustration.
 - [x] Thème partagé entre le notes master et le slide master (hérité du fichier du designer) : laissé tel quel, PowerPoint ouvre le fichier sans réparation.
