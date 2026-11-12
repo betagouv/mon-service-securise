@@ -8,6 +8,7 @@ export type ExpositionDuService = {
 };
 
 export type BesoinsDeSecurite = {
+  idNiveau: NiveauSecurite;
   niveau: string;
   resume: string;
   demarche: string;
@@ -47,6 +48,7 @@ export const besoinsDeSecurite = (
 ): BesoinsDeSecurite => {
   const niveau = NIVEAUX[description.niveauSecurite];
   return {
+    idNiveau: description.niveauSecurite,
     niveau: niveau.nom,
     resume: niveau.resume,
     demarche: niveau.demarche,
