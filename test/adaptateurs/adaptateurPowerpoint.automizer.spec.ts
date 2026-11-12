@@ -14,6 +14,12 @@ import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adap
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
 import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
+import {
+  CartographiesDesRisques,
+  RisqueCartographie,
+} from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
+import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
 
 const texteDeLaForme = (slide: string, nom: string) => {
   const forme = slide.match(
@@ -64,6 +70,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     donneesIdentifiees: [],
   };
 
+  const cartographiesParDefaut: CartographiesDesRisques = {
+    bruts: [],
+    aDate: [],
+    cibles: [],
+  };
+
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
     statut: 'Un statut',
@@ -82,6 +94,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       piecesDuDossier: [unePiece('Une pièce du dossier')],
       contexte: contexteParDefaut,
       besoinsDeSecurite: besoinsDeSecuriteParDefaut,
+      cartographiesDesRisques: cartographiesParDefaut,
       ...donnees,
     });
 
@@ -992,6 +1005,101 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           3028950 + 1714500 / 2,
           -1
         );
+      });
+    });
+
+    describe('sur la cartographie des risques bruts', () => {
+      const POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS = 13;
+
+      const unRisque = (
+        identifiant: string,
+        gravite: Gravite,
+        vraisemblance: Vraisemblance
+      ): RisqueCartographie => ({
+        identifiant,
+        intitule: `Intitulé de ${identifiant}`,
+        gravite,
+        vraisemblance,
+        niveau: 'moyen',
+      });
+
+      it('écrit dans chaque case de la matrice les identifiants de ses risques', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [
+              unRisque('R3', 4, 4),
+              unRisque('R7', 4, 4),
+              unRisque('RS1', 2, 1),
+            ],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        expect(texteDeLaForme(cartographie, 'matrice-g4-v4')).toBe('R3, R7');
+        expect(texteDeLaForme(cartographie, 'matrice-g2-v1')).toBe('RS1');
+        expect(texteDeLaForme(cartographie, 'matrice-g1-v1')).toBe('');
+        expect(cartographie).not.toContain('R3, R7, R9, R11, R14');
+        expect(cartographie).not.toContain('<a:t>R1, R5</a:t>');
+      });
+
+      const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
+        const [forme] = cartographie.match(
+          new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
+        )!;
+        return [...forme.matchAll(/<a:rPr [^>]*sz="(\d+)"/g)].map(
+          ([, sz]) => sz
+        );
+      };
+
+      it('garde la police de 18 pt dans une case qui contient peu de risques', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [unRisque('R3', 4, 4), unRisque('R7', 4, 4)],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        expect(tailleDePoliceDeLaCase(cartographie, 'matrice-g4-v4')).toEqual([
+          '1800',
+        ]);
+      });
+
+      it('réduit la police d’une case dont les identifiants dépassent trois lignes en 18 pt', async () => {
+        const identifiants = [
+          'R3',
+          'R5',
+          'R6',
+          'R7',
+          'R8',
+          'R11',
+          'R14',
+          'RS4',
+          'RS5',
+        ];
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: identifiants.map((identifiant) =>
+              unRisque(identifiant, 4, 4)
+            ),
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        expect(tailleDePoliceDeLaCase(cartographie, 'matrice-g4-v4')).toEqual([
+          '1400',
+        ]);
       });
     });
 

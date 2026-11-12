@@ -1,6 +1,7 @@
 import { PieceDuDossier } from '../modeles/objetsPowerpoint/piecesDuDossier.js';
 import { ContexteDuService } from '../modeles/objetsPowerpoint/contexteDuService.js';
 import { BesoinsDeSecurite } from '../modeles/objetsPowerpoint/besoinsDeSecurite.js';
+import { CartographiesDesRisques } from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
 
 export type AutoriteHomologation = {
   nom: string;
@@ -13,6 +14,7 @@ export type DonneesSupportCommissionHomologation = {
   piecesDuDossier: PieceDuDossier[];
   contexte: ContexteDuService;
   besoinsDeSecurite: BesoinsDeSecurite;
+  cartographiesDesRisques: CartographiesDesRisques;
 };
 
 export interface AdaptateurPowerpoint {
