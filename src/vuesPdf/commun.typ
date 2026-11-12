@@ -64,7 +64,9 @@
 
 #let niveauRisqueV2(gravite, vraisemblance) = {
   let niveau = gravite * vraisemblance
-  if niveau <= 4 and vraisemblance < 3 and gravite < 4 {
+  if gravite == 0 or vraisemblance == 0 {
+    "nonEvalue"
+  } else if niveau <= 4 and vraisemblance < 3 and gravite < 4 {
     "faible"
   } else if niveau >= 8 and vraisemblance > 2 and gravite >= 2 {
     "eleve"

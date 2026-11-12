@@ -1116,6 +1116,26 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(couleurDuFond('risque-3-pastille')).toBe('F8785B');
       });
 
+      it('colore en gris la pastille d’un risque non évalué', async () => {
+        const pptx = await genereSupport({
+          cartographiesDesRisques: {
+            ...cartographiesParDefaut,
+            bruts: [{ ...unRisque('RS1', 4, 4), niveau: 'nonEvalue' }],
+          },
+        });
+
+        const cartographie = await contenuSlide(
+          pptx,
+          POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
+        );
+        const [pastille] = cartographie.match(
+          /name="risque-1-pastille"(?:(?!<\/p:sp>).)*<\/p:sp>/s
+        )!;
+        expect(
+          pastille.match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1]
+        ).toBe('EEEEEE');
+      });
+
       describe('pour les lignes de la liste des risques', () => {
         const HAUTEUR_D_UNE_LIGNE_DE_TEXTE_EN_18_PT = 274320;
         const MARGES_D_UNE_LIGNE = 76200 + 50800;
