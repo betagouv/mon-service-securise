@@ -81,4 +81,16 @@ describe('Les besoins de sécurité présentés à la commission', () => {
       dureeDysfonctionnement: 'Moins de 12h',
     });
   });
+
+  it('listent les données identifiées', () => {
+    const description = uneDescriptionV2Valide()
+      .avecCategoriesDonneesTraitees(['documentsRHSensibles'])
+      .avecAutresDonneesTraitees(['Plannings des agents'])
+      .construis();
+
+    expect(besoinsDeSecurite(description).donneesIdentifiees).toEqual([
+      'Documents RH sensibles',
+      'Plannings des agents',
+    ]);
+  });
 });

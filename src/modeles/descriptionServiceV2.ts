@@ -284,6 +284,15 @@ export class DescriptionServiceV2 {
     );
   }
 
+  descriptionsDonneesTraitees() {
+    return [
+      ...this.categoriesDonneesTraitees.map((categorie) =>
+        this.referentiel.descriptionsDonneesCaracterePersonnel(categorie)
+      ),
+      ...this.categoriesDonneesTraiteesSupplementaires,
+    ];
+  }
+
   descriptionSpecificitesProjet() {
     return this.specificitesProjet
       .map((s) => this.referentiel.descriptionSpecificiteProjet(s))
