@@ -9,6 +9,7 @@ import {
 } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
+import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
 
 const unePiece = (intitule: string): PieceDuDossier => ({
   intitule,
@@ -21,13 +22,17 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
   const adaptateur = new AdaptateurPowerpointAutomizer();
 
+  const contexteParDefaut: ContexteDuService = {
+    organisation: 'Une organisation',
+  };
+
   const genereSupport = (
     donnees: Partial<DonneesSupportCommissionHomologation> = {}
   ) =>
     adaptateur.genereSupportCommissionHomologation({
       dateCreation: new Date(2026, 10, 9),
       piecesDuDossier: [unePiece('Une pièce du dossier')],
-      contexte: {},
+      contexte: contexteParDefaut,
       ...donnees,
     });
 
@@ -303,13 +308,31 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
       it('remplace le placeholder par la description du système d’information', async () => {
         const pptx = await genereSupport({
-          contexte: { description: 'Un portail de démarches en ligne' },
+          contexte: {
+            ...contexteParDefaut,
+            description: 'Un portail de démarches en ligne',
+          },
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
         expect(contexte).not.toContain('Portail RH permettant');
         expect(contexte).toContain(
           '<a:t>Un portail de démarches en ligne</a:t>'
+        );
+      });
+
+      it('écrit l’organisation responsable', async () => {
+        const pptx = await genereSupport({
+          contexte: {
+            ...contexteParDefaut,
+            organisation: 'Commune de Saint-Ours (987 654 321 00020)',
+          },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(contexte).not.toContain('Commune de Villeneuve');
+        expect(contexte).toContain(
+          '<a:t>Commune de Saint-Ours (987 654 321 00020)</a:t>'
         );
       });
     });
