@@ -15,6 +15,7 @@ import {
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
 import {
+  CartographiesDesRisques,
   NiveauDeRisque,
   RisqueCartographie,
 } from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
@@ -874,6 +875,28 @@ const ecrisLaListeDesRisques = (
   });
 };
 
+const TITRES_DES_CARTOGRAPHIES: {
+  cartographie: keyof CartographiesDesRisques;
+  titre: string;
+}[] = [
+  { cartographie: 'bruts', titre: 'Cartographie des risques bruts' },
+  { cartographie: 'aDate', titre: 'Cartographie des risques à date' },
+  { cartographie: 'cibles', titre: 'Cartographie des risques résiduels cible' },
+];
+
+const ecrisLeTitreDeLaCartographie = (
+  slide: ISlide,
+  titre: string,
+  numeroPage: number,
+  nombrePages: number
+) => {
+  slide.modifyElement(
+    'cartographie-titre',
+    modify.replaceText({ replace: 'titre', by: { text: titre } })
+  );
+  ecrisNumeroDePage(slide, 'cartographie-titre', numeroPage, nombrePages);
+};
+
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
 
@@ -987,18 +1010,24 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_HISTORIQUE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_RISQUES);
-    const risquesBruts = cartographiesDesRisques.bruts;
-    const pagesDesRisques = decoupeLesRisquesEnPages(risquesBruts);
-    pagesDesRisques.forEach((risquesDeLaPage, index) => {
-      presentation.addSlide(MODELE, SLIDE_CARTOGRAPHIE_DES_RISQUES, (slide) => {
-        ecrisNumeroDePage(
-          slide,
-          'cartographie-titre',
-          index + 1,
-          pagesDesRisques.length
+    TITRES_DES_CARTOGRAPHIES.forEach(({ cartographie, titre }) => {
+      const risques = cartographiesDesRisques[cartographie];
+      const pagesDesRisques = decoupeLesRisquesEnPages(risques);
+      pagesDesRisques.forEach((risquesDeLaPage, index) => {
+        presentation.addSlide(
+          MODELE,
+          SLIDE_CARTOGRAPHIE_DES_RISQUES,
+          (slide) => {
+            ecrisLeTitreDeLaCartographie(
+              slide,
+              titre,
+              index + 1,
+              pagesDesRisques.length
+            );
+            ecrisLaMatrice(slide, risques);
+            ecrisLaListeDesRisques(slide, risquesDeLaPage, risques.length);
+          }
         );
-        ecrisLaMatrice(slide, risquesBruts);
-        ecrisLaListeDesRisques(slide, risquesDeLaPage, risquesBruts.length);
       });
     });
 
