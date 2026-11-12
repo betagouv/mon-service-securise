@@ -24,6 +24,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
+    statut: 'Un statut',
   };
 
   const genereSupport = (
@@ -334,6 +335,16 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(contexte).toContain(
           '<a:t>Commune de Saint-Ours (987 654 321 00020)</a:t>'
         );
+      });
+
+      it('écrit le statut de déploiement', async () => {
+        const pptx = await genereSupport({
+          contexte: { ...contexteParDefaut, statut: 'En conception' },
+        });
+
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(contexte).not.toContain('En production');
+        expect(contexte).toContain('<a:t>En conception</a:t>');
       });
     });
 

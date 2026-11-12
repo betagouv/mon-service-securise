@@ -34,4 +34,14 @@ describe('Le contexte du service présenté à la commission', () => {
       '123 456 789 00010'
     );
   });
+
+  it('décrit le statut de déploiement avec le libellé du référentiel', () => {
+    const description = uneDescriptionV2Valide()
+      .avecStatutDeploiement('enLigne')
+      .construis();
+
+    expect(contexteDuService(description).statut).toBe(
+      'En ligne et accessible aux usagers et/ou agents'
+    );
+  });
 });
