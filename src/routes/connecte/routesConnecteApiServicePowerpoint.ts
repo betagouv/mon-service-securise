@@ -13,6 +13,7 @@ import { piecesDuDossier } from '../../modeles/objetsPowerpoint/piecesDuDossier.
 import { contexteDuService } from '../../modeles/objetsPowerpoint/contexteDuService.js';
 import { besoinsDeSecurite } from '../../modeles/objetsPowerpoint/besoinsDeSecurite.js';
 import { cartographiesDesRisques } from '../../modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { indiceCyber } from '../../modeles/objetsPowerpoint/indiceCyber.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
@@ -78,6 +79,7 @@ export const routesConnecteApiServicePowerpoint = ({
           contexte: contexteDuService(descriptionService),
           besoinsDeSecurite: besoinsDeSecurite(descriptionService),
           cartographiesDesRisques: cartographiesDesRisques(service.risquesV2!),
+          indiceCyber: indiceCyber(service),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse

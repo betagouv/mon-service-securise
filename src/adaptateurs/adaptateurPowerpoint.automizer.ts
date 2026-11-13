@@ -9,7 +9,6 @@ import {
   NOM_TEMPLATE,
   SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE,
   SLIDE_HISTORIQUE,
-  SLIDE_INDICE_CYBER,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
   SLIDE_INTERCALAIRE_SOCLE,
@@ -28,6 +27,7 @@ import {
 } from './automizer/slides/besoinsDeSecurite.js';
 import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
+import { ajouteLIndiceCyber } from './automizer/slides/indiceCyber.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -39,6 +39,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     contexte,
     besoinsDeSecurite,
     cartographiesDesRisques,
+    indiceCyber,
   }: DonneesSupportCommissionHomologation) {
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
@@ -83,7 +84,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     );
     presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
-    presentation.addSlide(MODELE, SLIDE_INDICE_CYBER);
+    ajouteLIndiceCyber(presentation, indiceCyber);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);
