@@ -1,8 +1,5 @@
 import Service from '../service.js';
-import {
-  IdCategorieMesure,
-  IdReferentielMesure,
-} from '../../referentiel.types.js';
+import { IdReferentielMesure } from '../../referentiel.types.js';
 
 export type IndiceCyberDeCategorie = {
   libelle: string;
@@ -37,14 +34,7 @@ export const indiceCyber = (service: Service): IndiceCyberDuService => {
     total: indice.total,
     totalPersonnalise: service.indiceCyberPersonnalise().total,
     noteMax: referentiel.indiceCyberNoteMax(),
-    categories: referentiel
-      .identifiantsCategoriesMesures()
-      .map((idCategorie) => ({
-        libelle: referentiel.descriptionCategorie(
-          idCategorie as IdCategorieMesure
-        ),
-        note: indice[idCategorie],
-      })),
+    categories: referentiel.indiceCyberAvecLibellesCategories(indice),
     referentiels: referentielsDesMesuresProposees(service),
   };
 };

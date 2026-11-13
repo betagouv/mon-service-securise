@@ -186,13 +186,10 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
         noteMax
       ),
       categoriesIndiceCyber: referentiel
-        .identifiantsCategoriesMesures()
-        .map((id: string) => ({
-          description: referentiel.descriptionCategorie(
-            id as IdCategorieMesure
-          ),
-          note:
-            typeof indice[id] === 'number' ? formatteNote(indice[id]) : null,
+        .indiceCyberAvecLibellesCategories(indice)
+        .map(({ libelle, note }) => ({
+          description: libelle,
+          note: typeof note === 'number' ? formatteNote(note) : null,
         })),
       noteMaxIndiceCyber: noteMax,
       svgCamembertIndispensables: svgCamembertMesures(statsIndispensables),

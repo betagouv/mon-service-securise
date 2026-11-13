@@ -77,6 +77,15 @@ const creeReferentiel = (
   const descriptionCategorie = (idCategorie: IdCategorieMesure) =>
     categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
+  const indiceCyberAvecLibellesCategories = (
+    indiceCyber: Record<IdCategorieMesure, number>
+  ) =>
+    (identifiantsCategoriesMesures() as IdCategorieMesure[]).map(
+      (idCategorie) => ({
+        libelle: descriptionCategorie(idCategorie),
+        note: indiceCyber[idCategorie],
+      })
+    );
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
   const descriptionEcheanceRenouvellement = (id: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[id]?.description;
@@ -569,6 +578,7 @@ const creeReferentiel = (
     coefficientIndiceCyberMesuresRecommandees,
     coefficientIndiceCyberStatutPartiel,
     indiceCyberNoteMax,
+    indiceCyberAvecLibellesCategories,
     definitionRisque,
     delaiAvantImpactCritiqueParDescription,
     delaisAvantImpactCritique,
