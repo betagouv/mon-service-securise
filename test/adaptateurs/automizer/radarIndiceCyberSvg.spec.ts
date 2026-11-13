@@ -1,8 +1,12 @@
+import { JSDOM } from 'jsdom';
 import { svgRadarIndiceCyber } from '../../../src/adaptateurs/automizer/radarIndiceCyberSvg.js';
 
 const textesDuSvg = (svg: string) =>
-  [...svg.matchAll(/<text[^>]*>(.*?)<\/text>/gs)].map(([, contenu]) =>
-    contenu.replace(/<[^>]+>/g, '').trim()
+  Array.from(
+    new JSDOM(svg, {
+      contentType: 'image/svg+xml',
+    }).window.document.querySelectorAll('text'),
+    (texte) => texte.textContent!.trim()
   );
 
 describe("Le radar de l'indice cyber par catégorie", () => {
