@@ -43,10 +43,28 @@ const texteDe = (element: Element) =>
     .map((texte) => texte.textContent)
     .join('');
 
+export const textesDeLaSlide = (slide: string) =>
+  elements(documentDeLaSlide(slide), 'a:t').map((texte) => texte.textContent!);
+
+export const texteDeLaSlide = (slide: string) =>
+  textesDeLaSlide(slide).join('\n');
+
+export const elementsDeLaSlide = (
+  slide: string,
+  espaceDeNoms: string,
+  nomLocal: string
+) =>
+  Array.from(
+    documentDeLaSlide(slide).getElementsByTagNameNS(espaceDeNoms, nomLocal)
+  );
+
 export const nomsDesFormes = (slide: string) =>
   elements(documentDeLaSlide(slide), 'p:cNvPr').map((proprietes) =>
     proprietes.getAttribute('name')!
   );
+
+export const nomsDesFormesCommencantPar = (slide: string, prefixe: string) =>
+  nomsDesFormes(slide).filter((nom) => nom.startsWith(prefixe));
 
 export const formeNommee = (slide: string, nom: string) =>
   formeNommeeDans(documentDeLaSlide(slide), nom);
