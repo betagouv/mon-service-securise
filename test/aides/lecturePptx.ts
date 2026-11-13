@@ -18,10 +18,66 @@ const cibleDeLaRelation = (relations: Document, idRelation: string) =>
     .find((relation) => relation.getAttribute('Id') === idRelation)!
     .getAttribute('Target')!;
 
-const parentDeBalise = (element: Element, balise: string) => {
-  let parent = element.parentElement;
-  while (parent && parent.tagName !== balise) parent = parent.parentElement;
-  return parent!;
+const formeNommeeDans = (slide: Document, nom: string) => {
+  const proprietes = elements(slide, 'p:cNvPr').find(
+    (candidate) => candidate.getAttribute('name') === nom
+  );
+  if (!proprietes) throw new Error(`Forme ${nom} absente de la slide`);
+  return proprietes.parentElement!.parentElement!;
+};
+
+let derniereSlideLue: { xml: string; document: Document } | undefined;
+
+const documentDeLaSlide = (xml: string) => {
+  if (derniereSlideLue?.xml !== xml) {
+    derniereSlideLue = {
+      xml,
+      document: parseurXml.parseFromString(xml, 'text/xml'),
+    };
+  }
+  return derniereSlideLue.document;
+};
+
+const texteDe = (element: Element) =>
+  elements(element, 'a:t')
+    .map((texte) => texte.textContent)
+    .join('');
+
+export const nomsDesFormes = (slide: string) =>
+  elements(documentDeLaSlide(slide), 'p:cNvPr').map((proprietes) =>
+    proprietes.getAttribute('name')!
+  );
+
+export const formeNommee = (slide: string, nom: string) =>
+  formeNommeeDans(documentDeLaSlide(slide), nom);
+
+export const texteDeLaForme = (slide: string, nom: string) =>
+  texteDe(formeNommee(slide, nom));
+
+export const paragraphesDeLaForme = (slide: string, nom: string) =>
+  elements(formeNommee(slide, nom), 'a:p').map(texteDe);
+
+export const cadreDeLaForme = (slide: string, nom: string) => {
+  const [positionnement] = elements(formeNommee(slide, nom), 'a:xfrm');
+  const [origine] = elements(positionnement, 'a:off');
+  const [etendue] = elements(positionnement, 'a:ext');
+  return {
+    x: Number(origine.getAttribute('x')),
+    y: Number(origine.getAttribute('y')),
+    largeur: Number(etendue.getAttribute('cx')),
+    hauteur: Number(etendue.getAttribute('cy')),
+  };
+};
+
+export const taillesDePolice = (slide: string, nom: string) =>
+  elements(formeNommee(slide, nom), 'a:rPr')
+    .map((proprietes) => proprietes.getAttribute('sz'))
+    .filter((taille): taille is string => taille !== null);
+
+export const couleurDuFond = (slide: string, nom: string) => {
+  const [proprietes] = elements(formeNommee(slide, nom), 'p:spPr');
+  const [couleur] = elements(proprietes, 'a:srgbClr');
+  return couleur.getAttribute('val');
 };
 
 const cheminsDesSlidesDansLOrdre = async (archive: JSZip) => {
@@ -149,13 +205,7 @@ export const imageDeLaForme = async (
   const archive = await JSZip.loadAsync(pptx);
   const chemin = (await cheminsDesSlidesDansLOrdre(archive))[position - 1];
   const slide = await lisXml(archive, chemin);
-  const proprietesDeLImage = elements(slide, 'p:cNvPr').find(
-    (proprietes) => proprietes.getAttribute('name') === nom
-  )!;
-  const [image] = elements(
-    parentDeBalise(proprietesDeLImage, 'p:pic'),
-    'a:blip'
-  );
+  const [image] = elements(formeNommeeDans(slide, nom), 'a:blip');
   const relations = await lisXml(
     archive,
     `${path.posix.dirname(chemin)}/_rels/${path.posix.basename(chemin)}.rels`
