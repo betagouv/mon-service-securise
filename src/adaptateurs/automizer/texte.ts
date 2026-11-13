@@ -63,3 +63,8 @@ export const tientDansLaPolice = (
 export const policeQuiConvient = (texte: string, polices: Police[]) =>
   polices.find((police) => tientDansLaPolice(texte, police)) ??
   polices[polices.length - 1];
+
+export const auDixieme = new Intl.NumberFormat('fr', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+}).format;

@@ -29,7 +29,7 @@ import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographies
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
 import {
   ajouteLIndiceCyber,
-  jaugesDeLIndiceCyber,
+  imagesDeLIndiceCyber,
 } from './automizer/slides/indiceCyber.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
@@ -44,7 +44,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     cartographiesDesRisques,
     indiceCyber,
   }: DonneesSupportCommissionHomologation) {
-    const jauges = jaugesDeLIndiceCyber(indiceCyber);
+    const imagesIndiceCyber = imagesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
       removeExistingSlides: true,
@@ -57,7 +57,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
         ILLUSTRATIONS_DES_NIVEAUX,
         `${this.dossierTemplates}/illustrationsNiveaux`
       )
-      .loadMediaBuffer(jauges.noms, jauges.images);
+      .loadMediaBuffer(imagesIndiceCyber.noms, imagesIndiceCyber.images);
 
     ajouteLaCouverture(presentation, dateCreation);
     presentation.addSlide(MODELE, SLIDE_SOMMAIRE);

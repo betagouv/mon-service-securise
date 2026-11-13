@@ -24,7 +24,11 @@ import {
   svgIndiceCyberPersonnalise,
 } from '../../src/adaptateurs/indiceCyberSvg.js';
 import { svgEnPng } from '../../src/adaptateurs/automizer/svgEnPng.js';
-import { LARGEUR_DES_JAUGES } from '../../src/adaptateurs/automizer/slides/indiceCyber.js';
+import {
+  LARGEUR_DES_JAUGES,
+  LARGEUR_DU_RADAR,
+} from '../../src/adaptateurs/automizer/slides/indiceCyber.js';
+import { svgRadarIndiceCyber } from '../../src/adaptateurs/automizer/radarIndiceCyberSvg.js';
 
 const pngDeLaJauge = (svg: string) => svgEnPng(svg, LARGEUR_DES_JAUGES);
 
@@ -1499,6 +1503,28 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
 
         expect(
           jauge.equals(pngDeLaJauge(svgIndiceCyberPersonnalise(2.6, 5)))
+        ).toBe(true);
+      });
+
+      it("dessine le radar de l'indice cyber par catégorie", async () => {
+        const categories = [
+          { libelle: 'Gouvernance', note: 3.2 },
+          { libelle: 'Protection', note: 1.8 },
+        ];
+        const pptx = await genereSupport({
+          indiceCyber: { ...indiceCyberParDefaut, categories, noteMax: 5 },
+        });
+
+        const radar = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-radar'
+        );
+
+        expect(
+          radar.equals(
+            svgEnPng(svgRadarIndiceCyber(categories, 5), LARGEUR_DU_RADAR)
+          )
         ).toBe(true);
       });
 
