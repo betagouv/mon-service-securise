@@ -126,9 +126,7 @@ const creeReferentiel = (
     idStatut && identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
   const formatteListeDeReferentiels = (referentiels: IdReferentielMesure[]) => {
-    const formatte = new Intl.ListFormat('fr', {
-      type: 'conjunction',
-    });
+    const formatte = new Intl.ListFormat('fr', { type: 'conjunction' });
     const referentielsSansDoublon = new Set(
       referentiels.map(
         (r) => `${donnees.articlesDefinisReferentielsMesure[r] ?? ''}${r}`

@@ -159,12 +159,7 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
     const statsRecommandees = service.statistiquesMesuresRecommandees();
     const statsGenerales = service.statistiquesMesuresGenerales();
 
-    const referentiels = Object.entries(
-      service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ).map(([, mesure]: [string, any]) => mesure.referentiel);
-    const referentielConcernes =
-      referentiel.formatteListeDeReferentiels(referentiels);
+    const referentielConcernes = service.referentielsDesMesuresGenerales();
 
     const donnees: DonneesPdfSyntheseSecurite = {
       nomService: service.nomService(),
