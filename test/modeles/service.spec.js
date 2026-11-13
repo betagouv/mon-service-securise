@@ -713,6 +713,23 @@ describe('Un service', () => {
     expect(service.indiceCyberPersonnalise()).toEqual(4.8);
   });
 
+  it('nomme les référentiels de ses mesures générales, sans doublon', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { A: {}, B: {}, C: {} },
+      articlesDefinisReferentielsMesure: { ANSSI: "l'", CNIL: 'la ' },
+    });
+    const mesures = new Mesures({ mesuresGenerales: [] }, referentiel, {
+      A: { referentiel: 'ANSSI' },
+      B: { referentiel: 'CNIL' },
+      C: { referentiel: 'ANSSI' },
+    });
+    const service = unService(referentiel).avecMesures(mesures).construis();
+
+    expect(service.referentielsDesMesuresGenerales()).toBe(
+      "l'ANSSI et la CNIL"
+    );
+  });
+
   it('peut calculer son indice cyber personnalisé même quand toutes les mesures sont « Non faites »', () => {
     // Le cas couvert ici est que le calcul de l'IC personnalisé EXCLUT les mesures non faites.
     // Donc, s'il n'y a QUE du « non faite », on pourrait avoir des divisions par 0.

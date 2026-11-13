@@ -5,7 +5,6 @@ import { Droits } from '../autorisations/gestionDroits.js';
 import RisqueGeneral from '../risqueGeneral.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
 import { ObjetGetContactsUtiles } from './objetGetContactsUtiles.js';
-import { IdReferentielMesure } from '../../referentiel.types.js';
 import Dossier from '../dossier.js';
 
 const {
@@ -102,15 +101,7 @@ export class ObjetGetServiceComplet {
 
   private donneesIndiceCyber() {
     const referentielsMesureConcernes =
-      this.referentiel.formatteListeDeReferentiels(
-        Object.entries(
-          this.service.mesures.enrichiesAvecDonneesPersonnalisees()
-            .mesuresGenerales
-        ).map(
-          ([, mesure]) =>
-            (mesure as { referentiel: IdReferentielMesure }).referentiel
-        )
-      );
+      this.service.referentielsDesMesuresGenerales();
     const indiceCyberAnssi = this.service.indiceCyber();
     const indiceCyberPersonnalise = this.service.indiceCyberPersonnalise();
 

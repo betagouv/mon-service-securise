@@ -101,6 +101,6 @@ describe('L’indice cyber présenté à la commission', () => {
   it('nomme les référentiels des mesures proposées au service, sans doublon', () => {
     const indice = indiceCyber(unServiceAvecSesMesures());
 
-    expect(indice.referentiels).toBe('l’ANSSI et la CNIL');
+    expect(indice.referentiels).toBe("l'ANSSI et la CNIL");
   });
 });
