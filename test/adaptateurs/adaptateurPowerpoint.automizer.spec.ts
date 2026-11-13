@@ -100,7 +100,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(18);
+      expect(await nombreDeSlides(pptx)).toBe(19);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -148,6 +148,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         '<a:t>4. Détail : Socle et plan d’action</a:t>'
       );
       expect(intercalaireSocle).toContain('<a:t>Logo</a:t>');
+      expect(await contenuSlide(pptx, 19)).toContain(
+        '<a:t>Conformité : Indice cyber</a:t>'
+      );
     });
 
     it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
