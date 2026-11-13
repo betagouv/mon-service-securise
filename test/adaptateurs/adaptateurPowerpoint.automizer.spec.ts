@@ -97,10 +97,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et les cartographies des risques bruts, à date et résiduels cible', async () => {
+    it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(16);
+      expect(await nombreDeSlides(pptx)).toBe(18);
       expect(await contenuSlide(pptx, 1)).toContain(
         '<a:t>Support de commission d’homologation</a:t>'
       );
@@ -140,6 +140,14 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(await contenuSlide(pptx, 13)).toContain(
         '<a:t>Cartographie des risques bruts</a:t>'
       );
+      expect(await contenuSlide(pptx, 17)).toContain(
+        '<a:t>Analyse de risques complémentaire (optionnel)</a:t>'
+      );
+      const intercalaireSocle = await contenuSlide(pptx, 18);
+      expect(intercalaireSocle).toContain(
+        '<a:t>4. Détail : Socle et plan d’action</a:t>'
+      );
+      expect(intercalaireSocle).toContain('<a:t>Logo</a:t>');
     });
 
     it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
