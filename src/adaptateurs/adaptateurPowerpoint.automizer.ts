@@ -9,6 +9,7 @@ import {
   NOM_TEMPLATE,
   SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE,
   SLIDE_HISTORIQUE,
+  SLIDE_INDICE_CYBER,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
   SLIDE_INTERCALAIRE_SOCLE,
@@ -82,6 +83,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     );
     presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
+    presentation.addSlide(MODELE, SLIDE_INDICE_CYBER);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);
