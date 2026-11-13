@@ -15,6 +15,7 @@ import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossi
 import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
 import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
 import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceCyber.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
@@ -74,6 +75,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     cibles: [],
   };
 
+  const indiceCyberParDefaut: IndiceCyberDuService = {
+    nomService: 'Un service',
+    total: 0,
+    totalPersonnalise: 0,
+    noteMax: 5,
+    categories: [],
+    referentiels: 'l’ANSSI',
+  };
+
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
     statut: 'Un statut',
@@ -93,6 +103,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       contexte: contexteParDefaut,
       besoinsDeSecurite: besoinsDeSecuriteParDefaut,
       cartographiesDesRisques: cartographiesParDefaut,
+      indiceCyber: indiceCyberParDefaut,
       ...donnees,
     });
 
@@ -1426,6 +1437,45 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'Cartographie des risques résiduels cible',
           'R3',
         ]);
+      });
+    });
+
+    describe('sur l’indice cyber', () => {
+      const POSITION_INDICE_CYBER = 19;
+
+      it('écrit le nom du service et ses deux indices, arrondis au dixième', async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            nomService: 'Mon service',
+            total: 2.43,
+            totalPersonnalise: 2.6,
+          },
+        });
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(texteDeLaForme(slide, 'indice-cyber-texte')).toBe(
+          'Le socle de sécurité a été réalisé via l’outil MonServiceSécurisé. L’indice cyber ANSSI de Mon service calculé est de 2,4/5, et l’indice cyber personnalisé est de 2,6/5.'
+        );
+      });
+
+      it('nomme les référentiels des mesures sur lesquelles l’indice est calculé', async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            referentiels: 'l’ANSSI et la CNIL',
+          },
+        });
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(texteDeLaForme(slide, 'indice-cyber-referentiels')).toBe(
+          'Calculé sur les mesures proposées par l’ANSSI et la CNIL'
+        );
+        expect(texteDeLaForme(slide, 'indice-cyber-explication')).toBe(
+          'L’indice cyber est calculé sur la base des informations renseignées par l’équipe concernant les mesures de sécurité proposées par l’ANSSI et la CNIL, et à l’exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.'
+        );
       });
     });
 
