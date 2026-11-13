@@ -2,6 +2,10 @@
   import { untrack } from 'svelte';
   import type { IdCategorie } from '../../../tableauDesMesures/tableauDesMesures.d';
   import type { DonneesIndiceCyber } from './indiceCyber.types';
+  import {
+    creeRadar,
+    enAttributPoints,
+  } from '../../../../../src/geometrie/radar';
 
   interface Props {
     noteMax: number;
@@ -18,68 +22,28 @@
   let { total: _, ...indicesCyber } = untrack(() => indicesCyberAvecTotal);
 
   const TAILLE = 150;
-  const CENTRE: [number, number] = [TAILLE / 2, TAILLE / 2];
-  const RAYON_MAX = (0.95 * TAILLE) / 2;
   const ZOOM_X = -40;
   const ZOOM_Y = -10;
   const DECALLAGE_TEXTE = 5;
-  const ANGLE_ORIGINE = -Math.PI / 2;
+  const DECALLAGE_Y_LIBELLE_SOUS_LE_CENTRE = 6;
 
-  const nbPoints = untrack(() => Object.keys(indicesCyber).length);
-  const nbEchelle = untrack(() => noteMax);
-  const incrementEchelle = RAYON_MAX / nbEchelle;
-
-  const polaireVersCartesien = (
-    r: number,
-    theta: number,
-    i: number
-  ): [number, number] => [
-    r * Math.cos(i * theta + ANGLE_ORIGINE) + CENTRE[0],
-    r * Math.sin(i * theta + ANGLE_ORIGINE) + CENTRE[1],
-  ];
-
-  const generePoints = (radius: number, n: number): [number, number][] => {
-    const theta = (2 * Math.PI) / n;
-    return Array.from({ length: n }, (_, i) =>
-      polaireVersCartesien(radius, theta, i)
-    );
-  };
-
-  const generePointsValeur = (
-    indices: number[],
-    max: number
-  ): [number, number][] => {
-    const theta = (2 * Math.PI) / indices.length;
-    return indices.map((indice, idx) =>
-      polaireVersCartesien((indice / max) * RAYON_MAX, theta, idx)
-    );
-  };
-
-  const tableauVersPointsPolygone = (array: [number, number][]): string =>
-    array.map((c) => c.join(' ')).join(' ');
-
-  const angleVersPointAncrage = (angle: number): 'middle' | 'end' | 'start' => {
-    if (angle > 320 || angle < 40 || (angle > 140 && angle < 220))
-      return 'middle';
-    if (angle > 140) return 'end';
-    return 'start';
-  };
+  const radar = untrack(() =>
+    creeRadar({
+      taille: TAILLE,
+      nombreAxes: Object.keys(indicesCyber).length,
+      noteMax,
+      ecartDesLibelles: DECALLAGE_TEXTE,
+    })
+  );
+  const [xCentre, yCentre] = radar.centre;
 
   const format = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   }).format;
 
-  const rayons = Array.from(
-    { length: nbEchelle + 1 },
-    (_, i) => i * incrementEchelle
-  );
   const pointsIndiceCyber = $derived(
-    generePointsValeur(Object.values(indicesCyber), noteMax)
-  );
-  const pointsToile = $derived(generePoints(RAYON_MAX, nbPoints));
-  const pointsLabels = $derived(
-    generePoints(RAYON_MAX + DECALLAGE_TEXTE, nbPoints)
+    radar.pointsDesNotes(Object.values(indicesCyber))
   );
   const idCible = Math.floor(Math.random() * 1_000_000);
 
@@ -118,10 +82,10 @@
     </linearGradient>
   </defs>
 
-  {#each pointsToile as point, index (index)}
+  {#each radar.axes as point, index (index)}
     <line
-      x1={CENTRE[0]}
-      y1={CENTRE[1]}
+      x1={xCentre}
+      y1={yCentre}
       x2={point[0]}
       y2={point[1]}
       stroke="#D9D9D9"
@@ -129,25 +93,23 @@
     />
   {/each}
 
-  {#each pointsLabels as point, index (index)}
-    {@const angle = index * (360 / nbPoints)}
-    {@const pointAncrage = angleVersPointAncrage(angle)}
-    {@const decallageY = angle > 90 && angle < 270 ? 6 : 0}
-    {@const label = categories[Object.keys(indicesCyber)[index]]}
-    <text x={point[0]} y={point[1]} dy={decallageY} text-anchor={pointAncrage}>
+  {#each radar.libelles as { point, alignement, sousLeCentre }, index (index)}
+    {@const decallageY = sousLeCentre ? DECALLAGE_Y_LIBELLE_SOUS_LE_CENTRE : 0}
+    {@const label = categories[categoriesDeIndiceCyber(index)]}
+    <text x={point[0]} y={point[1]} dy={decallageY} text-anchor={alignement}>
       {label}
     </text>
   {/each}
 
-  {#each rayons as radius, index (index)}
+  {#each radar.graduations as { note, rayon, polygone } (note)}
     <polygon
       stroke="#D9D9D9"
-      points={tableauVersPointsPolygone(generePoints(radius, nbPoints))}
+      points={enAttributPoints(polygone)}
       stroke-width="0.5"
     />
-    {#if index !== 0}
-      <text class="echelle" x={CENTRE[0]} y={CENTRE[1] - radius} dx={2} dy={2}>
-        {index}
+    {#if note !== 0}
+      <text class="echelle" x={xCentre} y={yCentre - rayon} dx={2} dy={2}>
+        {note}
       </text>
     {/if}
   {/each}
@@ -156,7 +118,7 @@
     stroke="url(#gradient-lineaire-anssi-{idCible})"
     stroke-width="1.5"
     stroke-linejoin="round"
-    points={tableauVersPointsPolygone(pointsIndiceCyber)}
+    points={enAttributPoints(pointsIndiceCyber)}
   />
 
   {#each pointsIndiceCyber as point, index (index)}
