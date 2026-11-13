@@ -7,9 +7,11 @@ import { nettoieLArchive } from './automizer/nettoyageDeLArchive.js';
 import {
   MODELE,
   NOM_TEMPLATE,
+  SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE,
   SLIDE_HISTORIQUE,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
+  SLIDE_INTERCALAIRE_SOCLE,
   SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE,
   SLIDE_PERIMETRE_VUE_FONCTIONNELLE,
   SLIDE_PRESENTATION_DU_SYSTEME,
@@ -78,6 +80,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       'cibles',
       cartographiesDesRisques.cibles
     );
+    presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);
