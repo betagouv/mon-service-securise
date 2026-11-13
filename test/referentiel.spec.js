@@ -297,6 +297,22 @@ describe('Le référentiel', () => {
     );
   });
 
+  it('associe à l’indice cyber de chaque catégorie son libellé, dans l’ordre du référentiel', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+    });
+
+    const indiceCyber = { total: 2.5, protection: 1.8, gouvernance: 3.2 };
+
+    expect(referentiel.indiceCyberAvecLibellesCategories(indiceCyber)).to.eql([
+      { libelle: 'Gouvernance', note: 3.2 },
+      { libelle: 'Protection', note: 1.8 },
+    ]);
+  });
+
   it('sait décrire les statuts des mesures', () => {
     const referentiel = Referentiel.creeReferentiel({
       statutsMesures: { unStatut: 'Un statut' },

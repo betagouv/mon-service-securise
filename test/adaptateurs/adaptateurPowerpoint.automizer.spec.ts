@@ -1,45 +1,46 @@
 import { readFile } from 'node:fs/promises';
 import { AdaptateurPowerpointAutomizer } from '../../src/adaptateurs/adaptateurPowerpoint.automizer.js';
 import {
+  cadreDeLaForme,
   contenuSlide,
+  couleurDuFond,
   fichiersNonCompresses,
   identifiantsDeFormesEnDouble,
+  elementsDeLaSlide,
   imageDeLaForme,
+  nomsDesFormes,
+  nomsDesFormesCommencantPar,
   nombreDeSlides,
+  paragraphesDeLaForme,
   partiesDeclarees,
   partiesDeclareesAbsentes,
   relationsCassees,
+  taillesDePolice,
+  texteDeLaForme,
+  texteDeLaSlide,
+  textesDeLaSlide,
 } from '../aides/lecturePptx.js';
 import { DonneesSupportCommissionHomologation } from '../../src/adaptateurs/adaptateurPowerpoint.interface.js';
 import { PieceDuDossier } from '../../src/modeles/objetsPowerpoint/piecesDuDossier.js';
 import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDuService.js';
 import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
 import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
+import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceCyber.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
+import {
+  svgIndiceCyber,
+  svgIndiceCyberPersonnalise,
+} from '../../src/adaptateurs/indiceCyberSvg.js';
+import { svgEnPng } from '../../src/adaptateurs/automizer/svgEnPng.js';
+import {
+  LARGEUR_DES_JAUGES,
+  LARGEUR_DU_RADAR,
+} from '../../src/adaptateurs/automizer/slides/indiceCyber.js';
+import { svgRadarIndiceCyber } from '../../src/adaptateurs/automizer/radarIndiceCyberSvg.js';
 
-const texteDeLaForme = (slide: string, nom: string) => {
-  const forme = slide.match(
-    new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
-  );
-  if (!forme) throw new Error(`Forme ${nom} absente de la slide`);
-  return [...forme[0].matchAll(/<a:t>([^<]*)<\/a:t>/g)]
-    .map(([, texte]) => texte)
-    .join('');
-};
-
-const cadreDeLaForme = (slide: string, nom: string) => {
-  const cadre = slide.match(
-    new RegExp(
-      `name="${nom}"(?:(?!</p:(?:sp|pic)>).)*?<a:off x="(\\d+)" y="(\\d+)"/>\\s*<a:ext cx="(\\d+)" cy="(\\d+)"/>`,
-      's'
-    )
-  );
-  if (!cadre) throw new Error(`Forme ${nom} absente de la slide`);
-  const [, x, y, largeur, hauteur] = cadre.map(Number);
-  return { x, y, largeur, hauteur };
-};
+const pngDeLaJauge = (svg: string) => svgEnPng(svg, LARGEUR_DES_JAUGES);
 
 const unePiece = (intitule: string): PieceDuDossier => ({
   intitule,
@@ -74,6 +75,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     cibles: [],
   };
 
+  const indiceCyberParDefaut: IndiceCyberDuService = {
+    nomService: 'Un service',
+    total: 0,
+    totalPersonnalise: 0,
+    noteMax: 5,
+    categories: [],
+    referentiels: 'l’ANSSI',
+  };
+
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
     statut: 'Un statut',
@@ -93,52 +103,72 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       contexte: contexteParDefaut,
       besoinsDeSecurite: besoinsDeSecuriteParDefaut,
       cartographiesDesRisques: cartographiesParDefaut,
+      indiceCyber: indiceCyberParDefaut,
       ...donnees,
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient, dans l’ordre, la couverture, le sommaire, la composition de la commission, les pièces du dossier, la présentation du système, le contexte, le périmètre de l’analyse, les objectifs de sécurité, l’historique et les cartographies des risques bruts, à date et résiduels cible', async () => {
+    it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(16);
-      expect(await contenuSlide(pptx, 1)).toContain(
-        '<a:t>Support de commission d’homologation</a:t>'
+      expect(await nombreDeSlides(pptx)).toBe(19);
+      expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
+        'Support de commission d’homologation'
       );
-      expect(await contenuSlide(pptx, 2)).toContain('<a:t>Sommaire</a:t>');
-      expect(await contenuSlide(pptx, 3)).toContain(
-        '<a:t>Composition de la commission</a:t>'
+      expect(textesDeLaSlide(await contenuSlide(pptx, 2))).toContain(
+        'Sommaire'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 3))).toContain(
+        'Composition de la commission'
       );
       const pagePieces = await contenuSlide(pptx, 4);
-      expect(pagePieces).toContain(
-        '<a:t>Pièces du dossier transmises avant la séance</a:t>'
+      expect(textesDeLaSlide(pagePieces)).toContain(
+        'Pièces du dossier transmises avant la séance'
       );
-      expect(pagePieces).not.toContain(
+      expect(texteDeLaSlide(pagePieces)).not.toContain(
         'Composition de la commission et contenu du dossier'
       );
       const presentationDuSysteme = await contenuSlide(pptx, 5);
-      expect(presentationDuSysteme).toContain(
-        '<a:t>1. Présentation du système</a:t>'
+      expect(textesDeLaSlide(presentationDuSysteme)).toContain(
+        '1. Présentation du système'
       );
-      expect(presentationDuSysteme).toContain('<a:t>Logo</a:t>');
-      expect(await contenuSlide(pptx, 6)).toContain('<a:t>Contexte</a:t>');
-      expect(await contenuSlide(pptx, 7)).toContain(
-        '<a:t>Périmètre de l’analyse : Vue fonctionnelle</a:t>'
+      expect(textesDeLaSlide(presentationDuSysteme)).toContain('Logo');
+      expect(textesDeLaSlide(await contenuSlide(pptx, 6))).toContain(
+        'Contexte'
       );
-      expect(await contenuSlide(pptx, 8)).toContain(
-        '<a:t>Périmètre de l’analyse : Description technique</a:t>'
+      expect(textesDeLaSlide(await contenuSlide(pptx, 7))).toContain(
+        'Périmètre de l’analyse : Vue fonctionnelle'
       );
-      expect(await contenuSlide(pptx, 9)).toContain(
-        '<a:t>Objectifs de sécurité, impacts et exposition</a:t>'
+      expect(textesDeLaSlide(await contenuSlide(pptx, 8))).toContain(
+        'Périmètre de l’analyse : Description technique'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 9))).toContain(
+        'Objectifs de sécurité, impacts et exposition'
       );
       const intercalaireHistorique = await contenuSlide(pptx, 10);
-      expect(intercalaireHistorique).toContain('<a:t>2. Historique</a:t>');
-      expect(intercalaireHistorique).toContain('<a:t>Logo</a:t>');
-      expect(await contenuSlide(pptx, 11)).toContain('<a:t>EVÈNEMENT</a:t>');
-      expect(await contenuSlide(pptx, 12)).toContain(
-        '<a:t>3. Détail : Risques et plan d’action</a:t>'
+      expect(textesDeLaSlide(intercalaireHistorique)).toContain(
+        '2. Historique'
       );
-      expect(await contenuSlide(pptx, 13)).toContain(
-        '<a:t>Cartographie des risques bruts</a:t>'
+      expect(textesDeLaSlide(intercalaireHistorique)).toContain('Logo');
+      expect(textesDeLaSlide(await contenuSlide(pptx, 11))).toContain(
+        'EVÈNEMENT'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 12))).toContain(
+        '3. Détail : Risques et plan d’action'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 13))).toContain(
+        'Cartographie des risques bruts'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 17))).toContain(
+        'Analyse de risques complémentaire (optionnel)'
+      );
+      const intercalaireSocle = await contenuSlide(pptx, 18);
+      expect(textesDeLaSlide(intercalaireSocle)).toContain(
+        '4. Détail : Socle et plan d’action'
+      );
+      expect(textesDeLaSlide(intercalaireSocle)).toContain('Logo');
+      expect(textesDeLaSlide(await contenuSlide(pptx, 19))).toContain(
+        'Conformité : Indice cyber'
       );
     });
 
@@ -147,8 +177,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
       });
 
-      expect(await contenuSlide(pptx, 3)).toContain(
-        '<a:t>Jean Dupond, RSSI</a:t>'
+      expect(textesDeLaSlide(await contenuSlide(pptx, 3))).toContain(
+        'Jean Dupond, RSSI'
       );
     });
 
@@ -157,18 +187,21 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
       });
 
-      expect(await contenuSlide(pptx, 3)).not.toContain(
-        'autorite-homologation-a-completer'
-      );
+      expect(
+        nomsDesFormesCommencantPar(
+          await contenuSlide(pptx, 3),
+          'autorite-homologation-a-completer'
+        )
+      ).toEqual([]);
     });
 
     it("laisse l'autorité d'homologation à compléter par le projet quand elle n'est pas renseignée", async () => {
       const pptx = await genereSupport();
 
       const commission = await contenuSlide(pptx, 3);
-      expect(commission).not.toContain('name="autorite-homologation"');
-      expect(commission).toContain(
-        'name="autorite-homologation-a-completer-texte"'
+      expect(nomsDesFormes(commission)).not.toContain('autorite-homologation');
+      expect(nomsDesFormes(commission)).toContain(
+        'autorite-homologation-a-completer-texte'
       );
     });
 
@@ -182,26 +215,18 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           positions.map((position) => contenuSlide(pptx, position))
         );
         return slides.filter((slide) =>
-          slide.includes('name="titre-page-pieces"')
+          nomsDesFormes(slide).includes('titre-page-pieces')
         ).length;
       };
 
-      const titreDeLaPage = (page: string) => {
-        const [titre] = page.match(
-          /name="titre-page-pieces"(?:(?!<\/p:sp>).)*<\/p:sp>/s
-        )!;
-        return [...titre.matchAll(/<a:t>([^<]*)<\/a:t>/g)]
-          .map(([, texte]) => texte)
-          .join('');
-      };
+      const titreDeLaPage = (page: string) =>
+        texteDeLaForme(page, 'titre-page-pieces');
 
-      const ligne = (page: string, numero: number, partie: string) =>
-        page.match(
-          new RegExp(
-            `name="piece-${numero}-${partie}"(?:(?!</p:sp>).)*</p:sp>`,
-            's'
-          )
-        )?.[0] ?? '';
+      const nomDeLaLigne = (numero: number, partie: string) =>
+        `piece-${numero}-${partie}`;
+
+      const texteDeLaLigne = (page: string, numero: number, partie: string) =>
+        texteDeLaForme(page, nomDeLaLigne(numero, partie));
 
       it('écrit l’intitulé, la source et la case de chaque pièce', async () => {
         const pptx = await genereSupport({
@@ -220,18 +245,14 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-        expect(ligne(page, 1, 'case')).toContain('<a:t>☑</a:t>');
-        expect(ligne(page, 1, 'intitule')).toContain(
-          '<a:t>Présent support de commission</a:t>'
+        expect(texteDeLaLigne(page, 1, 'case')).toBe('☑');
+        expect(texteDeLaLigne(page, 1, 'intitule')).toBe(
+          'Présent support de commission'
         );
-        expect(ligne(page, 1, 'source')).toContain(
-          '<a:t>MonServiceSécurisé</a:t>'
-        );
-        expect(ligne(page, 2, 'case')).toContain('<a:t>☐</a:t>');
-        expect(ligne(page, 2, 'intitule')).toContain(
-          '<a:t>Charte informatique</a:t>'
-        );
-        expect(ligne(page, 2, 'source')).toContain('<a:t>Utilisateur</a:t>');
+        expect(texteDeLaLigne(page, 1, 'source')).toBe('MonServiceSécurisé');
+        expect(texteDeLaLigne(page, 2, 'case')).toBe('☐');
+        expect(texteDeLaLigne(page, 2, 'intitule')).toBe('Charte informatique');
+        expect(texteDeLaLigne(page, 2, 'source')).toBe('Utilisateur');
       });
 
       it('retire la version à compléter des lignes remplies', async () => {
@@ -240,7 +261,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-        expect(page).not.toContain('name="piece-1-a-completer-');
+        expect(
+          nomsDesFormesCommencantPar(page, 'piece-1-a-completer-')
+        ).toEqual([]);
       });
 
       it('laisse les lignes au-delà des pièces à compléter par le projet', async () => {
@@ -249,11 +272,15 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-        expect(page).not.toContain('name="piece-2-intitule"');
-        expect(page).not.toContain('name="piece-2-source"');
-        expect(page).toContain('name="piece-2-a-completer-intitule-texte"');
-        expect(ligne(page, 2, 'case')).toContain('<a:t>☐</a:t>');
-        expect(page).toContain('name="piece-16-a-completer-reference-texte"');
+        expect(nomsDesFormes(page)).not.toContain('piece-2-intitule');
+        expect(nomsDesFormes(page)).not.toContain('piece-2-source');
+        expect(nomsDesFormes(page)).toContain(
+          'piece-2-a-completer-intitule-texte'
+        );
+        expect(texteDeLaLigne(page, 2, 'case')).toBe('☐');
+        expect(nomsDesFormes(page)).toContain(
+          'piece-16-a-completer-reference-texte'
+        );
       });
 
       it('répartit les pièces sur plusieurs pages numérotées au-delà de 16', async () => {
@@ -281,14 +308,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_SLIDE_PIECES + 1
         );
-        expect(ligne(deuxiemePage, 1, 'intitule')).toContain(
-          '<a:t>Pièce 17</a:t>'
-        );
-        expect(ligne(deuxiemePage, 4, 'intitule')).toContain(
-          '<a:t>Pièce 20</a:t>'
-        );
-        expect(deuxiemePage).toContain(
-          'name="piece-5-a-completer-intitule-texte"'
+        expect(texteDeLaLigne(deuxiemePage, 1, 'intitule')).toBe('Pièce 17');
+        expect(texteDeLaLigne(deuxiemePage, 4, 'intitule')).toBe('Pièce 20');
+        expect(nomsDesFormes(deuxiemePage)).toContain(
+          'piece-5-a-completer-intitule-texte'
         );
       });
 
@@ -306,7 +329,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(titreDeLaPage(pageVide)).toBe(
           'Pièces du dossier transmises avant la séance 2/2'
         );
-        expect(pageVide).not.toContain('Prérempli par MonServiceSécurisé');
+        expect(texteDeLaSlide(pageVide)).not.toContain(
+          'Prérempli par MonServiceSécurisé'
+        );
       });
 
       describe('pour une pièce dont l’intitulé peut être abrégé', () => {
@@ -318,9 +343,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           cochee: false,
         });
         const ordonnee = (page: string, numero: number, partie: string) =>
-          Number(
-            ligne(page, numero, partie).match(/<a:off x="\d+" y="(\d+)"/)![1]
-          );
+          cadreDeLaForme(page, nomDeLaLigne(numero, partie)).y;
 
         it('agrandit sa ligne et descend les lignes suivantes de la colonne quand son intitulé tient sur deux lignes', async () => {
           const pptx = await genereSupport({
@@ -354,8 +377,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           });
 
           const page = await contenuSlide(pptx, POSITION_SLIDE_PIECES);
-          expect(ligne(page, 1, 'intitule')).toContain(
-            '<a:t>Avis écrits des collaborateurs</a:t>'
+          expect(texteDeLaLigne(page, 1, 'intitule')).toBe(
+            'Avis écrits des collaborateurs'
           );
           expect(ordonnee(page, 2, 'case')).toBe(ordonnee(page, 10, 'case'));
         });
@@ -368,9 +391,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const pptx = await genereSupport({ piecesDuDossier: vingtPieces });
 
         const ordonneeDansLaPage = (page: string) => (numero: number) =>
-          Number(
-            ligne(page, numero, 'case').match(/<a:off x="\d+" y="(\d+)"/)![1]
-          );
+          cadreDeLaForme(page, nomDeLaLigne(numero, 'case')).y;
         const pages = [
           await contenuSlide(pptx, POSITION_SLIDE_PIECES),
           await contenuSlide(pptx, POSITION_SLIDE_PIECES + 1),
@@ -385,15 +406,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     describe('sur le contexte', () => {
       const POSITION_SLIDE_CONTEXTE = 6;
 
-      const formeDescription = (slide: string) =>
-        slide.match(
-          /name="contexte-description"(?:(?!<\/p:sp>).)*<\/p:sp>/s
-        )![0];
+      const DESCRIPTION = 'contexte-description';
 
-      const taillesDePolice = (forme: string) => [
-        ...new Set(
-          [...forme.matchAll(/<a:rPr [^>]*sz="(\d+)"/g)].map(([, sz]) => sz)
-        ),
+      const taillesDePoliceDeLaDescription = (slide: string) => [
+        ...new Set(taillesDePolice(slide, DESCRIPTION)),
       ];
 
       const descriptionDe = (nombreDeMots: number) =>
@@ -408,9 +424,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Portail RH permettant');
-        expect(contexte).toContain(
-          '<a:t>Un portail de démarches en ligne</a:t>'
+        expect(texteDeLaSlide(contexte)).not.toContain('Portail RH permettant');
+        expect(textesDeLaSlide(contexte)).toContain(
+          'Un portail de démarches en ligne'
         );
       });
 
@@ -420,7 +436,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1600']);
+        expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1600']);
       });
 
       it('réduit la police de la description à 14 pt quand elle dépasse trois lignes à 16 pt', async () => {
@@ -429,7 +445,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1400']);
+        expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1400']);
       });
 
       it('compte chaque saut de ligne de la description comme une nouvelle ligne', async () => {
@@ -441,7 +457,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(taillesDePolice(formeDescription(contexte))).toEqual(['1600']);
+        expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1600']);
       });
 
       it('coupe la description par « … » quand elle dépasse quatre lignes à 14 pt', async () => {
@@ -449,12 +465,11 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           contexte: { ...contexteParDefaut, description: descriptionDe(60) },
         });
 
-        const description = formeDescription(
-          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(texteDeLaForme(contexte, DESCRIPTION)).toBe(
+          `${descriptionDe(40)}…`
         );
-        const [, texte] = description.match(/<a:t>([^<]*)<\/a:t>/)!;
-        expect(texte).toBe(`${descriptionDe(40)}…`);
-        expect(taillesDePolice(description)).toEqual(['1400']);
+        expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1400']);
       });
 
       it('coupe aussi la description aux sauts de ligne quand elle dépasse quatre lignes à 14 pt', async () => {
@@ -465,11 +480,13 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           },
         });
 
-        const description = formeDescription(
-          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(paragraphesDeLaForme(contexte, DESCRIPTION)).toContain(
+          'Premier paragraphe…'
         );
-        expect(description).toContain('<a:t>Premier paragraphe…</a:t>');
-        expect(description).not.toContain('Dernier paragraphe');
+        expect(texteDeLaForme(contexte, DESCRIPTION)).not.toContain(
+          'Dernier paragraphe'
+        );
       });
 
       it('écrit chaque ligne de la description dans son propre paragraphe', async () => {
@@ -480,16 +497,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           },
         });
 
-        const description = formeDescription(
-          await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE)
-        );
-        const paragraphes = [...description.matchAll(/<a:p>.*?<\/a:p>/gs)].map(
-          ([paragraphe]) =>
-            [...paragraphe.matchAll(/<a:t>([^<]*)<\/a:t>/g)]
-              .map(([, texte]) => texte)
-              .join('')
-        );
-        expect(paragraphes).toEqual([
+        const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
+        expect(paragraphesDeLaForme(contexte, DESCRIPTION)).toEqual([
           'Premier paragraphe',
           '',
           'Second paragraphe',
@@ -505,9 +514,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Commune de Villeneuve');
-        expect(contexte).toContain(
-          '<a:t>Commune de Saint-Ours (987 654 321 00020)</a:t>'
+        expect(texteDeLaSlide(contexte)).not.toContain('Commune de Villeneuve');
+        expect(textesDeLaSlide(contexte)).toContain(
+          'Commune de Saint-Ours (987 654 321 00020)'
         );
       });
 
@@ -517,8 +526,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('En production');
-        expect(contexte).toContain('<a:t>En conception</a:t>');
+        expect(texteDeLaSlide(contexte)).not.toContain('En production');
+        expect(textesDeLaSlide(contexte)).toContain('En conception');
       });
 
       it('écrit les URL du projet', async () => {
@@ -527,8 +536,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('https://rh.villeneuve.fr');
-        expect(contexte).toContain('<a:t>https://rh.exemple.fr</a:t>');
+        expect(texteDeLaSlide(contexte)).not.toContain(
+          'https://rh.villeneuve.fr'
+        );
+        expect(textesDeLaSlide(contexte)).toContain('https://rh.exemple.fr');
       });
 
       it('écrit le type de projet', async () => {
@@ -540,8 +551,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Service en ligne, Portail');
-        expect(contexte).toContain('<a:t>Application mobile</a:t>');
+        expect(texteDeLaSlide(contexte)).not.toContain(
+          'Service en ligne, Portail'
+        );
+        expect(textesDeLaSlide(contexte)).toContain('Application mobile');
       });
 
       it('écrit l’hébergement', async () => {
@@ -550,8 +563,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Le système est entièrement fourni');
-        expect(contexte).toContain('<a:t>Autre</a:t>');
+        expect(texteDeLaSlide(contexte)).not.toContain(
+          'Le système est entièrement fourni'
+        );
+        expect(textesDeLaSlide(contexte)).toContain('Autre');
       });
 
       it('écrit la localisation des données stockées', async () => {
@@ -564,9 +579,11 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Au sein de l’Union européenne');
-        expect(contexte).toContain(
-          "<a:t>En partie ou totalement hors de l'Union européenne</a:t>"
+        expect(texteDeLaSlide(contexte)).not.toContain(
+          'Au sein de l’Union européenne'
+        );
+        expect(textesDeLaSlide(contexte)).toContain(
+          "En partie ou totalement hors de l'Union européenne"
         );
       });
 
@@ -576,8 +593,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
 
         const contexte = await contenuSlide(pptx, POSITION_SLIDE_CONTEXTE);
-        expect(contexte).not.toContain('Des postes de travail');
-        expect(contexte).toContain('<a:t>Un annuaire</a:t>');
+        expect(texteDeLaSlide(contexte)).not.toContain('Des postes de travail');
+        expect(textesDeLaSlide(contexte)).toContain('Un annuaire');
       });
     });
 
@@ -762,8 +779,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(besoins, 'donnee-identifiee-2')).toBe(
           'Plannings des agents'
         );
-        expect(besoins).not.toContain('name="donnee-identifiee-3"');
-        expect(besoins).not.toContain('name="donnee-identifiee"');
+        expect(nomsDesFormes(besoins)).not.toContain('donnee-identifiee-3');
+        expect(nomsDesFormes(besoins)).not.toContain('donnee-identifiee');
       });
 
       describe('pour les pastilles des données identifiées', () => {
@@ -783,8 +800,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
 
         const nomsDesPastilles = (besoins: string) =>
-          [...besoins.matchAll(/name="(donnee-identifiee-\d+)"/g)].map(
-            ([, nom]) => nom
+          nomsDesFormes(besoins).filter((nom) =>
+            /^donnee-identifiee-\d+$/.test(nom)
           );
 
         const pastillesDe = async (donneesIdentifiees: string[]) => {
@@ -797,13 +814,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const taillesDePoliceDesPastilles = (besoins: string) => [
           ...new Set(
             nomsDesPastilles(besoins).flatMap((nom) =>
-              [
-                ...besoins
-                  .match(
-                    new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
-                  )![0]
-                  .matchAll(/<a:rPr [^>]*sz="(\d+)"/g),
-              ].map(([, sz]) => sz)
+              taillesDePolice(besoins, nom)
             )
           ),
         ];
@@ -960,7 +971,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_SLIDE_BESOINS_DE_SECURITE
         );
-        expect(besoins).not.toContain('name="besoins-anssi-');
+        expect(nomsDesFormesCommencantPar(besoins, 'besoins-anssi-')).toEqual(
+          []
+        );
       });
 
       it('descend le niveau et son résumé à la place de l’encart quand le niveau choisi est celui recommandé', async () => {
@@ -1041,8 +1054,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(cartographie, 'matrice-g4-v4')).toBe('R3, R7');
         expect(texteDeLaForme(cartographie, 'matrice-g2-v1')).toBe('RS1');
         expect(texteDeLaForme(cartographie, 'matrice-g1-v1')).toBe('');
-        expect(cartographie).not.toContain('R3, R7, R9, R11, R14');
-        expect(cartographie).not.toContain('<a:t>R1, R5</a:t>');
+        expect(texteDeLaSlide(cartographie)).not.toContain(
+          'R3, R7, R9, R11, R14'
+        );
+        expect(textesDeLaSlide(cartographie)).not.toContain('R1, R5');
       });
 
       it('écrit le nombre de risques en tête de la liste', async () => {
@@ -1084,8 +1099,10 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(cartographie, 'risque-2-intitule')).toBe(
           'Intitulé de RS1'
         );
-        expect(cartographie).not.toContain('name="risque-3-');
-        expect(cartographie).not.toContain(
+        expect(nomsDesFormesCommencantPar(cartographie, 'risque-3-')).toEqual(
+          []
+        );
+        expect(texteDeLaSlide(cartographie)).not.toContain(
           'Compromission d’un poste de travail'
         );
       });
@@ -1106,13 +1123,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
         );
-        const couleurDuFond = (nom: string) =>
-          cartographie
-            .match(new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's'))![0]
-            .match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1];
-        expect(couleurDuFond('risque-1-pastille')).toBe('84C14E');
-        expect(couleurDuFond('risque-2-pastille')).toBe('FAC63C');
-        expect(couleurDuFond('risque-3-pastille')).toBe('F8785B');
+        expect(couleurDuFond(cartographie, 'risque-1-pastille')).toBe('84C14E');
+        expect(couleurDuFond(cartographie, 'risque-2-pastille')).toBe('FAC63C');
+        expect(couleurDuFond(cartographie, 'risque-3-pastille')).toBe('F8785B');
       });
 
       it('colore en gris la pastille d’un risque non évalué', async () => {
@@ -1127,12 +1140,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
         );
-        const [pastille] = cartographie.match(
-          /name="risque-1-pastille"(?:(?!<\/p:sp>).)*<\/p:sp>/s
-        )!;
-        expect(
-          pastille.match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1]
-        ).toBe('EEEEEE');
+        expect(couleurDuFond(cartographie, 'risque-1-pastille')).toBe('EEEEEE');
       });
 
       describe('pour les lignes de la liste des risques', () => {
@@ -1225,7 +1233,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
           return slides.filter(
             (slide) =>
-              slide.includes('name="liste-risques-total"') &&
+              nomsDesFormes(slide).includes('liste-risques-total') &&
               texteDeLaForme(slide, 'cartographie-titre').startsWith(
                 'Cartographie des risques bruts'
               )
@@ -1233,9 +1241,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         };
 
         const identifiantsDeLaPage = (page: string) =>
-          [...page.matchAll(/name="risque-\d+-identifiant"/g)].map(([nom]) =>
-            texteDeLaForme(page, nom.slice(6, -1))
-          );
+          nomsDesFormes(page)
+            .filter((nom) => /^risque-\d+-identifiant$/.test(nom))
+            .map((nom) => texteDeLaForme(page, nom));
 
         const intituleDeTroisLignes = Array.from(
           { length: 3 },
@@ -1320,15 +1328,6 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      const tailleDePoliceDeLaCase = (cartographie: string, nom: string) => {
-        const [forme] = cartographie.match(
-          new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's')
-        )!;
-        return [...forme.matchAll(/<a:rPr [^>]*sz="(\d+)"/g)].map(
-          ([, sz]) => sz
-        );
-      };
-
       it('garde la police de 18 pt dans une case qui contient peu de risques', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
@@ -1341,7 +1340,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
         );
-        expect(tailleDePoliceDeLaCase(cartographie, 'matrice-g4-v4')).toEqual([
+        expect(taillesDePolice(cartographie, 'matrice-g4-v4')).toEqual([
           '1800',
         ]);
       });
@@ -1371,7 +1370,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
         );
-        expect(tailleDePoliceDeLaCase(cartographie, 'matrice-g4-v4')).toEqual([
+        expect(taillesDePolice(cartographie, 'matrice-g4-v4')).toEqual([
           '1400',
         ]);
       });
@@ -1418,6 +1417,113 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       });
     });
 
+    describe('sur l’indice cyber', () => {
+      const POSITION_INDICE_CYBER = 19;
+      const ESPACE_DE_NOMS_SVG =
+        'http://schemas.microsoft.com/office/drawing/2016/SVG/main';
+
+      it('écrit le nom du service et ses deux indices, arrondis au dixième', async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            nomService: 'Mon service',
+            total: 2.43,
+            totalPersonnalise: 2.6,
+          },
+        });
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(texteDeLaForme(slide, 'indice-cyber-texte')).toBe(
+          'Le socle de sécurité a été réalisé via l’outil MonServiceSécurisé. L’indice cyber ANSSI de Mon service calculé est de 2,4/5, et l’indice cyber personnalisé est de 2,6/5.'
+        );
+      });
+
+      it("dessine la jauge de l'indice cyber ANSSI", async () => {
+        const pptx = await genereSupport({
+          indiceCyber: { ...indiceCyberParDefaut, total: 2.43, noteMax: 5 },
+        });
+
+        const jauge = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-jauge'
+        );
+
+        expect(jauge.equals(pngDeLaJauge(svgIndiceCyber(2.43, 5)))).toBe(true);
+      });
+
+      it("dessine la jauge de l'indice cyber personnalisé", async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            totalPersonnalise: 2.6,
+            noteMax: 5,
+          },
+        });
+
+        const jauge = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-jauge-personnalisee'
+        );
+
+        expect(
+          jauge.equals(pngDeLaJauge(svgIndiceCyberPersonnalise(2.6, 5)))
+        ).toBe(true);
+      });
+
+      it("dessine le radar de l'indice cyber par catégorie", async () => {
+        const categories = [
+          { libelle: 'Gouvernance', note: 3.2 },
+          { libelle: 'Protection', note: 1.8 },
+        ];
+        const pptx = await genereSupport({
+          indiceCyber: { ...indiceCyberParDefaut, categories, noteMax: 5 },
+        });
+
+        const radar = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-radar'
+        );
+
+        expect(
+          radar.equals(
+            svgEnPng(svgRadarIndiceCyber(categories, 5), LARGEUR_DU_RADAR)
+          )
+        ).toBe(true);
+      });
+
+      it("n'affiche pas la variante SVG figée du modèle à la place des jauges", async () => {
+        const pptx = await genereSupport();
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(elementsDeLaSlide(slide, ESPACE_DE_NOMS_SVG, 'svgBlip')).toEqual(
+          []
+        );
+      });
+
+      it('nomme les référentiels des mesures sur lesquelles l’indice est calculé', async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            referentiels: 'l’ANSSI et la CNIL',
+          },
+        });
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(texteDeLaForme(slide, 'indice-cyber-referentiels')).toBe(
+          'Calculé sur les mesures proposées par l’ANSSI et la CNIL'
+        );
+        expect(texteDeLaForme(slide, 'indice-cyber-explication')).toBe(
+          'L’indice cyber est calculé sur la base des informations renseignées par l’équipe concernant les mesures de sécurité proposées par l’ANSSI et la CNIL, et à l’exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.'
+        );
+      });
+    });
+
     describe('sur la description des risques', () => {
       const POSITION_DESCRIPTION_DES_RISQUES = 14;
 
@@ -1442,7 +1548,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_DESCRIPTION_DES_RISQUES
         );
-        expect(description).toContain('<a:t>Description des risques</a:t>');
+        expect(textesDeLaSlide(description)).toContain(
+          'Description des risques'
+        );
         expect(texteDeLaForme(description, 'description-risques-total')).toBe(
           '2 risques'
         );
@@ -1459,8 +1567,12 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ['R1', 'Intitulé de R1', 'Description de R1'],
           ['RS1', 'Intitulé de RS1', 'Description de RS1'],
         ]);
-        expect(description).not.toContain('name="description-risque-3-');
-        expect(description).not.toContain('Un attaquant externe compromet');
+        expect(
+          nomsDesFormesCommencantPar(description, 'description-risque-3-')
+        ).toEqual([]);
+        expect(texteDeLaSlide(description)).not.toContain(
+          'Un attaquant externe compromet'
+        );
       });
 
       it('colore la pastille de chaque risque selon son niveau à date', async () => {
@@ -1480,13 +1592,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           pptx,
           POSITION_DESCRIPTION_DES_RISQUES
         );
-        const couleurDuFond = (nom: string) =>
-          description
-            .match(new RegExp(`name="${nom}"(?:(?!</p:sp>).)*</p:sp>`, 's'))![0]
-            .match(/<p:spPr>.*?<a:srgbClr val="([0-9A-F]{6})"/s)![1];
         expect(
           [1, 2, 3, 4].map((numero) =>
-            couleurDuFond(`description-risque-${numero}-pastille`)
+            couleurDuFond(description, `description-risque-${numero}-pastille`)
           )
         ).toEqual(['84C14E', 'FAC63C', 'F8785B', 'EEEEEE']);
       });
@@ -1501,14 +1609,14 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             positions.map((position) => contenuSlide(pptx, position))
           );
           return slides.filter((slide) =>
-            slide.includes('name="description-risques-total"')
+            nomsDesFormes(slide).includes('description-risques-total')
           );
         };
 
         const identifiantsDeLaPage = (page: string) =>
-          [
-            ...page.matchAll(/name="(description-risque-\d+-identifiant)"/g),
-          ].map(([, nom]) => texteDeLaForme(page, nom));
+          nomsDesFormes(page)
+            .filter((nom) => /^description-risque-\d+-identifiant$/.test(nom))
+            .map((nom) => texteDeLaForme(page, nom));
 
         const descriptionDeTroisLignes = Array.from(
           { length: 3 },
@@ -1664,8 +1772,8 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const pptx = await genereSupport();
 
       const couverture = await contenuSlide(pptx, 1);
-      expect(couverture).toContain('<a:t>Date de création : </a:t>');
-      expect(couverture).toContain('<a:t>09/11/2026</a:t>');
+      expect(textesDeLaSlide(couverture)).toContain('Date de création : ');
+      expect(textesDeLaSlide(couverture)).toContain('09/11/2026');
     });
 
     describe('produit un fichier que PowerPoint ouvre sans le réparer', () => {

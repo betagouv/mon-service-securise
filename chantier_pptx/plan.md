@@ -106,13 +106,13 @@ Autre constat sur le template :
 Pas encore vérifié :
 
 - ~~l'ouverture du fichier dans Microsoft PowerPoint~~ : vérifiée sur la PR 2 (voir les points ouverts) ;
-- ~~le remplacement d'image~~ : validé en PR 3 avec `loadMedia` et `modify.setRelationTarget` (slide 8) ; reste à faire pour la slide 18 ;
+- ~~le remplacement d'image~~ : validé en PR 3 avec `loadMedia` et `modify.setRelationTarget` (slide 8), puis en PR 7 avec `loadMediaBuffer` pour des images générées (slide 18) ;
 - `modify.setTable` sur un tableau natif.
 
 ## Ce qu'on garde du POC
 
 - **L'idée de la brique 3** (image placée dans le template et remplacée à la génération) : illustration du niveau de besoin (slide 8), jauges et radar (slide 18). L'implémentation passera par pptx-automizer plutôt que par `remplaceImageNommee`, si son remplacement d'image fonctionne.
-- **Pipeline Typst → SVG → PNG** (brique 4) : seulement pour le radar et les jauges, si on les génère en image. Il n'est plus utilisé pour les matrices ni pour les barres.
+- ~~**Pipeline Typst → SVG → PNG**~~ (brique 4) : pas repris. Les jauges et le radar sont générés en SVG puis convertis en PNG par resvg (`automizer/svgEnPng.ts`, polices Marianne), sans Typst.
 - **Câblage MSS** : route `GET /api/service/:id/pptx/supportCommissionHomologation.pptx`, droits `Autorisation.DROITS_DOSSIER_DECISION_PDF`, injection `server.ts` → `mss.js` → `routesConnecteApi` → `routesConnecteApiService`, stub dans `testeurMSS`.
 
 ## Ce qui change par rapport au POC
@@ -125,7 +125,6 @@ Pas encore vérifié :
 
 Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la donnée → la forme nommée dans le template → un test qui relit le pptx généré.
 
-7. **Slide 18, indice cyber** : texte, puis jauges et radar en images.
 8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.
 9. **Slide 20, exigences restantes** : mesures partielles et à lancer uniquement, statut coloré, échéance, porteurs (`partieResponsable`).
 10. **Slide 24, avis** : collaborateurs, avis, durée, commentaire.
@@ -146,6 +145,6 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 - [x] Remplacement d'image avec pptx-automizer : validé en PR 3 (`loadMedia` + `setRelationTarget`, PNG plutôt que SVG).
 - [x] Largeur des pastilles de statut : largeur fixe par statut, reprise de la légende de la slide 19.
 - [ ] Pastilles de statut sous Microsoft PowerPoint : à revérifier avec les largeurs par statut.
-- [ ] Réutilisation éventuelle des jauges ou du radar déjà présents dans `src/vuesPdf/syntheseSecurite.typ` : à vérifier.
-- [ ] Vérification sous Microsoft PowerPoint : faite sur le spike, la couverture et le fichier de la PR 2 (ouvert sans réparation) ; à refaire à chaque nouvelle slide, notamment le contexte (2bis) : retours à la ligne et tenue de la description dans le cadre ; les objectifs de sécurité (3) : soulignés en tirets de l'explication, largeur des pastilles, illustration.
+- [x] Réutilisation des jauges et du radar : les jauges reprennent `src/adaptateurs/indiceCyberSvg.ts` (le même dessin que la synthèse PDF) ; la géométrie du radar est extraite dans `src/geometrie/radar.ts`, partagée par le front (`RadarIndiceCyber.svelte`) et le support (`automizer/radarIndiceCyberSvg.ts`), avec la note de chaque catégorie à côté de son libellé, comme sur la maquette.
+- [x] Vérification sous Microsoft PowerPoint : faite sur le support généré jusqu'à la slide de l'indice cyber (PR 7) ; à refaire pour chaque nouvelle slide.
 - [x] Thème partagé entre le notes master et le slide master (hérité du fichier du designer) : laissé tel quel, PowerPoint ouvre le fichier sans réparation.

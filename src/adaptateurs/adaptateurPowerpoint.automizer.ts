@@ -7,9 +7,11 @@ import { nettoieLArchive } from './automizer/nettoyageDeLArchive.js';
 import {
   MODELE,
   NOM_TEMPLATE,
+  SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE,
   SLIDE_HISTORIQUE,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
+  SLIDE_INTERCALAIRE_SOCLE,
   SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE,
   SLIDE_PERIMETRE_VUE_FONCTIONNELLE,
   SLIDE_PRESENTATION_DU_SYSTEME,
@@ -25,6 +27,10 @@ import {
 } from './automizer/slides/besoinsDeSecurite.js';
 import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
+import {
+  ajouteLIndiceCyber,
+  imagesDeLIndiceCyber,
+} from './automizer/slides/indiceCyber.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -36,7 +42,9 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     contexte,
     besoinsDeSecurite,
     cartographiesDesRisques,
+    indiceCyber,
   }: DonneesSupportCommissionHomologation) {
+    const imagesIndiceCyber = imagesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
       removeExistingSlides: true,
@@ -48,7 +56,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       .loadMedia(
         ILLUSTRATIONS_DES_NIVEAUX,
         `${this.dossierTemplates}/illustrationsNiveaux`
-      );
+      )
+      .loadMediaBuffer(imagesIndiceCyber.noms, imagesIndiceCyber.images);
 
     ajouteLaCouverture(presentation, dateCreation);
     presentation.addSlide(MODELE, SLIDE_SOMMAIRE);
@@ -78,6 +87,9 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       'cibles',
       cartographiesDesRisques.cibles
     );
+    presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
+    ajouteLIndiceCyber(presentation, indiceCyber);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);

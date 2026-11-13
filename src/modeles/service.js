@@ -142,6 +142,15 @@ class Service {
     return this.mesures.indiceCyberPersonnalise();
   }
 
+  referentielsDesMesuresGenerales() {
+    const { mesuresGenerales } =
+      this.mesures.enrichiesAvecDonneesPersonnalisees();
+    const referentiels = Object.values(mesuresGenerales).map(
+      (mesure) => mesure.referentiel
+    );
+    return this.referentiel.formatteListeDeReferentiels(referentiels);
+  }
+
   completudeMesures() {
     const completude = this.mesures.completude();
     const { nombreTotalMesures, nombreMesuresCompletes } = completude;

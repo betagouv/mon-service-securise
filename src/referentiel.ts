@@ -77,6 +77,15 @@ const creeReferentiel = (
   const descriptionCategorie = (idCategorie: IdCategorieMesure) =>
     categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
+  const indiceCyberAvecLibellesCategories = (
+    indiceCyber: Record<IdCategorieMesure, number>
+  ) =>
+    (identifiantsCategoriesMesures() as IdCategorieMesure[]).map(
+      (idCategorie) => ({
+        libelle: descriptionCategorie(idCategorie),
+        note: indiceCyber[idCategorie],
+      })
+    );
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
   const descriptionEcheanceRenouvellement = (id: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[id]?.description;
@@ -117,9 +126,7 @@ const creeReferentiel = (
     idStatut && identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
   const formatteListeDeReferentiels = (referentiels: IdReferentielMesure[]) => {
-    const formatte = new Intl.ListFormat('fr', {
-      type: 'conjunction',
-    });
+    const formatte = new Intl.ListFormat('fr', { type: 'conjunction' });
     const referentielsSansDoublon = new Set(
       referentiels.map(
         (r) => `${donnees.articlesDefinisReferentielsMesure[r] ?? ''}${r}`
@@ -569,6 +576,7 @@ const creeReferentiel = (
     coefficientIndiceCyberMesuresRecommandees,
     coefficientIndiceCyberStatutPartiel,
     indiceCyberNoteMax,
+    indiceCyberAvecLibellesCategories,
     definitionRisque,
     delaiAvantImpactCritiqueParDescription,
     delaisAvantImpactCritique,

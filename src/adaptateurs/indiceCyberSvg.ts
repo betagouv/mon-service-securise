@@ -58,8 +58,8 @@ export function svgIndiceCyber(total: number, noteMax: number): string {
     <mask id="mj" maskUnits="userSpaceOnUse" x="0" y="0" width="149" height="75">
       <path d="${SEMI_CERCLE}" fill="white"/>
     </mask>
-    <mask id="mp" maskUnits="userSpaceOnUse" x="0" y="0" width="149" height="75">
-      <path d="${SEMI_CERCLE}" fill="white"/>
+    <mask id="mp" maskUnits="userSpaceOnUse" x="5" y="5" width="149" height="75">
+      <path d="${SEMI_CERCLE}" fill="white" transform="translate(5, 5)"/>
     </mask>
   </defs>
   <circle cx="80" cy="80" r="79" fill="white" stroke="#CECECE" stroke-width="2"/>
@@ -74,9 +74,9 @@ export function svgIndiceCyber(total: number, noteMax: number): string {
     <textPath href="#courbe" startOffset="30">INDICE CYBER</textPath>
   </text>
   <g mask="url(#mp)">
-    <path d="${cheminDemiCercle(80, 80, 67)}" stroke="url(#gp)" stroke-width="18" transform="rotate(${progression})" transform-origin="80 80"/>
+    <path d="${cheminDemiCercle(80, 80, 67)}" stroke="url(#gp)" stroke-width="18" transform="rotate(${progression} 80 80)"/>
   </g>
-  <g transform="rotate(${rotation})" transform-origin="80 80">${FLECHE}
+  <g transform="rotate(${rotation} 80 80)">${FLECHE}
   </g>
 </svg>`;
 }

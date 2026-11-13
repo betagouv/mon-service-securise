@@ -159,12 +159,7 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
     const statsRecommandees = service.statistiquesMesuresRecommandees();
     const statsGenerales = service.statistiquesMesuresGenerales();
 
-    const referentiels = Object.entries(
-      service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ).map(([, mesure]: [string, any]) => mesure.referentiel);
-    const referentielConcernes =
-      referentiel.formatteListeDeReferentiels(referentiels);
+    const referentielConcernes = service.referentielsDesMesuresGenerales();
 
     const donnees: DonneesPdfSyntheseSecurite = {
       nomService: service.nomService(),
@@ -186,13 +181,10 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
         noteMax
       ),
       categoriesIndiceCyber: referentiel
-        .identifiantsCategoriesMesures()
-        .map((id: string) => ({
-          description: referentiel.descriptionCategorie(
-            id as IdCategorieMesure
-          ),
-          note:
-            typeof indice[id] === 'number' ? formatteNote(indice[id]) : null,
+        .indiceCyberAvecLibellesCategories(indice)
+        .map(({ libelle, note }) => ({
+          description: libelle,
+          note: typeof note === 'number' ? formatteNote(note) : null,
         })),
       noteMaxIndiceCyber: noteMax,
       svgCamembertIndispensables: svgCamembertMesures(statsIndispensables),
