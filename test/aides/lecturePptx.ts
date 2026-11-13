@@ -1,23 +1,36 @@
 import JSZip from 'jszip';
+import { JSDOM } from 'jsdom';
 import path from 'node:path';
+
+const parseurXml = new new JSDOM().window.DOMParser();
 
 const lisFichier = (archive: JSZip, chemin: string) =>
   archive.file(chemin)!.async('string');
 
-const cheminsDesSlidesDansLOrdre = async (archive: JSZip) => {
-  const presentation = await lisFichier(archive, 'ppt/presentation.xml');
-  const relations = await lisFichier(
-    archive,
-    'ppt/_rels/presentation.xml.rels'
-  );
+const lisXml = async (archive: JSZip, chemin: string) =>
+  parseurXml.parseFromString(await lisFichier(archive, chemin), 'text/xml');
 
-  return [...presentation.matchAll(/<p:sldId [^>]*r:id="([^"]+)"/g)].map(
-    ([, idRelation]) => {
-      const [, cible] = relations.match(
-        new RegExp(`Id="${idRelation}"[^>]*Target="([^"]+)"`)
-      )!;
-      return `ppt/${cible}`;
-    }
+const elements = (parent: Document | Element, balise: string) =>
+  Array.from(parent.getElementsByTagName(balise));
+
+const cibleDeLaRelation = (relations: Document, idRelation: string) =>
+  elements(relations, 'Relationship')
+    .find((relation) => relation.getAttribute('Id') === idRelation)!
+    .getAttribute('Target')!;
+
+const parentDeBalise = (element: Element, balise: string) => {
+  let parent = element.parentElement;
+  while (parent && parent.tagName !== balise) parent = parent.parentElement;
+  return parent!;
+};
+
+const cheminsDesSlidesDansLOrdre = async (archive: JSZip) => {
+  const presentation = await lisXml(archive, 'ppt/presentation.xml');
+  const relations = await lisXml(archive, 'ppt/_rels/presentation.xml.rels');
+
+  return elements(presentation, 'p:sldId').map(
+    (slide) =>
+      `ppt/${cibleDeLaRelation(relations, slide.getAttribute('r:id')!)}`
   );
 };
 
@@ -34,9 +47,9 @@ export const contenuSlide = async (pptx: Buffer, position: number) => {
 
 export const partiesDeclarees = async (pptx: Buffer) => {
   const archive = await JSZip.loadAsync(pptx);
-  const typesDeContenu = await lisFichier(archive, '[Content_Types].xml');
-  return [...typesDeContenu.matchAll(/<Override [^>]*PartName="([^"]+)"/g)].map(
-    ([, partie]) => partie
+  const typesDeContenu = await lisXml(archive, '[Content_Types].xml');
+  return elements(typesDeContenu, 'Override').map((declaration) =>
+    declaration.getAttribute('PartName')!
   );
 };
 
@@ -52,15 +65,14 @@ export const relationsCassees = async (pptx: Buffer) => {
   const relationsParFichier = await Promise.all(
     fichiersDeRelations.map(async (fichier) => ({
       fichier,
-      relations: await lisFichier(archive, fichier),
+      relations: await lisXml(archive, fichier),
     }))
   );
 
   return relationsParFichier.flatMap(({ fichier, relations }) =>
-    [...relations.matchAll(/<Relationship [^>]*>/g)]
-      .map(([relation]) => relation)
-      .filter((relation) => !relation.includes('TargetMode="External"'))
-      .map((relation) => relation.match(/Target="([^"]+)"/)![1])
+    elements(relations, 'Relationship')
+      .filter((relation) => relation.getAttribute('TargetMode') !== 'External')
+      .map((relation) => relation.getAttribute('Target')!)
       .filter((cible) => {
         const chemin = cible.startsWith('/')
           ? cible.slice(1)
@@ -112,12 +124,12 @@ export const identifiantsDeFormesEnDouble = async (pptx: Buffer) => {
   const slides = await Promise.all(
     chemins.map(async (chemin) => ({
       chemin,
-      xml: await lisFichier(archive, chemin),
+      xml: await lisXml(archive, chemin),
     }))
   );
   return slides.flatMap(({ chemin, xml }) => {
-    const identifiants = [...xml.matchAll(/<p:cNvPr id="(\d+)"/g)].map(
-      ([, identifiant]) => identifiant
+    const identifiants = elements(xml, 'p:cNvPr').map((proprietes) =>
+      proprietes.getAttribute('id')!
     );
     return [
       ...new Set(
@@ -136,17 +148,19 @@ export const imageDeLaForme = async (
 ) => {
   const archive = await JSZip.loadAsync(pptx);
   const chemin = (await cheminsDesSlidesDansLOrdre(archive))[position - 1];
-  const slide = await lisFichier(archive, chemin);
-  const [, idRelation] = slide.match(
-    new RegExp(`name="${nom}"(?:(?!</p:pic>).)*r:embed="([^"]+)"`, 's')
+  const slide = await lisXml(archive, chemin);
+  const proprietesDeLImage = elements(slide, 'p:cNvPr').find(
+    (proprietes) => proprietes.getAttribute('name') === nom
   )!;
-  const relations = await lisFichier(
+  const [image] = elements(
+    parentDeBalise(proprietesDeLImage, 'p:pic'),
+    'a:blip'
+  );
+  const relations = await lisXml(
     archive,
     `${path.posix.dirname(chemin)}/_rels/${path.posix.basename(chemin)}.rels`
   );
-  const [, cible] = relations.match(
-    new RegExp(`Id="${idRelation}"[^>]*Target="([^"]+)"`)
-  )!;
+  const cible = cibleDeLaRelation(relations, image.getAttribute('r:embed')!);
   return archive
     .file(path.posix.join(path.posix.dirname(chemin), cible))!
     .async('nodebuffer');
