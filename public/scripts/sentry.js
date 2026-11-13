@@ -8,7 +8,9 @@ $(() => {
 
     const connexionInterrompue = erreur.code === 'ECONNABORTED';
     const requeteInvalide = erreur.response?.status === 400;
-    if (connexionInterrompue || requeteInvalide) return null;
+    const ressourceIntrouvable = erreur.response?.status === 404;
+    if (connexionInterrompue || requeteInvalide || ressourceIntrouvable)
+      return null;
 
     return evenement;
   };
