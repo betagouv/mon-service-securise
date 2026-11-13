@@ -27,7 +27,10 @@ import {
 } from './automizer/slides/besoinsDeSecurite.js';
 import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
-import { ajouteLIndiceCyber } from './automizer/slides/indiceCyber.js';
+import {
+  ajouteLIndiceCyber,
+  jaugesDeLIndiceCyber,
+} from './automizer/slides/indiceCyber.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -41,6 +44,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     cartographiesDesRisques,
     indiceCyber,
   }: DonneesSupportCommissionHomologation) {
+    const jauges = jaugesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
       templateDir: this.dossierTemplates,
       removeExistingSlides: true,
@@ -52,7 +56,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       .loadMedia(
         ILLUSTRATIONS_DES_NIVEAUX,
         `${this.dossierTemplates}/illustrationsNiveaux`
-      );
+      )
+      .loadMediaBuffer(jauges.noms, jauges.images);
 
     ajouteLaCouverture(presentation, dateCreation);
     presentation.addSlide(MODELE, SLIDE_SOMMAIRE);

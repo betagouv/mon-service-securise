@@ -19,6 +19,14 @@ import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceC
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
+import {
+  svgIndiceCyber,
+  svgIndiceCyberPersonnalise,
+} from '../../src/adaptateurs/indiceCyberSvg.js';
+import { svgEnPng } from '../../src/adaptateurs/automizer/svgEnPng.js';
+import { LARGEUR_DES_JAUGES } from '../../src/adaptateurs/automizer/slides/indiceCyber.js';
+
+const pngDeLaJauge = (svg: string) => svgEnPng(svg, LARGEUR_DES_JAUGES);
 
 const texteDeLaForme = (slide: string, nom: string) => {
   const forme = slide.match(
@@ -1458,6 +1466,48 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(slide, 'indice-cyber-texte')).toBe(
           'Le socle de sécurité a été réalisé via l’outil MonServiceSécurisé. L’indice cyber ANSSI de Mon service calculé est de 2,4/5, et l’indice cyber personnalisé est de 2,6/5.'
         );
+      });
+
+      it("dessine la jauge de l'indice cyber ANSSI", async () => {
+        const pptx = await genereSupport({
+          indiceCyber: { ...indiceCyberParDefaut, total: 2.43, noteMax: 5 },
+        });
+
+        const jauge = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-jauge'
+        );
+
+        expect(jauge.equals(pngDeLaJauge(svgIndiceCyber(2.43, 5)))).toBe(true);
+      });
+
+      it("dessine la jauge de l'indice cyber personnalisé", async () => {
+        const pptx = await genereSupport({
+          indiceCyber: {
+            ...indiceCyberParDefaut,
+            totalPersonnalise: 2.6,
+            noteMax: 5,
+          },
+        });
+
+        const jauge = await imageDeLaForme(
+          pptx,
+          POSITION_INDICE_CYBER,
+          'indice-cyber-jauge-personnalisee'
+        );
+
+        expect(
+          jauge.equals(pngDeLaJauge(svgIndiceCyberPersonnalise(2.6, 5)))
+        ).toBe(true);
+      });
+
+      it("n'affiche pas la variante SVG figée du modèle à la place des jauges", async () => {
+        const pptx = await genereSupport();
+
+        const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
+
+        expect(slide).not.toContain('svgBlip');
       });
 
       it('nomme les référentiels des mesures sur lesquelles l’indice est calculé', async () => {
