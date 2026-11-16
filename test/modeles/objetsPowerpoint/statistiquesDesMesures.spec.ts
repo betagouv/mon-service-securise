@@ -64,7 +64,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
     expect(statistiques.referentiels).toBe("l'ANSSI et la CNIL");
   });
 
-  it('répartissent les mesures par niveau de criticité et par statut, les mesures spécifiques comptant comme recommandées', () => {
+  it('répartissent les mesures générales par niveau de criticité et par statut, sans les mesures spécifiques', () => {
     const { parCriticite } = statistiquesDesMesures(unServiceAvecSesMesures());
 
     expect(parCriticite).toEqual({
@@ -80,14 +80,14 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         fait: 0,
         enCours: 0,
         nonFait: 0,
-        aLancer: 1,
+        aLancer: 0,
         sansStatut: 1,
-        restant: 2,
+        restant: 1,
       },
     });
   });
 
-  it('répartissent les mesures par catégorie et par statut, avec le total de chaque catégorie', () => {
+  it('répartissent les mesures générales par catégorie et par statut, avec le total de chaque catégorie, sans les mesures spécifiques', () => {
     const { parCategorie } = statistiquesDesMesures(unServiceAvecSesMesures());
 
     expect(parCategorie).toEqual([
@@ -105,9 +105,9 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         fait: 0,
         enCours: 1,
         nonFait: 0,
-        aLancer: 1,
+        aLancer: 0,
         sansStatut: 1,
-        total: 3,
+        total: 2,
       },
     ]);
   });
