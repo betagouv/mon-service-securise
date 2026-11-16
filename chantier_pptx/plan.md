@@ -143,7 +143,12 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - porteurs d'après `partieResponsable` (« Équipe projet », « Prestataire », « Équipe projet et prestataire ») ; vide sans partie responsable (spécifiques notamment) ;
    - description sur plusieurs lignes (sans rétrécir) : la ligne du tableau s'agrandit, les cartouches descendent ;
    - débordement : slide répétée et paginée « 1/N » selon la hauteur des lignes, 5 exigences au plus par page, comme la liste des risques.
-10. **Slide 24, avis** : collaborateurs, avis, durée, commentaire.
+10. **Slide 24, avis** (fichier `slide23.xml`, modèle `objetsPowerpoint/avisDesMembres.ts`) :
+    - une carte par avis du dossier courant : membres (`collaborateurs` joints par des virgules, comme le PDF du dossier de décision), avis, durée proposée et commentaire ;
+    - sans avis : « Aucun avis n'a été renseigné par l'équipe. », comme le PDF ;
+    - plus de 4 avis : slide répétée et paginée « 1/N », 4 avis par page ;
+    - commentaire long : police réduite (18 → 16 → 14 pt), tronqué avec « … » au-delà ;
+    - les slides statiques qui précèdent (intercalaire et résultat de l'audit, intercalaire de la proposition de décision) sont ajoutées avec la slide.
 11. **Slides 27–30, annexe des mesures** : pagination par statut.
 12. **Retrait du feature flag**, une fois la fonctionnalité validée en production.
 
