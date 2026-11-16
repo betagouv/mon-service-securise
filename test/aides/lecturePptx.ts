@@ -98,6 +98,13 @@ export const couleurDuFond = (slide: string, nom: string) => {
   return couleur.getAttribute('val');
 };
 
+export const couleursDuTexte = (slide: string, nom: string) =>
+  elements(formeNommee(slide, nom), 'a:rPr').flatMap((proprietes) =>
+    elements(proprietes, 'a:srgbClr').map((couleur) =>
+      couleur.getAttribute('val')
+    )
+  );
+
 const cheminsDesSlidesDansLOrdre = async (archive: JSZip) => {
   const presentation = await lisXml(archive, 'ppt/presentation.xml');
   const relations = await lisXml(archive, 'ppt/_rels/presentation.xml.rels');

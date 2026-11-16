@@ -4,6 +4,7 @@ import {
   cadreDeLaForme,
   contenuSlide,
   couleurDuFond,
+  couleursDuTexte,
   fichiersNonCompresses,
   identifiantsDeFormesEnDouble,
   elementsDeLaSlide,
@@ -28,6 +29,7 @@ import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeS
 import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceCyber.js';
 import { StatistiquesDesMesures } from '../../src/modeles/objetsPowerpoint/statistiquesDesMesures.js';
+import { ExigenceRestante } from '../../src/modeles/objetsPowerpoint/exigencesRestantes.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
@@ -126,6 +128,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       cartographiesDesRisques: cartographiesParDefaut,
       indiceCyber: indiceCyberParDefaut,
       statistiquesDesMesures: statistiquesDesMesuresParDefaut,
+      exigencesRestantes: [],
       ...donnees,
     });
 
@@ -133,7 +136,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(20);
+      expect(await nombreDeSlides(pptx)).toBe(21);
       expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
         'Support de commission d’homologation'
       );
@@ -194,6 +197,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
       expect(textesDeLaSlide(await contenuSlide(pptx, 20))).toContain(
         'Mesures de sécurité'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 21))).toContain(
+        'Exigences à mettre en place restantes'
       );
     });
 
@@ -1782,6 +1788,259 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             'criticite-recommandees-barre',
           ]);
         });
+      });
+    });
+
+    describe('sur les exigences restantes', () => {
+      const POSITION_EXIGENCES_RESTANTES = 21;
+
+      const uneExigence = (
+        description: string,
+        exigence: Partial<ExigenceRestante> = {}
+      ): ExigenceRestante => ({
+        description,
+        statut: 'enCours',
+        cartouches: [],
+        ...exigence,
+      });
+
+      const slideDesExigences = async (
+        exigencesRestantes: ExigenceRestante[]
+      ) =>
+        contenuSlide(
+          await genereSupport({ exigencesRestantes }),
+          POSITION_EXIGENCES_RESTANTES
+        );
+
+      it('écrit une ligne par exigence : description, statut, échéance et porteurs', async () => {
+        const slide = await slideDesExigences([
+          uneExigence('Identifier les engagements des prestataires', {
+            statut: 'enCours',
+            echeance: '31/12/2026',
+            porteurs: 'Équipe projet et prestataire',
+          }),
+          uneExigence('Tester la restauration des sauvegardes', {
+            statut: 'aLancer',
+          }),
+        ]);
+
+        expect(
+          [1, 2].map((numero) =>
+            ['description', 'statut-texte', 'echeance', 'porteurs'].map(
+              (partie) => texteDeLaForme(slide, `exigence-${numero}-${partie}`)
+            )
+          )
+        ).toEqual([
+          [
+            'Identifier les engagements des prestataires',
+            'PARTIELLE',
+            '31/12/2026',
+            'Équipe projet et prestataire',
+          ],
+          ['Tester la restauration des sauvegardes', 'À LANCER', '', ''],
+        ]);
+      });
+
+      it('colore la pastille du statut aux couleurs de MonServiceSécurisé', async () => {
+        const slide = await slideDesExigences([
+          uneExigence('Partielle', { statut: 'enCours' }),
+          uneExigence('À lancer', { statut: 'aLancer' }),
+        ]);
+
+        expect(
+          [1, 2].map((numero) => [
+            couleursDuTexte(slide, `exigence-${numero}-statut-texte`),
+            couleurDuFond(slide, `exigence-${numero}-statut-fond`),
+          ])
+        ).toEqual([
+          [['0079D0'], 'DBEEFF'],
+          [['7025DA'], 'E9DDFF'],
+        ]);
+      });
+
+      it('ajuste la largeur de la pastille du statut à son libellé', async () => {
+        const slide = await slideDesExigences([
+          uneExigence('Partielle', { statut: 'enCours' }),
+          uneExigence('À lancer', { statut: 'aLancer' }),
+        ]);
+
+        expect(
+          [1, 2].map(
+            (numero) =>
+              cadreDeLaForme(slide, `exigence-${numero}-statut-fond`).largeur
+          )
+        ).toEqual([1519758, 1447800]);
+      });
+
+      describe('quand la description d’une mesure tient sur plusieurs lignes', () => {
+        const HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION = 297180;
+        const ECART_ENTRE_LIGNES_DU_TABLEAU = 57150;
+        const descriptionSurDeuxLignes =
+          'Mettre en place une authentification multifacteur pour les administrateurs et les comptes à privilèges';
+
+        const slideAvecUneDescriptionLongue = () =>
+          slideDesExigences([
+            uneExigence('Une description courte'),
+            uneExigence(descriptionSurDeuxLignes),
+            uneExigence('Une autre description courte'),
+          ]);
+
+        it('écrit la description sur plusieurs lignes au lieu de rétrécir la police', async () => {
+          const slide = await slideAvecUneDescriptionLongue();
+
+          expect(
+            formeNommee(slide, 'exigence-2-description').getElementsByTagName(
+              'a:normAutofit'
+            )
+          ).toHaveLength(0);
+          expect(
+            cadreDeLaForme(slide, 'exigence-2-description').hauteur -
+              cadreDeLaForme(slide, 'exigence-1-description').hauteur
+          ).toBe(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION);
+        });
+
+        it('agrandit la ligne du tableau et descend les cartouches d’autant', async () => {
+          const slide = await slideAvecUneDescriptionLongue();
+
+          const cadre = (numero: number, partie: string) => {
+            const { y, hauteur } = cadreDeLaForme(
+              slide,
+              `exigence-${numero}-${partie}`
+            );
+            const haut = cadreDeLaForme(
+              slide,
+              `exigence-${numero}-fond-mesure`
+            ).y;
+            return { decalage: y - haut, hauteur };
+          };
+          const ecartAvecLaLigneCourte = (
+            partie: string,
+            mesure: 'decalage' | 'hauteur'
+          ) => cadre(2, partie)[mesure] - cadre(1, partie)[mesure];
+          expect(
+            [
+              'fond-mesure',
+              'fond-statut',
+              'fond-echeance',
+              'fond-porteurs',
+              'echeance',
+              'porteurs',
+            ].map((partie) => ecartAvecLaLigneCourte(partie, 'hauteur'))
+          ).toEqual(Array(6).fill(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION));
+          expect(
+            ['cartouche-1-fond', 'cartouche-1-texte'].map((partie) =>
+              ecartAvecLaLigneCourte(partie, 'decalage')
+            )
+          ).toEqual([
+            HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION,
+            HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION,
+          ]);
+          expect(ecartAvecLaLigneCourte('statut-fond', 'decalage')).toBe(
+            HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION / 2
+          );
+        });
+
+        it('place les lignes suivantes sous la ligne agrandie', async () => {
+          const slide = await slideAvecUneDescriptionLongue();
+
+          const ligne = (numero: number) =>
+            cadreDeLaForme(slide, `exigence-${numero}-fond-mesure`);
+          expect(ligne(2).y).toBe(
+            ligne(1).y + ligne(1).hauteur + ECART_ENTRE_LIGNES_DU_TABLEAU
+          );
+          expect(ligne(3).y).toBe(
+            ligne(2).y + ligne(2).hauteur + ECART_ENTRE_LIGNES_DU_TABLEAU
+          );
+        });
+      });
+
+      describe('quand les exigences ne tiennent pas sur une page', () => {
+        const pagesDesExigences = async (pptx: Buffer) => {
+          const positions = Array.from(
+            { length: await nombreDeSlides(pptx) },
+            (_, index) => index + 1
+          );
+          const slides = await Promise.all(
+            positions.map((position) => contenuSlide(pptx, position))
+          );
+          return slides.filter((slide) =>
+            nomsDesFormes(slide).includes('exigences-restantes-titre')
+          );
+        };
+
+        const descriptionsDeLaPage = (page: string) =>
+          nomsDesFormes(page)
+            .filter((nom) => /^exigence-\d+-description$/.test(nom))
+            .map((nom) => texteDeLaForme(page, nom));
+
+        const descriptionSurDeuxLignes = (numero: number) =>
+          `Exigence ${numero} : documenter et autoriser uniquement les communications nécessaires via des règles de filtrage`;
+
+        it('répartit les exigences sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+          const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
+            uneExigence(descriptionSurDeuxLignes(numero))
+          );
+
+          const pages = await pagesDesExigences(
+            await genereSupport({ exigencesRestantes: exigences })
+          );
+
+          expect(pages.map(descriptionsDeLaPage)).toEqual([
+            [1, 2, 3, 4].map(descriptionSurDeuxLignes),
+            [5, 6].map(descriptionSurDeuxLignes),
+          ]);
+        });
+
+        it('ne met pas plus de 5 exigences par page, le nombre de lignes du modèle', async () => {
+          const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
+            uneExigence(`Exigence ${numero}`)
+          );
+
+          const pages = await pagesDesExigences(
+            await genereSupport({ exigencesRestantes: exigences })
+          );
+
+          expect(pages.map(descriptionsDeLaPage)).toEqual([
+            [
+              'Exigence 1',
+              'Exigence 2',
+              'Exigence 3',
+              'Exigence 4',
+              'Exigence 5',
+            ],
+            ['Exigence 6'],
+          ]);
+        });
+
+        it('numérote les pages dans le titre', async () => {
+          const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
+            uneExigence(`Exigence ${numero}`)
+          );
+
+          const pages = await pagesDesExigences(
+            await genereSupport({ exigencesRestantes: exigences })
+          );
+
+          expect(
+            pages.map((page) =>
+              texteDeLaForme(page, 'exigences-restantes-titre')
+            )
+          ).toEqual([
+            'Exigences à mettre en place restantes 1/2',
+            'Exigences à mettre en place restantes 2/2',
+          ]);
+        });
+      });
+
+      it('retire les lignes sans exigence', async () => {
+        const slide = await slideDesExigences([uneExigence('Seule exigence')]);
+
+        expect(
+          nomsDesFormes(slide).filter((nom) => /^exigence-[2-5]-/.test(nom))
+        ).toEqual([]);
+        expect(nomsDesFormesCommencantPar(slide, 'exigence-1-')).toHaveLength(
+          17
+        );
       });
     });
 
