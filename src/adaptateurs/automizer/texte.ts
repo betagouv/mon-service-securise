@@ -156,3 +156,26 @@ export const largeurDuTexteEnArial = (texte: string, tailleEnPoints: number) =>
       EMU_PAR_POINT) /
       1000
   );
+
+export const nombreDeLignesALaLargeurEnArial = (
+  texte: string,
+  largeurDisponible: number,
+  tailleEnPoints: number
+) =>
+  texte.split(/\r?\n/).reduce((lignes, paragraphe) => {
+    const { lignesDuParagraphe } = paragraphe.split(' ').reduce(
+      ({ lignesDuParagraphe: nombre, ligneCourante }, mot) => {
+        const ligneAvecLeMot =
+          ligneCourante === '' ? mot : `${ligneCourante} ${mot}`;
+        const depasse =
+          ligneCourante !== '' &&
+          largeurDuTexteEnArial(ligneAvecLeMot, tailleEnPoints) >
+            largeurDisponible;
+        return depasse
+          ? { lignesDuParagraphe: nombre + 1, ligneCourante: mot }
+          : { lignesDuParagraphe: nombre, ligneCourante: ligneAvecLeMot };
+      },
+      { lignesDuParagraphe: 1, ligneCourante: '' }
+    );
+    return lignes + lignesDuParagraphe;
+  }, 0);
