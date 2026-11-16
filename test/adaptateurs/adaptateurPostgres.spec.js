@@ -1034,4 +1034,56 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(nouveautes[0].lue).to.be(true);
     });
   });
+
+  describe('concernant les versions de service utilisées par un utilisateur', () => {
+    async function insereServiceEnVersion(versionService) {
+      const idService = genereUUID();
+      await persistance.sauvegardeService(
+        idService,
+        {},
+        'service-1',
+        'siret-1',
+        versionService
+      );
+      return idService;
+    }
+
+    it('donne sans doublon les versions des services auxquels il a accès', async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idServiceV1 = await insereServiceEnVersion('v1');
+      const idAutreServiceV1 = await insereServiceEnVersion('v1');
+      const idServiceV2 = await insereServiceEnVersion('v2');
+      await insereAutorisation(idUtilisateur, idServiceV1);
+      await insereAutorisation(idUtilisateur, idAutreServiceV1);
+      await insereAutorisationContributeur(idUtilisateur, idServiceV2);
+
+      const versions =
+        await persistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
+
+      expect(versions.sort()).to.eql(['v1', 'v2']);
+    });
+
+    it('ignore les services des autres utilisateurs', async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idAutreUtilisateur = await insereUtilisateur();
+      const idServiceV1 = await insereServiceEnVersion('v1');
+      const idServiceV2 = await insereServiceEnVersion('v2');
+      await insereAutorisation(idUtilisateur, idServiceV1);
+      await insereAutorisation(idAutreUtilisateur, idServiceV2);
+
+      const versions =
+        await persistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
+
+      expect(versions).to.eql(['v1']);
+    });
+
+    it('ne donne aucune version à un utilisateur sans service', async () => {
+      const idUtilisateur = await insereUtilisateur();
+
+      const versions =
+        await persistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
+
+      expect(versions).to.eql([]);
+    });
+  });
 });

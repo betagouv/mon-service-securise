@@ -935,7 +935,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
         SELECT DISTINCT version_service
         FROM services s
         JOIN autorisations a ON s.id = (a.donnees ->> 'idService')::uuid
-        WHERE a.donnees ->> 'idUtilisateur' = ?;
+        WHERE (a.donnees ->> 'idUtilisateur')::uuid = ?;
       `,
       [idUtilisateur]
     );
