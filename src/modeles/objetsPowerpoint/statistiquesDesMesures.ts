@@ -2,7 +2,7 @@ import Service from '../service.js';
 import { IdCategorieMesure } from '../../referentiel.types.js';
 import { StatutMesure } from '../mesure.js';
 
-export type RepartitionParStatut = Record<StatutMesure | 'sansStatut', number>;
+export type RepartitionParStatut = Record<StatutMesure | 'aRemplir', number>;
 
 export type MesuresDUnNiveauDeCriticite = RepartitionParStatut & {
   restant: number;
@@ -24,26 +24,15 @@ export type StatistiquesDesMesures = {
   parCategorie: MesuresDUneCategorie[];
 };
 
-type StatistiquesDUnType = RepartitionParStatut & {
-  aRemplir: number;
-  restant: number;
+type StatistiquesDUnNiveauDeCriticite = MesuresDUnNiveauDeCriticite & {
+  total: number;
 };
 
-const mesuresDUnNiveauDeCriticite = ({
-  fait,
-  enCours,
-  nonFait,
-  aLancer,
-  aRemplir,
-  restant,
-}: StatistiquesDUnType): MesuresDUnNiveauDeCriticite => ({
-  fait,
-  enCours,
-  nonFait,
-  aLancer,
-  sansStatut: aRemplir,
-  restant,
-});
+const sansLeTotal = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  total,
+  ...mesures
+}: StatistiquesDUnNiveauDeCriticite): MesuresDUnNiveauDeCriticite => mesures;
 
 export const statistiquesDesMesures = (
   service: Service
@@ -54,10 +43,8 @@ export const statistiquesDesMesures = (
     nombreDeMesuresSpecifiques: service.nombreMesuresSpecifiques(),
     referentiels: service.referentielsDesMesuresGenerales(),
     parCriticite: {
-      indispensables: mesuresDUnNiveauDeCriticite(
-        statistiques.indispensables()
-      ),
-      recommandees: mesuresDUnNiveauDeCriticite(statistiques.recommandees()),
+      indispensables: sansLeTotal(statistiques.indispensables()),
+      recommandees: sansLeTotal(statistiques.recommandees()),
     },
     parCategorie: (
       service.referentiel.identifiantsCategoriesMesures() as IdCategorieMesure[]
@@ -67,7 +54,7 @@ export const statistiquesDesMesures = (
         enCours: statistiques.enCours(categorie),
         nonFait: statistiques.nonFaites(categorie),
         aLancer: statistiques.aLancer(categorie),
-        sansStatut: statistiques.sansStatut(categorie),
+        aRemplir: statistiques.sansStatut(categorie),
       };
       return {
         libelle: service.referentiel.descriptionCategorie(categorie),

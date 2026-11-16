@@ -73,7 +73,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         enCours: 1,
         nonFait: 0,
         aLancer: 0,
-        sansStatut: 0,
+        aRemplir: 0,
         restant: 1,
       },
       recommandees: {
@@ -81,7 +81,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         enCours: 0,
         nonFait: 0,
         aLancer: 0,
-        sansStatut: 1,
+        aRemplir: 1,
         restant: 1,
       },
     });
@@ -97,7 +97,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         enCours: 0,
         nonFait: 0,
         aLancer: 0,
-        sansStatut: 0,
+        aRemplir: 0,
         total: 1,
       },
       {
@@ -106,7 +106,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
         enCours: 1,
         nonFait: 0,
         aLancer: 0,
-        sansStatut: 1,
+        aRemplir: 1,
         total: 2,
       },
     ]);
