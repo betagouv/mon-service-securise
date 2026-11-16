@@ -9,6 +9,7 @@ import {
   elementsDeLaSlide,
   imageDeLaForme,
   nomsDesFormes,
+  formeNommee,
   nomsDesFormesCommencantPar,
   nombreDeSlides,
   paragraphesDeLaForme,
@@ -1587,6 +1588,32 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toBe(
           'Total : 1 mesure proposée par l’ANSSI + 1 ajoutée par l’équipe.'
         );
+      });
+
+      it('légende les statuts avec les couleurs de MonServiceSécurisé', async () => {
+        const slide = await contenuSlide(
+          await genereSupport(),
+          POSITION_STATISTIQUES_DES_MESURES
+        );
+
+        const couleur = (nom: string) =>
+          formeNommee(slide, nom)
+            .getElementsByTagName('a:srgbClr')[0]
+            .getAttribute('val');
+        expect(
+          ['fait', 'enCours', 'nonFait', 'aLancer', 'aDefinir'].map(
+            (statut) => [
+              couleur(`legende-${statut}-texte`),
+              couleur(`legende-${statut}-fond`),
+            ]
+          )
+        ).toEqual([
+          ['0C8626', 'D4F4DB'],
+          ['0079D0', 'DBEEFF'],
+          ['FAA72C', 'FFF2DE'],
+          ['7025DA', 'E9DDFF'],
+          ['667892', 'F1F5F9'],
+        ]);
       });
 
       describe('par catégorie', () => {
