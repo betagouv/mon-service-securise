@@ -125,7 +125,13 @@ Pas encore vérifié :
 
 Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la donnée → la forme nommée dans le template → un test qui relit le pptx généré.
 
-8. **Slide 19, statistiques des mesures** : largeur des barres via `setPosition`.
+8. **Slide 19, statistiques des mesures** (fichier `slide18.xml`), après l'indice cyber :
+   - en-tête « Total : N mesures proposées par [référentiels] + M ajoutées par l'équipe » (`nombreTotalMesuresGenerales`, `nombreMesuresSpecifiques`, `referentielsDesMesuresGenerales`) ;
+   - **toutes les mesures**, spécifiques comprises (`statistiquesMesuresGeneralesEtSpecifiques(false)`) : les spécifiques comptent comme recommandées pour la criticité, et dans leur catégorie ; les non prises en compte restent comptées ;
+   - par niveau de criticité (indispensables, recommandées) : une barre et « Il reste N mesures à mettre en œuvre » (`restant`) ;
+   - par catégorie : une barre et le nombre de mesures de la catégorie ;
+   - barres : un segment par statut, proportionnel (fait, partielle, non prise en compte, à lancer), couleur du texte du statut dans MSS ; le reste en gris pour les mesures sans statut ; largeurs via `setPosition` ;
+   - légende des statuts aux couleurs de MSS.
 9. **Slide 20, exigences restantes** : mesures partielles et à lancer uniquement, statut coloré, échéance, porteurs (`partieResponsable`).
 10. **Slide 24, avis** : collaborateurs, avis, durée, commentaire.
 11. **Slides 27–30, annexe des mesures** : pagination par statut.
