@@ -35,6 +35,39 @@ const ecrisLesSegments = (
   }, barre.x);
 };
 
+const BARRE_D_UNE_CATEGORIE = { x: 12039600, largeur: 4038600 };
+
+const NOMBRE_DE_LIGNES_DE_CATEGORIE = 4;
+const PARTIES_D_UNE_LIGNE_DE_CATEGORIE = [
+  'libelle',
+  'barre',
+  ...STATUTS_DES_SEGMENTS,
+  'total',
+];
+
+const ecrisLesCategories = (
+  slide: ISlide,
+  parCategorie: StatistiquesDesMesures['parCategorie']
+) => {
+  Array.from(
+    { length: NOMBRE_DE_LIGNES_DE_CATEGORIE },
+    (_, index) => index + 1
+  ).forEach((numeroLigne) => {
+    const prefixe = `categorie-${numeroLigne}`;
+    const categorie = parCategorie[numeroLigne - 1];
+    if (!categorie) {
+      PARTIES_D_UNE_LIGNE_DE_CATEGORIE.forEach((partie) =>
+        slide.removeElement(`${prefixe}-${partie}`)
+      );
+      return;
+    }
+    const { libelle, total, ...repartition } = categorie;
+    slide.modifyElement(`${prefixe}-libelle`, modify.setText(libelle));
+    slide.modifyElement(`${prefixe}-total`, modify.setText(String(total)));
+    ecrisLesSegments(slide, prefixe, repartition, BARRE_D_UNE_CATEGORIE);
+  });
+};
+
 const ecrisLesCriticites = (
   slide: ISlide,
   parCriticite: StatistiquesDesMesures['parCriticite']
@@ -95,5 +128,6 @@ export const ajouteLesStatistiquesDesMesures = (
       ])
     );
     ecrisLesCriticites(slide, statistiques.parCriticite);
+    ecrisLesCategories(slide, statistiques.parCategorie);
   });
 };
