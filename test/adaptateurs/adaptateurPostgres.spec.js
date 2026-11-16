@@ -295,6 +295,130 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(services.length).to.be(0);
     });
+
+    it('sait lire uniquement les services auxquels un utilisateur a accès', async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idAutreUtilisateur = await insereUtilisateur();
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-2');
+      const idServiceInaccessible = await insereService('siret-3');
+      await insereAutorisation(idUtilisateur, idService1);
+      await insereAutorisationContributeur(idUtilisateur, idService2);
+      await insereAutorisation(idAutreUtilisateur, idServiceInaccessible);
+
+      const services = await persistance.servicesComplets({ idUtilisateur });
+
+      expect(services.map((s) => s.id).sort()).to.eql(
+        [idService1, idService2].sort()
+      );
+    });
+
+    it("sait lire tous les contributeurs des services d'un utilisateur, sans ceux des autres services", async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idContributeur = await insereUtilisateur();
+      const idEtranger = await insereUtilisateur();
+      const idService = await insereService('siret-1');
+      const idAutreService = await insereService('siret-2');
+      await insereAutorisation(idUtilisateur, idService);
+      await insereAutorisationContributeur(idContributeur, idService);
+      await insereAutorisation(idEtranger, idAutreService);
+
+      const services = await persistance.servicesComplets({ idUtilisateur });
+
+      expect(services.length).to.be(1);
+      expect(services[0].utilisateurs.map((u) => u.id).sort()).to.eql(
+        [idUtilisateur, idContributeur].sort()
+      );
+    });
+
+    it("ne mélange pas les suggestions et les modèles de mesure spécifique d'un service à l'autre", async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idEtranger = await insereUtilisateur();
+      const idService = await insereService('siret-1');
+      const idAutreService = await insereService('siret-2');
+      await insereAutorisation(idUtilisateur, idService);
+      await insereAutorisation(idEtranger, idAutreService);
+      const idModele = genereUUID();
+      await persistance.ajouteModeleMesureSpecifique(idModele, idUtilisateur, {
+        description: 'Le mien',
+      });
+      await persistance.ajouteModeleMesureSpecifique(genereUUID(), idEtranger, {
+        description: 'Celui d’un autre',
+      });
+      await persistance.ajouteSuggestionAction({
+        idService,
+        nature: 'la mienne',
+      });
+      await persistance.ajouteSuggestionAction({
+        idService: idAutreService,
+        nature: 'celle d’un autre',
+      });
+
+      const services = await persistance.servicesComplets({ idUtilisateur });
+
+      expect(services.length).to.be(1);
+      expect(services[0].suggestions).to.eql(['la mienne']);
+      expect(
+        services[0].modelesDisponiblesDeMesureSpecifique.map((m) => m.id)
+      ).to.eql([idModele]);
+    });
+
+    it('ne lit pas les suggestions déjà acquittées', async () => {
+      const idService = await insereService('siret-1');
+      await persistance.ajouteSuggestionAction({
+        idService,
+        nature: 'une nature',
+      });
+      await knex('suggestions_actions')
+        .where({ id_service: idService })
+        .update({ date_acquittement: new Date() });
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].suggestions).to.eql([]);
+    });
+
+    it('donne des listes vides pour un service sans contributeur, ni suggestion, ni modèle', async () => {
+      const idService = await insereService('siret-1');
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].utilisateurs).to.eql([]);
+      expect(services[0].suggestions).to.eql([]);
+      expect(services[0].modelesDisponiblesDeMesureSpecifique).to.eql([]);
+    });
+
+    it('sait lire tous les services avec leurs contributeurs', async () => {
+      const idUtilisateur1 = await insereUtilisateur();
+      const idUtilisateur2 = await insereUtilisateur();
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-2');
+      await insereAutorisation(idUtilisateur1, idService1);
+      await insereAutorisation(idUtilisateur2, idService2);
+
+      const services = await persistance.servicesComplets({ tous: true });
+
+      const contributeursParService = Object.fromEntries(
+        services.map((s) => [s.id, s.utilisateurs.map((u) => u.id)])
+      );
+      expect(contributeursParService).to.eql({
+        [idService1]: [idUtilisateur1],
+        [idService2]: [idUtilisateur2],
+      });
+    });
+
+    it('refuse une configuration de lecture vide', async () => {
+      let erreur;
+      try {
+        await persistance.servicesComplets({});
+      } catch (e) {
+        erreur = e;
+      }
+
+      expect(erreur.message).to.contain(
+        'La configuration passée pour la lecture de service est invalide'
+      );
+    });
   });
 
   describe('concernant le dénombrement des services et utilisateurs par SIRET', () => {
