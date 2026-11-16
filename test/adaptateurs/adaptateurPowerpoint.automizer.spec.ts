@@ -1622,6 +1622,18 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
+      it('borde la légende « Statut à définir » de gris pour la détacher du fond de la slide', async () => {
+        const slide = await contenuSlide(
+          await genereSupport(),
+          POSITION_STATISTIQUES_DES_MESURES
+        );
+
+        const bordure = formeNommee(slide, 'legende-aDefinir-fond')
+          .getElementsByTagName('a:ln')[0]
+          .getElementsByTagName('a:srgbClr')[0];
+        expect(bordure?.getAttribute('val')).toBe('94A3B8');
+      });
+
       describe('par catégorie', () => {
         const uneCategorie = (
           libelle: string,
