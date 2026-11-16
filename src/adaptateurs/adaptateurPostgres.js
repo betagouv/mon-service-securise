@@ -219,23 +219,22 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
                ) AS "aUneSimulationMigrationReferentiel"
         FROM services s
 
-               LEFT JOIN (SELECT id_service, json_agg(nature) AS suggestions
-                          FROM suggestions_actions
-                          WHERE date_acquittement IS NULL
-                          GROUP BY id_service) suggestions_du_service ON suggestions_du_service.id_service = s.id
+               LEFT JOIN LATERAL (SELECT json_agg(nature) AS suggestions
+                                  FROM suggestions_actions
+                                  WHERE id_service = s.id
+                                    AND date_acquittement IS NULL) suggestions_du_service ON TRUE
 
-               LEFT JOIN (SELECT (a.donnees ->>'idService')::uuid AS id_service,
-                          json_agg(
-                                to_jsonb(u) || jsonb_build_object('estAdmin', (a.donnees ->>'estAdmin')::boolean) || jsonb_build_object('estSuperviseur', COALESCE((a.donnees ->>'estSuperviseur')::boolean, false)) || jsonb_build_object('estProprietaire', (a.donnees ->>'estProprietaire')::boolean)
-                          ) AS utilisateurs
-                          FROM autorisations a
-                                 JOIN utilisateurs u ON (a.donnees ->>'idUtilisateur')::uuid = u.id
-                          GROUP BY id_service) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
+               LEFT JOIN LATERAL (SELECT json_agg(
+                                        to_jsonb(u) || jsonb_build_object('estAdmin', (a.donnees ->>'estAdmin')::boolean) || jsonb_build_object('estSuperviseur', COALESCE((a.donnees ->>'estSuperviseur')::boolean, false)) || jsonb_build_object('estProprietaire', (a.donnees ->>'estProprietaire')::boolean)
+                                  ) AS utilisateurs
+                                  FROM autorisations a
+                                         JOIN utilisateurs u ON (a.donnees ->>'idUtilisateur')::uuid = u.id
+                                  WHERE (a.donnees ->>'idService')::uuid = s.id) utilisateurs_du_service ON TRUE
 
-               LEFT JOIN (SELECT (a.donnees ->> 'idService')::uuid AS id_service, json_agg(m.*) AS tous_les_modeles_disponibles
-                          FROM autorisations a
-                                JOIN modeles_mesure_specifique m ON (a.donnees ->> 'idUtilisateur')::uuid = m.id_utilisateur
-                          GROUP BY id_service) modeles_de_mesure_specifique ON modeles_de_mesure_specifique.id_service = s.id
+               LEFT JOIN LATERAL (SELECT json_agg(m.*) AS tous_les_modeles_disponibles
+                                  FROM autorisations a
+                                         JOIN modeles_mesure_specifique m ON (a.donnees ->> 'idUtilisateur')::uuid = m.id_utilisateur
+                                  WHERE (a.donnees ->> 'idService')::uuid = s.id) modeles_de_mesure_specifique ON TRUE
           ${where()};
       `,
       { idUtilisateur, idService, hashSirets }
