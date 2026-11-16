@@ -59,7 +59,8 @@ export function svgIndiceCyber(total: number, noteMax: number): string {
       <path d="${SEMI_CERCLE}" fill="white"/>
     </mask>
     <mask id="mp" maskUnits="userSpaceOnUse" x="5" y="5" width="149" height="75">
-      <path d="${SEMI_CERCLE}" fill="white" transform="translate(5, 5)"/>
+      <g mask="url(#mj)" transform="translate(5, 5)">${SEGMENTS_JAUGE}
+      </g>
     </mask>
   </defs>
   <circle cx="80" cy="80" r="79" fill="white" stroke="#CECECE" stroke-width="2"/>
