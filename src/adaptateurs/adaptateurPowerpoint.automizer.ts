@@ -31,6 +31,7 @@ import {
   ajouteLIndiceCyber,
   imagesDeLIndiceCyber,
 } from './automizer/slides/indiceCyber.js';
+import { ajouteLesStatistiquesDesMesures } from './automizer/slides/statistiquesDesMesures.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -43,6 +44,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     besoinsDeSecurite,
     cartographiesDesRisques,
     indiceCyber,
+    statistiquesDesMesures,
   }: DonneesSupportCommissionHomologation) {
     const imagesIndiceCyber = imagesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
@@ -90,6 +92,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
     ajouteLIndiceCyber(presentation, indiceCyber);
+    ajouteLesStatistiquesDesMesures(presentation, statistiquesDesMesures);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);
