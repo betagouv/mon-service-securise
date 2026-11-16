@@ -2,7 +2,7 @@ import { Automizer, ISlide, modify } from 'pptx-automizer';
 import { MODELE, SLIDE_EXIGENCES_RESTANTES } from '../template.js';
 import { colore, coloreLeTexte, ecrisNumeroDePage } from '../formes.js';
 import { decoupeEnPagesALaHauteur } from '../pagination.js';
-import { nombreDeLignesDeTexte } from '../texte.js';
+import { largeurDuTexteEnArial, nombreDeLignesDeTexte } from '../texte.js';
 import { ExigenceRestante } from '../../../modeles/objetsPowerpoint/exigencesRestantes.js';
 
 const NOMBRE_DE_LIGNES_D_EXIGENCES = 5;
@@ -37,7 +37,55 @@ const DECALAGE_DU_TEXTE_DANS_LA_PASTILLE_DU_STATUT = 57150;
 const HAUT_DES_CELLULES_CENTREES = 190500;
 const HAUTEUR_DES_CELLULES_CENTREES_A_DESCRIPTION_COURTE = 812453;
 
+const X_DE_LA_PREMIERE_CARTOUCHE = 1066800;
+const ECART_ENTRE_CARTOUCHES = 76200;
+const MARGE_DU_TEXTE_DANS_SA_CARTOUCHE = 133350;
+const TAILLE_DU_TEXTE_D_UNE_CARTOUCHE = 18;
+
 type DispositionDUneLigne = { y: number; agrandissement: number };
+
+const largeurDeLaCartouche = (texte: string) =>
+  largeurDuTexteEnArial(texte, TAILLE_DU_TEXTE_D_UNE_CARTOUCHE) +
+  2 * MARGE_DU_TEXTE_DANS_SA_CARTOUCHE;
+
+const ecrisLesCartouches = (
+  slide: ISlide,
+  forme: (partie: string) => string,
+  cartouches: string[],
+  { y, agrandissement }: DispositionDUneLigne
+) => {
+  Array.from(
+    { length: NOMBRE_DE_CARTOUCHES_D_UNE_EXIGENCE },
+    (_, index) => index + 1
+  ).reduce((x, numero) => {
+    const fond = forme(`cartouche-${numero}-fond`);
+    const texte = forme(`cartouche-${numero}-texte`);
+    const cartouche = cartouches[numero - 1];
+    if (!cartouche) {
+      slide.removeElement(fond);
+      slide.removeElement(texte);
+      return x;
+    }
+    const largeur = largeurDeLaCartouche(cartouche);
+    slide.modifyElement(
+      fond,
+      modify.setPosition({
+        x,
+        y: y + HAUT_DES_FONDS_DE_CARTOUCHE + agrandissement,
+        w: largeur,
+      })
+    );
+    slide.modifyElement(texte, [
+      modify.setText(cartouche),
+      modify.setPosition({
+        x: x + MARGE_DU_TEXTE_DANS_SA_CARTOUCHE,
+        y: y + HAUT_DES_TEXTES_DE_CARTOUCHE + agrandissement,
+        w: largeur - MARGE_DU_TEXTE_DANS_SA_CARTOUCHE,
+      }),
+    ]);
+    return x + largeur + ECART_ENTRE_CARTOUCHES;
+  }, X_DE_LA_PREMIERE_CARTOUCHE);
+};
 
 const agrandissementDeLaLigne = ({ description }: ExigenceRestante) =>
   (nombreDeLignesDeTexte(description, CARACTERES_PAR_LIGNE_D_UNE_DESCRIPTION) -
@@ -90,17 +138,6 @@ const placeLaLigne = (
     y: y + HAUT_DE_LA_DESCRIPTION,
     h: HAUTEUR_D_UNE_DESCRIPTION_COURTE + agrandissement,
   });
-  Array.from(
-    { length: NOMBRE_DE_CARTOUCHES_D_UNE_EXIGENCE },
-    (_, index) => index + 1
-  ).forEach((numero) => {
-    place(`cartouche-${numero}-fond`, {
-      y: y + HAUT_DES_FONDS_DE_CARTOUCHE + agrandissement,
-    });
-    place(`cartouche-${numero}-texte`, {
-      y: y + HAUT_DES_TEXTES_DE_CARTOUCHE + agrandissement,
-    });
-  });
   const hautDeLaPastille =
     y +
     Math.round(
@@ -142,9 +179,11 @@ const PASTILLES_DES_STATUTS: Record<
 const ecrisLaLigne = (
   slide: ISlide,
   forme: (partie: string) => string,
-  { description, statut, echeance, porteurs }: ExigenceRestante
+  { description, statut, cartouches, echeance, porteurs }: ExigenceRestante,
+  disposition: DispositionDUneLigne
 ) => {
   slide.modifyElement(forme('description'), modify.setText(description));
+  ecrisLesCartouches(slide, forme, cartouches, disposition);
   const pastille = PASTILLES_DES_STATUTS[statut];
   slide.modifyElement(forme('statut-texte'), [
     modify.setText(pastille.libelle),
@@ -173,7 +212,7 @@ const ecrisLesLignes = (slide: ISlide, exigences: ExigenceRestante[]) => {
       return;
     }
     placeLaLigne(slide, forme, lignes[numeroLigne - 1]);
-    ecrisLaLigne(slide, forme, exigence);
+    ecrisLaLigne(slide, forme, exigence, lignes[numeroLigne - 1]);
   });
 };
 

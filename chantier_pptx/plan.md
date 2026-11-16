@@ -136,7 +136,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 9. **Slide 20, exigences restantes** (fichier `slide19.xml`, modèle `objetsPowerpoint/exigencesRestantes.ts`) :
    - mesures **partielles et à lancer** uniquement, **générales et spécifiques** (comme la maquette) ;
    - **ordre du référentiel** pour les mesures générales applicables, puis les spécifiques à la fin ;
-   - cartouches : criticité, référentiel, catégorie et `#identifiant` ; pour une spécifique : « Spécifique », catégorie, « Ajoutée » ;
+   - cartouches : criticité, référentiel, catégorie et `#identifiant` ; pour une spécifique : « Mesures ajoutées » et la catégorie ;
    - statut coloré aux couleurs de MSS ;
    - échéance au format jj/mm/aaaa, cellule vide sans échéance ;
    - porteurs d'après `partieResponsable` (« Équipe projet », « Prestataire », « Équipe projet et prestataire ») ; vide sans partie responsable (spécifiques notamment) ;
