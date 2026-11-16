@@ -27,6 +27,14 @@ export const colore = (couleur: string) => (forme: XmlElement) => {
   proprietes.getElementsByTagName('a:srgbClr')[0].setAttribute('val', couleur);
 };
 
+export const coloreLeTexte = (couleur: string) => (forme: XmlElement) => {
+  Array.from(forme.getElementsByTagName('a:rPr')).forEach((proprietes) =>
+    Array.from(proprietes.getElementsByTagName('a:srgbClr')).forEach(
+      (couleurDuTexte) => couleurDuTexte.setAttribute('val', couleur)
+    )
+  );
+};
+
 export const pointeLImageSur =
   (fichier: string) => (image: XmlElement, relation?: XmlElement) =>
     modify.setRelationTarget(fichier)(image, relation!);

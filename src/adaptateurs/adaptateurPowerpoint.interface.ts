@@ -4,6 +4,7 @@ import { BesoinsDeSecurite } from '../modeles/objetsPowerpoint/besoinsDeSecurite
 import { CartographiesDesRisques } from '../modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import { IndiceCyberDuService } from '../modeles/objetsPowerpoint/indiceCyber.js';
 import { StatistiquesDesMesures } from '../modeles/objetsPowerpoint/statistiquesDesMesures.js';
+import { ExigenceRestante } from '../modeles/objetsPowerpoint/exigencesRestantes.js';
 
 export type AutoriteHomologation = {
   nom: string;
@@ -19,6 +20,7 @@ export type DonneesSupportCommissionHomologation = {
   cartographiesDesRisques: CartographiesDesRisques;
   indiceCyber: IndiceCyberDuService;
   statistiquesDesMesures: StatistiquesDesMesures;
+  exigencesRestantes: ExigenceRestante[];
 };
 
 export interface AdaptateurPowerpoint {

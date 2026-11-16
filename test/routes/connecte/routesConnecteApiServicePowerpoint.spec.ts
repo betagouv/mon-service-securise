@@ -19,6 +19,7 @@ import { contenuSlide } from '../../aides/lecturePptx.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import Mesures from '../../../src/modeles/mesures.js';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -368,6 +369,46 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         expect(
           donneesRecues?.statistiquesDesMesures.nombreDeMesuresGenerales
         ).toBe(service.nombreTotalMesuresGenerales());
+      });
+
+      it("transmet à l'adaptateur les exigences restantes du service", async () => {
+        const referentiel = creeReferentielV2();
+        const service = unServiceV2(referentiel)
+          .avecId('456')
+          .avecDossiers([unDossier(referentiel).donnees])
+          .avecMesures(
+            new Mesures(
+              {
+                mesuresSpecifiques: [
+                  {
+                    description: 'Chiffrer les exports de données RH',
+                    categorie: 'protection',
+                    statut: 'enCours',
+                  },
+                ],
+              },
+              referentiel
+            )
+          )
+          .construis();
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({ serviceARenvoyer: service });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(
+          donneesRecues?.exigencesRestantes.map(
+            ({ description }) => description
+          )
+        ).toEqual(['Chiffrer les exports de données RH']);
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {
