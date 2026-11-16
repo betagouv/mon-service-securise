@@ -4,12 +4,12 @@ import {
   RepartitionParStatut,
   StatistiquesDesMesures,
 } from '../../../modeles/objetsPowerpoint/statistiquesDesMesures.js';
+import { STATUTS } from '../../../modeles/mesure.js';
 
 const auPluriel = (nombre: number, singulier: string, pluriel: string) =>
   nombre > 1 ? pluriel : singulier;
 
 const CRITICITES = ['indispensables', 'recommandees'] as const;
-const STATUTS_DES_SEGMENTS = ['fait', 'enCours', 'nonFait', 'aLancer'] as const;
 const BARRE_D_UNE_CRITICITE = { x: 1219200, largeur: 7353300 };
 
 const nombreDeMesures = (repartition: RepartitionParStatut) =>
@@ -22,7 +22,7 @@ const ecrisLesSegments = (
   barre: { x: number; largeur: number }
 ) => {
   const total = nombreDeMesures(repartition);
-  STATUTS_DES_SEGMENTS.reduce((x, statut) => {
+  STATUTS.reduce((x, statut) => {
     const segment = `${prefixe}-${statut}`;
     const nombre = repartition[statut];
     if (nombre === 0) {
@@ -41,7 +41,7 @@ const NOMBRE_DE_LIGNES_DE_CATEGORIE = 4;
 const PARTIES_D_UNE_LIGNE_DE_CATEGORIE = [
   'libelle',
   'barre',
-  ...STATUTS_DES_SEGMENTS,
+  ...STATUTS,
   'total',
 ];
 

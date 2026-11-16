@@ -1,13 +1,8 @@
 import Service from '../service.js';
 import { IdCategorieMesure } from '../../referentiel.types.js';
+import { StatutMesure } from '../mesure.js';
 
-export type RepartitionParStatut = {
-  fait: number;
-  enCours: number;
-  nonFait: number;
-  aLancer: number;
-  sansStatut: number;
-};
+export type RepartitionParStatut = Record<StatutMesure | 'sansStatut', number>;
 
 export type MesuresDUnNiveauDeCriticite = RepartitionParStatut & {
   restant: number;
