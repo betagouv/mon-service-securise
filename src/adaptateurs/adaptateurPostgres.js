@@ -361,7 +361,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
 
   const autorisationsDuService = async (idService) => {
     const as = await knex('autorisations').whereRaw(
-      "donnees->>'idService'=?",
+      "(donnees->>'idService')::uuid = ?",
       idService
     );
     return as.map(convertisLigneEnObjet);
