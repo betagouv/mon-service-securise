@@ -1589,6 +1589,99 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
+      describe('par catégorie', () => {
+        const uneCategorie = (
+          libelle: string,
+          repartition: Partial<typeof repartitionVide>
+        ) => {
+          const complete = { ...repartitionVide, ...repartition };
+          return {
+            libelle,
+            ...complete,
+            total: Object.values(complete).reduce((somme, n) => somme + n, 0),
+          };
+        };
+
+        const slideAvecLesCategories = async (
+          parCategorie: StatistiquesDesMesures['parCategorie']
+        ) =>
+          contenuSlide(
+            await genereSupport({
+              statistiquesDesMesures: {
+                ...statistiquesDesMesuresParDefaut,
+                parCategorie,
+              },
+            }),
+            POSITION_STATISTIQUES_DES_MESURES
+          );
+
+        const quatreCategories = [
+          uneCategorie('Gouvernance', { fait: 19, aLancer: 2, sansStatut: 5 }),
+          uneCategorie('Protection', {
+            fait: 15,
+            enCours: 2,
+            nonFait: 3,
+            sansStatut: 51,
+          }),
+          uneCategorie('Défense', { sansStatut: 10 }),
+          uneCategorie('Résilience', {
+            fait: 1,
+            enCours: 1,
+            aLancer: 1,
+            sansStatut: 2,
+          }),
+        ];
+
+        it('écrit le libellé et le nombre de mesures de chaque catégorie', async () => {
+          const slide = await slideAvecLesCategories(quatreCategories);
+
+          expect(
+            [1, 2, 3, 4].map((numero) => [
+              texteDeLaForme(slide, `categorie-${numero}-libelle`),
+              texteDeLaForme(slide, `categorie-${numero}-total`),
+            ])
+          ).toEqual([
+            ['Gouvernance', '26'],
+            ['Protection', '71'],
+            ['Défense', '10'],
+            ['Résilience', '5'],
+          ]);
+        });
+
+        it('découpe la barre de chaque catégorie en segments proportionnels, sans les statuts vides', async () => {
+          const slide = await slideAvecLesCategories(quatreCategories);
+
+          const barre = cadreDeLaForme(slide, 'categorie-2-barre');
+          const segments = ['fait', 'enCours', 'nonFait'].map((statut) =>
+            cadreDeLaForme(slide, `categorie-2-${statut}`)
+          );
+          expect(segments.map(({ largeur }) => largeur)).toEqual(
+            [15, 2, 3].map((nombre) =>
+              Math.round((barre.largeur * nombre) / 71)
+            )
+          );
+          expect(segments.map(({ x }) => x)).toEqual([
+            barre.x,
+            barre.x + segments[0].largeur,
+            barre.x + segments[0].largeur + segments[1].largeur,
+          ]);
+          expect(nomsDesFormesCommencantPar(slide, 'categorie-3-')).toEqual([
+            'categorie-3-libelle',
+            'categorie-3-barre',
+            'categorie-3-total',
+          ]);
+        });
+
+        it('retire les lignes sans catégorie', async () => {
+          const slide = await slideAvecLesCategories(
+            quatreCategories.slice(0, 3)
+          );
+
+          expect(nomsDesFormesCommencantPar(slide, 'categorie-4-')).toEqual([]);
+          expect(textesDeLaSlide(slide)).not.toContain('Résilience');
+        });
+      });
+
       describe('par niveau de criticité', () => {
         const slideAvecLesCriticites = async (
           parCriticite: StatistiquesDesMesures['parCriticite']
