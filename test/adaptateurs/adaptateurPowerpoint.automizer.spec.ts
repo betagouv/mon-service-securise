@@ -2029,6 +2029,20 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toBe(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION);
         });
 
+        it('compte les lignes de la description à la largeur de son texte, pas à son nombre de caractères', async () => {
+          const descriptionSurQuatreLignesDansPowerPoint =
+            "M 19 Héberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloudHéberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloud";
+          const slide = await slideDesExigences([
+            uneExigence('Une description courte'),
+            uneExigence(descriptionSurQuatreLignesDansPowerPoint),
+          ]);
+
+          expect(
+            cadreDeLaForme(slide, 'exigence-2-description').hauteur -
+              cadreDeLaForme(slide, 'exigence-1-description').hauteur
+          ).toBe(3 * HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION);
+        });
+
         it('agrandit la ligne du tableau et descend les cartouches d’autant', async () => {
           const slide = await slideAvecUneDescriptionLongue();
 

@@ -2,7 +2,10 @@ import { Automizer, ISlide, modify } from 'pptx-automizer';
 import { MODELE, SLIDE_EXIGENCES_RESTANTES } from '../template.js';
 import { colore, coloreLeTexte, ecrisNumeroDePage } from '../formes.js';
 import { decoupeEnPagesALaHauteur } from '../pagination.js';
-import { largeurDuTexteEnArial, nombreDeLignesDeTexte } from '../texte.js';
+import {
+  largeurDuTexteEnArial,
+  nombreDeLignesALaLargeurEnArial,
+} from '../texte.js';
 import { ExigenceRestante } from '../../../modeles/objetsPowerpoint/exigencesRestantes.js';
 
 const NOMBRE_DE_LIGNES_D_EXIGENCES = 5;
@@ -23,7 +26,9 @@ const PARTIES_D_UNE_LIGNE_D_EXIGENCE = [
   'porteurs',
 ];
 
-const CARACTERES_PAR_LIGNE_D_UNE_DESCRIPTION = 80;
+const LARGEUR_DU_CADRE_D_UNE_DESCRIPTION = 8949177;
+const MARGES_INTERNES_D_UNE_DESCRIPTION = 2 * 25400;
+const TAILLE_DU_TEXTE_D_UNE_DESCRIPTION = 19.5;
 const HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION = 297180;
 const HAUT_DE_LA_PREMIERE_LIGNE = 2656508;
 const HAUTEUR_D_UNE_LIGNE_A_DESCRIPTION_COURTE = 1155353;
@@ -88,7 +93,11 @@ const ecrisLesCartouches = (
 };
 
 const agrandissementDeLaLigne = ({ description }: ExigenceRestante) =>
-  (nombreDeLignesDeTexte(description, CARACTERES_PAR_LIGNE_D_UNE_DESCRIPTION) -
+  (nombreDeLignesALaLargeurEnArial(
+    description,
+    LARGEUR_DU_CADRE_D_UNE_DESCRIPTION - MARGES_INTERNES_D_UNE_DESCRIPTION,
+    TAILLE_DU_TEXTE_D_UNE_DESCRIPTION
+  ) -
     1) *
   HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION;
 
