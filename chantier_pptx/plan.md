@@ -132,7 +132,8 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - par catégorie : libellé, barre et nombre de mesures ; les lignes sans catégorie sont retirées ;
    - barres : un segment par statut (fait, partielle, non prise en compte, à lancer), proportionnel au total, dans la couleur du texte du statut dans MSS ; segments vides retirés ; le reste de la barre, gris, correspond aux mesures sans statut ;
    - légende des statuts aux couleurs de MSS (`TagStatutMesure.svelte`), vérifiée par un test ;
-   - à faire valider : la pastille « Statut à définir » (`F1F5F9`) se voit à peine sur le fond de la slide, et le gris des barres (`DCE3EC`) ne reprend pas ses couleurs.
+   - la pastille « Statut à définir » (`F1F5F9`), qui se voyait à peine sur le fond de la slide, est bordée de gris `94A3B8` (1,5 pt) d'après la vue de la designer ; texte inchangé (`667892`) ;
+   - à faire valider : le gris des barres (`DCE3EC`) ne reprend pas les couleurs de la pastille « Statut à définir ».
 9. ~~**Slide 20, exigences restantes**~~ (fait) (fichier `slide19.xml`, modèle `objetsPowerpoint/exigencesRestantes.ts`, module `automizer/slides/exigencesRestantes.ts`) :
    - mesures **partielles et à lancer** uniquement, **générales et spécifiques** (comme la maquette) ;
    - **ordre du référentiel** pour les mesures générales applicables, puis les spécifiques à la fin ;
