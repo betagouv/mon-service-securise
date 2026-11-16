@@ -1448,6 +1448,42 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       });
     });
 
+    describe('sur l’analyse de risques complémentaire', () => {
+      const POSITION_ANALYSE_DE_RISQUES_COMPLEMENTAIRE = 17;
+
+      it('ne la présente pas comme optionnelle pour un service qui n’est pas en niveau basique', async () => {
+        const slide = await contenuSlide(
+          await genereSupport({
+            besoinsDeSecurite: {
+              ...besoinsDeSecuriteParDefaut,
+              idNiveau: 'niveau2',
+            },
+          }),
+          POSITION_ANALYSE_DE_RISQUES_COMPLEMENTAIRE
+        );
+
+        expect(textesDeLaSlide(slide)).toContain(
+          'Analyse de risques complémentaire'
+        );
+      });
+
+      it('la présente comme optionnelle pour un service en niveau basique', async () => {
+        const slide = await contenuSlide(
+          await genereSupport({
+            besoinsDeSecurite: {
+              ...besoinsDeSecuriteParDefaut,
+              idNiveau: 'niveau1',
+            },
+          }),
+          POSITION_ANALYSE_DE_RISQUES_COMPLEMENTAIRE
+        );
+
+        expect(textesDeLaSlide(slide)).toContain(
+          'Analyse de risques complémentaire (optionnel)'
+        );
+      });
+    });
+
     describe('sur l’indice cyber', () => {
       const POSITION_INDICE_CYBER = 19;
       const ESPACE_DE_NOMS_SVG =

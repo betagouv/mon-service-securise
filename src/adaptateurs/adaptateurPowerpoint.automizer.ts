@@ -7,7 +7,6 @@ import { nettoieLArchive } from './automizer/nettoyageDeLArchive.js';
 import {
   MODELE,
   NOM_TEMPLATE,
-  SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE,
   SLIDE_HISTORIQUE,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
@@ -27,6 +26,7 @@ import {
 } from './automizer/slides/besoinsDeSecurite.js';
 import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
+import { ajouteLAnalyseDeRisquesComplementaire } from './automizer/slides/analyseDeRisquesComplementaire.js';
 import {
   ajouteLIndiceCyber,
   imagesDeLIndiceCyber,
@@ -91,7 +91,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       'cibles',
       cartographiesDesRisques.cibles
     );
-    presentation.addSlide(MODELE, SLIDE_ANALYSE_DE_RISQUES_COMPLEMENTAIRE);
+    ajouteLAnalyseDeRisquesComplementaire(
+      presentation,
+      besoinsDeSecurite.idNiveau
+    );
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
     ajouteLIndiceCyber(presentation, indiceCyber);
     ajouteLesStatistiquesDesMesures(presentation, statistiquesDesMesures);
