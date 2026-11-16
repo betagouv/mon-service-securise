@@ -172,7 +172,10 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
           knex.raw("(autorisations.donnees->>'idService')::uuid"),
           'services.id'
         )
-        .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
+        .whereRaw(
+          "(autorisations.donnees->>'idUtilisateur')::uuid = ?",
+          idUtilisateur
+        )
         .whereRaw('not services.id::text=?', idServiceMisAJour)
         .whereRaw('services.nom_service_hash=?', hashNomService)
         .count('services.*')
@@ -346,10 +349,10 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
 
   const autorisationPour = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
-        idUtilisateur,
-        idService,
-      ])
+      .whereRaw(
+        "(donnees->>'idUtilisateur')::uuid = ? and (donnees->>'idService')::uuid = ?",
+        [idUtilisateur, idService]
+      )
       .first()
       .then(convertisLigneEnObjet)
       .catch(() => undefined);
@@ -373,7 +376,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
   const nbAutorisationsProprietaire = (idUtilisateur) =>
     knex('autorisations')
       .count('id')
-      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
       .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
 
@@ -423,22 +426,24 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
 
   const supprimeAutorisation = (idUtilisateur, idService) =>
     knex('autorisations')
-      .whereRaw("donnees->>'idUtilisateur'=? and donnees->>'idService'=?", [
-        idUtilisateur,
-        idService,
-      ])
+      .whereRaw(
+        "(donnees->>'idUtilisateur')::uuid = ? and (donnees->>'idService')::uuid = ?",
+        [idUtilisateur, idService]
+      )
       .del();
 
   const supprimeAutorisations = () => knex('autorisations').del();
 
   const supprimeAutorisationsContribution = (idUtilisateur) =>
     knex('autorisations')
-      .whereRaw("donnees->>'idUtilisateur'=?", idUtilisateur)
+      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
       .whereRaw("(donnees->>'estProprietaire')::boolean=false")
       .del();
 
   const supprimeAutorisationsHomologation = (idService) =>
-    knex('autorisations').whereRaw("donnees->>'idService'=?", idService).del();
+    knex('autorisations')
+      .whereRaw("(donnees->>'idService')::uuid = ?", idService)
+      .del();
 
   const lisParcoursUtilisateur = async (id) =>
     elementDeTable('parcours_utilisateurs', id);
@@ -459,20 +464,20 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     const contributeurs = await knex.raw(
       `
         WITH mes_services
-               AS (SELECT donnees ->>'idService' AS ids_services
+               AS (SELECT (donnees ->>'idService')::uuid AS ids_services
         FROM autorisations
-        WHERE donnees->>'idUtilisateur' = ?
+        WHERE (donnees->>'idUtilisateur')::uuid = ?
           AND (donnees->>'estProprietaire')::boolean = true
           )
         SELECT DISTINCT
         ON (u.id) u.id, u.donnees
         FROM autorisations AS a
           JOIN utilisateurs AS u
-        ON u.id::TEXT = a.donnees->>'idUtilisateur'
-        WHERE a.donnees->>'idService' IN (SELECT "ids_services" FROM mes_services)
+        ON u.id = (a.donnees->>'idUtilisateur')::uuid
+        WHERE (a.donnees->>'idService')::uuid IN (SELECT "ids_services" FROM mes_services)
           AND a.donnees->>'estAdmin' <> 'true'
           AND a.donnees->>'estSuperviseur' <> 'true'
-          AND a.donnees->>'idUtilisateur' != ?
+          AND (a.donnees->>'idUtilisateur')::uuid != ?
       `,
       [idProprietaire, idProprietaire]
     );
@@ -989,9 +994,9 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
     const contributeurs = await knex.raw(
       `
         WITH mes_services AS (
-          SELECT donnees ->>'idService' AS ids_services
+          SELECT (donnees ->>'idService')::uuid AS ids_services
           FROM autorisations
-          WHERE donnees->>'idUtilisateur' = ?
+          WHERE (donnees->>'idUtilisateur')::uuid = ?
             AND (donnees->>'estAdmin')::boolean = true
         ),
         mes_sirets_haches AS (
@@ -1002,8 +1007,8 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
           FROM autorisations AS a
           JOIN utilisateurs AS u ON u.id = (a.donnees->>'idUtilisateur')::uuid
           JOIN services AS s ON s.id = (a.donnees->>'idService')::uuid
-          WHERE a.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
-            AND a.donnees->>'idUtilisateur' != ?
+          WHERE (a.donnees->>'idService')::uuid IN (SELECT ids_services FROM mes_services)
+            AND (a.donnees->>'idUtilisateur')::uuid != ?
             AND COALESCE((a.donnees->>'estSuperviseur')::boolean, false) = false
           UNION ALL
           SELECT u.id, u.donnees, ao.siret_hash
@@ -1029,7 +1034,7 @@ const nouvelAdaptateur = ({ knexSurcharge }) => {
                    ), '[]'::json)
             FROM autorisations a3
             WHERE (a3.donnees->>'idUtilisateur')::uuid = u.id
-                AND a3.donnees->>'idService' IN (SELECT ids_services FROM mes_services)
+                AND (a3.donnees->>'idService')::uuid IN (SELECT ids_services FROM mes_services)
                 AND COALESCE((a3.donnees->>'estSuperviseur')::boolean, false) = false
           ) AS autorisations
         FROM mes_utilisateurs_administres AS u
