@@ -26,6 +26,7 @@ import { ContexteDuService } from '../../src/modeles/objetsPowerpoint/contexteDu
 import { BesoinsDeSecurite } from '../../src/modeles/objetsPowerpoint/besoinsDeSecurite.js';
 import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cartographiesDesRisques.js';
 import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceCyber.js';
+import { StatistiquesDesMesures } from '../../src/modeles/objetsPowerpoint/statistiquesDesMesures.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
@@ -84,6 +85,25 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     referentiels: 'l’ANSSI',
   };
 
+  const repartitionVide = {
+    fait: 0,
+    enCours: 0,
+    nonFait: 0,
+    aLancer: 0,
+    sansStatut: 0,
+  };
+
+  const statistiquesDesMesuresParDefaut: StatistiquesDesMesures = {
+    nombreDeMesuresGenerales: 0,
+    nombreDeMesuresSpecifiques: 0,
+    referentiels: 'l’ANSSI',
+    parCriticite: {
+      indispensables: { ...repartitionVide, restant: 0 },
+      recommandees: { ...repartitionVide, restant: 0 },
+    },
+    parCategorie: [],
+  };
+
   const contexteParDefaut: ContexteDuService = {
     organisation: 'Une organisation',
     statut: 'Un statut',
@@ -104,6 +124,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       besoinsDeSecurite: besoinsDeSecuriteParDefaut,
       cartographiesDesRisques: cartographiesParDefaut,
       indiceCyber: indiceCyberParDefaut,
+      statistiquesDesMesures: statistiquesDesMesuresParDefaut,
       ...donnees,
     });
 
@@ -111,7 +132,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(19);
+      expect(await nombreDeSlides(pptx)).toBe(20);
       expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
         'Support de commission d’homologation'
       );
@@ -169,6 +190,9 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(textesDeLaSlide(intercalaireSocle)).toContain('Logo');
       expect(textesDeLaSlide(await contenuSlide(pptx, 19))).toContain(
         'Conformité : Indice cyber'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 20))).toContain(
+        'Mesures de sécurité'
       );
     });
 
@@ -1520,6 +1544,48 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
         expect(texteDeLaForme(slide, 'indice-cyber-explication')).toBe(
           'L’indice cyber est calculé sur la base des informations renseignées par l’équipe concernant les mesures de sécurité proposées par l’ANSSI et la CNIL, et à l’exclusion des mesures spécifiques ajoutées. Il fournit une évaluation indicative du niveau de sécurisation du service.'
+        );
+      });
+    });
+
+    describe('sur les statistiques des mesures', () => {
+      const POSITION_STATISTIQUES_DES_MESURES = 20;
+
+      const enTete = async (statistiques: Partial<StatistiquesDesMesures>) =>
+        texteDeLaForme(
+          await contenuSlide(
+            await genereSupport({
+              statistiquesDesMesures: {
+                ...statistiquesDesMesuresParDefaut,
+                ...statistiques,
+              },
+            }),
+            POSITION_STATISTIQUES_DES_MESURES
+          ),
+          'mesures-total'
+        );
+
+      it('écrit le nombre de mesures proposées par les référentiels et ajoutées par l’équipe', async () => {
+        expect(
+          await enTete({
+            nombreDeMesuresGenerales: 113,
+            nombreDeMesuresSpecifiques: 4,
+            referentiels: 'l’ANSSI et la CNIL',
+          })
+        ).toBe(
+          'Total : 113 mesures proposées par l’ANSSI et la CNIL + 4 ajoutées par l’équipe.'
+        );
+      });
+
+      it('accorde au singulier une seule mesure proposée ou ajoutée', async () => {
+        expect(
+          await enTete({
+            nombreDeMesuresGenerales: 1,
+            nombreDeMesuresSpecifiques: 1,
+            referentiels: 'l’ANSSI',
+          })
+        ).toBe(
+          'Total : 1 mesure proposée par l’ANSSI + 1 ajoutée par l’équipe.'
         );
       });
     });
