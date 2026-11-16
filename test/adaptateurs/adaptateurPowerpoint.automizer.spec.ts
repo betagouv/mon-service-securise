@@ -93,7 +93,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     enCours: 0,
     nonFait: 0,
     aLancer: 0,
-    sansStatut: 0,
+    aRemplir: 0,
   };
 
   const statistiquesDesMesuresParDefaut: StatistiquesDesMesures = {
@@ -1649,19 +1649,19 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
 
         const quatreCategories = [
-          uneCategorie('Gouvernance', { fait: 19, aLancer: 2, sansStatut: 5 }),
+          uneCategorie('Gouvernance', { fait: 19, aLancer: 2, aRemplir: 5 }),
           uneCategorie('Protection', {
             fait: 15,
             enCours: 2,
             nonFait: 3,
-            sansStatut: 51,
+            aRemplir: 51,
           }),
-          uneCategorie('Défense', { sansStatut: 10 }),
+          uneCategorie('Défense', { aRemplir: 10 }),
           uneCategorie('Résilience', {
             fait: 1,
             enCours: 1,
             aLancer: 1,
-            sansStatut: 2,
+            aRemplir: 2,
           }),
         ];
 
@@ -1750,7 +1750,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
               enCours: 25,
               nonFait: 3,
               aLancer: 6,
-              sansStatut: 14,
+              aRemplir: 14,
               restant: 48,
             },
             recommandees: { ...repartitionVide, restant: 0 },
@@ -1777,7 +1777,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         it('retire les segments des statuts sans mesure', async () => {
           const slide = await slideAvecLesCriticites({
             indispensables: { ...repartitionVide, fait: 3, restant: 0 },
-            recommandees: { ...repartitionVide, sansStatut: 4, restant: 4 },
+            recommandees: { ...repartitionVide, aRemplir: 4, restant: 4 },
           });
 
           expect(nomsDesFormesCommencantPar(slide, 'criticite-')).toEqual([
