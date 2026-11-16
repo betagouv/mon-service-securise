@@ -127,7 +127,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 
 8. **Slide 19, statistiques des mesures** (fichier `slide18.xml`), après l'indice cyber :
    - en-tête « Total : N mesures proposées par [référentiels] + M ajoutées par l'équipe » (`nombreTotalMesuresGenerales`, `nombreMesuresSpecifiques`, `referentielsDesMesuresGenerales`) ;
-   - **toutes les mesures**, spécifiques comprises (`statistiquesMesuresGeneralesEtSpecifiques(false)`) : les spécifiques comptent comme recommandées pour la criticité, et dans leur catégorie ; les non prises en compte restent comptées ;
+   - **mesures générales seulement** dans les barres, comme la synthèse PDF (`statistiquesMesuresGenerales()`) : les mesures spécifiques n'apparaissent que dans l'en-tête ; les non prises en compte restent comptées ;
    - par niveau de criticité (indispensables, recommandées) : une barre et « Il reste N mesures à mettre en œuvre » (`restant`) ;
    - par catégorie : une barre et le nombre de mesures de la catégorie ;
    - barres : un segment par statut, proportionnel (fait, partielle, non prise en compte, à lancer), couleur du texte du statut dans MSS ; le reste en gris pour les mesures sans statut ; largeurs via `setPosition` ;

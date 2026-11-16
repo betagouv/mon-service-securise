@@ -53,7 +53,7 @@ const mesuresDUnNiveauDeCriticite = ({
 export const statistiquesDesMesures = (
   service: Service
 ): StatistiquesDesMesures => {
-  const statistiques = service.statistiquesMesuresGeneralesEtSpecifiques(false);
+  const statistiques = service.statistiquesMesuresGenerales();
   return {
     nombreDeMesuresGenerales: service.nombreTotalMesuresGenerales(),
     nombreDeMesuresSpecifiques: service.nombreMesuresSpecifiques(),
