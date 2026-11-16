@@ -1588,6 +1588,81 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'Total : 1 mesure proposée par l’ANSSI + 1 ajoutée par l’équipe.'
         );
       });
+
+      describe('par niveau de criticité', () => {
+        const slideAvecLesCriticites = async (
+          parCriticite: StatistiquesDesMesures['parCriticite']
+        ) =>
+          contenuSlide(
+            await genereSupport({
+              statistiquesDesMesures: {
+                ...statistiquesDesMesuresParDefaut,
+                parCriticite,
+              },
+            }),
+            POSITION_STATISTIQUES_DES_MESURES
+          );
+
+        it('écrit le nombre de mesures restant à mettre en œuvre, au singulier ou au pluriel', async () => {
+          const slide = await slideAvecLesCriticites({
+            indispensables: { ...repartitionVide, restant: 48 },
+            recommandees: { ...repartitionVide, restant: 1 },
+          });
+
+          expect(
+            texteDeLaForme(slide, 'criticite-indispensables-restant')
+          ).toBe('Il reste 48 mesures à mettre en œuvre');
+          expect(texteDeLaForme(slide, 'criticite-recommandees-restant')).toBe(
+            'Il reste 1 mesure à mettre en œuvre'
+          );
+        });
+
+        it('découpe chaque barre en un segment par statut, proportionnel à son nombre de mesures', async () => {
+          const slide = await slideAvecLesCriticites({
+            indispensables: {
+              fait: 2,
+              enCours: 25,
+              nonFait: 3,
+              aLancer: 6,
+              sansStatut: 14,
+              restant: 48,
+            },
+            recommandees: { ...repartitionVide, restant: 0 },
+          });
+
+          const barre = cadreDeLaForme(slide, 'criticite-indispensables-barre');
+          const segments = ['fait', 'enCours', 'nonFait', 'aLancer'].map(
+            (statut) =>
+              cadreDeLaForme(slide, `criticite-indispensables-${statut}`)
+          );
+          expect(segments.map(({ largeur }) => largeur)).toEqual(
+            [2, 25, 3, 6].map((nombre) =>
+              Math.round((barre.largeur * nombre) / 50)
+            )
+          );
+          expect(segments[0].x).toBe(barre.x);
+          [1, 2, 3].forEach((index) =>
+            expect(segments[index].x).toBe(
+              segments[index - 1].x + segments[index - 1].largeur
+            )
+          );
+        });
+
+        it('retire les segments des statuts sans mesure', async () => {
+          const slide = await slideAvecLesCriticites({
+            indispensables: { ...repartitionVide, fait: 3, restant: 0 },
+            recommandees: { ...repartitionVide, sansStatut: 4, restant: 4 },
+          });
+
+          expect(nomsDesFormesCommencantPar(slide, 'criticite-')).toEqual([
+            'criticite-indispensables-restant',
+            'criticite-indispensables-barre',
+            'criticite-indispensables-fait',
+            'criticite-recommandees-restant',
+            'criticite-recommandees-barre',
+          ]);
+        });
+      });
     });
 
     describe('sur la description des risques', () => {
