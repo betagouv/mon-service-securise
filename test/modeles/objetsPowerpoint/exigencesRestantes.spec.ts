@@ -87,7 +87,7 @@ describe('Les exigences restantes présentées à la commission', () => {
     ).toEqual(['Mesure A', 'Spécifique partielle']);
   });
 
-  it('décrivent chaque mesure par ses cartouches : criticité, référentiel, catégorie et identifiant, ou « Ajoutée » pour une mesure spécifique', () => {
+  it('décrivent chaque mesure par ses cartouches : criticité, référentiel, catégorie et identifiant, ou « Mesures ajoutées » et la catégorie pour une mesure spécifique', () => {
     const referentielAvecDetails = Referentiel.creeReferentiel({
       // @ts-expect-error on recharge partiellement le référentiel
       categoriesMesures: {
@@ -140,7 +140,7 @@ describe('Les exigences restantes présentées à la commission', () => {
     ).toEqual([
       ['Indispensable', 'ANSSI', 'Gouvernance', '#0022'],
       ['Recommandée', 'CNIL', 'Protection', '#0087'],
-      ['Spécifique', 'Protection', 'Ajoutée'],
+      ['Mesures ajoutées', 'Protection'],
     ]);
   });
 

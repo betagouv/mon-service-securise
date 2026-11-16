@@ -99,11 +99,10 @@ const mesuresSpecifiquesRestantes = ({
               description,
               statut,
               cartouches: [
-                'Spécifique',
+                'Mesures ajoutées',
                 referentiel.descriptionCategorie(
                   categorie as IdCategorieMesure
                 ),
-                'Ajoutée',
               ],
               echeance: echeanceDe(echeance),
             },

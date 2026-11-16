@@ -1800,7 +1800,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       ): ExigenceRestante => ({
         description,
         statut: 'enCours',
-        cartouches: [],
+        cartouches: ['Indispensable', 'ANSSI', 'Gouvernance', '#0022'],
         ...exigence,
       });
 
@@ -1870,6 +1870,88 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
               cadreDeLaForme(slide, `exigence-${numero}-statut-fond`).largeur
           )
         ).toEqual([1519758, 1447800]);
+      });
+
+      describe('pour les cartouches', () => {
+        const slideAvecLesCartouches = () =>
+          slideDesExigences([
+            uneExigence('Une mesure générale', {
+              cartouches: ['Indispensable', 'ANSSI', 'Gouvernance', '#0022'],
+            }),
+            uneExigence('Une mesure spécifique', {
+              cartouches: ['Mesures ajoutées', 'Protection'],
+            }),
+          ]);
+
+        it('écrit chaque cartouche et retire celles qui ne servent pas', async () => {
+          const slide = await slideAvecLesCartouches();
+
+          const textesDesCartouches = (numero: number) =>
+            nomsDesFormes(slide)
+              .filter((nom) =>
+                new RegExp(`^exigence-${numero}-cartouche-\\d-texte$`).test(nom)
+              )
+              .map((nom) => texteDeLaForme(slide, nom));
+          expect(textesDesCartouches(1)).toEqual([
+            'Indispensable',
+            'ANSSI',
+            'Gouvernance',
+            '#0022',
+          ]);
+          expect(textesDesCartouches(2)).toEqual([
+            'Mesures ajoutées',
+            'Protection',
+          ]);
+          expect(
+            nomsDesFormes(slide).filter((nom) =>
+              /^exigence-2-cartouche-[34]-/.test(nom)
+            )
+          ).toEqual([]);
+        });
+
+        it('écrit les cartouches en italique, comme tout ce qui est prérempli, sans rétrécir leur texte', async () => {
+          const slide = await slideAvecLesCartouches();
+
+          [1, 2, 3, 4].forEach((numero) => {
+            const texte = formeNommee(
+              slide,
+              `exigence-1-cartouche-${numero}-texte`
+            );
+            expect(
+              Array.from(texte.getElementsByTagName('a:rPr')).map(
+                (proprietes) => proprietes.getAttribute('i')
+              )
+            ).toEqual(['1']);
+            expect(texte.getElementsByTagName('a:normAutofit')).toHaveLength(0);
+          });
+        });
+
+        it('ajuste la largeur de chaque cartouche à son texte et les fait se suivre', async () => {
+          const slide = await slideAvecLesCartouches();
+
+          const fonds = [1, 2, 3, 4].map((numero) =>
+            cadreDeLaForme(slide, `exigence-1-cartouche-${numero}-fond`)
+          );
+          const largeursDeLaMaquette = [1677516, 952723, 1639193, 902419];
+          fonds.forEach(({ largeur }, index) =>
+            expect(
+              Math.abs(largeur - largeursDeLaMaquette[index])
+            ).toBeLessThan(1000)
+          );
+          [1, 2, 3].forEach((index) =>
+            expect(
+              fonds[index].x - (fonds[index - 1].x + fonds[index - 1].largeur)
+            ).toBe(76200)
+          );
+          [1, 2, 3, 4].forEach((numero) => {
+            const fond = fonds[numero - 1];
+            const texte = cadreDeLaForme(
+              slide,
+              `exigence-1-cartouche-${numero}-texte`
+            );
+            expect(texte.x).toBe(fond.x + 133350);
+          });
+        });
       });
 
       describe('quand la description d’une mesure tient sur plusieurs lignes', () => {
