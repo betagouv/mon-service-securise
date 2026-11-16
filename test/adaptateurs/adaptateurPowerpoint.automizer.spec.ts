@@ -2160,6 +2160,20 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             'Exigences à mettre en place restantes 2/2',
           ]);
         });
+
+        it('garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
+          const largeurDeTitreAvec99Sur99EnArialGras = 10750115;
+          const margesInternesDuCadre = 2 * 25400;
+          const slide = await slideDesExigences([uneExigence('Exigence')]);
+
+          const titre = cadreDeLaForme(slide, 'exigences-restantes-titre');
+          const pastille = cadreDeLaForme(slide, 'pastille-prerempli');
+
+          expect(titre.largeur).toBeGreaterThanOrEqual(
+            largeurDeTitreAvec99Sur99EnArialGras + margesInternesDuCadre
+          );
+          expect(titre.x + titre.largeur).toBeLessThan(pastille.x);
+        });
       });
 
       it('retire les lignes sans exigence', async () => {
