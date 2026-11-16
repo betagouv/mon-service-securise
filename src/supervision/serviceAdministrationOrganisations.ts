@@ -245,18 +245,23 @@ export class ServiceAdministrationOrganisations {
     const autorisationsExistantes =
       await this.depotDonnees.autorisationsDuService(service.id);
 
-    return lesAdminsNonSuperviseurs.map((admin) => {
-      const idAdmin = admin.donnees().idUtilisateur;
-      const existante = autorisationsExistantes.find((a: Autorisation) =>
-        a.designeUtilisateur(idAdmin)
-      );
+    return lesAdminsNonSuperviseurs
+      .map((admin) => {
+        const idAdmin = admin.donnees().idUtilisateur;
+        const existante = autorisationsExistantes.find((a: Autorisation) =>
+          a.designeUtilisateur(idAdmin)
+        );
 
-      return Autorisation.NouvelleAutorisationAdmin({
-        id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
-        idService: service.id,
-        idUtilisateur: idAdmin,
-      });
-    });
+        const dejaAdmin = existante?.estUnAdmin();
+        if (dejaAdmin) return null;
+
+        return Autorisation.NouvelleAutorisationAdmin({
+          id: existante ? existante.id : this.adaptateurUUID.genereUUID(),
+          idService: service.id,
+          idUtilisateur: idAdmin,
+        });
+      })
+      .filter((a) => a !== null);
   }
 
   private async sauvegardeAutorisations(

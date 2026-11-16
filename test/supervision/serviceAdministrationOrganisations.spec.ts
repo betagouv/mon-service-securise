@@ -151,6 +151,26 @@ describe("Le service de gestion des admins d'organisation", () => {
       expect(autorisationsDuService[0].estAdmin).toBe(true);
     });
 
+    it("ne réécrit pas l'autorisation d'un admin déjà rattaché au service", async () => {
+      const administrationOrganisations = leServiceDAdministrationDesOrgas();
+      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+      const autorisationsSauvegardees: Autorisation[] = [];
+      const sauvegardeReelle = depotComplet.sauvegardeAutorisation;
+      depotComplet.sauvegardeAutorisation = async (autorisation) => {
+        autorisationsSauvegardees.push(autorisation);
+        await sauvegardeReelle(autorisation);
+      };
+
+      await administrationOrganisations.rattacheLesAdministrateursDe(unService);
+
+      expect(autorisationsSauvegardees).toEqual([]);
+      const autorisation = await depotComplet.autorisationPour(
+        idAdmin,
+        idService
+      );
+      expect(autorisation.estUnAdmin()).toBe(true);
+    });
+
     it('supprime les autorisations des anciens admins', async () => {
       const administrationOrganisations = leServiceDAdministrationDesOrgas();
 
