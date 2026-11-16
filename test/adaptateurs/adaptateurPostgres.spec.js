@@ -1086,4 +1086,51 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(versions).to.eql([]);
     });
   });
+
+  describe("concernant la lecture des autorisations d'un utilisateur", () => {
+    it('donne toutes ses autorisations, avec leurs données et leur identifiant', async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idService1 = await insereService('siret-1');
+      const idService2 = await insereService('siret-2');
+      const idAutorisation1 = await insereAutorisation(
+        idUtilisateur,
+        idService1
+      );
+      const idAutorisation2 = await insereAutorisationContributeur(
+        idUtilisateur,
+        idService2
+      );
+
+      const autorisations = await persistance.autorisations(idUtilisateur);
+
+      const parId = Object.fromEntries(autorisations.map((a) => [a.id, a]));
+      expect(Object.keys(parId).sort()).to.eql(
+        [idAutorisation1, idAutorisation2].sort()
+      );
+      expect(parId[idAutorisation1].idService).to.be(idService1);
+      expect(parId[idAutorisation1].estProprietaire).to.be(true);
+      expect(parId[idAutorisation2].idService).to.be(idService2);
+      expect(parId[idAutorisation2].estProprietaire).to.be(false);
+    });
+
+    it('ignore les autorisations des autres utilisateurs', async () => {
+      const idUtilisateur = await insereUtilisateur();
+      const idAutreUtilisateur = await insereUtilisateur();
+      const idService = await insereService('siret-1');
+      const idAutorisation = await insereAutorisation(idUtilisateur, idService);
+      await insereAutorisationContributeur(idAutreUtilisateur, idService);
+
+      const autorisations = await persistance.autorisations(idUtilisateur);
+
+      expect(autorisations.map((a) => a.id)).to.eql([idAutorisation]);
+    });
+
+    it("ne donne aucune autorisation à un utilisateur qui n'en a pas", async () => {
+      const idUtilisateur = await insereUtilisateur();
+
+      const autorisations = await persistance.autorisations(idUtilisateur);
+
+      expect(autorisations).to.eql([]);
+    });
+  });
 });
