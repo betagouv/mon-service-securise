@@ -351,6 +351,7 @@
           onsubmit={sauvegardeCommentaire}
           bind:contenuCommentaire
           {nonce}
+          {estLectureSeule}
         />
       {/if}
     </div>
