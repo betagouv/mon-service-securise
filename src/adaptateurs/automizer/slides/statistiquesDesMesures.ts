@@ -5,9 +5,7 @@ import {
   StatistiquesDesMesures,
 } from '../../../modeles/objetsPowerpoint/statistiquesDesMesures.js';
 import { STATUTS } from '../../../modeles/mesure.js';
-
-const auPluriel = (nombre: number, singulier: string, pluriel: string) =>
-  nombre > 1 ? pluriel : singulier;
+import { auPluriel } from '../texte.js';
 
 const CRITICITES = ['indispensables', 'recommandees'] as const;
 const BARRE_D_UNE_CRITICITE = { x: 1219200, largeur: 7353300 };

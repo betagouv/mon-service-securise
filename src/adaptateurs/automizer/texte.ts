@@ -64,6 +64,12 @@ export const policeQuiConvient = (texte: string, polices: Police[]) =>
   polices.find((police) => tientDansLaPolice(texte, police)) ??
   polices[polices.length - 1];
 
+export const auPluriel = (
+  nombre: number,
+  singulier: string,
+  pluriel: string
+) => (nombre > 1 ? pluriel : singulier);
+
 export const auDixieme = new Intl.NumberFormat('fr', {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,

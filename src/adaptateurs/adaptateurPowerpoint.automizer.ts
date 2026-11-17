@@ -42,6 +42,7 @@ import {
 import { ajouteLesStatistiquesDesMesures } from './automizer/slides/statistiquesDesMesures.js';
 import { ajouteLesExigencesRestantes } from './automizer/slides/exigencesRestantes.js';
 import { ajouteLesAvisDesMembres } from './automizer/slides/avisDesMembres.js';
+import { ajouteLAnnexeDesMesures } from './automizer/slides/annexeDesMesures.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -57,6 +58,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     statistiquesDesMesures,
     exigencesRestantes,
     avisDesMembres,
+    annexeDesMesures,
   }: DonneesSupportCommissionHomologation) {
     const imagesIndiceCyber = imagesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
@@ -116,6 +118,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     ajouteLesAvisDesMembres(presentation, avisDesMembres);
     presentation.addSlide(MODELE, SLIDE_PROPOSITION_DE_DECISION);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_ANNEXES);
+    ajouteLAnnexeDesMesures(presentation, annexeDesMesures);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);

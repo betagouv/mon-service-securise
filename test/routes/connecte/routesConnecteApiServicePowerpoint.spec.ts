@@ -412,6 +412,54 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         ).toEqual(['Chiffrer les exports de données RH']);
       });
 
+      it("transmet à l'adaptateur l'annexe des mesures du service", async () => {
+        const referentiel = creeReferentielV2();
+        const service = unServiceV2(referentiel)
+          .avecId('456')
+          .avecDossiers([unDossier(referentiel).donnees])
+          .avecMesures(
+            new Mesures(
+              {
+                mesuresSpecifiques: [
+                  {
+                    description: 'Chiffrer les exports de données RH',
+                    categorie: 'protection',
+                    statut: 'enCours',
+                  },
+                ],
+              },
+              // @ts-expect-error référentiel partiel
+              referentiel
+            )
+          )
+          .construis();
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({ serviceARenvoyer: service });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(
+          donneesRecues?.annexeDesMesures.find(
+            ({ statut }) => statut === 'enCours'
+          )?.mesures
+        ).toEqual([
+          {
+            description: 'Chiffrer les exports de données RH',
+            categorie: 'Protection',
+            criticite: '',
+            referentiel: 'Mesures ajoutées',
+          },
+        ]);
+      });
+
       it("transmet à l'adaptateur les avis des membres du dossier en cours", async () => {
         // @ts-expect-error on ne recharge que le nécessaire
         testeur.middleware().reinitialise({
