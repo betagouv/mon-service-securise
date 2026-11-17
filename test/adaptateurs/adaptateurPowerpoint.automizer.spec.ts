@@ -138,7 +138,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(26);
+      expect(await nombreDeSlides(pptx)).toBe(28);
       expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
         'Support de commission d’homologation'
       );
@@ -226,6 +226,13 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(textesDeLaSlide(intercalaireDecision)).toContain('Logo');
       expect(textesDeLaSlide(await contenuSlide(pptx, 26))).toContain(
         'Avis formalisés des membres'
+      );
+      const propositionDeDecision = await contenuSlide(pptx, 27);
+      expect(textesDeLaSlide(propositionDeDecision)).toContain(
+        'PROPOSITION DE DÉCISION'
+      );
+      expect(textesDeLaSlide(await contenuSlide(pptx, 28))).toContain(
+        'Annexes'
       );
     });
 
@@ -2489,8 +2496,11 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             },
             (_, index) => POSITION_AVIS_DES_MEMBRES + index
           );
-          return Promise.all(
+          const slides = await Promise.all(
             positions.map((position) => contenuSlide(pptx, position))
+          );
+          return slides.filter((slide) =>
+            nomsDesFormes(slide).includes('avis-titre')
           );
         };
 

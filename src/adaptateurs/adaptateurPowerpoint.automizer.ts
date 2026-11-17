@@ -8,6 +8,7 @@ import {
   MODELE,
   NOM_TEMPLATE,
   SLIDE_HISTORIQUE,
+  SLIDE_INTERCALAIRE_ANNEXES,
   SLIDE_INTERCALAIRE_AUDIT,
   SLIDE_INTERCALAIRE_DECISION,
   SLIDE_INTERCALAIRE_HISTORIQUE,
@@ -16,6 +17,7 @@ import {
   SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE,
   SLIDE_PERIMETRE_VUE_FONCTIONNELLE,
   SLIDE_PRESENTATION_DU_SYSTEME,
+  SLIDE_PROPOSITION_DE_DECISION,
   SLIDE_RESULTAT_DE_L_AUDIT,
   SLIDE_SOMMAIRE,
 } from './automizer/template.js';
@@ -112,6 +114,8 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     presentation.addSlide(MODELE, SLIDE_RESULTAT_DE_L_AUDIT);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_DECISION);
     ajouteLesAvisDesMembres(presentation, avisDesMembres);
+    presentation.addSlide(MODELE, SLIDE_PROPOSITION_DE_DECISION);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_ANNEXES);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);
