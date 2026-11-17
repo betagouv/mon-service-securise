@@ -2508,6 +2508,23 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
+      it('écrit « Aucun avis n’a été renseigné par l’équipe. », comme le PDF, quand le dossier n’a pas d’avis', async () => {
+        const slide = await slideDesAvis([]);
+
+        expect(texteDeLaForme(slide, 'aucun-avis')).toBe(
+          "Aucun avis n'a été renseigné par l'équipe."
+        );
+        expect(
+          nomsDesFormes(slide).filter((nom) => /^avis-\d-/.test(nom))
+        ).toEqual([]);
+      });
+
+      it('retire le message « Aucun avis » quand le dossier a des avis', async () => {
+        const slide = await slideDesAvis([unAvis('Jean Dupond')]);
+
+        expect(nomsDesFormes(slide)).not.toContain('aucun-avis');
+      });
+
       it('retire les cartes sans avis', async () => {
         const slide = await slideDesAvis([unAvis('Seul membre')]);
 
