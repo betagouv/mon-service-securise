@@ -17,7 +17,6 @@
     indiceCyberPersonnalise: number;
     idService: string;
     documentsPdfDisponibles: string[];
-    supportCommissionPptxDisponible: boolean;
     niveauSecurite: IdNiveauDeSecurite;
   }
 
@@ -29,7 +28,6 @@
     indiceCyber,
     indiceCyberPersonnalise,
     documentsPdfDisponibles,
-    supportCommissionPptxDisponible,
     niveauSecurite,
   }: Props = $props();
 
@@ -123,7 +121,6 @@
           {idService}
           avecDocumentsAccessible
           {documentsPdfDisponibles}
-          {supportCommissionPptxDisponible}
           peutSupprimer={!estLectureSeule}
         />
       {:else}

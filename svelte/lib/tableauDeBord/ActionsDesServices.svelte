@@ -11,7 +11,6 @@
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
-  import { aDesDocumentsATelecharger } from '../ui/tiroirs/documentsATelecharger';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
   import TiroirAssociationGroupesServices from '../ui/tiroirs/TiroirAssociationGroupesServices.svelte';
@@ -44,7 +43,9 @@
     selection.some((s) => s.type === 'Brouillon')
   );
   let ontDesDocuments = $derived(
-    selection.every((s) => estService(s) && aDesDocumentsATelecharger(s))
+    selection.every(
+      (s) => estService(s) && s.documentsPdfDisponibles.length > 0
+    )
   );
 
   const actionsSupplementaires = $derived([

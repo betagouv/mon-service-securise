@@ -16,7 +16,6 @@
     avecTamponAccessible?: boolean;
     avecStatutHomologation?: boolean;
     documentsPdfDisponibles?: string[];
-    supportCommissionPptxDisponible?: boolean;
     peutSupprimer?: boolean;
   }
 
@@ -28,7 +27,6 @@
     avecTamponAccessible = false,
     avecStatutHomologation = false,
     documentsPdfDisponibles = [],
-    supportCommissionPptxDisponible = false,
     peutSupprimer = false,
   }: Props = $props();
 
@@ -158,7 +156,6 @@
               service: {
                 id: idService,
                 documentsPdfDisponibles,
-                supportCommissionPptxDisponible,
               },
             })}
         ></dsfr-button>

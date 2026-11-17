@@ -83,8 +83,6 @@ export const propsPourPage = (
         indiceCyber: indicesCyber?.indiceCyberAnssi.total,
         indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
         documentsPdfDisponibles: service?.documentsPdfDisponibles,
-        supportCommissionPptxDisponible:
-          service?.supportCommissionPptxDisponible,
         niveauSecurite: descriptionService?.niveauSecurite,
       };
     case 'homologation':

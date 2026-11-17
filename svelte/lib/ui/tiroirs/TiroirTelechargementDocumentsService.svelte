@@ -2,7 +2,6 @@
   export type DonneesServicePourTelechargementDocuments = {
     id: string;
     documentsPdfDisponibles: string[];
-    supportCommissionPptxDisponible?: boolean;
   };
 </script>
 
@@ -57,7 +56,7 @@
       cheminDocument="dossierDecision.pdf"
     />
   {/if}
-  {#if service.supportCommissionPptxDisponible}
+  {#if documentDisponible('supportHomologation')}
     <DocumentTelechargeable
       type="PPTX"
       nom="Support de commission d'homologation"
