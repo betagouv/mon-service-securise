@@ -71,7 +71,7 @@ describe('L’annexe des mesures présentée à la commission', () => {
     ]);
   });
 
-  it('ajoute les mesures spécifiques après les générales de leur statut, sans criticité, avec le référentiel « Mesures ajoutées »', () => {
+  it('ajoute les mesures spécifiques après les générales de leur statut, avec la criticité « Spécifique » et le référentiel « Mesures ajoutées »', () => {
     const service = unService(referentiel)
       .avecMesures(
         new Mesures(
@@ -104,7 +104,7 @@ describe('L’annexe des mesures présentée à la commission', () => {
           {
             description: 'Spécifique faite',
             categorie: 'Protection',
-            criticite: '',
+            criticite: 'Spécifique',
             referentiel: 'Mesures ajoutées',
           },
         ],

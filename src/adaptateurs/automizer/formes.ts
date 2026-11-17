@@ -27,6 +27,21 @@ export const colore = (couleur: string) => (forme: XmlElement) => {
   proprietes.getElementsByTagName('a:srgbClr')[0].setAttribute('val', couleur);
 };
 
+const EPAISSEUR_D_UNE_BORDURE = '19050';
+
+export const borde = (couleur: string) => (forme: XmlElement) => {
+  const [proprietes] = Array.from(forme.getElementsByTagName('p:spPr'));
+  const [contour] = Array.from(proprietes.getElementsByTagName('a:ln'));
+  const document = forme.ownerDocument!;
+  const remplissage = document.createElement('a:solidFill');
+  const couleurDuContour = document.createElement('a:srgbClr');
+  couleurDuContour.setAttribute('val', couleur);
+  remplissage.appendChild(couleurDuContour);
+  while (contour.firstChild) contour.removeChild(contour.firstChild);
+  contour.setAttribute('w', EPAISSEUR_D_UNE_BORDURE);
+  contour.appendChild(remplissage);
+};
+
 export const coloreLeTexte = (couleur: string) => (forme: XmlElement) => {
   Array.from(forme.getElementsByTagName('a:rPr')).forEach((proprietes) =>
     Array.from(proprietes.getElementsByTagName('a:srgbClr')).forEach(

@@ -454,7 +454,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           {
             description: 'Chiffrer les exports de données RH',
             categorie: 'Protection',
-            criticite: '',
+            criticite: 'Spécifique',
             referentiel: 'Mesures ajoutées',
           },
         ]);
