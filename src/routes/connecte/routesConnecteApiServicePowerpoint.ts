@@ -4,33 +4,13 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
-import {
-  AdaptateurPowerpoint,
-  AutoriteHomologation,
-} from '../../adaptateurs/adaptateurPowerpoint.interface.js';
-import Dossier from '../../modeles/dossier.js';
-import { piecesDuDossier } from '../../modeles/objetsPowerpoint/piecesDuDossier.js';
-import { contexteDuService } from '../../modeles/objetsPowerpoint/contexteDuService.js';
-import { besoinsDeSecurite } from '../../modeles/objetsPowerpoint/besoinsDeSecurite.js';
-import { cartographiesDesRisques } from '../../modeles/objetsPowerpoint/cartographiesDesRisques.js';
-import { indiceCyber } from '../../modeles/objetsPowerpoint/indiceCyber.js';
-import { statistiquesDesMesures } from '../../modeles/objetsPowerpoint/statistiquesDesMesures.js';
-import { exigencesRestantes } from '../../modeles/objetsPowerpoint/exigencesRestantes.js';
-import { avisDesMembres } from '../../modeles/objetsPowerpoint/avisDesMembres.js';
-import { annexeDesMesures } from '../../modeles/objetsPowerpoint/annexeDesMesures.js';
-import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import { AdaptateurPowerpoint } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
+import { donneesSupportCommissionHomologation } from '../../adaptateurs/adaptateurPowerpoint.donnees.js';
 
 const CONTENT_TYPE_PPTX =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-
-const autoriteHomologation = ({
-  autorite,
-}: Dossier): AutoriteHomologation | undefined =>
-  autorite.estComplete()
-    ? { nom: autorite.nom!, fonction: autorite.fonction! }
-    : undefined;
 
 export const routesConnecteApiServicePowerpoint = ({
   middleware,
@@ -72,22 +52,11 @@ export const routesConnecteApiServicePowerpoint = ({
         return;
       }
 
-      const descriptionService =
-        service.descriptionService as DescriptionServiceV2;
       const maintenant = adaptateurHorloge.maintenant();
       const support =
         await adaptateurPowerpoint.genereSupportCommissionHomologation({
+          ...donneesSupportCommissionHomologation(service),
           dateCreation: maintenant,
-          autorite: autoriteHomologation(dossierCourant),
-          piecesDuDossier: piecesDuDossier(dossierCourant),
-          contexte: contexteDuService(descriptionService),
-          besoinsDeSecurite: besoinsDeSecurite(descriptionService),
-          cartographiesDesRisques: cartographiesDesRisques(service.risquesV2!),
-          indiceCyber: indiceCyber(service),
-          statistiquesDesMesures: statistiquesDesMesures(service),
-          exigencesRestantes: exigencesRestantes(service),
-          avisDesMembres: avisDesMembres(dossierCourant, service.referentiel),
-          annexeDesMesures: annexeDesMesures(service),
         });
       const dateDuJour = dateYYYYMMDD(maintenant);
       reponse
