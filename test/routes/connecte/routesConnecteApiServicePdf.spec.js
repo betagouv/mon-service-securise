@@ -318,7 +318,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       referentiel
     );
     serviceARenvoyer.mesures.indiceCyber = () => 3.5;
-    serviceARenvoyer.documentsPdfDisponibles = () => [
+    serviceARenvoyer.documentsDisponibles = () => [
       'annexes',
       'syntheseSecurite',
       'dossierDecision',
@@ -366,7 +366,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
     it("ajoute dans l'archive zip seulement les documents indiqués par le service", async () => {
       const serviceUnSeulDocument = unService().construis();
-      serviceUnSeulDocument.documentsPdfDisponibles = () => ['annexes'];
+      serviceUnSeulDocument.documentsDisponibles = () => ['annexes'];
 
       testeur
         .middleware()

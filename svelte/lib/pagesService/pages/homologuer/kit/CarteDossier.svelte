@@ -15,7 +15,7 @@
     avecDocumentsAccessible?: boolean;
     avecTamponAccessible?: boolean;
     avecStatutHomologation?: boolean;
-    documentsPdfDisponibles?: string[];
+    documentsDisponibles?: string[];
     peutSupprimer?: boolean;
   }
 
@@ -26,7 +26,7 @@
     avecDocumentsAccessible = false,
     avecTamponAccessible = false,
     avecStatutHomologation = false,
-    documentsPdfDisponibles = [],
+    documentsDisponibles = [],
     peutSupprimer = false,
   }: Props = $props();
 
@@ -155,7 +155,7 @@
             tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
               service: {
                 id: idService,
-                documentsPdfDisponibles,
+                documentsDisponibles,
               },
             })}
         ></dsfr-button>

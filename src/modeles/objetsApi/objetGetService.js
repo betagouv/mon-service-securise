@@ -23,7 +23,7 @@ const donnees = (
   const completude = service.completudeMesures();
   const actionRecommandee = service.actionRecommandee();
 
-  let documentsDisponibles = service.documentsPdfDisponibles(autorisation);
+  let documentsDisponibles = service.documentsDisponibles(autorisation);
   if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
     documentsDisponibles = documentsDisponibles.filter(
       (d) => d !== 'supportHomologation'
@@ -89,7 +89,7 @@ const donnees = (
     estAdmin: autorisation.estUnAdmin(),
     estSuperviseur: autorisation.estUnSuperviseur(),
     estProprietaire: autorisation.estProprietaire,
-    documentsPdfDisponibles: documentsDisponibles,
+    documentsDisponibles,
     permissions: {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },

@@ -200,7 +200,7 @@ class Service {
     return this.descriptionService.descriptionStatutDeploiement();
   }
 
-  documentsPdfDisponibles(autorisation) {
+  documentsDisponibles(autorisation) {
     const droitAuxAnnexes = autorisation.aLesPermissions(
       Autorisation.DROITS_ANNEXES_PDF
     );

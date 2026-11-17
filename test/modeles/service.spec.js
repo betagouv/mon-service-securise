@@ -461,7 +461,7 @@ describe('Un service', () => {
         const service = unService().construis();
         const autorisation = uneAutorisation().avecDroits(droits).construis();
 
-        expect(service.documentsPdfDisponibles(autorisation)).to[
+        expect(service.documentsDisponibles(autorisation)).to[
           methodeComparaison
         ](valeurAttendue);
       });
@@ -485,9 +485,7 @@ describe('Un service', () => {
         .construis();
 
       expect(
-        serviceAvecDossier.documentsPdfDisponibles(
-          autorisationPourDossierDecision
-        )
+        serviceAvecDossier.documentsDisponibles(autorisationPourDossierDecision)
       ).to.eql(['dossierDecision', 'supportHomologation']);
     });
 
@@ -503,9 +501,7 @@ describe('Un service', () => {
         .construis();
 
       expect(
-        serviceSansDossier.documentsPdfDisponibles(
-          autorisationPourDossierDecision
-        )
+        serviceSansDossier.documentsDisponibles(autorisationPourDossierDecision)
       ).to.eql([]);
     });
 
@@ -521,9 +517,7 @@ describe('Un service', () => {
         .construis();
 
       expect(
-        serviceSansDossier.documentsPdfDisponibles(
-          autorisationPourDossierDecision
-        )
+        serviceSansDossier.documentsDisponibles(autorisationPourDossierDecision)
       ).to.eql([]);
     });
   });

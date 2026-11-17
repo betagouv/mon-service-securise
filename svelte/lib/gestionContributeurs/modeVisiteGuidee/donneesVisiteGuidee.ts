@@ -90,12 +90,12 @@ export const autorisationsVisiteGuidee: Autorisation[] = [
 ];
 
 export const donneesServiceVisiteGuidee: Service & {
-  documentsPdfDisponibles: Array<string>;
+  documentsDisponibles: Array<string>;
 } = {
   id: 'ID-SERVICE-VISITE-GUIDEE',
   estProprietaire: true,
   contributeurs: contributeurs,
   permissions: { gestionContributeurs: false },
   nomService: 'Nom de mon service',
-  documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+  documentsDisponibles: ['annexes', 'syntheseSecurite'],
 };

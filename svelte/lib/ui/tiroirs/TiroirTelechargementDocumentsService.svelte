@@ -1,7 +1,7 @@
 <script module lang="ts">
   export type DonneesServicePourTelechargementDocuments = {
     id: string;
-    documentsPdfDisponibles: string[];
+    documentsDisponibles: string[];
   };
 </script>
 
@@ -20,12 +20,12 @@
     "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
 
   let idService = $derived(service.id);
-  let nbPdfDisponibles = $derived(service.documentsPdfDisponibles.length);
+  let nbPdfDisponibles = $derived(service.documentsDisponibles.length);
 
   const documentDisponible = (document: string) =>
     document === 'archive'
-      ? service.documentsPdfDisponibles.length > 0
-      : service.documentsPdfDisponibles.includes(document);
+      ? service.documentsDisponibles.length > 0
+      : service.documentsDisponibles.includes(document);
 </script>
 
 <ContenuTiroir>

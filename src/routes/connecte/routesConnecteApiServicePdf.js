@@ -129,7 +129,7 @@ const routesConnecteApiServicePdf = ({
 
       Promise.all(
         service
-          .documentsPdfDisponibles(autorisationService)
+          .documentsDisponibles(autorisationService)
           .map((d) => genereUnDocument(d))
       )
         .then((pdfs) => adaptateurZip.genereArchive(pdfs))
