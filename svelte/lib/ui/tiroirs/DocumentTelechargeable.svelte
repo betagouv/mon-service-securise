@@ -6,10 +6,18 @@
     cheminDocument?: string;
     idService?: string;
     href?: string;
+    badge?: string;
   }
 
-  let { type, nom, description, cheminDocument, idService, href }: Props =
-    $props();
+  let {
+    type,
+    nom,
+    description,
+    cheminDocument,
+    idService,
+    href,
+    badge,
+  }: Props = $props();
 
   let lien = $derived(
     href ??
@@ -28,4 +36,15 @@
   enlarge
   size="sm"
   blank
-></dsfr-card>
+  has-badge
+>
+  {#if badge}
+    <dsfr-badge
+      slot="badgesgroup"
+      label={badge}
+      type="accent"
+      accent="blue-cumulus"
+      size="sm"
+    ></dsfr-badge>
+  {/if}
+</dsfr-card>

@@ -20,7 +20,6 @@
     "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
 
   let idService = $derived(service.id);
-  let nbPdfDisponibles = $derived(service.documentsDisponibles.length);
 
   const documentDisponible = (document: string) =>
     document === 'archive'
@@ -36,6 +35,15 @@
       nom="Synthèse de la sécurité du service"
       description="Ce PDF résume en 1 page l'état de la sécurité du service."
       cheminDocument="syntheseSecurite.pdf"
+    />
+  {/if}
+  {#if documentDisponible('supportHomologation')}
+    <DocumentTelechargeable
+      type="PPTX"
+      nom="Support de commission d'homologation"
+      description="Ce support réunit les éléments utiles à la commission pour décider de l'homologation du service : risques, indice cyber, mesures restantes et avis des membres."
+      href="/api/service/{idService}/pptx/supportCommissionHomologation.pptx?timestamp={Date.now()}"
+      badge="bêta"
     />
   {/if}
   {#if documentDisponible('annexes')}
@@ -56,20 +64,12 @@
       cheminDocument="dossierDecision.pdf"
     />
   {/if}
-  {#if documentDisponible('supportHomologation')}
-    <DocumentTelechargeable
-      type="PPTX"
-      nom="Support de commission d'homologation"
-      description="Ce support réunit les éléments utiles à la commission pour décider de l'homologation du service : risques, indice cyber, mesures restantes et avis des membres."
-      href="/api/service/{idService}/pptx/supportCommissionHomologation.pptx?timestamp={Date.now()}"
-    />
-  {/if}
   {#if documentDisponible('archive')}
     <DocumentTelechargeable
       {idService}
       type="ZIP"
       nom="Tous les documents"
-      description="Ce fichier .ZIP contient les {nbPdfDisponibles} PDF."
+      description="Ce fichier .ZIP contient l’ensemble des documents ci-dessus."
       cheminDocument="documentsHomologation.zip"
     />
   {/if}
