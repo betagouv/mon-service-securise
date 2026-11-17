@@ -2,10 +2,12 @@ import express from 'express';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import { VersionService } from '../../modeles/versionService.js';
+import { donneesSupportCommissionHomologation } from '../../adaptateurs/adaptateurPowerpoint.donnees.js';
 
 const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
+  adaptateurPowerpoint,
   adaptateurTamponHomologation,
   adaptateurZip,
   adaptateurEnvironnement,
@@ -60,6 +62,14 @@ const routesConnecteApiServicePdf = ({
 
   const generePdfSyntheseSecurite = (service) =>
     adaptateurPdf.genereSyntheseSecurite({ service });
+
+  const generePptxCommissionHomologation = async (service) => {
+    const maintenant = adaptateurHorloge.maintenant();
+    return adaptateurPowerpoint.genereSupportCommissionHomologation({
+      ...donneesSupportCommissionHomologation(service),
+      dateCreation: maintenant,
+    });
+  };
 
   routes.get(
     '/:id/pdf/annexes.pdf',
@@ -120,6 +130,10 @@ const routesConnecteApiServicePdf = ({
             pdf: () => generePdfSyntheseSecurite(service),
             nom: () => 'SyntheseSecurite.pdf',
           },
+          supportHomologation: {
+            pdf: () => generePptxCommissionHomologation(service),
+            nom: () => 'SupportCommissionHomologation.pptx',
+          },
         };
 
         return references[idDocument]
@@ -127,11 +141,15 @@ const routesConnecteApiServicePdf = ({
           .then((buffer) => ({ nom: references[idDocument].nom(), buffer }));
       };
 
-      Promise.all(
-        service
-          .documentsDisponibles(autorisationService)
-          .map((d) => genereUnDocument(d))
-      )
+      let documentsDisponibles =
+        service.documentsDisponibles(autorisationService);
+      if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
+        documentsDisponibles = documentsDisponibles.filter(
+          (d) => d !== 'supportHomologation'
+        );
+      }
+
+      Promise.all(documentsDisponibles.map((d) => genereUnDocument(d)))
         .then((pdfs) => adaptateurZip.genereArchive(pdfs))
         .then((archive) => {
           const maintenantFormate = dateYYYYMMDD(

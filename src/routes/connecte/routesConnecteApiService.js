@@ -58,6 +58,7 @@ const routesConnecteApiService = ({
     routesConnecteApiServicePdf({
       adaptateurHorloge,
       adaptateurPdf,
+      adaptateurPowerpoint,
       adaptateurTamponHomologation,
       adaptateurZip,
       adaptateurEnvironnement,
