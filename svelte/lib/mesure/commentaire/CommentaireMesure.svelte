@@ -11,10 +11,16 @@
   interface Props {
     contenuCommentaire: string;
     nonce: string;
+    estLectureSeule: boolean;
     onsubmit: () => void;
   }
 
-  let { contenuCommentaire = $bindable(), nonce, onsubmit }: Props = $props();
+  let {
+    contenuCommentaire = $bindable(),
+    nonce,
+    estLectureSeule,
+    onsubmit,
+  }: Props = $props();
 
   let editor: Editor | undefined = $state();
   let editorEl: HTMLDivElement | undefined = $state();
@@ -22,7 +28,8 @@
   let listeVisible: boolean = $state(false);
 
   let commentaireValide = $derived(
-    !!contenuCommentaire &&
+    !estLectureSeule &&
+      !!contenuCommentaire &&
       contenuCommentaire.trim().length > 0 &&
       contenuCommentaire.length <= 1000
   );
@@ -30,6 +37,7 @@
   onMount(() => {
     editor = new Editor({
       element: editorEl,
+      editable: !estLectureSeule,
       injectCSS: true,
       injectNonce: nonce,
       editorProps: {
@@ -90,6 +98,7 @@
   });
 
   const sauvegardeCommentaire = () => {
+    if (!commentaireValide) return;
     onsubmit();
     editor?.commands.clearContent();
     contenuCommentaire = '';
@@ -106,6 +115,7 @@
     type="button"
     class="mention-commentaire"
     title="Ajouter une mention"
+    disabled={estLectureSeule}
     onclick={() => editor?.commands.insertContent('@')}
   >
     <img
@@ -128,7 +138,7 @@
   </button>
 </form>
 
-<style>
+<style lang="scss">
   form {
     display: flex;
     flex-direction: row;
@@ -151,6 +161,15 @@
     background: none;
     display: flex;
     cursor: pointer;
+
+    &[disabled] {
+      cursor: not-allowed;
+
+      & img {
+        filter: brightness(0) invert(93%) sepia(5%) saturate(689%)
+          hue-rotate(181deg) brightness(91%) contrast(94%);
+      }
+    }
   }
 
   .mention-commentaire {
@@ -196,7 +215,7 @@
   }
 
   .envoi-commentaire:not([disabled]):hover,
-  .mention-commentaire img:hover {
+  .mention-commentaire:not([disabled]) img:hover {
     /* #08416A  */
     filter: brightness(0) saturate(100%) invert(20%) sepia(67%) saturate(1040%)
       hue-rotate(172deg) brightness(90%) contrast(99%);
