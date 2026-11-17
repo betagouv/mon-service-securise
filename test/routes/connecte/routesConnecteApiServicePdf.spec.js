@@ -322,6 +322,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       'annexes',
       'syntheseSecurite',
       'dossierDecision',
+      'supportHomologation',
     ];
 
     beforeEach(() => {
@@ -364,6 +365,35 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         );
     });
 
+    it("délègue aux adaptateurs la génération des documents contenus dans l'archive", async () => {
+      let fichiersZipes;
+      testeur.adaptateurPdf().genereAnnexes = async () => 'PDF A';
+      testeur.adaptateurPdf().genereSyntheseSecurite = async () => 'PDF S';
+      testeur.adaptateurPdf().genereDossierDecision = async () => 'PDF D';
+      testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+        async () => 'PPTX';
+      testeur.adaptateurZip().genereArchive = async (fichiers) => {
+        fichiersZipes = fichiers;
+      };
+
+      await testeur.get('/api/service/456/pdf/documentsHomologation.zip');
+
+      expect(fichiersZipes.length).to.be(4);
+      expect(fichiersZipes[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
+      expect(fichiersZipes[1]).to.eql({
+        nom: 'SyntheseSecurite.pdf',
+        buffer: 'PDF S',
+      });
+      expect(fichiersZipes[2]).to.eql({
+        nom: 'DossierDecision.pdf',
+        buffer: 'PDF D',
+      });
+      expect(fichiersZipes[3]).to.eql({
+        nom: 'SupportCommissionHomologation.pptx',
+        buffer: 'PPTX',
+      });
+    });
+
     it("ajoute dans l'archive zip seulement les documents indiqués par le service", async () => {
       const serviceUnSeulDocument = unService().construis();
       serviceUnSeulDocument.documentsDisponibles = () => ['annexes'];
@@ -380,6 +410,10 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.adaptateurPdf().genereDossierDecision = async () => {
         throw new Error('Ce document ne devrait pas être généré');
       };
+      testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+        async () => {
+          throw new Error('Ce document ne devrait pas être généré');
+        };
       testeur.adaptateurZip().genereArchive = async (fichiers) => {
         fichiersZipes = fichiers;
       };
@@ -388,6 +422,40 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
       expect(fichiersZipes.length).to.be(1);
       expect(fichiersZipes[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
+    });
+
+    it("n'ajoute pas le support d'homologation si le feature flag est désactivé", async () => {
+      const serviceUnSeulDocument = unService().construis();
+      serviceUnSeulDocument.documentsDisponibles = () => [
+        'supportHomologation',
+      ];
+      testeur
+        .middleware()
+        .reinitialise({ serviceARenvoyer: serviceUnSeulDocument });
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecSupportCommissionPptx: () => false,
+      });
+      let fichiersZipes;
+      testeur.adaptateurPdf().genereAnnexes = async () => {
+        throw new Error('Ce document ne devrait pas être généré');
+      };
+      testeur.adaptateurPdf().genereSyntheseSecurite = async () => {
+        throw new Error('Ce document ne devrait pas être généré');
+      };
+      testeur.adaptateurPdf().genereDossierDecision = async () => {
+        throw new Error('Ce document ne devrait pas être généré');
+      };
+      testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+        async () => {
+          throw new Error('Ce document ne devrait pas être généré');
+        };
+      testeur.adaptateurZip().genereArchive = async (fichiers) => {
+        fichiersZipes = fichiers;
+      };
+
+      await testeur.get('/api/service/456/pdf/documentsHomologation.zip');
+
+      expect(fichiersZipes.length).to.be(0);
     });
 
     it("utilise un adaptateur d'horloge pour la génération du nom", async () => {
