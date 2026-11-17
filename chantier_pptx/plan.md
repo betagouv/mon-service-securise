@@ -152,7 +152,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
     - pas de troncature : le commentaire le plus long possible tient en 14 pt dans une carte large (vérifié) ;
     - plusieurs pages : slide répétée et paginée « 1/N » ;
     - les slides statiques qui précèdent (intercalaire et résultat de l'audit, intercalaire de la proposition de décision) sont ajoutées avec la slide.
-11. **Slides 27–30, annexe des mesures** (fichiers `slide26.xml` à `slide29.xml`, modèle `objetsPowerpoint/annexeDesMesures.ts`) :
+11. ~~**Slides 27–30, annexe des mesures**~~ (fait) (fichiers `slide26.xml` à `slide29.xml`, modèle `objetsPowerpoint/annexeDesMesures.ts`, module `automizer/slides/annexeDesMesures.ts`) :
     - une slide par statut, dans l'ordre de la maquette : Faite, Partielle, À lancer, Statut à définir ; slide omise quand aucune mesure n'a ce statut ;
     - mesures « Non prise en compte » non affichées (pas de slide dans la maquette) ;
     - mesures générales applicables dans l'ordre du référentiel, puis spécifiques, comme le PDF ; colonnes mesure, catégorie, criticité (« Indispensable » / « Recommandée », « Spécifique » pour une spécifique, comme la maquette), référentiel (« Mesures ajoutées » pour une spécifique) ;
