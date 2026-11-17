@@ -220,17 +220,9 @@ class Service {
         dossierCourant.etapeCourante()
       ) &&
       droitAuDossierDecision
-        ? ['dossierDecision']
+        ? ['dossierDecision', 'supportHomologation']
         : []),
     ];
-  }
-
-  supportCommissionPptxDisponible(autorisation) {
-    return (
-      this.version() === VersionService.v2 &&
-      !!this.dossierCourant() &&
-      autorisation.aLesPermissions(Autorisation.DROITS_DOSSIER_DECISION_PDF)
-    );
   }
 
   migreVersV2(descriptionServiceV2, donneesMesuresGenerales, referentiel) {
