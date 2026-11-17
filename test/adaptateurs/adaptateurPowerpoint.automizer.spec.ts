@@ -138,7 +138,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(25);
+      expect(await nombreDeSlides(pptx)).toBe(26);
       expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
         'Support de commission d’homologation'
       );
@@ -189,39 +189,42 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       expect(textesDeLaSlide(await contenuSlide(pptx, 17))).toContain(
         'Analyse de risques complémentaire (optionnel)'
       );
-      const intercalaireSocle = await contenuSlide(pptx, 18);
+      expect(textesDeLaSlide(await contenuSlide(pptx, 18))).toContain(
+        'Plan d’action (optionnel)'
+      );
+      const intercalaireSocle = await contenuSlide(pptx, 19);
       expect(textesDeLaSlide(intercalaireSocle)).toContain(
         '4. Détail : Socle et plan d’action'
       );
       expect(textesDeLaSlide(intercalaireSocle)).toContain('Logo');
-      expect(textesDeLaSlide(await contenuSlide(pptx, 19))).toContain(
+      expect(textesDeLaSlide(await contenuSlide(pptx, 20))).toContain(
         'Conformité : Indice cyber'
       );
-      expect(textesDeLaSlide(await contenuSlide(pptx, 20))).toContain(
+      expect(textesDeLaSlide(await contenuSlide(pptx, 21))).toContain(
         'Mesures de sécurité'
       );
-      expect(textesDeLaSlide(await contenuSlide(pptx, 21))).toContain(
+      expect(textesDeLaSlide(await contenuSlide(pptx, 22))).toContain(
         'Exigences à mettre en place restantes'
       );
-      const intercalaireAudit = await contenuSlide(pptx, 22);
+      const intercalaireAudit = await contenuSlide(pptx, 23);
       expect(textesDeLaSlide(intercalaireAudit)).toContain(
         '5. Détail : Audit et plan d’action'
       );
       expect(textesDeLaSlide(intercalaireAudit)).toContain('Logo');
-      const resultatsDesAudits = await contenuSlide(pptx, 23);
+      const resultatsDesAudits = await contenuSlide(pptx, 24);
       expect(textesDeLaSlide(resultatsDesAudits)).toEqual(
         expect.arrayContaining([
           '5. Audits et plan d’action',
-          'Résultats des audits : Nom des audits',
+          'Résultats des audits',
         ])
       );
       expect(texteDeLaSlide(resultatsDesAudits)).toContain('NOM DES AUDITS');
-      const intercalaireDecision = await contenuSlide(pptx, 24);
+      const intercalaireDecision = await contenuSlide(pptx, 25);
       expect(textesDeLaSlide(intercalaireDecision)).toContain(
         '6. Proposition de décision'
       );
       expect(textesDeLaSlide(intercalaireDecision)).toContain('Logo');
-      expect(textesDeLaSlide(await contenuSlide(pptx, 25))).toContain(
+      expect(textesDeLaSlide(await contenuSlide(pptx, 26))).toContain(
         'Avis formalisés des membres'
       );
     });
@@ -1507,8 +1510,35 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       });
     });
 
+    describe('sur le plan d’action', () => {
+      const POSITION_PLAN_D_ACTION = 18;
+
+      const titreDuPlanDAction = async (
+        idNiveau: BesoinsDeSecurite['idNiveau']
+      ) =>
+        texteDeLaForme(
+          await contenuSlide(
+            await genereSupport({
+              besoinsDeSecurite: { ...besoinsDeSecuriteParDefaut, idNiveau },
+            }),
+            POSITION_PLAN_D_ACTION
+          ),
+          'titre'
+        );
+
+      it('ne le présente pas comme optionnel pour un service qui n’est pas en niveau basique', async () => {
+        expect(await titreDuPlanDAction('niveau2')).toBe('Plan d’action');
+      });
+
+      it('le présente comme optionnel pour un service en niveau basique', async () => {
+        expect(await titreDuPlanDAction('niveau1')).toBe(
+          'Plan d’action (optionnel)'
+        );
+      });
+    });
+
     describe('sur l’indice cyber', () => {
-      const POSITION_INDICE_CYBER = 19;
+      const POSITION_INDICE_CYBER = 20;
       const ESPACE_DE_NOMS_SVG =
         'http://schemas.microsoft.com/office/drawing/2016/SVG/main';
 
@@ -1615,7 +1645,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('sur les statistiques des mesures', () => {
-      const POSITION_STATISTIQUES_DES_MESURES = 20;
+      const POSITION_STATISTIQUES_DES_MESURES = 21;
 
       const enTete = async (statistiques: Partial<StatistiquesDesMesures>) =>
         texteDeLaForme(
@@ -1863,7 +1893,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('sur les exigences restantes', () => {
-      const POSITION_EXIGENCES_RESTANTES = 21;
+      const POSITION_EXIGENCES_RESTANTES = 22;
 
       const uneExigence = (
         description: string,
@@ -2226,7 +2256,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('sur les avis des membres', () => {
-      const POSITION_AVIS_DES_MEMBRES = 25;
+      const POSITION_AVIS_DES_MEMBRES = 26;
 
       const unAvis = (
         membres: string,
