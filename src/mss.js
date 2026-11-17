@@ -6,6 +6,7 @@ import {
   TYPES_REQUETES,
 } from './http/configurationServeur.js';
 import { enTeteCachePourFichierStatique } from './http/cacheStatique.js';
+import { statutPageErreur } from './http/statutPageErreur.js';
 import routesConnecteApi from './routes/connecte/routesConnecteApi.js';
 import routesNonConnecteApi from './routes/nonConnecte/routesNonConnecteApi.js';
 import { routesNonConnecteApiBibliotheques } from './routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
@@ -250,7 +251,14 @@ const creeServeur = ({
       if (erreur.message === 'CSRF token mismatch') {
         return suite(erreur);
       }
-      return reponse.render('erreur', { idSentry: reponse.sentry });
+      return reponse
+        .status(
+          statutPageErreur({
+            statutErreur: erreur.status,
+            statutReponse: reponse.statusCode,
+          })
+        )
+        .render('erreur', { idSentry: reponse.sentry });
     });
   }
 
