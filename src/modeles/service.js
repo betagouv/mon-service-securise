@@ -211,17 +211,20 @@ class Service {
       Autorisation.DROITS_DOSSIER_DECISION_PDF
     );
     const dossierCourant = this.dossierCourant();
+    const dossierDecisionDisponible =
+      dossierCourant &&
+      this.referentiel.etapeSuffisantePourDossierDecision(
+        dossierCourant.etapeCourante()
+      ) &&
+      droitAuDossierDecision;
+    const supportHomologationDisponible =
+      dossierDecisionDisponible && this.version() === VersionService.v2;
 
     return [
       ...(droitAuxAnnexes ? ['annexes'] : []),
       ...(droitALaSyntheseSecurite ? ['syntheseSecurite'] : []),
-      ...(dossierCourant &&
-      this.referentiel.etapeSuffisantePourDossierDecision(
-        dossierCourant.etapeCourante()
-      ) &&
-      droitAuDossierDecision
-        ? ['dossierDecision', 'supportHomologation']
-        : []),
+      ...(dossierDecisionDisponible ? ['dossierDecision'] : []),
+      ...(supportHomologationDisponible ? ['supportHomologation'] : []),
     ];
   }
 

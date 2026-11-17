@@ -26,6 +26,7 @@ import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescription
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 import { unUUID } from '../constructeurs/UUID.js';
 import { ObjetPDFAnnexeRisquesV2 } from '../../src/modeles/objetsPDF/objetPDFAnnexeRisquesV2.js';
+import { fabriqueReferentiel } from '../../src/fabriqueReferentiel.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -427,6 +428,7 @@ describe('Un service', () => {
       ],
       etapeNecessairePourDossierDecision: 'avis',
     });
+    const referentielV2 = fabriqueReferentiel().v2();
 
     const droitsPourAnnexe = {
       [DECRIRE]: LECTURE,
@@ -468,9 +470,27 @@ describe('Un service', () => {
     });
 
     it("inclut le dossier de décision et le support d'homologation lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
+      const serviceAvecDossier = unServiceV2(referentielV2)
+        .avecDossiers([
+          unDossier(referentielV2).quiEstComplet().quiEstNonFinalise().donnees,
+        ])
+        .construis();
+      const autorisationPourDossierDecision = uneAutorisation()
+        .avecDroits({
+          [HOMOLOGUER]: LECTURE,
+        })
+        .construis();
+
+      expect(
+        serviceAvecDossier.documentsDisponibles(autorisationPourDossierDecision)
+      ).to.eql(['dossierDecision', 'supportHomologation']);
+    });
+
+    it("exclut le support d'homologation lorsque la version du service est v1", () => {
       const serviceAvecDossier = new Service(
         {
           id: '123',
+          versionService: VersionService.v1,
           dossiers: [
             unDossier(referentiel).avecAutorite('Jean Dujardin', 'RSSI')
               .donnees,
@@ -486,14 +506,13 @@ describe('Un service', () => {
 
       expect(
         serviceAvecDossier.documentsDisponibles(autorisationPourDossierDecision)
-      ).to.eql(['dossierDecision', 'supportHomologation']);
+      ).to.eql(['dossierDecision']);
     });
 
     it("exclut le dossier de décision et le support d'homologation en cas d'absence de dossier d'homologation courant", () => {
-      const serviceSansDossier = new Service(
-        { id: '123', dossiers: [] },
-        referentiel
-      );
+      const serviceSansDossier = unServiceV2(referentielV2)
+        .avecDossiers([])
+        .construis();
       const autorisationPourDossierDecision = uneAutorisation()
         .avecDroits({
           [HOMOLOGUER]: LECTURE,
@@ -506,10 +525,9 @@ describe('Un service', () => {
     });
 
     it("exclut le dossier de décision et le support d'homologation si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
-      const serviceSansDossier = new Service(
-        { id: '123', dossiers: [unDossier(referentiel).donnees] },
-        referentiel
-      );
+      const serviceSansDossier = unServiceV2(referentielV2)
+        .avecDossiers([unDossier(referentiel).donnees])
+        .construis();
       const autorisationPourDossierDecision = uneAutorisation()
         .avecDroits({
           [HOMOLOGUER]: LECTURE,
