@@ -8,12 +8,15 @@ import {
   MODELE,
   NOM_TEMPLATE,
   SLIDE_HISTORIQUE,
+  SLIDE_INTERCALAIRE_AUDIT,
+  SLIDE_INTERCALAIRE_DECISION,
   SLIDE_INTERCALAIRE_HISTORIQUE,
   SLIDE_INTERCALAIRE_RISQUES,
   SLIDE_INTERCALAIRE_SOCLE,
   SLIDE_PERIMETRE_DESCRIPTION_TECHNIQUE,
   SLIDE_PERIMETRE_VUE_FONCTIONNELLE,
   SLIDE_PRESENTATION_DU_SYSTEME,
+  SLIDE_RESULTAT_DE_L_AUDIT,
   SLIDE_SOMMAIRE,
 } from './automizer/template.js';
 import { ajouteLaCouverture } from './automizer/slides/couverture.js';
@@ -33,6 +36,7 @@ import {
 } from './automizer/slides/indiceCyber.js';
 import { ajouteLesStatistiquesDesMesures } from './automizer/slides/statistiquesDesMesures.js';
 import { ajouteLesExigencesRestantes } from './automizer/slides/exigencesRestantes.js';
+import { ajouteLesAvisDesMembres } from './automizer/slides/avisDesMembres.js';
 
 export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
   constructor(private readonly dossierTemplates = 'src/vuesPowerpoint') {}
@@ -47,6 +51,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     indiceCyber,
     statistiquesDesMesures,
     exigencesRestantes,
+    avisDesMembres,
   }: DonneesSupportCommissionHomologation) {
     const imagesIndiceCyber = imagesDeLIndiceCyber(indiceCyber);
     const presentation = new Automizer({
@@ -99,6 +104,10 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
     ajouteLIndiceCyber(presentation, indiceCyber);
     ajouteLesStatistiquesDesMesures(presentation, statistiquesDesMesures);
     ajouteLesExigencesRestantes(presentation, exigencesRestantes);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_AUDIT);
+    presentation.addSlide(MODELE, SLIDE_RESULTAT_DE_L_AUDIT);
+    presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_DECISION);
+    ajouteLesAvisDesMembres(presentation, avisDesMembres);
 
     const archive = await presentation.getJSZip();
     await nettoieLArchive(archive);

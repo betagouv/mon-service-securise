@@ -20,6 +20,10 @@ import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import Mesures from '../../../src/modeles/mesures.js';
+import {
+  ReferentielV2,
+  TousReferentiels,
+} from '../../../src/referentiel.interface.ts';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -387,6 +391,7 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
                   },
                 ],
               },
+              // @ts-expect-error surcharge de référentiel
               referentiel
             )
           )
@@ -409,6 +414,44 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
             ({ description }) => description
           )
         ).toEqual(['Chiffrer les exports de données RH']);
+      });
+
+      it("transmet à l'adaptateur les avis des membres du dossier en cours", async () => {
+        // @ts-expect-error on ne recharge que le nécessaire
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: unServiceV2()
+            .avecId('456')
+            .avecDossiers([
+              unDossier(creeReferentielV2()).avecAvis([
+                {
+                  collaborateurs: ['Jean Dupond', 'Marie Curie'],
+                  statut: 'favorable',
+                  dureeValidite: 'unAn',
+                  commentaires: 'Rien à signaler',
+                },
+              ]).donnees,
+            ])
+            .construis(),
+        });
+        let donneesRecues: DonneesSupportCommissionHomologation | undefined;
+        testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
+          async (donnees: DonneesSupportCommissionHomologation) => {
+            donneesRecues = donnees;
+            return Buffer.from('contenu pptx');
+          };
+
+        await testeur.get(
+          '/api/service/456/pptx/supportCommissionHomologation.pptx'
+        );
+
+        expect(donneesRecues?.avisDesMembres).toEqual([
+          {
+            membres: 'Jean Dupond, Marie Curie',
+            avis: 'Favorable',
+            duree: '1 an',
+            commentaire: 'Rien à signaler',
+          },
+        ]);
       });
 
       it('sert un pptx lisible, généré par le vrai adaptateur', async () => {

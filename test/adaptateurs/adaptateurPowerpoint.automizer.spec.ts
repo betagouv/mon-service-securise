@@ -30,6 +30,7 @@ import { CartographiesDesRisques } from '../../src/modeles/objetsPowerpoint/cart
 import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceCyber.js';
 import { StatistiquesDesMesures } from '../../src/modeles/objetsPowerpoint/statistiquesDesMesures.js';
 import { ExigenceRestante } from '../../src/modeles/objetsPowerpoint/exigencesRestantes.js';
+import { AvisDUnMembre } from '../../src/modeles/objetsPowerpoint/avisDesMembres.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
@@ -129,6 +130,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       indiceCyber: indiceCyberParDefaut,
       statistiquesDesMesures: statistiquesDesMesuresParDefaut,
       exigencesRestantes: [],
+      avisDesMembres: [],
       ...donnees,
     });
 
@@ -136,7 +138,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     it('contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
-      expect(await nombreDeSlides(pptx)).toBe(21);
+      expect(await nombreDeSlides(pptx)).toBe(25);
       expect(textesDeLaSlide(await contenuSlide(pptx, 1))).toContain(
         'Support de commission d’homologation'
       );
@@ -200,6 +202,22 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
       expect(textesDeLaSlide(await contenuSlide(pptx, 21))).toContain(
         'Exigences à mettre en place restantes'
+      );
+      const intercalaireAudit = await contenuSlide(pptx, 22);
+      expect(textesDeLaSlide(intercalaireAudit)).toContain(
+        '5. Détail : Audit et plan d’action'
+      );
+      expect(textesDeLaSlide(intercalaireAudit)).toContain('Logo');
+      expect(textesDeLaSlide(await contenuSlide(pptx, 23))).toContain(
+        'Résultat de l’audit : Nom de l’audit'
+      );
+      const intercalaireDecision = await contenuSlide(pptx, 24);
+      expect(textesDeLaSlide(intercalaireDecision)).toContain(
+        '6. Proposition de décision'
+      );
+      expect(textesDeLaSlide(intercalaireDecision)).toContain('Logo');
+      expect(textesDeLaSlide(await contenuSlide(pptx, 25))).toContain(
+        'Avis formalisés des membres'
       );
     });
 
@@ -2199,6 +2217,176 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(nomsDesFormesCommencantPar(slide, 'exigence-1-')).toHaveLength(
           17
         );
+      });
+    });
+
+    describe('sur les avis des membres', () => {
+      const POSITION_AVIS_DES_MEMBRES = 25;
+
+      const unAvis = (
+        membres: string,
+        avis: Partial<AvisDUnMembre> = {}
+      ): AvisDUnMembre => ({
+        membres,
+        avis: 'Favorable',
+        duree: '1 an',
+        commentaire: '',
+        ...avis,
+      });
+
+      const slideDesAvis = async (avisDesMembres: AvisDUnMembre[]) =>
+        contenuSlide(
+          await genereSupport({ avisDesMembres }),
+          POSITION_AVIS_DES_MEMBRES
+        );
+
+      it('écrit une carte par avis : membres, avis, durée et commentaire', async () => {
+        const slide = await slideDesAvis([
+          unAvis('Jean Dupond, Marie Curie', {
+            avis: 'Favorable avec réserves',
+            duree: '6 mois',
+            commentaire: 'Revoir la politique de mots de passe',
+          }),
+          unAvis('Paul Martin', { avis: 'Défavorable', duree: '1 an' }),
+        ]);
+
+        expect(
+          [1, 2].map((numero) =>
+            ['membres', 'avis', 'duree', 'commentaire'].map((partie) =>
+              texteDeLaForme(slide, `avis-${numero}-${partie}`)
+            )
+          )
+        ).toEqual([
+          [
+            'Jean Dupond, Marie Curie',
+            'Favorable avec réserves',
+            '6 mois',
+            'Revoir la politique de mots de passe',
+          ],
+          ['Paul Martin', 'Défavorable', '1 an', ''],
+        ]);
+      });
+
+      describe('pour la mise en page d’une carte', () => {
+        const MARGE_DANS_LA_CARTE = 266700;
+        const ECART_SOUS_UNE_VALEUR = 228600;
+        const ECART_SOUS_UN_LIBELLE = 38100;
+        const HAUTEUR_D_UN_LIBELLE = 300038;
+        const HAUTEUR_D_UNE_VALEUR_SUR_UNE_LIGNE = 300038;
+        const HAUTEUR_D_UNE_LIGNE_DE_VALEUR = 261937;
+        const HAUTEUR_D_UNE_LIGNE_DES_MEMBRES = 355880;
+
+        const basDe = (slide: string, nom: string) => {
+          const { y, hauteur } = cadreDeLaForme(slide, nom);
+          return y + hauteur;
+        };
+
+        it('garde les textes dans la carte, avec la même marge à gauche et à droite', async () => {
+          const slide = await slideDesAvis([
+            unAvis('Ludmilla Cara, Thomas Berthelot'),
+          ]);
+
+          const carte = cadreDeLaForme(slide, 'avis-1-carte');
+          expect(
+            [
+              'membres',
+              'libelle-avis',
+              'avis',
+              'libelle-duree',
+              'duree',
+              'libelle-commentaire',
+              'commentaire',
+            ].map((partie) => {
+              const { x, largeur } = cadreDeLaForme(slide, `avis-1-${partie}`);
+              return [x - carte.x, carte.x + carte.largeur - (x + largeur)];
+            })
+          ).toEqual(Array(7).fill([MARGE_DANS_LA_CARTE, MARGE_DANS_LA_CARTE]));
+        });
+
+        it('écrit le commentaire avec un paragraphe par ligne, sans rétrécir la police', async () => {
+          const slide = await slideDesAvis([
+            unAvis('Jean Dupond', { commentaire: 'Ok\n\nÀ revoir' }),
+          ]);
+
+          expect(paragraphesDeLaForme(slide, 'avis-1-commentaire')).toEqual([
+            'Ok',
+            '',
+            'À revoir',
+          ]);
+          expect(
+            ['membres', 'avis', 'duree', 'commentaire'].map(
+              (partie) =>
+                formeNommee(slide, `avis-1-${partie}`).getElementsByTagName(
+                  'a:normAutofit'
+                ).length
+            )
+          ).toEqual([0, 0, 0, 0]);
+        });
+
+        it('empile chaque libellé sous la valeur qui le précède, et chaque valeur sous son libellé', async () => {
+          const slide = await slideDesAvis([
+            unAvis('Jean Dupond', { avis: 'Favorable' }),
+          ]);
+
+          const y = (partie: string) =>
+            cadreDeLaForme(slide, `avis-1-${partie}`).y;
+          const bas = (partie: string) => basDe(slide, `avis-1-${partie}`);
+          expect(cadreDeLaForme(slide, 'avis-1-avis').hauteur).toBe(
+            HAUTEUR_D_UNE_VALEUR_SUR_UNE_LIGNE
+          );
+          expect([
+            y('libelle-avis') - bas('membres'),
+            y('avis') - bas('libelle-avis'),
+            y('libelle-duree') - bas('avis'),
+            y('duree') - bas('libelle-duree'),
+            y('libelle-commentaire') - bas('duree'),
+            y('commentaire') - bas('libelle-commentaire'),
+          ]).toEqual([
+            ECART_SOUS_UNE_VALEUR,
+            ECART_SOUS_UN_LIBELLE,
+            ECART_SOUS_UNE_VALEUR,
+            ECART_SOUS_UN_LIBELLE,
+            ECART_SOUS_UNE_VALEUR,
+            ECART_SOUS_UN_LIBELLE,
+          ]);
+          expect(cadreDeLaForme(slide, 'avis-1-libelle-avis').hauteur).toBe(
+            HAUTEUR_D_UN_LIBELLE
+          );
+        });
+
+        it('agrandit les membres et l’avis qui tiennent sur plusieurs lignes, sans rétrécir leur police', async () => {
+          const slide = await slideDesAvis([
+            unAvis('Jean Dupond', { avis: 'Favorable' }),
+            unAvis('Ludmilla Cara, Thomas Berthelot', {
+              avis: 'Favorable avec réserve : mettre en place le MFA',
+            }),
+          ]);
+
+          const ecartDeHauteur = (partie: string) =>
+            cadreDeLaForme(slide, `avis-2-${partie}`).hauteur -
+            cadreDeLaForme(slide, `avis-1-${partie}`).hauteur;
+          expect(ecartDeHauteur('membres')).toBe(
+            HAUTEUR_D_UNE_LIGNE_DES_MEMBRES
+          );
+          expect(ecartDeHauteur('avis')).toBe(HAUTEUR_D_UNE_LIGNE_DE_VALEUR);
+        });
+
+        it('étire le commentaire jusqu’au bas de la carte', async () => {
+          const slide = await slideDesAvis([unAvis('Jean Dupond')]);
+
+          expect(basDe(slide, 'avis-1-commentaire')).toBe(
+            basDe(slide, 'avis-1-carte') - MARGE_DANS_LA_CARTE
+          );
+        });
+      });
+
+      it('retire les cartes sans avis', async () => {
+        const slide = await slideDesAvis([unAvis('Seul membre')]);
+
+        expect(
+          nomsDesFormes(slide).filter((nom) => /^avis-[2-4]-/.test(nom))
+        ).toEqual([]);
+        expect(nomsDesFormesCommencantPar(slide, 'avis-1-')).toHaveLength(9);
       });
     });
 

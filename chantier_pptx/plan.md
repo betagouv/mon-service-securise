@@ -146,8 +146,11 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
 10. **Slide 24, avis** (fichier `slide23.xml`, modèle `objetsPowerpoint/avisDesMembres.ts`) :
     - une carte par avis du dossier courant : membres (`collaborateurs` joints par des virgules, comme le PDF du dossier de décision), avis, durée proposée et commentaire ;
     - sans avis : « Aucun avis n'a été renseigné par l'équipe. », comme le PDF ;
-    - plus de 4 avis : slide répétée et paginée « 1/N », 4 avis par page ;
-    - commentaire long : police réduite (18 → 16 → 14 pt), tronqué avec « … » au-delà ;
+    - commentaire jusqu'à 1000 caractères (limite du formulaire et de l'API), sur toute la hauteur restante de la carte, un paragraphe par ligne ;
+    - police du commentaire réduite (18 → 16 → 14 pt) : la plus grande qui tient ;
+    - page de 4 cartes (largeur du modèle) quand tous ses commentaires tiennent en 14 pt, sinon page de 2 cartes deux fois plus larges ; avis dans l'ordre du dossier, pages remplies dans cet ordre ;
+    - commentaire qui ne tient pas en 14 pt même dans une carte large (sauts de ligne nombreux) : tronqué avec « … » ;
+    - plusieurs pages : slide répétée et paginée « 1/N » ;
     - les slides statiques qui précèdent (intercalaire et résultat de l'audit, intercalaire de la proposition de décision) sont ajoutées avec la slide.
 11. **Slides 27–30, annexe des mesures** : pagination par statut.
 12. **Retrait du feature flag**, une fois la fonctionnalité validée en production.
