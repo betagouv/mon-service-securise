@@ -152,7 +152,14 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
     - pas de troncature : le commentaire le plus long possible tient en 14 pt dans une carte large (vérifié) ;
     - plusieurs pages : slide répétée et paginée « 1/N » ;
     - les slides statiques qui précèdent (intercalaire et résultat de l'audit, intercalaire de la proposition de décision) sont ajoutées avec la slide.
-11. **Slides 27–30, annexe des mesures** : pagination par statut.
+11. **Slides 27–30, annexe des mesures** (fichiers `slide26.xml` à `slide29.xml`, modèle `objetsPowerpoint/annexeDesMesures.ts`) :
+    - une slide par statut, dans l'ordre de la maquette : Faite, Partielle, À lancer, Statut à définir ; slide omise quand aucune mesure n'a ce statut ;
+    - mesures « Non prise en compte » non affichées (pas de slide dans la maquette) ;
+    - mesures générales applicables dans l'ordre du référentiel, puis spécifiques, comme le PDF ; colonnes mesure, catégorie, criticité (« Indispensable » / « Recommandée », vide pour une spécifique), référentiel (« Mesures ajoutées » pour une spécifique) ;
+    - « Statut à définir » listé comme les autres statuts (la maquette), pas seulement compté (le PDF) ;
+    - nombre de mesures du statut à côté de la pastille, consigne « Dupliquer la slide… » retirée ;
+    - débordement : slide répétée et paginée « 1/N », à la hauteur des lignes ;
+    - les slides statiques « Proposition de décision » (après les avis) et l'intercalaire « Annexes » (avant l'annexe) sont ajoutées avec l'étape.
 12. **Retrait du feature flag**, une fois la fonctionnalité validée en production.
 
 ## Points ouverts
