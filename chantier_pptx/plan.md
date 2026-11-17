@@ -143,7 +143,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
    - porteurs d'après `partieResponsable` (« Équipe projet », « Prestataire », « Équipe projet et prestataire ») ; vide sans partie responsable (spécifiques notamment) ;
    - description sur plusieurs lignes (sans rétrécir) : la ligne du tableau s'agrandit, les cartouches descendent ;
    - débordement : slide répétée et paginée « 1/N » selon la hauteur des lignes, 5 exigences au plus par page, comme la liste des risques.
-10. **Slide 24, avis** (fichier `slide23.xml`, modèle `objetsPowerpoint/avisDesMembres.ts`) :
+10. ~~**Slide 24, avis**~~ (fait) (fichier `slide23.xml`, modèle `objetsPowerpoint/avisDesMembres.ts`, module `automizer/slides/avisDesMembres.ts`) :
     - une carte par avis du dossier courant : membres (`collaborateurs` joints par des virgules, comme le PDF du dossier de décision), avis, durée proposée et commentaire ;
     - sans avis : « Aucun avis n'a été renseigné par l'équipe. », comme le PDF ;
     - commentaire jusqu'à 1000 caractères (limite du formulaire et de l'API), sur toute la hauteur restante de la carte, un paragraphe par ligne ;
