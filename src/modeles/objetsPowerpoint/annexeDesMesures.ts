@@ -77,7 +77,7 @@ const mesuresSpecifiques = ({
         categorie: referentiel.descriptionCategorie(
           categorie as IdCategorieMesure
         ),
-        criticite: '',
+        criticite: 'Spécifique',
         referentiel: 'Mesures ajoutées',
       },
     }));

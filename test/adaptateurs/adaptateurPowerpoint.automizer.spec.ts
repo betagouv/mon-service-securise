@@ -2686,6 +2686,112 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(nomsDesFormesCommencantPar(slide, 'mesure-1-')).toHaveLength(8);
       });
 
+      describe('quand la description d’une mesure tient sur plusieurs lignes', () => {
+        const HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION = 319710;
+        const descriptionSurDeuxLignes =
+          'Mettre en place une authentification multifacteur pour les administrateurs et les comptes à privilèges du système';
+
+        it('agrandit la ligne du tableau, garde ses textes centrés et descend les lignes suivantes', async () => {
+          const [slide] = await slidesDeLAnnexe([
+            {
+              statut: 'fait',
+              mesures: [
+                uneMesure('Une description courte'),
+                uneMesure(descriptionSurDeuxLignes),
+                uneMesure('Une autre description courte'),
+              ],
+            },
+          ]);
+
+          const cadre = (numero: number, partie: string) =>
+            cadreDeLaForme(slide, `mesure-${numero}-${partie}`);
+          const parties = [
+            'fond-mesure',
+            'mesure',
+            'fond-categorie',
+            'categorie',
+            'fond-criticite',
+            'criticite',
+            'fond-referentiel',
+            'referentiel',
+          ];
+          expect(
+            parties.map(
+              (partie) => cadre(2, partie).hauteur - cadre(1, partie).hauteur
+            )
+          ).toEqual(Array(8).fill(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION));
+          expect(
+            parties.map(
+              (partie) =>
+                cadre(3, partie).y -
+                cadre(2, partie).y -
+                (cadre(2, partie).y - cadre(1, partie).y)
+            )
+          ).toEqual(Array(8).fill(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION));
+        });
+      });
+
+      describe('quand les mesures d’un statut ne tiennent pas sur une page', () => {
+        const descriptionsDeLaPage = (page: string) =>
+          nomsDesFormes(page)
+            .filter((nom) => /^mesure-\d-mesure$/.test(nom))
+            .map((nom) => texteDeLaForme(page, nom));
+
+        const descriptionSurQuatreLignes =
+          "Héberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloud, puis vérifier régulièrement que le prestataire respecte ses engagements contractuels, notamment en matière de localisation des données et de réversibilité";
+
+        it('ne met pas plus de 9 mesures par page, le nombre de lignes du modèle', async () => {
+          const mesures = Array.from({ length: 12 }, (_, index) =>
+            uneMesure(`Mesure ${index + 1}`)
+          );
+
+          const pages = await slidesDeLAnnexe([{ statut: 'fait', mesures }]);
+
+          expect(
+            pages.map((page) => descriptionsDeLaPage(page).length)
+          ).toEqual([9, 3]);
+        });
+
+        it('répartit les mesures selon la hauteur de leurs lignes', async () => {
+          const mesures = Array.from({ length: 5 }, () =>
+            uneMesure(descriptionSurQuatreLignes)
+          );
+
+          const pages = await slidesDeLAnnexe([{ statut: 'fait', mesures }]);
+
+          expect(
+            pages.map((page) => descriptionsDeLaPage(page).length)
+          ).toEqual([3, 2]);
+        });
+      });
+
+      it('colore la pastille de chaque statut comme la légende des statistiques, bordure grise comprise pour « Statut à définir »', async () => {
+        const slides = await slidesDeLAnnexe(
+          (['fait', 'enCours', 'aLancer', 'sansStatut'] as const).map(
+            (statut) => ({ statut, mesures: [uneMesure('Une mesure')] })
+          )
+        );
+
+        const bordure = (slide: string) =>
+          formeNommee(slide, 'annexe-statut-fond')
+            .getElementsByTagName('a:ln')[0]
+            ?.getElementsByTagName('a:srgbClr')[0]
+            ?.getAttribute('val');
+        expect(
+          slides.map((slide) => [
+            texteDeLaForme(slide, 'annexe-statut-texte'),
+            couleursDuTexte(slide, 'annexe-statut-texte'),
+            couleurDuFond(slide, 'annexe-statut-fond'),
+            bordure(slide),
+          ])
+        ).toEqual([
+          ['FAITE', ['0C8626'], 'D4F4DB', undefined],
+          ['PARTIELLE', ['0079D0'], 'DBEEFF', undefined],
+          ['À LANCER', ['7025DA'], 'E9DDFF', undefined],
+          ['STATUT À DÉFINIR', ['667892'], 'F1F5F9', '94A3B8'],
+        ]);
+      });
+
       it('écrit le nombre de mesures du statut, au singulier ou au pluriel', async () => {
         const slides = await slidesDeLAnnexe([
           { statut: 'fait', mesures: [uneMesure('Une mesure')] },

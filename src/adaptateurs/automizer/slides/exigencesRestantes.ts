@@ -1,6 +1,7 @@
 import { Automizer, ISlide, modify } from 'pptx-automizer';
 import { MODELE, SLIDE_EXIGENCES_RESTANTES } from '../template.js';
-import { colore, coloreLeTexte, ecrisNumeroDePage } from '../formes.js';
+import { ecrisNumeroDePage } from '../formes.js';
+import { ecrisLaPastilleDuStatut } from '../pastillesDesStatuts.js';
 import { decoupeEnPagesALaHauteur } from '../pagination.js';
 import {
   largeurDuTexteEnArial,
@@ -167,24 +168,6 @@ const placeLaLigne = (
   );
 };
 
-const PASTILLES_DES_STATUTS: Record<
-  ExigenceRestante['statut'],
-  { libelle: string; texte: string; fond: string; largeur: number }
-> = {
-  enCours: {
-    libelle: 'PARTIELLE',
-    texte: '0079D0',
-    fond: 'DBEEFF',
-    largeur: 1519758,
-  },
-  aLancer: {
-    libelle: 'À LANCER',
-    texte: '7025DA',
-    fond: 'E9DDFF',
-    largeur: 1447800,
-  },
-};
-
 const ecrisLaLigne = (
   slide: ISlide,
   forme: (partie: string) => string,
@@ -193,15 +176,11 @@ const ecrisLaLigne = (
 ) => {
   slide.modifyElement(forme('description'), modify.setText(description));
   ecrisLesCartouches(slide, forme, cartouches, disposition);
-  const pastille = PASTILLES_DES_STATUTS[statut];
-  slide.modifyElement(forme('statut-texte'), [
-    modify.setText(pastille.libelle),
-    coloreLeTexte(pastille.texte),
-  ]);
-  slide.modifyElement(forme('statut-fond'), [
-    colore(pastille.fond),
-    modify.setPosition({ w: pastille.largeur }),
-  ]);
+  ecrisLaPastilleDuStatut(
+    slide,
+    { fond: forme('statut-fond'), texte: forme('statut-texte') },
+    statut
+  );
   slide.modifyElement(forme('echeance'), modify.setText(echeance ?? ''));
   slide.modifyElement(forme('porteurs'), modify.setText(porteurs ?? ''));
 };
