@@ -2439,22 +2439,33 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             .repeat(16)
             .slice(0, 1000);
 
-        it('met sur la page 2 cartes deux fois plus larges, en gardant l’écart entre les cartes', async () => {
+        it('agrandit seulement sa carte, à la largeur de deux cartes et de l’écart qui les sépare', async () => {
           const slide = await slideDesAvis([
             unAvis('Jean Dupond'),
             unAvis('Paul Martin', { commentaire: commentaireDe1000Caracteres }),
+            unAvis('Sophie Bernard'),
           ]);
 
-          const premiere = cadreDeLaForme(slide, 'avis-1-carte');
-          const seconde = cadreDeLaForme(slide, 'avis-2-carte');
-          expect([premiere.x, premiere.largeur]).toEqual([838200, 8172450]);
-          expect([seconde.x, seconde.largeur]).toEqual([9277350, 8172450]);
+          expect(
+            [1, 2, 3].map((numero) => {
+              const { x, largeur } = cadreDeLaForme(
+                slide,
+                `avis-${numero}-carte`
+              );
+              return [x, largeur];
+            })
+          ).toEqual([
+            [838200, 3952875],
+            [5057775, 8172450],
+            [13496925, 3952875],
+          ]);
+          const agrandie = cadreDeLaForme(slide, 'avis-2-carte');
           expect(
             ['bandeau', 'membres', 'commentaire'].map((partie) => {
               const { x, largeur } = cadreDeLaForme(slide, `avis-2-${partie}`);
               return [
-                x - seconde.x,
-                seconde.x + seconde.largeur - (x + largeur),
+                x - agrandie.x,
+                agrandie.x + agrandie.largeur - (x + largeur),
               ];
             })
           ).toEqual([
@@ -2463,7 +2474,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             [266700, 266700],
           ]);
           expect(
-            nomsDesFormes(slide).filter((nom) => /^avis-[34]-/.test(nom))
+            nomsDesFormes(slide).filter((nom) => /^avis-4-/.test(nom))
           ).toEqual([]);
         });
       });
@@ -2488,7 +2499,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             .filter((nom) => /^avis-\d-membres$/.test(nom))
             .map((nom) => texteDeLaForme(page, nom));
 
-        it('met 4 cartes par page, ou 2 cartes larges dès qu’un commentaire ne tient pas en 14 pt, dans l’ordre des avis', async () => {
+        it('remplit 4 emplacements par page dans l’ordre des avis, une carte agrandie en prenant 2', async () => {
           const commentaireLong =
             'Les sauvegardes doivent être testées avant la mise en production. '.repeat(
               10
@@ -2498,20 +2509,28 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             unAvis('A'),
             unAvis('B'),
             unAvis('C'),
-            unAvis('D'),
-            unAvis('E', { commentaire: commentaireLong }),
+            unAvis('D', { commentaire: commentaireLong }),
+            unAvis('E'),
             unAvis('F'),
-            unAvis('G'),
+            unAvis('G', { commentaire: commentaireLong }),
           ]);
 
           expect(pages.map(membresDeLaPage)).toEqual([
-            ['A', 'B', 'C', 'D'],
-            ['E', 'F'],
+            ['A', 'B', 'C'],
+            ['D', 'E', 'F'],
             ['G'],
           ]);
           expect(
-            pages.map((page) => cadreDeLaForme(page, 'avis-1-carte').largeur)
-          ).toEqual([3952875, 8172450, 3952875]);
+            pages.map((page) =>
+              nomsDesFormes(page)
+                .filter((nom) => /^avis-\d-carte$/.test(nom))
+                .map((nom) => cadreDeLaForme(page, nom).largeur)
+            )
+          ).toEqual([
+            [3952875, 3952875, 3952875],
+            [8172450, 3952875, 3952875],
+            [8172450],
+          ]);
         });
 
         it('numérote les pages dans le titre', async () => {
