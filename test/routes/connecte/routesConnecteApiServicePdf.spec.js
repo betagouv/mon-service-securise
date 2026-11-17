@@ -16,7 +16,7 @@ import {
   unService,
   unServiceV2,
 } from '../../constructeurs/constructeurService.js';
-import { VersionService } from '../../../src/modeles/versionService.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.js';
 
 const { LECTURE } = Permissions;
 const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
@@ -307,16 +307,12 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/documentsHomologation.zip`', () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    const serviceARenvoyer = new Service(
-      {
-        id: '456',
-        versionService: VersionService.v1,
-        descriptionService: { nomService: 'un service' },
-        dossiers: [unDossier(referentiel).donnees],
-      },
-      referentiel
-    );
+    const referentiel = creeReferentielV2();
+    const serviceARenvoyer = unServiceV2(referentiel)
+      .avecId('456')
+      .avecNomService('un service')
+      .avecDossiers([unDossier(referentiel).donnees])
+      .construis();
     serviceARenvoyer.mesures.indiceCyber = () => 3.5;
     serviceARenvoyer.documentsDisponibles = () => [
       'annexes',
