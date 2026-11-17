@@ -467,7 +467,7 @@ describe('Un service', () => {
       });
     });
 
-    it("inclut le dossier de décision lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
+    it("inclut le dossier de décision et le support d'homologation lorsqu'elle a un dossier d'homologation courant à une étape suffisante et les droits suffisants", () => {
       const serviceAvecDossier = new Service(
         {
           id: '123',
@@ -488,10 +488,10 @@ describe('Un service', () => {
         serviceAvecDossier.documentsPdfDisponibles(
           autorisationPourDossierDecision
         )
-      ).to.eql(['dossierDecision']);
+      ).to.eql(['dossierDecision', 'supportHomologation']);
     });
 
-    it("exclut le dossier de décision en cas d'absence de dossier d'homologation courant", () => {
+    it("exclut le dossier de décision et le support d'homologation en cas d'absence de dossier d'homologation courant", () => {
       const serviceSansDossier = new Service(
         { id: '123', dossiers: [] },
         referentiel
@@ -509,7 +509,7 @@ describe('Un service', () => {
       ).to.eql([]);
     });
 
-    it("exclut le dossier de décision si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
+    it("exclut le dossier de décision et le support d'homologation si l'étape courante du dossier d'homologation n'est pas suffisante", () => {
       const serviceSansDossier = new Service(
         { id: '123', dossiers: [unDossier(referentiel).donnees] },
         referentiel
@@ -525,61 +525,6 @@ describe('Un service', () => {
           autorisationPourDossierDecision
         )
       ).to.eql([]);
-    });
-  });
-
-  describe('sur demande de la disponibilité du support de commission PowerPoint', () => {
-    const autorisationHomologuerEnLecture = () =>
-      uneAutorisation()
-        .avecDroits({ [HOMOLOGUER]: LECTURE })
-        .construis();
-
-    it("est disponible pour un service V2 avec un dossier d'homologation en cours, avec le droit Homologuer en lecture", () => {
-      const service = unServiceV2()
-        .avecDossiers([unDossier(creeReferentielV2()).donnees])
-        .construis();
-
-      expect(
-        service.supportCommissionPptxDisponible(
-          autorisationHomologuerEnLecture()
-        )
-      ).toBe(true);
-    });
-
-    it("n'est pas disponible sans dossier d'homologation en cours", () => {
-      const service = unServiceV2().construis();
-
-      expect(
-        service.supportCommissionPptxDisponible(
-          autorisationHomologuerEnLecture()
-        )
-      ).toBe(false);
-    });
-
-    it("n'est pas disponible pour un service V1", () => {
-      const service = unService()
-        .avecVersion(VersionService.v1)
-        .avecDossiers([unDossier(Referentiel.creeReferentielVide()).donnees])
-        .construis();
-
-      expect(
-        service.supportCommissionPptxDisponible(
-          autorisationHomologuerEnLecture()
-        )
-      ).toBe(false);
-    });
-
-    it("n'est pas disponible sans le droit Homologuer en lecture", () => {
-      const service = unServiceV2()
-        .avecDossiers([unDossier(creeReferentielV2()).donnees])
-        .construis();
-      const autorisationSansDroit = uneAutorisation()
-        .avecDroits({})
-        .construis();
-
-      expect(
-        service.supportCommissionPptxDisponible(autorisationSansDroit)
-      ).toBe(false);
     });
   });
 
