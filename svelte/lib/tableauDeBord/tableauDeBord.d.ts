@@ -42,7 +42,7 @@ export type Service = {
   estProprietaire: boolean;
   estAdmin: boolean;
   estSuperviseur: boolean;
-  documentsPdfDisponibles: string[];
+  documentsDisponibles: string[];
   permissions: {
     gestionContributeurs: boolean;
   };

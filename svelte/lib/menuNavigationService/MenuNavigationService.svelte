@@ -85,7 +85,7 @@
             </a>
           </li>
         {/if}
-        {#if service.documentsPdfDisponibles.length > 0}
+        {#if service.documentsDisponibles.length > 0}
           <li>
             <button
               id="voir-telechargement"

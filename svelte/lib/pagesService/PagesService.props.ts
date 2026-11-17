@@ -82,7 +82,7 @@ export const propsPourPage = (
         statutsHomologation: props.referentiel.dossiers.statutsHomologation,
         indiceCyber: indicesCyber?.indiceCyberAnssi.total,
         indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise.total,
-        documentsPdfDisponibles: service?.documentsPdfDisponibles,
+        documentsDisponibles: service?.documentsDisponibles,
         niveauSecurite: descriptionService?.niveauSecurite,
       };
     case 'homologation':

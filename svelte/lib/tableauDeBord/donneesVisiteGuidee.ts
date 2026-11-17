@@ -23,7 +23,7 @@ export const donneesVisiteGuidee = {
       estProprietaire: true,
       estAdmin: false,
       estSuperviseur: false,
-      documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+      documentsDisponibles: ['annexes', 'syntheseSecurite'],
       permissions: {
         gestionContributeurs: true,
       },

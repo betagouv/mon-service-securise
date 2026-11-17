@@ -140,7 +140,7 @@ describe("L'objet d'API de `GET /service`", () => {
       estProprietaire: false,
       estAdmin: false,
       estSuperviseur: false,
-      documentsPdfDisponibles: ['syntheseSecurite'],
+      documentsDisponibles: ['syntheseSecurite'],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
       actionRecommandee: { id: 'simulerReferentielV2', autorisee: true },
@@ -166,7 +166,7 @@ describe("L'objet d'API de `GET /service`", () => {
         unAdaptateurEnvironnement({ avecSupportCommissionPptx: true })
       );
 
-      expect(donnees.documentsPdfDisponibles).to.contain('supportHomologation');
+      expect(donnees.documentsDisponibles).to.contain('supportHomologation');
     });
 
     it('ne le liste pas dans les documents disponibles si le feature flag est désactivé', () => {
@@ -177,7 +177,7 @@ describe("L'objet d'API de `GET /service`", () => {
         unAdaptateurEnvironnement()
       );
 
-      expect(donnees.documentsPdfDisponibles).not.to.contain(
+      expect(donnees.documentsDisponibles).not.to.contain(
         'supportHomologation'
       );
     });

@@ -395,7 +395,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         estProprietaire: false,
         estAdmin: false,
         estSuperviseur: false,
-        documentsPdfDisponibles: ['syntheseSecurite'],
+        documentsDisponibles: ['syntheseSecurite'],
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
         actionRecommandee: { autorisee: false, id: 'simulerReferentielV2' },

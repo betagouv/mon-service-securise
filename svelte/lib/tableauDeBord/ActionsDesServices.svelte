@@ -43,9 +43,7 @@
     selection.some((s) => s.type === 'Brouillon')
   );
   let ontDesDocuments = $derived(
-    selection.every(
-      (s) => estService(s) && s.documentsPdfDisponibles.length > 0
-    )
+    selection.every((s) => estService(s) && s.documentsDisponibles.length > 0)
   );
 
   const actionsSupplementaires = $derived([

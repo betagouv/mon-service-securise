@@ -7,7 +7,7 @@ const service: ServicePourPagesService = {
   version: 'v2' as VersionService,
   nomService: 'Nom de mon service',
   organisationResponsable: 'Nom de mon entité',
-  documentsPdfDisponibles: ['annexes', 'syntheseSecurite'],
+  documentsDisponibles: ['annexes', 'syntheseSecurite'],
 };
 
 const brouillonComplet: BrouillonServiceV2 = {

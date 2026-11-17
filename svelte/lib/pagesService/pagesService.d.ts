@@ -87,7 +87,7 @@ export type ServicePourPagesService = {
   nomService: string;
   organisationResponsable: string;
   version: VersionService;
-  documentsPdfDisponibles: string[];
+  documentsDisponibles: string[];
 };
 
 export type ServiceComplet = {

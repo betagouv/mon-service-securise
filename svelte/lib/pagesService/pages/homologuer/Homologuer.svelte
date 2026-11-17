@@ -16,7 +16,7 @@
     indiceCyber: number;
     indiceCyberPersonnalise: number;
     idService: string;
-    documentsPdfDisponibles: string[];
+    documentsDisponibles: string[];
     niveauSecurite: IdNiveauDeSecurite;
   }
 
@@ -27,7 +27,7 @@
     statutsHomologation,
     indiceCyber,
     indiceCyberPersonnalise,
-    documentsPdfDisponibles,
+    documentsDisponibles,
     niveauSecurite,
   }: Props = $props();
 
@@ -120,7 +120,7 @@
           {statutsHomologation}
           {idService}
           avecDocumentsAccessible
-          {documentsPdfDisponibles}
+          {documentsDisponibles}
           peutSupprimer={!estLectureSeule}
         />
       {:else}
