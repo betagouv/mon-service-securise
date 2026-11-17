@@ -20,10 +20,6 @@ import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import Mesures from '../../../src/modeles/mesures.js';
-import {
-  ReferentielV2,
-  TousReferentiels,
-} from '../../../src/referentiel.interface.ts';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;

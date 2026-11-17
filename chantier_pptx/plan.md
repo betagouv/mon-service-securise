@@ -148,7 +148,7 @@ Chaque PR après la 1 suit le même schéma : un test rouge sur la vue → la do
     - sans avis : « Aucun avis n'a été renseigné par l'équipe. », comme le PDF ;
     - commentaire jusqu'à 1000 caractères (limite du formulaire et de l'API), sur toute la hauteur restante de la carte, un paragraphe par ligne ;
     - police du commentaire réduite (18 → 16 → 14 pt) : la plus grande qui tient ;
-    - page de 4 cartes (largeur du modèle) quand tous ses commentaires tiennent en 14 pt, sinon page de 2 cartes deux fois plus larges ; avis dans l'ordre du dossier, pages remplies dans cet ordre ;
+    - 4 emplacements par page : une carte prend 1 emplacement (largeur du modèle) si son commentaire tient en 14 pt, sinon 2 (largeur de deux cartes et de leur écart) ; avis dans l'ordre du dossier, une carte agrandie qui ne tient plus sur la page passe à la suivante ;
     - pas de troncature : le commentaire le plus long possible tient en 14 pt dans une carte large (vérifié) ;
     - plusieurs pages : slide répétée et paginée « 1/N » ;
     - les slides statiques qui précèdent (intercalaire et résultat de l'audit, intercalaire de la proposition de décision) sont ajoutées avec la slide.

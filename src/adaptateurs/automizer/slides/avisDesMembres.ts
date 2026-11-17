@@ -23,16 +23,20 @@ const PARTIES_D_UNE_CARTE = [
 ];
 const FONDS_D_UNE_CARTE = ['carte', 'bandeau'];
 
-type FormatDePage = { largeurDesCartes: number; xDesCartes: number[] };
+const EMPLACEMENTS_PAR_PAGE = 4;
+const X_DU_PREMIER_EMPLACEMENT = 838200;
+const LARGEUR_D_UN_EMPLACEMENT = 3952875;
+const ECART_ENTRE_LES_CARTES = 266700;
 
-const QUATRE_CARTES: FormatDePage = {
-  largeurDesCartes: 3952875,
-  xDesCartes: [838200, 5057775, 9277350, 13496925],
-};
-const DEUX_CARTES_LARGES: FormatDePage = {
-  largeurDesCartes: 8172450,
-  xDesCartes: [838200, 9277350],
-};
+const largeurDUneCarte = (emplacements: number) =>
+  emplacements * LARGEUR_D_UN_EMPLACEMENT +
+  (emplacements - 1) * ECART_ENTRE_LES_CARTES;
+
+const xDeLEmplacement = (emplacement: number) =>
+  X_DU_PREMIER_EMPLACEMENT +
+  emplacement * (LARGEUR_D_UN_EMPLACEMENT + ECART_ENTRE_LES_CARTES);
+
+const LARGEUR_D_UNE_CARTE_DU_MODELE = largeurDUneCarte(1);
 
 const HAUT_DES_MEMBRES = 2718420;
 const BAS_DES_CARTES = 2394570 + 6939930;
@@ -68,11 +72,11 @@ const HAUTEUR_D_UNE_LIGNE_SIMPLE_PAR_POINT =
   VALEUR.hauteurDUneLigneDePlus / VALEUR.tailleEnPoints;
 const INTERLIGNE_DU_COMMENTAIRE = 1.17818;
 
-const largeurDesTextes = ({ largeurDesCartes }: FormatDePage) =>
-  largeurDesCartes - 2 * MARGE_DANS_LA_CARTE;
+const largeurDesTextes = (largeurDeLaCarte: number) =>
+  largeurDeLaCarte - 2 * MARGE_DANS_LA_CARTE;
 
-const largeurUtileDesTextes = (format: FormatDePage) =>
-  largeurDesTextes(format) - MARGES_INTERNES_D_UN_TEXTE;
+const largeurUtileDesTextes = (largeurDeLaCarte: number) =>
+  largeurDesTextes(largeurDeLaCarte) - MARGES_INTERNES_D_UN_TEXTE;
 
 const hauteurDuTexte = (
   texte: string,
@@ -81,12 +85,12 @@ const hauteurDuTexte = (
     hauteurSurUneLigne,
     hauteurDUneLigneDePlus,
   }: TexteDUneCarte,
-  format: FormatDePage
+  largeurDeLaCarte: number
 ) =>
   hauteurSurUneLigne +
   (nombreDeLignesALaLargeurEnArial(
     texte,
-    largeurUtileDesTextes(format),
+    largeurUtileDesTextes(largeurDeLaCarte),
     tailleEnPoints
   ) -
     1) *
@@ -111,14 +115,14 @@ const empileLesTextes = (hauteurs: [string, number][]) =>
 
 const disposeLaCarte = (
   { membres, avis, duree }: AvisDUnMembre,
-  format: FormatDePage
+  largeurDeLaCarte: number
 ): DispositionDUneCarte => {
   const textesAuDessusDuCommentaire = empileLesTextes([
-    ['membres', hauteurDuTexte(membres, MEMBRES, format)],
+    ['membres', hauteurDuTexte(membres, MEMBRES, largeurDeLaCarte)],
     ['libelle-avis', HAUTEUR_D_UN_LIBELLE],
-    ['avis', hauteurDuTexte(avis, VALEUR, format)],
+    ['avis', hauteurDuTexte(avis, VALEUR, largeurDeLaCarte)],
     ['libelle-duree', HAUTEUR_D_UN_LIBELLE],
-    ['duree', hauteurDuTexte(duree, VALEUR, format)],
+    ['duree', hauteurDuTexte(duree, VALEUR, largeurDeLaCarte)],
     ['libelle-commentaire', HAUTEUR_D_UN_LIBELLE],
   ]);
   const libelleDuCommentaire =
@@ -140,11 +144,11 @@ const commentaireTientEnPolice = (
   commentaire: string,
   taille: number,
   hauteurDuCommentaire: number,
-  format: FormatDePage
+  largeurDeLaCarte: number
 ) =>
   nombreDeLignesALaLargeurEnArial(
     commentaire,
-    largeurUtileDesTextes(format),
+    largeurUtileDesTextes(largeurDeLaCarte),
     taille
   ) *
     taille *
@@ -155,39 +159,45 @@ const commentaireTientEnPolice = (
 const tailleDuCommentaire = (
   commentaire: string,
   hauteurDuCommentaire: number,
-  format: FormatDePage
+  largeurDeLaCarte: number
 ) =>
   TAILLES_DU_COMMENTAIRE.find((taille) =>
-    commentaireTientEnPolice(commentaire, taille, hauteurDuCommentaire, format)
+    commentaireTientEnPolice(
+      commentaire,
+      taille,
+      hauteurDuCommentaire,
+      largeurDeLaCarte
+    )
   ) ?? PLUS_PETITE_TAILLE_DU_COMMENTAIRE;
 
 const tientDansUneCarteDuModele = (avis: AvisDUnMembre) =>
   commentaireTientEnPolice(
     avis.commentaire,
     PLUS_PETITE_TAILLE_DU_COMMENTAIRE,
-    disposeLaCarte(avis, QUATRE_CARTES).hauteurDuCommentaire,
-    QUATRE_CARTES
+    disposeLaCarte(avis, LARGEUR_D_UNE_CARTE_DU_MODELE).hauteurDuCommentaire,
+    LARGEUR_D_UNE_CARTE_DU_MODELE
   );
 
-const formatDeLaPage = (avisDeLaPage: AvisDUnMembre[]) =>
-  avisDeLaPage.every(tientDansUneCarteDuModele)
-    ? QUATRE_CARTES
-    : DEUX_CARTES_LARGES;
+const emplacementsDeLAvis = (avis: AvisDUnMembre) =>
+  tientDansUneCarteDuModele(avis) ? 1 : 2;
 
 const tiennentSurLaPage = (avisDeLaPage: AvisDUnMembre[]) =>
-  avisDeLaPage.length <= formatDeLaPage(avisDeLaPage).xDesCartes.length;
+  avisDeLaPage.reduce(
+    (emplacements, avis) => emplacements + emplacementsDeLAvis(avis),
+    0
+  ) <= EMPLACEMENTS_PAR_PAGE;
 
 const placeLaCarte = (
   slide: ISlide,
   forme: (partie: string) => string,
   x: number,
-  format: FormatDePage,
+  largeurDeLaCarte: number,
   { positions }: DispositionDUneCarte
 ) => {
   FONDS_D_UNE_CARTE.forEach((partie) =>
     slide.modifyElement(
       forme(partie),
-      modify.setPosition({ x, w: format.largeurDesCartes })
+      modify.setPosition({ x, w: largeurDeLaCarte })
     )
   );
   positions.forEach(({ partie, y, h }) =>
@@ -196,7 +206,7 @@ const placeLaCarte = (
       modify.setPosition({
         x: x + MARGE_DANS_LA_CARTE,
         y,
-        w: largeurDesTextes(format),
+        w: largeurDesTextes(largeurDeLaCarte),
         h,
       })
     )
@@ -207,7 +217,7 @@ const ecrisLaCarte = (
   slide: ISlide,
   forme: (partie: string) => string,
   { membres, avis, duree, commentaire }: AvisDUnMembre,
-  format: FormatDePage,
+  largeurDeLaCarte: number,
   { hauteurDuCommentaire }: DispositionDUneCarte
 ) => {
   slide.modifyElement(forme('membres'), modify.setText(membres));
@@ -217,30 +227,37 @@ const ecrisLaCarte = (
     modify.setText(commentaire),
     unParagrapheParLigne,
     changeLaTailleDePolice(
-      tailleDuCommentaire(commentaire, hauteurDuCommentaire, format)
+      tailleDuCommentaire(commentaire, hauteurDuCommentaire, largeurDeLaCarte)
     ),
   ]);
 };
 
 const ecrisLesCartes = (slide: ISlide, avisDeLaPage: AvisDUnMembre[]) => {
-  const format = formatDeLaPage(avisDeLaPage);
   Array.from(
     { length: NOMBRE_DE_CARTES_DU_MODELE },
     (_, index) => index + 1
-  ).forEach((numeroCarte) => {
+  ).reduce((emplacement, numeroCarte) => {
     const avis = avisDeLaPage[numeroCarte - 1];
-    const x = format.xDesCartes[numeroCarte - 1];
     const forme = (partie: string) => `avis-${numeroCarte}-${partie}`;
-    if (!avis || x === undefined) {
+    if (!avis) {
       PARTIES_D_UNE_CARTE.forEach((partie) =>
         slide.removeElement(forme(partie))
       );
-      return;
+      return emplacement;
     }
-    const disposition = disposeLaCarte(avis, format);
-    placeLaCarte(slide, forme, x, format, disposition);
-    ecrisLaCarte(slide, forme, avis, format, disposition);
-  });
+    const emplacements = emplacementsDeLAvis(avis);
+    const largeurDeLaCarte = largeurDUneCarte(emplacements);
+    const disposition = disposeLaCarte(avis, largeurDeLaCarte);
+    placeLaCarte(
+      slide,
+      forme,
+      xDeLEmplacement(emplacement),
+      largeurDeLaCarte,
+      disposition
+    );
+    ecrisLaCarte(slide, forme, avis, largeurDeLaCarte, disposition);
+    return emplacement + emplacements;
+  }, 0);
 };
 
 export const ajouteLesAvisDesMembres = (
