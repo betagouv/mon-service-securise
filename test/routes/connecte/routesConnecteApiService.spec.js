@@ -1,11 +1,7 @@
 import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
-import {
-  unService,
-  unServiceV2,
-} from '../../constructeurs/constructeurService.js';
-import { creeReferentielV2 } from '../../../src/referentielV2.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   Permissions,
