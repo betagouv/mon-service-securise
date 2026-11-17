@@ -251,6 +251,7 @@ export const ajouteLesAvisDesMembres = (
   pages.forEach((avisDeLaPage, index) =>
     presentation.addSlide(MODELE, SLIDE_AVIS_DES_MEMBRES, (slide) => {
       ecrisNumeroDePage(slide, 'avis-titre', index + 1, pages.length);
+      if (avisDesMembres.length > 0) slide.removeElement('aucun-avis');
       ecrisLesCartes(slide, avisDeLaPage);
     })
   );
