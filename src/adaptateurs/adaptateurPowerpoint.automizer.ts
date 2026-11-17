@@ -29,7 +29,10 @@ import {
 } from './automizer/slides/besoinsDeSecurite.js';
 import { ajouteLaCartographieDesRisques } from './automizer/slides/cartographiesDesRisques.js';
 import { ajouteLaDescriptionDesRisques } from './automizer/slides/descriptionDesRisques.js';
-import { ajouteLAnalyseDeRisquesComplementaire } from './automizer/slides/analyseDeRisquesComplementaire.js';
+import {
+  ajouteLAnalyseDeRisquesComplementaire,
+  ajouteLePlanDAction,
+} from './automizer/slides/slidesOptionnelles.js';
 import {
   ajouteLIndiceCyber,
   imagesDeLIndiceCyber,
@@ -100,6 +103,7 @@ export class AdaptateurPowerpointAutomizer implements AdaptateurPowerpoint {
       presentation,
       besoinsDeSecurite.idNiveau
     );
+    ajouteLePlanDAction(presentation, besoinsDeSecurite.idNiveau);
     presentation.addSlide(MODELE, SLIDE_INTERCALAIRE_SOCLE);
     ajouteLIndiceCyber(presentation, indiceCyber);
     ajouteLesStatistiquesDesMesures(presentation, statistiquesDesMesures);
