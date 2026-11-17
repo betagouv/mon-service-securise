@@ -141,7 +141,6 @@ describe("L'objet d'API de `GET /service`", () => {
       estAdmin: false,
       estSuperviseur: false,
       documentsPdfDisponibles: ['syntheseSecurite'],
-      supportCommissionPptxDisponible: false,
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
       actionRecommandee: { id: 'simulerReferentielV2', autorisee: true },
@@ -152,31 +151,35 @@ describe("L'objet d'API de `GET /service`", () => {
   });
 
   describe('concernant le support de commission PowerPoint', () => {
-    const serviceV2AvecDossierEnCours = () =>
+    const serviceV2AvecDossierEnCoursComplet = () =>
       unServiceV2()
-        .avecDossiers([unDossier(referentiel).donnees])
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+        ])
         .construis();
 
-    it('indique qu’il est disponible quand la fonctionnalité est active et que le service le permet', () => {
+    it('le liste dans les documents disponibles si le feature flag est activé', () => {
       const donnees = objetGetService.donnees(
-        serviceV2AvecDossierEnCours(),
+        serviceV2AvecDossierEnCoursComplet(),
         autorisation,
         referentiel,
         unAdaptateurEnvironnement({ avecSupportCommissionPptx: true })
       );
 
-      expect(donnees.supportCommissionPptxDisponible).to.be(true);
+      expect(donnees.documentsPdfDisponibles).to.contain('supportHomologation');
     });
 
-    it('indique qu’il n’est pas disponible quand la fonctionnalité n’est pas active', () => {
+    it('ne le liste pas dans les documents disponibles si le feature flag est désactivé', () => {
       const donnees = objetGetService.donnees(
-        serviceV2AvecDossierEnCours(),
+        serviceV2AvecDossierEnCoursComplet(),
         autorisation,
         referentiel,
         unAdaptateurEnvironnement()
       );
 
-      expect(donnees.supportCommissionPptxDisponible).to.be(false);
+      expect(donnees.documentsPdfDisponibles).not.to.contain(
+        'supportHomologation'
+      );
     });
   });
 

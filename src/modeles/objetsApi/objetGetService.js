@@ -22,6 +22,13 @@ const donnees = (
   const dateExpiration = service.dossiers.dateExpiration();
   const completude = service.completudeMesures();
   const actionRecommandee = service.actionRecommandee();
+
+  let documentsDisponibles = service.documentsPdfDisponibles(autorisation);
+  if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
+    documentsDisponibles = documentsDisponibles.filter(
+      (d) => d !== 'supportHomologation'
+    );
+  }
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -82,10 +89,7 @@ const donnees = (
     estAdmin: autorisation.estUnAdmin(),
     estSuperviseur: autorisation.estUnSuperviseur(),
     estProprietaire: autorisation.estProprietaire,
-    documentsPdfDisponibles: service.documentsPdfDisponibles(autorisation),
-    supportCommissionPptxDisponible:
-      adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx() &&
-      service.supportCommissionPptxDisponible(autorisation),
+    documentsPdfDisponibles: documentsDisponibles,
     permissions: {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },

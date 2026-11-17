@@ -88,7 +88,6 @@ export type ServicePourPagesService = {
   organisationResponsable: string;
   version: VersionService;
   documentsPdfDisponibles: string[];
-  supportCommissionPptxDisponible: boolean;
 };
 
 export type ServiceComplet = {
