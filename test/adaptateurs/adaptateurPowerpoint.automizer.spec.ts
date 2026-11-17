@@ -2398,6 +2398,116 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
+      describe('quand un commentaire ne tient pas en 14 pt dans une carte de la largeur du modèle', () => {
+        const commentaireDe1000Caracteres =
+          'Les sauvegardes doivent être testées avant la mise en production. '
+            .repeat(16)
+            .slice(0, 1000);
+
+        it('met sur la page 2 cartes deux fois plus larges, en gardant l’écart entre les cartes', async () => {
+          const slide = await slideDesAvis([
+            unAvis('Jean Dupond'),
+            unAvis('Paul Martin', { commentaire: commentaireDe1000Caracteres }),
+          ]);
+
+          const premiere = cadreDeLaForme(slide, 'avis-1-carte');
+          const seconde = cadreDeLaForme(slide, 'avis-2-carte');
+          expect([premiere.x, premiere.largeur]).toEqual([838200, 8172450]);
+          expect([seconde.x, seconde.largeur]).toEqual([9277350, 8172450]);
+          expect(
+            ['bandeau', 'membres', 'commentaire'].map((partie) => {
+              const { x, largeur } = cadreDeLaForme(slide, `avis-2-${partie}`);
+              return [
+                x - seconde.x,
+                seconde.x + seconde.largeur - (x + largeur),
+              ];
+            })
+          ).toEqual([
+            [0, 0],
+            [266700, 266700],
+            [266700, 266700],
+          ]);
+          expect(
+            nomsDesFormes(slide).filter((nom) => /^avis-[34]-/.test(nom))
+          ).toEqual([]);
+        });
+      });
+
+      describe('quand les avis ne tiennent pas sur une page', () => {
+        const pagesDesAvis = async (avisDesMembres: AvisDUnMembre[]) => {
+          const pptx = await genereSupport({ avisDesMembres });
+          const positions = Array.from(
+            {
+              length:
+                (await nombreDeSlides(pptx)) - POSITION_AVIS_DES_MEMBRES + 1,
+            },
+            (_, index) => POSITION_AVIS_DES_MEMBRES + index
+          );
+          return Promise.all(
+            positions.map((position) => contenuSlide(pptx, position))
+          );
+        };
+
+        const membresDeLaPage = (page: string) =>
+          nomsDesFormes(page)
+            .filter((nom) => /^avis-\d-membres$/.test(nom))
+            .map((nom) => texteDeLaForme(page, nom));
+
+        it('met 4 cartes par page, ou 2 cartes larges dès qu’un commentaire ne tient pas en 14 pt, dans l’ordre des avis', async () => {
+          const commentaireLong =
+            'Les sauvegardes doivent être testées avant la mise en production. '.repeat(
+              10
+            );
+
+          const pages = await pagesDesAvis([
+            unAvis('A'),
+            unAvis('B'),
+            unAvis('C'),
+            unAvis('D'),
+            unAvis('E', { commentaire: commentaireLong }),
+            unAvis('F'),
+            unAvis('G'),
+          ]);
+
+          expect(pages.map(membresDeLaPage)).toEqual([
+            ['A', 'B', 'C', 'D'],
+            ['E', 'F'],
+            ['G'],
+          ]);
+          expect(
+            pages.map((page) => cadreDeLaForme(page, 'avis-1-carte').largeur)
+          ).toEqual([3952875, 8172450, 3952875]);
+        });
+
+        it('numérote les pages dans le titre', async () => {
+          const pages = await pagesDesAvis(
+            ['A', 'B', 'C', 'D', 'E'].map((membres) => unAvis(membres))
+          );
+
+          expect(
+            pages.map((page) => texteDeLaForme(page, 'avis-titre'))
+          ).toEqual([
+            'Avis formalisés des membres 1/2',
+            'Avis formalisés des membres 2/2',
+          ]);
+        });
+
+        it('garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
+          const largeurDuTitreDesExigencesAvec99Sur99EnArialGras = 10750115;
+          const margesInternesDuCadre = 2 * 25400;
+          const [page] = await pagesDesAvis([unAvis('A')]);
+
+          const titre = cadreDeLaForme(page, 'avis-titre');
+          const pastille = cadreDeLaForme(page, 'pastille-prerempli');
+
+          expect(titre.largeur).toBeGreaterThanOrEqual(
+            largeurDuTitreDesExigencesAvec99Sur99EnArialGras +
+              margesInternesDuCadre
+          );
+          expect(titre.x + titre.largeur).toBeLessThan(pastille.x);
+        });
+      });
+
       it('retire les cartes sans avis', async () => {
         const slide = await slideDesAvis([unAvis('Seul membre')]);
 
