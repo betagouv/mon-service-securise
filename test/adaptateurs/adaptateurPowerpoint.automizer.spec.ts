@@ -208,9 +208,14 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         '5. Détail : Audit et plan d’action'
       );
       expect(textesDeLaSlide(intercalaireAudit)).toContain('Logo');
-      expect(textesDeLaSlide(await contenuSlide(pptx, 23))).toContain(
-        'Résultat de l’audit : Nom de l’audit'
+      const resultatsDesAudits = await contenuSlide(pptx, 23);
+      expect(textesDeLaSlide(resultatsDesAudits)).toEqual(
+        expect.arrayContaining([
+          '5. Audits et plan d’action',
+          'Résultats des audits : Nom des audits',
+        ])
       );
+      expect(texteDeLaSlide(resultatsDesAudits)).toContain('NOM DES AUDITS');
       const intercalaireDecision = await contenuSlide(pptx, 24);
       expect(textesDeLaSlide(intercalaireDecision)).toContain(
         '6. Proposition de décision'
