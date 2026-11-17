@@ -6,7 +6,7 @@ import {
   TYPES_REQUETES,
 } from './http/configurationServeur.js';
 import { enTeteCachePourFichierStatique } from './http/cacheStatique.js';
-import { statutPageErreur } from './http/statutPageErreur.js';
+import { controleurPageErreur } from './http/controleurPageErreur.js';
 import routesConnecteApi from './routes/connecte/routesConnecteApi.js';
 import routesNonConnecteApi from './routes/nonConnecte/routesNonConnecteApi.js';
 import { routesNonConnecteApiBibliotheques } from './routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
@@ -247,19 +247,7 @@ const creeServeur = ({
   app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
-    app.use((erreur, _requete, reponse, suite) => {
-      if (erreur.message === 'CSRF token mismatch') {
-        return suite(erreur);
-      }
-      return reponse
-        .status(
-          statutPageErreur({
-            statutErreur: erreur.status,
-            statutReponse: reponse.statusCode,
-          })
-        )
-        .render('erreur', { idSentry: reponse.sentry });
-    });
+    app.use(controleurPageErreur);
   }
 
   const ecoute = (port, succes) => {
