@@ -2378,6 +2378,24 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             basDe(slide, 'avis-1-carte') - MARGE_DANS_LA_CARTE
           );
         });
+
+        it('réduit la police du commentaire à la plus grande taille qui tient dans la carte : 18, 16 puis 14 pt', async () => {
+          const unCommentaireSur = (lignes: number) =>
+            Array(lignes).fill('Une ligne').join('\n');
+          const slide = await slideDesAvis(
+            [11, 12, 13, 14].map((lignes) =>
+              unAvis('Jean Dupond', {
+                commentaire: unCommentaireSur(lignes),
+              })
+            )
+          );
+
+          expect(
+            [1, 2, 3, 4].map((numero) => [
+              ...new Set(taillesDePolice(slide, `avis-${numero}-commentaire`)),
+            ])
+          ).toEqual([['1800'], ['1600'], ['1600'], ['1400']]);
+        });
       });
 
       it('retire les cartes sans avis', async () => {
