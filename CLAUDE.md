@@ -112,3 +112,7 @@ Classes en français : `Service`, `Dossier`, `Utilisateur`, `Mesure`, `Autorisat
 - **Pas de commentaires intempestifs** : le code doit s'expliquer par lui-même. Un commentaire uniquement quand le « pourquoi » n'est pas évident.
 - **Meaningful variables** : nommer explicitement les variables et fonctions. Extraire des méthodes/fonctions locales bien nommées plutôt que d'empiler des expressions.
 - **Revue par étapes** : sur un chantier en plusieurs items, marquer une pause entre chaque item (review + commit) avant de passer au suivant.
+
+## Requêtes PostgreSQL
+
+Avant d'écrire ou de modifier une requête SQL, une migration ou un index, suivre le skill `bonnes-pratiques-postgresql` (`.claude/skills/bonnes-pratiques-postgresql/SKILL.md`) : comparaison des identifiants en `uuid` pour utiliser les index, agrégats en `LATERAL`, réduction du nombre de requêtes, vérification par `EXPLAIN ANALYZE`.
