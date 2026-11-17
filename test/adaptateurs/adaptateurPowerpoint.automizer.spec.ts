@@ -31,6 +31,10 @@ import { IndiceCyberDuService } from '../../src/modeles/objetsPowerpoint/indiceC
 import { StatistiquesDesMesures } from '../../src/modeles/objetsPowerpoint/statistiquesDesMesures.js';
 import { ExigenceRestante } from '../../src/modeles/objetsPowerpoint/exigencesRestantes.js';
 import { AvisDUnMembre } from '../../src/modeles/objetsPowerpoint/avisDesMembres.js';
+import {
+  MesureDeLAnnexe,
+  MesuresDUnStatut,
+} from '../../src/modeles/objetsPowerpoint/annexeDesMesures.js';
 import { RisqueCartographie } from '../../src/modeles/objetsPowerpoint/risqueCartographie.js';
 import { Gravite } from '../../src/moteurRisques/v2/graviteObjectifsVises.js';
 import { Vraisemblance } from '../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.js';
@@ -131,6 +135,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       statistiquesDesMesures: statistiquesDesMesuresParDefaut,
       exigencesRestantes: [],
       avisDesMembres: [],
+      annexeDesMesures: [],
       ...donnees,
     });
 
@@ -2596,6 +2601,103 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           nomsDesFormes(slide).filter((nom) => /^avis-[2-4]-/.test(nom))
         ).toEqual([]);
         expect(nomsDesFormesCommencantPar(slide, 'avis-1-')).toHaveLength(9);
+      });
+    });
+
+    describe('sur l’annexe des mesures', () => {
+      const POSITION_ANNEXE_DES_MESURES = 29;
+
+      const uneMesure = (
+        description: string,
+        mesure: Partial<MesureDeLAnnexe> = {}
+      ): MesureDeLAnnexe => ({
+        description,
+        categorie: 'Gouvernance',
+        criticite: 'Indispensable',
+        referentiel: 'ANSSI',
+        ...mesure,
+      });
+
+      const slidesDeLAnnexe = async (annexeDesMesures: MesuresDUnStatut[]) => {
+        const pptx = await genereSupport({ annexeDesMesures });
+        const positions = Array.from(
+          {
+            length:
+              (await nombreDeSlides(pptx)) - POSITION_ANNEXE_DES_MESURES + 1,
+          },
+          (_, index) => POSITION_ANNEXE_DES_MESURES + index
+        );
+        return Promise.all(
+          positions.map((position) => contenuSlide(pptx, position))
+        );
+      };
+
+      it('ajoute une slide par statut qui a des mesures, avec une ligne par mesure', async () => {
+        const slides = await slidesDeLAnnexe([
+          {
+            statut: 'fait',
+            mesures: [
+              uneMesure('Désigner un responsable de la sécurité'),
+              uneMesure('Chiffrer les sauvegardes', {
+                categorie: 'Protection',
+                criticite: 'Recommandée',
+                referentiel: 'CNIL',
+              }),
+            ],
+          },
+          {
+            statut: 'sansStatut',
+            mesures: [uneMesure('Journaliser les accès')],
+          },
+        ]);
+
+        expect(slides).toHaveLength(2);
+        expect(textesDeLaSlide(slides[0])).toContain('FAITE');
+        expect(textesDeLaSlide(slides[1])).toContain('STATUT À DÉFINIR');
+        const ligne = (slide: string, numero: number) =>
+          ['mesure', 'categorie', 'criticite', 'referentiel'].map((partie) =>
+            texteDeLaForme(slide, `mesure-${numero}-${partie}`)
+          );
+        expect([ligne(slides[0], 1), ligne(slides[0], 2)]).toEqual([
+          [
+            'Désigner un responsable de la sécurité',
+            'Gouvernance',
+            'Indispensable',
+            'ANSSI',
+          ],
+          ['Chiffrer les sauvegardes', 'Protection', 'Recommandée', 'CNIL'],
+        ]);
+        expect(ligne(slides[1], 1)).toEqual([
+          'Journaliser les accès',
+          'Gouvernance',
+          'Indispensable',
+          'ANSSI',
+        ]);
+      });
+
+      it('retire les lignes sans mesure', async () => {
+        const [slide] = await slidesDeLAnnexe([
+          { statut: 'enCours', mesures: [uneMesure('Seule mesure')] },
+        ]);
+
+        expect(
+          nomsDesFormes(slide).filter((nom) => /^mesure-[2-9]-/.test(nom))
+        ).toEqual([]);
+        expect(nomsDesFormesCommencantPar(slide, 'mesure-1-')).toHaveLength(8);
+      });
+
+      it('écrit le nombre de mesures du statut, au singulier ou au pluriel', async () => {
+        const slides = await slidesDeLAnnexe([
+          { statut: 'fait', mesures: [uneMesure('Une mesure')] },
+          {
+            statut: 'aLancer',
+            mesures: [uneMesure('Une mesure'), uneMesure('Une autre')],
+          },
+        ]);
+
+        expect(
+          slides.map((slide) => texteDeLaForme(slide, 'annexe-nombre'))
+        ).toEqual(['1 mesure', '2 mesures']);
       });
     });
 

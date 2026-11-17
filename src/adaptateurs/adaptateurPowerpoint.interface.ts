@@ -6,6 +6,7 @@ import { IndiceCyberDuService } from '../modeles/objetsPowerpoint/indiceCyber.js
 import { StatistiquesDesMesures } from '../modeles/objetsPowerpoint/statistiquesDesMesures.js';
 import { ExigenceRestante } from '../modeles/objetsPowerpoint/exigencesRestantes.js';
 import { AvisDUnMembre } from '../modeles/objetsPowerpoint/avisDesMembres.js';
+import { MesuresDUnStatut } from '../modeles/objetsPowerpoint/annexeDesMesures.js';
 
 export type AutoriteHomologation = {
   nom: string;
@@ -23,6 +24,7 @@ export type DonneesSupportCommissionHomologation = {
   statistiquesDesMesures: StatistiquesDesMesures;
   exigencesRestantes: ExigenceRestante[];
   avisDesMembres: AvisDUnMembre[];
+  annexeDesMesures: MesuresDUnStatut[];
 };
 
 export interface AdaptateurPowerpoint {
