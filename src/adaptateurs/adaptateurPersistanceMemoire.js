@@ -753,8 +753,8 @@ const nouvelAdaptateur = (
       ...idAdminsAdministres,
     ]);
 
-    const utilisateurs = donnees.utilisateurs.filter((u) =>
-      tousIdsUtilisateursAdministres.has(u.id)
+    const utilisateurs = donnees.utilisateurs.filter(
+      (u) => tousIdsUtilisateursAdministres.has(u.id) && u.id !== idUtilisateur
     );
     return utilisateurs.map((u) => ({
       ...u,
@@ -785,18 +785,20 @@ const nouvelAdaptateur = (
         servicesSupervises.includes(a.idService)
     );
 
-    return idAdminsSupervises.map((id) => {
-      const utilisateurAdmin = donnees.utilisateurs.find((u) => u.id === id);
-      return {
-        ...utilisateurAdmin,
-        estAdmin: true,
-        nombreEntites: lignesAdminSupervise.filter((l) => l.idAdmin === id)
-          .length,
-        autorisations: autorisationsDesAdmins.filter(
-          (a) => a.idUtilisateur === id
-        ),
-      };
-    });
+    return idAdminsSupervises
+      .filter((id) => id !== idUtilisateur)
+      .map((id) => {
+        const utilisateurAdmin = donnees.utilisateurs.find((u) => u.id === id);
+        return {
+          ...utilisateurAdmin,
+          estAdmin: true,
+          nombreEntites: lignesAdminSupervise.filter((l) => l.idAdmin === id)
+            .length,
+          autorisations: autorisationsDesAdmins.filter(
+            (a) => a.idUtilisateur === id
+          ),
+        };
+      });
   };
 
   return {

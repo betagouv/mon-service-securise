@@ -369,11 +369,10 @@ export class ServiceAdministrationOrganisations {
   async utilisateursDansLePerimetreDe(
     idUtilisateur: UUID
   ): Promise<Array<UtilisateurAdministre>> {
-    const utilisateursAdministres =
-      await this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
-    const utilisateursSupervises =
-      await this.depotDonnees.utilisateursSupervisesPar(idUtilisateur);
-    return [...utilisateursAdministres, ...utilisateursSupervises];
+    if (await this.depotDonnees.estAdmin(idUtilisateur))
+      return this.depotDonnees.utilisateursAdministresPar(idUtilisateur);
+
+    return this.depotDonnees.utilisateursSupervisesPar(idUtilisateur);
   }
 
   async attribueRoleAUtilisateurAdministre(

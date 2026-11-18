@@ -873,6 +873,12 @@ describe("Le service de gestion des admins d'organisation", () => {
             .avecId(idS2)
             .avecOrganisationResponsable({ siret: 'SIRET-1' }).donnees
         )
+        .ajouteUneAutorisation(
+          uneAutorisation().deSuperviseur(idSuperviseur, idS1).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deSuperviseur(idSuperviseur, idS2).donnees
+        )
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS1).donnees)
         .ajouteUneAutorisation(uneAutorisation().dAdmin(idAdmin, idS2).donnees)
         .ajouteUneAutorisation(
@@ -912,6 +918,58 @@ describe("Le service de gestion des admins d'organisation", () => {
 
       expect(utilisateurs).toHaveLength(1);
       expect(utilisateurs[0].id).toBe(idAdmin);
+    });
+
+    describe('dans le cas où un utilisateur est Admin ET Superviseur', () => {
+      const idAdminEtSuperviseur = unUUID('AS');
+
+      beforeEach(() => {
+        adaptateurPersistance = unePersistanceMemoire()
+          .ajouteAdminSurPerimetre(idAdminEtSuperviseur, ['SIRET-1'])
+          .ajouteSuperviseurSurPerimetre(idAdminEtSuperviseur, ['SIRET-1'])
+          .ajouteAdminSurPerimetre(idAdmin, ['SIRET-1'])
+          .ajouteUnUtilisateur(unUtilisateur().avecId(idAdmin).donnees)
+          .ajouteUnUtilisateur(
+            unUtilisateur().avecId(idAdminEtSuperviseur).donnees
+          )
+          .ajouteUnUtilisateur(unUtilisateur().avecId(idU1).donnees)
+          .ajouteUnService(
+            unServiceV2()
+              .avecId(idS1)
+              .avecOrganisationResponsable({ siret: 'SIRET-1' }).donnees
+          )
+          .ajouteUneAutorisation({
+            ...uneAutorisation().deSuperviseur(idAdminEtSuperviseur, idS1)
+              .donnees,
+            estAdmin: true,
+          })
+          .ajouteUneAutorisation(
+            uneAutorisation().dAdmin(idAdmin, idS1).donnees
+          )
+          .ajouteUneAutorisation(
+            uneAutorisation().deContributeur(idU1, idS1).donnees
+          )
+          .construis() as unknown as AdaptateurPersistance;
+        adaptateurPersistanceTS = unePersistanceMemoireTS()
+          .ajouteAdminSurPerimetre(idAdminEtSuperviseur, [entite])
+          .ajouteSuperviseurSurPerimetre(idAdminEtSuperviseur, [entite])
+          .ajouteAdminSurPerimetre(idAdmin, [entite])
+          .construis();
+
+        depotComplet = unDepotComplet({
+          adaptateurPersistance,
+          adaptateurPersistanceTS,
+        });
+
+        service = leServiceDAdministrationDesOrgas();
+      });
+
+      it('ne retourne que les utilisateurs administrés', async () => {
+        const utilisateurs =
+          await service.utilisateursDansLePerimetreDe(idAdminEtSuperviseur);
+
+        expect(utilisateurs).toHaveLength(2);
+      });
     });
   });
 
