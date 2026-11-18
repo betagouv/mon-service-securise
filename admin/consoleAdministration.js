@@ -38,6 +38,7 @@ import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAd
 import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 import { enCadence } from '../src/utilitaires/pThrottle.js';
+import { knexJournalMSS } from '../src/bdd/knexJournal.ts';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -62,8 +63,9 @@ class ConsoleAdministration {
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
     this.busEvenements = new BusEvenements({ adaptateurGestionErreur });
 
+    this.adaptateurChiffrement = fabriqueAdaptateurChiffrement();
     this.depotDonnees = DepotDonnees.creeDepot({
-      adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
+      adaptateurChiffrement: this.adaptateurChiffrement,
       adaptateurJWT: fabriqueAdaptateurJWT(),
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID: fabriqueAdaptateurUUID(),
@@ -1018,6 +1020,56 @@ class ConsoleAdministration {
     };
 
     await this.depotDonnees.nouveauService(utilisateur.id, donneesService);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async peupleObservatoire() {
+    const niveaux = {
+      niveau1: 'Élémentaires',
+      niveau2: 'Modérés',
+      niveau3: 'Importants',
+    };
+    await knexMSS('observatoire_mss_services_crees').truncate();
+    const tousLesServices = await this.depotDonnees.tousLesServices();
+    const servicesParIdHash = new Map(
+      tousLesServices.map((s) => [
+        this.adaptateurChiffrement.hacheSha256(s.id),
+        s,
+      ])
+    );
+    const evenements = await knexJournalMSS('journal_mss.evenements')
+      .select()
+      .where({ type: 'NOUVEAU_SERVICE_CREE' });
+
+    const promesse = async (s) => [
+      s.id,
+      await adaptateurRechercheEntrepriseAPI.recupereDetailsOrganisation(
+        s.descriptionService.organisationResponsable.siret
+      ),
+    ];
+    const donneesEntrepriseParId = new Map(
+      await Promise.all(tousLesServices.map((s) => promesse(s)))
+    );
+
+    const donneesAInserer = [
+      ...servicesParIdHash.entries().map(([idHash, service]) => {
+        const dateCreation =
+          evenements.find((e) => e.donnees.idService === idHash)?.date ||
+          new Date();
+        const donneesEntreprise = donneesEntrepriseParId.get(service.id);
+        return {
+          id_hash: idHash,
+          date_creation: dateCreation,
+          niveau_securite: niveaux[service.descriptionService.niveauSecurite],
+          departement: donneesEntreprise?.departement,
+          region: donneesEntreprise?.region,
+          secteur_activite: donneesEntreprise?.sectionActivitePrincipale,
+          type_organisation: donneesEntreprise?.trancheEffectifSalarie,
+        };
+      }),
+    ];
+
+    await knexMSS('observatoire_mss_services_crees').insert(donneesAInserer);
   }
 }
 

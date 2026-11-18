@@ -150,6 +150,7 @@ const recupereDetailsOrganisation = async (
       anneeTrancheEffectifSalarie: etablissement.annee_tranche_effectif_salarie,
       commune: etablissement.commune,
       departement: extraisDepartement(etablissement.commune),
+      region: etablissement.region,
     };
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {

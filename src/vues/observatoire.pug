@@ -1,0 +1,9 @@
+extends mssDeconnecte
+
+block append scripts
+    +composantSvelte('observatoire.js')
+    +donneesPartagees('donnees-observatoire',donneesObservatoire)
+
+block main
+    #conteneur-observatoire
+    +moduleAvecVersion('/statique/observatoire.mjs')

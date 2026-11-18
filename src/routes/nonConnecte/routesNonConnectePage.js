@@ -2,6 +2,7 @@ import express from 'express';
 import { readFileSync } from 'node:fs';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
+import { knexMSS } from '../../bdd/knex.js';
 
 const routesNonConnectePage = ({
   adaptateurEnvironnement,
@@ -202,6 +203,13 @@ const routesNonConnectePage = ({
     reponse.type('text/markdown').send(llms);
   });
 
+  routes.get('/observatoire', async (_requete, reponse) => {
+    const totalServices = (
+      await knexMSS('observatoire_mss_services_crees').count()
+    )[0].count;
+
+    reponse.render('observatoire', { donneesObservatoire: { totalServices } });
+  });
   return routes;
 };
 
