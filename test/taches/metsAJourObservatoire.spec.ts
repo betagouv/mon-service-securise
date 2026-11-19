@@ -65,6 +65,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
   let trxJournal: Knex.Knex.Transaction;
   let services: ServiceSimplifie[];
   let siretsRecherches: string[];
+  let instantsDesRecherches: number[];
 
   const creeTablesObservatoire = async () => {
     await knexMSS.schema
@@ -129,12 +130,15 @@ describe("La tâche de mise à jour de l'observatoire", () => {
     trxJournal = await knexJournal.transaction();
     services = [];
     siretsRecherches = [];
+    instantsDesRecherches = [];
+    vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-11-19T10:00:00.000Z'));
   });
 
   afterEach(async () => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
     await trxMSS.rollback();
     await trxJournal.rollback();
   });
@@ -157,6 +161,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
       adaptateurRechercheEntreprise: {
         recupereDetailsOrganisation: async (siret: string) => {
           siretsRecherches.push(siret);
+          instantsDesRecherches.push(performance.now());
           return {
             departement: '33',
             region: '75',
@@ -273,6 +278,36 @@ describe("La tâche de mise à jour de l'observatoire", () => {
         },
       ]);
       expect(siretsRecherches).toEqual([]);
+    });
+
+    it("n'interroge qu'une fois l'API Recherche Entreprise pour plusieurs nouveaux services d'une même organisation", async () => {
+      services = [
+        unService('S1', { siret: 'SIRET-A' }),
+        unService('S2', { siret: 'SIRET-A' }),
+        unService('S3', { siret: 'SIRET-B' }),
+      ];
+
+      await tache().execute();
+
+      expect(siretsRecherches).toEqual(['SIRET-A', 'SIRET-B']);
+      const departements = (await servicesCrees()).map((s) => s.departement);
+      expect(departements).toEqual(['33', '33', '33']);
+    });
+
+    it("espace les appels à l'API Recherche Entreprise pour respecter sa limite de 50 appels par seconde", async () => {
+      services = [
+        unService('S1', { siret: 'SIRET-A' }),
+        unService('S2', { siret: 'SIRET-B' }),
+        unService('S3', { siret: 'SIRET-C' }),
+      ];
+
+      await tache().execute();
+
+      const ecarts = instantsDesRecherches
+        .slice(1)
+        .map((instant, index) => instant - instantsDesRecherches[index]);
+      expect(ecarts).toHaveLength(2);
+      ecarts.forEach((ecart) => expect(ecart).toBeGreaterThanOrEqual(20));
     });
   });
 

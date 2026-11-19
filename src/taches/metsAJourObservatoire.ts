@@ -3,6 +3,7 @@ import type { DepotDonnees } from '../depotDonnees.interface.js';
 import type { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 import type { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
 import { debutDeMois, premierJourMoisSuivant } from '../utilitaires/date.js';
+import { enCadence } from '../utilitaires/pThrottle.js';
 
 type ValeurDuMois = { idHashService: string; mois: string; valeur: number };
 
@@ -10,6 +11,14 @@ const TABLE_EXECUTIONS = 'executions';
 const TABLE_SERVICES = 'services_crees';
 const TABLE_MESURES = 'mesures_faites';
 const TABLE_HOMOLOGATIONS = 'homologations_realisees';
+
+const INTERVALLE_APPELS_RECHERCHE_ENTREPRISE_EN_MS = 25;
+const PAS_AFFICHAGE_PROGRESSION = 100;
+
+const affiche = (ligne: string) => {
+  // eslint-disable-next-line no-console
+  console.log(ligne);
+};
 
 const LIBELLES_NIVEAUX: Record<string, string> = {
   niveau1: 'Élémentaires',
@@ -61,16 +70,20 @@ export class MiseAJourObservatoire {
 
   async execute(): Promise<string[]> {
     const trace: string[] = [];
+    const etape = (ligne: string) => {
+      affiche(ligne);
+      trace.push(ligne);
+    };
     const dateExecution = new Date();
     const derniereExecution = await this.dateDerniereExecution();
-    trace.push(
+    etape(
       derniereExecution
         ? `📅 Dernière exécution réussie : ${derniereExecution.toISOString()}`
         : '📅 Aucune exécution précédente : calcul complet'
     );
 
     const nouveauxServices = await this.metsAJourServices();
-    trace.push(`🆕 ${nouveauxServices} nouveau(x) service(s)`);
+    etape(`🆕 ${nouveauxServices} nouveau(x) service(s)`);
 
     const premierMois = derniereExecution
       ? debutDeMois(derniereExecution)
@@ -79,19 +92,19 @@ export class MiseAJourObservatoire {
 
     if (premierMois) {
       const mois = moisEntre(premierMois, dernierMois);
-      trace.push(`🔁 Mois recalculés : ${mois[0]} → ${mois.at(-1)}`);
+      etape(`🔁 Mois recalculés : ${mois[0]} → ${mois.at(-1)}`);
 
       const lignesMesures = await this.metsAJourMesuresFaites(
         mois,
         dateExecution
       );
-      trace.push(`🛡️ ${lignesMesures} ligne(s) de mesures faites écrites`);
+      etape(`🛡️ ${lignesMesures} ligne(s) de mesures faites écrites`);
 
       const lignesHomologations = await this.metsAJourHomologations(
         mois,
         dateExecution
       );
-      trace.push(`📜 ${lignesHomologations} ligne(s) d'homologations écrites`);
+      etape(`📜 ${lignesHomologations} ligne(s) d'homologations écrites`);
     }
 
     await this.knexMSS(TABLE_EXECUTIONS).insert({
@@ -137,33 +150,72 @@ export class MiseAJourObservatoire {
       ).map(({ id_hash: idHash, date }) => [idHash, date])
     );
 
-    const lignes = await Promise.all(
-      services.map(async (service) => {
-        const idHash = this.adaptateurChiffrement.hacheSha256(service.id);
-        const niveauSecurite =
-          LIBELLES_NIVEAUX[service.descriptionService.niveauSecurite];
-
-        if (idsConnus.has(idHash))
-          return { id_hash: idHash, niveau_securite: niveauSecurite };
-
-        const organisation =
-          await this.adaptateurRechercheEntreprise.recupereDetailsOrganisation(
-            service.descriptionService.organisationResponsable.siret
-          );
-        return {
-          id_hash: idHash,
-          date_creation: dateCreationParIdHash.get(idHash) ?? new Date(),
-          niveau_securite: niveauSecurite,
-          departement: organisation?.departement,
-          region: organisation?.region,
-          secteur_activite: organisation?.sectionActivitePrincipale,
-          type_organisation: organisation?.trancheEffectifSalarie,
-        };
-      })
+    const servicesHaches = services.map((service) => ({
+      idHash: this.adaptateurChiffrement.hacheSha256(service.id),
+      niveauSecurite:
+        LIBELLES_NIVEAUX[service.descriptionService.niveauSecurite],
+      siret: service.descriptionService.organisationResponsable.siret,
+    }));
+    const servicesNouveaux = servicesHaches.filter(
+      ({ idHash }) => !idsConnus.has(idHash)
+    );
+    const organisationParSiret = await this.recupereOrganisations(
+      servicesNouveaux.map(({ siret }) => siret)
     );
 
+    const lignes = servicesHaches.map(({ idHash, niveauSecurite, siret }) => {
+      if (idsConnus.has(idHash))
+        return { id_hash: idHash, niveau_securite: niveauSecurite };
+
+      const organisation = organisationParSiret.get(siret);
+      return {
+        id_hash: idHash,
+        date_creation: dateCreationParIdHash.get(idHash) ?? new Date(),
+        niveau_securite: niveauSecurite,
+        departement: organisation?.departement,
+        region: organisation?.region,
+        secteur_activite: organisation?.sectionActivitePrincipale,
+        type_organisation: organisation?.trancheEffectifSalarie,
+      };
+    });
+
     await this.upsert(TABLE_SERVICES, lignes, ['id_hash'], ['niveau_securite']);
-    return lignes.filter((l) => !idsConnus.has(l.id_hash)).length;
+    return servicesNouveaux.length;
+  }
+
+  private async recupereOrganisations(sirets: string[]) {
+    const siretsUniques = [...new Set(sirets)];
+    const total = siretsUniques.length;
+    affiche(
+      `🏢 ${total} organisation(s) à rechercher dans l'API Recherche Entreprise`
+    );
+
+    let nombreRecuperees = 0;
+    const recupereEnCadence = enCadence(
+      INTERVALLE_APPELS_RECHERCHE_ENTREPRISE_EN_MS,
+      async (siret: string) => {
+        const organisation =
+          await this.adaptateurRechercheEntreprise.recupereDetailsOrganisation(
+            siret
+          );
+        nombreRecuperees += 1;
+        if (
+          nombreRecuperees % PAS_AFFICHAGE_PROGRESSION === 0 ||
+          nombreRecuperees === total
+        )
+          affiche(
+            `   ↳ ${nombreRecuperees}/${total} organisation(s) récupérée(s)`
+          );
+        return organisation;
+      }
+    );
+
+    const organisations = await Promise.all(
+      siretsUniques.map((siret) => recupereEnCadence(siret))
+    );
+    return new Map(
+      siretsUniques.map((siret, index) => [siret, organisations[index]])
+    );
   }
 
   private async metsAJourMesuresFaites(
