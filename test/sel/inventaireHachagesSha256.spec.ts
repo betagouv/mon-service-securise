@@ -6,6 +6,7 @@ type Couverture =
   | 'migreLesHashDeMss'
   | 'migreLesHashDeLaSupervision'
   | 'migreLesEvenementsDuJournal'
+  | "il faut reset les données de l'observatoire"
   | 'aucun hash persisté';
 
 const inventaire: Record<
@@ -183,6 +184,10 @@ const inventaire: Record<
   'src/notifications/rapportMensuel.ts': {
     occurrences: 1,
     couvertPar: 'aucun hash persisté',
+  },
+  'src/taches/metsAJourObservatoire.ts': {
+    occurrences: 1,
+    couvertPar: "il faut reset les données de l'observatoire",
   },
 };
 
