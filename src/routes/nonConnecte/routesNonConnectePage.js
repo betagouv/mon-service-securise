@@ -208,7 +208,32 @@ const routesNonConnectePage = ({
       await knexMSS('observatoire_mss_services_crees').count()
     )[0].count;
 
-    reponse.render('observatoire', { donneesObservatoire: { totalServices } });
+    const { rows: cumulMensuelServices } = await knexMSS.raw(`
+      WITH bornes AS (
+        SELECT date_trunc('month', MIN(date_creation)) AS premier_mois,
+               date_trunc('month', MAX(date_creation)) AS dernier_mois
+        FROM observatoire_mss_services_crees
+      ),
+      mois AS (
+        SELECT generate_series(premier_mois, dernier_mois, interval '1 month') AS mois
+        FROM bornes
+      ),
+      crees_par_mois AS (
+        SELECT date_trunc('month', date_creation) AS mois, COUNT(*) AS nombre
+        FROM observatoire_mss_services_crees
+        WHERE date_creation IS NOT NULL
+        GROUP BY 1
+      )
+      SELECT to_char(mois.mois, 'YYYY-MM') AS mois,
+             (SUM(COALESCE(crees_par_mois.nombre, 0)) OVER (ORDER BY mois.mois))::int AS cumul
+      FROM mois
+      LEFT JOIN crees_par_mois ON crees_par_mois.mois = mois.mois
+      ORDER BY mois.mois
+    `);
+
+    reponse.render('observatoire', {
+      donneesObservatoire: { totalServices, cumulMensuelServices },
+    });
   });
   return routes;
 };

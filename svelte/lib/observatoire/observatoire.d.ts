@@ -4,6 +4,12 @@ declare global {
   }
 }
 
+export type CumulMensuelServices = {
+  mois: string;
+  cumul: number;
+};
+
 export type ObservatoireProps = {
   totalServices: number;
+  cumulMensuelServices: CumulMensuelServices[];
 };
