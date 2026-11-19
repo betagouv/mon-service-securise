@@ -239,11 +239,25 @@ const routesNonConnectePage = ({
       ORDER BY date
     `);
 
+    const { rows: servicesParNiveauSecurite } = await knexMSS.raw(`
+      SELECT niveau_securite AS "niveauSecurite",
+             COUNT(*)::int AS total
+      FROM observatoire_mss_services_crees
+      WHERE niveau_securite IS NOT NULL
+      GROUP BY niveau_securite
+      ORDER BY CASE niveau_securite
+                 WHEN 'Élémentaires' THEN 1
+                 WHEN 'Modérés' THEN 2
+                 WHEN 'Importants' THEN 3
+               END
+    `);
+
     reponse.render('observatoire', {
       donneesObservatoire: {
         totalServices,
         cumulMensuelServices,
         mesuresFaitesParMois,
+        servicesParNiveauSecurite,
       },
     });
   });

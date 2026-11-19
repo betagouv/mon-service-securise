@@ -7,9 +7,17 @@
     y: Array<number>;
     unite: string;
     palette?: 'categorical';
+    plein?: boolean;
   }
 
-  let { titre, x, y, unite, palette = 'categorical' }: Props = $props();
+  let {
+    titre,
+    x,
+    y,
+    unite,
+    plein = false,
+    palette = 'categorical',
+  }: Props = $props();
 </script>
 
 <Chart {titre}>
@@ -19,5 +27,6 @@
     name={JSON.stringify(x)}
     unit-tooltip={unite}
     selected-palette={palette}
+    fill={plein}
   ></pie-chart>
 </Chart>

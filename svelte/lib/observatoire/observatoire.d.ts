@@ -14,8 +14,14 @@ export type MesuresFaitesParMois = {
   total: number;
 };
 
+export type ServicesParNiveauSecurite = {
+  niveauSecurite: string;
+  total: number;
+};
+
 export type ObservatoireProps = {
   totalServices: number;
   cumulMensuelServices: CumulMensuelServices[];
   mesuresFaitesParMois: MesuresFaitesParMois[];
+  servicesParNiveauSecurite: ServicesParNiveauSecurite[];
 };
