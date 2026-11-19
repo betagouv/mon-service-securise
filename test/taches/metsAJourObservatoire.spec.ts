@@ -59,8 +59,8 @@ const uneHomologationCreee = (
 });
 
 describe("La tâche de mise à jour de l'observatoire", () => {
-  let knexMSS: Knex.Knex;
-  let trxMSS: Knex.Knex.Transaction;
+  let knexObservatoire: Knex.Knex;
+  let trxObservatoire: Knex.Knex.Transaction;
   let knexJournal: Knex.Knex;
   let trxJournal: Knex.Knex.Transaction;
   let services: ServiceSimplifie[];
@@ -68,7 +68,9 @@ describe("La tâche de mise à jour de l'observatoire", () => {
   let instantsDesRecherches: number[];
 
   const creeTablesObservatoire = async () => {
-    await knexMSS.schema
+    await knexObservatoire.schema.createSchema('mss');
+    await knexObservatoire.schema
+      .withSchema('mss')
       .createTable('executions', (table) => {
         table.timestamp('date_execution');
       })
@@ -111,7 +113,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
   };
 
   beforeAll(async () => {
-    knexMSS = Knex({
+    knexObservatoire = Knex({
       client: ClientPgLite,
       dialect: 'postgres',
       connection: {},
@@ -126,7 +128,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
   });
 
   beforeEach(async () => {
-    trxMSS = await knexMSS.transaction();
+    trxObservatoire = await knexObservatoire.transaction();
     trxJournal = await knexJournal.transaction();
     services = [];
     siretsRecherches = [];
@@ -139,18 +141,18 @@ describe("La tâche de mise à jour de l'observatoire", () => {
   afterEach(async () => {
     vi.useRealTimers();
     vi.restoreAllMocks();
-    await trxMSS.rollback();
+    await trxObservatoire.rollback();
     await trxJournal.rollback();
   });
 
   afterAll(async () => {
-    await knexMSS.destroy();
+    await knexObservatoire.destroy();
     await knexJournal.destroy();
   });
 
   const tache = () =>
     new MiseAJourObservatoire({
-      knexMSS: trxMSS,
+      knexObservatoire: trxObservatoire,
       knexJournal: trxJournal,
       depotDonnees: {
         tousLesServices: async () => services,
@@ -176,31 +178,31 @@ describe("La tâche de mise à jour de l'observatoire", () => {
     trxJournal('journal_mss.evenements').insert(evenements);
 
   const aDejaEteExecuteeLe = async (date: string) =>
-    trxMSS('executions').insert({ date_execution: date });
+    trxObservatoire('mss.executions').insert({ date_execution: date });
 
   const servicesCrees = () =>
-    trxMSS('services_crees').select().orderBy('id_hash');
+    trxObservatoire('mss.services_crees').select().orderBy('id_hash');
 
   const lignesMensuelles = (table: string, colonneValeur: string) =>
-    trxMSS(table)
+    trxObservatoire(table)
       .select(
         'id_hash_service as idHashService',
-        trxMSS.raw(`to_char(date, 'YYYY-MM-DD') as date`),
+        trxObservatoire.raw(`to_char(date, 'YYYY-MM-DD') as date`),
         `${colonneValeur} as valeur`
       )
       .orderBy(['id_hash_service', 'date']);
 
   const mesuresFaites = () =>
-    lignesMensuelles('mesures_faites', 'total_faites');
+    lignesMensuelles('mss.mesures_faites', 'total_faites');
 
   const homologationsRealisees = () =>
-    lignesMensuelles('homologations_realisees', 'total_realisees');
+    lignesMensuelles('mss.homologations_realisees', 'total_realisees');
 
   describe('concernant les exécutions', () => {
     it("consigne la date de l'exécution", async () => {
       await tache().execute();
 
-      const executions = await trxMSS('executions').select();
+      const executions = await trxObservatoire('mss.executions').select();
       expect(executions).toEqual([
         { date_execution: new Date('2026-11-19T10:00:00.000Z') },
       ]);
@@ -253,7 +255,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
     });
 
     it("ne met à jour que le niveau de sécurité d'un service déjà connu, sans réinterroger l'API Recherche Entreprise", async () => {
-      await trxMSS('services_crees').insert({
+      await trxObservatoire('mss.services_crees').insert({
         id_hash: 'hash-S1',
         date_creation: new Date('2026-03-12T08:00:00.000Z'),
         niveau_securite: 'Élémentaires',
@@ -412,10 +414,10 @@ describe("La tâche de mise à jour de l'observatoire", () => {
     });
 
     it("lors d'une exécution suivante, repart de la valeur connue au début du mois de la dernière exécution", async () => {
-      await trxMSS('services_crees').insert({
+      await trxObservatoire('mss.services_crees').insert({
         id_hash: 'hash-S1',
       });
-      await trxMSS('mesures_faites').insert({
+      await trxObservatoire('mss.mesures_faites').insert({
         id_hash_service: 'hash-S1',
         date: '2026-10-01',
         total_faites: 4,
@@ -487,10 +489,10 @@ describe("La tâche de mise à jour de l'observatoire", () => {
     });
 
     it("lors d'une exécution suivante, ajoute les nouvelles homologations au total connu sans recompter les mois précédents", async () => {
-      await trxMSS('services_crees').insert({
+      await trxObservatoire('mss.services_crees').insert({
         id_hash: 'hash-S1',
       });
-      await trxMSS('homologations_realisees').insert({
+      await trxObservatoire('mss.homologations_realisees').insert({
         id_hash_service: 'hash-S1',
         date: '2026-10-01',
         total_realisees: 3,

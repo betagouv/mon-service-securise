@@ -35,6 +35,15 @@ const journalMSS = () => ({
     ),
 });
 
+const observatoire = () => ({
+  urlServeur: () => process.env.BASE_DONNEES_OBSERVATOIRE_URL_SERVEUR,
+  poolMaximumConnexion: () =>
+    nombreOuDefautDepuisChaine(
+      process.env.BASE_DONNEES_OBSERVATOIRE_POOL_CONNEXION_MAX,
+      10
+    ),
+});
+
 const matomo = () => ({
   urlTagManager: () => process.env.MATOMO_URL_TAG_MANAGER,
 });
@@ -199,6 +208,7 @@ export {
   matomo,
   modeMaintenance,
   mss,
+  observatoire,
   oidc,
   reportingTechnique,
   sendinblue,
