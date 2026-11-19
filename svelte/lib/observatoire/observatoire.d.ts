@@ -9,7 +9,13 @@ export type CumulMensuelServices = {
   cumul: number;
 };
 
+export type MesuresFaitesParMois = {
+  mois: string;
+  total: number;
+};
+
 export type ObservatoireProps = {
   totalServices: number;
   cumulMensuelServices: CumulMensuelServices[];
+  mesuresFaitesParMois: MesuresFaitesParMois[];
 };

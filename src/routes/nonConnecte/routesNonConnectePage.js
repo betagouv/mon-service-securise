@@ -231,8 +231,20 @@ const routesNonConnectePage = ({
       ORDER BY mois.mois
     `);
 
+    const { rows: mesuresFaitesParMois } = await knexMSS.raw(`
+      SELECT to_char(date - interval '1 month', 'YYYY-MM') AS mois,
+             SUM(total_faites)::int AS total
+      FROM observatoire_mss_mesures_faites
+      GROUP BY date
+      ORDER BY date
+    `);
+
     reponse.render('observatoire', {
-      donneesObservatoire: { totalServices, cumulMensuelServices },
+      donneesObservatoire: {
+        totalServices,
+        cumulMensuelServices,
+        mesuresFaitesParMois,
+      },
     });
   });
   return routes;

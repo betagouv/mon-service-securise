@@ -5,15 +5,36 @@
   import type { ObservatoireProps } from './observatoire.d';
   import CarteChiffreCle from '../adminStatistiques/CarteChiffreCle.svelte';
 
-  let { totalServices, cumulMensuelServices }: ObservatoireProps = $props();
+  let {
+    totalServices,
+    cumulMensuelServices,
+    mesuresFaitesParMois,
+  }: ObservatoireProps = $props();
 
-  let mois = $derived(cumulMensuelServices.map(({ mois }) => mois));
-  let cumuls = $derived(cumulMensuelServices.map(({ cumul }) => cumul));
+  const formatMois = new Intl.DateTimeFormat('fr-FR', {
+    month: 'short',
+    year: '2-digit',
+  });
+  const enLibelleMois = (mois: string) =>
+    formatMois.format(new Date(`${mois}-01T00:00:00`));
+
+  let moisServices = $derived(
+    cumulMensuelServices.map(({ mois }) => enLibelleMois(mois))
+  );
+  let cumulsServices = $derived(cumulMensuelServices.map(({ cumul }) => cumul));
+
+  let moisMesuresFaites = $derived(
+    mesuresFaitesParMois.map(({ mois }) => enLibelleMois(mois))
+  );
+  let totauxMesuresFaites = $derived(
+    mesuresFaitesParMois.map(({ total }) => total)
+  );
+  let totalMesuresFaitesADate = $derived(totauxMesuresFaites.at(-1) ?? 0);
 </script>
 
 <h1>Observatoire</h1>
 
-<div>
+<div class="ligne">
   <CarteChiffreCle
     chiffre={totalServices}
     description="Systèmes d’information sécurisés"
@@ -22,15 +43,31 @@
 
   <LineChart
     titre="Évolution par mois (cumul)"
-    x={mois}
-    y={cumuls}
+    x={moisServices}
+    y={cumulsServices}
     nom="SI sécurisés"
     unite="SI"
   />
 </div>
 
+<div class="ligne">
+  <CarteChiffreCle
+    chiffre={totalMesuresFaitesADate.toLocaleString('fr-FR')}
+    description="Faiblesses corrigées"
+    icone="success"
+  />
+
+  <LineChart
+    titre="Évolution par mois (cumul)"
+    x={moisMesuresFaites}
+    y={totauxMesuresFaites}
+    nom="Mesures faites"
+    unite="mesures"
+  />
+</div>
+
 <style lang="scss">
-  div {
+  .ligne {
     display: flex;
     gap: 12px;
   }
