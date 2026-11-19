@@ -9,6 +9,7 @@ export const up = (knex) =>
       .notNullable();
     table.integer('total_faites');
     table.date('date');
+    table.unique(['id_hash_service', 'date']);
   });
 
 export const down = (knex) => knex.schema.dropTable(nomTable);

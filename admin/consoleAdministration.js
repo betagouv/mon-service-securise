@@ -38,7 +38,8 @@ import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAd
 import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 import { enCadence } from '../src/utilitaires/pThrottle.js';
-import { knexJournalMSS } from '../src/bdd/knexJournal.ts';
+import { knexJournalMSS } from '../src/bdd/knexJournal.js';
+import { MiseAJourObservatoire } from '../src/taches/metsAJourObservatoire.ts';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -1022,175 +1023,15 @@ class ConsoleAdministration {
     await this.depotDonnees.nouveauService(utilisateur.id, donneesService);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async peupleObservatoireServiceCrees() {
-    const niveaux = {
-      niveau1: 'Élémentaires',
-      niveau2: 'Modérés',
-      niveau3: 'Importants',
-    };
-    await knexMSS('observatoire_mss_services_crees').truncate();
-    const tousLesServices = await this.depotDonnees.tousLesServices();
-    const servicesParIdHash = new Map(
-      tousLesServices.map((s) => [
-        this.adaptateurChiffrement.hacheSha256(s.id),
-        s,
-      ])
-    );
-    const evenements = await knexJournalMSS('journal_mss.evenements')
-      .select()
-      .where({ type: 'NOUVEAU_SERVICE_CREE' });
-
-    const promesse = async (s) => [
-      s.id,
-      await adaptateurRechercheEntrepriseAPI.recupereDetailsOrganisation(
-        s.descriptionService.organisationResponsable.siret
-      ),
-    ];
-    const donneesEntrepriseParId = new Map(
-      await Promise.all(tousLesServices.map((s) => promesse(s)))
-    );
-
-    const donneesAInserer = [
-      ...servicesParIdHash.entries().map(([idHash, service]) => {
-        const dateCreation =
-          evenements.find((e) => e.donnees.idService === idHash)?.date ||
-          new Date();
-        const donneesEntreprise = donneesEntrepriseParId.get(service.id);
-        return {
-          id_hash: idHash,
-          date_creation: dateCreation,
-          niveau_securite: niveaux[service.descriptionService.niveauSecurite],
-          departement: donneesEntreprise?.departement,
-          region: donneesEntreprise?.region,
-          secteur_activite: donneesEntreprise?.sectionActivitePrincipale,
-          type_organisation: donneesEntreprise?.trancheEffectifSalarie,
-        };
-      }),
-    ];
-
-    await knexMSS('observatoire_mss_services_crees').insert(donneesAInserer);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async peupleObservatoireMesures() {
-    const { rows: mesuresFaitesParServiceEtParMois } =
-      await knexJournalMSS.raw(`
-        WITH derniere_completude_du_mois AS (
-          SELECT DISTINCT ON (donnees->>'idService', date_trunc('month', date))
-                 donnees->>'idService' AS id_hash_service,
-                 date_trunc('month', date) + interval '1 month' AS debut_mois_suivant,
-                 (donnees->'detailMesures')::jsonb AS detail_mesures
-          FROM journal_mss.evenements
-          WHERE type = 'COMPLETUDE_SERVICE_MODIFIEE'
-          ORDER BY donnees->>'idService', date_trunc('month', date), date DESC
-        ),
-        mesures_faites_connues AS (
-          SELECT id_hash_service,
-                 debut_mois_suivant,
-                 (SELECT COUNT(*)
-                  FROM jsonb_array_elements(COALESCE(detail_mesures, '[]'::jsonb)) AS mesure
-                  WHERE mesure->>'statut' = 'fait')::int AS total_faites
-          FROM derniere_completude_du_mois
-        ),
-        tous_les_mois_par_service AS (
-          SELECT id_hash_service,
-                 generate_series(
-                   MIN(debut_mois_suivant),
-                   date_trunc('month', now()) + interval '1 month',
-                   interval '1 month'
-                 ) AS debut_mois_suivant
-          FROM mesures_faites_connues
-          GROUP BY id_hash_service
-        ),
-        mois_avec_valeur_eventuelle AS (
-          SELECT mois.id_hash_service,
-                 mois.debut_mois_suivant,
-                 connue.total_faites,
-                 COUNT(connue.total_faites) OVER (
-                   PARTITION BY mois.id_hash_service
-                   ORDER BY mois.debut_mois_suivant
-                 ) AS rang_derniere_valeur_connue
-          FROM tous_les_mois_par_service AS mois
-          LEFT JOIN mesures_faites_connues AS connue
-            USING (id_hash_service, debut_mois_suivant)
-        )
-        SELECT id_hash_service,
-               debut_mois_suivant::date AS date,
-               MAX(total_faites) OVER (
-                 PARTITION BY id_hash_service, rang_derniere_valeur_connue
-               ) AS total_faites
-        FROM mois_avec_valeur_eventuelle
-      `);
-
-    const idsHashServicesConnus = new Set(
-      (await knexMSS('observatoire_mss_services_crees').select('id_hash')).map(
-        ({ id_hash: idHash }) => idHash
-      )
-    );
-    const donneesAInserer = mesuresFaitesParServiceEtParMois.filter(
-      ({ id_hash_service: idHashService }) =>
-        idsHashServicesConnus.has(idHashService)
-    );
-
-    await knexMSS('observatoire_mss_mesures_faites').truncate();
-    await knexMSS.batchInsert(
-      'observatoire_mss_mesures_faites',
-      donneesAInserer,
-      1000
-    );
-    console.log(`${donneesAInserer.length} lignes insérées`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async peupleObservatoireHomologations() {
-    const { rows: homologationsRealisees } = await knexJournalMSS.raw(`
-      WITH homologations_par_mois AS (
-        SELECT donnees->>'idService' AS id_hash_service,
-               date_trunc('month', date) + interval '1 month' AS debut_mois_suivant,
-               COUNT(*) AS nombre
-        FROM journal_mss.evenements
-        WHERE type = 'NOUVELLE_HOMOLOGATION_CREEE'
-          AND COALESCE((donnees->>'refusee')::boolean, false) = false
-        GROUP BY 1, 2
-      ),
-      tous_les_mois_par_service AS (
-        SELECT id_hash_service,
-               generate_series(
-                 MIN(debut_mois_suivant),
-                 date_trunc('month', now()) + interval '1 month',
-                 interval '1 month'
-               ) AS debut_mois_suivant
-        FROM homologations_par_mois
-        GROUP BY id_hash_service
-      )
-      SELECT id_hash_service,
-             debut_mois_suivant::date AS date,
-             (SUM(COALESCE(nombre, 0)) OVER (
-               PARTITION BY id_hash_service
-               ORDER BY debut_mois_suivant
-             ))::int AS total_realisees
-      FROM tous_les_mois_par_service
-      LEFT JOIN homologations_par_mois USING (id_hash_service, debut_mois_suivant)
-    `);
-
-    const idsHashServicesConnus = new Set(
-      (await knexMSS('observatoire_mss_services_crees').select('id_hash')).map(
-        ({ id_hash: idHash }) => idHash
-      )
-    );
-    const donneesAInserer = homologationsRealisees.filter(
-      ({ id_hash_service: idHashService }) =>
-        idsHashServicesConnus.has(idHashService)
-    );
-
-    await knexMSS('observatoire_mss_homologations_realisees').truncate();
-    await knexMSS.batchInsert(
-      'observatoire_mss_homologations_realisees',
-      donneesAInserer,
-      1000
-    );
-    console.log(`${donneesAInserer.length} homologations insérées`);
+  async metsAJourObservatoire() {
+    const trace = await new MiseAJourObservatoire({
+      knexMSS,
+      knexJournal: knexJournalMSS,
+      depotDonnees: this.depotDonnees,
+      adaptateurChiffrement: this.adaptateurChiffrement,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    }).execute();
+    trace.forEach((ligne) => console.log(ligne));
   }
 }
 
