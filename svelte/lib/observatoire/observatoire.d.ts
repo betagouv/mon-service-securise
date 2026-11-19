@@ -24,4 +24,10 @@ export type ObservatoireProps = {
   cumulMensuelServices: CumulMensuelServices[];
   mesuresFaitesParMois: MesuresFaitesParMois[];
   servicesParNiveauSecurite: ServicesParNiveauSecurite[];
+  cumulMensuelHomologations: CumulMensuelHomologations[];
+};
+
+export type CumulMensuelHomologations = {
+  mois: string;
+  cumul: number;
 };

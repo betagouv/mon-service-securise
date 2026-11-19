@@ -9,6 +9,7 @@
     cumulMensuelServices,
     mesuresFaitesParMois,
     servicesParNiveauSecurite,
+    cumulMensuelHomologations,
   }: ObservatoireProps = $props();
 
   const dateDonnees = new Date().toLocaleDateString('fr-FR');
@@ -40,6 +41,14 @@
   let servicesParNiveau = $derived(
     servicesParNiveauSecurite.map(({ total }) => total)
   );
+
+  let moisHomologations = $derived(
+    cumulMensuelHomologations.map(({ mois }) => enLibelleMois(mois))
+  );
+  let cumulsHomologations = $derived(
+    cumulMensuelHomologations.map(({ cumul }) => cumul)
+  );
+  let totalHomologationsADate = $derived(cumulsHomologations.at(-1) ?? 0);
 </script>
 
 {#snippet chiffreCle(chiffre: number)}
@@ -104,6 +113,20 @@
         totauxMesuresFaites,
         'Mesures faites',
         'mesures'
+      )}
+    </CarteObservatoire>
+  </div>
+
+  <div class="ligne">
+    <CarteObservatoire titre="Homologations réalisées" {dateDonnees}>
+      {@render chiffreCle(totalHomologationsADate)}
+    </CarteObservatoire>
+    <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
+      {@render evolutionMensuelle(
+        moisHomologations,
+        cumulsHomologations,
+        'Homologations',
+        'homologations'
       )}
     </CarteObservatoire>
   </div>

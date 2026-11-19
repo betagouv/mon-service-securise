@@ -252,12 +252,21 @@ const routesNonConnectePage = ({
                END
     `);
 
+    const { rows: cumulMensuelHomologations } = await knexMSS.raw(`
+      SELECT to_char(date - interval '1 month', 'YYYY-MM') AS mois,
+             SUM(total_realisees)::int AS cumul
+      FROM observatoire_mss_homologations_realisees
+      GROUP BY date
+      ORDER BY date
+    `);
+
     reponse.render('observatoire', {
       donneesObservatoire: {
         totalServices,
         cumulMensuelServices,
         mesuresFaitesParMois,
         servicesParNiveauSecurite,
+        cumulMensuelHomologations,
       },
     });
   });
