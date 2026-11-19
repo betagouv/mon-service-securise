@@ -39,6 +39,7 @@ import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/p
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 import { enCadence } from '../src/utilitaires/pThrottle.js';
 import { knexJournalMSS } from '../src/bdd/knexJournal.js';
+import { knexObservatoire } from '../src/bdd/knexObservatoire.js';
 import { MiseAJourObservatoire } from '../src/taches/metsAJourObservatoire.js';
 
 const log = {
@@ -1025,7 +1026,7 @@ class ConsoleAdministration {
 
   async metsAJourObservatoire() {
     const trace = await new MiseAJourObservatoire({
-      knexMSS,
+      knexObservatoire,
       knexJournal: knexJournalMSS,
       depotDonnees: this.depotDonnees,
       adaptateurChiffrement: this.adaptateurChiffrement,

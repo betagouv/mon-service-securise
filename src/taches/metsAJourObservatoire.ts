@@ -7,10 +7,11 @@ import { enCadence } from '../utilitaires/pThrottle.js';
 
 type ValeurDuMois = { idHashService: string; mois: string; valeur: number };
 
-const TABLE_EXECUTIONS = 'executions';
-const TABLE_SERVICES = 'services_crees';
-const TABLE_MESURES = 'mesures_faites';
-const TABLE_HOMOLOGATIONS = 'homologations_realisees';
+const SCHEMA = 'mss';
+const TABLE_EXECUTIONS = `${SCHEMA}.executions`;
+const TABLE_SERVICES = `${SCHEMA}.services_crees`;
+const TABLE_MESURES = `${SCHEMA}.mesures_faites`;
+const TABLE_HOMOLOGATIONS = `${SCHEMA}.homologations_realisees`;
 
 const INTERVALLE_APPELS_RECHERCHE_ENTREPRISE_EN_MS = 25;
 const PAS_AFFICHAGE_PROGRESSION = 100;
@@ -42,26 +43,26 @@ const parMois = (valeurs: ValeurDuMois[]) => {
 };
 
 export class MiseAJourObservatoire {
-  private readonly knexMSS: Knex;
+  private readonly knexObservatoire: Knex;
   private readonly knexJournal: Knex;
   private readonly depotDonnees: DepotDonnees;
   private readonly adaptateurChiffrement: AdaptateurChiffrement;
   private readonly adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
 
   constructor({
-    knexMSS,
+    knexObservatoire,
     knexJournal,
     depotDonnees,
     adaptateurChiffrement,
     adaptateurRechercheEntreprise,
   }: {
-    knexMSS: Knex;
+    knexObservatoire: Knex;
     knexJournal: Knex;
     depotDonnees: DepotDonnees;
     adaptateurChiffrement: AdaptateurChiffrement;
     adaptateurRechercheEntreprise: AdaptateurRechercheEntreprise;
   }) {
-    this.knexMSS = knexMSS;
+    this.knexObservatoire = knexObservatoire;
     this.knexJournal = knexJournal;
     this.depotDonnees = depotDonnees;
     this.adaptateurChiffrement = adaptateurChiffrement;
@@ -107,14 +108,14 @@ export class MiseAJourObservatoire {
       etape(`📜 ${lignesHomologations} ligne(s) d'homologations écrites`);
     }
 
-    await this.knexMSS(TABLE_EXECUTIONS).insert({
+    await this.knexObservatoire(TABLE_EXECUTIONS).insert({
       date_execution: dateExecution,
     });
     return trace;
   }
 
   private async dateDerniereExecution(): Promise<Date | undefined> {
-    const [{ derniere }] = await this.knexMSS(TABLE_EXECUTIONS).max(
+    const [{ derniere }] = await this.knexObservatoire(TABLE_EXECUTIONS).max(
       'date_execution as derniere'
     );
     return derniere ? new Date(derniere) : undefined;
@@ -131,7 +132,8 @@ export class MiseAJourObservatoire {
   }
 
   private async idsHashServicesConnus(): Promise<Set<string>> {
-    const lignes = await this.knexMSS(TABLE_SERVICES).select('id_hash');
+    const lignes =
+      await this.knexObservatoire(TABLE_SERVICES).select('id_hash');
     return new Set(lignes.map(({ id_hash: idHash }) => idHash));
   }
 
@@ -294,7 +296,7 @@ export class MiseAJourObservatoire {
     const idsConnus = await this.idsHashServicesConnus();
     const valeursCourantes = new Map<string, number>(
       (
-        await this.knexMSS(table)
+        await this.knexObservatoire(table)
           .select('id_hash_service', colonneValeur)
           .where({ date: mois[0] })
       ).map((ligne) => [ligne.id_hash_service, ligne[colonneValeur]])
@@ -333,7 +335,7 @@ export class MiseAJourObservatoire {
     colonnesAMettreAJour: string[]
   ) {
     const taillePaquet = 1000;
-    await this.knexMSS.transaction(async (trx) => {
+    await this.knexObservatoire.transaction(async (trx) => {
       for (let i = 0; i < lignes.length; i += taillePaquet) {
         // eslint-disable-next-line no-await-in-loop
         await trx(table)

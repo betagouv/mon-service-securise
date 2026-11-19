@@ -8,8 +8,8 @@ import BusEvenements from '../../src/bus/busEvenements.js';
 import { fabriqueReferentiel } from '../../src/fabriqueReferentiel.js';
 import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
 import { fabriqueReportingTechnique } from '../../src/adaptateurs/adaptateurReportingTechnique.interface.js';
-import { knexMSS } from '../../src/bdd/knex.js';
 import { knexJournalMSS } from '../../src/bdd/knexJournal.js';
+import { knexObservatoire } from '../../src/bdd/knexObservatoire.js';
 import { MiseAJourObservatoire } from '../../src/taches/metsAJourObservatoire.js';
 
 const maintenant = () =>
@@ -34,7 +34,7 @@ const tache = async () => {
   });
 
   return new MiseAJourObservatoire({
-    knexMSS,
+    knexObservatoire,
     knexJournal: knexJournalMSS,
     depotDonnees,
     adaptateurChiffrement,
