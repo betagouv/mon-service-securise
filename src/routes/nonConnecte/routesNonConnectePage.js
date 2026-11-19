@@ -260,6 +260,10 @@ const routesNonConnectePage = ({
       ORDER BY date
     `);
 
+    const [{ derniereExecution }] = await knexMSS(
+      'observatoire_mss_executions'
+    ).max('date_execution as derniereExecution');
+
     reponse.render('observatoire', {
       donneesObservatoire: {
         totalServices,
@@ -267,6 +271,7 @@ const routesNonConnectePage = ({
         mesuresFaitesParMois,
         servicesParNiveauSecurite,
         cumulMensuelHomologations,
+        dateDerniereExecution: derniereExecution,
       },
     });
   });

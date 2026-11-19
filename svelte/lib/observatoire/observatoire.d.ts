@@ -25,6 +25,7 @@ export type ObservatoireProps = {
   mesuresFaitesParMois: MesuresFaitesParMois[];
   servicesParNiveauSecurite: ServicesParNiveauSecurite[];
   cumulMensuelHomologations: CumulMensuelHomologations[];
+  dateDerniereExecution: string | null;
 };
 
 export type CumulMensuelHomologations = {

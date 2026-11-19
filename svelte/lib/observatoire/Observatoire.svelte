@@ -10,9 +10,14 @@
     mesuresFaitesParMois,
     servicesParNiveauSecurite,
     cumulMensuelHomologations,
+    dateDerniereExecution,
   }: ObservatoireProps = $props();
 
-  const dateDonnees = new Date().toLocaleDateString('fr-FR');
+  let dateDonnees = $derived(
+    dateDerniereExecution
+      ? new Date(dateDerniereExecution).toLocaleDateString('fr-FR')
+      : undefined
+  );
 
   const formatMois = new Intl.DateTimeFormat('fr-FR', {
     month: 'short',
@@ -71,7 +76,11 @@
 {/snippet}
 
 <div class="observatoire">
-  <h1>Observatoire</h1>
+  <h1>Projets</h1>
+  <p>
+    La sécurisation et l’homologation des systèmes d’information dans le secteur
+    public.
+  </p>
 
   <div class="ligne">
     <CarteObservatoire titre="Systèmes d’information sécurisés" {dateDonnees}>
@@ -141,6 +150,7 @@
     margin: 0 auto;
     padding: 32px 16px;
     background: #f6f6f6;
+    text-align: left;
 
     h1 {
       margin: 0;

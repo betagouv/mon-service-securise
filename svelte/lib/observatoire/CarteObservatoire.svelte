@@ -3,7 +3,7 @@
 
   interface Props {
     titre: string;
-    dateDonnees: string;
+    dateDonnees?: string;
     children: Snippet;
   }
 
@@ -15,7 +15,9 @@
   <div class="contenu">
     {@render children()}
   </div>
-  <p class="source">MonServiceSécurisé, {dateDonnees}</p>
+  <p class="source">
+    MonServiceSécurisé{dateDonnees ? `, ${dateDonnees}` : ''}
+  </p>
 </section>
 
 <style lang="scss">
