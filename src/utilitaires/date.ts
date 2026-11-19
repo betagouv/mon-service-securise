@@ -55,13 +55,24 @@ const aMinuitUTC = (date: Date): number =>
 const nombreDeJoursCalendaires = (debut: Date, fin: Date): number =>
   (aMinuitUTC(fin) - aMinuitUTC(debut)) / MS_PAR_JOUR;
 
+const debutDeMois = (date: Date) =>
+  `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-01`;
+
+const premierJourMoisSuivant = (mois: string): string => {
+  const date = new Date(`${mois}T00:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + 1);
+  return debutDeMois(date);
+};
+
 export {
   ajouteMoisADate,
   dateEnFrancais,
   dateEnIso,
+  debutDeMois,
   chaineDateFrEnChaineDateISO,
   dateInvalide,
   dateYYYYMMDD,
   nombreDeJoursCalendaires,
+  premierJourMoisSuivant,
   secondesJusqua23h59m59s,
 };
