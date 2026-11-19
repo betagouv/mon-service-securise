@@ -3,5 +3,6 @@
   "30 6 * * 2 $ROOT/scripts/taches/tacheEnvoiRapportHebdomadaire.sh",
   "0 4 1 * * $ROOT/scripts/taches/tacheEnvoiRapportMensuel.sh",
   "0 10 * * 0 $ROOT/scripts/taches/tacheHistoriseNombreDeServicesDansCrm.sh",
-  "10 0 * * * $ROOT/scripts/taches/tachePurgeRevocationsJwt.sh"
+  "10 0 * * * $ROOT/scripts/taches/tachePurgeRevocationsJwt.sh",
+  "30 2 * * * $ROOT/scripts/taches/tacheMetsAJourObservatoire.sh"
 ]
