@@ -1,4 +1,50 @@
 import type { Knex } from 'knex';
+import {
+  libellesDepartements,
+  libellesRegions,
+  libellesSecteursActivite,
+  libellesTypesOrganisation,
+} from './libellesObservatoire.js';
+
+export type ValeurFiltre = { valeur: string; libelle: string };
+
+const valeursDisponibles = async (
+  knex: Knex,
+  colonne: string,
+  libelles: Record<string, string>,
+  ordre: 'parLibelle' | 'parValeur' = 'parLibelle'
+): Promise<ValeurFiltre[]> => {
+  const lignes = await knex('observatoire_mss_services_crees')
+    .distinct(colonne)
+    .whereNotNull(colonne);
+  const valeurs: ValeurFiltre[] = lignes.map((ligne) => ({
+    valeur: ligne[colonne],
+    libelle: libelles[ligne[colonne]] ?? ligne[colonne],
+  }));
+  const cleDeTri = ordre === 'parLibelle' ? 'libelle' : 'valeur';
+  return valeurs.sort((a, b) => a[cleDeTri].localeCompare(b[cleDeTri], 'fr'));
+};
+
+export const filtresDisponibles = async (knex: Knex) => ({
+  regions: await valeursDisponibles(knex, 'region', libellesRegions),
+  departements: await valeursDisponibles(
+    knex,
+    'departement',
+    libellesDepartements,
+    'parValeur'
+  ),
+  secteursActivite: await valeursDisponibles(
+    knex,
+    'secteur_activite',
+    libellesSecteursActivite
+  ),
+  typesOrganisation: await valeursDisponibles(
+    knex,
+    'type_organisation',
+    libellesTypesOrganisation,
+    'parValeur'
+  ),
+});
 
 export type FiltresObservatoire = {
   region?: string;
@@ -112,5 +158,6 @@ export const donneesObservatoire = async (
     servicesParNiveauSecurite,
     cumulMensuelHomologations,
     dateDerniereExecution: dateDerniereExecution ?? null,
+    filtresDisponibles: await filtresDisponibles(knex),
   };
 };

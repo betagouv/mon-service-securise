@@ -9,14 +9,17 @@
   import { api } from './observatoire.api';
   import CarteObservatoire from './CarteObservatoire.svelte';
   import Loader from '../ui/Loader.svelte';
+  import SelectionFiltres from './SelectionFiltres.svelte';
 
   let donnees = $state.raw<DonneesObservatoire>();
+  let filtres = $state.raw<FiltresObservatoire>({});
 
-  const chargeDonnees = async (filtres: FiltresObservatoire = {}) => {
-    donnees = await api.donnees(filtres);
+  const chargeDonnees = async (nouveauxFiltres: FiltresObservatoire) => {
+    filtres = nouveauxFiltres;
+    donnees = await api.donnees(nouveauxFiltres);
   };
 
-  onMount(() => chargeDonnees());
+  onMount(() => chargeDonnees({}));
 
   let dateDonnees = $derived(
     donnees?.dateDerniereExecution
@@ -100,6 +103,12 @@
   {#if !donnees}
     <Loader />
   {:else}
+    <SelectionFiltres
+      disponibles={donnees.filtresDisponibles}
+      {filtres}
+      onchange={chargeDonnees}
+    />
+
     <div class="ligne">
       <CarteObservatoire titre="Systèmes d’information sécurisés" {dateDonnees}>
         {@render chiffreCle(totalServices)}

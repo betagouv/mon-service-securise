@@ -20,6 +20,16 @@ export type DonneesObservatoire = {
   servicesParNiveauSecurite: ServicesParNiveauSecurite[];
   cumulMensuelHomologations: CumulMensuel[];
   dateDerniereExecution: string | null;
+  filtresDisponibles: FiltresDisponibles;
+};
+
+export type ValeurFiltre = { valeur: string; libelle: string };
+
+export type FiltresDisponibles = {
+  regions: ValeurFiltre[];
+  departements: ValeurFiltre[];
+  secteursActivite: ValeurFiltre[];
+  typesOrganisation: ValeurFiltre[];
 };
 
 export type FiltresObservatoire = {
