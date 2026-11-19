@@ -1141,6 +1141,57 @@ class ConsoleAdministration {
     );
     console.log(`${donneesAInserer.length} lignes insérées`);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async peupleObservatoireHomologations() {
+    const { rows: homologationsRealisees } = await knexJournalMSS.raw(`
+      WITH homologations_par_mois AS (
+        SELECT donnees->>'idService' AS id_hash_service,
+               date_trunc('month', date) + interval '1 month' AS debut_mois_suivant,
+               COUNT(*) AS nombre
+        FROM journal_mss.evenements
+        WHERE type = 'NOUVELLE_HOMOLOGATION_CREEE'
+          AND COALESCE((donnees->>'refusee')::boolean, false) = false
+        GROUP BY 1, 2
+      ),
+      tous_les_mois_par_service AS (
+        SELECT id_hash_service,
+               generate_series(
+                 MIN(debut_mois_suivant),
+                 date_trunc('month', now()) + interval '1 month',
+                 interval '1 month'
+               ) AS debut_mois_suivant
+        FROM homologations_par_mois
+        GROUP BY id_hash_service
+      )
+      SELECT id_hash_service,
+             debut_mois_suivant::date AS date,
+             (SUM(COALESCE(nombre, 0)) OVER (
+               PARTITION BY id_hash_service
+               ORDER BY debut_mois_suivant
+             ))::int AS total_realisees
+      FROM tous_les_mois_par_service
+      LEFT JOIN homologations_par_mois USING (id_hash_service, debut_mois_suivant)
+    `);
+
+    const idsHashServicesConnus = new Set(
+      (await knexMSS('observatoire_mss_services_crees').select('id_hash')).map(
+        ({ id_hash: idHash }) => idHash
+      )
+    );
+    const donneesAInserer = homologationsRealisees.filter(
+      ({ id_hash_service: idHashService }) =>
+        idsHashServicesConnus.has(idHashService)
+    );
+
+    await knexMSS('observatoire_mss_homologations_realisees').truncate();
+    await knexMSS.batchInsert(
+      'observatoire_mss_homologations_realisees',
+      donneesAInserer,
+      1000
+    );
+    console.log(`${donneesAInserer.length} homologations insérées`);
+  }
 }
 
 export default ConsoleAdministration;
