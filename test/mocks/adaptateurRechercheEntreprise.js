@@ -16,6 +16,7 @@ const fauxAdaptateurRechercheEntreprise = () => ({
     anneeTrancheEffectifSalarie: null,
     commune: '33376',
     departement: '33',
+    region: '75',
   }),
 });
 
