@@ -1023,7 +1023,7 @@ class ConsoleAdministration {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async peupleObservatoire() {
+  async peupleObservatoireServiceCrees() {
     const niveaux = {
       niveau1: 'Élémentaires',
       niveau2: 'Modérés',
@@ -1070,6 +1070,76 @@ class ConsoleAdministration {
     ];
 
     await knexMSS('observatoire_mss_services_crees').insert(donneesAInserer);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async peupleObservatoireMesures() {
+    const { rows: mesuresFaitesParServiceEtParMois } =
+      await knexJournalMSS.raw(`
+        WITH derniere_completude_du_mois AS (
+          SELECT DISTINCT ON (donnees->>'idService', date_trunc('month', date))
+                 donnees->>'idService' AS id_hash_service,
+                 date_trunc('month', date) + interval '1 month' AS debut_mois_suivant,
+                 (donnees->'detailMesures')::jsonb AS detail_mesures
+          FROM journal_mss.evenements
+          WHERE type = 'COMPLETUDE_SERVICE_MODIFIEE'
+          ORDER BY donnees->>'idService', date_trunc('month', date), date DESC
+        ),
+        mesures_faites_connues AS (
+          SELECT id_hash_service,
+                 debut_mois_suivant,
+                 (SELECT COUNT(*)
+                  FROM jsonb_array_elements(COALESCE(detail_mesures, '[]'::jsonb)) AS mesure
+                  WHERE mesure->>'statut' = 'fait')::int AS total_faites
+          FROM derniere_completude_du_mois
+        ),
+        tous_les_mois_par_service AS (
+          SELECT id_hash_service,
+                 generate_series(
+                   MIN(debut_mois_suivant),
+                   date_trunc('month', now()) + interval '1 month',
+                   interval '1 month'
+                 ) AS debut_mois_suivant
+          FROM mesures_faites_connues
+          GROUP BY id_hash_service
+        ),
+        mois_avec_valeur_eventuelle AS (
+          SELECT mois.id_hash_service,
+                 mois.debut_mois_suivant,
+                 connue.total_faites,
+                 COUNT(connue.total_faites) OVER (
+                   PARTITION BY mois.id_hash_service
+                   ORDER BY mois.debut_mois_suivant
+                 ) AS rang_derniere_valeur_connue
+          FROM tous_les_mois_par_service AS mois
+          LEFT JOIN mesures_faites_connues AS connue
+            USING (id_hash_service, debut_mois_suivant)
+        )
+        SELECT id_hash_service,
+               debut_mois_suivant::date AS date,
+               MAX(total_faites) OVER (
+                 PARTITION BY id_hash_service, rang_derniere_valeur_connue
+               ) AS total_faites
+        FROM mois_avec_valeur_eventuelle
+      `);
+
+    const idsHashServicesConnus = new Set(
+      (await knexMSS('observatoire_mss_services_crees').select('id_hash')).map(
+        ({ id_hash: idHash }) => idHash
+      )
+    );
+    const donneesAInserer = mesuresFaitesParServiceEtParMois.filter(
+      ({ id_hash_service: idHashService }) =>
+        idsHashServicesConnus.has(idHashService)
+    );
+
+    await knexMSS('observatoire_mss_mesures_faites').truncate();
+    await knexMSS.batchInsert(
+      'observatoire_mss_mesures_faites',
+      donneesAInserer,
+      1000
+    );
+    console.log(`${donneesAInserer.length} lignes insérées`);
   }
 }
 
