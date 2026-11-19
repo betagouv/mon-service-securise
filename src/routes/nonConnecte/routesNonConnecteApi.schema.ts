@@ -29,6 +29,13 @@ export const reglesValidationRechercheOrganisations = {
   recherche: z.string().min(2).max(200),
 };
 
+export const reglesValidationFiltresObservatoire = {
+  region: z.string().max(100).optional(),
+  departement: z.string().max(100).optional(),
+  secteurActivite: z.string().max(100).optional(),
+  typeOrganisation: z.string().max(100).optional(),
+};
+
 export const reglesValidationDesinscriptionInfolettre = {
   event: z.literal('unsubscribe'),
   email: z.email(),

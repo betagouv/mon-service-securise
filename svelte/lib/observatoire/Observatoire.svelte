@@ -1,21 +1,26 @@
 <script lang="ts">
   import '@gouvfr/dsfr-chart';
   import '@gouvfr/dsfr-chart/css';
-  import type { ObservatoireProps } from './observatoire.d';
+  import { onMount } from 'svelte';
+  import type {
+    DonneesObservatoire,
+    FiltresObservatoire,
+  } from './observatoire.d';
+  import { api } from './observatoire.api';
   import CarteObservatoire from './CarteObservatoire.svelte';
+  import Loader from '../ui/Loader.svelte';
 
-  let {
-    totalServices,
-    cumulMensuelServices,
-    mesuresFaitesParMois,
-    servicesParNiveauSecurite,
-    cumulMensuelHomologations,
-    dateDerniereExecution,
-  }: ObservatoireProps = $props();
+  let donnees = $state.raw<DonneesObservatoire>();
+
+  const chargeDonnees = async (filtres: FiltresObservatoire = {}) => {
+    donnees = await api.donnees(filtres);
+  };
+
+  onMount(() => chargeDonnees());
 
   let dateDonnees = $derived(
-    dateDerniereExecution
-      ? new Date(dateDerniereExecution).toLocaleDateString('fr-FR')
+    donnees?.dateDerniereExecution
+      ? new Date(donnees.dateDerniereExecution).toLocaleDateString('fr-FR')
       : undefined
   );
 
@@ -26,6 +31,16 @@
   const enLibelleMois = (mois: string) =>
     formatMois.format(new Date(`${mois}-01T00:00:00`));
   const enChiffre = (nombre: number) => Number(nombre).toLocaleString('fr-FR');
+
+  let totalServices = $derived(donnees?.totalServices ?? 0);
+  let cumulMensuelServices = $derived(donnees?.cumulMensuelServices ?? []);
+  let mesuresFaitesParMois = $derived(donnees?.mesuresFaitesParMois ?? []);
+  let servicesParNiveauSecurite = $derived(
+    donnees?.servicesParNiveauSecurite ?? []
+  );
+  let cumulMensuelHomologations = $derived(
+    donnees?.cumulMensuelHomologations ?? []
+  );
 
   let moisServices = $derived(
     cumulMensuelServices.map(({ mois }) => enLibelleMois(mois))
@@ -82,63 +97,67 @@
     public.
   </p>
 
-  <div class="ligne">
-    <CarteObservatoire titre="Systèmes d’information sécurisés" {dateDonnees}>
-      {@render chiffreCle(totalServices)}
-    </CarteObservatoire>
-    <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
-      {@render evolutionMensuelle(
-        moisServices,
-        cumulsServices,
-        'SI sécurisés',
-        'SI'
-      )}
-    </CarteObservatoire>
-  </div>
-
-  <CarteObservatoire
-    titre="Répartition par besoins de sécurité des projets"
-    {dateDonnees}
-  >
-    <div class="camembert">
-      <pie-chart
-        x={JSON.stringify([niveauxSecurite])}
-        y={JSON.stringify([servicesParNiveau])}
-        name={JSON.stringify(niveauxSecurite)}
-        unit-tooltip="services"
-        selected-palette="categorical"
-        fill="true"
-      ></pie-chart>
+  {#if !donnees}
+    <Loader />
+  {:else}
+    <div class="ligne">
+      <CarteObservatoire titre="Systèmes d’information sécurisés" {dateDonnees}>
+        {@render chiffreCle(totalServices)}
+      </CarteObservatoire>
+      <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
+        {@render evolutionMensuelle(
+          moisServices,
+          cumulsServices,
+          'SI sécurisés',
+          'SI'
+        )}
+      </CarteObservatoire>
     </div>
-  </CarteObservatoire>
 
-  <div class="ligne">
-    <CarteObservatoire titre="Faiblesses corrigées" {dateDonnees}>
-      {@render chiffreCle(totalMesuresFaitesADate)}
+    <CarteObservatoire
+      titre="Répartition par besoins de sécurité des projets"
+      {dateDonnees}
+    >
+      <div class="camembert">
+        <pie-chart
+          x={JSON.stringify([niveauxSecurite])}
+          y={JSON.stringify([servicesParNiveau])}
+          name={JSON.stringify(niveauxSecurite)}
+          unit-tooltip="services"
+          selected-palette="categorical"
+          fill="true"
+        ></pie-chart>
+      </div>
     </CarteObservatoire>
-    <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
-      {@render evolutionMensuelle(
-        moisMesuresFaites,
-        totauxMesuresFaites,
-        'Mesures faites',
-        'mesures'
-      )}
-    </CarteObservatoire>
-  </div>
 
-  <div class="ligne">
-    <CarteObservatoire titre="Homologations réalisées" {dateDonnees}>
-      {@render chiffreCle(totalHomologationsADate)}
-    </CarteObservatoire>
-    <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
-      {@render evolutionMensuelle(
-        moisHomologations,
-        cumulsHomologations,
-        'Homologations',
-        'homologations'
-      )}
-    </CarteObservatoire>
-  </div>
+    <div class="ligne">
+      <CarteObservatoire titre="Faiblesses corrigées" {dateDonnees}>
+        {@render chiffreCle(totalMesuresFaitesADate)}
+      </CarteObservatoire>
+      <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
+        {@render evolutionMensuelle(
+          moisMesuresFaites,
+          totauxMesuresFaites,
+          'Mesures faites',
+          'mesures'
+        )}
+      </CarteObservatoire>
+    </div>
+
+    <div class="ligne">
+      <CarteObservatoire titre="Homologations réalisées" {dateDonnees}>
+        {@render chiffreCle(totalHomologationsADate)}
+      </CarteObservatoire>
+      <CarteObservatoire titre="Évolution par mois (cumul)" {dateDonnees}>
+        {@render evolutionMensuelle(
+          moisHomologations,
+          cumulsHomologations,
+          'Homologations',
+          'homologations'
+        )}
+      </CarteObservatoire>
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">

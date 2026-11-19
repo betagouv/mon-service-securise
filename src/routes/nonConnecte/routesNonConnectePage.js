@@ -2,7 +2,6 @@ import express from 'express';
 import { readFileSync } from 'node:fs';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
-import { knexMSS } from '../../bdd/knex.js';
 
 const routesNonConnectePage = ({
   adaptateurEnvironnement,
@@ -203,78 +202,10 @@ const routesNonConnectePage = ({
     reponse.type('text/markdown').send(llms);
   });
 
-  routes.get('/observatoire', async (_requete, reponse) => {
-    const totalServices = (
-      await knexMSS('observatoire_mss_services_crees').count()
-    )[0].count;
-
-    const { rows: cumulMensuelServices } = await knexMSS.raw(`
-      WITH bornes AS (
-        SELECT date_trunc('month', MIN(date_creation)) AS premier_mois,
-               date_trunc('month', MAX(date_creation)) AS dernier_mois
-        FROM observatoire_mss_services_crees
-      ),
-      mois AS (
-        SELECT generate_series(premier_mois, dernier_mois, interval '1 month') AS mois
-        FROM bornes
-      ),
-      crees_par_mois AS (
-        SELECT date_trunc('month', date_creation) AS mois, COUNT(*) AS nombre
-        FROM observatoire_mss_services_crees
-        WHERE date_creation IS NOT NULL
-        GROUP BY 1
-      )
-      SELECT to_char(mois.mois, 'YYYY-MM') AS mois,
-             (SUM(COALESCE(crees_par_mois.nombre, 0)) OVER (ORDER BY mois.mois))::int AS cumul
-      FROM mois
-      LEFT JOIN crees_par_mois ON crees_par_mois.mois = mois.mois
-      ORDER BY mois.mois
-    `);
-
-    const { rows: mesuresFaitesParMois } = await knexMSS.raw(`
-      SELECT to_char(date - interval '1 month', 'YYYY-MM') AS mois,
-             SUM(total_faites)::int AS total
-      FROM observatoire_mss_mesures_faites
-      GROUP BY date
-      ORDER BY date
-    `);
-
-    const { rows: servicesParNiveauSecurite } = await knexMSS.raw(`
-      SELECT niveau_securite AS "niveauSecurite",
-             COUNT(*)::int AS total
-      FROM observatoire_mss_services_crees
-      WHERE niveau_securite IS NOT NULL
-      GROUP BY niveau_securite
-      ORDER BY CASE niveau_securite
-                 WHEN 'Élémentaires' THEN 1
-                 WHEN 'Modérés' THEN 2
-                 WHEN 'Importants' THEN 3
-               END
-    `);
-
-    const { rows: cumulMensuelHomologations } = await knexMSS.raw(`
-      SELECT to_char(date - interval '1 month', 'YYYY-MM') AS mois,
-             SUM(total_realisees)::int AS cumul
-      FROM observatoire_mss_homologations_realisees
-      GROUP BY date
-      ORDER BY date
-    `);
-
-    const [{ derniereExecution }] = await knexMSS(
-      'observatoire_mss_executions'
-    ).max('date_execution as derniereExecution');
-
-    reponse.render('observatoire', {
-      donneesObservatoire: {
-        totalServices,
-        cumulMensuelServices,
-        mesuresFaitesParMois,
-        servicesParNiveauSecurite,
-        cumulMensuelHomologations,
-        dateDerniereExecution: derniereExecution,
-      },
-    });
+  routes.get('/observatoire', (_requete, reponse) => {
+    reponse.render('observatoire');
   });
+
   return routes;
 };
 

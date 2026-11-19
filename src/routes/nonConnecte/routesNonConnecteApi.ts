@@ -5,6 +5,7 @@ import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationDesinscriptionInfolettre,
+  reglesValidationFiltresObservatoire,
   reglesValidationRechercheOrganisations,
   schemaPostUtilisateur,
 } from './routesNonConnecteApi.schema.js';
@@ -22,6 +23,11 @@ import {
 
 import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
 import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
+import { knexMSS } from '../../bdd/knex.js';
+import {
+  donneesObservatoire,
+  FiltresObservatoire,
+} from '../../observatoire/donneesObservatoire.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -96,6 +102,15 @@ const routesNonConnecteApi = ({
       );
 
       return reponse.status(200).json({ suggestions });
+    }
+  );
+
+  routes.get(
+    '/observatoire',
+    valideQuery(z.strictObject(reglesValidationFiltresObservatoire)),
+    async (requete, reponse) => {
+      const filtres = requete.query as FiltresObservatoire;
+      reponse.json(await donneesObservatoire(knexMSS, filtres));
     }
   );
 

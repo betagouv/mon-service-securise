@@ -1,10 +1,4 @@
-declare global {
-  interface HTMLElementEventMap {
-    'svelte-recharge-observatoire': CustomEvent;
-  }
-}
-
-export type CumulMensuelServices = {
+export type CumulMensuel = {
   mois: string;
   cumul: number;
 };
@@ -19,16 +13,18 @@ export type ServicesParNiveauSecurite = {
   total: number;
 };
 
-export type ObservatoireProps = {
+export type DonneesObservatoire = {
   totalServices: number;
-  cumulMensuelServices: CumulMensuelServices[];
+  cumulMensuelServices: CumulMensuel[];
   mesuresFaitesParMois: MesuresFaitesParMois[];
   servicesParNiveauSecurite: ServicesParNiveauSecurite[];
-  cumulMensuelHomologations: CumulMensuelHomologations[];
+  cumulMensuelHomologations: CumulMensuel[];
   dateDerniereExecution: string | null;
 };
 
-export type CumulMensuelHomologations = {
-  mois: string;
-  cumul: number;
+export type FiltresObservatoire = {
+  region?: string;
+  departement?: string;
+  secteurActivite?: string;
+  typeOrganisation?: string;
 };
