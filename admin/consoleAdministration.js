@@ -38,6 +38,8 @@ import { ServiceAdministrationOrganisations } from '../src/supervision/serviceAd
 import { ProcedureSuppressionContributeur } from '../src/modeles/autorisations/procedureSuppressionContributeur.js';
 import { fabriqueReferentiel } from '../src/fabriqueReferentiel.js';
 import { enCadence } from '../src/utilitaires/pThrottle.js';
+import { knexJournalMSS } from '../src/bdd/knexJournal.js';
+import { MiseAJourObservatoire } from '../src/taches/metsAJourObservatoire.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -62,8 +64,9 @@ class ConsoleAdministration {
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
     this.busEvenements = new BusEvenements({ adaptateurGestionErreur });
 
+    this.adaptateurChiffrement = fabriqueAdaptateurChiffrement();
     this.depotDonnees = DepotDonnees.creeDepot({
-      adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
+      adaptateurChiffrement: this.adaptateurChiffrement,
       adaptateurJWT: fabriqueAdaptateurJWT(),
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID: fabriqueAdaptateurUUID(),
@@ -1018,6 +1021,17 @@ class ConsoleAdministration {
     };
 
     await this.depotDonnees.nouveauService(utilisateur.id, donneesService);
+  }
+
+  async metsAJourObservatoire() {
+    const trace = await new MiseAJourObservatoire({
+      knexMSS,
+      knexJournal: knexJournalMSS,
+      depotDonnees: this.depotDonnees,
+      adaptateurChiffrement: this.adaptateurChiffrement,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+    }).execute();
+    trace.forEach((ligne) => console.log(ligne));
   }
 }
 
