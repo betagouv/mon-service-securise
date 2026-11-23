@@ -1,22 +1,24 @@
 <script lang="ts">
   interface Props {
-    type: 'PDF' | 'ZIP' | 'CSV' | 'PPTX';
+    detail: string;
     nom: string;
     description: string;
     cheminDocument?: string;
     idService?: string;
     href?: string;
     badge?: string;
+    desactive?: boolean;
   }
 
   let {
-    type,
+    detail,
     nom,
     description,
     cheminDocument,
     idService,
     href,
     badge,
+    desactive = false,
   }: Props = $props();
 
   let lien = $derived(
@@ -32,11 +34,12 @@
   download
   href={lien}
   has-detail-end
-  detail-end={type}
+  detail-end={detail}
   enlarge
   size="sm"
   blank
   has-badge
+  disabled={desactive}
 >
   {#if badge}
     <dsfr-badge

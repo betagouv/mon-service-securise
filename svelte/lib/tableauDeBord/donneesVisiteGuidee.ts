@@ -1,4 +1,5 @@
 import type { NiveauSecuriteService } from './tableauDeBord.d';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 export const donneesVisiteGuidee = {
   resume: {
@@ -31,6 +32,7 @@ export const donneesVisiteGuidee = {
       actionRecommandee: undefined,
       niveauSecurite: 'niveau1' as NiveauSecuriteService,
       pourcentageCompletude: 0.5,
+      version: 'v2' as VersionService,
     },
   ],
   indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: '4.3' }],

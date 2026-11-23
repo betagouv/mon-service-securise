@@ -8,6 +8,7 @@
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { routeurStore } from '../../store/routeur.store';
   import TitreOngletDSFR from '../../../ui/TitreOngletDSFR.svelte';
+  import type { VersionService } from '../../../../../src/modeles/versionService';
 
   interface Props {
     dossiers: DossiersHomologation;
@@ -18,6 +19,7 @@
     idService: string;
     documentsDisponibles: string[];
     niveauSecurite: IdNiveauDeSecurite;
+    versionService: VersionService | undefined;
   }
 
   let {
@@ -29,6 +31,7 @@
     indiceCyberPersonnalise,
     documentsDisponibles,
     niveauSecurite,
+    versionService,
   }: Props = $props();
 
   const configurationsTabs = [
@@ -122,6 +125,7 @@
           avecDocumentsAccessible
           {documentsDisponibles}
           peutSupprimer={!estLectureSeule}
+          {versionService}
         />
       {:else}
         <div class="onglet-vide">
@@ -158,6 +162,7 @@
           avecStatutHomologation
           avecTamponAccessible={!dossiers.dossierActif.importe}
           {idService}
+          {versionService}
         />
       {:else}
         <div class="onglet-vide">
@@ -188,7 +193,12 @@
         </div>
       {:else}
         {#each dossiers.dossiersPasses as dossier (dossier.id)}
-          <CarteDossier {dossier} {statutsHomologation} {idService} />
+          <CarteDossier
+            {dossier}
+            {statutsHomologation}
+            {idService}
+            {versionService}
+          />
         {/each}
       {/if}
     </div>
@@ -217,6 +227,7 @@
             {statutsHomologation}
             avecStatutHomologation
             {idService}
+            {versionService}
           />
         {/each}
       {/if}

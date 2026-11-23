@@ -7,6 +7,7 @@
   import TiroirTelechargementTamponHomologation from './TiroirTelechargementTamponHomologation.svelte';
   import TiroirSuppressionDossierCourant from './TiroirSuppressionDossierCourant.svelte';
   import { routeurStore } from '../../../store/routeur.store';
+  import type { VersionService } from '../../../../../../src/modeles/versionService';
 
   interface Props {
     idService: string;
@@ -17,12 +18,14 @@
     avecStatutHomologation?: boolean;
     documentsDisponibles?: string[];
     peutSupprimer?: boolean;
+    versionService: VersionService | undefined;
   }
 
   let {
     idService,
     dossier,
     statutsHomologation,
+    versionService,
     avecDocumentsAccessible = false,
     avecTamponAccessible = false,
     avecStatutHomologation = false,
@@ -156,6 +159,7 @@
               service: {
                 id: idService,
                 documentsDisponibles,
+                version: versionService,
               },
             })}
         ></dsfr-button>
