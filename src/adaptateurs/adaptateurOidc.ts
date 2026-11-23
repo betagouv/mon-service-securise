@@ -63,11 +63,16 @@ const estUneMethodeAuthentificationAvecMFA = (
   methodesAuthentification: MethodeAuthentification[]
 ) => methodesAuthentification.includes('mfa');
 
-const estUneErreurTechniqueProConnect = (erreur: unknown) =>
-  erreur instanceof client.AuthorizationResponseError &&
-  erreur.error === 'invalid_request' &&
-  erreur.error_description ===
-    'authentication aborted due to a technical error on the authorization server';
+const estUneErreurTechniqueProConnect = (erreur: unknown) => {
+  const codesErreurTechnique = ['invalid_request', 'server_error'];
+
+  return (
+    erreur instanceof client.AuthorizationResponseError &&
+    codesErreurTechnique.includes(erreur.error) &&
+    erreur.error_description ===
+      'authentication aborted due to a technical error on the authorization server'
+  );
+};
 
 const recupereJeton = async (requete: Request) => {
   const configuration = await recupereConfiguration();

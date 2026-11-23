@@ -33,13 +33,22 @@ describe("L'adaptateur OIDC", () => {
       expect(estUneErreurTechniqueProConnect(erreur)).toBe(true);
     });
 
+    it('reconnaît une erreur technique de ProConnect renvoyée en `server_error`', () => {
+      const erreur = uneErreurDAutorisation(
+        'server_error',
+        DESCRIPTION_ERREUR_TECHNIQUE
+      );
+
+      expect(estUneErreurTechniqueProConnect(erreur)).toBe(true);
+    });
+
     it('ne reconnaît pas une `invalid_request` dont la description est différente', () => {
       const erreur = uneErreurDAutorisation('invalid_request', 'invalid scope');
 
       expect(estUneErreurTechniqueProConnect(erreur)).toBe(false);
     });
 
-    it('ne reconnaît pas une autre erreur que `invalid_request`', () => {
+    it('ne reconnaît pas une autre erreur que `invalid_request` ou `server_error`', () => {
       const erreur = uneErreurDAutorisation(
         'access_denied',
         DESCRIPTION_ERREUR_TECHNIQUE
