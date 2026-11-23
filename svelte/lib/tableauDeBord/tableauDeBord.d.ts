@@ -1,3 +1,5 @@
+import type { VersionService } from '../../../src/modeles/versionService';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-tableau-de-bord': CustomEvent;
@@ -50,6 +52,7 @@ export type Service = {
   actionRecommandee?: ActionRecommandee;
   niveauSecurite?: NiveauSecuriteService;
   pourcentageCompletude?: number;
+  version: VersionService;
 };
 
 export type BrouillonService = {

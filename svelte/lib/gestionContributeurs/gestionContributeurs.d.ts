@@ -3,6 +3,7 @@
 import type { ResumeNiveauDroit } from '../ui/types';
 import type { AxiosStatic } from 'axios';
 import type { Contributeur } from './kit/ChampAvecSuggestions.svelte';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 declare global {
   const axios: AxiosStatic;
@@ -22,6 +23,7 @@ export type Service = {
   contributeurs: Utilisateur[];
   permissions: { gestionContributeurs: boolean };
   nomService: string;
+  version: VersionService;
 };
 
 export type DonneesServicePourTiroirContributeurs = Service;

@@ -3,6 +3,7 @@ import type {
   Service,
   Utilisateur,
 } from '../gestionContributeurs.d';
+import type { VersionService } from '../../../../src/modeles/versionService';
 
 const contributeurs: Utilisateur[] = [
   {
@@ -98,4 +99,5 @@ export const donneesServiceVisiteGuidee: Service & {
   permissions: { gestionContributeurs: false },
   nomService: 'Nom de mon service',
   documentsDisponibles: ['annexes', 'syntheseSecurite'],
+  version: 'v2' as VersionService,
 };

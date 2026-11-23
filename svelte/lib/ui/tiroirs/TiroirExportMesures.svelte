@@ -15,13 +15,13 @@
 
 <ContenuTiroir>
   <DocumentTelechargeable
-    type="CSV"
+    detail="CSV"
     nom="Liste sans données additionnelles renseignées"
     description="Cette liste ne contient ni statut ni commentaire ajoutés aux mesures."
     href="/service/{idService}/mesures/export.csv?timestamp={Date.now()}"
   />
   <DocumentTelechargeable
-    type="CSV"
+    detail="CSV"
     nom="Liste avec données additionnelles renseignées"
     description="Cette liste contient les statuts et les commentaires ajoutés aux mesures."
     href="/service/{idService}/mesures/export.csv?avecDonneesAdditionnelles=true{avecReferentielsExternes
