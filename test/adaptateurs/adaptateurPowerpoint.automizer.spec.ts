@@ -140,7 +140,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
   describe('quand il génère le support de commission d’homologation', () => {
-    it('contient tous les slides, dans le bon ordre', async () => {
+    it('[1] contient tous les slides, dans le bon ordre', async () => {
       const pptx = await genereSupport();
 
       expect(await nombreDeSlides(pptx)).toBe(28);
@@ -241,7 +241,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
-    it("écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
+    it("[2] écrit le nom et la fonction de l'autorité d'homologation dans la composition de la commission", async () => {
       const pptx = await genereSupport({
         autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
       });
@@ -251,7 +251,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       );
     });
 
-    it("ne laisse pas l'autorité d'homologation à compléter quand elle est renseignée", async () => {
+    it("[3] ne laisse pas l'autorité d'homologation à compléter quand elle est renseignée", async () => {
       const pptx = await genereSupport({
         autorite: { nom: 'Jean Dupond', fonction: 'RSSI' },
       });
@@ -264,7 +264,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       ).toEqual([]);
     });
 
-    it("laisse l'autorité d'homologation à compléter par le projet quand elle n'est pas renseignée", async () => {
+    it("[4] laisse l'autorité d'homologation à compléter par le projet quand elle n'est pas renseignée", async () => {
       const pptx = await genereSupport();
 
       const commission = await contenuSlide(pptx, 3);
@@ -297,7 +297,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const texteDeLaLigne = (page: string, numero: number, partie: string) =>
         texteDeLaForme(page, nomDeLaLigne(numero, partie));
 
-      it('écrit l’intitulé, la source et la case de chaque pièce', async () => {
+      it('[5] écrit l’intitulé, la source et la case de chaque pièce', async () => {
         const pptx = await genereSupport({
           piecesDuDossier: [
             {
@@ -324,7 +324,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaLigne(page, 2, 'source')).toBe('Utilisateur');
       });
 
-      it('retire la version à compléter des lignes remplies', async () => {
+      it('[6] retire la version à compléter des lignes remplies', async () => {
         const pptx = await genereSupport({
           piecesDuDossier: [unePiece('Une pièce')],
         });
@@ -335,7 +335,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toEqual([]);
       });
 
-      it('laisse les lignes au-delà des pièces à compléter par le projet', async () => {
+      it('[7] laisse les lignes au-delà des pièces à compléter par le projet', async () => {
         const pptx = await genereSupport({
           piecesDuDossier: [unePiece('Une pièce')],
         });
@@ -352,7 +352,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('répartit les pièces sur plusieurs pages numérotées au-delà de 16', async () => {
+      it('[8] répartit les pièces sur plusieurs pages numérotées au-delà de 16', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
         );
@@ -367,7 +367,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toBe('Pièces du dossier transmises avant la séance 2/2');
       });
 
-      it('commence la page suivante par les pièces restantes, puis la complète de lignes à remplir', async () => {
+      it('[9] commence la page suivante par les pièces restantes, puis la complète de lignes à remplir', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
         );
@@ -384,7 +384,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('ajoute une page entièrement à compléter quand les pièces remplissent exactement leurs pages', async () => {
+      it('[10] ajoute une page entièrement à compléter quand les pièces remplissent exactement leurs pages', async () => {
         const seizePieces = Array.from({ length: 16 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
         );
@@ -414,7 +414,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const ordonnee = (page: string, numero: number, partie: string) =>
           cadreDeLaForme(page, nomDeLaLigne(numero, partie)).y;
 
-        it('agrandit sa ligne et descend les lignes suivantes de la colonne quand son intitulé tient sur deux lignes', async () => {
+        it('[11] agrandit sa ligne et descend les lignes suivantes de la colonne quand son intitulé tient sur deux lignes', async () => {
           const pptx = await genereSupport({
             piecesDuDossier: [
               unePiece('Pièce 1'),
@@ -435,7 +435,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('écrit son intitulé abrégé, sur une seule ligne, quand l’intitulé complet dépasserait trois lignes', async () => {
+        it('[12] écrit son intitulé abrégé, sur une seule ligne, quand l’intitulé complet dépasserait trois lignes', async () => {
           const pptx = await genereSupport({
             piecesDuDossier: [
               pieceAbregeable(
@@ -453,7 +453,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('utilise des lignes régulières sur toutes les pages', async () => {
+      it('[13] utilise des lignes régulières sur toutes les pages', async () => {
         const vingtPieces = Array.from({ length: 20 }, (_, index) =>
           unePiece(`Pièce ${index + 1}`)
         );
@@ -484,7 +484,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const descriptionDe = (nombreDeMots: number) =>
         Array.from({ length: nombreDeMots }, () => 'description').join(' ');
 
-      it('remplace le placeholder par la description du système d’information', async () => {
+      it('[14] remplace le placeholder par la description du système d’information', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -499,7 +499,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('réduit la police de la description à 16 pt quand elle dépasse deux lignes à 21 pt', async () => {
+      it('[15] réduit la police de la description à 16 pt quand elle dépasse deux lignes à 21 pt', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, description: descriptionDe(20) },
         });
@@ -508,7 +508,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1600']);
       });
 
-      it('réduit la police de la description à 14 pt quand elle dépasse trois lignes à 16 pt', async () => {
+      it('[16] réduit la police de la description à 14 pt quand elle dépasse trois lignes à 16 pt', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, description: descriptionDe(35) },
         });
@@ -517,7 +517,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1400']);
       });
 
-      it('compte chaque saut de ligne de la description comme une nouvelle ligne', async () => {
+      it('[17] compte chaque saut de ligne de la description comme une nouvelle ligne', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -529,7 +529,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1600']);
       });
 
-      it('coupe la description par « … » quand elle dépasse quatre lignes à 14 pt', async () => {
+      it('[18] coupe la description par « … » quand elle dépasse quatre lignes à 14 pt', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, description: descriptionDe(60) },
         });
@@ -541,7 +541,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(taillesDePoliceDeLaDescription(contexte)).toEqual(['1400']);
       });
 
-      it('coupe aussi la description aux sauts de ligne quand elle dépasse quatre lignes à 14 pt', async () => {
+      it('[19] coupe aussi la description aux sauts de ligne quand elle dépasse quatre lignes à 14 pt', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -558,7 +558,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit chaque ligne de la description dans son propre paragraphe', async () => {
+      it('[20] écrit chaque ligne de la description dans son propre paragraphe', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -574,7 +574,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('écrit l’organisation responsable', async () => {
+      it('[21] écrit l’organisation responsable', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -589,7 +589,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit le statut de déploiement', async () => {
+      it('[22] écrit le statut de déploiement', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, statut: 'En conception' },
         });
@@ -599,7 +599,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(textesDeLaSlide(contexte)).toContain('En conception');
       });
 
-      it('écrit les URL du projet', async () => {
+      it('[23] écrit les URL du projet', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, urls: 'https://rh.exemple.fr' },
         });
@@ -611,7 +611,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(textesDeLaSlide(contexte)).toContain('https://rh.exemple.fr');
       });
 
-      it('écrit le type de projet', async () => {
+      it('[24] écrit le type de projet', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -626,7 +626,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(textesDeLaSlide(contexte)).toContain('Application mobile');
       });
 
-      it('écrit l’hébergement', async () => {
+      it('[25] écrit l’hébergement', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, hebergement: 'Autre' },
         });
@@ -638,7 +638,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(textesDeLaSlide(contexte)).toContain('Autre');
       });
 
-      it('écrit la localisation des données stockées', async () => {
+      it('[26] écrit la localisation des données stockées', async () => {
         const pptx = await genereSupport({
           contexte: {
             ...contexteParDefaut,
@@ -656,7 +656,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit les sécurisations prévues', async () => {
+      it('[27] écrit les sécurisations prévues', async () => {
         const pptx = await genereSupport({
           contexte: { ...contexteParDefaut, securisations: 'Un annuaire' },
         });
@@ -672,7 +672,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const BAS_DE_L_ENCART_ANSSI = 6295579 + 1828577;
       const DESCENTE_SANS_ENCART = BAS_DE_L_ENCART_ANSSI - (5251772 + 929506);
 
-      it('écrit le niveau de besoin de sécurité', async () => {
+      it('[28] écrit le niveau de besoin de sécurité', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -687,7 +687,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(besoins, 'besoins-niveau')).toBe('Modérés');
       });
 
-      it('illustre le niveau avec l’illustration de MonServiceSécurisé', async () => {
+      it('[29] illustre le niveau avec l’illustration de MonServiceSécurisé', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -709,7 +709,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toBe(true);
       });
 
-      it('écrit le résumé du niveau', async () => {
+      it('[30] écrit le résumé du niveau', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -726,7 +726,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit la démarche indicative adaptée, en majuscules', async () => {
+      it('[31] écrit la démarche indicative adaptée, en majuscules', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -743,7 +743,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit le nom du service et le niveau dans l’explication par le projet', async () => {
+      it('[32] écrit le nom du service et le niveau dans l’explication par le projet', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -764,7 +764,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit l’exposition du service', async () => {
+      it('[33] écrit l’exposition du service', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -789,7 +789,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(texteDeLaForme(besoins, 'exposition-duree')).toBe('Moins de 4h');
       });
 
-      it('agrandit l’ouverture et descend l’audience et la durée d’une ligne quand l’ouverture dépasse une ligne', async () => {
+      it('[34] agrandit l’ouverture et descend l’audience et la durée d’une ligne quand l’ouverture dépasse une ligne', async () => {
         const avecOuverture = async (ouverture: string) =>
           contenuSlide(
             await genereSupport({
@@ -827,7 +827,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit une pastille par donnée identifiée, à la place de la pastille modèle', async () => {
+      it('[35] écrit une pastille par donnée identifiée, à la place de la pastille modèle', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -899,13 +899,13 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'Plannings des agents',
         ];
 
-        it('gardent la police de 18 pt quand elles tiennent dans la carte', async () => {
+        it('[36] gardent la police de 18 pt quand elles tiennent dans la carte', async () => {
           const besoins = await slideAvecLesDonnees(['Données techniques']);
 
           expect(taillesDePoliceDesPastilles(besoins)).toEqual(['1800']);
         });
 
-        it('réduisent leur police pour tenir dans la carte quand elles débordent en 18 pt', async () => {
+        it('[37] réduisent leur police pour tenir dans la carte quand elles débordent en 18 pt', async () => {
           const besoins = await slideAvecLesDonnees([
             'Données techniques',
             'Documents RH sensibles',
@@ -925,7 +925,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('remplacent les dernières par « et N autres » quand elles débordent même en 14 pt', async () => {
+        it('[38] remplacent les dernières par « et N autres » quand elles débordent même en 14 pt', async () => {
           const besoins = await slideAvecLesDonnees([
             ...cinqDonnees,
             'Agendas des élus',
@@ -943,7 +943,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('écrit « et 1 autre » au singulier', async () => {
+        it('[39] écrit « et 1 autre » au singulier', async () => {
           const besoins = await slideAvecLesDonnees(cinqDonnees);
           const noms = nomsDesPastilles(besoins);
 
@@ -951,7 +951,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           expect(texteDeLaForme(besoins, noms[4])).toBe('et 1 autre');
         });
 
-        it('les place côte à côte tant qu’elles tiennent sur la ligne', async () => {
+        it('[40] les place côte à côte tant qu’elles tiennent sur la ligne', async () => {
           const [premiere, seconde] = await pastillesDe([
             'Données techniques',
             'Agendas',
@@ -963,7 +963,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('adaptent leur largeur à leur texte', async () => {
+        it('[41] adaptent leur largeur à leur texte', async () => {
           const [courte] = await pastillesDe(['Données techniques']);
           const [longue] = await pastillesDe([
             'Données administratives et financières',
@@ -972,7 +972,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           expect(longue.largeur).toBeGreaterThan(courte.largeur);
         });
 
-        it('sont assez larges pour que leur texte tienne sur une ligne, au gras italique de 18 pt', async () => {
+        it('[42] sont assez larges pour que leur texte tienne sur une ligne, au gras italique de 18 pt', async () => {
           const LARGEUR_DE_DOCUMENTS_RH_SENSIBLES_AU_RENDU = 3048819;
           const [pastille] = await pastillesDe(['Documents RH sensibles']);
 
@@ -981,7 +981,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('passent à la ligne quand la pastille ne tient plus sur la ligne', async () => {
+        it('[43] passent à la ligne quand la pastille ne tient plus sur la ligne', async () => {
           const [premiere, , troisieme] = await pastillesDe([
             'Données techniques',
             'Agendas',
@@ -994,7 +994,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('prennent toute la largeur et passent sur deux lignes quand leur texte dépasse une ligne', async () => {
+        it('[44] prennent toute la largeur et passent sur deux lignes quand leur texte dépasse une ligne', async () => {
           const [courte] = await pastillesDe(['Données techniques']);
           const [longue, suivante] = await pastillesDe([
             'Données relatives à la situation familiale, économique et financière',
@@ -1010,7 +1010,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('nomme, dans l’encart, le niveau identifié à titre indicatif par l’ANSSI', async () => {
+      it('[45] nomme, dans l’encart, le niveau identifié à titre indicatif par l’ANSSI', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -1028,7 +1028,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('retire l’encart quand le niveau choisi n’est pas supérieur à celui identifié par l’ANSSI', async () => {
+      it('[46] retire l’encart quand le niveau choisi n’est pas supérieur à celui identifié par l’ANSSI', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -1045,7 +1045,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('descend le niveau et son résumé à la place de l’encart quand le niveau choisi est celui recommandé', async () => {
+      it('[47] descend le niveau et son résumé à la place de l’encart quand le niveau choisi est celui recommandé', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -1064,7 +1064,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('agrandit l’illustration jusqu’au niveau, en gardant ses proportions et son axe, quand le niveau choisi est celui recommandé', async () => {
+      it('[48] agrandit l’illustration jusqu’au niveau, en gardant ses proportions et son axe, quand le niveau choisi est celui recommandé', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
@@ -1104,7 +1104,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         niveau: 'moyen',
       });
 
-      it('écrit dans chaque case de la matrice les identifiants de ses risques', async () => {
+      it('[49] écrit dans chaque case de la matrice les identifiants de ses risques', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1129,7 +1129,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(textesDeLaSlide(cartographie)).not.toContain('R1, R5');
       });
 
-      it('écrit le nombre de risques en tête de la liste', async () => {
+      it('[50] écrit le nombre de risques en tête de la liste', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1146,7 +1146,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('écrit l’identifiant et l’intitulé de chaque risque, et retire les lignes inutilisées', async () => {
+      it('[51] écrit l’identifiant et l’intitulé de chaque risque, et retire les lignes inutilisées', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1176,7 +1176,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('colore la pastille de chaque risque selon son niveau, comme les cases de la matrice', async () => {
+      it('[52] colore la pastille de chaque risque selon son niveau, comme les cases de la matrice', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1197,7 +1197,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(couleurDuFond(cartographie, 'risque-3-pastille')).toBe('F8785B');
       });
 
-      it('colore en gris la pastille d’un risque non évalué', async () => {
+      it('[53] colore en gris la pastille d’un risque non évalué', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1237,7 +1237,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             POSITION_CARTOGRAPHIE_DES_RISQUES_BRUTS
           );
 
-        it('ajustent leur hauteur au nombre de lignes de leur intitulé, en 18 pt', async () => {
+        it('[54] ajustent leur hauteur au nombre de lignes de leur intitulé, en 18 pt', async () => {
           const cartographie = await listeAvecLesIntitules([
             intituleDe(1),
             intituleDe(2),
@@ -1255,7 +1255,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
+        it('[55] s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
           const cartographie = await listeAvecLesIntitules([
             intituleDe(3),
             intituleDe(1),
@@ -1272,7 +1272,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('centrent la pastille et l’identifiant dans la ligne, et ajustent la zone de l’intitulé', async () => {
+        it('[56] centrent la pastille et l’identifiant dans la ligne, et ajustent la zone de l’intitulé', async () => {
           const cartographie = await listeAvecLesIntitules([
             intituleDe(1),
             intituleDe(3),
@@ -1319,7 +1319,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           () => 'Compromission d’un poste de travail utilisateur'
         ).join(' ');
 
-        it('répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+        it('[57] répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
           const huitRisques = Array.from({ length: 8 }, (_, index) => ({
             ...unRisque(`R${index + 1}`, 4, 4),
             intitule: intituleDeTroisLignes,
@@ -1344,7 +1344,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           expect(identifiantsDeLaPage(pages[1])).toEqual(['R7', 'R8']);
         });
 
-        it('ne met pas plus de 7 risques par page, le nombre de lignes du modèle', async () => {
+        it('[58] ne met pas plus de 7 risques par page, le nombre de lignes du modèle', async () => {
           const neufRisquesCourts = Array.from({ length: 9 }, (_, index) =>
             unRisque(`R${index + 1}`, 4, 4)
           );
@@ -1362,7 +1362,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('numérote les pages dans le titre', async () => {
+        it('[59] numérote les pages dans le titre', async () => {
           const neufRisquesCourts = Array.from({ length: 9 }, (_, index) =>
             unRisque(`R${index + 1}`, 4, 4)
           );
@@ -1382,7 +1382,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('ne numérote pas le titre quand les risques tiennent sur une page', async () => {
+        it('[60] ne numérote pas le titre quand les risques tiennent sur une page', async () => {
           const pptx = await genereSupport({
             cartographiesDesRisques: {
               ...cartographiesParDefaut,
@@ -1397,7 +1397,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('garde la police de 18 pt dans une case qui contient peu de risques', async () => {
+      it('[61] garde la police de 18 pt dans une case qui contient peu de risques', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -1414,7 +1414,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('réduit la police d’une case dont les identifiants dépassent trois lignes en 18 pt', async () => {
+      it('[62] réduit la police d’une case dont les identifiants dépassent trois lignes en 18 pt', async () => {
         const identifiants = [
           'R3',
           'R5',
@@ -1455,7 +1455,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         niveau: 'eleve',
       });
 
-      it('suivent la cartographie brute et la description des risques, chacune avec son titre et ses risques', async () => {
+      it('[63] suivent la cartographie brute et la description des risques, chacune avec son titre et ses risques', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             bruts: [unRisque('R1')],
@@ -1489,7 +1489,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     describe('sur l’analyse de risques complémentaire', () => {
       const POSITION_ANALYSE_DE_RISQUES_COMPLEMENTAIRE = 17;
 
-      it('ne la présente pas comme optionnelle pour un service qui n’est pas en niveau basique', async () => {
+      it('[64] ne la présente pas comme optionnelle pour un service qui n’est pas en niveau basique', async () => {
         const slide = await contenuSlide(
           await genereSupport({
             besoinsDeSecurite: {
@@ -1505,7 +1505,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('la présente comme optionnelle pour un service en niveau basique', async () => {
+      it('[65] la présente comme optionnelle pour un service en niveau basique', async () => {
         const slide = await contenuSlide(
           await genereSupport({
             besoinsDeSecurite: {
@@ -1538,11 +1538,11 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'titre'
         );
 
-      it('ne le présente pas comme optionnel pour un service qui n’est pas en niveau basique', async () => {
+      it('[66] ne le présente pas comme optionnel pour un service qui n’est pas en niveau basique', async () => {
         expect(await titreDuPlanDAction('niveau2')).toBe('Plan d’action');
       });
 
-      it('le présente comme optionnel pour un service en niveau basique', async () => {
+      it('[67] le présente comme optionnel pour un service en niveau basique', async () => {
         expect(await titreDuPlanDAction('niveau1')).toBe(
           'Plan d’action (optionnel)'
         );
@@ -1554,7 +1554,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       const ESPACE_DE_NOMS_SVG =
         'http://schemas.microsoft.com/office/drawing/2016/SVG/main';
 
-      it('écrit le nom du service et ses deux indices, arrondis au dixième', async () => {
+      it('[68] écrit le nom du service et ses deux indices, arrondis au dixième', async () => {
         const pptx = await genereSupport({
           indiceCyber: {
             ...indiceCyberParDefaut,
@@ -1571,7 +1571,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it("dessine la jauge de l'indice cyber ANSSI", async () => {
+      it("[69] dessine la jauge de l'indice cyber ANSSI", async () => {
         const pptx = await genereSupport({
           indiceCyber: { ...indiceCyberParDefaut, total: 2.43, noteMax: 5 },
         });
@@ -1585,7 +1585,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(jauge.equals(pngDeLaJauge(svgIndiceCyber(2.43, 5)))).toBe(true);
       });
 
-      it("dessine la jauge de l'indice cyber personnalisé", async () => {
+      it("[70] dessine la jauge de l'indice cyber personnalisé", async () => {
         const pptx = await genereSupport({
           indiceCyber: {
             ...indiceCyberParDefaut,
@@ -1605,7 +1605,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toBe(true);
       });
 
-      it("dessine le radar de l'indice cyber par catégorie", async () => {
+      it("[71] dessine le radar de l'indice cyber par catégorie", async () => {
         const categories = [
           { libelle: 'Gouvernance', note: 3.2 },
           { libelle: 'Protection', note: 1.8 },
@@ -1627,7 +1627,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toBe(true);
       });
 
-      it("n'affiche pas la variante SVG figée du modèle à la place des jauges", async () => {
+      it("[72] n'affiche pas la variante SVG figée du modèle à la place des jauges", async () => {
         const pptx = await genereSupport();
 
         const slide = await contenuSlide(pptx, POSITION_INDICE_CYBER);
@@ -1637,7 +1637,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('nomme les référentiels des mesures sur lesquelles l’indice est calculé', async () => {
+      it('[73] nomme les référentiels des mesures sur lesquelles l’indice est calculé', async () => {
         const pptx = await genereSupport({
           indiceCyber: {
             ...indiceCyberParDefaut,
@@ -1673,7 +1673,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           'mesures-total'
         );
 
-      it('écrit le nombre de mesures proposées par les référentiels et ajoutées par l’équipe', async () => {
+      it('[74] écrit le nombre de mesures proposées par les référentiels et ajoutées par l’équipe', async () => {
         expect(
           await enTete({
             nombreDeMesuresGenerales: 113,
@@ -1685,7 +1685,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('accorde au singulier une seule mesure proposée ou ajoutée', async () => {
+      it('[75] accorde au singulier une seule mesure proposée ou ajoutée', async () => {
         expect(
           await enTete({
             nombreDeMesuresGenerales: 1,
@@ -1697,7 +1697,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('légende les statuts avec les couleurs de MonServiceSécurisé', async () => {
+      it('[76] légende les statuts avec les couleurs de MonServiceSécurisé', async () => {
         const slide = await contenuSlide(
           await genereSupport(),
           POSITION_STATISTIQUES_DES_MESURES
@@ -1723,7 +1723,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('borde la légende « Statut à définir » de gris pour la détacher du fond de la slide', async () => {
+      it('[77] borde la légende « Statut à définir » de gris pour la détacher du fond de la slide', async () => {
         const slide = await contenuSlide(
           await genereSupport(),
           POSITION_STATISTIQUES_DES_MESURES
@@ -1778,7 +1778,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           }),
         ];
 
-        it('écrit le libellé et le nombre de mesures de chaque catégorie', async () => {
+        it('[78] écrit le libellé et le nombre de mesures de chaque catégorie', async () => {
           const slide = await slideAvecLesCategories(quatreCategories);
 
           expect(
@@ -1794,7 +1794,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('découpe la barre de chaque catégorie en segments proportionnels, sans les statuts vides', async () => {
+        it('[79] découpe la barre de chaque catégorie en segments proportionnels, sans les statuts vides', async () => {
           const slide = await slideAvecLesCategories(quatreCategories);
 
           const barre = cadreDeLaForme(slide, 'categorie-2-barre');
@@ -1818,7 +1818,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('retire les lignes sans catégorie', async () => {
+        it('[80] retire les lignes sans catégorie', async () => {
           const slide = await slideAvecLesCategories(
             quatreCategories.slice(0, 3)
           );
@@ -1842,7 +1842,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             POSITION_STATISTIQUES_DES_MESURES
           );
 
-        it('écrit le nombre de mesures restant à mettre en œuvre, au singulier ou au pluriel', async () => {
+        it('[81] écrit le nombre de mesures restant à mettre en œuvre, au singulier ou au pluriel', async () => {
           const slide = await slideAvecLesCriticites({
             indispensables: { ...repartitionVide, restant: 48 },
             recommandees: { ...repartitionVide, restant: 1 },
@@ -1856,7 +1856,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('découpe chaque barre en un segment par statut, proportionnel à son nombre de mesures', async () => {
+        it('[82] découpe chaque barre en un segment par statut, proportionnel à son nombre de mesures', async () => {
           const slide = await slideAvecLesCriticites({
             indispensables: {
               fait: 2,
@@ -1887,7 +1887,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('retire les segments des statuts sans mesure', async () => {
+        it('[83] retire les segments des statuts sans mesure', async () => {
           const slide = await slideAvecLesCriticites({
             indispensables: { ...repartitionVide, fait: 3, restant: 0 },
             recommandees: { ...repartitionVide, aRemplir: 4, restant: 4 },
@@ -1925,7 +1925,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           POSITION_EXIGENCES_RESTANTES
         );
 
-      it('écrit une ligne par exigence : description, statut, échéance et porteurs', async () => {
+      it('[84] écrit une ligne par exigence : description, statut, échéance et porteurs', async () => {
         const slide = await slideDesExigences([
           uneExigence('Identifier les engagements des prestataires', {
             statut: 'enCours',
@@ -1954,7 +1954,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('colore la pastille du statut aux couleurs de MonServiceSécurisé', async () => {
+      it('[85] colore la pastille du statut aux couleurs de MonServiceSécurisé', async () => {
         const slide = await slideDesExigences([
           uneExigence('Partielle', { statut: 'enCours' }),
           uneExigence('À lancer', { statut: 'aLancer' }),
@@ -1971,7 +1971,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('ajuste la largeur de la pastille du statut à son libellé', async () => {
+      it('[86] ajuste la largeur de la pastille du statut à son libellé', async () => {
         const slide = await slideDesExigences([
           uneExigence('Partielle', { statut: 'enCours' }),
           uneExigence('À lancer', { statut: 'aLancer' }),
@@ -1996,7 +1996,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             }),
           ]);
 
-        it('écrit chaque cartouche et retire celles qui ne servent pas', async () => {
+        it('[87] écrit chaque cartouche et retire celles qui ne servent pas', async () => {
           const slide = await slideAvecLesCartouches();
 
           const textesDesCartouches = (numero: number) =>
@@ -2022,7 +2022,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toEqual([]);
         });
 
-        it('écrit les cartouches en italique, comme tout ce qui est prérempli, sans rétrécir leur texte', async () => {
+        it('[88] écrit les cartouches en italique, comme tout ce qui est prérempli, sans rétrécir leur texte', async () => {
           const slide = await slideAvecLesCartouches();
 
           [1, 2, 3, 4].forEach((numero) => {
@@ -2039,7 +2039,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           });
         });
 
-        it('ajuste la largeur de chaque cartouche à son texte et les fait se suivre', async () => {
+        it('[89] ajuste la largeur de chaque cartouche à son texte et les fait se suivre', async () => {
           const slide = await slideAvecLesCartouches();
 
           const fonds = [1, 2, 3, 4].map((numero) =>
@@ -2080,7 +2080,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             uneExigence('Une autre description courte'),
           ]);
 
-        it('écrit la description sur plusieurs lignes au lieu de rétrécir la police', async () => {
+        it('[90] écrit la description sur plusieurs lignes au lieu de rétrécir la police', async () => {
           const slide = await slideAvecUneDescriptionLongue();
 
           expect(
@@ -2094,7 +2094,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toBe(HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION);
         });
 
-        it('compte les lignes de la description à la largeur de son texte, pas à son nombre de caractères', async () => {
+        it('[91] compte les lignes de la description à la largeur de son texte, pas à son nombre de caractères', async () => {
           const descriptionSurQuatreLignesDansPowerPoint =
             "M 19 Héberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloudHéberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloud";
           const slide = await slideDesExigences([
@@ -2108,7 +2108,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toBe(3 * HAUTEUR_D_UNE_LIGNE_DE_DESCRIPTION);
         });
 
-        it('agrandit la ligne du tableau et descend les cartouches d’autant', async () => {
+        it('[92] agrandit la ligne du tableau et descend les cartouches d’autant', async () => {
           const slide = await slideAvecUneDescriptionLongue();
 
           const cadre = (numero: number, partie: string) => {
@@ -2149,7 +2149,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('place les lignes suivantes sous la ligne agrandie', async () => {
+        it('[93] place les lignes suivantes sous la ligne agrandie', async () => {
           const slide = await slideAvecUneDescriptionLongue();
 
           const ligne = (numero: number) =>
@@ -2185,7 +2185,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const descriptionSurDeuxLignes = (numero: number) =>
           `Exigence ${numero} : documenter et autoriser uniquement les communications nécessaires via des règles de filtrage`;
 
-        it('répartit les exigences sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+        it('[94] répartit les exigences sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
           const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
             uneExigence(descriptionSurDeuxLignes(numero))
           );
@@ -2200,7 +2200,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('ne met pas plus de 5 exigences par page, le nombre de lignes du modèle', async () => {
+        it('[95] ne met pas plus de 5 exigences par page, le nombre de lignes du modèle', async () => {
           const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
             uneExigence(`Exigence ${numero}`)
           );
@@ -2221,7 +2221,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('numérote les pages dans le titre', async () => {
+        it('[96] numérote les pages dans le titre', async () => {
           const exigences = [1, 2, 3, 4, 5, 6].map((numero) =>
             uneExigence(`Exigence ${numero}`)
           );
@@ -2240,7 +2240,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
+        it('[97] garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
           const largeurDeTitreAvec99Sur99EnArialGras = 10750115;
           const margesInternesDuCadre = 2 * 25400;
           const slide = await slideDesExigences([uneExigence('Exigence')]);
@@ -2255,7 +2255,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('retire les lignes sans exigence', async () => {
+      it('[98] retire les lignes sans exigence', async () => {
         const slide = await slideDesExigences([uneExigence('Seule exigence')]);
 
         expect(
@@ -2287,7 +2287,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           POSITION_AVIS_DES_MEMBRES
         );
 
-      it('écrit une carte par avis : membres, avis, durée et commentaire', async () => {
+      it('[99] écrit une carte par avis : membres, avis, durée et commentaire', async () => {
         const slide = await slideDesAvis([
           unAvis('Jean Dupond, Marie Curie', {
             avis: 'Favorable avec réserves',
@@ -2328,7 +2328,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           return y + hauteur;
         };
 
-        it('garde les textes dans la carte, avec la même marge à gauche et à droite', async () => {
+        it('[100] garde les textes dans la carte, avec la même marge à gauche et à droite', async () => {
           const slide = await slideDesAvis([
             unAvis('Ludmilla Cara, Thomas Berthelot'),
           ]);
@@ -2350,7 +2350,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toEqual(Array(7).fill([MARGE_DANS_LA_CARTE, MARGE_DANS_LA_CARTE]));
         });
 
-        it('écrit le commentaire avec un paragraphe par ligne, sans rétrécir la police', async () => {
+        it('[101] écrit le commentaire avec un paragraphe par ligne, sans rétrécir la police', async () => {
           const slide = await slideDesAvis([
             unAvis('Jean Dupond', { commentaire: 'Ok\n\nÀ revoir' }),
           ]);
@@ -2370,7 +2370,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toEqual([0, 0, 0, 0]);
         });
 
-        it('empile chaque libellé sous la valeur qui le précède, et chaque valeur sous son libellé', async () => {
+        it('[102] empile chaque libellé sous la valeur qui le précède, et chaque valeur sous son libellé', async () => {
           const slide = await slideDesAvis([
             unAvis('Jean Dupond', { avis: 'Favorable' }),
           ]);
@@ -2401,7 +2401,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('agrandit les membres et l’avis qui tiennent sur plusieurs lignes, sans rétrécir leur police', async () => {
+        it('[103] agrandit les membres et l’avis qui tiennent sur plusieurs lignes, sans rétrécir leur police', async () => {
           const slide = await slideDesAvis([
             unAvis('Jean Dupond', { avis: 'Favorable' }),
             unAvis('Ludmilla Cara, Thomas Berthelot', {
@@ -2418,7 +2418,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           expect(ecartDeHauteur('avis')).toBe(HAUTEUR_D_UNE_LIGNE_DE_VALEUR);
         });
 
-        it('étire le commentaire jusqu’au bas de la carte', async () => {
+        it('[104] étire le commentaire jusqu’au bas de la carte', async () => {
           const slide = await slideDesAvis([unAvis('Jean Dupond')]);
 
           expect(basDe(slide, 'avis-1-commentaire')).toBe(
@@ -2426,7 +2426,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('réduit la police du commentaire à la plus grande taille qui tient dans la carte : 18, 16 puis 14 pt', async () => {
+        it('[105] réduit la police du commentaire à la plus grande taille qui tient dans la carte : 18, 16 puis 14 pt', async () => {
           const unCommentaireSur = (lignes: number) =>
             Array(lignes).fill('Une ligne').join('\n');
           const slide = await slideDesAvis(
@@ -2451,7 +2451,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             .repeat(16)
             .slice(0, 1000);
 
-        it('agrandit seulement sa carte, à la largeur de deux cartes et de l’écart qui les sépare', async () => {
+        it('[106] agrandit seulement sa carte, à la largeur de deux cartes et de l’écart qui les sépare', async () => {
           const slide = await slideDesAvis([
             unAvis('Jean Dupond'),
             unAvis('Paul Martin', { commentaire: commentaireDe1000Caracteres }),
@@ -2514,7 +2514,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             .filter((nom) => /^avis-\d-membres$/.test(nom))
             .map((nom) => texteDeLaForme(page, nom));
 
-        it('remplit 4 emplacements par page dans l’ordre des avis, une carte agrandie en prenant 2', async () => {
+        it('[107] remplit 4 emplacements par page dans l’ordre des avis, une carte agrandie en prenant 2', async () => {
           const commentaireLong =
             'Les sauvegardes doivent être testées avant la mise en production. '.repeat(
               10
@@ -2548,7 +2548,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('numérote les pages dans le titre', async () => {
+        it('[108] numérote les pages dans le titre', async () => {
           const pages = await pagesDesAvis(
             ['A', 'B', 'C', 'D', 'E'].map((membres) => unAvis(membres))
           );
@@ -2561,7 +2561,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ]);
         });
 
-        it('garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
+        it('[109] garde le titre sur une ligne avec une pagination à deux chiffres, sans toucher la pastille « Prérempli »', async () => {
           const largeurDuTitreDesExigencesAvec99Sur99EnArialGras = 10750115;
           const margesInternesDuCadre = 2 * 25400;
           const [page] = await pagesDesAvis([unAvis('A')]);
@@ -2577,7 +2577,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('écrit « Aucun avis n’a été renseigné par l’équipe. », comme le PDF, quand le dossier n’a pas d’avis', async () => {
+      it('[110] écrit « Aucun avis n’a été renseigné par l’équipe. », comme le PDF, quand le dossier n’a pas d’avis', async () => {
         const slide = await slideDesAvis([]);
 
         expect(texteDeLaForme(slide, 'aucun-avis')).toBe(
@@ -2588,13 +2588,13 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ).toEqual([]);
       });
 
-      it('retire le message « Aucun avis » quand le dossier a des avis', async () => {
+      it('[111] retire le message « Aucun avis » quand le dossier a des avis', async () => {
         const slide = await slideDesAvis([unAvis('Jean Dupond')]);
 
         expect(nomsDesFormes(slide)).not.toContain('aucun-avis');
       });
 
-      it('retire les cartes sans avis', async () => {
+      it('[112] retire les cartes sans avis', async () => {
         const slide = await slideDesAvis([unAvis('Seul membre')]);
 
         expect(
@@ -2632,7 +2632,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       };
 
-      it('ajoute une slide par statut qui a des mesures, avec une ligne par mesure', async () => {
+      it('[113] ajoute une slide par statut qui a des mesures, avec une ligne par mesure', async () => {
         const slides = await slidesDeLAnnexe([
           {
             statut: 'fait',
@@ -2675,7 +2675,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('retire les lignes sans mesure', async () => {
+      it('[114] retire les lignes sans mesure', async () => {
         const [slide] = await slidesDeLAnnexe([
           { statut: 'enCours', mesures: [uneMesure('Seule mesure')] },
         ]);
@@ -2691,7 +2691,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const descriptionSurDeuxLignes =
           'Mettre en place une authentification multifacteur pour les administrateurs et les comptes à privilèges du système';
 
-        it('agrandit la ligne du tableau, garde ses textes centrés et descend les lignes suivantes', async () => {
+        it('[115] agrandit la ligne du tableau, garde ses textes centrés et descend les lignes suivantes', async () => {
           const [slide] = await slidesDeLAnnexe([
             {
               statut: 'fait',
@@ -2740,7 +2740,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         const descriptionSurQuatreLignes =
           "Héberger le système d'information et les données auprès d'un prestataire d'informatique en nuage qualifié SecNumCloud, puis vérifier régulièrement que le prestataire respecte ses engagements contractuels, notamment en matière de localisation des données et de réversibilité";
 
-        it('ne met pas plus de 9 mesures par page, le nombre de lignes du modèle', async () => {
+        it('[116] ne met pas plus de 9 mesures par page, le nombre de lignes du modèle', async () => {
           const mesures = Array.from({ length: 12 }, (_, index) =>
             uneMesure(`Mesure ${index + 1}`)
           );
@@ -2752,7 +2752,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           ).toEqual([9, 3]);
         });
 
-        it('répartit les mesures selon la hauteur de leurs lignes', async () => {
+        it('[117] répartit les mesures selon la hauteur de leurs lignes', async () => {
           const mesures = Array.from({ length: 5 }, () =>
             uneMesure(descriptionSurQuatreLignes)
           );
@@ -2765,7 +2765,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         });
       });
 
-      it('colore la pastille de chaque statut comme la légende des statistiques, bordure grise comprise pour « Statut à définir »', async () => {
+      it('[118] colore la pastille de chaque statut comme la légende des statistiques, bordure grise comprise pour « Statut à définir »', async () => {
         const slides = await slidesDeLAnnexe(
           (['fait', 'enCours', 'aLancer', 'sansStatut'] as const).map(
             (statut) => ({ statut, mesures: [uneMesure('Une mesure')] })
@@ -2792,7 +2792,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         ]);
       });
 
-      it('écrit le nombre de mesures du statut, au singulier ou au pluriel', async () => {
+      it('[119] écrit le nombre de mesures du statut, au singulier ou au pluriel', async () => {
         const slides = await slidesDeLAnnexe([
           { statut: 'fait', mesures: [uneMesure('Une mesure')] },
           {
@@ -2819,7 +2819,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         niveau: 'faible',
       });
 
-      it('suit la cartographie brute et décrit chaque risque à date, en retirant les lignes inutilisées', async () => {
+      it('[120] suit la cartographie brute et décrit chaque risque à date, en retirant les lignes inutilisées', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -2858,7 +2858,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         );
       });
 
-      it('colore la pastille de chaque risque selon son niveau à date', async () => {
+      it('[121] colore la pastille de chaque risque selon son niveau à date', async () => {
         const pptx = await genereSupport({
           cartographiesDesRisques: {
             ...cartographiesParDefaut,
@@ -2912,7 +2912,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           description: descriptionDeTroisLignes,
         }));
 
-        it('répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
+        it('[122] répartit les risques sur plusieurs pages, selon la hauteur de leurs lignes', async () => {
           const pptx = await genereSupport({
             cartographiesDesRisques: {
               ...cartographiesParDefaut,
@@ -2932,7 +2932,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('numérote les pages dans le titre', async () => {
+        it('[123] numérote les pages dans le titre', async () => {
           const pptx = await genereSupport({
             cartographiesDesRisques: {
               ...cartographiesParDefaut,
@@ -2970,7 +2970,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
             POSITION_DESCRIPTION_DES_RISQUES
           );
 
-        it('prennent la hauteur de la plus haute des deux colonnes de texte, en 18 pt', async () => {
+        it('[124] prennent la hauteur de la plus haute des deux colonnes de texte, en 18 pt', async () => {
           const description = await descriptionAvec([
             {
               ...unRisque('R1'),
@@ -3001,7 +3001,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
+        it('[125] s’empilent sous l’en-tête, séparées par l’écart de la maquette', async () => {
           const description = await descriptionAvec([
             unRisque('R1'),
             { ...unRisque('R2'), description: motsRepetes('description', 40) },
@@ -3021,7 +3021,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
           );
         });
 
-        it('alignent les fonds de la ligne, centrent la pastille et ajustent les zones de texte', async () => {
+        it('[126] alignent les fonds de la ligne, centrent la pastille et ajustent les zones de texte', async () => {
           const description = await descriptionAvec([
             unRisque('R1'),
             { ...unRisque('R2'), description: motsRepetes('description', 40) },
@@ -3051,7 +3051,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
       });
     });
 
-    it('écrit la date de création au format court, après son libellé', async () => {
+    it('[127] écrit la date de création au format court, après son libellé', async () => {
       const pptx = await genereSupport();
 
       const couverture = await contenuSlide(pptx, 1);
@@ -3060,7 +3060,7 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
     });
 
     describe('produit un fichier que PowerPoint ouvre sans le réparer', () => {
-      it('ne déclare chaque partie du fichier qu’une seule fois', async () => {
+      it('[128] ne déclare chaque partie du fichier qu’une seule fois', async () => {
         const pptx = await genereSupport();
 
         const parties = await partiesDeclarees(pptx);
@@ -3070,25 +3070,25 @@ describe("L'adaptateur PowerPoint utilisant pptx-automizer", () => {
         expect(doublons).toEqual([]);
       });
 
-      it('ne contient aucune relation vers une partie absente du fichier', async () => {
+      it('[129] ne contient aucune relation vers une partie absente du fichier', async () => {
         const pptx = await genereSupport();
 
         expect(await relationsCassees(pptx)).toEqual([]);
       });
 
-      it('ne déclare aucune partie absente du fichier', async () => {
+      it('[130] ne déclare aucune partie absente du fichier', async () => {
         const pptx = await genereSupport();
 
         expect(await partiesDeclareesAbsentes(pptx)).toEqual([]);
       });
 
-      it('compresse les fichiers de l’archive', async () => {
+      it('[131] compresse les fichiers de l’archive', async () => {
         const pptx = await genereSupport();
 
         expect(fichiersNonCompresses(pptx)).toEqual([]);
       });
 
-      it('donne un identifiant unique à chaque forme d’une slide', async () => {
+      it('[132] donne un identifiant unique à chaque forme d’une slide', async () => {
         const pptx = await genereSupport({
           besoinsDeSecurite: {
             ...besoinsDeSecuriteParDefaut,
