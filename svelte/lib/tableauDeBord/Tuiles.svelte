@@ -8,8 +8,6 @@
     nombreServicesHomologues: number;
     nombreHomologationsExpirees: number;
     indiceCyberMoyen: IndiceCyberMoyen | undefined;
-    estSuperviseur: boolean;
-    avecGestionOrganisations: boolean;
   }
 
   let {
@@ -17,8 +15,6 @@
     nombreServicesHomologues,
     nombreHomologationsExpirees,
     indiceCyberMoyen,
-    estSuperviseur,
-    avecGestionOrganisations,
   }: Props = $props();
 
   let valeurIndiceCyberMoyen = $derived(
@@ -63,15 +59,6 @@
     titre={valeurIndiceCyberMoyen}
     description="Indice cyber moyen"
   />
-  {#if estSuperviseur && !avecGestionOrganisations}
-    <a href="/supervision">
-      <Tuile
-        nomSvg="illustration_search"
-        titre="Supervision"
-        description="Suivre les statistiques"
-      />
-    </a>
-  {/if}
 </div>
 
 <style lang="scss">

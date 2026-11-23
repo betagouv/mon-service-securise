@@ -38,7 +38,6 @@ export default defineConfig({
       CRISP_ID_ARTICLE_ROADMAP: '107f8554-ccea-4fe3-950c-2c07a106811a',
       CRISP_ID_CATEGORIE_BLOG: '8424d4d8-aa79-46fc-bef9-afd0287df0aa',
       FEATURE_FLAG_AVEC_RISQUES_V2: 'true',
-      FEATURE_FLAG_AVEC_GESTION_ORGANISATIONS: 'true',
     },
     stdout: 'pipe',
     stderr: 'pipe',

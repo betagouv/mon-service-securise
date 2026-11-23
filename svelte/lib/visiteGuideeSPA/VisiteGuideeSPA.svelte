@@ -168,7 +168,6 @@
       <TableauDeBord
         estSuperviseur={false}
         estAdmin={false}
-        avecGestionOrganisations={false}
         modeVisiteGuidee={true}
         aDejaVuEntierementVisiteGuidee={false}
         avecGroupesServices={false}
