@@ -97,6 +97,7 @@ export const propsPourPage = (
         peutHomologuer: props.peutHomologuer,
         niveauSecurite: descriptionService?.niveauSecurite,
         estLectureSeule: props.estLectureSeule.homologation,
+        versionService: service?.version,
       };
     default:
       return {};

@@ -19,6 +19,7 @@
     EcheancesRenouvellementHomologation,
     StatutsAvisDossierHomologation,
   } from '../../pagesService.d';
+  import type { VersionService } from '../../../../../src/modeles/versionService';
   import VoirDemarcheIndicative from './kit/VoirDemarcheIndicative.svelte';
   import type { IdNiveauDeSecurite } from '../../../ui/types';
   import { navigation } from './parcoursHomologation.navigation';
@@ -34,6 +35,7 @@
     peutHomologuer: boolean;
     niveauSecurite: IdNiveauDeSecurite;
     estLectureSeule: boolean;
+    versionService: VersionService | undefined;
   }
 
   let {
@@ -45,6 +47,7 @@
     peutHomologuer,
     niveauSecurite,
     estLectureSeule,
+    versionService,
   }: Props = $props();
 
   let etapeCourante: IdEtapeParcoursHomologation | undefined = $state();
@@ -150,6 +153,7 @@
         {echeancesRenouvellement}
         {peutHomologuer}
         {estLectureSeule}
+        {versionService}
         bind:this={composantEtapeCourante}
       />
     </div>

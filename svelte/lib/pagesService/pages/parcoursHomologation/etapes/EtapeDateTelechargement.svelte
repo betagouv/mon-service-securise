@@ -3,14 +3,16 @@
   import type { Dossier } from '../../homologuer/homologuer.types';
   import { dateEnFrancaisLongue } from '../../../../outils/date';
   import * as api from '../parcoursHomologation.api';
+  import type { VersionService } from '../../../../../../src/modeles/versionService';
 
   interface Props {
     idService: string;
+    versionService: VersionService | undefined;
     dossier: Dossier;
     peutHomologuer: boolean;
   }
 
-  let { idService, dossier, peutHomologuer }: Props = $props();
+  let { idService, versionService, dossier, peutHomologuer }: Props = $props();
 
   const commandesTelechargement = {
     declenche: async () => {
@@ -58,7 +60,10 @@
 
   <ul class="consignes">
     <li>
-      Télécharger le fichier .ZIP contenant les 3 PDF : synthèse de sécurité,
+      Télécharger le fichier .ZIP contenant les {versionService === 'v2'
+        ? '4 documents'
+        : '3 PDF'} : synthèse de sécurité,
+      {versionService === 'v2' ? "support de commission d'homologation, " : ''}
       annexes et décision d'homologation de sécurité.
     </li>
     <li>
