@@ -102,8 +102,6 @@ const featureFlag = () => ({
     process.env.FEATURE_FLAG_AVEC_GROUPES_SERVICES === 'true',
   avecGroupesEntites: () =>
     process.env.FEATURE_FLAG_AVEC_GROUPES_ENTITES === 'true',
-  avecSupportCommissionPptx: () =>
-    process.env.FEATURE_FLAG_AVEC_SUPPORT_COMMISSION_PPTX === 'true',
 });
 
 const statique = () => ({

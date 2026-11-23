@@ -141,15 +141,11 @@ const routesConnecteApiServicePdf = ({
           .then((buffer) => ({ nom: references[idDocument].nom(), buffer }));
       };
 
-      let documentsDisponibles =
-        service.documentsDisponibles(autorisationService);
-      if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
-        documentsDisponibles = documentsDisponibles.filter(
-          (d) => d !== 'supportHomologation'
-        );
-      }
-
-      Promise.all(documentsDisponibles.map((d) => genereUnDocument(d)))
+      Promise.all(
+        service
+          .documentsDisponibles(autorisationService)
+          .map((d) => genereUnDocument(d))
+      )
         .then((pdfs) => adaptateurZip.genereArchive(pdfs))
         .then((archive) => {
           const maintenantFormate = dateYYYYMMDD(

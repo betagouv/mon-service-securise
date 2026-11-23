@@ -9,7 +9,6 @@ import {
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
-import * as adaptateurEnvironnement from '../../../src/adaptateurs/adaptateurEnvironnement.js';
 
 const { HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -59,8 +58,7 @@ describe("L'objet d'API de `GET /services`", () => {
     const { services } = objetGetServices.donnees(
       [service],
       [autorisationComplete],
-      referentiel,
-      adaptateurEnvironnement
+      referentiel
     );
 
     expect(services.length).to.be(1);
@@ -104,8 +102,7 @@ describe("L'objet d'API de `GET /services`", () => {
           autorisationPourUnAutreService,
           autorisationPourUnTroisiemeService,
         ],
-        referentiel,
-        adaptateurEnvironnement
+        referentiel
       ).resume
     ).to.eql({
       nombreServices: 3,
@@ -134,8 +131,7 @@ describe("L'objet d'API de `GET /services`", () => {
     const donnees = objetGetServices.donnees(
       services,
       [autorisationPourUnService, autorisationSansHomologuerPourUnAutreService],
-      referentiel,
-      adaptateurEnvironnement
+      referentiel
     );
 
     expect(donnees.resume.nombreServices).to.equal(2);
@@ -154,8 +150,7 @@ describe("L'objet d'API de `GET /services`", () => {
     const donnees = objetGetServices.donnees(
       services,
       [autorisationSansHomologuerPourUnAutreService],
-      referentiel,
-      adaptateurEnvironnement
+      referentiel
     );
 
     expect(donnees.resume.nombreServices).to.equal(1);
