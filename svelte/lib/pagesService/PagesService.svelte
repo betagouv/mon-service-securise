@@ -118,6 +118,14 @@
   const rafraichisMenu = async () => {
     await composantMenu?.rafraichis();
   };
+
+  const rafraichisApresChangementHomologation = async () => {
+    await Promise.all([
+      rafraichisServiceComplet(),
+      rafraichisResumeService(),
+      rafraichisMenu(),
+    ]);
+  };
 </script>
 
 <svelte:body
@@ -131,10 +139,10 @@
     rafraichisServiceComplet();
   }}
   on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
-  on:homologation-supprimee={rafraichisServiceComplet}
-  on:homologation-modifiee={rafraichisServiceComplet}
+  on:homologation-supprimee={rafraichisApresChangementHomologation}
+  on:homologation-modifiee={rafraichisApresChangementHomologation}
   on:parcours-homologation-initie={rafraichisServiceComplet}
-  on:homologation-finalisee={rafraichisServiceComplet}
+  on:homologation-finalisee={rafraichisApresChangementHomologation}
 />
 
 <Toaster />
