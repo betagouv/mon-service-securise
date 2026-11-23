@@ -32,7 +32,6 @@
   interface Props {
     estSuperviseur: boolean;
     estAdmin: boolean;
-    avecGestionOrganisations: boolean;
     modeVisiteGuidee?: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
@@ -42,7 +41,6 @@
   let {
     estSuperviseur,
     estAdmin,
-    avecGestionOrganisations,
     modeVisiteGuidee = false,
     prenomNom,
     aDejaVuEntierementVisiteGuidee,
@@ -238,8 +236,6 @@
         {nombreServicesHomologues}
         {nombreHomologationsExpirees}
         {indiceCyberMoyen}
-        {estSuperviseur}
-        {avecGestionOrganisations}
       />
     {/if}
     <BandeauFiltres />

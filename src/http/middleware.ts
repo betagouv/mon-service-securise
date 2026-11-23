@@ -469,9 +469,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
   const chargeFeatureFlags: RequestHandler = (_requete, reponse, suite) => {
     reponse.locals.featureFlags = {
       avecRisquesV2: adaptateurEnvironnement.featureFlag().avecRisquesV2(),
-      avecGestionDesOrganisations: adaptateurEnvironnement
-        .featureFlag()
-        .avecGestionDesOrganisations(),
       avecGroupesServices: adaptateurEnvironnement
         .featureFlag()
         .avecGroupesServices(),

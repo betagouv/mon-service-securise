@@ -16,7 +16,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     ];
 
     let contenuMenuAdmin = [];
-    if (featureFlags.avecGestionDesOrganisations && estConnecte) {
+    if (estConnecte) {
       if (utilisateurConnecte.estAdmin) {
         contenuMenuAdmin = contenuAdmin;
       } else if (utilisateurConnecte.estSuperviseur) {

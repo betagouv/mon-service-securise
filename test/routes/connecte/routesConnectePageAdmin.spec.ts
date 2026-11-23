@@ -34,16 +34,6 @@ describe("Le serveur MSS des pages d'admin", () => {
         expect(reponse.headers['content-type']).toContain('text/html');
       });
 
-      it("jette une erreur 404 si le feature flag de gestion des orgas n'est pas activé", async () => {
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecGestionDesOrganisations: () => false,
-        });
-
-        const reponse = await testeur.get(`${route}`);
-
-        expect(reponse.status).toBe(404);
-      });
-
       it("jette une erreur 404 si l'utilisateur n'est ni admin ni superviseur", async () => {
         testeur.depotDonnees().estAdmin = async () => false;
         testeur.depotDonnees().estSuperviseur = async () => false;
@@ -87,7 +77,6 @@ describe("Le serveur MSS des pages d'admin", () => {
 
     it('indique à la page de ne pas les afficher si le feature flag est désactivé', async () => {
       testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecGestionDesOrganisations: () => true,
         avecGroupesEntites: () => false,
       });
 
