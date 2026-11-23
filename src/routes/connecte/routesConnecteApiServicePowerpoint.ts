@@ -1,7 +1,6 @@
 import express from 'express';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { Middleware } from '../../http/middleware.interface.js';
-import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { AdaptateurPowerpoint } from '../../adaptateurs/adaptateurPowerpoint.interface.js';
@@ -14,24 +13,14 @@ const CONTENT_TYPE_PPTX =
 
 export const routesConnecteApiServicePowerpoint = ({
   middleware,
-  adaptateurEnvironnement,
   adaptateurPowerpoint,
   adaptateurHorloge,
 }: {
   middleware: Middleware;
-  adaptateurEnvironnement: AdaptateurEnvironnement;
   adaptateurPowerpoint: AdaptateurPowerpoint;
   adaptateurHorloge: AdaptateurHorloge;
 }) => {
   const routes = express.Router();
-
-  routes.use('/:id/pptx', (_requete, reponse, suite) => {
-    if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
-      reponse.sendStatus(404);
-      return;
-    }
-    suite();
-  });
 
   routes.get(
     '/:id/pptx/supportCommissionHomologation.pptx',

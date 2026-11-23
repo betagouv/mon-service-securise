@@ -50,28 +50,6 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
         );
     });
 
-    it('répond 404 si le feature flag est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecSupportCommissionPptx: () => false,
-      });
-
-      const reponse = await testeur.get(
-        '/api/service/456/pptx/supportCommissionHomologation.pptx'
-      );
-
-      expect(reponse.status).toBe(404);
-    });
-
-    it('ne bloque pas les autres routes du service si le feature flag est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecSupportCommissionPptx: () => false,
-      });
-
-      const reponse = await testeur.get('/api/service/456/indiceCyber');
-
-      expect(reponse.status).toBe(200);
-    });
-
     it('répond 422 si le service est en V1', async () => {
       // @ts-expect-error on ne recharge que le nécessaire
       testeur.middleware().reinitialise({

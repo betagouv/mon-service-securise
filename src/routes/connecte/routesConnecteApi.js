@@ -89,8 +89,7 @@ const routesConnecteApi = ({
       const donneesServices = objetGetServices.donnees(
         services,
         autorisations,
-        referentiel,
-        adaptateurEnvironnement
+        referentiel
       );
 
       const brouillonsService =
@@ -285,8 +284,7 @@ const routesConnecteApi = ({
         const servicesSansIndice = objetGetServices.donnees(
           services,
           autorisations,
-          referentiel,
-          adaptateurEnvironnement
+          referentiel
         );
         const indicesCyber = objetGetIndicesCyber.donnees(
           services,

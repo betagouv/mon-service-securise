@@ -7,12 +7,7 @@ const {
   DROITS_VOIR_MESURES,
 } = Autorisation;
 
-const donnees = (
-  service,
-  autorisation,
-  referentiel,
-  adaptateurEnvironnement
-) => {
+const donnees = (service, autorisation, referentiel) => {
   const enCoursEdition =
     service.dossiers.statutSaisie() === Dossiers.A_COMPLETER;
   const etapeCouranteAutorisee = referentiel.etapeDossierAutorisee(
@@ -23,12 +18,6 @@ const donnees = (
   const completude = service.completudeMesures();
   const actionRecommandee = service.actionRecommandee();
 
-  let documentsDisponibles = service.documentsDisponibles(autorisation);
-  if (!adaptateurEnvironnement.featureFlag().avecSupportCommissionPptx()) {
-    documentsDisponibles = documentsDisponibles.filter(
-      (d) => d !== 'supportHomologation'
-    );
-  }
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -89,7 +78,7 @@ const donnees = (
     estAdmin: autorisation.estUnAdmin(),
     estSuperviseur: autorisation.estUnSuperviseur(),
     estProprietaire: autorisation.estProprietaire,
-    documentsDisponibles,
+    documentsDisponibles: service.documentsDisponibles(autorisation),
     permissions: {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },

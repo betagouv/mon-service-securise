@@ -18,14 +18,6 @@ import Mesures from '../../../src/modeles/mesures.js';
 const { HOMOLOGUER, DECRIRE, SECURISER } = Rubriques;
 const { LECTURE, ECRITURE } = Permissions;
 
-const unAdaptateurEnvironnement = ({
-  avecSupportCommissionPptx = false,
-} = {}) => ({
-  featureFlag: () => ({
-    avecSupportCommissionPptx: () => avecSupportCommissionPptx,
-  }),
-});
-
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: { nonRealisee: { libelle: 'Non réalisée', ordre: 1 } },
@@ -95,14 +87,7 @@ describe("L'objet d'API de `GET /service`", () => {
     .construis();
 
   it('fournit les données nécessaires', () => {
-    expect(
-      objetGetService.donnees(
-        service,
-        autorisation,
-        referentiel,
-        unAdaptateurEnvironnement()
-      )
-    ).to.eql({
+    expect(objetGetService.donnees(service, autorisation, referentiel)).to.eql({
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
@@ -162,24 +147,10 @@ describe("L'objet d'API de `GET /service`", () => {
       const donnees = objetGetService.donnees(
         serviceV2AvecDossierEnCoursComplet(),
         autorisation,
-        referentiel,
-        unAdaptateurEnvironnement({ avecSupportCommissionPptx: true })
+        referentiel
       );
 
       expect(donnees.documentsDisponibles).to.contain('supportHomologation');
-    });
-
-    it('ne le liste pas dans les documents disponibles si le feature flag est désactivé', () => {
-      const donnees = objetGetService.donnees(
-        serviceV2AvecDossierEnCoursComplet(),
-        autorisation,
-        referentiel,
-        unAdaptateurEnvironnement()
-      );
-
-      expect(donnees.documentsDisponibles).not.to.contain(
-        'supportHomologation'
-      );
     });
   });
 
@@ -193,8 +164,7 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       unServiceAvecDossierBientotExpire,
       autorisation,
-      referentiel,
-      unAdaptateurEnvironnement()
+      referentiel
     );
 
     const dans3jours = dateEnFrancais(
@@ -211,8 +181,7 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansHomologuer,
-      referentiel,
-      unAdaptateurEnvironnement()
+      referentiel
     );
 
     expect(donnees.statutHomologation).to.be(undefined);
@@ -226,8 +195,7 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansDecrire,
-      referentiel,
-      unAdaptateurEnvironnement()
+      referentiel
     );
 
     expect(donnees.niveauSecurite).to.be(undefined);
@@ -241,8 +209,7 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansSecuriser,
-      referentiel,
-      unAdaptateurEnvironnement()
+      referentiel
     );
 
     expect(donnees.pourcentageCompletude).to.be(undefined);
@@ -278,8 +245,7 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       serviceAvecDossierFinalise,
       autorisation,
-      referentielDeuxEtapes,
-      unAdaptateurEnvironnement()
+      referentielDeuxEtapes
     );
 
     expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
@@ -297,8 +263,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuNonAdmin = objetGetService.donnees(
         serviceAvecAdminA,
         uneAutorisation().deProprietaire('B', '123').construis(),
-        referentiel,
-        unAdaptateurEnvironnement()
+        referentiel
       );
 
       const [admin] = pointDeVueDuNonAdmin.contributeurs;
@@ -318,8 +283,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDeAdminLuiMeme = objetGetService.donnees(
         serviceAvecAdminA,
         uneAutorisation().dAdmin('ADMIN', '123').construis(),
-        referentiel,
-        unAdaptateurEnvironnement()
+        referentiel
       );
 
       const [admin] = pointDeVueDeAdminLuiMeme.contributeurs;
@@ -341,8 +305,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuNonSuperviseur = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deProprietaire('B', '123').construis(),
-        referentiel,
-        unAdaptateurEnvironnement()
+        referentiel
       );
 
       const [superviseur] = pointDeVueDuNonSuperviseur.contributeurs;
@@ -362,8 +325,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuSuperviseur = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
-        referentiel,
-        unAdaptateurEnvironnement()
+        referentiel
       );
 
       expect(pointDeVueDuSuperviseur.estSuperviseur).to.be(true);
@@ -373,8 +335,7 @@ describe("L'objet d'API de `GET /service`", () => {
       const pointDeVueDuSuperviseurLuiMeme = objetGetService.donnees(
         serviceAvecSuperviseurS,
         uneAutorisation().deSuperviseur('SUPERVISEUR', '123').construis(),
-        referentiel,
-        unAdaptateurEnvironnement()
+        referentiel
       );
 
       const [superviseur] = pointDeVueDuSuperviseurLuiMeme.contributeurs;
@@ -398,8 +359,7 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           uneAutorisation().deProprietaire('A', '123').construis(),
-          referentiel,
-          unAdaptateurEnvironnement()
+          referentiel
         ).permissions
       ).to.eql({ gestionContributeurs: true });
     });
@@ -418,8 +378,7 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           autorisation,
-          referentiel,
-          unAdaptateurEnvironnement()
+          referentiel
         ).permissions
       ).to.eql({ gestionContributeurs: false });
     });

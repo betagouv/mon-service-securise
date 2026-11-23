@@ -420,40 +420,6 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       expect(fichiersZipes[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
     });
 
-    it("n'ajoute pas le support d'homologation si le feature flag est désactivé", async () => {
-      const serviceUnSeulDocument = unService().construis();
-      serviceUnSeulDocument.documentsDisponibles = () => [
-        'supportHomologation',
-      ];
-      testeur
-        .middleware()
-        .reinitialise({ serviceARenvoyer: serviceUnSeulDocument });
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecSupportCommissionPptx: () => false,
-      });
-      let fichiersZipes;
-      testeur.adaptateurPdf().genereAnnexes = async () => {
-        throw new Error('Ce document ne devrait pas être généré');
-      };
-      testeur.adaptateurPdf().genereSyntheseSecurite = async () => {
-        throw new Error('Ce document ne devrait pas être généré');
-      };
-      testeur.adaptateurPdf().genereDossierDecision = async () => {
-        throw new Error('Ce document ne devrait pas être généré');
-      };
-      testeur.adaptateurPowerpoint().genereSupportCommissionHomologation =
-        async () => {
-          throw new Error('Ce document ne devrait pas être généré');
-        };
-      testeur.adaptateurZip().genereArchive = async (fichiers) => {
-        fichiersZipes = fichiers;
-      };
-
-      await testeur.get('/api/service/456/pdf/documentsHomologation.zip');
-
-      expect(fichiersZipes.length).to.be(0);
-    });
-
     it("utilise un adaptateur d'horloge pour la génération du nom", async () => {
       let adaptateurHorlogeAppele = false;
       testeur.adaptateurHorloge().maintenant = () => {
