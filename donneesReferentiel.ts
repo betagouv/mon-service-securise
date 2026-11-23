@@ -94,6 +94,17 @@ const donnees = {
       canalDiffusion: 'centreNotifications',
       titreCta: 'Découvrir',
     },
+    {
+      id: 'supportHomologation',
+      dateDeDeploiement: '2026-11-23 08:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/quels-documents-seront-fournis-pour-lhomologation-de-securite-jmofou/?bust=1793809050384',
+      titre: 'Votre homologation, désormais en slides !',
+      sousTitre:
+        'Téléchargez un support PowerPoint prêt à présenter en commission, généré à partir des informations de votre service.',
+      image: 'supportHomologation.png',
+      canalDiffusion: 'centreNotifications',
+      titreCta: 'Découvrir',
+    },
   ],
 
   tachesCompletudeProfil: [
