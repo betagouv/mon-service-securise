@@ -98,8 +98,6 @@ const featureFlag = () => ({
   avecRisquesV2: () => process.env.FEATURE_FLAG_AVEC_RISQUES_V2 === 'true',
   avecGroupesServices: () =>
     process.env.FEATURE_FLAG_AVEC_GROUPES_SERVICES === 'true',
-  avecGroupesEntites: () =>
-    process.env.FEATURE_FLAG_AVEC_GROUPES_ENTITES === 'true',
 });
 
 const statique = () => ({

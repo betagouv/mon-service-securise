@@ -135,7 +135,6 @@ const testeurMss = () => {
       featureFlag: () => ({
         avecRisquesV2: () => true,
         avecGroupesServices: () => true,
-        avecGroupesEntites: () => true,
       }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],

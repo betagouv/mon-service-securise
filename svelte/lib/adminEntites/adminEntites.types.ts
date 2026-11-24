@@ -6,10 +6,6 @@ declare global {
   }
 }
 
-export type AdminEntitesProps = {
-  avecGroupesEntites: boolean;
-};
-
 export type AdminSupervise = {
   id: string;
   prenomNom: string;

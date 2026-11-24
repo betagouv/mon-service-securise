@@ -1,20 +1,17 @@
 import AdminEntites from './AdminEntites.svelte';
 import { mount, unmount } from 'svelte';
-import type { AdminEntitesProps } from './adminEntites.types';
 
 document.body.addEventListener(
   'svelte-recharge-admin-entites',
-  async (e: CustomEvent<AdminEntitesProps>) =>
-    await rechargeApp({ ...e.detail })
+  async () => await rechargeApp()
 );
 
 let app: ReturnType<typeof mount>;
-const rechargeApp = async (props: AdminEntitesProps) => {
+const rechargeApp = async () => {
   if (app) await unmount(app);
 
   app = mount(AdminEntites, {
     target: document.getElementById('conteneur-admin-entites')!,
-    props,
   });
 };
 
