@@ -83,25 +83,9 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         expect(versionRecue).to.be('v1');
       });
 
-      it("utilise l'objet pdf des risques v1 pour un service v2, si le feature flag risquesV2 est désactivé", async () => {
+      it("utilise l'objet pdf des risques v2 pour un service v2", async () => {
         const unV2 = unServiceV2().construis();
         testeur.middleware().reinitialise({ serviceARenvoyer: unV2 });
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecRisquesV2: () => false,
-        });
-
-        await testeur.get('/api/service/456/pdf/annexes.pdf');
-
-        expect(donneesRisquesRecues.risques).to.be.an('array');
-        expect(versionRecue).to.be('v1');
-      });
-
-      it("utilise l'objet pdf des risques v2 pour un service v2, si le feature flag risquesV2 est activé", async () => {
-        const unV2 = unServiceV2().construis();
-        testeur.middleware().reinitialise({ serviceARenvoyer: unV2 });
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecRisquesV2: () => true,
-        });
 
         await testeur.get('/api/service/456/pdf/annexes.pdf');
 

@@ -4,7 +4,6 @@ $(() => {
   const idService = $('#pages-service').data('id-service');
   const referentiel = lisDonneesPartagees('referentiel');
   const etapeActive = lisDonneesPartagees('etape-active');
-  const featureFlags = lisDonneesPartagees('feature-flags');
   const preferencesUtilisateur = lisDonneesPartagees('preferences-utilisateur');
   const suggestionsService = lisDonneesPartagees('suggestions-service');
   const nonce = lisDonneesPartagees('nonce-commentaires');
@@ -17,7 +16,6 @@ $(() => {
         referentiel,
         etapeActive,
         modeVisiteGuidee: false,
-        featureFlags,
         preferencesUtilisateur,
         suggestionsService,
         nonce,

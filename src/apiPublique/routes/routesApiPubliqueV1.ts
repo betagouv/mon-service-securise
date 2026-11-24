@@ -12,7 +12,6 @@ import { serialiseIndiceCyberPourAPIPublique } from '../mappers/indiceCyber.mapp
 import { serialiseMesuresPourAPIPublique } from '../mappers/mesures.mapper.js';
 import { serialiseHomologationPourAPIPublique } from '../mappers/homologation.mapper.js';
 import { serialiseRisquesPourAPIPublique } from '../mappers/risques.mapper.js';
-import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { VersionService } from '../../modeles/versionService.js';
 
 const {
@@ -24,10 +23,8 @@ const {
 
 export const routesApiPubliqueV1 = ({
   depotDonnees,
-  adaptateurEnvironnement,
 }: {
   depotDonnees: DepotDonnees;
-  adaptateurEnvironnement: AdaptateurEnvironnement;
 }) => {
   const routes = express.Router();
   const serviceAccessible = chargeServiceAccessible({ depotDonnees });
@@ -88,9 +85,7 @@ export const routesApiPubliqueV1 = ({
     serviceAccessible(DROITS_VOIR_RISQUES),
     (requete: RequeteServiceApiPublique, reponse: Response) => {
       const service = requete.service!;
-      const avecRisquesV2 =
-        adaptateurEnvironnement.featureFlag().avecRisquesV2() &&
-        service.version() === VersionService.v2;
+      const avecRisquesV2 = service.version() === VersionService.v2;
 
       reponse.json(serialiseRisquesPourAPIPublique(service, { avecRisquesV2 }));
     }

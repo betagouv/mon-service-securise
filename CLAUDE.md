@@ -53,7 +53,7 @@ src/
 - **Routes** : montées dans `mss.js` sous `/`, `/api`, `/oidc`, `/bibliotheques`, `/statique`. Pas de classes de contrôleur — ce sont des fonctions qui valident (Zod), appellent le domaine, et renvoient.
 - **Auth** : `cookie-session` signé + JWT via `adaptateurJWT`. Middleware `verificationJWT` garde les routes protégées. OIDC complet dans `src/oidc/`, MFA optionnel par fournisseur.
 - **Bus d'événements** : `src/bus/busEvenements.js` diffuse les événements domaine (ex. `EvenementNouveauServiceCree`). Les abonnés (tracking, mail, journal, supervision) sont câblés dans `server.ts` via `cableTousLesAbonnes()`.
-- **Configuration** : 100+ variables d'env (voir `.env.template`), centralisées dans `src/adaptateurs/adaptateurEnvironnement.js`. Feature flags = variables d'env (ex. `FEATURE_FLAG_AVEC_RISQUES_V2`).
+- **Configuration** : 100+ variables d'env (voir `.env.template`), centralisées dans `src/adaptateurs/adaptateurEnvironnement.js`. Feature flags = variables d'env (préfixe `FEATURE_FLAG_`).
 - **Erreurs** : toutes les erreurs domaine héritent de `ErreurModele` dans `src/erreurs.ts`. Le handler global dans `mss.js` les mappe en réponses HTTP.
 
 ## Branchement d'un composant Svelte

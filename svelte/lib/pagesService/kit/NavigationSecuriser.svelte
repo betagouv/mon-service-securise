@@ -7,11 +7,10 @@
   interface Props {
     idService: string;
     visible: Record<EtapeService, boolean>;
-    avecRisquesV2: boolean;
     versionService: VersionService | undefined;
   }
 
-  let { idService, visible, avecRisquesV2, versionService }: Props = $props();
+  let { idService, visible, versionService }: Props = $props();
 
   const configurationNav = $derived.by(() => {
     const navVisibles = [];
@@ -56,7 +55,7 @@
   {#if indexRisques > 0}
     <div slot="link-{indexRisques + 1}" class="titre-risques">
       <span>Risques de sécurité</span>
-      {#if avecRisquesV2 && versionService === VersionService.v2}
+      {#if versionService === VersionService.v2}
         <dsfr-badge label="BÊTA" type="accent" accent="blue-cumulus" size="sm"
         ></dsfr-badge>
       {/if}

@@ -64,7 +64,6 @@ const routesConnecteApi = ({
   adaptateurZip,
   adaptateurJournal,
   lecteurDeFormData,
-  adaptateurEnvironnement,
   serviceStatistiquesAdmin,
   adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
@@ -338,7 +337,6 @@ const routesConnecteApi = ({
       adaptateurTamponHomologation,
       adaptateurZip,
       adaptateurJournal,
-      adaptateurEnvironnement,
     })
   );
 

@@ -77,7 +77,6 @@
     estLectureSeule: boolean;
     modeVisiteGuidee: boolean;
     versionService: VersionService;
-    avecRisquesV2: boolean;
     afficheExplicationRisquesV2: boolean;
     visible: Record<EtapeService, boolean>;
   }
@@ -92,7 +91,6 @@
     estLectureSeule,
     modeVisiteGuidee,
     versionService,
-    avecRisquesV2,
     afficheExplicationRisquesV2,
     visible,
   }: Props = $props();
@@ -148,7 +146,7 @@
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
-    if (!modeVisiteGuidee && avecRisquesV2 && versionService === 'v2')
+    if (!modeVisiteGuidee && versionService === 'v2')
       await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
@@ -336,7 +334,7 @@
   on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
-<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
+<NavigationSecuriser {idService} {visible} {versionService} />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img

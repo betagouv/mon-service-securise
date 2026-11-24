@@ -50,7 +50,6 @@ const routesConnecteApiService = ({
   adaptateurTamponHomologation,
   adaptateurZip,
   adaptateurJournal,
-  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -61,7 +60,6 @@ const routesConnecteApiService = ({
       adaptateurPowerpoint,
       adaptateurTamponHomologation,
       adaptateurZip,
-      adaptateurEnvironnement,
       middleware,
       referentiel,
     })
