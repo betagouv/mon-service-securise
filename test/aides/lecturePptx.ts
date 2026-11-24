@@ -26,16 +26,13 @@ const formeNommeeDans = (slide: Document, nom: string) => {
   return proprietes.parentElement!.parentElement!;
 };
 
-let derniereSlideLue: { xml: string; document: Document } | undefined;
+const slidesLues = new Map<string, Document>();
 
 const documentDeLaSlide = (xml: string) => {
-  if (derniereSlideLue?.xml !== xml) {
-    derniereSlideLue = {
-      xml,
-      document: parseurXml.parseFromString(xml, 'text/xml'),
-    };
+  if (!slidesLues.has(xml)) {
+    slidesLues.set(xml, parseurXml.parseFromString(xml, 'text/xml'));
   }
-  return derniereSlideLue.document;
+  return slidesLues.get(xml)!;
 };
 
 const texteDe = (element: Element) =>
@@ -124,6 +121,12 @@ export const contenuSlide = async (pptx: Buffer, position: number) => {
   const archive = await JSZip.loadAsync(pptx);
   const chemins = await cheminsDesSlidesDansLOrdre(archive);
   return lisFichier(archive, chemins[position - 1]);
+};
+
+export const contenusDesSlides = async (pptx: Buffer) => {
+  const archive = await JSZip.loadAsync(pptx);
+  const chemins = await cheminsDesSlidesDansLOrdre(archive);
+  return Promise.all(chemins.map((chemin) => lisFichier(archive, chemin)));
 };
 
 export const partiesDeclarees = async (pptx: Buffer) => {
