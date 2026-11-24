@@ -1128,72 +1128,19 @@ describe('Le middleware MSS', () => {
   });
 
   describe('sur demande de chargement des `feature flags`', () => {
-    let middleware;
-    let adaptateurHorloge;
-    let adaptateurEnvironnement;
-    const featureFlag = {
-      avecRisquesV2: () => false,
-    };
-
-    beforeEach(() => {
-      adaptateurEnvironnement = { featureFlag: () => featureFlag };
-      adaptateurHorloge = {
-        maintenant: () => new Date('2024-01-01 00:00:00Z'),
-      };
-      middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
-    });
-
     it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
+      const middleware = Middleware({});
+
       middleware.chargeFeatureFlags(requete, reponse, () => {
         expect(reponse.locals.featureFlags).not.to.be(undefined);
-      });
-    });
-
-    describe("concernant l'affichage des risques V2", () => {
-      it("n'affiche pas les risques V2 si le feature flag est désactivé", async () => {
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecRisquesV2).to.be(false);
-        });
-      });
-
-      it('affiche les risques V2 si le feature flag est activé', async () => {
-        adaptateurEnvironnement = {
-          featureFlag: () => ({ ...featureFlag, avecRisquesV2: () => true }),
-        };
-        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
-
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
-        });
       });
     });
   });
 
   describe("sur demande de chargement de l'explication des risques v2", () => {
-    let adaptateurEnvironnement;
     let middleware;
     beforeEach(() => {
-      adaptateurEnvironnement = {
-        featureFlag: () => ({
-          avecRisquesV2: () => true,
-        }),
-      };
-      middleware = Middleware({ adaptateurEnvironnement });
       requete.idUtilisateurCourant = '1234';
-    });
-
-    it("ne demande pas l'affichage si le feature flag des risques v2 est désactivé", async () => {
-      let doitAfficher;
-      adaptateurEnvironnement = {
-        featureFlag: () => ({ avecRisquesV2: () => false }),
-      };
-      middleware = Middleware({ adaptateurEnvironnement });
-
-      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
-        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
-      });
-
-      expect(doitAfficher).to.be(false);
     });
 
     it("ne demande pas l'affichage si l'utilisateur a déjà vu les explications", async () => {
@@ -1203,7 +1150,7 @@ describe('Le middleware MSS', () => {
           idUtilisateur: '1234',
           aVuExplicationRisquesV2: true,
         });
-      middleware = Middleware({ adaptateurEnvironnement, depotDonnees });
+      middleware = Middleware({ depotDonnees });
 
       await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
         doitAfficher = reponse.locals.afficheExplicationRisquesV2;
@@ -1219,7 +1166,7 @@ describe('Le middleware MSS', () => {
           idUtilisateur: '1234',
           aVuExplicationRisquesV2: false,
         });
-      middleware = Middleware({ adaptateurEnvironnement, depotDonnees });
+      middleware = Middleware({ depotDonnees });
 
       await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
         doitAfficher = reponse.locals.afficheExplicationRisquesV2;

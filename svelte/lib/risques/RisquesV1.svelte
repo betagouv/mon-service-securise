@@ -37,7 +37,6 @@
     matriceNiveauxRisque: MatriceNiveauxRisque;
     niveauxRisque: ReferentielNiveauxRisque;
     visible: Record<EtapeService, boolean>;
-    avecRisquesV2: boolean;
     versionService: VersionService | undefined;
   }
 
@@ -52,7 +51,6 @@
     matriceNiveauxRisque,
     niveauxRisque,
     visible,
-    avecRisquesV2,
     versionService,
   }: Props = $props();
 
@@ -169,7 +167,7 @@
   });
 </script>
 
-<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
+<NavigationSecuriser {idService} {visible} {versionService} />
 <div class="au-dessus-tableau">
   <div class="section cartographie">
     <h2>Cartographie des risques</h2>

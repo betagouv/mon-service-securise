@@ -17,7 +17,6 @@ import Risques from '../../../src/modeles/risques.ts';
 import { RisquesV2 } from '../../../src/moteurRisques/v2/risquesV2.ts';
 import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
-import { AdaptateurEnvironnement } from '../../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.ts';
 import {
@@ -35,10 +34,8 @@ const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES } = Rubriques;
 describe("Les routes d'API publique `/v1`", () => {
   let depotDonnees: DepotDonnees;
   let enTeteAuthorization: string;
-  let avecRisquesV2: boolean;
 
   beforeEach(async () => {
-    avecRisquesV2 = false;
     depotDonnees = await depotVide();
     const { valeurEnClair } = await depotDonnees.nouvelleCle(unUUID('U'), 30);
     enTeteAuthorization = `Bearer ${valeurEnClair}`;
@@ -53,9 +50,6 @@ describe("Les routes d'API publique `/v1`", () => {
         logueErreur: () => {},
       } as unknown as AdaptateurGestionErreur,
       adaptateurAuditApiPublique: { trace: async () => {} },
-      adaptateurEnvironnement: {
-        featureFlag: () => ({ avecRisquesV2: () => avecRisquesV2 }),
-      } as unknown as AdaptateurEnvironnement,
     }).app;
 
   const unServiceDeLyon = () =>
@@ -665,9 +659,7 @@ describe("Les routes d'API publique `/v1`", () => {
           depotDonnees.service = async () => service;
         });
 
-        it('renvoie les risques V2 quand la fonctionnalité est activée', async () => {
-          avecRisquesV2 = true;
-
+        it('renvoie les risques V2', async () => {
           const reponse = await recupereRisques();
 
           expect(reponse.status).toBe(200);
@@ -695,20 +687,7 @@ describe("Les routes d'API publique `/v1`", () => {
           });
         });
 
-        it("renvoie les risques V1 quand la fonctionnalité n'est pas activée", async () => {
-          avecRisquesV2 = false;
-
-          const reponse = await recupereRisques();
-
-          const origines = reponse.body.donnees.map(
-            ({ origine }: { origine: string }) => origine
-          );
-          expect(origines).not.toContain('referentielV2');
-        });
-
         it('renvoie une réponse conforme au schéma documenté', async () => {
-          avecRisquesV2 = true;
-
           const reponse = await recupereRisques();
 
           expect(schemaReponseRisques.safeParse(reponse.body).success).toBe(

@@ -186,7 +186,6 @@ const creeServeur = ({
       adaptateurZip,
       adaptateurJournal,
       lecteurDeFormData,
-      adaptateurEnvironnement,
       serviceStatistiquesAdmin,
       adaptateurTeleversementServices,
       adaptateurTeleversementModelesMesureSpecifique,

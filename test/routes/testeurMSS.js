@@ -132,9 +132,6 @@ const testeurMss = () => {
         urlDocumentationApi: () => 'http://localhost:1235/docs',
       }),
       trustProxy: () => 0,
-      featureFlag: () => ({
-        avecRisquesV2: () => true,
-      }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
       }),

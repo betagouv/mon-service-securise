@@ -9,9 +9,6 @@ declare global {
 
 export type VisiteGuideeSPAProps = {
   referentiel: ReferentielPagesService & ReferentielStatistiques;
-  featureFlags: {
-    avecRisquesV2: boolean;
-  };
   nonce: string;
 };
 

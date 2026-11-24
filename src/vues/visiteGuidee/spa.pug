@@ -47,7 +47,6 @@ block append scripts
       ...Object.fromEntries(Object.entries(referentielV2.typesService()).map(([id, { nom }]) => [id, nom])),
     },
   })
-  +donneesPartagees('feature-flags', {avecRisquesV2: featureFlags.avecRisquesV2})
   +donneesPartagees('nonce-commentaires', nonce)
   +donneesPartagees('autorisations-service', autorisationsService)
 

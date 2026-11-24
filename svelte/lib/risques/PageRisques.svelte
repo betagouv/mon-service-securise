@@ -29,7 +29,6 @@
     visible: Record<EtapeService, boolean>;
     risquesV1: TypeRisquesV1;
     statuts: ReferentielStatut;
-    avecRisquesV2: boolean;
     versionService: VersionService | undefined;
     modeVisiteGuidee?: boolean;
     vecteursRisque: ReferentielVecteursRisque;
@@ -51,12 +50,11 @@
     categoriesObjectifsVises,
     visible,
     versionService,
-    avecRisquesV2,
     modeVisiteGuidee = false,
   }: Props = $props();
 </script>
 
-{#if avecRisquesV2 && versionService === VersionService.v2}
+{#if versionService === VersionService.v2}
   <RisquesV2
     {idService}
     {risquesV1}
@@ -65,7 +63,6 @@
     {niveauxVraisemblance}
     {visible}
     {estLectureSeule}
-    {avecRisquesV2}
     {versionService}
     {modeVisiteGuidee}
     {vecteursRisque}
@@ -83,7 +80,6 @@
     {niveauxRisque}
     {estLectureSeule}
     {categoriesRisque}
-    {avecRisquesV2}
     {versionService}
   />
 {/if}

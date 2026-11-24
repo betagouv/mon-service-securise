@@ -10,7 +10,6 @@ const routesConnecteApiServicePdf = ({
   adaptateurPowerpoint,
   adaptateurTamponHomologation,
   adaptateurZip,
-  adaptateurEnvironnement,
   middleware,
   referentiel,
 }) => {
@@ -18,10 +17,7 @@ const routesConnecteApiServicePdf = ({
 
   const generePdfAnnexes = (service) => {
     const versionPdfRisques =
-      service.version() === VersionService.v2 &&
-      adaptateurEnvironnement.featureFlag().avecRisquesV2()
-        ? 'v2'
-        : 'v1';
+      service.version() === VersionService.v2 ? 'v2' : 'v1';
     const donneesDescription = service.vueAnnexePDFDescription().donnees();
     const donneesMesures = service.vueAnnexePDFMesures().donnees();
     const donneesRisques = service

@@ -27,7 +27,6 @@ export type TableauDesMesuresProps = {
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
   versionService: VersionService;
-  avecRisquesV2: boolean;
   afficheExplicationRisquesV2: boolean;
   visible: Record<EtapeService, boolean>;
 };

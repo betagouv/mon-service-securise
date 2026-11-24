@@ -27,7 +27,7 @@
   import ListeMesures from '../listeMesures/ListeMesures.svelte';
   import { trackDansMatomo } from '../ui/matomo';
 
-  let { referentiel, featureFlags, nonce }: VisiteGuideeSPAProps = $props();
+  let { referentiel, nonce }: VisiteGuideeSPAProps = $props();
 
   let etapeAdditionnelle: EtapeVisiteGuideeAdditionnelle | undefined = $state();
   let modeAdditionnel = $derived(!!etapeAdditionnelle);
@@ -217,7 +217,6 @@
         homologation: false,
       }}
       modeVisiteGuidee={true}
-      {featureFlags}
       preferencesUtilisateur={{
         afficheExplicationRisquesV2: false,
       }}

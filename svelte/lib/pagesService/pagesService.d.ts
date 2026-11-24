@@ -69,9 +69,6 @@ export type PagesServiceProps = {
   estLectureSeule: Record<EtapeService, boolean>;
   modeVisiteGuidee: boolean;
   etapeActive: EtapeService;
-  featureFlags: {
-    avecRisquesV2: boolean;
-  };
   preferencesUtilisateur: {
     afficheExplicationRisquesV2: boolean;
   };

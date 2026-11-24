@@ -43,7 +43,6 @@
     niveauxVraisemblance: ReferentielVraisemblances;
     visible: Record<EtapeService, boolean>;
     estLectureSeule: boolean;
-    avecRisquesV2: boolean;
     versionService: VersionService | undefined;
     modeVisiteGuidee: boolean;
   }
@@ -58,7 +57,6 @@
     niveauxVraisemblance,
     visible,
     estLectureSeule,
-    avecRisquesV2,
     versionService,
     modeVisiteGuidee,
   }: Props = $props();
@@ -124,7 +122,7 @@
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
 
-<NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
+<NavigationSecuriser {idService} {visible} {versionService} />
 
 <div class="explications">
   <span>

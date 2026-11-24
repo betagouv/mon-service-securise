@@ -22,7 +22,6 @@
     tranches: Tranches;
     tranchesPersonnalisees: Tranches;
     visible: Record<EtapeService, boolean>;
-    avecRisquesV2: boolean;
     versionService: VersionService | undefined;
   }
 
@@ -38,7 +37,6 @@
     tranches,
     tranchesPersonnalisees,
     visible,
-    avecRisquesV2,
     versionService,
   }: Props = $props();
 
@@ -80,7 +78,7 @@
 </script>
 
 <div class="conteneur-indice-cyber">
-  <NavigationSecuriser {idService} {visible} {avecRisquesV2} {versionService} />
+  <NavigationSecuriser {idService} {visible} {versionService} />
   <dsfr-tabs
     tabs={configurationsTabs}
     activeTabIndex={tabActive}

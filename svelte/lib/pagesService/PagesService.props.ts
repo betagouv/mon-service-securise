@@ -29,7 +29,6 @@ export const propsPourPage = (
         retoursUtilisateur: props.referentiel.mesures.retoursUtilisateur,
         nonce: props.nonce,
         versionService: service?.version,
-        avecRisquesV2: props.featureFlags.avecRisquesV2,
         afficheExplicationRisquesV2:
           props.preferencesUtilisateur.afficheExplicationRisquesV2,
       };
@@ -54,7 +53,6 @@ export const propsPourPage = (
         niveauxRisque: props.referentiel.risques.niveaux,
         risquesV1,
         statuts: props.referentiel.mesures.statuts,
-        avecRisquesV2: props.featureFlags.avecRisquesV2,
         versionService: service?.version,
       };
     case 'rolesResponsabilites':
@@ -73,7 +71,6 @@ export const propsPourPage = (
         tranches: indicesCyber?.tranches.indiceCyber,
         tranchesPersonnalisees: indicesCyber?.tranches.indiceCyberPersonnalise,
         versionService: service?.version,
-        avecRisquesV2: props.featureFlags.avecRisquesV2,
       };
     case 'dossiers':
       return {
