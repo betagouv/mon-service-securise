@@ -1,95 +1,118 @@
-import expect from 'expect.js';
-import Middleware from '../../src/http/middleware.js';
+import { NextFunction, Response } from 'express';
+import Middleware, { RequeteMSS } from '../../src/http/middleware.ts';
 import {
   ErreurChainageMiddleware,
   ErreurDroitsIncoherents,
-} from '../../src/erreurs.js';
+} from '../../src/erreurs.ts';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
-import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
-import Utilisateur from '../../src/modeles/utilisateur.js';
-import { TYPES_REQUETES } from '../../src/http/configurationServeur.js';
+import ParcoursUtilisateur, {
+  DonneesParcoursUtilisateur,
+} from '../../src/modeles/parcoursUtilisateur.ts';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import { fabriqueAdaptateurChiffrement } from '../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 import {
+  Droits,
   Permissions,
   Rubriques,
-} from '../../src/modeles/autorisations/gestionDroits.js';
-import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
-import { unUUIDRandom } from '../constructeurs/UUID.js';
+} from '../../src/modeles/autorisations/gestionDroits.ts';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
+import { unUUIDRandom } from '../constructeurs/UUID.ts';
+import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
+import { AdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.interface.ts';
+import { AdaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
+import { AdaptateurGestionErreur } from '../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
+import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.ts';
+import { AdaptateurProtection } from '../../src/adaptateurs/adaptateurProtection.interface.ts';
+import { Middleware as TypeMiddleware } from '../../src/http/middleware.interface.ts';
+import Service from '../../src/modeles/service.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
 const { LECTURE, ECRITURE, INVISIBLE } = Permissions;
 
-const prepareVerificationReponse = (reponse, status, message) => {
-  reponse.render = () => {};
-  reponse.status = (s) => {
-    try {
-      expect(s).to.equal(status);
-      return reponse;
-    } catch (e) {
-      expect().fail(e);
-      return undefined;
-    }
-  };
+const ID_UTILISATEUR_COURANT = unUUIDRandom();
+const ID_SERVICE = unUUIDRandom();
 
-  reponse.send = (m) => {
-    try {
-      if (typeof message !== 'undefined') expect(m).to.equal(message);
-    } catch (e) {
-      /* eslint-disable no-console */
-      console.log(e);
-      /* eslint-enable no-console */
-    }
-  };
+const unParcoursUtilisateur = (donnees: Partial<DonneesParcoursUtilisateur>) =>
+  new ParcoursUtilisateur({
+    aVuTableauDeBordDepuisConnexion: false,
+    idUtilisateur: ID_UTILISATEUR_COURANT,
+    etatVisiteGuidee: { dejaTerminee: false },
+    ...donnees,
+  });
+
+type ReponseDeTest = Response & { headers: Record<string, string> };
+
+type DepotDonneesDeTest = {
+  [Methode in keyof DepotDonnees]?: (...args: never[]) => unknown;
 };
 
-const prepareVerificationRedirection = (reponse, urlRedirection) => {
-  reponse.redirect = (url) => {
-    expect(url).to.equal(urlRedirection);
-  };
+type ConfigurationDeTest = {
+  adaptateurJWT?: unknown;
+  adaptateurEnvironnement?: unknown;
+  adaptateurGestionErreur?: unknown;
+  adaptateurChiffrement?: unknown;
 };
 
-const verifieValeurHeader = (nomHeader, regExpValeurAttendue, reponse) => {
-  expect(reponse.headers).to.have.property(nomHeader);
-  expect(reponse.headers[nomHeader]).to.match(new RegExp(regExpValeurAttendue));
-};
+const appelleJusquALaSuite = (
+  middleware: (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => unknown,
+  requete: RequeteMSS,
+  reponse: Response
+) =>
+  new Promise<void>((resolve) => {
+    middleware(requete, reponse, () => resolve());
+  });
 
 describe('Le middleware MSS', () => {
-  const requete = {};
-  const reponse = {};
-  const depotDonnees = {};
+  const requete = {} as RequeteMSS;
+  const reponse = {} as ReponseDeTest;
+  const depotDonnees: DepotDonneesDeTest = {};
 
   const leMiddleware = ({
     adaptateurJWT,
     adaptateurEnvironnement,
     adaptateurGestionErreur,
     adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
-  } = {}) =>
+  }: ConfigurationDeTest = {}): TypeMiddleware =>
     Middleware({
-      adaptateurJWT: adaptateurJWT || { decode: () => ({}) },
-      adaptateurEnvironnement,
-      adaptateurGestionErreur: adaptateurGestionErreur || {
+      adaptateurJWT: (adaptateurJWT || {
+        decode: () => ({}),
+      }) as AdaptateurJWT,
+      adaptateurEnvironnement:
+        adaptateurEnvironnement as AdaptateurEnvironnement,
+      adaptateurGestionErreur: (adaptateurGestionErreur || {
         identifieUtilisateur: () => {},
-      },
-      depotDonnees,
-      adaptateurChiffrement,
+      }) as AdaptateurGestionErreur,
+      depotDonnees: depotDonnees as unknown as DepotDonnees,
+      adaptateurChiffrement: adaptateurChiffrement as AdaptateurChiffrement,
+      adaptateurProtection: {} as AdaptateurProtection,
     });
+
+  const suiteInterdite = () => {
+    throw new Error("Le middleware suivant n'aurait pas dû être appelé");
+  };
 
   beforeEach(() => {
     requete.session = { token: 'XXX', cguAcceptees: true, estInvite: false };
     requete.params = {};
     requete.body = {};
     requete.cookies = {};
-    requete.originalUrl = undefined;
+    requete.originalUrl = undefined as unknown as string;
 
     reponse.headers = {};
     reponse.locals = {};
-    reponse.redirect = () => {};
-    reponse.set = (clefsValeurs) =>
+    reponse.redirect = vi.fn();
+    reponse.set = vi.fn((clefsValeurs: Record<string, string>) => {
       Object.assign(reponse.headers, clefsValeurs);
-    reponse.status = () => reponse;
-    reponse.send = () => {};
-    reponse.render = () => {};
+      return reponse;
+    }) as unknown as ReponseDeTest['set'];
+    reponse.status = vi.fn().mockReturnValue(reponse);
+    reponse.send = vi.fn();
+    reponse.sendStatus = vi.fn();
+    reponse.render = vi.fn();
 
     depotDonnees.service = async () => {};
     depotDonnees.utilisateur = async () =>
@@ -106,13 +129,12 @@ describe('Le middleware MSS', () => {
       mss: () => ({ urlBase: () => 'http://domaine:1234' }),
     };
 
-    prepareVerificationRedirection(
-      reponse,
+    const middleware = leMiddleware({ adaptateurEnvironnement });
+    middleware.redirigeVersUrlBase(requete, reponse, suiteInterdite);
+
+    expect(reponse.redirect).toHaveBeenCalledWith(
       'http://domaine:1234/monUrlDemandee'
     );
-
-    const middleware = leMiddleware({ adaptateurEnvironnement });
-    middleware.redirigeVersUrlBase(requete, reponse);
   });
 
   it("ne redirige pas l'utilisateur vers l'url de base s'il en provient déjà", async () => {
@@ -129,7 +151,7 @@ describe('Le middleware MSS', () => {
       aFini = true;
     });
 
-    expect(aFini).to.be(true);
+    expect(aFini).toBe(true);
   });
 
   describe('sur vérification du token JWT', () => {
@@ -138,16 +160,13 @@ describe('Le middleware MSS', () => {
     });
 
     it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", async () => {
-      const adaptateurJWT = {
-        decode: (token) => {
-          expect(token).to.equal('XXX');
-        },
-      };
-
-      prepareVerificationRedirection(reponse, '/connexion');
+      const adaptateurJWT = { decode: vi.fn() };
 
       const middleware = leMiddleware({ adaptateurJWT });
-      await middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse, suiteInterdite);
+
+      expect(adaptateurJWT.decode).toHaveBeenCalledWith('XXX');
+      expect(reponse.redirect).toHaveBeenCalledWith('/connexion');
     });
 
     it("redirige l'utilisateur vers la mire de login quand le JWT a été révoqué", async () => {
@@ -161,62 +180,49 @@ describe('Le middleware MSS', () => {
       depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
       depotDonnees.estJwtRevoque = async () => true;
 
-      let urlDeRedirection;
-      reponse.redirect = (url) => {
-        urlDeRedirection = url;
-      };
-
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      const middleware = leMiddleware({ adaptateurJWT });
       await middleware.verificationJWT(requete, reponse, () => {});
 
-      expect(urlDeRedirection).to.be('/connexion');
+      expect(reponse.redirect).toHaveBeenCalledWith('/connexion');
     });
 
     it("ajoute l'URL originale à la redirection si elle commence par un '/'", async () => {
       const adaptateurJWT = { decode: () => null };
       requete.originalUrl = '/tableauDeBord';
-      prepareVerificationRedirection(
-        reponse,
-        '/connexion?urlRedirection=%2FtableauDeBord'
-      );
 
       const middleware = leMiddleware({ adaptateurJWT });
-      await middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse, suiteInterdite);
+
+      expect(reponse.redirect).toHaveBeenCalledWith(
+        '/connexion?urlRedirection=%2FtableauDeBord'
+      );
     });
 
     it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", async () => {
       const adaptateurJWT = { decode: () => null };
       requete.originalUrl = '/api/service';
-      prepareVerificationRedirection(reponse, '/connexion');
 
       const middleware = leMiddleware({ adaptateurJWT });
-      await middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse, suiteInterdite);
+
+      expect(reponse.redirect).toHaveBeenCalledWith('/connexion');
     });
 
     it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', async () => {
       const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
+      const lectureUtilisateur = vi.fn().mockResolvedValue(undefined);
+      depotDonnees.utilisateur = lectureUtilisateur;
 
-      depotDonnees.utilisateur = (id) => {
-        expect(id).to.equal('123');
-        return Promise.resolve(undefined);
-      };
+      const middleware = leMiddleware({ adaptateurJWT });
+      await middleware.verificationJWT(requete, reponse, suiteInterdite);
 
-      prepareVerificationRedirection(reponse, '/connexion');
-
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      await middleware.verificationJWT(requete, reponse, suite);
+      expect(lectureUtilisateur).toHaveBeenCalledWith('123');
+      expect(reponse.redirect).toHaveBeenCalledWith('/connexion');
     });
 
     describe("identifie l'utilisateur pour la gestion d'erreur", () => {
       it("par l'identifiant présent dans son token", async () => {
-        let idCourant;
-        const adaptateurGestionErreur = {
-          identifieUtilisateur: (idUtilisateur) => {
-            idCourant = idUtilisateur;
-          },
-        };
+        const adaptateurGestionErreur = { identifieUtilisateur: vi.fn() };
 
         const middleware = leMiddleware({
           adaptateurJWT: { decode: () => ({ idUtilisateur: '123' }) },
@@ -225,16 +231,13 @@ describe('Le middleware MSS', () => {
 
         await middleware.verificationJWT(requete, reponse, () => {});
 
-        expect(idCourant).to.be('123');
+        expect(
+          adaptateurGestionErreur.identifieUtilisateur
+        ).toHaveBeenCalledWith('123', undefined);
       });
 
       it('en conservant le timestamp de création de son token', async () => {
-        let timestampToken;
-        const adaptateurGestionErreur = {
-          identifieUtilisateur: (_idUtilisateur, timestampTokenJwt) => {
-            timestampToken = timestampTokenJwt;
-          },
-        };
+        const adaptateurGestionErreur = { identifieUtilisateur: vi.fn() };
 
         const middleware = leMiddleware({
           adaptateurJWT: { decode: () => ({ iat: 123456789 }) },
@@ -243,26 +246,28 @@ describe('Le middleware MSS', () => {
 
         await middleware.verificationJWT(requete, reponse, () => {});
 
-        expect(timestampToken).to.be(123456789);
+        expect(
+          adaptateurGestionErreur.identifieUtilisateur
+        ).toHaveBeenCalledWith(expect.anything(), 123456789);
       });
     });
 
     it('ajoute les informations de `cguAcceptees` provenant de la session à la requête', async () => {
       const middleware = leMiddleware();
-      requete.session.cguAcceptees = 'CGU';
+      requete.session!.cguAcceptees = 'CGU';
 
       await middleware.verificationJWT(requete, reponse, () => {});
 
-      expect(requete.cguAcceptees).to.be('CGU');
+      expect(requete.cguAcceptees).toBe('CGU');
     });
 
     it('ajoute les informations de `estInvite` provenant de la session à la requête', async () => {
       const middleware = leMiddleware();
-      requete.session.estInvite = 'INVITÉ';
+      requete.session!.estInvite = 'INVITÉ';
 
       await middleware.verificationJWT(requete, reponse, () => {});
 
-      expect(requete.estInvite).to.be('INVITÉ');
+      expect(requete.estInvite).toBe('INVITÉ');
     });
 
     it("ajoute l'utilisateur connecté à `reponse.locals`", async () => {
@@ -270,7 +275,7 @@ describe('Le middleware MSS', () => {
 
       await middleware.verificationJWT(requete, reponse, () => {});
 
-      expect(reponse.locals.utilisateurConnecte).to.eql({
+      expect(reponse.locals.utilisateurConnecte).toEqual({
         prenomNom: 'Jean Dujardin',
         email: 'jean.dujardin@beta.gouv.com',
         estAdmin: true,
@@ -285,47 +290,33 @@ describe('Le middleware MSS', () => {
         },
       };
       const middleware = leMiddleware({ adaptateurJWT });
+
       it('redirige vers la page de connexion pour une requête de type NAVIGATION', async () => {
-        requete.typeRequete = TYPES_REQUETES.NAVIGATION;
-        let urlRecue;
-        reponse.redirect = (url) => {
-          urlRecue = url;
-        };
+        requete.typeRequete = 'NAVIGATION';
 
         await middleware.verificationJWT(requete, reponse, () => {});
 
-        expect(urlRecue).to.be('/connexion');
+        expect(reponse.redirect).toHaveBeenCalledWith('/connexion');
       });
 
       it("redirige vers la page de connexion en ajoutant l'URL originale à la redirection", async () => {
-        requete.typeRequete = TYPES_REQUETES.NAVIGATION;
+        requete.typeRequete = 'NAVIGATION';
         requete.originalUrl = '/tableauDeBord';
-        let urlRecue;
-        reponse.redirect = (url) => {
-          urlRecue = url;
-        };
 
-        await middleware.verificationJWT(requete, reponse);
+        await middleware.verificationJWT(requete, reponse, suiteInterdite);
 
-        expect(urlRecue).to.be('/connexion?urlRedirection=%2FtableauDeBord');
+        expect(reponse.redirect).toHaveBeenCalledWith(
+          '/connexion?urlRedirection=%2FtableauDeBord'
+        );
       });
 
       it('retourne une erreur technique pour une requête de type API', async () => {
-        requete.typeRequete = TYPES_REQUETES.API;
-        let donneesRecues;
-        let statutRecu;
-        reponse.status = (statut) => {
-          statutRecu = statut;
-          return reponse;
-        };
-        reponse.send = (donnees) => {
-          donneesRecues = donnees;
-        };
+        requete.typeRequete = 'API';
 
         await middleware.verificationJWT(requete, reponse, () => {});
 
-        expect(donneesRecues).to.eql({ cause: 'TOKEN_EXPIRE' });
-        expect(statutRecu).to.be(401);
+        expect(reponse.send).toHaveBeenCalledWith({ cause: 'TOKEN_EXPIRE' });
+        expect(reponse.status).toHaveBeenCalledWith(401);
       });
     });
   });
@@ -344,17 +335,15 @@ describe('Le middleware MSS', () => {
         const adaptateurJWT = {
           decode: () => ({ source: 'AGENT_CONNECT' }),
         };
-        const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
-
-        reponse.redirect = (url) => {
-          expect(url).to.equal('/oidc/connexion');
-        };
+        const middleware = leMiddleware({ adaptateurJWT });
 
         let suiteAppelee = false;
         await middleware.verificationAcceptationCGU(requete, reponse, () => {
           suiteAppelee = true;
         });
-        expect(suiteAppelee).to.be(false);
+
+        expect(suiteAppelee).toBe(false);
+        expect(reponse.redirect).toHaveBeenCalledWith('/oidc/connexion');
       });
     });
 
@@ -364,49 +353,50 @@ describe('Le middleware MSS', () => {
       };
 
       it('si la dernière version des CGU est acceptée, appelle le middleware suivant', async () => {
-        const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+        const middleware = leMiddleware({ adaptateurJWT });
 
         let suiteAppelee = false;
         await middleware.verificationAcceptationCGU(requete, reponse, () => {
           suiteAppelee = true;
         });
-        expect(suiteAppelee).to.be(true);
+
+        expect(suiteAppelee).toBe(true);
       });
 
       it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", async () => {
         requete.session = { ...requete.session, cguAcceptees: false };
-        const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
-
-        reponse.redirect = (url) => {
-          expect(url).to.equal('/cgu');
-        };
+        const middleware = leMiddleware({ adaptateurJWT });
 
         let suiteAppelee = false;
         await middleware.verificationAcceptationCGU(requete, reponse, () => {
           suiteAppelee = true;
         });
-        expect(suiteAppelee).to.be(false);
+
+        expect(suiteAppelee).toBe(false);
+        expect(reponse.redirect).toHaveBeenCalledWith('/cgu');
       });
     });
   });
 
   it('efface les cookies sur demande', async () => {
-    expect(requete.session).to.not.be(null);
+    expect(requete.session).not.toBe(null);
 
     const middleware = leMiddleware();
-    middleware.suppressionCookie(requete, reponse, () => {
-      expect(requete.session).to.be(null);
-    });
+    middleware.suppressionCookie(requete, reponse, () => {});
+
+    expect(requete.session).toBe(null);
   });
 
   describe("sur recherche d'un service existant", () => {
-    let idService;
+    let idService: string;
 
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999' }),
     };
+
     beforeEach(() => {
       idService = unUUIDRandom();
+      requete.params = { id: idService };
       depotDonnees.service = () => Promise.resolve();
       depotDonnees.utilisateur = () => ({
         genereToken: () => 'NOUVEAU_TOKEN',
@@ -415,99 +405,84 @@ describe('Le middleware MSS', () => {
     });
 
     it("jette une erreur si l'id est invalide", async () => {
-      let statutRenvoye;
-      reponse.sendStatus = (statut) => {
-        statutRenvoye = statut;
-      };
       const middleware = leMiddleware();
       requete.params = { id: 'pasUnUUID' };
 
-      await middleware.trouveService({})(requete, reponse);
+      await middleware.trouveService({})(requete, reponse, suiteInterdite);
 
-      expect(statutRenvoye).to.be(400);
+      expect(reponse.sendStatus).toHaveBeenCalledWith(400);
     });
 
     it("ne jette pas d'erreur si d'autres paramètres sont présent dans la requête", async () => {
-      let statutRenvoye = 'AUCUNE_ERREUR';
-      reponse.sendStatus = (statut) => {
-        statutRenvoye = statut;
-      };
       const middleware = leMiddleware();
       requete.params = { id: idService, autreParametre: 'unParametre' };
 
-      await middleware.trouveService({})(requete, reponse);
+      await middleware.trouveService({})(requete, reponse, () => {});
 
-      expect(statutRenvoye).to.be('AUCUNE_ERREUR');
+      expect(reponse.sendStatus).not.toHaveBeenCalled();
     });
 
     it('requête le dépôt de données', async () => {
-      let idRecu;
-      depotDonnees.service = async (id) => {
-        idRecu = id;
-      };
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      const lectureService = vi.fn();
+      depotDonnees.service = lectureService;
+      const middleware = leMiddleware({ adaptateurJWT });
 
-      requete.params = { id: idService };
-      await middleware.trouveService({})(requete, reponse);
+      await middleware.trouveService({})(requete, reponse, () => {});
 
-      expect(idRecu).to.be(idService);
+      expect(lectureService).toHaveBeenCalledWith(idService);
     });
 
     it('renvoie une erreur HTTP 404 si service non trouvée', async () => {
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      const middleware = leMiddleware({ adaptateurJWT });
 
-      prepareVerificationReponse(reponse, 404, 'Service non trouvé');
+      await middleware.trouveService({})(requete, reponse, suiteInterdite);
 
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      await middleware.trouveService({})(requete, reponse, suite);
+      expect(reponse.status).toHaveBeenCalledWith(404);
+      expect(reponse.send).toHaveBeenCalledWith('Service non trouvé');
     });
 
     it("jette une erreur technique si l'objet de droits est incohérent", async () => {
       const middleware = leMiddleware();
-      requete.params = { id: unUUIDRandom() };
+      const droitsIncoherents = {
+        mauvaiseCle: 'mauvaiseValeur',
+      } as unknown as Partial<Droits>;
 
-      try {
-        await middleware.trouveService({ mauvaiseCle: 'mauvaiseValeur' })(
+      await expect(
+        middleware.trouveService(droitsIncoherents)(
           requete,
-          reponse
-        );
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e).to.be.an(ErreurDroitsIncoherents);
-        expect(e.message).to.equal(
+          reponse,
+          suiteInterdite
+        )
+      ).rejects.toThrow(
+        new ErreurDroitsIncoherents(
           "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
-        );
-      }
+        )
+      );
     });
 
     it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
       depotDonnees.service = async () => ({});
       depotDonnees.accesAutorise = async () => false;
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      const middleware = leMiddleware({ adaptateurJWT });
 
-      prepareVerificationReponse(reponse, 403, 'Accès au service refusé');
+      await middleware.trouveService({})(requete, reponse, suiteInterdite);
 
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      await middleware.trouveService({})(requete, reponse, suite);
+      expect(reponse.status).toHaveBeenCalledWith(403);
+      expect(reponse.render).toHaveBeenCalledWith('erreurAccesRefuse');
     });
 
     it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", async () => {
       depotDonnees.service = async () => {
         throw new Error('oups');
       };
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      const middleware = leMiddleware({ adaptateurJWT });
 
-      prepareVerificationReponse(
-        reponse,
-        422,
+      await middleware.trouveService({})(requete, reponse, suiteInterdite);
+
+      expect(reponse.status).toHaveBeenCalledWith(422);
+      expect(reponse.send).toHaveBeenCalledWith(
         "Le service n'a pas pu être récupéré"
       );
-
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      await middleware.trouveService({})(requete, reponse, suite);
     });
 
     it('retourne le service trouvé et appelle le middleware suivant', async () => {
@@ -515,68 +490,68 @@ describe('Le middleware MSS', () => {
       depotDonnees.service = async () => service;
       depotDonnees.accesAutorise = async () => true;
       const middleware = leMiddleware({ adaptateurJWT });
-      requete.params = { id: unUUIDRandom() };
 
       let appele = false;
       await middleware.trouveService({})(requete, reponse, () => {
         appele = true;
-        expect(requete.service).to.equal(service);
       });
-      expect(appele).to.be(true);
+
+      expect(appele).toBe(true);
+      expect(requete.service).toBe(service);
     });
   });
 
   describe("sur recherche du dossier courant d'une homologation existante", () => {
     it("renvoie une erreur HTTP 404 si le service n'a pas de dossier courant'", async () => {
-      const service = { dossierCourant: () => null };
-      requete.service = service;
+      requete.service = { dossierCourant: () => null } as unknown as Service;
       const middleware = leMiddleware();
 
-      prepareVerificationReponse(reponse, 404, 'Service sans dossier courant');
+      middleware.trouveDossierCourant(requete, reponse, suiteInterdite);
 
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveDossierCourant(requete, reponse, suite);
+      expect(reponse.status).toHaveBeenCalledWith(404);
+      expect(reponse.send).toHaveBeenCalledWith('Service sans dossier courant');
     });
 
     it("jette une erreur technique si le service n'est pas présent dans la requête", async () => {
-      requete.service = null;
+      requete.service = undefined;
       const middleware = leMiddleware();
 
       expect(() =>
-        middleware.trouveDossierCourant(requete, reponse)
-      ).to.throwError((e) => {
-        expect(e).to.be.an(ErreurChainageMiddleware);
-        expect(e.message).to.equal(
+        middleware.trouveDossierCourant(requete, reponse, suiteInterdite)
+      ).toThrow(
+        new ErreurChainageMiddleware(
           'Un service doit être présent dans la requête. Manque-t-il un appel à `trouveService` ?'
-        );
-      });
+        )
+      );
     });
 
     it('retourne le dossier courant trouvé et appelle le middleware suivant', async () => {
       const dossierCourant = {};
-      const service = { dossierCourant: () => dossierCourant };
-
-      requete.service = service;
+      requete.service = {
+        dossierCourant: () => dossierCourant,
+      } as unknown as Service;
       const middleware = leMiddleware();
 
       let appele = false;
       middleware.trouveDossierCourant(requete, reponse, () => {
         appele = true;
-        expect(requete.dossierCourant).to.eql(dossierCourant);
       });
-      expect(appele).to.be(true);
+
+      expect(appele).toBe(true);
+      expect(requete.dossierCourant).toBe(dossierCourant);
     });
   });
 
   describe('sur demande positionnement des headers', () => {
-    beforeEach(() => (requete.nonce = undefined));
-
-    const verifiePositionnementHeader = (nomHeader, regExpValeurAttendue) => {
+    const verifiePositionnementHeader = (
+      nomHeader: string,
+      valeurAttendue: string | RegExp
+    ) => {
       const middleware = leMiddleware();
-      middleware.positionneHeaders(requete, reponse, () => {
-        verifieValeurHeader(nomHeader, regExpValeurAttendue, reponse);
-      });
+      middleware.positionneHeaders(requete, reponse, () => {});
+
+      expect(reponse.headers).toHaveProperty(nomHeader);
+      expect(reponse.headers[nomHeader]).toMatch(new RegExp(valeurAttendue));
     };
 
     describe('concernant les CSP', () => {
@@ -661,35 +636,36 @@ describe('Le middleware MSS', () => {
 
     it('positionne un nonce dans le reponse.locals', async () => {
       const middleware = leMiddleware({
-        adaptateurChiffrement: {
-          nonce: () => 'UN-NONCE',
-        },
+        adaptateurChiffrement: { nonce: () => 'UN-NONCE' },
       });
-      middleware.positionneHeaders(requete, reponse, () => {
-        expect(reponse.locals.nonce).to.eql('UN-NONCE');
-      });
+
+      middleware.positionneHeaders(requete, reponse, () => {});
+
+      expect(reponse.locals.nonce).toEqual('UN-NONCE');
     });
   });
 
   describe("sur demande de filtrage d'adresse IP", () => {
+    const changeIp = (ip: string) =>
+      Object.defineProperty(requete, 'ip', { value: ip, configurable: true });
+
     it("jette une erreur 401 si l'adresse IP n'est pas valide", async () => {
       const middleware = leMiddleware();
-      requete.ip = '192.168.1.1';
-
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-      prepareVerificationReponse(reponse, 401, 'Non autorisé');
+      changeIp('192.168.1.1');
 
       middleware.verificationAddresseIP(['192.168.0.1/24'])(
         requete,
         reponse,
-        suite
+        suiteInterdite
       );
+
+      expect(reponse.status).toHaveBeenCalledWith(401);
+      expect(reponse.send).toHaveBeenCalledWith('Non autorisé');
     });
 
     it("passe au middleware suivant si l'adresse est valide", async () => {
       const middleware = leMiddleware();
-      requete.ip = '192.168.0.1';
+      changeIp('192.168.0.1');
       let appele = false;
 
       middleware.verificationAddresseIP(['192.168.0.1/24'])(
@@ -700,51 +676,52 @@ describe('Le middleware MSS', () => {
         }
       );
 
-      expect(appele).to.be(true);
+      expect(appele).toBe(true);
     });
   });
 
   describe('sur demande de chargement des autorisations pour un service', () => {
     beforeEach(() => {
-      requete.idUtilisateurCourant = '999';
-      requete.service = { id: '123' };
+      requete.idUtilisateurCourant = ID_UTILISATEUR_COURANT;
+      requete.service = { id: ID_SERVICE } as unknown as Service;
       depotDonnees.autorisationPour = async () =>
         uneAutorisation().avecDroits({}).construis();
     });
 
     it("jette une erreur technique si le service ou l'utilisateur ne sont pas présents dans la requête", async () => {
-      requete.service = null;
-      const middleware = leMiddleware({ depotDonnees });
+      requete.service = undefined;
+      const middleware = leMiddleware();
 
       expect(() =>
         middleware.chargeAutorisationsService(requete, reponse, () => {})
-      ).to.throwError((e) => {
-        expect(e).to.be.an(ErreurChainageMiddleware);
-        expect(e.message).to.equal(
+      ).toThrow(
+        new ErreurChainageMiddleware(
           'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
-        );
-      });
+        )
+      );
     });
 
     it("utilise le dépôt de données pour lire l'autorisation", async () => {
-      let donneesPassees = {};
-      depotDonnees.autorisationPour = async (idUtilisateur, idService) => {
-        donneesPassees = { idUtilisateur, idService };
-        return uneAutorisation().avecDroits({}).construis();
-      };
+      const lectureAutorisation = vi
+        .fn()
+        .mockResolvedValue(uneAutorisation().avecDroits({}).construis());
+      depotDonnees.autorisationPour = lectureAutorisation;
+      const middleware = leMiddleware();
 
-      const middleware = leMiddleware({ depotDonnees });
+      await appelleJusquALaSuite(
+        middleware.chargeAutorisationsService,
+        requete,
+        reponse
+      );
 
-      middleware.chargeAutorisationsService(requete, reponse, () => {
-        expect(donneesPassees).to.eql({
-          idUtilisateur: '999',
-          idService: '123',
-        });
-      });
+      expect(lectureAutorisation).toHaveBeenCalledWith(
+        ID_UTILISATEUR_COURANT,
+        ID_SERVICE
+      );
     });
 
     it("ajoute l'autorisation à la *`requete`* pour qu'elle soit accessibles aux routes utilisant le middleware", async () => {
-      const middleware = leMiddleware({ depotDonnees });
+      const middleware = leMiddleware();
       const autorisationChargee = uneAutorisation()
         .avecDroits({
           [DECRIRE]: ECRITURE,
@@ -754,13 +731,17 @@ describe('Le middleware MSS', () => {
         .construis();
       depotDonnees.autorisationPour = async () => autorisationChargee;
 
-      middleware.chargeAutorisationsService(requete, reponse, () => {
-        expect(requete.autorisationService).to.be(autorisationChargee);
-      });
+      await appelleJusquALaSuite(
+        middleware.chargeAutorisationsService,
+        requete,
+        reponse
+      );
+
+      expect(requete.autorisationService).toBe(autorisationChargee);
     });
 
     it("remanie l'objet d'autorisation à la *`reponse`* pour qu'il soit utilisable par le `.pug`", async () => {
-      const middleware = leMiddleware({ depotDonnees });
+      const middleware = leMiddleware();
       depotDonnees.autorisationPour = async () =>
         uneAutorisation()
           .avecDroits({
@@ -770,116 +751,107 @@ describe('Le middleware MSS', () => {
           })
           .construis();
 
-      middleware.chargeAutorisationsService(requete, reponse, () => {
-        expect(reponse.locals.autorisationsService).to.eql({
-          DECRIRE: { estLectureSeule: false, estMasque: false },
-          SECURISER: { estLectureSeule: true, estMasque: false },
-          HOMOLOGUER: { estLectureSeule: false, estMasque: true },
-          peutHomologuer: false,
-        });
+      await appelleJusquALaSuite(
+        middleware.chargeAutorisationsService,
+        requete,
+        reponse
+      );
+
+      expect(reponse.locals.autorisationsService).toEqual({
+        DECRIRE: { estLectureSeule: false, estMasque: false },
+        SECURISER: { estLectureSeule: true, estMasque: false },
+        HOMOLOGUER: { estLectureSeule: false, estMasque: true },
+        peutHomologuer: false,
       });
     });
   });
 
   describe("sur demande de chargement de l'état de la visite guidée", () => {
     describe('quand la fonctionnalité visite guidée est active', () => {
-      let middleware;
+      let middleware: TypeMiddleware;
 
       beforeEach(() => {
         depotDonnees.lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur({
-            idUtilisateur: '1234',
+          unParcoursUtilisateur({
             etatVisiteGuidee: { dejaTerminee: true },
           });
 
         depotDonnees.utilisateur = async () =>
-          new Utilisateur(
-            {
-              email: 'jeanne.delajardiniere@gouv.fr',
-              prenom: 'Jeanne',
-              dateCreation: '2025-01-01',
-            },
-            { adaptateurJWT: {} }
-          );
+          unUtilisateur()
+            .quiSAppelle('Jeanne Delajardinière')
+            .quiSEstInscritLe(new Date('2025-01-01'))
+            .construis();
 
-        middleware = leMiddleware({ depotDonnees });
+        middleware = leMiddleware();
       });
 
       it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", async () => {
         requete.idUtilisateurCourant = undefined;
 
-        try {
-          await middleware.chargeEtatVisiteGuidee(requete, reponse, () => {});
-          expect().fail(
-            "Le chargement de l'état de la visite guidée aurait dû lever une exception"
-          );
-        } catch (e) {
-          expect(e).to.be.an(ErreurChainageMiddleware);
-          expect(e.message).to.equal(
+        await expect(
+          middleware.chargeEtatVisiteGuidee(requete, reponse, suiteInterdite)
+        ).rejects.toThrow(
+          new ErreurChainageMiddleware(
             'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-          );
-        }
+          )
+        );
       });
 
       it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", async () => {
-        requete.idUtilisateurCourant = '1234';
+        requete.idUtilisateurCourant = ID_UTILISATEUR_COURANT;
 
-        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-          expect(reponse.locals.etatVisiteGuidee.dejaTerminee).to.equal(true);
+        await middleware.chargeEtatVisiteGuidee(requete, reponse, () => {});
 
-          expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).to.eql({
-            prenom: 'Jeanne',
-            dateInscription: '2025-01-01',
-          });
+        expect(reponse.locals.etatVisiteGuidee.dejaTerminee).toBe(true);
+        expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).toEqual({
+          prenom: 'Jeanne',
+          dateInscription: new Date('2025-01-01'),
         });
       });
     });
   });
 
   describe("sur demande de chargement de l'état de l'explication du nouveau référentiel", () => {
-    let middleware;
+    let middleware: TypeMiddleware;
 
     beforeEach(() => {
       depotDonnees.lisParcoursUtilisateur = async () =>
-        new ParcoursUtilisateur({
-          idUtilisateur: '1234',
+        unParcoursUtilisateur({
           etatVisiteGuidee: { dejaTerminee: true },
           explicationNouveauReferentiel: { dejaTermine: false },
         });
 
-      middleware = leMiddleware({ depotDonnees });
+      middleware = leMiddleware();
     });
 
     it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", async () => {
       requete.idUtilisateurCourant = undefined;
 
-      try {
-        await middleware.chargeExplicationNouveauReferentiel(
+      await expect(
+        middleware.chargeExplicationNouveauReferentiel(
           requete,
           reponse,
-          () => {}
-        );
-        expect().fail(
-          "Le chargement de l'état d'explication du nouveau référentiel aurait dû lever une exception"
-        );
-      } catch (e) {
-        expect(e).to.be.an(ErreurChainageMiddleware);
-        expect(e.message).to.equal(
+          suiteInterdite
+        )
+      ).rejects.toThrow(
+        new ErreurChainageMiddleware(
           'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-        );
-      }
+        )
+      );
     });
 
     it("ajoute l'état d'affichage de l'explication du nouveau référentiel à `reponse.locals`", async () => {
-      reponse.locals.afficheExplicationNouveauReferentiel = undefined;
-      requete.idUtilisateurCourant = '1234';
-      middleware = leMiddleware();
+      requete.idUtilisateurCourant = ID_UTILISATEUR_COURANT;
 
-      middleware.chargeExplicationNouveauReferentiel(requete, reponse, () => {
-        expect(reponse.locals.afficheExplicationNouveauReferentiel).not.to.be(
-          undefined
-        );
-      });
+      await middleware.chargeExplicationNouveauReferentiel(
+        requete,
+        reponse,
+        () => {}
+      );
+
+      expect(reponse.locals.afficheExplicationNouveauReferentiel).not.toBe(
+        undefined
+      );
     });
   });
 
@@ -887,12 +859,11 @@ describe('Le middleware MSS', () => {
     const adaptateurEnvironnement = {
       versionDeBuild: () => '1.1',
     };
-
     const middleware = leMiddleware({ adaptateurEnvironnement });
 
-    middleware.ajouteVersionFichierCompiles(requete, reponse, () => {
-      expect(reponse.locals.version).to.be('1.1');
-    });
+    middleware.ajouteVersionFichierCompiles(requete, reponse, () => {});
+
+    expect(reponse.locals.version).toBe('1.1');
   });
 
   it("ajoute l'URL de base dans `reponse.locals`, le rendant ainsi accessible aux `.pug`", async () => {
@@ -903,7 +874,7 @@ describe('Le middleware MSS', () => {
 
     middleware.exposeUrlBase(requete, reponse, () => {});
 
-    expect(reponse.locals.urlBase).to.be('https://monsite.fr');
+    expect(reponse.locals.urlBase).toBe('https://monsite.fr');
   });
 
   describe("concernant l'URL canonique", () => {
@@ -911,60 +882,51 @@ describe('Le middleware MSS', () => {
       mss: () => ({ urlBase: () => 'https://monsite.fr' }),
     };
 
+    const surLaRequete = (
+      chemin: string,
+      methode: string,
+      urlOriginale: string
+    ) => {
+      Object.defineProperty(requete, 'path', {
+        value: chemin,
+        configurable: true,
+      });
+      requete.method = methode;
+      requete.originalUrl = urlOriginale;
+    };
+
     it("expose l'URL canonique de la page dans `reponse.locals`", () => {
-      requete.path = '/aPropos';
-      requete.method = 'GET';
-      requete.originalUrl = '/aPropos';
+      surLaRequete('/aPropos', 'GET', '/aPropos');
 
       const middleware = leMiddleware({ adaptateurEnvironnement });
       middleware.positionneCanonical(requete, reponse, () => {});
 
-      expect(reponse.locals.canonical).to.be('https://monsite.fr/aPropos');
+      expect(reponse.locals.canonical).toBe('https://monsite.fr/aPropos');
     });
 
     it("exclut la chaîne de requête de l'URL canonique", () => {
-      requete.path = '/aPropos';
-      requete.method = 'GET';
-      requete.originalUrl = '/aPropos?utm_source=newsletter';
+      surLaRequete('/aPropos', 'GET', '/aPropos?utm_source=newsletter');
 
       const middleware = leMiddleware({ adaptateurEnvironnement });
       middleware.positionneCanonical(requete, reponse, () => {});
 
-      expect(reponse.locals.canonical).to.be('https://monsite.fr/aPropos');
+      expect(reponse.locals.canonical).toBe('https://monsite.fr/aPropos');
     });
 
     it('redirige en 301 vers le chemin sans slash final, en conservant la requête', () => {
-      requete.path = '/aPropos/';
-      requete.method = 'GET';
-      requete.originalUrl = '/aPropos/?utm_source=newsletter';
-
-      let statut;
-      let cible;
-      reponse.redirect = (s, url) => {
-        statut = s;
-        cible = url;
-      };
+      surLaRequete('/aPropos/', 'GET', '/aPropos/?utm_source=newsletter');
 
       const middleware = leMiddleware({ adaptateurEnvironnement });
-      middleware.positionneCanonical(requete, reponse, () =>
-        expect().fail(
-          'la suite ne doit pas être appelée lors de la redirection'
-        )
-      );
+      middleware.positionneCanonical(requete, reponse, suiteInterdite);
 
-      expect(statut).to.be(301);
-      expect(cible).to.be('/aPropos?utm_source=newsletter');
+      expect(reponse.redirect).toHaveBeenCalledWith(
+        301,
+        '/aPropos?utm_source=newsletter'
+      );
     });
 
     it('ne redirige pas la racine', () => {
-      requete.path = '/';
-      requete.method = 'GET';
-      requete.originalUrl = '/';
-
-      let aRedirige = false;
-      reponse.redirect = () => {
-        aRedirige = true;
-      };
+      surLaRequete('/', 'GET', '/');
 
       let aFini = false;
       const middleware = leMiddleware({ adaptateurEnvironnement });
@@ -972,20 +934,13 @@ describe('Le middleware MSS', () => {
         aFini = true;
       });
 
-      expect(aRedirige).to.be(false);
-      expect(aFini).to.be(true);
-      expect(reponse.locals.canonical).to.be('https://monsite.fr/');
+      expect(reponse.redirect).not.toHaveBeenCalled();
+      expect(aFini).toBe(true);
+      expect(reponse.locals.canonical).toBe('https://monsite.fr/');
     });
 
     it('ne redirige pas une requête non GET comportant un slash final', () => {
-      requete.path = '/api/service/';
-      requete.method = 'POST';
-      requete.originalUrl = '/api/service/';
-
-      let aRedirige = false;
-      reponse.redirect = () => {
-        aRedirige = true;
-      };
+      surLaRequete('/api/service/', 'POST', '/api/service/');
 
       let aFini = false;
       const middleware = leMiddleware({ adaptateurEnvironnement });
@@ -993,186 +948,140 @@ describe('Le middleware MSS', () => {
         aFini = true;
       });
 
-      expect(aRedirige).to.be(false);
-      expect(aFini).to.be(true);
+      expect(reponse.redirect).not.toHaveBeenCalled();
+      expect(aFini).toBe(true);
     });
   });
 
   describe('concernant le mode maintenance', () => {
-    let adaptateurEnvironnement;
-
-    beforeEach(() => {
-      adaptateurEnvironnement = {
-        modeMaintenance: () => ({
-          actif: () => false,
-          enPreparation: () => false,
-          detailsPreparation: () => {},
-        }),
-      };
+    const unModeMaintenance = ({
+      actif = false,
+      enPreparation = false,
+      detailsPreparation = '',
+    } = {}) => ({
+      modeMaintenance: () => ({
+        actif: () => actif,
+        enPreparation: () => enPreparation,
+        detailsPreparation: () => detailsPreparation,
+      }),
     });
 
     it('ajoute le contenu de la préparation de maintenance dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
-      adaptateurEnvironnement = {
-        modeMaintenance: () => ({
-          actif: () => false,
-          enPreparation: () => true,
-          detailsPreparation: () => 'JOUR - HEURE',
+      const middleware = leMiddleware({
+        adaptateurEnvironnement: unModeMaintenance({
+          enPreparation: true,
+          detailsPreparation: 'JOUR - HEURE',
         }),
-      };
+      });
 
-      const middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware.verificationModeMaintenance(requete, reponse, () => {});
 
-      middleware.verificationModeMaintenance(requete, reponse, () => {
-        expect(reponse.locals.avertissementMaintenance).to.eql({
-          jour: 'JOUR',
-          heure: 'HEURE',
-        });
+      expect(reponse.locals.avertissementMaintenance).toEqual({
+        jour: 'JOUR',
+        heure: 'HEURE',
       });
     });
 
     describe('quand il est actif', () => {
-      beforeEach(() => {
-        adaptateurEnvironnement = {
-          modeMaintenance: () => ({
-            actif: () => true,
-            enPreparation: () => false,
-            detailsPreparation: () => {},
-          }),
-        };
-      });
+      const adaptateurEnvironnement = unModeMaintenance({ actif: true });
 
       it('renvoie une erreur 503', () => {
-        let statutRecu;
-        reponse.status = (s) => {
-          statutRecu = s;
-          return reponse;
-        };
-
         const middleware = leMiddleware({ adaptateurEnvironnement });
 
         middleware.verificationModeMaintenance(requete, reponse, () => {});
 
-        expect(statutRecu).to.be(503);
+        expect(reponse.status).toHaveBeenCalledWith(503);
       });
 
       it('sert la page de maintenance', () => {
-        let pageServie;
-        reponse.render = (page) => {
-          pageServie = page;
-          return reponse;
-        };
-
         const middleware = leMiddleware({ adaptateurEnvironnement });
 
         middleware.verificationModeMaintenance(requete, reponse, () => {});
 
-        expect(pageServie).to.be('maintenance');
+        expect(reponse.render).toHaveBeenCalledWith('maintenance');
       });
     });
 
     describe("quand il n'est pas actif", () => {
       it('appelle le middleware suivant', () => {
-        adaptateurEnvironnement = {
-          modeMaintenance: () => ({
-            actif: () => false,
-            enPreparation: () => false,
-            detailsPreparation: () => {},
-          }),
-        };
+        const middleware = leMiddleware({
+          adaptateurEnvironnement: unModeMaintenance(),
+        });
+
         let suiteAppelee = false;
-        let requeteInterceptee = false;
-        reponse.status = () => {
-          requeteInterceptee = true;
-          return reponse;
-        };
-        reponse.send = () => {
-          requeteInterceptee = true;
-          return reponse;
-        };
-
-        const middleware = leMiddleware({ adaptateurEnvironnement });
-
         middleware.verificationModeMaintenance(requete, reponse, () => {
           suiteAppelee = true;
         });
 
-        expect(suiteAppelee).to.be(true);
-        expect(requeteInterceptee).to.be(false);
+        expect(suiteAppelee).toBe(true);
+        expect(reponse.status).not.toHaveBeenCalled();
+        expect(reponse.send).not.toHaveBeenCalled();
       });
     });
   });
 
   describe('concernant le type de requête', () => {
     it('sait charger le type de requête', async () => {
-      const middleware = leMiddleware({});
+      const middleware = leMiddleware();
 
-      middleware.chargeTypeRequete('API')(requete, reponse, () => {
-        expect(requete.typeRequete).to.be('API');
-      });
+      middleware.chargeTypeRequete('API')(requete, reponse, () => {});
+
+      expect(requete.typeRequete).toBe('API');
     });
   });
 
   describe("sur demande d'interdiction de mise en cache", () => {
     it('interdit la mise en cache', async () => {
-      const middleware = leMiddleware({});
+      const middleware = leMiddleware();
 
-      middleware.interdisLaMiseEnCache(requete, reponse, () => {
-        expect(reponse.headers['cache-control']).to.be(
-          'no-store, no-cache, must-revalidate, proxy-revalidate'
-        );
-        expect(reponse.headers.pragma).to.be('no-cache');
-        expect(reponse.headers.expires).to.be('0');
-        expect(reponse.headers['surrogate-control']).to.be('no-store');
-      });
+      middleware.interdisLaMiseEnCache(requete, reponse, () => {});
+
+      expect(reponse.headers['cache-control']).toBe(
+        'no-store, no-cache, must-revalidate, proxy-revalidate'
+      );
+      expect(reponse.headers.pragma).toBe('no-cache');
+      expect(reponse.headers.expires).toBe('0');
+      expect(reponse.headers['surrogate-control']).toBe('no-store');
     });
   });
 
   describe('sur demande de chargement des `feature flags`', () => {
     it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
-      const middleware = Middleware({});
+      const middleware = leMiddleware();
 
-      middleware.chargeFeatureFlags(requete, reponse, () => {
-        expect(reponse.locals.featureFlags).not.to.be(undefined);
-      });
+      middleware.chargeFeatureFlags(requete, reponse, () => {});
+
+      expect(reponse.locals.featureFlags).not.toBe(undefined);
     });
   });
 
   describe("sur demande de chargement de l'explication des risques v2", () => {
-    let middleware;
     beforeEach(() => {
-      requete.idUtilisateurCourant = '1234';
+      requete.idUtilisateurCourant = ID_UTILISATEUR_COURANT;
     });
 
     it("ne demande pas l'affichage si l'utilisateur a déjà vu les explications", async () => {
-      let doitAfficher;
       depotDonnees.lisParcoursUtilisateur = async () =>
-        new ParcoursUtilisateur({
-          idUtilisateur: '1234',
+        unParcoursUtilisateur({
           aVuExplicationRisquesV2: true,
         });
-      middleware = Middleware({ depotDonnees });
+      const middleware = leMiddleware();
 
-      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
-        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
-      });
+      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {});
 
-      expect(doitAfficher).to.be(false);
+      expect(reponse.locals.afficheExplicationRisquesV2).toBe(false);
     });
 
     it("demande l'affichage si l'utilisateur n'a pas vu les explications", async () => {
-      let doitAfficher;
       depotDonnees.lisParcoursUtilisateur = async () =>
-        new ParcoursUtilisateur({
-          idUtilisateur: '1234',
+        unParcoursUtilisateur({
           aVuExplicationRisquesV2: false,
         });
-      middleware = Middleware({ depotDonnees });
+      const middleware = leMiddleware();
 
-      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
-        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
-      });
+      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {});
 
-      expect(doitAfficher).to.be(true);
+      expect(reponse.locals.afficheExplicationRisquesV2).toBe(true);
     });
   });
 });
