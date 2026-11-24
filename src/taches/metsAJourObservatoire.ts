@@ -1,4 +1,5 @@
 import type { Knex } from 'knex';
+import { tailleEntite, typeEntite } from '@lab-anssi/lib';
 import type { DepotDonnees } from '../depotDonnees.interface.js';
 import type { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 import type { AdaptateurRechercheEntreprise } from '../adaptateurs/adaptateurRechercheEntreprise.interface.js';
@@ -177,7 +178,8 @@ export class MiseAJourObservatoire {
         departement: organisation?.departement,
         region: organisation?.region,
         secteur_activite: organisation?.sectionActivitePrincipale,
-        type_organisation: organisation?.trancheEffectifSalarie,
+        type_organisation: organisation ? typeEntite(organisation) : null,
+        taille_organisation: organisation ? tailleEntite(organisation) : null,
       };
     });
 

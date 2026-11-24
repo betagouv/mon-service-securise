@@ -241,20 +241,26 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
   describe("sur demande de détails d'une organisation", () => {
     it("utilise les données pertinentes de l'enseigne", async () => {
       const reponseAPI = {
-        activite_principale: 'ACTIVITE SIEGE',
-        annee_tranche_effectif_salarie: 'ANNEE TRANCHE SIEGE',
-        tranche_effectif_salarie: 'TRANCHE SIEGE',
-        complements: {},
-        siege: {
-          commune: 'COMMUNE SIEGE',
-          departement: 'DEPARTEMENT SIEGE',
+        nature_juridique: 'NATURE_JURIDIQUE',
+        categorie_entreprise: 'CATEGORIE ENTREPRISE',
+        finances: {
+          2021: {
+            ca: 'CA 2021',
+            resultat_net: 'RESULTAT 2021',
+          },
+        },
+        section_activite_principale: 'SECTION ACTIVITE PRINCIPALE',
+        complements: {
+          collectivite_territoriale: 'COLLECTIVITE TERRITORIALE',
+          est_association: 'EST ASSOCIATION',
+          identifiant_association: 'IDENTIFIANT ASSOCIATION',
+          est_administration: 'EST ADMINISTRATION',
         },
         matching_etablissements: [
           {
-            activite_principale: 'ACTIVITE ENSEIGNE',
-            annee_tranche_effectif_salarie: 'ANNEE TRANCHE ENSEIGNE',
-            tranche_effectif_salarie: 'TRANCHE ENSEIGNE',
+            tranche_effectif_salarie: 'TRANCHE SIEGE',
             commune: '75000',
+            region: '22',
           },
         ],
       };
@@ -267,13 +273,26 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
         fauxAxios
       );
 
-      expect(resultat.activitePrincipale).to.eql('ACTIVITE ENSEIGNE');
-      expect(resultat.trancheEffectifSalarie).to.eql('TRANCHE ENSEIGNE');
-      expect(resultat.anneeTrancheEffectifSalarie).to.eql(
-        'ANNEE TRANCHE ENSEIGNE'
-      );
-      expect(resultat.commune).to.eql('75000');
-      expect(resultat.departement).to.eql('75');
+      expect(resultat).to.eql({
+        categorieEntreprise: 'CATEGORIE ENTREPRISE',
+        complements: {
+          collectiviteTerritoriale: 'COLLECTIVITE TERRITORIALE',
+          estAdministration: 'EST ADMINISTRATION',
+          estAssociation: 'EST ASSOCIATION',
+          identifiantAssociation: 'IDENTIFIANT ASSOCIATION',
+        },
+        departement: '75',
+        finances: {
+          2021: {
+            ca: 'CA 2021',
+            resultatNet: 'RESULTAT 2021',
+          },
+        },
+        natureJuridique: 'NATURE_JURIDIQUE',
+        region: '22',
+        sectionActivitePrincipale: 'SECTION ACTIVITE PRINCIPALE',
+        trancheEffectifSalarie: 'TRANCHE SIEGE',
+      });
     });
   });
 
