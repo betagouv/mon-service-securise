@@ -4,7 +4,6 @@
     doitEtreOuvert: boolean;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { elements, doitEtreOuvert = $bindable() }: Props = $props();
 
   const gereClic = (e: MouseEvent) => {

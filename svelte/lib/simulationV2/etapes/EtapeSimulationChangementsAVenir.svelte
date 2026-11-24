@@ -17,7 +17,6 @@
     estComplete: boolean;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable() }: Props = $props();
 
   $effect(() => {

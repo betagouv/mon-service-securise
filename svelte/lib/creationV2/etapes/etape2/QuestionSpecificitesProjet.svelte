@@ -10,10 +10,8 @@
     onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  // eslint-disable-next-line no-useless-assignment
   estComplete = true;
 
   const illustrations: Record<SpecificiteProjet, string> = {
