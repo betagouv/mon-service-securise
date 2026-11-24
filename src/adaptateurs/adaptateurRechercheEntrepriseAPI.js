@@ -136,19 +136,27 @@ const recupereDetailsOrganisation = async (
     const etablissement = entiteApi.matching_etablissements[0];
 
     return {
-      estServicePublic: entiteApi.complements.est_service_public,
-      estFiness: entiteApi.complements.est_finess,
-      estEss: entiteApi.complements.est_ess,
-      estEntrepreneurIndividuel:
-        entiteApi.complements.est_entrepreneur_individuel,
-      estAssociation: entiteApi.complements.est_association,
-      categorieEntreprise: entiteApi.categorie_entreprise,
-      activitePrincipale: etablissement.activite_principale,
-      trancheEffectifSalarie: etablissement.tranche_effectif_salarie,
       natureJuridique: entiteApi.nature_juridique,
+      categorieEntreprise: entiteApi.categorie_entreprise,
+      trancheEffectifSalarie: etablissement.tranche_effectif_salarie,
+      finances: entiteApi.finances
+        ? Object.fromEntries(
+            Object.entries(entiteApi.finances).map(
+              ([cle, { ca, resultat_net: resultatNet }]) => [
+                cle,
+                { ca, resultatNet },
+              ]
+            )
+          )
+        : null,
+      complements: {
+        collectiviteTerritoriale:
+          entiteApi.complements?.collectivite_territoriale,
+        estAssociation: entiteApi.complements?.est_association,
+        identifiantAssociation: entiteApi.complements?.identifiant_association,
+        estAdministration: entiteApi.complements?.est_administration,
+      },
       sectionActivitePrincipale: entiteApi.section_activite_principale,
-      anneeTrancheEffectifSalarie: etablissement.annee_tranche_effectif_salarie,
-      commune: etablissement.commune,
       departement: extraisDepartement(etablissement.commune),
       region: etablissement.region,
     };

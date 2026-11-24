@@ -82,6 +82,7 @@ describe("La tâche de mise à jour de l'observatoire", () => {
         table.text('region');
         table.text('secteur_activite');
         table.text('type_organisation');
+        table.text('taille_organisation');
       })
       .createTable('mesures_faites', (table) => {
         table.text('id_hash_service');
@@ -237,7 +238,8 @@ describe("La tâche de mise à jour de l'observatoire", () => {
           departement: '33',
           region: '75',
           secteur_activite: 'L',
-          type_organisation: '12',
+          taille_organisation: 'PME',
+          type_organisation: 'entreprise',
         },
       ]);
       expect(siretsRecherches).toEqual(['SIRET-1']);
@@ -262,7 +264,8 @@ describe("La tâche de mise à jour de l'observatoire", () => {
         departement: '75',
         region: '11',
         secteur_activite: 'O',
-        type_organisation: '03',
+        taille_organisation: 'PME',
+        type_organisation: 'entreprise',
       });
       services = [unService('S1', { niveauSecurite: 'niveau3' })];
 
@@ -276,7 +279,8 @@ describe("La tâche de mise à jour de l'observatoire", () => {
           departement: '75',
           region: '11',
           secteur_activite: 'O',
-          type_organisation: '03',
+          taille_organisation: 'PME',
+          type_organisation: 'entreprise',
         },
       ]);
       expect(siretsRecherches).toEqual([]);

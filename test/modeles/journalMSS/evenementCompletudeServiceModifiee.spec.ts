@@ -15,22 +15,6 @@ import {
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
 describe('Un événement de complétude modifiée', () => {
-  const detailsOrganisationResponsable = {
-    estServicePublic: false,
-    estFiness: false,
-    estEss: true,
-    estEntrepreneurIndividuel: false,
-    estAssociation: false,
-    categorieEntreprise: null,
-    activitePrincipale: '68.20B',
-    trancheEffectifSalarie: null,
-    natureJuridique: '6540',
-    sectionActivitePrincipale: 'L',
-    anneeTrancheEffectifSalarie: null,
-    commune: '33376',
-    departement: '33',
-  };
-
   const hacheEnMajuscules = {
     hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
@@ -69,6 +53,7 @@ describe('Un événement de complétude modifiée', () => {
         categoriesMesures: { gouvernance: 'Gouvernance' },
         indiceCyber: { noteMax: 5 },
         prioritesMesures: { p1: {} },
+        // @ts-expect-error on recharge partiellement
         mesures: { mesureA: {} },
         statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
       });
@@ -111,7 +96,6 @@ describe('Un événement de complétude modifiée', () => {
 
       const evenement = unEvenementSurV1()
         .avecService(service)
-        .deLOrganisation(detailsOrganisationResponsable)
         .quiChiffreAvec(hacheEnMajuscules)
         .quiAEuLieuLe('08/03/2024')
         .construis();
@@ -158,6 +142,7 @@ describe('Un événement de complétude modifiée', () => {
     it("range les données de l'indice cyber par catégorie", () => {
       const referentiel = creeReferentielVide();
       referentiel.recharge({
+        // @ts-expect-error on recharge partiellement
         mesures: { mesureA: {} },
         categoriesMesures: { gouvernance: 'Gouvernance' },
         statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
@@ -236,6 +221,7 @@ describe('Un événement de complétude modifiée', () => {
       const referentiel = creeReferentielV2();
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: uneMesureV2, statut: 'fait' }] },
+        // @ts-expect-error on recharge partiellement
         referentiel,
         { [uneMesureV2]: { categorie: 'gouvernance' } }
       );
@@ -269,6 +255,7 @@ describe('Un événement de complétude modifiée', () => {
             },
           ],
         },
+        // @ts-expect-error on recharge partiellement
         referentielV2,
         { [uneMesureV2]: { categorie: 'gouvernance' } }
       );
@@ -297,7 +284,6 @@ describe('Un événement de complétude modifiée', () => {
 
       const evenement = unEvenementSurV2()
         .avecService(service)
-        .deLOrganisation(detailsOrganisationResponsable)
         .quiAEuLieuLe('08/03/2024')
         .construis();
 
