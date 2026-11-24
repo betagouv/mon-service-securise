@@ -185,8 +185,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       '@lab-anssi/lib':
-        specifier: ^3.0.2
-        version: 3.1.1(debug@4.4.3(supports-color@10.2.2))(express@5.3.0(supports-color@10.2.2))(supports-color@10.2.2)
+        specifier: ^3.2.2
+        version: 3.2.2(debug@4.4.3(supports-color@10.2.2))(express@5.3.0(supports-color@10.2.2))(supports-color@10.2.2)
       '@lab-anssi/ui-kit':
         specifier: 1.63.3
         version: 1.63.3(svelte@5.57.3(@typescript-eslint/types@8.72.0))
@@ -775,8 +775,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lab-anssi/lib@3.1.1':
-    resolution: {integrity: sha512-sAa8UP8FmdrjD2+F1JNXOe/MYhpmcX7Smmc8gkhAkEUidtNp37N9HlghEPDkuD7L4y0Dpri0BmqdUMczYWhzUw==}
+  '@lab-anssi/lib@3.2.2':
+    resolution: {integrity: sha512-zrYAfEygEMx7QXHQFopXoIMA5UsGB3zrPmjBSc0zc2teebE8BzpQFI9dDM5Czq2jVEWoFYrH9uRzjzrOG38dGw==}
     peerDependencies:
       express: ~5.2.1
 
@@ -4750,7 +4750,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lab-anssi/lib@3.1.1(debug@4.4.3(supports-color@10.2.2))(express@5.3.0(supports-color@10.2.2))(supports-color@10.2.2)':
+  '@lab-anssi/lib@3.2.2(debug@4.4.3(supports-color@10.2.2))(express@5.3.0(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
       axios: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       express: 5.3.0(supports-color@10.2.2)
