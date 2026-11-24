@@ -11,7 +11,6 @@
     listeVisible: boolean;
   }
 
-  // eslint-disable-next-line no-useless-assignment
   let { listeVisible = $bindable() }: Props = $props();
 
   type Contributeur = { initiales: string; prenomNom: string; id: string };
