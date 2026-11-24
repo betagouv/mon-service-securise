@@ -9,7 +9,7 @@
   import { services } from '../tableauDeBord/stores/services.store';
   import type { ReponseApiServices } from '../tableauDeBord/tableauDeBord.d';
 
-  let { avecGroupesServices, avecGroupesEntites }: GroupesProps = $props();
+  let { avecGroupesEntites }: GroupesProps = $props();
 
   const configurationsTabs = [
     { id: 'services', label: 'Groupes de services' },
@@ -18,9 +18,7 @@
   let idTabActive = $state(0);
 
   const elementsAOrganiser = $derived(
-    [avecGroupesServices && 'vos services', avecGroupesEntites && 'vos entités']
-      .filter(Boolean)
-      .join(' et ')
+    avecGroupesEntites ? 'vos services et vos entités' : 'vos services'
   );
 
   const chargeServices = async () => {
@@ -89,7 +87,7 @@
   />
 {/snippet}
 
-{#if avecGroupesServices && avecGroupesEntites}
+{#if avecGroupesEntites}
   <dsfr-tabs
     tabs={configurationsTabs}
     activeTabIndex={idTabActive}
@@ -108,10 +106,8 @@
       {@render ongletEntites()}
     </div>
   </dsfr-tabs>
-{:else if avecGroupesServices}
-  {@render ongletServices()}
 {:else}
-  {@render ongletEntites()}
+  {@render ongletServices()}
 {/if}
 
 <Toaster />

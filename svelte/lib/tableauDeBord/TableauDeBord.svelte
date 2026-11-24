@@ -35,7 +35,6 @@
     modeVisiteGuidee?: boolean;
     prenomNom?: string;
     aDejaVuEntierementVisiteGuidee: boolean;
-    avecGroupesServices: boolean;
   }
 
   let {
@@ -44,7 +43,6 @@
     modeVisiteGuidee = false,
     prenomNom,
     aDejaVuEntierementVisiteGuidee,
-    avecGroupesServices,
   }: Props = $props();
 
   // Le `overflow: hidden` interne de dsfr-tabs empêche la barre d'actions d'être sticky,
@@ -155,8 +153,7 @@
   };
 
   const rafraichisGroupes = async () => {
-    if (avecGroupesServices)
-      groupesServices = (await axios.get('/api/groupes-services')).data;
+    groupesServices = (await axios.get('/api/groupes-services')).data;
   };
 
   const configurationsTabs: { id: StatutHomologation; label: string }[] = [
@@ -260,7 +257,6 @@
           <TableauxDesServicesAvecActions
             indicesCyberCharges={indiceCyberMoyen !== undefined}
             groupes={groupesServices}
-            {avecGroupesServices}
             {idGroupeOuvert}
           />
         </div>

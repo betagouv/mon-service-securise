@@ -22,16 +22,6 @@ describe('Le serveur MSS des routes privées /api/groupes-services', () => {
         });
     });
 
-    it('répond 404 si le feature flag est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecGroupesServices: () => false,
-      });
-
-      const reponse = await testeur.get('/api/groupes-services');
-
-      expect(reponse.status).toBe(404);
-    });
-
     it("renvoie une liste vide si l'utilisateur n'a aucun groupe", async () => {
       const reponse = await testeur.get('/api/groupes-services');
 

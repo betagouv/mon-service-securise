@@ -105,18 +105,8 @@ const routesConnectePage = ({
         depotDonnees.estSuperviseur(idUtilisateurCourant),
       ]);
 
-      const featureFlags = adaptateurEnvironnement.featureFlag();
-      const avecGroupesServices = featureFlags.avecGroupesServices();
-      const avecGroupesEntites = estAdmin || estSuperviseur;
-
-      if (!avecGroupesServices && !avecGroupesEntites) {
-        reponse.status(404).render('404');
-        return;
-      }
-
       reponse.render('profilGroupes', {
-        avecGroupesServices,
-        avecGroupesEntites,
+        avecGroupesEntites: estAdmin || estSuperviseur,
       });
     }
   );

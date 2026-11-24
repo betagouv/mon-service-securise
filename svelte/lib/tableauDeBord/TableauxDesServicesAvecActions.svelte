@@ -36,13 +36,11 @@
   interface Props {
     indicesCyberCharges?: boolean;
     groupes: GroupeServices[];
-    avecGroupesServices: boolean;
     idGroupeOuvert: string | undefined;
   }
   let {
     indicesCyberCharges = false,
     groupes,
-    avecGroupesServices,
     idGroupeOuvert,
   }: Props = $props();
 
@@ -99,9 +97,9 @@
         )}
       {/if}
     </span>
-    <ActionsDesServices {selection} {groupes} {avecGroupesServices} />
+    <ActionsDesServices {selection} {groupes} />
   </div>
-  {#if groupesTries.length > 0 && avecGroupesServices}
+  {#if groupesTries.length > 0}
     <div
       class="contenu-groupes"
       style:--hauteur-barre-actions="{hauteurBarreActions}px"

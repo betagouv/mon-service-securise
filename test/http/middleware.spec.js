@@ -1133,7 +1133,6 @@ describe('Le middleware MSS', () => {
     let adaptateurEnvironnement;
     const featureFlag = {
       avecRisquesV2: () => false,
-      avecGroupesServices: () => false,
     };
 
     beforeEach(() => {
@@ -1165,28 +1164,6 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
-        });
-      });
-    });
-
-    describe("concernant l'affichage des groupes de services", () => {
-      it("n'affiche pas les groupes si le feature flag est désactivé", async () => {
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecGroupesServices).to.be(false);
-        });
-      });
-
-      it('affiche les groupes si le feature flag est activé', async () => {
-        adaptateurEnvironnement = {
-          featureFlag: () => ({
-            ...featureFlag,
-            avecGroupesServices: () => true,
-          }),
-        };
-        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
-
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecGroupesServices).to.be(true);
         });
       });
     });

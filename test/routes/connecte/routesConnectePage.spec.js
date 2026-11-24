@@ -259,32 +259,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
     });
 
-    it('affiche le lien vers les groupes si le feature flag est actif', async () => {
-      testeur.middleware().reinitialise({
-        featureFlags: { avecGroupesServices: true },
-      });
-
-      const reponse = await testeur.get('/profil');
-
-      expect(reponse.text).to.contain('/profil/groupes');
-    });
-
-    it("n'affiche pas le lien vers les groupes à un utilisateur ni admin ni superviseur si le feature flag des groupes de services est inactif", async () => {
-      testeur.middleware().reinitialise({
-        featureFlags: { avecGroupesServices: false },
-      });
-
-      const reponse = await testeur.get('/profil');
-
-      expect(reponse.text).not.to.contain('/profil/groupes');
-    });
-
-    it('affiche le lien vers les groupes à un admin même si le feature flag des groupes de services est inactif', async () => {
-      testeur.middleware().reinitialise({
-        featureFlags: { avecGroupesServices: false },
-        utilisateurConnecte: { estAdmin: true },
-      });
-
+    it('affiche le lien vers les groupes', async () => {
       const reponse = await testeur.get('/profil');
 
       expect(reponse.text).to.contain('/profil/groupes');
@@ -316,35 +291,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
       expect(reponse.text).to.contain('id="conteneur-groupes"');
       expect(reponse.text).to.contain('/statique/composants-svelte/groupes.js');
-    });
-
-    it('sert la page à un admin même si le feature flag des groupes de services est désactivé', async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecGroupesServices: () => false,
-      });
-      await testeur.depotDonnees().sauvegardeAdminOrganisations(
-        AdminOrganisations.hydrate({
-          idUtilisateur: 'U1',
-          entitesAdministrees: [{ siret: '11111111100011' }],
-        })
-      );
-
-      const reponse = await testeur.get('/profil/groupes');
-
-      expect(reponse.status).to.be(200);
-      const donnees = donneesPartagees(reponse.text, 'donnees-groupes');
-      expect(donnees.avecGroupesServices).to.be(false);
-    });
-
-    it('répond 404 à un utilisateur ni admin ni superviseur si le feature flag des groupes de services est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecGroupesServices: () => false,
-      });
-
-      const reponse = await testeur.get('/profil/groupes');
-
-      expect(reponse.status).to.be(404);
     });
 
     describe("concernant l'affichage des groupes d'entités", () => {

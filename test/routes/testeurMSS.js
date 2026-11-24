@@ -134,7 +134,6 @@ const testeurMss = () => {
       trustProxy: () => 0,
       featureFlag: () => ({
         avecRisquesV2: () => true,
-        avecGroupesServices: () => true,
       }),
       sendinblue: () => ({
         adressesIpAppelantNosWebhooks: () => ['1.2.3.4/20'],
