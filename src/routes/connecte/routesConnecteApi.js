@@ -412,10 +412,7 @@ const routesConnecteApi = ({
   routes.use(
     '/groupes-services',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiGroupesServices({
-      depotDonnees,
-      adaptateurEnvironnement,
-    })
+    routesConnecteApiGroupesServices({ depotDonnees })
   );
 
   routes.use(

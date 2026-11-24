@@ -20,7 +20,6 @@ export type GroupeEntites = GroupeAffichable & {
 };
 
 export type GroupesProps = {
-  avecGroupesServices: boolean;
   avecGroupesEntites: boolean;
 };
 

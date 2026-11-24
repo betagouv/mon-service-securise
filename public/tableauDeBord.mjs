@@ -8,7 +8,6 @@ $(() => {
     aDejaVuEntierementVisiteGuidee,
   } = lisDonneesPartagees('utilisateur-connecte');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const avecGroupesServices = lisDonneesPartagees('avec-groupes-services');
   const visiteGuideeActive = etatVisiteGuidee.dejaTerminee === false;
 
   document.body.dispatchEvent(
@@ -18,7 +17,6 @@ $(() => {
         estAdmin,
         prenomNom,
         aDejaVuEntierementVisiteGuidee,
-        avecGroupesServices,
       },
     })
   );

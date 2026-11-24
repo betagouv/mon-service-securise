@@ -20,10 +20,9 @@
   interface Props {
     selection: ServiceOuBrouillon[];
     groupes: GroupeServices[];
-    avecGroupesServices: boolean;
   }
 
-  let { selection, groupes, avecGroupesServices }: Props = $props();
+  let { selection, groupes }: Props = $props();
 
   const estService = (
     s: ServiceOuBrouillon
@@ -112,21 +111,19 @@
           service: seulementLesServices(selection)[0],
         })}
     ></dsfr-button>
-    {#if avecGroupesServices}
-      <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-      <dsfr-button
-        label="Classer dans des groupes"
-        icon="folder-2-line"
-        kind="tertiary-no-outline"
-        has-icon
-        disabled={!actionsDisponibles || selectionPossedeDesBrouillons}
-        onclick={() =>
-          tiroirStore.afficheContenu(TiroirAssociationGroupesServices, {
-            services: seulementLesServices(selection),
-            groupes,
-          })}
-      ></dsfr-button>
-    {/if}
+    <!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+    <dsfr-button
+      label="Classer dans des groupes"
+      icon="folder-2-line"
+      kind="tertiary-no-outline"
+      has-icon
+      disabled={!actionsDisponibles || selectionPossedeDesBrouillons}
+      onclick={() =>
+        tiroirStore.afficheContenu(TiroirAssociationGroupesServices, {
+          services: seulementLesServices(selection),
+          groupes,
+        })}
+    ></dsfr-button>
     <BoutonAvecListeDeroulante
       titre=""
       icone="more-line"
