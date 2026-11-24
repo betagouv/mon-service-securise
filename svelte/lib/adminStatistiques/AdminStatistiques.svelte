@@ -31,14 +31,9 @@
   interface Props {
     referentiel: ReferentielStatistiques;
     modeVisiteGuidee?: boolean;
-    avecGroupesEntites?: boolean;
   }
 
-  let {
-    referentiel,
-    avecGroupesEntites = false,
-    modeVisiteGuidee = false,
-  }: Props = $props();
+  let { referentiel, modeVisiteGuidee = false }: Props = $props();
 
   let statistiques: Statistiques | undefined = $state();
   let entites: Array<EntiteSupervisee> = $state([]);
@@ -65,7 +60,7 @@
       label: e.nom ?? e.siret,
     });
 
-    if (avecGroupesEntites && groupesAvecEntitesTries.length > 0) {
+    if (groupesAvecEntitesTries.length > 0) {
       const groupesDOptions = groupesAvecEntitesTries.map((g) => ({
         legend: g.libelle,
         options: entites
@@ -112,7 +107,7 @@
     enCoursChargement = true;
     const [entitesLues, groupesLus] = await Promise.all([
       apiEntites.entitesDansMonPerimetre(),
-      avecGroupesEntites ? apiGroupesEntites.lisGroupes() : [],
+      apiGroupesEntites.lisGroupes(),
     ]);
     entites = entitesLues;
     groupes = groupesLus;

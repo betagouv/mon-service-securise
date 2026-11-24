@@ -31,16 +31,6 @@ describe('Le serveur MSS des routes privées /api/admin/groupes-entites', () => 
         });
     });
 
-    it('répond 404 si le feature flag est désactivé', async () => {
-      testeur.adaptateurEnvironnement().featureFlag = () => ({
-        avecGroupesEntites: () => false,
-      });
-
-      const reponse = await testeur.get('/api/admin/groupes-entites');
-
-      expect(reponse.status).toBe(404);
-    });
-
     it("répond 403 si l'utilisateur n'est ni admin ni superviseur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U-SANS-PERIMETRE' });
 

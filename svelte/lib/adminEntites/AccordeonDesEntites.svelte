@@ -13,7 +13,6 @@
     recherche: string;
     groupe?: GroupeEntites;
     ouvertParDefaut?: boolean;
-    selectionnable?: boolean;
     siretsSelectionnes?: string[];
     onSelectionChange?: (sirets: string[]) => void;
     onEntitesRetirees?: () => Promise<void>;
@@ -24,7 +23,6 @@
     recherche,
     groupe,
     ouvertParDefaut = false,
-    selectionnable = false,
     siretsSelectionnes = [],
     onSelectionChange,
     onEntitesRetirees,
@@ -80,7 +78,6 @@
 >
   <TableauDesEntites
     {entites}
-    {selectionnable}
     {siretsSelectionnes}
     {onSelectionChange}
     {avecMentionGroupeVide}

@@ -9,7 +9,6 @@
 
   interface Props {
     entites: EntiteSupervisee[];
-    selectionnable?: boolean;
     siretsSelectionnes?: string[];
     onSelectionChange?: (sirets: string[]) => void;
     avecMentionGroupeVide?: boolean;
@@ -17,7 +16,6 @@
 
   let {
     entites,
-    selectionnable = false,
     siretsSelectionnes = [],
     onSelectionChange,
     avecMentionGroupeVide = false,
@@ -34,8 +32,8 @@
   ]}
   rows={entites}
   row-key="siret"
-  selectable={selectionnable}
-  select-all={selectionnable}
+  selectable={true}
+  select-all={true}
   selected-row-keys={JSON.stringify(siretsSelectionnes)}
   onselectionchanged={(e: CustomEvent<{ keys: string[] }>) =>
     onSelectionChange?.(e.detail.keys)}

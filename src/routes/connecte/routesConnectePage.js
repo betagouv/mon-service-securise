@@ -107,8 +107,7 @@ const routesConnectePage = ({
 
       const featureFlags = adaptateurEnvironnement.featureFlag();
       const avecGroupesServices = featureFlags.avecGroupesServices();
-      const avecGroupesEntites =
-        featureFlags.avecGroupesEntites() && (estAdmin || estSuperviseur);
+      const avecGroupesEntites = estAdmin || estSuperviseur;
 
       if (!avecGroupesServices && !avecGroupesEntites) {
         reponse.status(404).render('404');
@@ -237,7 +236,6 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     routesConnectePageAdmin({
       depotDonnees,
-      adaptateurEnvironnement,
       referentiel,
       referentielV2,
     })

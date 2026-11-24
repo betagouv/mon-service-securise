@@ -2,10 +2,7 @@
   import { onMount, tick } from 'svelte';
   import { enleveParametreDeUrl } from '../outils/url';
   import { api } from './adminEntites.api';
-  import type {
-    AdminEntitesProps,
-    EntiteSupervisee,
-  } from './adminEntites.types';
+  import type { EntiteSupervisee } from './adminEntites.types';
   import type { GroupeEntites } from '../groupes/groupes.d';
   import { apiGroupesEntites } from '../groupes/groupesEntites.api';
   import AccordeonDesEntites from './AccordeonDesEntites.svelte';
@@ -18,8 +15,6 @@
   import ChampRecherche from '../ui/ChampRecherche.svelte';
   import AucunResultatRecherche from '../ui/AucunResultatRecherche.svelte';
   import Loader from '../ui/Loader.svelte';
-
-  let { avecGroupesEntites }: AdminEntitesProps = $props();
 
   let mesEntites: Array<EntiteSupervisee> = $state([]);
   let groupes: GroupeEntites[] = $state([]);
@@ -79,7 +74,7 @@
     enCoursChargement = true;
     const [entitesLues, groupesLus] = await Promise.all([
       api.entitesDansMonPerimetre(),
-      avecGroupesEntites ? apiGroupesEntites.lisGroupes() : [],
+      apiGroupesEntites.lisGroupes(),
     ]);
     mesEntites = entitesLues;
     groupes = groupesLus;
@@ -126,9 +121,7 @@
 
 {#if !enCoursChargement}
   <ChampRecherche bind:valeur={() => recherche, changeRecherche} />
-{/if}
 
-{#if avecGroupesEntites && !enCoursChargement}
   <div class="barre-actions" bind:offsetHeight={hauteurBarreActions}>
     <span class="sous-texte">
       {#if siretsSelectionnes.length > 0}
@@ -170,7 +163,6 @@
         entites={entitesDuGroupe(groupe)}
         {recherche}
         ouvertParDefaut={groupe.id === idGroupeOuvert}
-        selectionnable={avecGroupesEntites}
         {siretsSelectionnes}
         onSelectionChange={changeSelection}
         onEntitesRetirees={rafraichisApresRetrait}
@@ -181,7 +173,6 @@
         entites={entitesSansGroupe}
         {recherche}
         ouvertParDefaut={!idGroupeOuvert}
-        selectionnable={avecGroupesEntites}
         {siretsSelectionnes}
         onSelectionChange={changeSelection}
       />
@@ -190,7 +181,6 @@
 {:else}
   <TableauDesEntites
     entites={mesEntitesFiltrees}
-    selectionnable={avecGroupesEntites}
     {siretsSelectionnes}
     onSelectionChange={changeSelection}
   />

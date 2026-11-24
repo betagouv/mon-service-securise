@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { UUID } from '../../typesBasiques.js';
-import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaAssociationGroupeEntites,
@@ -41,20 +40,10 @@ const traduisErreur = (
 
 const routesConnecteApiAdminGroupesEntites = ({
   depotDonnees,
-  adaptateurEnvironnement,
 }: {
   depotDonnees: DepotDonnees;
-  adaptateurEnvironnement: AdaptateurEnvironnement;
 }) => {
   const routes = express.Router();
-
-  routes.use((_requete, reponse, suite) => {
-    if (!adaptateurEnvironnement.featureFlag().avecGroupesEntites()) {
-      reponse.sendStatus(404);
-      return;
-    }
-    suite();
-  });
 
   routes.use(async (requete, reponse, suite) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
