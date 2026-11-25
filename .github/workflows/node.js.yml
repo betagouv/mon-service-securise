@@ -29,11 +29,14 @@ jobs:
       - name: Exécuter les contrôles en parallèle
         run: >-
           pnpm exec concurrently --group
-          --names prettier,eslint,eslint-svelte,tsc,svelte-check
+          --names prettier,eslint,eslint-svelte,tsc,tsc-tests,tsc-integration,tsc-a11y,svelte-check
           "prettier --check ."
           "eslint ."
           "eslint -c svelte/eslint.config.js svelte"
           "tsc --noEmit"
+          "tsc --noEmit -p test"
+          "tsc --noEmit -p test_integration"
+          "tsc --noEmit -p test_accessibilite"
           "svelte-check --workspace svelte --fail-on-warnings"
 
   tests-unitaires:

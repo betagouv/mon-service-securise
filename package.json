@@ -14,6 +14,7 @@
     "migration-bdd": "tsx node_modules/knex/bin/cli.js migrate:latest",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
+    "test:types": "concurrently --group --names tsc,tsc-tests,tsc-integration,tsc-a11y \"tsc --noEmit\" \"tsc --noEmit -p test\" \"tsc --noEmit -p test_integration\" \"tsc --noEmit -p test_accessibilite\"",
     "test:a11y": "playwright test --config=playwright.accessibilite.config.ts",
     "test:integration": "playwright test --config=playwright.integration.config.ts",
     "start": "node dist/server.js",
