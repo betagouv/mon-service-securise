@@ -32,7 +32,10 @@ class Entite extends InformationsService {
 
   static async completeDonnees(
     donnees: DonneesEntite,
-    serviceAnnuaire: AdaptateurRechercheEntreprise
+    serviceAnnuaire: Pick<
+      AdaptateurRechercheEntreprise,
+      'rechercheOrganisations'
+    >
   ) {
     const organisations = await serviceAnnuaire.rechercheOrganisations(
       donnees.siret

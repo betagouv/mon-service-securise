@@ -1,4 +1,6 @@
 import * as adaptateurRechercheEntreprise from './adaptateurRechercheEntrepriseAPI.js';
 
-export type AdaptateurRechercheEntreprise =
-  typeof adaptateurRechercheEntreprise;
+export type AdaptateurRechercheEntreprise = Pick<
+  typeof adaptateurRechercheEntreprise,
+  'rechercheOrganisations' | 'recupereDetailsOrganisation'
+>;
