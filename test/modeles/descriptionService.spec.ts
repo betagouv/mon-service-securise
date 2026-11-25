@@ -5,14 +5,17 @@ import {
 import DescriptionService from '../../src/modeles/descriptionService.js';
 import InformationsService from '../../src/modeles/informationsService.js';
 import { creeReferentielVide } from '../../src/referentiel.js';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('La description du service', () => {
   const referentielAvecStatutValide = (statut: string) => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      statutsDeploiement: { [statut]: {} },
-      localisationsDonnees: { france: {} },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        statutsDeploiement: { [statut]: {} },
+        localisationsDonnees: { france: {} },
+      })
+    );
     return referentiel;
   };
 
@@ -91,12 +94,14 @@ describe('La description du service', () => {
 
   it('décrit le type service', () => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      typesService: {
-        unType: { description: 'Un type' },
-        unAutre: { description: 'Un autre' },
-      },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        typesService: {
+          unType: { description: 'Un type' },
+          unAutre: { description: 'Un autre' },
+        },
+      })
+    );
     const descriptionService = new DescriptionService(
       {
         nomService: 'nom',
@@ -112,11 +117,13 @@ describe('La description du service', () => {
 
   it('décrit la localisation des données', () => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      localisationsDonnees: {
-        france: { description: 'Quelque part en France' },
-      },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        localisationsDonnees: {
+          france: { description: 'Quelque part en France' },
+        },
+      })
+    );
 
     const descriptionService = new DescriptionService(
       {
@@ -132,13 +139,15 @@ describe('La description du service', () => {
 
   it('décrit le statut de déploiement', () => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      statutsDeploiement: {
-        enLigne: {
-          description: 'En ligne',
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        statutsDeploiement: {
+          enLigne: {
+            description: 'En ligne',
+          },
         },
-      },
-    });
+      })
+    );
 
     const descriptionService = new DescriptionService(
       {
@@ -161,7 +170,7 @@ describe('La description du service', () => {
 
   it('valide que le statut de déploiement est bien du référentiel', () => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({ statutsDeploiement: {} });
+    referentiel.recharge(donneesReferentielDeTest({ statutsDeploiement: {} }));
     const creeDescriptionService = () =>
       new DescriptionService(
         { statutDeploiement: 'pasAccessible' },
@@ -177,11 +186,13 @@ describe('La description du service', () => {
 
   it('valide la localisation des données si elle est présente', () => {
     const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      localisationsDonnees: {
-        france: { description: 'Quelque part en France' },
-      },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        localisationsDonnees: {
+          france: { description: 'Quelque part en France' },
+        },
+      })
+    );
     expect(
       () =>
         new DescriptionService(
