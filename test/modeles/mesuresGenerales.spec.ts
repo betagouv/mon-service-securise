@@ -4,6 +4,7 @@ import MesuresGenerales, {
 import { creeReferentiel, creeReferentielVide } from '../../src/referentiel.js';
 import MesureGenerale from '../../src/modeles/mesureGenerale.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 
@@ -16,10 +17,11 @@ describe('La liste des mesures générales', () => {
 
   describe("sur demande de mise à jour d'une mesure", () => {
     beforeEach(() => {
-      referentiel = creeReferentiel({
-        // @ts-expect-error identifiant de mesure factice
-        mesures: { m1: {} },
-      });
+      referentiel = creeReferentiel(
+        donneesReferentielDeTest({
+          mesures: { m1: {} },
+        })
+      );
     });
 
     it("insère la mesure si elle n'existe pas", () => {
@@ -60,8 +62,7 @@ describe('La liste des mesures générales', () => {
 
   it('est complète quand les mesures sont complètes', () => {
     referentiel = creeReferentiel();
-    // @ts-expect-error on utilise un identifiant de mesure factice
-    referentiel.recharge({ mesures: { mesure: {} } });
+    referentiel.recharge(donneesReferentielDeTest({ mesures: { mesure: {} } }));
 
     const donnees: DonneesMesuresGenerales<'mesure'> = {
       mesuresGenerales: [{ id: 'mesure', statut: 'fait' }],
@@ -72,8 +73,9 @@ describe('La liste des mesures générales', () => {
   });
 
   it('est à compléter quand toutes les mesures ne sont pas complètes', () => {
-    // @ts-expect-error identifiant de mesure factice
-    referentiel = creeReferentiel({ mesures: { mesure: {} } });
+    referentiel = creeReferentiel(
+      donneesReferentielDeTest({ mesures: { mesure: {} } })
+    );
 
     const donnees: DonneesMesuresGenerales<'mesure'> = {
       mesuresGenerales: [{ id: 'mesure' }],
@@ -85,26 +87,27 @@ describe('La liste des mesures générales', () => {
 
   describe('sur une demande de mesures par statut', () => {
     beforeEach(() => {
-      referentiel = creeReferentiel({
-        mesures: {
-          // @ts-expect-error on utilise des idMesure factices
-          mesure1: {
-            description: 'Mesure une',
-            categorie: 'categorie1',
-            indispensable: true,
+      referentiel = creeReferentiel(
+        donneesReferentielDeTest({
+          mesures: {
+            mesure1: {
+              description: 'Mesure une',
+              categorie: 'categorie1',
+              indispensable: true,
+            },
+            mesure2: {
+              description: 'Mesure deux',
+              categorie: 'categorie1',
+              indispensable: false,
+            },
+            mesure3: {
+              description: 'Mesure trois',
+              categorie: 'categorie1',
+              indispensable: true,
+            },
           },
-          mesure2: {
-            description: 'Mesure deux',
-            categorie: 'categorie1',
-            indispensable: false,
-          },
-          mesure3: {
-            description: 'Mesure trois',
-            categorie: 'categorie1',
-            indispensable: true,
-          },
-        },
-      });
+        })
+      );
     });
 
     it('regroupe par statut les mesures', () => {

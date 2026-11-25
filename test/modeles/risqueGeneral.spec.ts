@@ -3,22 +3,25 @@ import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
 import Risque from '../../src/modeles/risque.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
 import { creeReferentiel } from '../../src/referentiel.js';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Un risque général', () => {
   let referentiel: Referentiel;
 
   beforeEach(() => {
     referentiel = creeReferentiel();
-    referentiel.recharge({
-      niveauxGravite: { unNiveau: {} },
-      risques: {
-        unRisque: {
-          description: 'Une description',
-          categories: ['CR1'],
-          identifiantNumerique: 'R1',
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        niveauxGravite: { unNiveau: {} },
+        risques: {
+          unRisque: {
+            description: 'Une description',
+            categories: ['CR1'],
+            identifiantNumerique: 'R1',
+          },
         },
-      },
-    });
+      })
+    );
   });
 
   it('retourne un JSON avec incluant la description du risque', () => {
@@ -54,20 +57,24 @@ describe('Un risque général', () => {
   });
 
   it('connaît son intitulé', () => {
-    referentiel.recharge({
-      risques: { unRisque: { description: 'Une description' } },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        risques: { unRisque: { description: 'Une description' } },
+      })
+    );
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
     expect(risque.intituleRisque()).toEqual('Une description');
   });
 
   it('connaît ses catégories', () => {
-    referentiel.recharge({
-      risques: {
-        unRisque: { description: 'Une description', categories: ['C1'] },
-      },
-      categoriesRisques: { C1: {} },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        risques: {
+          unRisque: { description: 'Une description', categories: ['C1'] },
+        },
+        categoriesRisques: { C1: 'Catégorie 1' },
+      })
+    );
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
     expect(risque.categoriesRisque()).toEqual(['C1']);
   });

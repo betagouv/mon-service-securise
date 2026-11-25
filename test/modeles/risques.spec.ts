@@ -9,6 +9,7 @@ import RisquesSpecifiques from '../../src/modeles/risquesSpecifiques.js';
 import { creeReferentiel } from '../../src/referentiel.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
 import { unUUID } from '../constructeurs/UUID.ts';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Les risques liés à un service', () => {
   let referentiel: Referentiel;
@@ -64,7 +65,9 @@ describe('Les risques liés à un service', () => {
     });
 
     it('retournent `COMPLETES` si tous les risques spécifiques sont complètement saisis', () => {
-      referentiel.recharge({ niveauxGravite: { grave: {} } });
+      referentiel.recharge(
+        donneesReferentielDeTest({ niveauxGravite: { grave: {} } })
+      );
       const risques = new Risques(
         {
           risquesSpecifiques: [
@@ -100,15 +103,17 @@ describe('Les risques liés à un service', () => {
 
   describe('sur demande des risques principaux', () => {
     beforeEach(() => {
-      referentiel.recharge({
-        risques: { unRisque: {}, unAutreRisque: {} },
-        vraisemblancesRisques: { vraisemblable: {} },
-        niveauxGravite: {
-          negligeable: { position: 0, important: false },
-          significatif: { position: 1, important: true },
-          critique: { position: 2, important: true },
-        },
-      });
+      referentiel.recharge(
+        donneesReferentielDeTest({
+          risques: { unRisque: {}, unAutreRisque: {} },
+          vraisemblancesRisques: { vraisemblable: {} },
+          niveauxGravite: {
+            negligeable: { position: 0, important: false },
+            significatif: { position: 1, important: true },
+            critique: { position: 2, important: true },
+          },
+        })
+      );
     });
 
     it('conservent les risques généraux importants', () => {
@@ -191,11 +196,13 @@ describe('Les risques liés à un service', () => {
 
   describe('sur une demande des risques par niveau de gravité', () => {
     it('fusionnent les risques récupérés généraux et spécifiques', () => {
-      referentiel.recharge({
-        risques: { unRisque: { description: 'Un risque' } },
-        niveauxGravite: { grave: {} },
-        vraisemblancesRisques: { vraisemblable: {} },
-      });
+      referentiel.recharge(
+        donneesReferentielDeTest({
+          risques: { unRisque: { description: 'Un risque' } },
+          niveauxGravite: { grave: {} },
+          vraisemblancesRisques: { vraisemblable: {} },
+        })
+      );
       const risques = new Risques(
         {
           risquesGeneraux: [

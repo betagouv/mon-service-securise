@@ -9,6 +9,7 @@ import {
 import { UUID } from '../../../src/typesBasiques.js';
 import RisqueSpecifique from '../../../src/modeles/risqueSpecifique.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 const { ECRITURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -110,11 +111,13 @@ describe('Les routes API des risques spécifiques de services', () => {
 
   describe('quand requête PUT sur `/api/service/:id/risquesSpecifiques', () => {
     beforeEach(() => {
-      testeur.referentiel().recharge({
-        niveauxGravite: { unNiveau: {} },
-        categoriesRisques: { C1: {} },
-        vraisemblancesRisques: { unNiveauVraisemblance: {} },
-      });
+      testeur.referentiel().recharge(
+        donneesReferentielDeTest({
+          niveauxGravite: { unNiveau: {} },
+          categoriesRisques: { C1: 'Catégorie 1' },
+          vraisemblancesRisques: { unNiveauVraisemblance: {} },
+        })
+      );
       testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService =
         async () => {};
       const serviceARenvoyer = unService(testeur.referentiel())

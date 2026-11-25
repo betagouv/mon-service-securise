@@ -6,17 +6,23 @@ import Risque from '../../src/modeles/risque.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
 import { creeReferentiel } from '../../src/referentiel.js';
 import { unUUID } from '../constructeurs/UUID.ts';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Un risque spécifique', () => {
   let referentiel: Referentiel;
 
   beforeEach(() => {
     referentiel = creeReferentiel();
-    referentiel.recharge({
-      niveauxGravite: { unNiveau: {} },
-      vraisemblancesRisques: { vraisemblable: {} },
-      categoriesRisques: { disponibilite: {}, integrite: {} },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        niveauxGravite: { unNiveau: {} },
+        vraisemblancesRisques: { vraisemblable: {} },
+        categoriesRisques: {
+          disponibilite: 'Disponibilité',
+          integrite: 'Intégrité',
+        },
+      })
+    );
   });
 
   const unRisque = (

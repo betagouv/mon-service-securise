@@ -11,15 +11,20 @@ import MesureSpecifique, {
 } from '../../src/modeles/mesureSpecifique.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 import { creeReferentielVide } from '../../src/referentiel.js';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Une mesure spécifique', () => {
   const referentiel = creeReferentielVide();
-  referentiel.recharge({
-    categoriesMesures: { uneCategorie: 'Une catégorie' },
-  });
+  referentiel.recharge(
+    donneesReferentielDeTest({
+      categoriesMesures: { uneCategorie: 'Une catégorie' },
+    })
+  );
 
   it('sait se décrire', () => {
-    referentiel.enrichis({ prioritesMesures: { p3: {} } });
+    referentiel.enrichis(
+      donneesReferentielDeTest({ prioritesMesures: { p3: {} } })
+    );
 
     const mesure = new MesureSpecifique(
       {
@@ -81,7 +86,7 @@ describe('Une mesure spécifique', () => {
   });
 
   it('vérifie la valeur de la priorité', () => {
-    referentiel.enrichis({ prioritesMesures: {} });
+    referentiel.enrichis(donneesReferentielDeTest({ prioritesMesures: {} }));
 
     expect(
       () => new MesureSpecifique({ priorite: 'prioriteInvalide' }, referentiel)
@@ -133,7 +138,9 @@ describe('Une mesure spécifique', () => {
     let donneesMesureSpecifique: DonneesMesureSpecifique;
 
     beforeEach(() => {
-      referentiel.enrichis({ prioritesMesures: { p3: {} } });
+      referentiel.enrichis(
+        donneesReferentielDeTest({ prioritesMesures: { p3: {} } })
+      );
       donneesMesureSpecifique = {
         id: unUUID('1'),
         description: 'Une mesure spécifique',

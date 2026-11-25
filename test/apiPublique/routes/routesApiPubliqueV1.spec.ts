@@ -27,6 +27,7 @@ import {
 import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 const { LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES } = Rubriques;
@@ -299,23 +300,25 @@ describe("Les routes d'API publique `/v1`", () => {
       const idMesureSpecifique = unUUIDRandom();
 
       const desMesures = () => {
-        const referentiel = creeReferentiel({
-          mesures: {
-            deconnexionAutomatique: {
-              description: 'Mettre en place une déconnexion automatique',
-              categorie: 'protection',
-              indispensable: true,
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            mesures: {
+              deconnexionAutomatique: {
+                description: 'Mettre en place une déconnexion automatique',
+                categorie: 'protection',
+                indispensable: true,
+              },
+              revueDesDroits: {
+                description: 'Revoir les droits des utilisateurs',
+                categorie: 'gouvernance',
+              },
             },
-            revueDesDroits: {
-              description: 'Revoir les droits des utilisateurs',
-              categorie: 'gouvernance',
+            categoriesMesures: {
+              gouvernance: 'Gouvernance',
+              protection: 'Protection',
             },
-          },
-          categoriesMesures: {
-            gouvernance: 'Gouvernance',
-            protection: 'Protection',
-          },
-        });
+          })
+        );
         const mesuresPersonnalisees = {
           deconnexionAutomatique: {
             description: 'Mettre en place une déconnexion automatique',
@@ -533,24 +536,26 @@ describe("Les routes d'API publique `/v1`", () => {
           .set('Authorization', enTeteAuthorization);
 
       describe("pour un service qui suit l'ancien référentiel de risques", () => {
-        const referentiel = creeReferentiel({
-          risques: {
-            indisponibiliteService: {
-              description: 'Indisponibilité du service',
-              categories: ['disponibilite'],
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            risques: {
+              indisponibiliteService: {
+                description: 'Indisponibilité du service',
+                categories: ['disponibilite'],
+              },
+              fuiteDonnees: {
+                description: 'Fuite de données',
+                categories: ['confidentialite'],
+              },
+              risqueDesactive: {
+                description: 'Risque désactivé',
+                categories: ['integrite'],
+              },
             },
-            fuiteDonnees: {
-              description: 'Fuite de données',
-              categories: ['confidentialite'],
-            },
-            risqueDesactive: {
-              description: 'Risque désactivé',
-              categories: ['integrite'],
-            },
-          },
-          niveauxGravite: { grave: { position: 3 } },
-          vraisemblancesRisques: { vraisemblable: { position: 2 } },
-        });
+            niveauxGravite: { grave: { position: 3 } },
+            vraisemblancesRisques: { vraisemblable: { position: 2 } },
+          })
+        );
 
         beforeEach(() => {
           const risques = new Risques(

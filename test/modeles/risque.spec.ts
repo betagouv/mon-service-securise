@@ -2,6 +2,7 @@ import { ErreurNiveauGraviteInconnu } from '../../src/erreurs.js';
 import Risque from '../../src/modeles/risque.js';
 import { creeReferentiel } from '../../src/referentiel.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Un risque', () => {
   let referentiel: Referentiel;
@@ -18,12 +19,14 @@ describe('Un risque', () => {
   });
 
   it('connaît son importance', () => {
-    referentiel.recharge({
-      niveauxGravite: {
-        negligeable: { important: false },
-        significatif: { important: true },
-      },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        niveauxGravite: {
+          negligeable: { important: false },
+          significatif: { important: true },
+        },
+      })
+    );
 
     const risqueNegligeable = new Risque(
       { niveauGravite: 'negligeable' },
@@ -39,17 +42,21 @@ describe('Un risque', () => {
   });
 
   it('connaît la description de son niveau de gravité', () => {
-    referentiel.recharge({
-      niveauxGravite: { unNiveau: { description: 'Une description' } },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        niveauxGravite: { unNiveau: { description: 'Une description' } },
+      })
+    );
     const risque = new Risque({ niveauGravite: 'unNiveau' }, referentiel);
     expect(risque.descriptionNiveauGravite()).toEqual('Une description');
   });
 
   it('sait se décrire', () => {
-    referentiel.recharge({
-      niveauxGravite: { unNiveau: { description: 'Une description' } },
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        niveauxGravite: { unNiveau: { description: 'Une description' } },
+      })
+    );
     const risque = new Risque(
       { niveauGravite: 'unNiveau', commentaire: 'Un commentaire' },
       referentiel
@@ -63,17 +70,19 @@ describe('Un risque', () => {
 
   describe('sait calculer son niveau de risque', () => {
     beforeEach(() => {
-      referentiel.recharge({
-        niveauxGravite: {
-          nonConcerne: { description: 'Une description', position: 0 },
-        },
-        vraisemblancesRisques: {
-          invraisemblable: { description: 'Une description', position: 0 },
-        },
-        niveauxRisques: {
-          eleve: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
-        },
-      });
+      referentiel.recharge(
+        donneesReferentielDeTest({
+          niveauxGravite: {
+            nonConcerne: { description: 'Une description', position: 0 },
+          },
+          vraisemblancesRisques: {
+            invraisemblable: { description: 'Une description', position: 0 },
+          },
+          niveauxRisques: {
+            eleve: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+          },
+        })
+      );
     });
 
     it("quand la gravité n'est pas définie", () => {
