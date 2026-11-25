@@ -9,6 +9,7 @@ import {
 } from '../../../src/modeles/autorisations/gestionDroits.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
+import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
@@ -160,7 +161,7 @@ describe('Les routes API des mesures générales des services', () => {
       testeur.depotDonnees().metsAJourMesureGeneraleDuService = (
         idService: UUID,
         idUtilisateur: UUID,
-        donnees: MesureGenerale
+        donnees: MesureGenerale<IdMesureV2>
       ) => {
         donneesRecues = donnees;
         idServiceRecu = idService;

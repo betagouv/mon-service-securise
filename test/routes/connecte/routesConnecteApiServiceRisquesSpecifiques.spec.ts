@@ -72,8 +72,7 @@ describe('Les routes API des risques spécifiques de services', () => {
       ) => {
         idServiceRecu = idService;
         donneesRecues = donnees;
-        // eslint-disable-next-line no-param-reassign
-        donnees.id = 'RS1';
+        Object.assign(donnees, { id: unUUIDRandom() });
       };
 
       await testeur.post(
@@ -89,12 +88,12 @@ describe('Les routes API des risques spécifiques de services', () => {
     });
 
     it('retourne la représentation du risque ajouté', async () => {
+      const idRisqueAjoute = unUUIDRandom();
       testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async (
         _: UUID,
         risque: RisqueSpecifique
       ) => {
-        // eslint-disable-next-line no-param-reassign
-        risque.id = 'abcd';
+        Object.assign(risque, { id: idRisqueAjoute });
         // eslint-disable-next-line no-param-reassign
         risque.identifiantNumerique = 'RS1';
       };
@@ -104,7 +103,7 @@ describe('Les routes API des risques spécifiques de services', () => {
         unePayloadValideSauf()
       );
 
-      expect(reponse.body.id).toBe('abcd');
+      expect(reponse.body.id).toBe(idRisqueAjoute);
       expect(reponse.body.identifiantNumerique).toBe('RS1');
     });
   });
@@ -123,7 +122,7 @@ describe('Les routes API des risques spécifiques de services', () => {
         .avecRisques(
           new Risques({
             risquesSpecifiques: [
-              { id: 'RS1', categories: ['C1'], intitule: 'intitule1' },
+              { id: unUUIDRandom(), categories: ['C1'], intitule: 'intitule1' },
             ],
           })
         )

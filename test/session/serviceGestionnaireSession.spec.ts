@@ -14,6 +14,7 @@ describe('Le service gestionnaire de session', () => {
   beforeEach(() => {
     depotDonnees = {
       revoqueJwt: async () => {},
+      estJwtRevoque: async () => false,
     };
     gestionnaireSession = fabriqueServiceGestionnaireSession({ depotDonnees });
   });

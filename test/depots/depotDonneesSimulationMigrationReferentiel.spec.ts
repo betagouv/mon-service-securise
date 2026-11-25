@@ -17,12 +17,12 @@ describe('Le dépôt de données des simulations de migration du référentiel v
     typeof AdaptateurPersistanceMemoire.nouvelAdaptateur
   >;
   let adaptateurChiffrement: AdaptateurChiffrement;
-  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests> & BusEvenements;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
 
   beforeEach(() => {
     persistance = unePersistanceMemoire().construis();
     adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
-    busEvenements = fabriqueBusPourLesTests() as unknown as BusEvenements;
+    busEvenements = fabriqueBusPourLesTests();
   });
 
   describe("sur demande d'ajout d'une simulation si nécessaire", () => {
@@ -30,7 +30,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -72,7 +72,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -86,7 +86,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -119,7 +119,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -152,7 +152,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -166,7 +166,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -182,7 +182,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 
@@ -220,7 +220,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
-          busEvenements,
+          busEvenements: busEvenements as unknown as BusEvenements,
           persistance,
         });
 

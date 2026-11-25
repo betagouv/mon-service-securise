@@ -97,6 +97,7 @@ describe("Le serveur d'API publique", () => {
   it("fait confiance au nombre de proxys configuré pour déterminer l'adresse IP du client", () => {
     const { app } = creeServeurApiPublique({
       urlBaseMss: 'https://mss.example.org',
+      urlBaseApi: 'https://api.example.org',
       depotDonnees,
       adaptateurGestionErreur: {} as AdaptateurGestionErreur,
       adaptateurAuditApiPublique,

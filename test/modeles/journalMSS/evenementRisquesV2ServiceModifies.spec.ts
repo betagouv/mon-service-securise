@@ -29,6 +29,7 @@ describe('Un événement de risques V2 modifiés', () => {
           commentaire: 'un comm',
           description: 'une description',
           intitule: 'un intitule',
+          identifiantNumerique: 'RS1',
           id: idRisqueSpecifique,
           vraisemblance: 1,
           gravite: 2,
