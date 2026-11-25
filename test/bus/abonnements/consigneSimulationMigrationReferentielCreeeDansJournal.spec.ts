@@ -1,16 +1,21 @@
 import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import {
+  AdaptateurJournalMSS,
+  EvenementJournal,
+} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
+import type Service from '../../../src/modeles/service.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { consigneSimulationMigrationReferentielCreee } from '../../../src/bus/abonnements/consigneSimulationMigrationReferentielCreeeDansJournal.js';
 
 describe("L'abonnement qui consigne la création d'une simulation de migration de référentiel dans le journal MSS", () => {
-  let adaptateurJournal;
+  let adaptateurJournal: AdaptateurJournalMSS;
 
   beforeEach(() => {
     adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
   });
 
   it('consigne un événement de simulation créée', async () => {
-    let evenementRecu = {};
+    let evenementRecu: EvenementJournal;
     adaptateurJournal.consigneEvenement = async (evenement) => {
       evenementRecu = evenement;
     };
@@ -19,7 +24,7 @@ describe("L'abonnement qui consigne la création d'une simulation de migration d
       service: unService().avecId('123').construis(),
     });
 
-    expect(evenementRecu.type).to.equal(
+    expect(evenementRecu!.type).toEqual(
       'SIMULATION_MIGRATION_REFERENTIEL_CREEE'
     );
   });
@@ -27,7 +32,7 @@ describe("L'abonnement qui consigne la création d'une simulation de migration d
   it("lève une exception s'il ne reçoit pas de service", async () => {
     await expect(
       consigneSimulationMigrationReferentielCreee({ adaptateurJournal })({
-        service: null,
+        service: null as unknown as Service,
       })
     ).rejects.toThrow(
       'Impossible de consigner la création de simulation de migration du référentiel dans le journal MSS sans avoir le service en paramètre.'

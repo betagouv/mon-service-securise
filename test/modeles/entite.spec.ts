@@ -1,5 +1,4 @@
 import Entite from '../../src/modeles/entite.js';
-import { ServiceAnnuaire } from '../../src/annuaire/serviceAnnuaire.interface.ts';
 
 describe('Une entité', () => {
   describe('sur demande de complétion des donnees', () => {
@@ -10,7 +9,7 @@ describe('Une entité', () => {
           siretUtilisePourLaRecherche = siret;
           return [{ nom: 'NomEntite', departement: '33', siret }];
         },
-      } as ServiceAnnuaire;
+      };
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
@@ -25,7 +24,7 @@ describe('Une entité', () => {
     it("retourne les données passées en entrée s'il n'y a pas de résultat de recherche d'entreprise", async () => {
       const fauxAdaptateurRechercheEntreprise = {
         rechercheOrganisations: async () => [],
-      } as unknown as ServiceAnnuaire;
+      };
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
@@ -44,7 +43,7 @@ describe('Une entité', () => {
             siret: '1235',
           },
         ],
-      } as unknown as ServiceAnnuaire;
+      };
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
