@@ -34,11 +34,11 @@ describe('La description du service', () => {
         pointsAcces: [{ description: 'Une description' }],
         presentation: 'Une présentation du service',
         provenanceService: 'uneProvenance',
-        statutDeploiement: 'unStatut',
+        statutDeploiement: 'enLigne',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         niveauSecurite: 'niveau1',
       },
-      referentielAvecStatutValide('unStatut')
+      referentielAvecStatutValide('enLigne')
     );
 
     expect(descriptionService.delaiAvantImpactCritique).toEqual('unDelai');
@@ -56,7 +56,7 @@ describe('La description du service', () => {
       'Une présentation du service'
     );
     expect(descriptionService.provenanceService).toEqual('uneProvenance');
-    expect(descriptionService.statutDeploiement).toEqual('unStatut');
+    expect(descriptionService.statutDeploiement).toEqual('enLigne');
     expect(descriptionService.nombreOrganisationsUtilisatrices).toEqual({
       borneBasse: 1,
       borneHaute: 5,
@@ -173,6 +173,7 @@ describe('La description du service', () => {
     referentiel.recharge(donneesReferentielDeTest({ statutsDeploiement: {} }));
     const creeDescriptionService = () =>
       new DescriptionService(
+        // @ts-expect-error on vérifie le rejet d'un statut hors référentiel
         { statutDeploiement: 'pasAccessible' },
         referentiel
       );
@@ -230,11 +231,11 @@ describe('La description du service', () => {
         localisationDonnees: 'france',
         presentation: 'Une présentation',
         provenanceService: 'uneProvenance',
-        statutDeploiement: 'accessible',
+        statutDeploiement: 'enLigne',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         organisationResponsable: { nom: 'MonOrga', siret: 'unSiret' },
       },
-      referentielAvecStatutValide('accessible')
+      referentielAvecStatutValide('enLigne')
     );
     expect(descriptionService.statutSaisie()).toEqual(
       InformationsService.A_COMPLETER
@@ -249,12 +250,12 @@ describe('La description du service', () => {
         localisationDonnees: 'france',
         presentation: 'Une présentation',
         provenanceService: 'uneProvenance',
-        statutDeploiement: 'accessible',
+        statutDeploiement: 'enLigne',
         nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
         organisationResponsable: { siret: '12345' },
         niveauSecurite: 'niveau1',
       },
-      referentielAvecStatutValide('accessible')
+      referentielAvecStatutValide('enLigne')
     );
 
     expect(descriptionService.statutSaisie()).toEqual(

@@ -114,7 +114,7 @@ describe('Les routes API des risques spécifiques de services', () => {
       testeur.referentiel().recharge(
         donneesReferentielDeTest({
           niveauxGravite: { unNiveau: {} },
-          categoriesRisques: { C1: 'Catégorie 1' },
+          categoriesRisques: { disponibilite: 'Disponibilité' },
           vraisemblancesRisques: { unNiveauVraisemblance: {} },
         })
       );
@@ -125,7 +125,12 @@ describe('Les routes API des risques spécifiques de services', () => {
         .avecRisques(
           new Risques({
             risquesSpecifiques: [
-              { id: unUUIDRandom(), categories: ['C1'], intitule: 'intitule1' },
+              // @ts-expect-error un risque spécifique peut ne pas encore être évalué
+              {
+                id: unUUIDRandom(),
+                categories: ['disponibilite'],
+                intitule: 'intitule1',
+              },
             ],
           })
         )
@@ -142,7 +147,7 @@ describe('Les routes API des risques spécifiques de services', () => {
         {
           niveauGravite: 'inexistant',
           intitule: 'risque',
-          categories: ['C1'],
+          categories: ['disponibilite'],
         }
       );
       expect(status).toBe(400);

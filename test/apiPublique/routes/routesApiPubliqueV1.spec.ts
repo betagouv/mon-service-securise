@@ -567,9 +567,11 @@ describe("Les routes d'API publique `/v1`", () => {
                   niveauVraisemblance: 'vraisemblable',
                   commentaire: 'Pas de bascule automatique',
                 },
+                // @ts-expect-error un risque désactivé n'est pas évalué
                 { id: 'risqueDesactive', desactive: true },
               ],
               risquesSpecifiques: [
+                // @ts-expect-error un risque spécifique peut être partiellement évalué
                 {
                   id: idRisqueSpecifique,
                   intitule: 'Départ du seul administrateur système',

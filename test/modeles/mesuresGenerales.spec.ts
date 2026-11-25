@@ -92,17 +92,17 @@ describe('La liste des mesures générales', () => {
           mesures: {
             mesure1: {
               description: 'Mesure une',
-              categorie: 'categorie1',
+              categorie: 'gouvernance',
               indispensable: true,
             },
             mesure2: {
               description: 'Mesure deux',
-              categorie: 'categorie1',
+              categorie: 'gouvernance',
               indispensable: false,
             },
             mesure3: {
               description: 'Mesure trois',
-              categorie: 'categorie1',
+              categorie: 'gouvernance',
               indispensable: true,
             },
           },
@@ -125,7 +125,7 @@ describe('La liste des mesures générales', () => {
         referentiel
       );
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
+      expect(mesures.parStatutEtCategorie().fait.gouvernance.length).toEqual(1);
     });
 
     it("ajoute l'importance de la mesure", () => {
@@ -135,7 +135,7 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        mesures.parStatutEtCategorie().fait.categorie1[0].indispensable
+        mesures.parStatutEtCategorie().fait.gouvernance[0].indispensable
       ).toBe(true);
     });
 
@@ -146,7 +146,7 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        mesures.parStatutEtCategorie().fait.categorie1[0].description
+        mesures.parStatutEtCategorie().fait.gouvernance[0].description
       ).toEqual('Mesure une');
     });
 
@@ -163,7 +163,7 @@ describe('La liste des mesures générales', () => {
       const mesures = new MesuresGenerales(donnees, referentiel);
 
       expect(
-        mesures.parStatutEtCategorie().fait.categorie1[0].modalites
+        mesures.parStatutEtCategorie().fait.gouvernance[0].modalites
       ).toEqual('Modalités de la mesure');
     });
 
@@ -200,7 +200,7 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        mesures.parStatutEtCategorie().fait.categorie1[2].description
+        mesures.parStatutEtCategorie().fait.gouvernance[2].description
       ).toEqual('Mesure deux');
     });
   });

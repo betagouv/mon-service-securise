@@ -18,7 +18,7 @@ describe('La liste des mesures spécifiques', () => {
 
   beforeEach(() => {
     referentiel = creeReferentielVide();
-    referentiel.identifiantsCategoriesMesures = () => ['categorie1'];
+    referentiel.identifiantsCategoriesMesures = () => ['gouvernance'];
   });
 
   const uneMesureSpecifique = (
@@ -27,7 +27,7 @@ describe('La liste des mesures spécifiques', () => {
     id: unUUID('1'),
     description: 'Une mesure spécifique',
     modalites: 'Des modalités',
-    categorie: 'categorie1',
+    categorie: 'gouvernance',
     statut: 'fait',
     ...surcharge,
   });
@@ -60,12 +60,12 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
           uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             statut: 'nonFait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
         ],
       },
@@ -73,10 +73,10 @@ describe('La liste des mesures spécifiques', () => {
     );
 
     expect(
-      mesures.parStatutEtCategorie().fait.categorie1[0].description
+      mesures.parStatutEtCategorie().fait.gouvernance[0].description
     ).toEqual('Mesure Spécifique 1');
     expect(
-      mesures.parStatutEtCategorie().nonFait.categorie1[0].description
+      mesures.parStatutEtCategorie().nonFait.gouvernance[0].description
     ).toEqual('Mesure Spécifique 2');
   });
 
@@ -87,7 +87,7 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
             modalites: 'Modalités',
           }),
         ],
@@ -95,10 +95,10 @@ describe('La liste des mesures spécifiques', () => {
       referentiel
     );
 
-    expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
-    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).toEqual(
-      'Modalités'
-    );
+    expect(mesures.parStatutEtCategorie().fait.gouvernance.length).toEqual(1);
+    expect(
+      mesures.parStatutEtCategorie().fait.gouvernance[0].modalites
+    ).toEqual('Modalités');
   });
 
   it("ordonne les status comme précisé par l'accumulateur", () => {
@@ -108,17 +108,17 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
           uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             statut: 'nonFait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
           uneMesureSpecifique({
             description: 'Mesure Spécifique 3',
             statut: 'enCours',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
         ],
       },
@@ -140,12 +140,12 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
             modalites: 'Modalités',
           }),
           uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
             modalites: 'Modalités',
             statut: '',
           }),
@@ -154,10 +154,10 @@ describe('La liste des mesures spécifiques', () => {
       referentiel
     );
 
-    expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
-    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).toEqual(
-      'Modalités'
-    );
+    expect(mesures.parStatutEtCategorie().fait.gouvernance.length).toEqual(1);
+    expect(
+      mesures.parStatutEtCategorie().fait.gouvernance[0].modalites
+    ).toEqual('Modalités');
   });
 
   it('exclut les mesures sans categorie', () => {
@@ -167,7 +167,7 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
             modalites: 'Modalités',
           }),
           uneMesureSpecifique({
@@ -183,7 +183,7 @@ describe('La liste des mesures spécifiques', () => {
 
     expect(Object.keys(mesures.parStatutEtCategorie().fait).length).toEqual(1);
     expect(
-      mesures.parStatutEtCategorie().fait.categorie1[0].description
+      mesures.parStatutEtCategorie().fait.gouvernance[0].description
     ).toEqual('Mesure Spécifique 1');
   });
 
@@ -194,26 +194,24 @@ describe('La liste des mesures spécifiques', () => {
           uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           }),
         ],
       },
       referentiel
     );
 
-    const mesuresParStatut = mesures.parStatutEtCategorie({
-      fait: {
-        categorie1: [{ description: 'Mesure une', indispensable: true }],
-      },
-      enCours: {},
-      nonFait: {},
-      aLancer: {},
-    });
-    expect(mesuresParStatut.fait.categorie1.length).toEqual(2);
-    expect(mesuresParStatut.fait.categorie1[0].description).toEqual(
+    const accumulateur = MesureSpecifique.accumulateurInitialStatuts(true);
+    accumulateur.fait.gouvernance = [
+      { description: 'Mesure une', indispensable: true },
+    ];
+
+    const mesuresParStatut = mesures.parStatutEtCategorie(accumulateur);
+    expect(mesuresParStatut.fait.gouvernance.length).toEqual(2);
+    expect(mesuresParStatut.fait.gouvernance[0].description).toEqual(
       'Mesure une'
     );
-    expect(mesuresParStatut.fait.categorie1[1].description).toEqual(
+    expect(mesuresParStatut.fait.gouvernance[1].description).toEqual(
       'Mesure Spécifique 1'
     );
   });
@@ -226,7 +224,7 @@ describe('La liste des mesures spécifiques', () => {
             id: unUUID('1'),
             description: 'Mesure Spécifique 1',
             statut: 'fait',
-            categorie: 'categorie1',
+            categorie: 'gouvernance',
           },
         ],
       },
@@ -274,7 +272,7 @@ describe('La liste des mesures spécifiques', () => {
         [unUUID('2')]: {
           description: 'Description du modèle',
           descriptionLongue: 'Longue du modèle',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
         },
       };
@@ -296,7 +294,7 @@ describe('La liste des mesures spécifiques', () => {
       const mesureCompletee = avecUnModele.toutes()[0];
       expect(mesureCompletee.description).toBe('Description du modèle');
       expect(mesureCompletee.descriptionLongue).toBe('Longue du modèle');
-      expect(mesureCompletee.categorie).toBe('categorie1');
+      expect(mesureCompletee.categorie).toBe('gouvernance');
     });
 
     it('jette une erreur lorsque le modèle de la mesure est introuvable', () => {
@@ -329,7 +327,7 @@ describe('La liste des mesures spécifiques', () => {
         id: unUUID('1'),
         description: 'Mesure Spécifique 1',
         statut: 'fait',
-        categorie: 'categorie1',
+        categorie: 'gouvernance',
       });
       const mesures = new MesuresSpecifiques(
         { mesuresSpecifiques: [donneesMesure] },
@@ -359,7 +357,7 @@ describe('La liste des mesures spécifiques', () => {
           id: unUUID('X'),
           description: 'une description',
           statut: 'fait',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
         }),
         referentiel
       );
@@ -375,7 +373,7 @@ describe('La liste des mesures spécifiques', () => {
       const modelesAvecM1 = {
         [unUUID('1')]: {
           description: 'Mesure M1',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
           descriptionLongue: '',
         },
@@ -391,7 +389,7 @@ describe('La liste des mesures spécifiques', () => {
       expect(connaitM1.toutes()[0].toJSON()).toEqual({
         id: '22222222-2222-2222-2222-222222222222',
         idModele: '11111111-1111-1111-1111-111111111111',
-        categorie: 'categorie1',
+        categorie: 'gouvernance',
         description: 'Mesure M1',
         statut: 'aLancer',
         descriptionLongue: '',
@@ -417,7 +415,7 @@ describe('La liste des mesures spécifiques', () => {
       const modelesAvecM1 = {
         [unUUID('1')]: {
           description: 'Mesure M1',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
           descriptionLongue: '',
         },
@@ -444,13 +442,13 @@ describe('La liste des mesures spécifiques', () => {
         [unUUID('3')]: {
           description: 'Description du modèle 1',
           descriptionLongue: 'Longue du modèle 1',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
         },
         [unUUID('4')]: {
           description: 'Description du modèle 2',
           descriptionLongue: 'Longue du modèle 2',
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
         },
       };
@@ -479,7 +477,7 @@ describe('La liste des mesures spécifiques', () => {
       expect(mesures.donneesSerialisees()).toEqual([
         {
           id: unUUID('1'),
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           description: 'Description du modèle 1',
           descriptionLongue: 'Longue du modèle 1',
           responsables: [],
@@ -501,7 +499,7 @@ describe('La liste des mesures spécifiques', () => {
     it('supprime la mesure', () => {
       const modelesDisponiblesDeMesureSpecifique = {
         [unUUID('2')]: {
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
           description: '',
           descriptionLongue: '',
@@ -532,7 +530,7 @@ describe('La liste des mesures spécifiques', () => {
     it('retourne une liste des id de modèles', () => {
       const modelesDisponiblesDeMesureSpecifique = {
         [unUUID('3')]: {
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
           description: '',
           descriptionLongue: '',
@@ -564,13 +562,13 @@ describe('La liste des mesures spécifiques', () => {
     it('détache ces mesures uniquement', () => {
       const modelesDisponiblesDeMesureSpecifique = {
         [unUUID('3')]: {
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('U'),
           description: '',
           descriptionLongue: '',
         },
         [unUUID('4')]: {
-          categorie: 'categorie1',
+          categorie: 'gouvernance',
           idUtilisateur: unUUID('V'),
           description: '',
           descriptionLongue: '',
