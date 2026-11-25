@@ -52,13 +52,14 @@ describe("L'abonnement qui consigne les notifications de modifications de respon
     ancienneMesure: Mesure;
     nouvelleMesure: Mesure;
     typeMesure?: 'generale' | 'specifique';
-  }) => ({
-    service: unService().avecId(idService).construis(),
-    utilisateur: unUtilisateur().avecId(idActeur).construis(),
-    ancienneMesure,
-    nouvelleMesure,
-    typeMesure,
-  });
+  }) =>
+    new EvenementMesureServiceModifiee({
+      service: unService().avecId(idService).construis(),
+      utilisateur: unUtilisateur().avecId(idActeur).construis(),
+      ancienneMesure,
+      nouvelleMesure,
+      typeMesure,
+    });
 
   it("ne consigne pas si la mesure n'a pas changé", async () => {
     const evenement = creeEvenement({

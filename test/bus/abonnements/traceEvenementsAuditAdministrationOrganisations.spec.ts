@@ -18,7 +18,10 @@ import { fabriqueBusPourLesTests } from '../aides/busPourLesTests.js';
 import BusEvenements from '../../../src/bus/busEvenements.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { AdaptateurAuditAdminOrganisations } from '../../../src/adaptateurs/adaptateurAuditAdminOrganisations.interface.ts';
-import { TraceAudit } from '../../../src/modeles/gestionOrganisations/traceAudit.ts';
+import {
+  TraceAudit,
+  TypeActionAudit,
+} from '../../../src/modeles/gestionOrganisations/traceAudit.ts';
 
 describe("L'abonnement qui trace les évènements d'administration d'organisations", () => {
   const idUtilisateurAdmin = unUUID('A');
@@ -67,7 +70,7 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
 
   describe("sur retrait d'accès à un utilisateur administré", () => {
     it("consigne un événement de retrait d'accès", async () => {
-      let donneesRecues: TraceAudit<'RETRAIT_ACCES'> | undefined;
+      let donneesRecues: TraceAudit<TypeActionAudit> | undefined;
       adaptateurAuditAdminOrganisations.trace = async (donnees) => {
         donneesRecues = donnees;
       };
@@ -132,7 +135,7 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
 
   describe("lors de l'attribution de rôle à un utilisateur administré", () => {
     it("consigne un événement d'attribution de rôle à un utilisateur administré", async () => {
-      let donneesRecues: TraceAudit<'ATTRIBUTION_ROLE'> | undefined;
+      let donneesRecues: TraceAudit<TypeActionAudit> | undefined;
       adaptateurAuditAdminOrganisations.trace = async (donnees) => {
         donneesRecues = donnees;
       };
@@ -203,7 +206,7 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
 
   describe("lors de la nomination d'un admin sur une organisation", () => {
     it("consigne un événement de nomination d'un admin", async () => {
-      let donneesRecues: TraceAudit<'NOMINATION_ADMIN'> | undefined;
+      let donneesRecues: TraceAudit<TypeActionAudit> | undefined;
       adaptateurAuditAdminOrganisations.trace = async (donnees) => {
         donneesRecues = donnees;
       };
@@ -252,7 +255,7 @@ describe("L'abonnement qui trace les évènements d'administration d'organisatio
 
   describe("lors du retrait d'un admin d'une organisation", () => {
     it("consigne un événement de retrait d'un admin", async () => {
-      let donneesRecues: TraceAudit<'RETRAIT_ADMIN'> | undefined;
+      let donneesRecues: TraceAudit<TypeActionAudit> | undefined;
       adaptateurAuditAdminOrganisations.trace = async (donnees) => {
         donneesRecues = donnees;
       };

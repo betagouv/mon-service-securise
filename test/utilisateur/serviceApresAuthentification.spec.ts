@@ -13,6 +13,10 @@ import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPe
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { AdaptateurPersistance } from '../../src/adaptateurs/adaptateurPersistance.interface.ts';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
+import { creeReferentielV2 } from '../../src/referentielV2.ts';
 
 describe("Le service d'après authentification", () => {
   let adaptateurProfilAnssi: AdaptateurProfilAnssi;
@@ -250,11 +254,15 @@ describe("Le service d'après authentification", () => {
         } as unknown as AdaptateurProfilAnssi;
 
         const depotDuTest = creeDepot({
+          adaptateurEnvironnement,
+          referentielV2: creeReferentielV2(),
+          serviceCgu: { versionActuelle: () => '1' },
           adaptateurChiffrement: fauxAdaptateurChiffrement(),
-          adaptateurPersistance: unePersistanceMemoire().construis(),
+          adaptateurPersistance:
+            unePersistanceMemoire().construis() as unknown as AdaptateurPersistance,
           adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
           adaptateurProfilAnssi: mpaDuTest,
-          busEvenements: fabriqueBusPourLesTests(),
+          busEvenements: fabriqueBusPourLesTests() as unknown as BusEvenements,
         });
         await depotDuTest.nouvelUtilisateur(
           unUtilisateur()

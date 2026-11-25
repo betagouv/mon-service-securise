@@ -22,7 +22,7 @@ import { creeReferentielV2 } from '../../../src/referentielV2.ts';
  */
 
 const justeLaMesureEtSonChampIndispensable = (
-  mesures: Array<{ indispensable: boolean }>
+  mesures: Record<string, { indispensable: boolean }>
 ): { [id: string]: { indispensable: boolean } } =>
   Object.fromEntries(
     Object.entries(mesures).map(([id, mesure]) => [

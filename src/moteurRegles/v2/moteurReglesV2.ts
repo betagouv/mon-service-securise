@@ -58,6 +58,14 @@ export type RegleDuReferentielV2 = {
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
 
+export type MesureCalculeeParLeMoteur = Omit<
+  DetailReferentielMesureV2,
+  'indispensable'
+> & {
+  indispensable: boolean;
+  partieResponsable?: PartieResponsable;
+};
+
 export class MoteurReglesV2 {
   private readonly referentiel: ReferentielV2;
   private readonly regles: RegleV2[];
@@ -78,13 +86,9 @@ export class MoteurReglesV2 {
     );
   }
 
-  mesures(descriptionService: DescriptionServiceV2): Record<
-    IdMesureV2,
-    DetailReferentielMesureV2 & {
-      indispensable: boolean;
-      partieResponsable: PartieResponsable;
-    }
-  > {
+  mesures(
+    descriptionService: DescriptionServiceV2
+  ): Record<IdMesureV2, MesureCalculeeParLeMoteur> {
     const mesures = [];
 
     const niveauDuService = descriptionService.niveauSecurite;

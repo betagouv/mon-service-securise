@@ -1,4 +1,5 @@
 import { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
+import type { ErrorEvent } from '@sentry/node';
 import { optionsSentry } from '../../../src/adaptateurs/gestionErreur/optionsSentry.js';
 
 describe("Les options d'initialisation de Sentry", () => {
@@ -25,9 +26,9 @@ describe("Les options d'initialisation de Sentry", () => {
     const evenement = beforeSend!(
       { type: undefined },
       { originalException: new Error('haut niveau', { cause: erreurAxios }) }
-    );
+    ) as ErrorEvent;
 
-    expect(evenement?.contexts?.axios?.corpsEnvoye).toEqual({
+    expect(evenement.contexts?.axios?.corpsEnvoye).toEqual({
       siret: '[Filtré]',
     });
   });

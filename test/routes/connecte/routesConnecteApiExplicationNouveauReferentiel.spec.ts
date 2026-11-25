@@ -1,5 +1,6 @@
 import testeurMSS from '../testeurMSS.js';
 import ParcoursUtilisateur from '../../../src/modeles/parcoursUtilisateur.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('Le serveur MSS des routes privées /api/explicationNouveauReferentiel/*', () => {
   const testeur = testeurMSS();
@@ -8,6 +9,9 @@ describe('Le serveur MSS des routes privées /api/explicationNouveauReferentiel/
     await testeur.initialise();
     testeur.depotDonnees().lisParcoursUtilisateur = () =>
       new ParcoursUtilisateur({
+        idUtilisateur: unUUID('U'),
+        aVuTableauDeBordDepuisConnexion: false,
+        etatVisiteGuidee: { dejaTerminee: false },
         explicationNouveauReferentiel: { dejaTermine: false },
       });
   });
@@ -36,7 +40,7 @@ describe('Le serveur MSS des routes privées /api/explicationNouveauReferentiel/
       await testeur.post('/api/explicationNouveauReferentiel/termine');
 
       expect(
-        parcoursUtilisateurRecu!.explicationNouveauReferentiel.dejaTermine
+        parcoursUtilisateurRecu!.explicationNouveauReferentiel.estTermine()
       ).toBe(true);
     });
   });

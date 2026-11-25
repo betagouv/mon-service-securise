@@ -19,6 +19,7 @@ describe('Les risques V2', () => {
         gravite: 2,
         vraisemblance: 1,
         intitule: 'un risque',
+        identifiantNumerique: 'RS1',
         risqueBrut: { vraisemblance: 1, gravite: 1 },
       }),
     ];
@@ -89,6 +90,7 @@ describe('Les risques V2', () => {
       gravite: 2,
       vraisemblance: 1,
       intitule: 'un risque',
+      identifiantNumerique: 'RS1',
       risqueBrut: { vraisemblance: 1, gravite: 1 },
     });
 
@@ -109,6 +111,7 @@ describe('Les risques V2', () => {
           gravite: 2,
           vraisemblance: 1,
           intitule: 'un risque',
+          identifiantNumerique: 'RS1',
           risqueBrut: { vraisemblance: 1, gravite: 1 },
         }),
       ],
@@ -148,6 +151,7 @@ describe('Les risques V2', () => {
           gravite: 2,
           vraisemblance: 1,
           intitule: 'un risque',
+          identifiantNumerique: 'RS1',
           risqueBrut: { vraisemblance: 1, gravite: 1 },
         }),
       ],
