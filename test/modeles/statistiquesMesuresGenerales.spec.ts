@@ -1,13 +1,15 @@
-import expect from 'expect.js';
-import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 import { ErreurCategorieInconnue } from '../../src/erreurs.js';
 import { desStatistiques } from '../constructeurs/constructeurStatistiquesMesures.js';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Les statistiques des mesures générales', () => {
   it('vérifient que les catégories sont présentes dans le référentiel', () => {
-    const seulementGouvernance = Referentiel.creeReferentiel({
-      categoriesMesures: { gouvernance: 'Gouvernance' },
-    });
+    const seulementGouvernance = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+      })
+    );
 
     expect(() => {
       const mesureProtection = { categorie: 'protection' };
@@ -15,24 +17,25 @@ describe('Les statistiques des mesures générales', () => {
       desStatistiques(seulementGouvernance)
         .avecMesuresPersonnalisees({ P1: mesureProtection })
         .construis();
-    }).to.throwException((e) => {
-      expect(e).to.be.a(ErreurCategorieInconnue);
-      expect(e.message).to.equal(
+    }).toThrowError(
+      new ErreurCategorieInconnue(
         'La catégorie "protection" n\'est pas répertoriée'
-      );
-    });
+      )
+    );
   });
 
   it('calculent le nombre de mesures "Faites" par catégorie', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {} },
-      statutsMesures: { fait: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {} },
+        statutsMesures: { fait: '' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -47,21 +50,23 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.faites('gouvernance')).to.eql(2);
-    expect(stats.faites('resilience')).to.eql(1);
-    expect(stats.faites('protection')).to.eql(0);
+    expect(stats.faites('gouvernance')).toEqual(2);
+    expect(stats.faites('resilience')).toEqual(1);
+    expect(stats.faites('protection')).toEqual(0);
   });
 
   it('calculent le nombre de mesures "En cours" par catégorie', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {} },
-      statutsMesures: { enCours: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {} },
+        statutsMesures: { enCours: '' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -76,21 +81,23 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.enCours('gouvernance')).to.eql(2);
-    expect(stats.enCours('resilience')).to.eql(1);
-    expect(stats.enCours('protection')).to.eql(0);
+    expect(stats.enCours('gouvernance')).toEqual(2);
+    expect(stats.enCours('resilience')).toEqual(1);
+    expect(stats.enCours('protection')).toEqual(0);
   });
 
   it('calculent le nombre de mesures "Non faites" par catégorie', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {} },
-      statutsMesures: { nonFait: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {} },
+        statutsMesures: { nonFait: '' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -105,21 +112,23 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.nonFaites('gouvernance')).to.eql(2);
-    expect(stats.nonFaites('resilience')).to.eql(1);
-    expect(stats.nonFaites('protection')).to.eql(0);
+    expect(stats.nonFaites('gouvernance')).toEqual(2);
+    expect(stats.nonFaites('resilience')).toEqual(1);
+    expect(stats.nonFaites('protection')).toEqual(0);
   });
 
   it('calculent le nombre de mesures "À lancer" par catégorie', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {} },
-      statutsMesures: { aLancer: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {} },
+        statutsMesures: { aLancer: '' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -134,21 +143,23 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.aLancer('gouvernance')).to.eql(2);
-    expect(stats.aLancer('resilience')).to.eql(1);
-    expect(stats.aLancer('protection')).to.eql(0);
+    expect(stats.aLancer('gouvernance')).toEqual(2);
+    expect(stats.aLancer('resilience')).toEqual(1);
+    expect(stats.aLancer('protection')).toEqual(0);
   });
 
   it("calculent le nombre de mesures sans statut par catégorie : les mesures personnalisées qui sont absentes des mesures générales ou les générales sans statut (même si ce n'est pas censé arriver)", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {} },
-      statutsMesures: { fait: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {} },
+        statutsMesures: { fait: '' },
+      })
+    );
 
     const g2SansStatut = { id: 'G2' };
     const stats = desStatistiques(referentiel)
@@ -160,22 +171,24 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.sansStatut('gouvernance')).to.be(2); // G2 sans statut, et G1 absente des générales
-    expect(stats.sansStatut('resilience')).to.be(1); // R1 absente des générales
+    expect(stats.sansStatut('gouvernance')).toBe(2); // G2 sans statut, et G1 absente des générales
+    expect(stats.sansStatut('resilience')).toBe(1); // R1 absente des générales
   });
 
   const casDeTests = [
     { nom: 'indispensables', methode: 'indispensables', indispensable: true },
     { nom: 'recommandées', methode: 'recommandees', indispensable: false },
-  ];
+  ] as const;
   casDeTests.forEach(({ nom, methode, indispensable }) => {
     describe(`quand elles calculent le nombre de mesures ${nom}`, () => {
       it(`donnent le nombre de mesures au statut "En cours" qui sont ${nom}`, () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {} },
-          statutsMesures: { fait: '', enCours: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {} },
+            statutsMesures: { fait: '', enCours: '' },
+          })
+        );
 
         const enCoursEtTypeCorrect = { id: 'A', statut: 'enCours' };
         const typeCorrectMaisPasEnCours = { id: 'B', statut: 'fait' };
@@ -194,15 +207,17 @@ describe('Les statistiques des mesures générales', () => {
           })
           .construis();
 
-        expect(stats[methode]().enCours).to.be(1);
+        expect(stats[methode]().enCours).toBe(1);
       });
 
       it(`donnent le nombre de mesures au statut "Non fait" qui sont ${nom}`, () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {} },
-          statutsMesures: { fait: '', nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {} },
+            statutsMesures: { fait: '', nonFait: '' },
+          })
+        );
 
         const nonFaitEtTypeCorrect = { id: 'A', statut: 'nonFait' };
         const typeCorrectMaisPasNonFait = { id: 'B', statut: 'fait' };
@@ -221,15 +236,17 @@ describe('Les statistiques des mesures générales', () => {
           })
           .construis();
 
-        expect(stats[methode]().nonFait).to.be(1);
+        expect(stats[methode]().nonFait).toBe(1);
       });
 
       it(`donnent le nombre de mesures au statut "Fait" qui sont ${nom}`, () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {} },
-          statutsMesures: { fait: '', nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {} },
+            statutsMesures: { fait: '', nonFait: '' },
+          })
+        );
 
         const faitEtTypeCorrect = { id: 'A', statut: 'fait' };
         const typeCorrectMaisPasFait = { id: 'B', statut: 'nonFait' };
@@ -248,15 +265,17 @@ describe('Les statistiques des mesures générales', () => {
           })
           .construis();
 
-        expect(stats[methode]().fait).to.be(1);
+        expect(stats[methode]().fait).toBe(1);
       });
 
       it('donnent le nombre de mesures "restantes" : ce sont celles qui ne sont pas au statut "Fait"', () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {} },
-          statutsMesures: { fait: '', enCours: '', nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {} },
+            statutsMesures: { fait: '', enCours: '', nonFait: '' },
+          })
+        );
 
         const enCours = { id: 'A', statut: 'enCours' };
         const nonFaite = { id: 'B', statut: 'nonFait' };
@@ -277,15 +296,17 @@ describe('Les statistiques des mesures générales', () => {
           .construis();
 
         // Une seule mesure faite sur 4 : il y en a 3 "restantes".
-        expect(stats[methode]().restant).to.be(3);
+        expect(stats[methode]().restant).toBe(3);
       });
 
       it('donnent le nombre de mesures "à remplir" : celles qui n\'ont pas de statut', () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {} },
-          statutsMesures: { nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {} },
+            statutsMesures: { nonFait: '' },
+          })
+        );
 
         // Une mesure générale sans statut est impossible à obtenir via l'IHM… mais on se protège quand même
         const sansStatut = { id: 'A' };
@@ -304,15 +325,17 @@ describe('Les statistiques des mesures générales', () => {
           })
           .construis();
 
-        expect(stats[methode]().aRemplir).to.be(2); // On compte A et C
+        expect(stats[methode]().aRemplir).toBe(2); // On compte A et C
       });
 
       it(`donnent le nombre total de mesures qui sont ${nom}`, () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
-          statutsMesures: { fait: '', nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
+            statutsMesures: { fait: '', nonFait: '' },
+          })
+        );
 
         const typeCorrectFaite = { id: 'A', statut: 'fait' };
         const typeCorrectNonFaite = { id: 'B', statut: 'nonFait' };
@@ -339,15 +362,17 @@ describe('Les statistiques des mesures générales', () => {
           })
           .construis();
 
-        expect(stats[methode]().total).to.be(4);
+        expect(stats[methode]().total).toBe(4);
       });
 
       it(`ne prend pas en compte les mesures 'nonFait' dans le nombre total de mesures qui sont ${nom}`, () => {
-        const referentiel = Referentiel.creeReferentiel({
-          categoriesMesures: { gouvernance: 'Gouvernance' },
-          mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
-          statutsMesures: { fait: '', nonFait: '' },
-        });
+        const referentiel = creeReferentiel(
+          donneesReferentielDeTest({
+            categoriesMesures: { gouvernance: 'Gouvernance' },
+            mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
+            statutsMesures: { fait: '', nonFait: '' },
+          })
+        );
 
         const typeCorrectFaite = { id: 'A', statut: 'fait' };
         const typeCorrectNonFaite = { id: 'B', statut: 'nonFait' };
@@ -375,21 +400,23 @@ describe('Les statistiques des mesures générales', () => {
           .ignoreLesMesuresNonPrisesEnCompte()
           .construis();
 
-        expect(stats[methode]().total).to.be(3);
+        expect(stats[methode]().total).toBe(3);
       });
     });
   });
 
   it("calculent le nombre de mesures 'Sans statut' pour toutes les catégories", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        resilience: 'Résilience',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, R1: {}, P1: {} },
-      statutsMesures: { fait: 'Fait' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          resilience: 'Résilience',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, R1: {}, P1: {} },
+        statutsMesures: { fait: 'Fait' },
+      })
+    );
 
     const g2AvecStatut = { id: 'G2', statut: 'fait' };
     const stats = desStatistiques(referentiel)
@@ -402,18 +429,20 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.sansStatutToutesCategories()).to.be(3);
+    expect(stats.sansStatutToutesCategories()).toBe(3);
   });
 
   it('calculent les totaux et le nombre de mesure faites par type et par catégories', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
-      statutsMesures: { fait: 'Fait', enCours: 'En cours' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
+        statutsMesures: { fait: 'Fait', enCours: 'En cours' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -432,7 +461,7 @@ describe('Les statistiques des mesures générales', () => {
       })
       .construis();
 
-    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+    expect(stats.totauxParTypeEtParCategorie()).toEqual({
       indispensables: {
         gouvernance: { sansStatut: 0, enCours: 1, fait: 2, total: 3 },
         protection: { sansStatut: 0, enCours: 0, fait: 0, total: 0 },
@@ -445,14 +474,16 @@ describe('Les statistiques des mesures générales', () => {
   });
 
   it('ajoute les mesures spécifiques aux totaux des mesures recommandées par type et par catégories', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, P1: {} },
-      statutsMesures: { fait: 'Fait' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, P1: {} },
+        statutsMesures: { fait: 'Fait' },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -466,7 +497,7 @@ describe('Les statistiques des mesures générales', () => {
       .avecMesuresSpecifiques([{ categorie: 'protection', statut: 'fait' }])
       .construis();
 
-    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+    expect(stats.totauxParTypeEtParCategorie()).toEqual({
       indispensables: {
         gouvernance: { sansStatut: 0, fait: 1, total: 1 },
         protection: { sansStatut: 0, fait: 0, total: 0 },
@@ -479,18 +510,20 @@ describe('Les statistiques des mesures générales', () => {
   });
 
   it('calculent les totaux et le nombre de mesure faite par type et par catégorie sans prendre en compte les mesures "nonFait"', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        protection: 'Protection',
-      },
-      mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
-      statutsMesures: {
-        fait: 'Fait',
-        enCours: 'En cours',
-        nonFait: 'Non prise en compte',
-      },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          protection: 'Protection',
+        },
+        mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
+        statutsMesures: {
+          fait: 'Fait',
+          enCours: 'En cours',
+          nonFait: 'Non prise en compte',
+        },
+      })
+    );
 
     const stats = desStatistiques(referentiel)
       .surLesMesuresGenerales([
@@ -510,7 +543,7 @@ describe('Les statistiques des mesures générales', () => {
       .ignoreLesMesuresNonPrisesEnCompte()
       .construis();
 
-    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+    expect(stats.totauxParTypeEtParCategorie()).toEqual({
       indispensables: {
         gouvernance: {
           sansStatut: 0,

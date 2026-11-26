@@ -1,29 +1,39 @@
-import { StatistiquesMesures } from '../../src/modeles/statistiquesMesures.js';
+import {
+  MesurePersonnalisee,
+  MesureSpecifiqueAComptabiliser,
+  StatistiquesMesures,
+} from '../../src/modeles/statistiquesMesures.js';
 import MesuresGenerales from '../../src/modeles/mesuresGenerales.js';
+import { DonneesMesureGenerale } from '../../src/modeles/mesureGenerale.type.js';
+import { TousReferentiels } from '../../src/referentiel.interface.js';
+import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+
+type MesureGeneraleDeTest = { id: string; statut?: string };
+type MesurePersonnaliseeDeTest = { categorie: string; indispensable?: boolean };
 
 class ConstructeurStatistiquesMesures {
-  constructor(referentiel) {
-    this.donnees = {
-      mesuresGenerales: [],
-      mesuresPersonnalisees: {},
-      mesuresSpecifiques: [],
-    };
-    this.referentiel = referentiel;
-    this.ignoreMesuresNonPrisesEnCompte = false;
-  }
+  private mesuresGenerales: MesureGeneraleDeTest[] = [];
+  private mesuresPersonnalisees: Record<string, MesurePersonnaliseeDeTest> = {};
+  private mesuresSpecifiques: MesureSpecifiqueAComptabiliser[] = [];
+  private ignoreMesuresNonPrisesEnCompte = false;
 
-  surLesMesuresGenerales(donneesMesuresGenerales) {
-    this.donnees.mesuresGenerales = donneesMesuresGenerales;
+  constructor(private readonly referentiel: TousReferentiels) {}
+
+  surLesMesuresGenerales(mesuresGenerales: MesureGeneraleDeTest[]) {
+    this.mesuresGenerales = mesuresGenerales;
     return this;
   }
 
-  avecMesuresPersonnalisees(donneesMesuresPersonnalisees) {
-    this.donnees.mesuresPersonnalisees = donneesMesuresPersonnalisees;
+  avecMesuresPersonnalisees(
+    mesuresPersonnalisees: Record<string, MesurePersonnaliseeDeTest>
+  ) {
+    this.mesuresPersonnalisees = mesuresPersonnalisees;
     return this;
   }
 
-  avecMesuresSpecifiques(donneesMesuresSpecifiques) {
-    this.donnees.mesuresSpecifiques = donneesMesuresSpecifiques;
+  avecMesuresSpecifiques(mesuresSpecifiques: MesureSpecifiqueAComptabiliser[]) {
+    this.mesuresSpecifiques = mesuresSpecifiques;
     return this;
   }
 
@@ -36,11 +46,18 @@ class ConstructeurStatistiquesMesures {
     return new StatistiquesMesures(
       {
         mesuresGenerales: new MesuresGenerales(
-          { mesuresGenerales: this.donnees.mesuresGenerales },
+          {
+            mesuresGenerales: this.mesuresGenerales as Array<
+              Partial<DonneesMesureGenerale<IdMesureV1 | IdMesureV2>>
+            >,
+          },
           this.referentiel
         ),
-        mesuresPersonnalisees: this.donnees.mesuresPersonnalisees,
-        mesuresSpecifiques: this.donnees.mesuresSpecifiques,
+        mesuresPersonnalisees: this.mesuresPersonnalisees as Record<
+          string,
+          MesurePersonnalisee
+        >,
+        mesuresSpecifiques: this.mesuresSpecifiques,
       },
       this.referentiel,
       this.ignoreMesuresNonPrisesEnCompte
@@ -48,7 +65,7 @@ class ConstructeurStatistiquesMesures {
   }
 }
 
-const desStatistiques = (referentiel) =>
+const desStatistiques = (referentiel: TousReferentiels) =>
   new ConstructeurStatistiquesMesures(referentiel);
 
 export { desStatistiques };

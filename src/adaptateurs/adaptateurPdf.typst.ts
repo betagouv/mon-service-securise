@@ -210,18 +210,16 @@ export class AdaptateurPdfTypst implements AdaptateurPdf {
       nombreTotalMesuresGenerales: service.nombreTotalMesuresGenerales(),
       nombreMesuresSpecifiques: service.nombreMesuresSpecifiques(),
       referentielConcernes,
-      categoriesMesures: referentiel
-        .identifiantsCategoriesMesures()
-        .map((id: string) => ({
-          description: referentiel.descriptionCategorie(
-            id as IdCategorieMesure
-          ),
-          fait: statsGenerales.faites(id),
-          enCours: statsGenerales.enCours(id),
-          nonFait: statsGenerales.nonFaites(id),
-          aLancer: statsGenerales.aLancer(id),
-          aRemplir: statsGenerales.sansStatut(id),
-        })),
+      categoriesMesures: (
+        referentiel.identifiantsCategoriesMesures() as IdCategorieMesure[]
+      ).map((id) => ({
+        description: referentiel.descriptionCategorie(id),
+        fait: statsGenerales.faites(id),
+        enCours: statsGenerales.enCours(id),
+        nonFait: statsGenerales.nonFaites(id),
+        aLancer: statsGenerales.aLancer(id),
+        aRemplir: statsGenerales.sansStatut(id),
+      })),
     };
 
     const res = this.renduPDF(donnees, 'src/vuesPdf/syntheseSecurite.typ');
