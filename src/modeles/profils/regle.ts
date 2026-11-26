@@ -1,13 +1,13 @@
 import { CritereRegle } from '../../referentiel.types.js';
 
 export type DonneesRegle = {
-  presence: CritereRegle[];
-  absence: CritereRegle[];
+  presence: readonly CritereRegle[];
+  absence: readonly CritereRegle[];
 };
 
 class Regle {
-  readonly presence: CritereRegle[];
-  readonly absence: CritereRegle[];
+  readonly presence: readonly CritereRegle[];
+  readonly absence: readonly CritereRegle[];
 
   constructor({ presence, absence }: Partial<DonneesRegle> = {}) {
     this.presence = presence || [];

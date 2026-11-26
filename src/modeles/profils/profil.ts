@@ -11,7 +11,10 @@ class Profil {
   private readonly regles: Regles;
   private readonly mesures: Mesures;
 
-  constructor(regles: DonneesRegle[], mesures: Partial<DonneesMesures>) {
+  constructor(
+    regles: readonly Partial<DonneesRegle>[],
+    mesures: Partial<DonneesMesures>
+  ) {
     this.regles = new Regles(regles);
     this.mesures = new Mesures(mesures);
   }

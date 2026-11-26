@@ -1,76 +1,106 @@
-import * as Referentiel from '../../referentiel.js';
+import { creeReferentielVide } from '../../referentiel.js';
+import { Referentiel } from '../../referentiel.interface.js';
 import Profil from '../../modeles/profils/profil.js';
-import * as adaptateurEnvironnement from '../../adaptateurs/adaptateurEnvironnement.js';
+import { DonneesRegle } from '../../modeles/profils/regle.js';
+import DescriptionService from '../../modeles/descriptionService.js';
+import {
+  CritereRegle,
+  DetailsMesureGeneraleV1,
+  DonneesReferentiel,
+  IdMesure,
+} from '../../referentiel.types.js';
+
+type ReglesPersonnalisation = Partial<
+  DonneesReferentiel['reglesPersonnalisation']
+>;
+
+type ProfilPersonnalisation = {
+  readonly regles: readonly Partial<DonneesRegle>[];
+  readonly mesuresAAjouter?: readonly IdMesure[];
+  readonly mesuresARetirer?: readonly IdMesure[];
+  readonly mesuresARendreIndispensables?: readonly IdMesure[];
+};
+
+type MesuresACibler =
+  'mesuresAAjouter' | 'mesuresARendreIndispensables' | 'mesuresARetirer';
 
 class MoteurRegles {
-  constructor(
-    referentiel = Referentiel.creeReferentielVide(),
-    adaptateurEnv = adaptateurEnvironnement
-  ) {
-    this.reglesPersonnalisation = referentiel.reglesPersonnalisation();
+  private readonly referentiel: Referentiel;
+
+  constructor(referentiel: Referentiel = creeReferentielVide()) {
     this.referentiel = referentiel;
-    this.adaptateurEnvironnement = adaptateurEnv;
   }
 
-  mesuresAModifier(descriptionService, mesuresACibler) {
+  private reglesPersonnalisation(): ReglesPersonnalisation {
+    return this.referentiel.reglesPersonnalisation();
+  }
+
+  mesuresAModifier(
+    descriptionService: DescriptionService,
+    mesuresACibler: MesuresACibler
+  ): IdMesure[] {
     const { clefsDescriptionServiceAConsiderer = [], profils = {} } =
-      this.reglesPersonnalisation;
+      this.reglesPersonnalisation();
 
     const valeursDescriptionService = clefsDescriptionServiceAConsiderer
-      .filter((clef) => descriptionService[clef] !== false)
-      .flatMap((clef) => descriptionService[clef]);
+      .filter((clef) => (descriptionService[clef] as unknown) !== false)
+      .flatMap((clef) => descriptionService[clef] as CritereRegle);
 
-    const mapMesures = Object.keys(profils)
+    const mapMesures = Object.values<ProfilPersonnalisation>(profils)
       .map(
         (profil) =>
-          new Profil(profils[profil].regles, {
-            ajouter: profils[profil].mesuresAAjouter,
-            retirer: profils[profil].mesuresARetirer,
-            rendreIndispensables: profils[profil].mesuresARendreIndispensables,
+          new Profil(profil.regles, {
+            ajouter: profil.mesuresAAjouter,
+            retirer: profil.mesuresARetirer,
+            rendreIndispensables: profil.mesuresARendreIndispensables,
           })
       )
       .flatMap((profil) => profil[mesuresACibler](valeursDescriptionService));
     return [...new Set(mapMesures)];
   }
 
-  mesuresAAjouter(descriptionService) {
+  mesuresAAjouter(descriptionService: DescriptionService) {
     return this.mesuresAModifier(descriptionService, 'mesuresAAjouter');
   }
 
-  mesuresARendreIndispensables(descriptionService) {
+  mesuresARendreIndispensables(descriptionService: DescriptionService) {
     return this.mesuresAModifier(
       descriptionService,
       'mesuresARendreIndispensables'
     );
   }
 
-  mesuresARetirer(descriptionService) {
+  mesuresARetirer(descriptionService: DescriptionService) {
     return this.mesuresAModifier(descriptionService, 'mesuresARetirer');
   }
 
-  mesures(descriptionService) {
-    const { mesuresBase = [] } = this.reglesPersonnalisation;
+  mesures(
+    descriptionService: DescriptionService
+  ): Record<IdMesure, DetailsMesureGeneraleV1> {
+    const { mesuresBase = [] } = this.reglesPersonnalisation();
     const mesuresAAjouter = this.mesuresAAjouter(descriptionService);
     const mesuresARetirer = this.mesuresARetirer(descriptionService);
-    const mesuresARendreIndispensables =
-      this.mesuresARendreIndispensables(descriptionService);
+    const idsARendreIndispensables = new Set(
+      this.mesuresARendreIndispensables(descriptionService)
+    );
 
-    const idsMesures = mesuresBase
-      .concat(mesuresAAjouter)
-      .filter((mesure) => !mesuresARetirer.includes(mesure));
+    const idsMesures = [...mesuresBase, ...mesuresAAjouter].filter(
+      (idMesure) => !mesuresARetirer.includes(idMesure)
+    );
 
-    const litMesuresEtRendIndispensable = () => {
-      const idsARendreIndispensables = new Set(mesuresARendreIndispensables);
-      const resultat = new Map();
-
-      idsMesures.forEach((idMesure) => {
+    return Object.fromEntries(
+      idsMesures.map((idMesure) => {
         const mesure = this.referentiel.mesure(idMesure);
-        mesure.indispensable ||= idsARendreIndispensables.has(idMesure);
-        resultat.set(idMesure, mesure);
-      });
-      return Object.fromEntries(resultat.entries());
-    };
-    return litMesuresEtRendIndispensable();
+        return [
+          idMesure,
+          {
+            ...mesure,
+            indispensable:
+              mesure.indispensable || idsARendreIndispensables.has(idMesure),
+          },
+        ];
+      })
+    ) as Record<IdMesure, DetailsMesureGeneraleV1>;
   }
 }
 

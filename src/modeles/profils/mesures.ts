@@ -1,15 +1,15 @@
 import { IdMesure } from '../../referentiel.types.js';
 
 export type DonneesMesures = {
-  ajouter: IdMesure[];
-  retirer: IdMesure[];
-  rendreIndispensables: IdMesure[];
+  ajouter: readonly IdMesure[];
+  retirer: readonly IdMesure[];
+  rendreIndispensables: readonly IdMesure[];
 };
 
 class Mesures {
-  readonly ajouter: IdMesure[];
-  readonly retirer: IdMesure[];
-  readonly rendreIndispensables: IdMesure[];
+  readonly ajouter: readonly IdMesure[];
+  readonly retirer: readonly IdMesure[];
+  readonly rendreIndispensables: readonly IdMesure[];
 
   constructor({
     ajouter = [],
