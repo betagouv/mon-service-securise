@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import ObjetPersistanceService from '../../../src/modeles/objetsPersistance/objetPersistanceService.js';
 
 describe("Les données de persistance d'un service", () => {
@@ -8,9 +7,9 @@ describe("Les données de persistance d'un service", () => {
       dossiers: [{ id: '999', finalise: false }],
     };
 
-    expect(new ObjetPersistanceService(donneesService).sauf('dossiers')).to.eql(
-      { id: 'id' }
-    );
+    expect(
+      new ObjetPersistanceService(donneesService).sauf('dossiers')
+    ).toEqual({ id: 'id' });
   });
 
   it('peuvent exclure plusieurs propriétés', () => {
@@ -21,6 +20,6 @@ describe("Les données de persistance d'un service", () => {
 
     expect(
       new ObjetPersistanceService(donneesService).sauf('dossiers', 'id')
-    ).to.eql({});
+    ).toEqual({});
   });
 });

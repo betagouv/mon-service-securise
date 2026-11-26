@@ -1,3 +1,3 @@
-const copie = (donnees: Record<string, unknown>) => structuredClone(donnees);
+const copie = <T>(donnees: T): T => structuredClone(donnees);
 
 export default copie;

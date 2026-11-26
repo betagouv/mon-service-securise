@@ -49,7 +49,10 @@ describe("Le service qui sait indiquer quels services n'ont pas toutes les modè
     const serviceV2 = unServiceV2().avecId(idService).construis();
     adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnUtilisateur({ id: idUtilisateur, email: 'jean.dupont@mail.fr' })
-      .ajouteUnService(serviceV2.donneesAPersister().donnees, VersionService.v2)
+      .ajouteUnService(
+        serviceV2.donneesAPersister().toutes(),
+        VersionService.v2
+      )
       .construis() as unknown as AdaptateurPersistance;
     const depotDonnees: DepotDonnees = leDepot();
 
