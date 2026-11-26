@@ -20,6 +20,7 @@ import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import Mesures from '../../../src/modeles/mesures.js';
+import { mesuresSpecifiquesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 const { LECTURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -357,15 +358,14 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           .avecMesures(
             new Mesures(
               {
-                mesuresSpecifiques: [
+                mesuresSpecifiques: mesuresSpecifiquesDeTest([
                   {
                     description: 'Chiffrer les exports de données RH',
                     categorie: 'protection',
                     statut: 'enCours',
                   },
-                ],
+                ]),
               },
-              // @ts-expect-error surcharge de référentiel
               referentiel
             )
           )
@@ -398,15 +398,14 @@ describe('Le serveur MSS des routes /api/service/:id/pptx/*', () => {
           .avecMesures(
             new Mesures(
               {
-                mesuresSpecifiques: [
+                mesuresSpecifiques: mesuresSpecifiquesDeTest([
                   {
                     description: 'Chiffrer les exports de données RH',
                     categorie: 'protection',
                     statut: 'enCours',
                   },
-                ],
+                ]),
               },
-              // @ts-expect-error référentiel partiel
               referentiel
             )
           )

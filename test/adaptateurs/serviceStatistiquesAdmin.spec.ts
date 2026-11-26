@@ -32,7 +32,6 @@ const unServiceV2AvecMesureDeStatutEtCategorie = (
 ) => {
   const mesures = new Mesures(
     { mesuresGenerales: [{ id, statut }] },
-    // @ts-expect-error mesures est en js pour l'instant
     referentiel,
     { [id]: { categorie } }
   );

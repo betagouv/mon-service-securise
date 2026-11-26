@@ -13,6 +13,7 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { AdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
 import { AdaptateurRechercheEntreprise } from '../../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
+import { mesuresSpecifiquesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Les notifications transactionnelles', () => {
   let depotDonnees: DepotDonnees;
@@ -48,16 +49,15 @@ describe('Les notifications transactionnelles', () => {
               mesuresGenerales: [
                 { id: 'RECENSEMENT.1', statut: 'fait', echeance: '2026-01-01' },
               ],
-              mesuresSpecifiques: [
+              mesuresSpecifiques: mesuresSpecifiquesDeTest([
                 {
                   id: unUUID('M'),
                   statut: 'fait',
                   description: 'Spécifique',
                   echeance: '2026-02-02',
                 },
-              ],
+              ]),
             },
-            // @ts-expect-error il infère sur du js un référentiel v1
             creeReferentielV2(),
             {
               'RECENSEMENT.1': { categorie: 'gouvernance' },

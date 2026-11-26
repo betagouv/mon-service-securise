@@ -12,6 +12,7 @@ import {
 } from '../../../src/modeles/autorisations/gestionDroits.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import MesureSpecifique from '../../../src/modeles/mesureSpecifique.js';
+import { mesuresSpecifiquesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -165,7 +166,11 @@ describe('Les routes des mesures spécifiques de service', () => {
 
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
-        .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
+        .avecMesures(
+          new Mesures({
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([{ id: 'M1' }]),
+          })
+        )
         .construis();
 
       testeur
@@ -323,7 +328,11 @@ describe('Les routes des mesures spécifiques de service', () => {
     it('délègue au dépôt de données la suppression de la mesure spécifique', async () => {
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
-        .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
+        .avecMesures(
+          new Mesures({
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([{ id: 'M1' }]),
+          })
+        )
         .construis();
       testeur.middleware().reinitialise({
         idUtilisateur: '999',

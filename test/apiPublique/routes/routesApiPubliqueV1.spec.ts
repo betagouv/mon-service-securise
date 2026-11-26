@@ -28,6 +28,7 @@ import { DepotDonnees } from '../../../src/depotDonnees.interface.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 import { AdaptateurGestionErreur } from '../../../src/adaptateurs/adaptateurGestionErreur.interface.ts';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import { mesuresPersonnaliseesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 const { LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES } = Rubriques;
@@ -351,7 +352,7 @@ describe("Les routes d'API publique `/v1`", () => {
             ],
           },
           referentiel,
-          mesuresPersonnalisees
+          mesuresPersonnaliseesDeTest(mesuresPersonnalisees)
         );
       };
 
