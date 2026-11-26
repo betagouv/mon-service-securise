@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { chaineDateFrEnChaineDateISO } from '../../utilitaires/date.js';
+import { Referentiel } from '../../referentiel.interface.js';
 
 const NOMBRE_MAXIMUM_DE_SERVICES = 250;
 const NOMBRE_MAXIMUM_DE_TYPES_PAR_SERVICE = 5;
@@ -34,4 +35,18 @@ export const schemaPostTeleversementServices = () => ({
       })
     )
     .max(NOMBRE_MAXIMUM_DE_SERVICES),
+});
+
+export const schemaPostTeleversementModelesMesureSpecifique = (
+  referentiel: Referentiel
+) => ({
+  modelesMesureSpecifique: z
+    .array(
+      z.strictObject({
+        description: z.string().max(1000),
+        descriptionLongue: z.string().max(2000),
+        categorie: celluleTexte(),
+      })
+    )
+    .max(referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur()),
 });

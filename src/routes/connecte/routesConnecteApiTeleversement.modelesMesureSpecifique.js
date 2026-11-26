@@ -1,39 +1,35 @@
 import express from 'express';
+import { z } from 'zod';
 import {
-  ErreurFichierXlsInvalide,
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
 } from '../../erreurs.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPostTeleversementModelesMesureSpecifique } from './routesConnecteApiTeleversement.schema.js';
 
 const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
-  lecteurDeFormData,
-  adaptateurTeleversementModelesMesureSpecifique,
   depotDonnees,
+  referentiel,
 }) => {
   const routes = express.Router();
-  routes.post('/', middleware.protegeTrafic(), async (requete, reponse) => {
-    try {
-      const buffer = await lecteurDeFormData.extraisDonneesXLS(requete);
-      const donnees =
-        await adaptateurTeleversementModelesMesureSpecifique.extraisDonneesTeleversees(
-          buffer
-        );
+  routes.post(
+    '/',
+    middleware.protegeTrafic(),
+    valideBody(
+      z.strictObject(
+        schemaPostTeleversementModelesMesureSpecifique(referentiel)
+      )
+    ),
+    async (requete, reponse) => {
       await depotDonnees.nouveauTeleversementModelesMesureSpecifique(
         requete.idUtilisateurCourant,
-        donnees
+        requete.body.modelesMesureSpecifique
       );
 
       reponse.sendStatus(201);
-    } catch (e) {
-      if (e instanceof ErreurFichierXlsInvalide) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      throw e;
     }
-  });
+  );
 
   routes.get('/', async (requete, reponse) => {
     const televersement =

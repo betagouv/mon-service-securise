@@ -3,11 +3,10 @@ import routesConnecteApiTeleversementModelesMesure from './routesConnecteApiTele
 import { routesConnecteApiTeleversementServicesV2 } from './routesConnecteApiTeleversement.servicesV2.js';
 
 const routesConnecteApiTeleversement = ({
-  lecteurDeFormData,
-  adaptateurTeleversementModelesMesureSpecifique,
   busEvenements,
   depotDonnees,
   middleware,
+  referentiel,
 }) => {
   const routes = express.Router();
 
@@ -23,10 +22,9 @@ const routesConnecteApiTeleversement = ({
   routes.use(
     '/modelesMesureSpecifique',
     routesConnecteApiTeleversementModelesMesure({
-      lecteurDeFormData,
       middleware,
-      adaptateurTeleversementModelesMesureSpecifique,
       depotDonnees,
+      referentiel,
     })
   );
 
