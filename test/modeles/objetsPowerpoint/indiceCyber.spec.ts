@@ -2,31 +2,33 @@ import { indiceCyber } from '../../../src/modeles/objetsPowerpoint/indiceCyber.j
 import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('L’indice cyber présenté à la commission', () => {
-  const referentiel = Referentiel.creeReferentiel({
-    indiceCyber: {
-      coefficientIndispensables: 0.8,
-      coefficientRecommandees: 0.2,
-      coefficientStatutPartiel: 0.5,
-      noteMax: 5,
-    },
-    categoriesMesures: {
-      gouvernance: 'Gouvernance',
-      protection: 'Protection',
-      defense: 'Défense',
-      resilience: 'Résilience',
-    },
-    // @ts-expect-error on recharge partiellement le référentiel
-    mesures: { A: {}, B: {}, C: {}, D: {} },
-    statutsMesures: {
-      fait: 'Faite',
-      enCours: 'Partielle',
-      nonFait: 'Non prise en compte',
-      aLancer: 'À lancer',
-    },
-    articlesDefinisReferentielsMesure: { ANSSI: "l'", CNIL: 'la ' },
-  });
+  const referentiel = Referentiel.creeReferentiel(
+    donneesReferentielDeTest({
+      indiceCyber: {
+        coefficientIndispensables: 0.8,
+        coefficientRecommandees: 0.2,
+        coefficientStatutPartiel: 0.5,
+        noteMax: 5,
+      },
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+        defense: 'Défense',
+        resilience: 'Résilience',
+      },
+      mesures: { A: {}, B: {}, C: {}, D: {} },
+      statutsMesures: {
+        fait: 'Faite',
+        enCours: 'Partielle',
+        nonFait: 'Non prise en compte',
+        aLancer: 'À lancer',
+      },
+      articlesDefinisReferentielsMesure: { ANSSI: "l'", CNIL: 'la ' },
+    })
+  );
 
   const unServiceAvecSesMesures = () =>
     unService(referentiel)

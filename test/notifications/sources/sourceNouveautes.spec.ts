@@ -11,14 +11,17 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import * as Referentiel from '../../../src/referentiel.ts';
 import { SourceNouveautes } from '../../../src/notifications/sources/sourceNouveautes.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
+import {
+  donneesReferentielDeTest,
+  DonneesReferentielDeTest,
+} from '../../constructeurs/referentielDeTest.ts';
 
 describe('Les notifications de nouveautés', () => {
   let referentiel: TousReferentiels;
   let depotDonnees: DepotDonnees;
 
-  const unReferentiel = (donnees: Record<string, unknown>) =>
-    // @ts-expect-error On force des valeurs de test
-    Referentiel.creeReferentiel(donnees);
+  const unReferentiel = (donnees: DonneesReferentielDeTest) =>
+    Referentiel.creeReferentiel(donneesReferentielDeTest(donnees));
 
   beforeEach(() => {
     referentiel = unReferentiel({
@@ -120,12 +123,13 @@ describe('Les notifications de nouveautés', () => {
   });
 
   it('utilise la date de déploiement comme horodatage', async () => {
-    referentiel.enrichis({
-      nouvellesFonctionnalites: [
-        // @ts-expect-error On force des valeurs de test
-        { id: 'N1', dateDeDeploiement: '2024-07-15' },
-      ],
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2024-07-15' },
+        ],
+      })
+    );
 
     const notifications = await laSource().notificationsPour(unUUID('U1'));
 

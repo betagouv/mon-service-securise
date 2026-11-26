@@ -11,14 +11,17 @@ import BusEvenements from '../../../src/bus/busEvenements.js';
 import * as Referentiel from '../../../src/referentiel.ts';
 import { fabriqueAdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
 import { SourceTachesProfil } from '../../../src/notifications/sources/sourceTachesProfil.ts';
+import {
+  donneesReferentielDeTest,
+  DonneesReferentielDeTest,
+} from '../../constructeurs/referentielDeTest.ts';
 
 describe('Les notifications de tâche profil', () => {
   let referentiel: TousReferentiels;
   let depotDonnees: DepotDonnees;
 
-  const unReferentiel = (donnees: Record<string, unknown>) =>
-    // @ts-expect-error On force des valeurs de test
-    Referentiel.creeReferentiel(donnees);
+  const unReferentiel = (donnees: DonneesReferentielDeTest) =>
+    Referentiel.creeReferentiel(donneesReferentielDeTest(donnees));
 
   const laSource = () =>
     new SourceTachesProfil(

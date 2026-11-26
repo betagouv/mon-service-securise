@@ -2,24 +2,25 @@ import { statistiquesDesMesures } from '../../../src/modeles/objetsPowerpoint/st
 import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('Les statistiques des mesures présentées à la commission', () => {
-  const referentiel = Referentiel.creeReferentiel({
-    // @ts-expect-error on recharge partiellement le référentiel
-    categoriesMesures: {
-      gouvernance: 'Gouvernance',
-      protection: 'Protection',
-    },
-    // @ts-expect-error on recharge partiellement le référentiel
-    mesures: { A: {}, B: {}, C: {} },
-    statutsMesures: {
-      fait: 'Faite',
-      enCours: 'Partielle',
-      nonFait: 'Non prise en compte',
-      aLancer: 'À lancer',
-    },
-    articlesDefinisReferentielsMesure: { ANSSI: "l'", CNIL: 'la ' },
-  });
+  const referentiel = Referentiel.creeReferentiel(
+    donneesReferentielDeTest({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+      mesures: { A: {}, B: {}, C: {} },
+      statutsMesures: {
+        fait: 'Faite',
+        enCours: 'Partielle',
+        nonFait: 'Non prise en compte',
+        aLancer: 'À lancer',
+      },
+      articlesDefinisReferentielsMesure: { ANSSI: "l'", CNIL: 'la ' },
+    })
+  );
 
   const unServiceAvecSesMesures = () =>
     unService(referentiel)

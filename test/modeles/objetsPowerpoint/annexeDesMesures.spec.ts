@@ -2,43 +2,44 @@ import { annexeDesMesures } from '../../../src/modeles/objetsPowerpoint/annexeDe
 import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('L’annexe des mesures présentée à la commission', () => {
-  const referentiel = Referentiel.creeReferentiel({
-    // @ts-expect-error on recharge partiellement le référentiel
-    categoriesMesures: {
-      gouvernance: 'Gouvernance',
-      protection: 'Protection',
-    },
-    mesures: {
-      // @ts-expect-error on recharge partiellement le référentiel
-      A: {
-        description: 'Mesure A',
-        categorie: 'gouvernance',
-        indispensable: true,
-        referentiel: 'ANSSI',
+  const referentiel = Referentiel.creeReferentiel(
+    donneesReferentielDeTest({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
       },
-      B: {
-        description: 'Mesure B',
-        categorie: 'protection',
-        referentiel: 'CNIL',
+      mesures: {
+        A: {
+          description: 'Mesure A',
+          categorie: 'gouvernance',
+          indispensable: true,
+          referentiel: 'ANSSI',
+        },
+        B: {
+          description: 'Mesure B',
+          categorie: 'protection',
+          referentiel: 'CNIL',
+        },
+        C: {
+          description: 'Mesure C',
+          categorie: 'protection',
+          referentiel: 'ANSSI',
+        },
+        D: { description: 'Mesure D' },
+        E: { description: 'Mesure E' },
+        F: { description: 'Mesure F' },
       },
-      C: {
-        description: 'Mesure C',
-        categorie: 'protection',
-        referentiel: 'ANSSI',
+      statutsMesures: {
+        fait: 'Faite',
+        enCours: 'Partielle',
+        nonFait: 'Non prise en compte',
+        aLancer: 'À lancer',
       },
-      D: { description: 'Mesure D' },
-      E: { description: 'Mesure E' },
-      F: { description: 'Mesure F' },
-    },
-    statutsMesures: {
-      fait: 'Faite',
-      enCours: 'Partielle',
-      nonFait: 'Non prise en compte',
-      aLancer: 'À lancer',
-    },
-  });
+    })
+  );
 
   const mesuresPersonnalisees = { A: {}, B: {}, C: {}, D: {}, E: {} };
 

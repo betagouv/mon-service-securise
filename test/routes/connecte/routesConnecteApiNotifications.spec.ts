@@ -6,21 +6,22 @@ import { creeReferentiel } from '../../../src/referentiel.ts';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { NotificationTransactionnelle } from '../../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
 import CentreNotifications from '../../../src/notifications/centreNotifications.ts';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
 
   beforeEach(async () => {
     const referentiel = creeReferentiel();
-    referentiel.recharge({
-      nouvellesFonctionnalites: [
-        // @ts-expect-error on charge partiellement
-        { id: 'N1', dateDeDeploiement: '2024-01-01' },
-        // @ts-expect-error on charge partiellement
-        { id: 'N2', dateDeDeploiement: '2024-02-02' },
-      ],
-      tachesCompletudeProfil: [],
-    });
+    referentiel.recharge(
+      donneesReferentielDeTest({
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2024-01-01' },
+          { id: 'N2', dateDeDeploiement: '2024-02-02' },
+        ],
+        tachesCompletudeProfil: [],
+      })
+    );
     await testeur.initialise(referentiel);
     testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
 

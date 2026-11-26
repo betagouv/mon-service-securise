@@ -7,6 +7,7 @@ import { creeReferentiel } from '../../../src/referentiel.ts';
 import { DonneesRisqueSpecifique } from '../../../src/modeles/risqueSpecifique.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
 import { DonneesRisqueGeneral } from '../../../src/modeles/risqueGeneral.ts';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('Un événement de risques modifiés', () => {
   const hacheEnMajuscules = {
@@ -15,14 +16,13 @@ describe('Un événement de risques modifiés', () => {
   let referentiel: Referentiel;
 
   beforeEach(() => {
-    referentiel = creeReferentiel({
-      // @ts-expect-error on recharge partiellement le référentiel
-      risques: { R1: {} },
-      // @ts-expect-error on recharge partiellement le référentiel
-      niveauxGravite: { moyen: {}, minime: {} },
-      // @ts-expect-error on recharge partiellement le référentiel
-      vraisemblancesRisques: { invraisemblable: {}, quasiCertain: {} },
-    });
+    referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        risques: { R1: {} },
+        niveauxGravite: { moyen: {}, minime: {} },
+        vraisemblancesRisques: { invraisemblable: {}, quasiCertain: {} },
+      })
+    );
   });
 
   it("chiffre l'identifiant du service qui lui est donné", () => {

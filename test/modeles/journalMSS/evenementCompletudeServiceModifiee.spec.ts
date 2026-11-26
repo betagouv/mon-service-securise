@@ -13,6 +13,7 @@ import {
   uneDescriptionDeNiveauDeSecuriteEstime3,
 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('Un événement de complétude modifiée', () => {
   const hacheEnMajuscules = {
@@ -49,14 +50,15 @@ describe('Un événement de complétude modifiée', () => {
 
     it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
       const referentiel = creeReferentielVide();
-      referentiel.recharge({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        indiceCyber: { noteMax: 5 },
-        prioritesMesures: { p1: {} },
-        // @ts-expect-error on recharge partiellement
-        mesures: { mesureA: {} },
-        statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
-      });
+      referentiel.recharge(
+        donneesReferentielDeTest({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          indiceCyber: { noteMax: 5 },
+          prioritesMesures: { p1: {} },
+          mesures: { mesureA: {} },
+          statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
+        })
+      );
       const mesuresPersonnalises = {
         mesureA: { categorie: 'gouvernance' },
       };
@@ -141,13 +143,14 @@ describe('Un événement de complétude modifiée', () => {
 
     it("range les données de l'indice cyber par catégorie", () => {
       const referentiel = creeReferentielVide();
-      referentiel.recharge({
-        // @ts-expect-error on recharge partiellement
-        mesures: { mesureA: {} },
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
-        indiceCyber: { noteMax: 5 },
-      });
+      referentiel.recharge(
+        donneesReferentielDeTest({
+          mesures: { mesureA: {} },
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
+          indiceCyber: { noteMax: 5 },
+        })
+      );
       const mesuresPersonnalises = { mesureA: { categorie: 'gouvernance' } };
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
