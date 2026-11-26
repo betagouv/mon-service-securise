@@ -50,7 +50,7 @@ class RisqueSpecifique extends Risque {
 
   toJSON() {
     return {
-      ...super.toJSON(),
+      ...(super.toJSON() as Partial<DonneesRisqueSpecifique>),
       identifiantNumerique: this.identifiantNumeriqueRisque(),
       niveauRisque: this.niveauRisque(),
     };

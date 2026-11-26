@@ -14,6 +14,7 @@ import Mesures from '../../src/modeles/mesures.js';
 import { IdCategorieMesure } from '../../src/referentiel.types.ts';
 import { StatutMesure } from '../../src/modeles/mesure.ts';
 import { DonneesIndiceCyber } from '../../src/modeles/indiceCyber.type.js';
+import { mesuresPersonnaliseesDeTest } from '../constructeurs/mesuresDeTest.ts';
 
 const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
 
@@ -33,7 +34,7 @@ const unServiceV2AvecMesureDeStatutEtCategorie = (
   const mesures = new Mesures(
     { mesuresGenerales: [{ id, statut }] },
     referentiel,
-    { [id]: { categorie } }
+    mesuresPersonnaliseesDeTest({ [id]: { categorie } })
   );
   return unServiceV2(referentiel).avecMesures(mesures).construis();
 };
