@@ -1,4 +1,5 @@
 import { DonneesReferentiel } from '../../src/referentiel.types.js';
+import { DonneesReferentielV2 } from '../../src/referentielV2.js';
 
 // Ce référentiel de test permet de garder la hiérachie et les clés de nos vraies données de référentiel,
 // en remplaçant recursivement les types des valeurs par leur type primitif
@@ -29,3 +30,13 @@ export type DonneesReferentielDeTest = {
 export const donneesReferentielDeTest = (
   donnees: DonneesReferentielDeTest
 ): DonneesReferentiel => donnees as unknown as DonneesReferentiel;
+
+export type DonneesReferentielV2DeTest = {
+  [Section in keyof DonneesReferentielV2]?: Elargi<
+    DonneesReferentielV2[Section]
+  >;
+};
+
+export const donneesReferentielV2DeTest = (
+  donnees: DonneesReferentielV2DeTest
+): DonneesReferentielV2 => donnees as unknown as DonneesReferentielV2;
