@@ -39,6 +39,14 @@
     ajouteParametreAUrl('rapportTeleversement', 'true');
     tiroirStore.ferme();
   };
+
+  const televerseLeFichier = async (fichier: File) => {
+    const donnees = new FormData();
+    donnees.append('fichier', fichier);
+    await axios.post('/api/televersement/modelesMesureSpecifique', donnees, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  };
 </script>
 
 <ContenuTiroir>
@@ -58,7 +66,7 @@
         nombreRestantModelesAjoutables
       )}.`,
     ]}
-    apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
+    televerse={televerseLeFichier}
     formatAccepte={FormatAccepte.Excel}
     onTeleversementChange={(etat) => {
       etatTeleversement = etat;

@@ -4,7 +4,6 @@ import { routesConnecteApiTeleversementServicesV2 } from './routesConnecteApiTel
 
 const routesConnecteApiTeleversement = ({
   lecteurDeFormData,
-  adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
   busEvenements,
   depotDonnees,
@@ -15,8 +14,6 @@ const routesConnecteApiTeleversement = ({
   routes.use(
     '/services-v2',
     routesConnecteApiTeleversementServicesV2({
-      lecteurDeFormData,
-      adaptateurTeleversementServices,
       busEvenements,
       depotDonnees,
       middleware,

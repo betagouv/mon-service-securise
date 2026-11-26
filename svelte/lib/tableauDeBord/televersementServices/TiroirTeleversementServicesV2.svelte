@@ -9,12 +9,20 @@
   } from '../../ui/televersement/KitDeTeleversement.types';
   import KitDeTeleversement from '../../ui/televersement/KitDeTeleversement.svelte';
   import { ajouteParametreAUrl } from '../../outils/url';
+  import { extraisServicesTeleverses } from './extraisServicesTeleverses';
 
   export const titre = 'Téléverser des services';
   export const sousTitre =
     "Importez votre liste de services, qu'ils soient homologués ou non. Vous pourrez ainsi piloter plus facilement leur sécurisation dans MonServiceSécurisé grâce au tableau de bord, centre de notifications, mails de rappels, etc...";
 
   let etatTeleversement: EtatTeleversement = $state('EnAttente');
+
+  const televerseLesServices = async (fichier: File) => {
+    const services = await extraisServicesTeleverses(
+      await fichier.arrayBuffer()
+    );
+    await axios.post('/api/televersement/services-v2', { services });
+  };
 
   const gereValidationTeleversement = async () => {
     if (etatTeleversement !== 'Valide') return;
@@ -41,7 +49,7 @@
         'Nombre de services maximum : 250',
         'Taille maximale : 1 Mo. Format supporté : XLSX.',
       ]}
-      apiPostDuTeleversement="/api/televersement/services-v2"
+      televerse={televerseLesServices}
       formatAccepte={FormatAccepte.Excel}
       onTeleversementChange={(etat) => {
         etatTeleversement = etat;
