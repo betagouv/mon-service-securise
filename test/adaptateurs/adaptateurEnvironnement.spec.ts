@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import {
   chiffrement,
   crm,
@@ -7,7 +6,7 @@ import {
 } from '../../src/adaptateurs/adaptateurEnvironnement.js';
 
 describe("L'adaptateur environnement", () => {
-  let envActuel;
+  let envActuel: NodeJS.ProcessEnv;
 
   beforeEach(() => {
     envActuel = process.env;
@@ -25,7 +24,7 @@ describe("L'adaptateur environnement", () => {
 
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
-    expect(tousLesSelsDeHachage).to.eql([
+    expect(tousLesSelsDeHachage).toEqual([
       { version: 1, sel: 'sel1' },
       { version: 2, sel: 'sel2' },
     ]);
@@ -40,7 +39,7 @@ describe("L'adaptateur environnement", () => {
 
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
-    expect(tousLesSelsDeHachage).to.eql([
+    expect(tousLesSelsDeHachage).toEqual([
       { version: 1, sel: 'sel1' },
       { version: 2, sel: 'sel2' },
       { version: 3, sel: 'sel3' },
@@ -56,7 +55,7 @@ describe("L'adaptateur environnement", () => {
 
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
-    expect(tousLesSelsDeHachage).to.eql([
+    expect(tousLesSelsDeHachage).toEqual([
       { version: 1, sel: 'sel1' },
       { version: 2, sel: 'sel2' },
     ]);
@@ -67,20 +66,20 @@ describe("L'adaptateur environnement", () => {
 
     const tousLesSelsDeHachage = chiffrement().tousLesSelsDeHachage();
 
-    expect(tousLesSelsDeHachage[0].version === 1).to.be(true);
+    expect(tousLesSelsDeHachage[0].version === 1).toBe(true);
   });
 
   describe('sur demande des URL de MonServiceSécurisé', () => {
     it("expose l'URL de base de l'API publique", () => {
       process.env = { URL_BASE_API_MSS: 'https://api.example.org' };
 
-      expect(mss().urlBaseApi()).to.be('https://api.example.org');
+      expect(mss().urlBaseApi()).toBe('https://api.example.org');
     });
 
     it("construit l'URL de la documentation à partir de l'URL de base de l'API publique", () => {
       process.env = { URL_BASE_API_MSS: 'https://api.example.org' };
 
-      expect(mss().urlDocumentationApi()).to.be('https://api.example.org/docs');
+      expect(mss().urlDocumentationApi()).toBe('https://api.example.org/docs');
     });
   });
 
@@ -90,17 +89,17 @@ describe("L'adaptateur environnement", () => {
         REPORTING_TWENTY_CRM_URL_BASE: 'https://crm.example.org',
       };
 
-      expect(crm().urlBase().toString()).to.be('https://crm.example.org/');
+      expect(crm().urlBase().toString()).toBe('https://crm.example.org/');
     });
 
     it("jette une erreur quand la variable d'environnement est absente", () => {
       process.env = {};
 
-      expect(() => crm().urlBase()).to.throwError((e) => {
-        expect(e.message).to.be(
+      expect(() => crm().urlBase()).toThrowError(
+        new Error(
           "La variable d'environnement de l'URL de base du CRM Twenty est absente."
-        );
-      });
+        )
+      );
     });
   });
 
@@ -110,13 +109,13 @@ describe("L'adaptateur environnement", () => {
         CACHE_CONTROL_FICHIERS_STATIQUES: 'public, max-age=86400',
       };
 
-      expect(statique().politiqueCache()).to.equal('public, max-age=86400');
+      expect(statique().politiqueCache()).toEqual('public, max-age=86400');
     });
 
     it("interdit le stockage quand la variable d'environnement est absente", () => {
       process.env = {};
 
-      expect(statique().politiqueCache()).to.equal('no-store');
+      expect(statique().politiqueCache()).toEqual('no-store');
     });
   });
 });

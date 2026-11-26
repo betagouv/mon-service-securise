@@ -1,5 +1,15 @@
-const nombreOuDefautDepuisChaine = (nombre, defaut) =>
-  Number.isNaN(parseInt(nombre, 10)) ? defaut : parseInt(nombre, 10);
+const nombreOuDefautDepuisChaine = (
+  nombre: string | undefined,
+  defaut: number
+): number => {
+  const nombreLu = parseInt(nombre ?? '', 10);
+  return Number.isNaN(nombreLu) ? defaut : nombreLu;
+};
+
+type SelDeHachage = { version: number; sel: string };
+
+const versionDuSelDeHachage = (cle: string) =>
+  cle.match(/CHIFFREMENT_SEL_DE_HASHAGE_(\d+)/)?.[1];
 
 const emailMemoire = () => ({
   logEmailDansConsole: () =>
@@ -70,7 +80,7 @@ const sentry = () => ({
 
 const webhookLogErreur = () => ({
   actif: () =>
-    process.env.MATTERMOST_URL_WEBHOOK_CANAL_LOG_ERREUR &&
+    !!process.env.MATTERMOST_URL_WEBHOOK_CANAL_LOG_ERREUR &&
     process.env.AVEC_DUPLICATION_LOG_ERREUR_SUR_WEBHOOK === 'true',
   url: () => process.env.MATTERMOST_URL_WEBHOOK_CANAL_LOG_ERREUR,
 });
@@ -79,18 +89,15 @@ const chiffrement = () => ({
   utiliseChiffrementChaCha20: () =>
     process.env.CHIFFREMENT_CHACHA20_ACTIF === 'true',
   cleChaCha20Hex: () => process.env.CHIFFREMENT_CHACHA20_CLE_HEX,
-  tousLesSelsDeHachage: () =>
+  tousLesSelsDeHachage: (): SelDeHachage[] =>
     Object.entries(process.env)
-      .map(([cle, valeur]) => {
-        const matches = cle.match(/CHIFFREMENT_SEL_DE_HASHAGE_(\d+)/);
-        return [matches ? matches[1] : undefined, valeur];
+      .flatMap(([cle, valeur]) => {
+        const version = versionDuSelDeHachage(cle);
+        return version && valeur !== undefined
+          ? [{ version: parseInt(version, 10), sel: valeur }]
+          : [];
       })
-      .filter(([cle, _]) => !!cle)
-      .sort(([version1, _], [version2, __]) => version1 - version2)
-      .map(([version, valeur]) => ({
-        version: parseInt(version, 10),
-        sel: valeur,
-      })),
+      .sort((sel1, sel2) => sel1.version - sel2.version),
 });
 
 const featureFlag = () => ({
