@@ -12,12 +12,6 @@ type StatutApiPublique = MesureApiPublique['statut'];
 type OrigineApiPublique = MesureApiPublique['origine'];
 type CategorieApiPublique = MesureApiPublique['categorie'];
 
-type DonneesMesurePersonnalisee = {
-  description: string;
-  categorie: CategorieApiPublique;
-  indispensable?: boolean;
-};
-
 type EtatApplication = {
   statut?: string;
   echeance?: Date;
@@ -37,16 +31,16 @@ const mesuresDuReferentiel = (service: Service): MesureApiPublique[] => {
   const { mesuresPersonnalisees, mesuresGenerales } = service.mesures;
   const origine = origineReferentiel(service);
 
-  return Object.entries(
-    mesuresPersonnalisees as Record<string, DonneesMesurePersonnalisee>
-  ).map(([id, { description, categorie, indispensable }]) => ({
-    id,
-    origine,
-    intitule: description,
-    categorie,
-    indispensable: !!indispensable,
-    ...etatApplication(mesuresGenerales.avecId(id) ?? {}),
-  }));
+  return Object.entries(mesuresPersonnalisees).map(
+    ([id, { description, categorie, indispensable }]) => ({
+      id,
+      origine,
+      intitule: description,
+      categorie,
+      indispensable: !!indispensable,
+      ...etatApplication(mesuresGenerales.avecId(id) ?? {}),
+    })
+  );
 };
 
 const mesuresSpecifiques = (service: Service): MesureApiPublique[] =>

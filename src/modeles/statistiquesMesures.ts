@@ -1,7 +1,10 @@
 import Mesure, { StatutMesure } from './mesure.js';
 import MesuresGenerales from './mesuresGenerales.js';
 import { TousReferentiels } from '../referentiel.interface.js';
-import { IdCategorieMesure } from '../referentiel.types.js';
+import {
+  IdCategorieMesure,
+  IdReferentielMesure,
+} from '../referentiel.types.js';
 import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
 import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
 
@@ -24,7 +27,9 @@ export type StatistiquesDUnTypeEtDUneCategorie = StatistiquesDUneCategorie & {
 type ParCategorie<T> = Record<IdCategorieMesure, T>;
 
 export type MesurePersonnalisee = {
+  description: string;
   categorie: IdCategorieMesure;
+  referentiel: IdReferentielMesure;
   indispensable?: boolean;
 };
 

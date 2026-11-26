@@ -1,11 +1,12 @@
-import expect from 'expect.js';
 import Service from '../../../src/modeles/service.js';
-import * as Referentiel from '../../../src/referentiel.js';
+import { creeReferentielVide } from '../../../src/referentiel.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 import VueAnnexePDFMesures from '../../../src/modeles/objetsPDF/objetPDFAnnexeMesures.js';
 import { unService } from '../../constructeurs/constructeurService.js';
+import Mesures from '../../../src/modeles/mesures.js';
 
 describe("L'objet PDF de l'annexe des mesures", () => {
-  const donneesReferentiel = {
+  const donneesReferentiel = donneesReferentielDeTest({
     categoriesMesures: { gouvernance: 'Gouvernance', protection: 'Protection' },
     mesures: { mesure1: {} },
     niveauxGravite: { grave: {} },
@@ -14,8 +15,8 @@ describe("L'objet PDF de l'annexe des mesures", () => {
       ANSSI: "l'",
       CNIL: 'la ',
     },
-  };
-  const referentiel = Referentiel.creeReferentielVide();
+  });
+  const referentiel = creeReferentielVide();
   referentiel.enrichis(donneesReferentiel);
   const service = new Service(
     {
@@ -34,8 +35,8 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees).to.have.key('statuts');
-    expect(donnees.statuts).to.eql(donneesReferentiel.statutsMesures);
+    expect(donnees).toHaveProperty('statuts');
+    expect(donnees.statuts).toEqual(donneesReferentiel.statutsMesures);
   });
 
   it('fournit les catégories provenant du référentiel', () => {
@@ -43,8 +44,8 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees).to.have.key('categories');
-    expect(donnees.categories).to.eql(donneesReferentiel.categoriesMesures);
+    expect(donnees).toHaveProperty('categories');
+    expect(donnees.categories).toEqual(donneesReferentiel.categoriesMesures);
   });
 
   it('fournit le nom du service', () => {
@@ -52,20 +53,21 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees).to.have.key('nomService');
-    expect(donnees.nomService).to.equal('Nom Service');
+    expect(donnees).toHaveProperty('nomService');
+    expect(donnees.nomService).toEqual('Nom Service');
   });
 
   it('fournit les mesures par statut et par catégorie du service', () => {
     const vueAnnexePDFMesures = new VueAnnexePDFMesures(service, referentiel);
-    service.mesuresParStatutEtCategorie = () => ({
-      grave: { gouvernance: [{ id: 'mesure1' }] },
-    });
+    service.mesuresParStatutEtCategorie = () =>
+      ({
+        grave: { gouvernance: [{ id: 'mesure1' }] },
+      }) as unknown as ReturnType<Service['mesuresParStatutEtCategorie']>;
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees).to.have.key('mesuresParStatut');
-    expect(donnees.mesuresParStatut).to.eql({
+    expect(donnees).toHaveProperty('mesuresParStatut');
+    expect(donnees.mesuresParStatut).toEqual({
       grave: { gouvernance: [{ id: 'mesure1' }] },
     });
   });
@@ -76,20 +78,23 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees).to.have.key('nbMesuresARemplirToutesCategories');
-    expect(donnees.nbMesuresARemplirToutesCategories).to.equal(6);
+    expect(donnees).toHaveProperty('nbMesuresARemplirToutesCategories');
+    expect(donnees.nbMesuresARemplirToutesCategories).toEqual(6);
   });
 
   it('fournit une chaine de caractères indiquant les référentiels concernés par les mesures non renseignées', () => {
     const serviceAvecMesuresAnssiCnil = unService().construis();
     serviceAvecMesuresAnssiCnil.mesures.enrichiesAvecDonneesPersonnalisees =
-      () => ({
-        mesuresGenerales: {
-          mesureA: { referentiel: 'ANSSI' },
-          mesureB: { referentiel: 'CNIL' },
-          mesureC: { referentiel: 'CNIL' },
-        },
-      });
+      () =>
+        ({
+          mesuresGenerales: {
+            mesureA: { referentiel: 'ANSSI' },
+            mesureB: { referentiel: 'CNIL' },
+            mesureC: { referentiel: 'CNIL' },
+          },
+        }) as unknown as ReturnType<
+          Mesures['enrichiesAvecDonneesPersonnalisees']
+        >;
     const vueAnnexePDFMesures = new VueAnnexePDFMesures(
       serviceAvecMesuresAnssiCnil,
       referentiel
@@ -97,7 +102,7 @@ describe("L'objet PDF de l'annexe des mesures", () => {
 
     const donnees = vueAnnexePDFMesures.donnees();
 
-    expect(donnees.referentielsConcernesMesuresNonRenseignees).to.equal(
+    expect(donnees.referentielsConcernesMesuresNonRenseignees).toEqual(
       "l'ANSSI et la CNIL"
     );
   });

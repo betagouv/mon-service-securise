@@ -13,7 +13,10 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { AdaptateurHorloge } from '../../../src/adaptateurs/adaptateurHorloge.ts';
 import { AdaptateurRechercheEntreprise } from '../../../src/adaptateurs/adaptateurRechercheEntreprise.interface.ts';
-import { mesuresSpecifiquesDeTest } from '../../constructeurs/mesuresDeTest.ts';
+import {
+  mesuresPersonnaliseesDeTest,
+  mesuresSpecifiquesDeTest,
+} from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Les notifications transactionnelles', () => {
   let depotDonnees: DepotDonnees;
@@ -59,9 +62,9 @@ describe('Les notifications transactionnelles', () => {
               ]),
             },
             creeReferentielV2(),
-            {
+            mesuresPersonnaliseesDeTest({
               'RECENSEMENT.1': { categorie: 'gouvernance' },
-            }
+            })
           )
         )
         .construis(),

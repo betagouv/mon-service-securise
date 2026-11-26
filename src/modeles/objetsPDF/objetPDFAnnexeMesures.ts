@@ -1,8 +1,16 @@
-import * as Referentiel from '../../referentiel.js';
+import type Service from '../service.js';
+import { creeReferentielVide } from '../../referentiel.js';
+import { Referentiel } from '../../referentiel.interface.js';
 import Mesure from '../mesure.js';
 
 class ObjetPDFAnnexeMesures {
-  constructor(service, referentiel = Referentiel.creeReferentielVide()) {
+  private readonly service: Service;
+  private readonly referentiel: Referentiel;
+
+  constructor(
+    service: Service,
+    referentiel: Referentiel = creeReferentielVide()
+  ) {
     this.referentiel = referentiel;
     this.service = service;
   }
@@ -10,13 +18,9 @@ class ObjetPDFAnnexeMesures {
   donnees() {
     const { mesuresGenerales } =
       this.service.mesures.enrichiesAvecDonneesPersonnalisees();
-    const mesuresGeneralesNonRenseignes = Object.entries(
-      mesuresGenerales
-    ).filter(([_, mesure]) => !mesure.statut);
-
-    const referentielsConcernes = mesuresGeneralesNonRenseignes.map(
-      ([_, mesure]) => mesure.referentiel
-    );
+    const referentielsConcernes = Object.values(mesuresGenerales)
+      .filter((mesure) => !mesure.statut)
+      .map((mesure) => mesure.referentiel);
     const referentielsConcernesMesuresNonRenseignees =
       this.referentiel.formatteListeDeReferentiels(referentielsConcernes);
 

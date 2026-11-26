@@ -37,7 +37,7 @@ class RisqueGeneral extends Risque {
 
   toJSON() {
     return {
-      ...super.toJSON(),
+      ...(super.toJSON() as Partial<DonneesRisqueGeneral>),
       intitule: this.intituleRisque(),
       categories: this.categoriesRisque(),
       identifiantNumerique: this.identifiantNumeriqueRisque(),

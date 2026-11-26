@@ -226,7 +226,9 @@ describe('Un événement de complétude modifiée', () => {
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: uneMesureV2, statut: 'fait' }] },
         referentiel,
-        { [uneMesureV2]: { categorie: 'gouvernance' } }
+        mesuresPersonnaliseesDeTest({
+          [uneMesureV2]: { categorie: 'gouvernance' },
+        })
       );
       const service = unServiceV2(referentiel).avecMesures(mesures).construis();
 
@@ -259,7 +261,9 @@ describe('Un événement de complétude modifiée', () => {
           ],
         },
         referentielV2,
-        { [uneMesureV2]: { categorie: 'gouvernance' } }
+        mesuresPersonnaliseesDeTest({
+          [uneMesureV2]: { categorie: 'gouvernance' },
+        })
       );
       const service = unServiceV2(referentielV2)
         .avecId('ABC')

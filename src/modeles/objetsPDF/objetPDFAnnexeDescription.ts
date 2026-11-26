@@ -1,28 +1,48 @@
-import * as Referentiel from '../../referentiel.js';
+import type Service from '../service.js';
+import DescriptionService from '../descriptionService.js';
+import { creeReferentielVide } from '../../referentiel.js';
+import { Referentiel } from '../../referentiel.interface.js';
+import {
+  IdDelaiAvantImpactCritique,
+  IdDonneeCaracterePersonnel,
+  IdFonctionnalite,
+} from '../../referentiel.types.js';
+
+export type ServiceV1 = Omit<Service, 'descriptionService'> & {
+  descriptionService: DescriptionService;
+};
 
 class ObjetPDFAnnexeDescription {
-  constructor(service, referentiel = Referentiel.creeReferentielVide()) {
+  private readonly service: ServiceV1;
+  private readonly referentiel: Referentiel;
+
+  constructor(
+    service: ServiceV1,
+    referentiel: Referentiel = creeReferentielVide()
+  ) {
     this.referentiel = referentiel;
     this.service = service;
   }
 
   donnees() {
+    const { descriptionService } = this.service;
+
     const fonctionnalites = this.referentiel.descriptionsFonctionnalites(
-      this.service.descriptionService.fonctionnalites
+      descriptionService.fonctionnalites as IdFonctionnalite[]
     );
     const fonctionnalitesSpecifiques =
-      this.service.descriptionService.fonctionnalitesSpecifiques.descriptions();
+      descriptionService.fonctionnalitesSpecifiques.descriptions();
 
     const donneesStockees =
       this.referentiel.descriptionsDonneesCaracterePersonnel(
-        this.service.descriptionService.donneesCaracterePersonnel
+        descriptionService.donneesCaracterePersonnel as IdDonneeCaracterePersonnel[]
       );
     const donneesStockeesSpecifiques =
-      this.service.descriptionService.donneesSensiblesSpecifiques.descriptions();
+      descriptionService.donneesSensiblesSpecifiques.descriptions();
 
     const dureeDysfonctionnementMaximumAcceptable =
       this.referentiel.descriptionDelaiAvantImpactCritique(
-        this.service.descriptionService.delaiAvantImpactCritique
+        descriptionService.delaiAvantImpactCritique as IdDelaiAvantImpactCritique
       );
 
     return {
