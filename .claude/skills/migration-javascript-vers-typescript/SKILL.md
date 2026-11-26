@@ -18,9 +18,24 @@ On convertit **toutes les dépendances d'un fichier avant le fichier lui-même**
 
 Découpage en **items** : un item = un fichier source + son `.spec` associé. On avance **pas à pas**, avec une **pause review/commit entre chaque item**. Les fichiers triviaux et quasi identiques (ex. sous-types d'une même classe) peuvent être regroupés en un seul item.
 
+## Deux commits par item : renommage seul, puis conversion
+
+Git ne mémorise pas les renommages : il les **déduit** par similarité de contenu (seuil 50 %). Une conversion TS réécrit souvent plus de la moitié du fichier, et le renommage serait alors vu comme une suppression + un ajout, ce qui casse `git log --follow` et rend la review illisible. Chaque item se fait donc en **deux commits** :
+
+1. **Renommage seul** : `git mv` du source et du spec (et du constructeur de test éventuel), **sans aucune modification de contenu**. Vérifier `git diff --cached --name-status -M` → `R100` pour chaque fichier. Faire une pause pour que le commit soit fait, avec un intitulé du type :
+   `[SOIN] Renomme uniquement \`monFichier\` en \`.ts\` afin de faciliter le diff`
+2. **Conversion** : le typage, la traduction du spec et les répercussions, dans un second commit :
+   `[SOIN] Convertit le modèle \`MonModele\` en Typescript`
+
+À savoir :
+
+- L'onglet _Files changed_ d'une PR GitHub affiche le diff **cumulé** de la branche : il peut toujours montrer un delete/add. L'onglet _Commits_ montre bien le renommage sur le premier commit.
+- Merger ces PR en **rebase** ou en **merge commit**, jamais en squash : le squash fusionne les deux commits et perd le renommage sur `master`.
+- Vérifier l'historique après merge : `git log --follow -- src/modeles/monFichier.ts` doit remonter jusqu'au `.js`.
+
 ## Conversion d'un fichier source
 
-1. **Renommer en préservant l'historique** : `git mv monFichier.js monFichier.ts`. Les imports restants pointant vers `./monFichier.js` n'ont **pas** besoin d'être modifiés — l'extension `.js` dans les imports résout correctement le `.ts` (moduleResolution `NodeNext`).
+1. **Renommer en préservant l'historique** : `git mv monFichier.js monFichier.ts`, dans le commit de renommage seul (voir ci-dessus). Les imports restants pointant vers `./monFichier.js` n'ont **pas** besoin d'être modifiés — l'extension `.js` dans les imports résout correctement le `.ts` (moduleResolution `NodeNext`).
 2. **Typer le constructeur** : les données d'entrée sont un type `DonneesX` exporté.
    - Si le constructeur a une valeur par défaut `= {}` (données optionnelles), typer en `Partial<DonneesX> = {}`.
    - Si le constructeur n'a **pas** de défaut (données requises), typer en `DonneesX` directement, **sans** `Partial<>`.
@@ -43,7 +58,7 @@ Découpage en **items** : un item = un fichier source + son `.spec` associé. On
 
 Vitest est configuré avec `globals: true` : `describe`, `it`, `expect`, `beforeEach` sont **globaux**, aucun import à ajouter.
 
-1. `git mv monFichier.spec.js monFichier.spec.ts`.
+1. `git mv monFichier.spec.js monFichier.spec.ts`, dans le même commit de renommage seul que le source.
 2. **Supprimer** `import expect from 'expect.js';`.
 3. **Traduire les matchers** :
    | expect.js                                | Vitest                    |
@@ -63,7 +78,7 @@ Vitest est configuré avec `globals: true` : `describe`, `it`, `expect`, `before
 
 ## Vérification
 
-À chaque item, la barrière verte est **`npx vitest run <chemins des specs concernés>`**. Le typecheck complet passe par `pnpm build:back` (tsc) ; `pnpm test` lance ESLint puis Vitest sur tout le projet.
+À chaque item, la barrière verte est **`pnpm exec vitest run <chemins des specs concernés>`** (jamais `npx`, cf. `CLAUDE.md`). Le typecheck passe par `pnpm exec tsc --noEmit` (src) **et** `pnpm exec tsc --noEmit -p test` (tests, vérifiés en CI) — `pnpm test:types` lance les deux. `pnpm test` lance ESLint puis Vitest sur tout le projet.
 
 ## Références
 
