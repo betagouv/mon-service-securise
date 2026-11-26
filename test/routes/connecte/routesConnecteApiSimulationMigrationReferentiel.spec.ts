@@ -19,6 +19,7 @@ import { DonneesMesureGenerale } from '../../../src/modeles/mesureGenerale.type.
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import { SimulationMigrationReferentiel } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.ts';
 import Service from '../../../src/modeles/service.js';
+import { DonneesIndiceCyber } from '../../../src/modeles/indiceCyber.type.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -430,7 +431,8 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       it("retourne l'évolution de l'indice cyber du service", async () => {
         const idService = unUUIDRandom();
         const serviceV1 = unService().avecId(idService).construis();
-        serviceV1.mesures.indiceCyber = () => ({ total: 2.5 });
+        serviceV1.mesures.indiceCyber = () =>
+          ({ total: 2.5 }) as DonneesIndiceCyber;
         testeur.referentiel().recharge({ indiceCyber: { noteMax: 5 } });
         // @ts-expect-error on ne veut réinitialiser que le service
         testeur.middleware().reinitialise({ serviceARenvoyer: serviceV1 });

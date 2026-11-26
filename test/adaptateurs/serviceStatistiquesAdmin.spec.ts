@@ -13,6 +13,7 @@ import { creeReferentielV2 } from '../../src/referentielV2.ts';
 import Mesures from '../../src/modeles/mesures.js';
 import { IdCategorieMesure } from '../../src/referentiel.types.ts';
 import { StatutMesure } from '../../src/modeles/mesure.ts';
+import { DonneesIndiceCyber } from '../../src/modeles/indiceCyber.type.js';
 
 const sansFiltre = { filtreNiveauxSecurite: [], filtreEntites: [] };
 
@@ -140,7 +141,7 @@ describe("L'adaptateur des statistiques admin", () => {
   describe("sur demande de l'indice cyber moyen", () => {
     const unServiceAvecIndiceCyber = (indiceCyber: number) => {
       const s = unServiceV2().construis();
-      s.indiceCyber = () => ({ total: indiceCyber });
+      s.indiceCyber = () => ({ total: indiceCyber }) as DonneesIndiceCyber;
       return s;
     };
 
@@ -178,7 +179,7 @@ describe("L'adaptateur des statistiques admin", () => {
   describe('sur demande de la répartition des indices cyber par tranche', () => {
     const unServiceAvecIndiceCyber = (indiceCyber: number) => {
       const s = unServiceV2().construis();
-      s.indiceCyber = () => ({ total: indiceCyber });
+      s.indiceCyber = () => ({ total: indiceCyber }) as DonneesIndiceCyber;
       return s;
     };
 
