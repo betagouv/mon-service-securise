@@ -11,14 +11,17 @@ import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
 import BusEvenements from '../../../src/bus/busEvenements.js';
 import { SourceTachesService } from '../../../src/notifications/sources/sourceTachesService.ts';
 import { uneTacheDeService } from '../../constructeurs/constructeurTacheDeService.js';
+import {
+  donneesReferentielDeTest,
+  DonneesReferentielDeTest,
+} from '../../constructeurs/referentielDeTest.ts';
 
 describe('Les notifications de tâche service', () => {
   let referentiel: TousReferentiels;
   let depotDonnees: DepotDonnees;
 
-  const unReferentiel = (donnees: Record<string, unknown>) =>
-    // @ts-expect-error On force des valeurs de test
-    Referentiel.creeReferentiel(donnees);
+  const unReferentiel = (donnees: DonneesReferentielDeTest) =>
+    Referentiel.creeReferentiel(donneesReferentielDeTest(donnees));
 
   const laSource = () => new SourceTachesService(referentiel, depotDonnees);
 
@@ -102,12 +105,13 @@ describe('Les notifications de tâche service', () => {
   });
 
   it('complète le sous-titre avec les informations liées au service', async () => {
-    referentiel.enrichis({
-      naturesTachesService: {
-        // @ts-expect-error On force des valeurs de test
-        natureDeTest: { titre: '--%NOM_SERVICE%--', lien: '' },
-      },
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%NOM_SERVICE%--', lien: '' },
+        },
+      })
+    );
 
     depotDonnees.tachesDesServices = async () => [
       uneTacheDeService().avecUnServiceNomme('toto').construis(),
@@ -119,12 +123,13 @@ describe('Les notifications de tâche service', () => {
   });
 
   it('complète le sous-titre avec les informations des données de la tâche', async () => {
-    referentiel.enrichis({
-      naturesTachesService: {
-        // @ts-expect-error On force des valeurs de test
-        natureDeTest: { titre: '--%nouveauxBesoins%--', lien: '' },
-      },
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%nouveauxBesoins%--', lien: '' },
+        },
+      })
+    );
 
     depotDonnees.tachesDesServices = async () => [
       uneTacheDeService()
@@ -137,12 +142,13 @@ describe('Les notifications de tâche service', () => {
   });
 
   it("peut utiliser n'importe quelle donnée de la tâche pour complèter le sous-titre", async () => {
-    referentiel.enrichis({
-      naturesTachesService: {
-        // @ts-expect-error On force des valeurs de test
-        natureDeTest: { titre: '--%nimportequoi%--', lien: '' },
-      },
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        naturesTachesService: {
+          natureDeTest: { titre: '--%nimportequoi%--', lien: '' },
+        },
+      })
+    );
 
     depotDonnees.tachesDesServices = async () => [
       uneTacheDeService()
@@ -155,12 +161,13 @@ describe('Les notifications de tâche service', () => {
   });
 
   it("complète le lien avec l'ID du service", async () => {
-    referentiel.enrichis({
-      naturesTachesService: {
-        // @ts-expect-error On force des valeurs de test
-        natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
-      },
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        naturesTachesService: {
+          natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
+        },
+      })
+    );
 
     depotDonnees.tachesDesServices = async () => [
       uneTacheDeService().avecUnServiceId('S1').construis(),
@@ -172,12 +179,13 @@ describe('Les notifications de tâche service', () => {
   });
 
   it('ne conserve pas les données du service', async () => {
-    referentiel.enrichis({
-      naturesTachesService: {
-        // @ts-expect-error On force des valeurs de test
-        natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
-      },
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        naturesTachesService: {
+          natureDeTest: { lien: '/service/%ID_SERVICE%/page' },
+        },
+      })
+    );
 
     depotDonnees.tachesDesServices = async () => [
       uneTacheDeService().avecUnServiceId('S1').construis(),

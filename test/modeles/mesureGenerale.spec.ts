@@ -9,22 +9,24 @@ import MesureGenerale from '../../src/modeles/mesureGenerale.js';
 import InformationsService from '../../src/modeles/informationsService.js';
 import { Referentiel } from '../../src/referentiel.interface.ts';
 import { creeReferentiel } from '../../src/referentiel.ts';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe('Une mesure de sécurité', () => {
   let referentiel: Referentiel;
 
   beforeEach(() => {
     referentiel = creeReferentiel();
-    referentiel.enrichis({
-      mesures: {
-        // @ts-expect-error on utilise une mesure factice
-        identifiantMesure: { description: 'Une description' },
-        identifiantMesureIndispensable: {
-          description: 'Cette mesure est indispensable',
-          indispensable: true,
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        mesures: {
+          identifiantMesure: { description: 'Une description' },
+          identifiantMesureIndispensable: {
+            description: 'Cette mesure est indispensable',
+            indispensable: true,
+          },
         },
-      },
-    });
+      })
+    );
   });
 
   it('sait se décrire', () => {

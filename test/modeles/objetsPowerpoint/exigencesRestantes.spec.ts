@@ -2,29 +2,30 @@ import { exigencesRestantes } from '../../../src/modeles/objetsPowerpoint/exigen
 import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
 
 describe('Les exigences restantes présentées à la commission', () => {
-  const referentiel = Referentiel.creeReferentiel({
-    // @ts-expect-error on recharge partiellement le référentiel
-    categoriesMesures: {
-      gouvernance: 'Gouvernance',
-      protection: 'Protection',
-    },
-    mesures: {
-      // @ts-expect-error on recharge partiellement le référentiel
-      A: { description: 'Mesure A' },
-      B: { description: 'Mesure B' },
-      C: { description: 'Mesure C' },
-      D: { description: 'Mesure D' },
-      E: { description: 'Mesure E' },
-    },
-    statutsMesures: {
-      fait: 'Faite',
-      enCours: 'Partielle',
-      nonFait: 'Non prise en compte',
-      aLancer: 'À lancer',
-    },
-  });
+  const referentiel = Referentiel.creeReferentiel(
+    donneesReferentielDeTest({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+      mesures: {
+        A: { description: 'Mesure A' },
+        B: { description: 'Mesure B' },
+        C: { description: 'Mesure C' },
+        D: { description: 'Mesure D' },
+        E: { description: 'Mesure E' },
+      },
+      statutsMesures: {
+        fait: 'Faite',
+        enCours: 'Partielle',
+        nonFait: 'Non prise en compte',
+        aLancer: 'À lancer',
+      },
+    })
+  );
 
   const mesuresPersonnalisees = { A: {}, B: {}, C: {}, D: {}, E: {} };
 
@@ -88,31 +89,30 @@ describe('Les exigences restantes présentées à la commission', () => {
   });
 
   it('décrivent chaque mesure par ses cartouches : criticité, référentiel, catégorie et identifiant, ou « Mesures ajoutées » et la catégorie pour une mesure spécifique', () => {
-    const referentielAvecDetails = Referentiel.creeReferentiel({
-      // @ts-expect-error on recharge partiellement le référentiel
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        protection: 'Protection',
-      },
-      mesures: {
-        // @ts-expect-error on recharge partiellement le référentiel
-        A: {
-          description: 'Mesure A',
-          categorie: 'gouvernance',
-          referentiel: 'ANSSI',
-          identifiantNumerique: '0022',
-          indispensable: true,
+    const referentielAvecDetails = Referentiel.creeReferentiel(
+      donneesReferentielDeTest({
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          protection: 'Protection',
         },
-        B: {
-          description: 'Mesure B',
-          categorie: 'protection',
-          referentiel: 'CNIL',
-          identifiantNumerique: '0087',
+        mesures: {
+          A: {
+            description: 'Mesure A',
+            categorie: 'gouvernance',
+            referentiel: 'ANSSI',
+            identifiantNumerique: '0022',
+            indispensable: true,
+          },
+          B: {
+            description: 'Mesure B',
+            categorie: 'protection',
+            referentiel: 'CNIL',
+            identifiantNumerique: '0087',
+          },
         },
-      },
-      // @ts-expect-error on recharge partiellement le référentiel
-      statutsMesures: { enCours: 'Partielle', aLancer: 'À lancer' },
-    });
+        statutsMesures: { enCours: 'Partielle', aLancer: 'À lancer' },
+      })
+    );
     const service = unService(referentielAvecDetails)
       .avecMesures(
         new Mesures(

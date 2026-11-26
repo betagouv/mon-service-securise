@@ -20,14 +20,17 @@ import { IdNouvelleFonctionnalite } from '../../src/referentiel.types.ts';
 import { unServiceV2 } from '../constructeurs/constructeurService.js';
 import { UUID } from '../../src/typesBasiques.ts';
 import { NotificationTransactionnelle } from '../../src/modeles/notificationsTransactionnelles/notificationTransactionnelle.ts';
+import {
+  donneesReferentielDeTest,
+  DonneesReferentielDeTest,
+} from '../constructeurs/referentielDeTest.ts';
 
 describe('Le centre de notifications', () => {
   let referentiel: TousReferentiels;
   let depotDonnees: DepotDonnees;
 
-  const unReferentiel = (donnees: Record<string, unknown>) =>
-    // @ts-expect-error On force des valeurs de test
-    Referentiel.creeReferentiel(donnees);
+  const unReferentiel = (donnees: DonneesReferentielDeTest) =>
+    Referentiel.creeReferentiel(donneesReferentielDeTest(donnees));
 
   beforeEach(() => {
     referentiel = unReferentiel({
@@ -69,10 +72,11 @@ describe('Le centre de notifications', () => {
 
   it('trie toutes les notifications retournées', async () => {
     const enJanvier = '2024-01-01';
-    referentiel.enrichis({
-      // @ts-expect-error On force des valeurs de test
-      nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: enJanvier }],
-    });
+    referentiel.enrichis(
+      donneesReferentielDeTest({
+        nouvellesFonctionnalites: [{ id: 'N1', dateDeDeploiement: enJanvier }],
+      })
+    );
 
     const enFevrier = '2024-02-02';
     depotDonnees.tachesDesServices = async () => [
