@@ -11,9 +11,6 @@ import fabriqueAdaptateurTracking from './src/adaptateurs/fabriqueAdaptateurTrac
 import { fabriqueAdaptateurHorloge } from './src/adaptateurs/adaptateurHorloge.js';
 import { fabriqueAdaptateurJWT } from './src/adaptateurs/adaptateurJWT.js';
 import * as adaptateurTamponHomologation from './src/adaptateurs/adaptateurTamponHomologation.js';
-import * as lecteurDeFormData from './src/http/lecteurDeFormData.js';
-import * as adaptateurTeleversementServices from './src/adaptateurs/adaptateurTeleversementServices.xls.js';
-import * as adaptateurTeleversementModelesMesureSpecifique from './src/adaptateurs/adaptateurTeleversementModelesMesureSpecifique.xls.js';
 import * as adaptateurZip from './src/adaptateurs/adaptateurZip.js';
 import { adaptateurProtection } from './src/adaptateurs/adaptateurProtection.js';
 import { fabriqueProcedures } from './src/routes/procedures.js';
@@ -176,11 +173,8 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurStatistiques,
     serviceStatistiquesAdmin,
     adaptateurJWT,
-    adaptateurTeleversementServices,
-    adaptateurTeleversementModelesMesureSpecifique,
     adaptateurProfilAnssi,
     cmsCrisp,
-    lecteurDeFormData,
     serviceAdministrationOrganisations,
     serviceGestionnaireSession,
     serviceSupervision,
