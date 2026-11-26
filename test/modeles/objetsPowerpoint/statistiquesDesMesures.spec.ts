@@ -3,6 +3,10 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import {
+  mesuresPersonnaliseesDeTest,
+  mesuresSpecifiquesDeTest,
+} from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Les statistiques des mesures présentées à la commission', () => {
   const referentiel = Referentiel.creeReferentiel(
@@ -31,16 +35,16 @@ describe('Les statistiques des mesures présentées à la commission', () => {
               { id: 'A', statut: 'fait' },
               { id: 'B', statut: 'enCours' },
             ],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Une mesure',
                 categorie: 'protection',
                 statut: 'aLancer',
               },
-            ],
+            ]),
           },
           referentiel,
-          {
+          mesuresPersonnaliseesDeTest({
             A: {
               categorie: 'gouvernance',
               indispensable: true,
@@ -52,7 +56,7 @@ describe('Les statistiques des mesures présentées à la commission', () => {
               referentiel: 'ANSSI',
             },
             C: { categorie: 'protection', referentiel: 'CNIL' },
-          }
+          })
         )
       )
       .construis();

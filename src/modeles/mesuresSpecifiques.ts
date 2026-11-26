@@ -12,7 +12,7 @@ import {
 
 import Mesure, { StatutMesure } from './mesure.js';
 import { creeReferentielVide } from '../referentiel.js';
-import { Referentiel } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
 
 type DonneesMesuresSpecifiques = {
@@ -26,7 +26,7 @@ type DonneesModeleMesureSpecifique = {
   categorie: string;
 };
 
-type ModelesDisponiblesMesureSpecifique = Record<
+export type ModelesDisponiblesMesureSpecifique = Record<
   UUID,
   DonneesModeleMesureSpecifique
 >;
@@ -41,7 +41,7 @@ class MesuresSpecifiques extends ElementsConstructibles<MesureSpecifique> {
 
   constructor(
     donnees: Partial<DonneesMesuresSpecifiques> = {},
-    referentiel: Referentiel = creeReferentielVide(),
+    referentiel: TousReferentiels = creeReferentielVide(),
     modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique = {}
   ) {
     const { mesuresSpecifiques = [] } = donnees;

@@ -13,6 +13,7 @@ import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { mesuresPersonnaliseesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -45,7 +46,9 @@ describe('Les routes API des mesures générales des services', () => {
           ],
         },
         avecMesureA,
-        { mesureA: { description: 'Mesure A', referentiel: 'ANSSI' } }
+        mesuresPersonnaliseesDeTest({
+          mesureA: { description: 'Mesure A', referentiel: 'ANSSI' },
+        })
       );
 
       // @ts-expect-error La fonction reinitialise() devrait prendre des paramètres optionnels

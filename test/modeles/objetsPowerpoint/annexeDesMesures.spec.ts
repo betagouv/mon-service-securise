@@ -3,6 +3,10 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import {
+  mesuresPersonnaliseesDeTest,
+  mesuresSpecifiquesDeTest,
+} from '../../constructeurs/mesuresDeTest.ts';
 
 describe('L’annexe des mesures présentée à la commission', () => {
   const referentiel = Referentiel.creeReferentiel(
@@ -62,7 +66,7 @@ describe('L’annexe des mesures présentée à la commission', () => {
         ],
       },
       referentiel,
-      mesuresPersonnalisees
+      mesuresPersonnaliseesDeTest(mesuresPersonnalisees)
     );
 
     expect(descriptionsParStatut(mesures)).toEqual([
@@ -78,7 +82,7 @@ describe('L’annexe des mesures présentée à la commission', () => {
         new Mesures(
           {
             mesuresGenerales: [{ id: 'A', statut: 'fait' }],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Spécifique faite',
                 categorie: 'protection',
@@ -89,10 +93,10 @@ describe('L’annexe des mesures présentée à la commission', () => {
                 categorie: 'protection',
                 statut: 'nonFait',
               },
-            ],
+            ]),
           },
           referentiel,
-          { A: {} }
+          mesuresPersonnaliseesDeTest({ A: {} })
         )
       )
       .construis();
@@ -125,7 +129,11 @@ describe('L’annexe des mesures présentée à la commission', () => {
             ],
           },
           referentiel,
-          { A: {}, B: { indispensable: true }, C: {} }
+          mesuresPersonnaliseesDeTest({
+            A: {},
+            B: { indispensable: true },
+            C: {},
+          })
         )
       )
       .construis();

@@ -14,6 +14,7 @@ import {
 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import { mesuresPersonnaliseesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Un événement de complétude modifiée', () => {
   const hacheEnMajuscules = {
@@ -74,7 +75,7 @@ describe('Un événement de complétude modifiée', () => {
           ],
         },
         referentiel,
-        mesuresPersonnalises
+        mesuresPersonnaliseesDeTest(mesuresPersonnalises)
       );
       const service = unService(referentiel)
         .avecId('ABC')
@@ -155,7 +156,7 @@ describe('Un événement de complétude modifiée', () => {
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
         referentiel,
-        mesuresPersonnalises
+        mesuresPersonnaliseesDeTest(mesuresPersonnalises)
       );
       const service = unService(referentiel).avecMesures(mesures).construis();
       const evenement = unEvenementSurV1()
@@ -224,7 +225,6 @@ describe('Un événement de complétude modifiée', () => {
       const referentiel = creeReferentielV2();
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: uneMesureV2, statut: 'fait' }] },
-        // @ts-expect-error on recharge partiellement
         referentiel,
         { [uneMesureV2]: { categorie: 'gouvernance' } }
       );
@@ -258,7 +258,6 @@ describe('Un événement de complétude modifiée', () => {
             },
           ],
         },
-        // @ts-expect-error on recharge partiellement
         referentielV2,
         { [uneMesureV2]: { categorie: 'gouvernance' } }
       );

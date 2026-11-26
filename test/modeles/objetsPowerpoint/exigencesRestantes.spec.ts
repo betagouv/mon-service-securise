@@ -3,6 +3,10 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import {
+  mesuresPersonnaliseesDeTest,
+  mesuresSpecifiquesDeTest,
+} from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Les exigences restantes présentées à la commission', () => {
   const referentiel = Referentiel.creeReferentiel(
@@ -42,7 +46,7 @@ describe('Les exigences restantes présentées à la commission', () => {
             ],
           },
           referentiel,
-          mesuresPersonnalisees
+          mesuresPersonnaliseesDeTest(mesuresPersonnalisees)
         )
       )
       .construis();
@@ -64,7 +68,7 @@ describe('Les exigences restantes présentées à la commission', () => {
         new Mesures(
           {
             mesuresGenerales: [{ id: 'A', statut: 'aLancer' }],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Spécifique faite',
                 categorie: 'protection',
@@ -75,10 +79,10 @@ describe('Les exigences restantes présentées à la commission', () => {
                 categorie: 'protection',
                 statut: 'enCours',
               },
-            ],
+            ]),
           },
           referentiel,
-          mesuresPersonnalisees
+          mesuresPersonnaliseesDeTest(mesuresPersonnalisees)
         )
       )
       .construis();
@@ -121,16 +125,16 @@ describe('Les exigences restantes présentées à la commission', () => {
               { id: 'A', statut: 'enCours' },
               { id: 'B', statut: 'aLancer' },
             ],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Spécifique',
                 categorie: 'protection',
                 statut: 'aLancer',
               },
-            ],
+            ]),
           },
           referentielAvecDetails,
-          { A: {}, B: {} }
+          mesuresPersonnaliseesDeTest({ A: {}, B: {} })
         )
       )
       .construis();
@@ -153,17 +157,17 @@ describe('Les exigences restantes présentées à la commission', () => {
               { id: 'A', statut: 'enCours', echeance: '2026-12-31' },
               { id: 'B', statut: 'aLancer' },
             ],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Spécifique',
                 categorie: 'protection',
                 statut: 'aLancer',
                 echeance: '2027-02-28',
               },
-            ],
+            ]),
           },
           referentiel,
-          mesuresPersonnalisees
+          mesuresPersonnaliseesDeTest(mesuresPersonnalisees)
         )
       )
       .construis();
@@ -184,21 +188,21 @@ describe('Les exigences restantes présentées à la commission', () => {
               { id: 'C', statut: 'enCours' },
               { id: 'D', statut: 'enCours' },
             ],
-            mesuresSpecifiques: [
+            mesuresSpecifiques: mesuresSpecifiquesDeTest([
               {
                 description: 'Spécifique',
                 categorie: 'protection',
                 statut: 'aLancer',
               },
-            ],
+            ]),
           },
           referentiel,
-          {
+          mesuresPersonnaliseesDeTest({
             A: { partieResponsable: 'Projet' },
             B: { partieResponsable: 'Presta' },
             C: { partieResponsable: 'Mixte' },
             D: {},
-          }
+          })
         )
       )
       .construis();

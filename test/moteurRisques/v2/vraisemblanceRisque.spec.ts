@@ -11,6 +11,7 @@ import {
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import { mesuresPersonnaliseesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 describe('Le calcul de vraisemblance pour un risque', () => {
   const configurationVraisemblance = (
@@ -81,9 +82,10 @@ describe('Le calcul de vraisemblance pour un risque', () => {
         .avecMesures(
           new Mesures(
             { mesuresGenerales },
-            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
             referentiel,
-            Object.fromEntries(mesuresGenerales.map((m) => [m.id, {}]))
+            mesuresPersonnaliseesDeTest(
+              Object.fromEntries(mesuresGenerales.map((m) => [m.id, {}]))
+            )
           )
         )
         .construis();

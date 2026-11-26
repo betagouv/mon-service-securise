@@ -1,32 +1,43 @@
 import InformationsService from './informationsService.js';
 import MesuresGenerales from './mesuresGenerales.js';
-import MesuresSpecifiques from './mesuresSpecifiques.js';
-import * as Referentiel from '../referentiel.js';
-import { StatistiquesMesures } from './statistiquesMesures.js';
+import MesuresSpecifiques, {
+  ModelesDisponiblesMesureSpecifique,
+} from './mesuresSpecifiques.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { TousReferentiels } from '../referentiel.interface.js';
+import {
+  MesurePersonnalisee,
+  StatistiquesMesures,
+} from './statistiquesMesures.js';
 import { IndiceCyber } from './indiceCyber.js';
 import { CompletudeMesures } from './completudeMesures.js';
+import { DonneesMesureGenerale } from './mesureGenerale.type.js';
+import { DonneesMesureSpecifique } from './mesureSpecifique.js';
+import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+import { DonneesIndiceCyber } from './indiceCyber.type.js';
+import { UUID } from '../typesBasiques.js';
 
-function mesuresGeneralesApplicables(
-  mesuresPersonnalisees,
-  mesuresGenerales,
-  referentiel
-) {
-  const idMesuresPersonnalisees = Object.keys(mesuresPersonnalisees);
-  const donneesMesuresGeneralesApplicables = idMesuresPersonnalisees.map(
-    (id) => ({ id, ...mesuresGenerales.avecId(id) })
-  );
-  return new MesuresGenerales(
-    { mesuresGenerales: donneesMesuresGeneralesApplicables },
-    referentiel
-  );
-}
+type IdMesure = IdMesureV1 | IdMesureV2;
+
+export type DonneesMesures = {
+  mesuresGenerales: Array<Partial<DonneesMesureGenerale<IdMesure>>>;
+  mesuresSpecifiques: DonneesMesureSpecifique[];
+};
+
+export type MesuresPersonnalisees = Record<string, MesurePersonnalisee>;
 
 class Mesures extends InformationsService {
+  mesuresGenerales: MesuresGenerales<IdMesure>;
+  readonly mesuresSpecifiques: MesuresSpecifiques;
+  readonly mesuresPersonnalisees: MesuresPersonnalisees;
+  private readonly referentiel: TousReferentiels;
+
   constructor(
-    donnees = {},
-    referentiel = Referentiel.creeReferentielVide(),
-    mesuresPersonnalisees = {},
-    modelesDisponiblesDeMesureSpecifique = {}
+    donnees: Partial<DonneesMesures> = {},
+    referentiel: TousReferentiels = creeReferentielVide(),
+    mesuresPersonnalisees: MesuresPersonnalisees = {},
+    modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique = {}
   ) {
     super();
 
@@ -45,6 +56,26 @@ class Mesures extends InformationsService {
     this.mesuresPersonnalisees = mesuresPersonnalisees;
   }
 
+  private idsMesuresPersonnalisees() {
+    return Object.keys(this.mesuresPersonnalisees) as IdMesure[];
+  }
+
+  private mesuresGeneralesApplicables() {
+    const donneesMesuresGeneralesApplicables =
+      this.idsMesuresPersonnalisees().map((id) => {
+        const generale = this.mesuresGenerales.avecId(id);
+        return {
+          id,
+          ...generale?.donneesSerialisees(),
+          rendueIndispensable: generale?.rendueIndispensable,
+        };
+      });
+    return new MesuresGenerales(
+      { mesuresGenerales: donneesMesuresGeneralesApplicables },
+      this.referentiel
+    );
+  }
+
   completude() {
     return new CompletudeMesures({
       statistiquesMesuresGenerales: this.statistiquesMesuresGenerales(),
@@ -52,20 +83,20 @@ class Mesures extends InformationsService {
     });
   }
 
-  tauxCompletudeMesures() {
+  tauxCompletudeMesures(): number {
     const { nombreTotalMesures, nombreMesuresCompletes } = this.completude();
 
     return nombreMesuresCompletes / nombreTotalMesures;
   }
 
-  indiceCyber() {
+  indiceCyber(): DonneesIndiceCyber {
     return new IndiceCyber(
       this.statistiquesMesuresGenerales().totauxParTypeEtParCategorie(),
       this.referentiel
     ).indiceCyber();
   }
 
-  indiceCyberPersonnalise() {
+  indiceCyberPersonnalise(): DonneesIndiceCyber {
     const statistiquesSansLesNonPrisesEnCompte =
       this.statistiquesMesuresGeneralesEtSpecifiques(true);
 
@@ -75,28 +106,21 @@ class Mesures extends InformationsService {
     ).indiceCyber();
   }
 
-  nombreMesuresPersonnalisees() {
-    return Object.keys(this.mesuresPersonnalisees).length;
+  nombreMesuresPersonnalisees(): number {
+    return this.idsMesuresPersonnalisees().length;
   }
 
-  nombreMesuresSpecifiques() {
+  nombreMesuresSpecifiques(): number {
     return this.mesuresSpecifiques.nombre();
   }
 
-  nombreTotalMesuresGenerales() {
+  nombreTotalMesuresGenerales(): number {
     return this.nombreMesuresPersonnalisees();
   }
 
-  nombreTotalNonFait() {
-    const statistiquesAvecNonFait = new StatistiquesMesures(
-      {
-        mesuresGenerales: this.mesuresGenerales,
-        mesuresPersonnalisees: this.mesuresPersonnalisees,
-        mesuresSpecifiques: this.mesuresSpecifiques.items,
-      },
-      this.referentiel,
-      false
-    );
+  nombreTotalNonFait(): number {
+    const statistiquesAvecNonFait =
+      this.statistiquesMesuresGeneralesEtSpecifiques(false);
     return (
       statistiquesAvecNonFait.indispensables().nonFait +
       statistiquesAvecNonFait.recommandees().nonFait
@@ -104,27 +128,16 @@ class Mesures extends InformationsService {
   }
 
   parStatutEtCategorie() {
-    const applicables = mesuresGeneralesApplicables(
-      this.mesuresPersonnalisees,
-      this.mesuresGenerales,
-      this.referentiel
-    );
-
-    const mesuresGeneralesParStatut = applicables.parStatutEtCategorie();
+    const mesuresGeneralesParStatut =
+      this.mesuresGeneralesApplicables().parStatutEtCategorie();
     return this.mesuresSpecifiques.parStatutEtCategorie(
       mesuresGeneralesParStatut
     );
   }
 
   statutSaisie() {
-    const applicables = mesuresGeneralesApplicables(
-      this.mesuresPersonnalisees,
-      this.mesuresGenerales,
-      this.referentiel
-    );
-
     const generalesSontCompletes =
-      applicables.statutSaisie() === Mesures.COMPLETES;
+      this.mesuresGeneralesApplicables().statutSaisie() === Mesures.COMPLETES;
     const specifiquesCompletes =
       this.mesuresSpecifiques.statutSaisie() === Mesures.COMPLETES ||
       this.mesuresSpecifiques.nombre() === 0;
@@ -135,33 +148,31 @@ class Mesures extends InformationsService {
   }
 
   enrichiesAvecDonneesPersonnalisees() {
-    const mesuresEnrichies = Object.entries(this.mesuresPersonnalisees).reduce(
-      (acc, mesurePersonnalisee) => {
-        const [id, donnees] = mesurePersonnalisee;
-        let generale = this.mesuresGenerales.avecId(id);
-        if (generale) {
-          generale = generale.toJSON();
-          delete generale.id;
-        }
+    const mesuresEnrichies = Object.fromEntries(
+      this.idsMesuresPersonnalisees().map((id) => {
+        const donneesGenerale: Partial<DonneesMesureGenerale<IdMesure>> = {
+          ...this.mesuresGenerales.avecId(id)?.toJSON(),
+        };
+        delete donneesGenerale.id;
 
+        const idV2 = id as IdMesureV2;
         const porteursSinguliers =
-          this.referentiel.porteursSinguliersDeMesure(id);
-        const thematique = this.referentiel.thematiqueDeMesure(id);
+          this.referentiel.porteursSinguliersDeMesure(idV2);
+        const thematique = this.referentiel.thematiqueDeMesure(idV2);
         const mesuresReferentielsExternes =
-          this.referentiel.referentielsExternesDeMesure(id);
+          this.referentiel.referentielsExternesDeMesure(idV2);
 
-        return {
-          ...acc,
-          [id]: {
-            ...donnees,
-            ...(generale && { ...generale }),
+        return [
+          id,
+          {
+            ...this.mesuresPersonnalisees[id],
+            ...donneesGenerale,
             ...(porteursSinguliers && { porteursSinguliers }),
             ...(thematique && { thematique }),
             ...(mesuresReferentielsExternes && { mesuresReferentielsExternes }),
           },
-        };
-      },
-      {}
+        ];
+      })
     );
 
     return {
@@ -172,7 +183,7 @@ class Mesures extends InformationsService {
 
   personnaliseesAvecStatutSeul() {
     return Object.fromEntries(
-      Object.keys(this.mesuresPersonnalisees).map((id) => {
+      this.idsMesuresPersonnalisees().map((id) => {
         const statut = this.mesuresGenerales.avecId(id)?.statut;
         return [id, { statut }];
       })
@@ -190,7 +201,9 @@ class Mesures extends InformationsService {
     );
   }
 
-  statistiquesMesuresGeneralesEtSpecifiques(exclueMesuresNonPrisesEnCompte) {
+  statistiquesMesuresGeneralesEtSpecifiques(
+    exclueMesuresNonPrisesEnCompte: boolean
+  ) {
     return new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,
@@ -202,7 +215,7 @@ class Mesures extends InformationsService {
     );
   }
 
-  supprimeResponsable(idUtilisateur) {
+  supprimeResponsable(idUtilisateur: UUID) {
     this.mesuresGenerales.supprimeResponsable(idUtilisateur);
     this.mesuresSpecifiques.supprimeResponsable(idUtilisateur);
   }

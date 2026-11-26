@@ -3,6 +3,7 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { donneesReferentielDeTest } from '../../constructeurs/referentielDeTest.ts';
+import { mesuresPersonnaliseesDeTest } from '../../constructeurs/mesuresDeTest.ts';
 
 describe('L’indice cyber présenté à la commission', () => {
   const referentiel = Referentiel.creeReferentiel(
@@ -44,7 +45,7 @@ describe('L’indice cyber présenté à la commission', () => {
             ],
           },
           referentiel,
-          {
+          mesuresPersonnaliseesDeTest({
             A: {
               categorie: 'gouvernance',
               indispensable: true,
@@ -65,7 +66,7 @@ describe('L’indice cyber présenté à la commission', () => {
               indispensable: true,
               referentiel: 'ANSSI',
             },
-          }
+          })
         )
       )
       .construis();
