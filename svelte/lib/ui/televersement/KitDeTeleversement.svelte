@@ -14,7 +14,7 @@
       titre: string;
       sousTitre: string;
     };
-    apiPostDuTeleversement: string;
+    televerse: (fichier: File) => Promise<void>;
     formatAccepte: FormatAccepte;
     lesLimitations?: string[];
     onTeleversementChange: (etat: EtatTeleversement) => void;
@@ -23,7 +23,7 @@
   let {
     etape1,
     template,
-    apiPostDuTeleversement,
+    televerse,
     formatAccepte,
     lesLimitations = [],
     onTeleversementChange,
@@ -57,20 +57,28 @@
     onTeleversementChange(nouvelEtat);
   };
 
+  const TAILLE_MAXIMALE_EN_OCTETS = 1024 * 1024;
+
+  const estUnFichierAcceptable = (fichierChoisi: File) =>
+    fichierChoisi.name.toLowerCase().endsWith('.xlsx') &&
+    fichierChoisi.size <= TAILLE_MAXIMALE_EN_OCTETS;
+
   const gereVerificationFichier = async () => {
-    if (fichier?.length === 0) {
+    const fichierChoisi = fichier?.[0];
+    if (!fichierChoisi) {
       changeEtat('EnAttente');
+      return;
+    }
+
+    if (!estUnFichierAcceptable(fichierChoisi)) {
+      changeEtat('Invalide');
       return;
     }
 
     changeEtat('EnCoursEnvoi');
 
-    const donnees = new FormData();
-    donnees.append('fichier', fichier![0]);
     try {
-      await axios.post(apiPostDuTeleversement, donnees, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      await televerse(fichierChoisi);
       changeEtat('Valide');
     } catch {
       changeEtat('Invalide');

@@ -64,6 +64,7 @@ const creeServeur = ({
 
   app.use(/\/((?!statique).)*/, middleware.interdisLaMiseEnCache);
 
+  app.use('/api/televersement', express.json({ limit: '1mb' }));
   app.use(express.json());
 
   app.use(

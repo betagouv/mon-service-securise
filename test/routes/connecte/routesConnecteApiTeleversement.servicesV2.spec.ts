@@ -1,5 +1,4 @@
 import testeurMSS from '../testeurMSS.js';
-import { ErreurFichierXlsInvalide } from '../../../src/erreurs.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { LigneServiceTeleverseV2 } from '../../../src/modeles/televersement/serviceTeleverseV2.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
@@ -31,65 +30,164 @@ describe('Les routes connecté de téléversement de services V2', () => {
       });
     });
 
-    it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
-      let adaptateurAppele = false;
-      let requeteRecue;
-      testeur.lecteurDeFormData().extraisDonneesXLS = async (
-        requete: Request
-      ) => {
-        adaptateurAppele = true;
-        requeteRecue = requete;
-      };
-
-      await testeur.post('/api/televersement/services-v2');
-
-      expect(adaptateurAppele).toBe(true);
-      expect(requeteRecue).not.toBe(undefined);
+    const unServiceTeleverse = () => ({
+      nom: 'Mon service',
+      siret: '130 000 000 00000',
+      statutDeploiement: 'En conception',
+      typeService: ['Service en ligne', 'API'],
+      typeHebergement: 'Hébergement interne (On-premise)',
+      ouvertureSysteme: 'Accessible depuis internet',
+      audienceCible: 'Large',
+      dureeDysfonctionnementAcceptable: 'Moins de 4h',
+      volumetrieDonneesTraitees: 'Faible',
+      localisationDonneesTraitees: "Au sein de l'Union européenne",
+      dateHomologation: '31/01/2025',
+      dureeHomologation: '6 mois',
+      nomAutoriteHomologation: 'Nom Prénom',
+      fonctionAutoriteHomologation: 'Fonction',
     });
 
-    it("délègue la conversion du contenu à l'adaptateur XLS", async () => {
-      let adaptateurAppele = false;
-      let bufferRecu;
-      testeur.adaptateurTeleversementServices().extraisTeleversementServicesV2 =
-        async (buffer: Buffer) => {
-          adaptateurAppele = true;
-          bufferRecu = buffer;
+    const posteLesServices = (services: unknown) =>
+      testeur.post('/api/televersement/services-v2', { services });
+
+    describe('concernant la validation de la payload', () => {
+      it('jette une erreur 400 si la liste des services est absente', async () => {
+        const reponse = await testeur.post('/api/televersement/services-v2');
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('jette une erreur 400 si la payload contient une propriété inconnue', async () => {
+        const reponse = await testeur.post('/api/televersement/services-v2', {
+          services: [unServiceTeleverse()],
+          inconnue: 'X',
+        });
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('jette une erreur 400 si un service contient une propriété inconnue', async () => {
+        const reponse = await posteLesServices([
+          { ...unServiceTeleverse(), inconnue: 'X' },
+        ]);
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it("jette une erreur 400 s'il manque une propriété à un service", async () => {
+        const serviceSansNom: Partial<ReturnType<typeof unServiceTeleverse>> =
+          unServiceTeleverse();
+        delete serviceSansNom.nom;
+
+        const reponse = await posteLesServices([serviceSansNom]);
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it("jette une erreur 400 si une propriété n'est pas une chaîne de caractères", async () => {
+        const reponse = await posteLesServices([
+          { ...unServiceTeleverse(), nom: { $ne: '' } },
+        ]);
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('jette une erreur 400 si une chaîne dépasse 1000 caractères', async () => {
+        const reponse = await posteLesServices([
+          { ...unServiceTeleverse(), nom: 'X'.repeat(1001) },
+        ]);
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('jette une erreur 400 si un service a plus de 5 types', async () => {
+        const reponse = await posteLesServices([
+          { ...unServiceTeleverse(), typeService: Array(6).fill('API') },
+        ]);
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('jette une erreur 400 au-delà de 250 services', async () => {
+        const reponse = await posteLesServices(
+          Array(251).fill(unServiceTeleverse())
+        );
+
+        expect(reponse.status).toBe(400);
+      });
+
+      it('accepte 250 services, même si la payload dépasse 100 ko', async () => {
+        const payload = {
+          services: Array(250).fill({
+            ...unServiceTeleverse(),
+            nom: 'X'.repeat(1000),
+          }),
         };
+        expect(JSON.stringify(payload).length).toBeGreaterThan(100 * 1024);
 
-      await testeur.post('/api/televersement/services-v2');
+        const reponse = await testeur.post(
+          '/api/televersement/services-v2',
+          payload
+        );
 
-      expect(adaptateurAppele).toBe(true);
-      expect(bufferRecu).not.toBe(undefined);
+        expect(reponse.status).toBe(201);
+      });
+
+      it('laisse au rapport de téléversement le soin de signaler les erreurs métier, comme un statut inconnu', async () => {
+        const reponse = await posteLesServices([
+          { ...unServiceTeleverse(), statutDeploiement: 'Statut inconnu' },
+        ]);
+
+        expect(reponse.status).toBe(201);
+      });
     });
 
-    it('jette une erreur 400 si le fichier est invalide', async () => {
-      testeur.lecteurDeFormData().extraisDonneesXLS = async () => {
-        throw new ErreurFichierXlsInvalide();
-      };
+    describe('concernant la sauvegarde du téléversement', () => {
+      let idUtilisateurQuiTeleverse: UUID | undefined;
+      let donneesRecues: LigneServiceTeleverseV2[];
 
-      const reponse = await testeur.post('/api/televersement/services-v2');
+      beforeEach(() => {
+        idUtilisateurQuiTeleverse = undefined;
+        donneesRecues = [];
+        testeur.middleware().reinitialise({ idUtilisateur: '123' });
+        testeur.depotDonnees().nouveauTeleversementServices = async (
+          idUtilisateurCourant: UUID,
+          donnees: LigneServiceTeleverseV2[]
+        ) => {
+          idUtilisateurQuiTeleverse = idUtilisateurCourant;
+          donneesRecues = donnees;
+        };
+      });
 
-      expect(reponse.status).toBe(400);
-    });
+      it('délègue au dépôt de données la sauvegarde des services reçus', async () => {
+        const reponse = await posteLesServices([unServiceTeleverse()]);
 
-    it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur.adaptateurTeleversementServices().extraisTeleversementServicesV2 =
-        async () => [{ nom: 'Un service' }];
-      let idUtilisateurQuiTeleverse;
-      let donneesRecues;
-      testeur.depotDonnees().nouveauTeleversementServices = async (
-        idUtilisateurCourant: UUID,
-        donnees: LigneServiceTeleverseV2[]
-      ) => {
-        idUtilisateurQuiTeleverse = idUtilisateurCourant;
-        donneesRecues = donnees;
-      };
+        expect(reponse.status).toBe(201);
+        expect(idUtilisateurQuiTeleverse).toBe('123');
+        expect(donneesRecues).toEqual([
+          {
+            ...unServiceTeleverse(),
+            dateHomologation: new Date('2025-01-31'),
+          },
+        ]);
+      });
 
-      await testeur.post('/api/televersement/services-v2');
+      it("ne renseigne pas de date d'homologation si elle est vide", async () => {
+        await posteLesServices([
+          { ...unServiceTeleverse(), dateHomologation: '' },
+        ]);
 
-      expect(idUtilisateurQuiTeleverse).toBe('123');
-      expect(donneesRecues).toEqual([{ nom: 'Un service' }]);
+        expect(donneesRecues[0].dateHomologation).toBe(undefined);
+      });
+
+      it("transmet une date invalide si la date d'homologation est illisible, pour que le rapport la signale", async () => {
+        await posteLesServices([
+          { ...unServiceTeleverse(), dateHomologation: 'pas une date' },
+        ]);
+
+        const dateRecue = donneesRecues[0].dateHomologation!;
+        expect(Number.isNaN(dateRecue.valueOf())).toBe(true);
+      });
     });
   });
 
