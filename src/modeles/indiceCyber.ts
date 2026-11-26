@@ -1,53 +1,78 @@
+import { TousReferentiels } from '../referentiel.interface.js';
+import { CategorieMesure, DonneesIndiceCyber } from './indiceCyber.type.js';
+
+export type StatistiquesCategorie = {
+  total: number;
+  fait: number;
+  enCours: number;
+};
+
+type StatistiquesParCategorie = Record<CategorieMesure, StatistiquesCategorie>;
+
+export type StatistiquesParTypeEtParCategorie = {
+  indispensables: StatistiquesParCategorie;
+  recommandees: StatistiquesParCategorie;
+};
+
 const tauxDeCategorie = (
-  statsIndispensables,
-  statsRecommandees,
-  referentiel
-) => {
+  indispensables: StatistiquesCategorie,
+  recommandees: StatistiquesCategorie,
+  referentiel: TousReferentiels
+): number => {
   const coeff = {
     indispensables: referentiel.coefficientIndiceCyberMesuresIndispensables(),
     recommandees: referentiel.coefficientIndiceCyberMesuresRecommandees(),
     statutPartiel: referentiel.coefficientIndiceCyberStatutPartiel(),
   };
-  const indispensables = statsIndispensables;
-  const recommandees = statsRecommandees;
 
   const fractionIndispensables =
     indispensables.fait + indispensables.enCours * coeff.statutPartiel;
   const fractionRecommandees =
     recommandees.fait + recommandees.enCours * coeff.statutPartiel;
-  let score;
-  if (recommandees.total === 0 && indispensables.total === 0) score = 0;
-  else if (recommandees.total === 0)
-    score = fractionIndispensables / indispensables.total;
-  else if (indispensables.total === 0)
-    score = fractionRecommandees / recommandees.total;
-  else
-    score =
-      (coeff.indispensables +
-        coeff.recommandees * (fractionRecommandees / recommandees.total)) *
-      (fractionIndispensables / indispensables.total);
 
-  return score;
+  if (recommandees.total === 0 && indispensables.total === 0) return 0;
+  if (recommandees.total === 0)
+    return fractionIndispensables / indispensables.total;
+  if (indispensables.total === 0)
+    return fractionRecommandees / recommandees.total;
+  return (
+    (coeff.indispensables +
+      coeff.recommandees * (fractionRecommandees / recommandees.total)) *
+    (fractionIndispensables / indispensables.total)
+  );
 };
 
+const parCategorie = (
+  categories: CategorieMesure[],
+  valeur: (categorie: CategorieMesure) => number
+) =>
+  Object.fromEntries(
+    categories.map((categorie) => [categorie, valeur(categorie)])
+  ) as Record<CategorieMesure, number>;
+
 class IndiceCyber {
-  constructor(statistiquesParTypeEtParCategorie, referentiel) {
-    this.tauxParCategorie = {};
+  private readonly tauxParCategorie: Record<CategorieMesure, number>;
+  private readonly scoreToutesCategories: DonneesIndiceCyber;
 
-    const toutesCategories = referentiel.identifiantsCategoriesMesures();
-
-    toutesCategories.forEach((categorie) => {
-      this.tauxParCategorie[categorie] = tauxDeCategorie(
-        statistiquesParTypeEtParCategorie.indispensables[categorie],
-        statistiquesParTypeEtParCategorie.recommandees[categorie],
-        referentiel
-      );
-    });
-
+  constructor(
+    statistiquesParTypeEtParCategorie: StatistiquesParTypeEtParCategorie,
+    referentiel: TousReferentiels
+  ) {
+    const toutesCategories =
+      referentiel.identifiantsCategoriesMesures() as CategorieMesure[];
     const { indispensables, recommandees } = statistiquesParTypeEtParCategorie;
-    const nbMesures = (categorie) =>
+
+    this.tauxParCategorie = parCategorie(toutesCategories, (categorie) =>
+      tauxDeCategorie(
+        indispensables[categorie],
+        recommandees[categorie],
+        referentiel
+      )
+    );
+
+    const nbMesures = (categorie: CategorieMesure) =>
       indispensables[categorie].total + recommandees[categorie].total;
-    const scorePondere = (categorie) =>
+    const scorePondere = (categorie: CategorieMesure) =>
       nbMesures(categorie) * this.tauxDeLaCategorie(categorie);
     const totalPondere = toutesCategories.reduce(
       (acc, categorie) => acc + scorePondere(categorie),
@@ -62,20 +87,20 @@ class IndiceCyber {
       ? indiceCyberNoteMax * (totalPondere / nbTotalMesures)
       : 0;
 
-    this.scoreToutesCategories = toutesCategories.reduce(
-      (acc, categorie) => ({
-        ...acc,
-        [categorie]: indiceCyberNoteMax * this.tauxDeLaCategorie(categorie),
-      }),
-      { total: indiceTotal }
-    );
+    this.scoreToutesCategories = {
+      total: indiceTotal,
+      ...parCategorie(
+        toutesCategories,
+        (categorie) => indiceCyberNoteMax * this.tauxDeLaCategorie(categorie)
+      ),
+    };
   }
 
-  tauxDeLaCategorie(idCategorie) {
+  tauxDeLaCategorie(idCategorie: CategorieMesure): number {
     return this.tauxParCategorie[idCategorie];
   }
 
-  indiceCyber() {
+  indiceCyber(): DonneesIndiceCyber {
     return this.scoreToutesCategories;
   }
 }
