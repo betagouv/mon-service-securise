@@ -1,8 +1,8 @@
 import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
+import { creeReferentielVide } from '../../../src/referentiel.js';
 
 import {
-  ErreurFichierXlsInvalide,
   ErreurTeleversementInvalide,
   ErreurTeleversementInexistant,
 } from '../../../src/erreurs.js';
@@ -11,7 +11,13 @@ import TeleversementModelesMesureSpecifique from '../../../src/modeles/televerse
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
-  beforeEach(() => testeur.initialise());
+  beforeEach(() => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
+      modelesMesureSpecifique: { nombreMaximumParUtilisateur: 3 },
+    });
+    return testeur.initialise(referentiel);
+  });
 
   it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", async () => {
     await testeur
@@ -30,51 +36,116 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       });
     });
 
-    it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
-      let adaptateurAppele = false;
-      let requeteRecue;
-      testeur.lecteurDeFormData().extraisDonneesXLS = async (requete) => {
-        adaptateurAppele = true;
-        requeteRecue = requete;
-      };
-
-      await testeur.post('/api/televersement/modelesMesureSpecifique');
-
-      expect(adaptateurAppele).to.be(true);
-      expect(requeteRecue).not.to.be(undefined);
+    const unModeleTeleverse = () => ({
+      description: 'Mon intitulé',
+      descriptionLongue: 'Ma description',
+      categorie: 'Gouvernance',
     });
 
-    it('jette une erreur 400 si le fichier est invalide', async () => {
-      testeur.lecteurDeFormData().extraisDonneesXLS = async () => {
-        throw new ErreurFichierXlsInvalide();
-      };
+    const posteLesModeles = (modelesMesureSpecifique) =>
+      testeur.post('/api/televersement/modelesMesureSpecifique', {
+        modelesMesureSpecifique,
+      });
 
-      const reponse = await testeur.post(
-        '/api/televersement/modelesMesureSpecifique'
-      );
+    describe('concernant la validation de la payload', () => {
+      beforeEach(() => {
+        testeur.depotDonnees().nouveauTeleversementModelesMesureSpecifique =
+          async () => {};
+      });
 
-      expect(reponse.status).to.be(400);
+      it('jette une erreur 400 si la liste des modèles est absente', async () => {
+        const reponse = await testeur.post(
+          '/api/televersement/modelesMesureSpecifique'
+        );
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('jette une erreur 400 si la payload contient une propriété inconnue', async () => {
+        const reponse = await testeur.post(
+          '/api/televersement/modelesMesureSpecifique',
+          { modelesMesureSpecifique: [unModeleTeleverse()], inconnue: 'X' }
+        );
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('jette une erreur 400 si un modèle contient une propriété inconnue', async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), inconnue: 'X' },
+        ]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it("jette une erreur 400 s'il manque une propriété à un modèle", async () => {
+        const modeleSansCategorie = unModeleTeleverse();
+        delete modeleSansCategorie.categorie;
+
+        const reponse = await posteLesModeles([modeleSansCategorie]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it("jette une erreur 400 si une propriété n'est pas une chaîne de caractères", async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), description: { $ne: '' } },
+        ]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it("jette une erreur 400 si l'intitulé dépasse 1000 caractères", async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), description: 'X'.repeat(1001) },
+        ]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('jette une erreur 400 si la description dépasse 2000 caractères', async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), descriptionLongue: 'X'.repeat(2001) },
+        ]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('jette une erreur 400 si la catégorie dépasse 1000 caractères', async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), categorie: 'X'.repeat(1001) },
+        ]);
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('jette une erreur 400 au-delà du nombre maximum de modèles par utilisateur', async () => {
+        const reponse = await posteLesModeles(
+          Array(4).fill(unModeleTeleverse())
+        );
+
+        expect(reponse.status).to.be(400);
+      });
+
+      it('accepte le nombre maximum de modèles par utilisateur', async () => {
+        const reponse = await posteLesModeles(
+          Array(3).fill(unModeleTeleverse())
+        );
+
+        expect(reponse.status).to.be(201);
+      });
+
+      it('laisse au rapport de téléversement le soin de signaler les erreurs métier, comme un intitulé manquant', async () => {
+        const reponse = await posteLesModeles([
+          { ...unModeleTeleverse(), description: '' },
+        ]);
+
+        expect(reponse.status).to.be(201);
+      });
     });
 
-    it("délègue la conversion du contenu à l'adaptateur de lecture de données téléversées", async () => {
-      let adaptateurAppele = false;
-      let bufferRecu;
-      testeur.adaptateurTeleversementModelesMesureSpecifique().extraisDonneesTeleversees =
-        async (buffer) => {
-          adaptateurAppele = true;
-          bufferRecu = buffer;
-        };
-
-      await testeur.post('/api/televersement/modelesMesureSpecifique');
-
-      expect(adaptateurAppele).to.be(true);
-      expect(bufferRecu).not.to.be(undefined);
-    });
-
-    it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
+    it('délègue au dépôt de données la sauvegarde des modèles reçus', async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur.adaptateurTeleversementModelesMesureSpecifique().extraisDonneesTeleversees =
-        async () => [{ description: 'Mesure téléversée' }];
 
       let donneesRecues;
       let idUtilisateurQuiTeleverse;
@@ -84,10 +155,11 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           donneesRecues = donnees;
         };
 
-      await testeur.post('/api/televersement/modelesMesureSpecifique');
+      const reponse = await posteLesModeles([unModeleTeleverse()]);
 
+      expect(reponse.status).to.be(201);
       expect(idUtilisateurQuiTeleverse).to.equal('123');
-      expect(donneesRecues).to.eql([{ description: 'Mesure téléversée' }]);
+      expect(donneesRecues).to.eql([unModeleTeleverse()]);
     });
   });
 

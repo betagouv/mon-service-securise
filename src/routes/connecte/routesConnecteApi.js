@@ -63,10 +63,7 @@ const routesConnecteApi = ({
   adaptateurCsv,
   adaptateurZip,
   adaptateurJournal,
-  lecteurDeFormData,
   serviceStatistiquesAdmin,
-  adaptateurTeleversementServices,
-  adaptateurTeleversementModelesMesureSpecifique,
   procedures,
   serviceAdministrationOrganisations,
   serviceAnnuaire,
@@ -417,12 +414,10 @@ const routesConnecteApi = ({
     '/televersement',
     middleware.verificationAcceptationCGU,
     routesConnecteApiTeleversement({
-      lecteurDeFormData,
-      adaptateurTeleversementServices,
-      adaptateurTeleversementModelesMesureSpecifique,
       busEvenements,
       depotDonnees,
       middleware,
+      referentiel,
     })
   );
 
