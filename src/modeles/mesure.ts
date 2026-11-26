@@ -66,7 +66,7 @@ abstract class Mesure extends InformationsService {
     return [...reste, statutFait];
   }
 
-  static statutRenseigne(statut?: string) {
+  static statutRenseigne(statut?: string): statut is StatutMesure {
     if (!statut) return false;
 
     return STATUTS.includes(statut as StatutMesure);
