@@ -15,5 +15,3 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@lab-anssi/ui-kit'
   - '@lab-anssi/lib'
-  # Renovate security update: multer@2.3.0
-  - multer@2.3.0

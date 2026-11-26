@@ -37,7 +37,6 @@
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "9.1.0",
-    "@e965/xlsx": "^0.20.3",
     "@gouvfr/dsfr-chart": "^2.1.1",
     "@lab-anssi/lib": "^3.2.2",
     "@lab-anssi/ui-kit": "1.63.3",
@@ -65,7 +64,6 @@
     "jszip": "^3.10.1",
     "knex": "^3.1.0",
     "lusca": "^1.7.0",
-    "multer": "^2.1.1",
     "openid-client": "^6.0.0",
     "p-map": "^7.0.0",
     "p-throttle": "^8.0.0",
@@ -82,6 +80,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
+    "@e965/xlsx": "^0.20.3",
     "@electric-sql/pglite": "^0.5.0",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.0",

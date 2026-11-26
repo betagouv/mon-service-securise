@@ -38,9 +38,6 @@ const testeurMss = () => {
   let serviceStatistiquesAdmin;
   let adaptateurJWT;
   let adaptateurProfilAnssi;
-  let lecteurDeFormData;
-  let adaptateurTeleversementServices;
-  let adaptateurTeleversementModelesMesureSpecifique;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -173,15 +170,6 @@ const testeurMss = () => {
     serviceGestionnaireSession = fabriqueServiceGestionnaireSession({
       depotDonnees,
     });
-    lecteurDeFormData = {
-      extraisDonneesXLS: async () => Buffer.from([]),
-    };
-    adaptateurTeleversementServices = {
-      extraisTeleversementServicesV2: async () => {},
-    };
-    adaptateurTeleversementModelesMesureSpecifique = {
-      extraisDonneesTeleversees: async () => {},
-    };
     busEvenements = fabriqueBusPourLesTests();
     try {
       depotDonnees = await depotVide();
@@ -212,9 +200,6 @@ const testeurMss = () => {
         serviceStatistiquesAdmin,
         adaptateurJWT,
         adaptateurProfilAnssi,
-        lecteurDeFormData,
-        adaptateurTeleversementServices,
-        adaptateurTeleversementModelesMesureSpecifique,
         cmsCrisp,
         serviceAdministrationOrganisations,
         serviceSupervision,
@@ -269,10 +254,6 @@ const testeurMss = () => {
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     adaptateurEnvironnement: () => adaptateurEnvironnement,
-    lecteurDeFormData: () => lecteurDeFormData,
-    adaptateurTeleversementServices: () => adaptateurTeleversementServices,
-    adaptateurTeleversementModelesMesureSpecifique: () =>
-      adaptateurTeleversementModelesMesureSpecifique,
     busEvenements: () => busEvenements,
     cmsCrisp: () => cmsCrisp,
     depotDonnees: () => depotDonnees,

@@ -111,7 +111,6 @@ class ErreurIdentifiantNotificationTransactionnelleInconnu extends ErreurModele 
 class ErreurIntituleRisqueManquant extends ErreurModele {}
 class ErreurCategoriesRisqueManquantes extends ErreurModele {}
 class ErreurCategorieRisqueInconnue extends ErreurModele {}
-class ErreurFichierXlsInvalide extends ErreurModele {}
 class ErreurNombreLimiteModelesMesureSpecifiqueAtteint extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
@@ -220,6 +219,5 @@ export {
   ErreurServiceNonAdministre,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
-  ErreurFichierXlsInvalide,
   ErreurTechniqueProConnect,
 };
