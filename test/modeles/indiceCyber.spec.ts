@@ -1,7 +1,7 @@
-import expect from 'expect.js';
-import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 import { desStatistiques } from '../constructeurs/constructeurStatistiquesMesures.js';
 import { IndiceCyber } from '../../src/modeles/indiceCyber.js';
+import { donneesReferentielDeTest } from '../constructeurs/referentielDeTest.ts';
 
 describe("L'indice cyber", () => {
   const coefficientIndispensables = 0.8;
@@ -11,17 +11,19 @@ describe("L'indice cyber", () => {
 
   describe('sur demande du taux par catégorie', () => {
     it("calcule le taux de la catégorie en prenant en compte le nombre d'indispensables faites et partielles et le nombre de recommandées faites et partielles", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        indiceCyber: {
-          coefficientIndispensables,
-          coefficientRecommandees,
-          coefficientStatutPartiel,
-          noteMax,
-        },
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {}, D: {}, E: {}, F: {}, G: {} },
-        statutsMesures: { fait: '', enCours: '', nonFait: '' },
-      });
+      const referentiel = creeReferentiel(
+        donneesReferentielDeTest({
+          indiceCyber: {
+            coefficientIndispensables,
+            coefficientRecommandees,
+            coefficientStatutPartiel,
+            noteMax,
+          },
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {}, D: {}, E: {}, F: {}, G: {} },
+          statutsMesures: { fait: '', enCours: '', nonFait: '' },
+        })
+      );
 
       const indispensableFaite = { id: 'A', statut: 'fait' };
       const autreIndispensableFaite = { id: 'B', statut: 'fait' };
@@ -71,7 +73,7 @@ describe("L'indice cyber", () => {
       const poidsMesuresIndispensables =
         coefficientIndispensables * fractionIndispensables;
 
-      expect(indiceCyber.tauxDeLaCategorie('gouvernance')).to.eql(
+      expect(indiceCyber.tauxDeLaCategorie('gouvernance')).toEqual(
         poidsMesuresRecommandeesAjuste + poidsMesuresIndispensables
       );
 
@@ -85,21 +87,23 @@ describe("L'indice cyber", () => {
       // … mais il faut ajuster ce poids des recommandées par une pondération par rapport aux indispensables
       // … donc on multiplie ce poids des recommandées par le score des indispensables : 0,1 * 0,625 = 0,0625
       // Donc le total vaut le poids des indispensables + le poids ajusté des recommandées : 0,5 + 0,0625 = 0,5625
-      expect(indiceCyber.tauxDeLaCategorie('gouvernance')).to.be(0.5625);
+      expect(indiceCyber.tauxDeLaCategorie('gouvernance')).toBe(0.5625);
     });
 
     it("ne tient compte que des mesures indispensables s'il n'y a pas de mesures recommandées", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        indiceCyber: {
-          coefficientIndispensables,
-          coefficientRecommandees,
-          coefficientStatutPartiel,
-          noteMax,
-        },
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', enCours: '', nonFait: '' },
-      });
+      const referentiel = creeReferentiel(
+        donneesReferentielDeTest({
+          indiceCyber: {
+            coefficientIndispensables,
+            coefficientRecommandees,
+            coefficientStatutPartiel,
+            noteMax,
+          },
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', enCours: '', nonFait: '' },
+        })
+      );
 
       const indispensableFaite = { id: 'A', statut: 'fait' };
       const autreIndispensableFaite = { id: 'B', statut: 'enCours' };
@@ -127,7 +131,7 @@ describe("L'indice cyber", () => {
       );
 
       const taux = indiceCyber.tauxDeLaCategorie('gouvernance');
-      expect(taux).to.eql(
+      expect(taux).toEqual(
         (nbIndispensablesFaites +
           nbIndispensablesPartielles * coefficientStatutPartiel) /
           nbTotalIndispensables
@@ -135,21 +139,23 @@ describe("L'indice cyber", () => {
 
       // 0,5 car on a 1 mesure faite, 1 mesure partielle, 1 mesure non faite
       // … donc 1 point + 0,5 point + 0 point, divisé par 3 mesures au total : 1,5 / 3 = 0,5
-      expect(taux).to.be(0.5);
+      expect(taux).toBe(0.5);
     });
 
     it("ne tient compte que des mesures recommandées s'il n'y a pas de mesures indispensables", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        indiceCyber: {
-          coefficientIndispensables,
-          coefficientRecommandees,
-          coefficientStatutPartiel,
-          noteMax,
-        },
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        mesures: { A: {}, B: {}, C: {} },
-        statutsMesures: { fait: '', enCours: '', nonFait: '' },
-      });
+      const referentiel = creeReferentiel(
+        donneesReferentielDeTest({
+          indiceCyber: {
+            coefficientIndispensables,
+            coefficientRecommandees,
+            coefficientStatutPartiel,
+            noteMax,
+          },
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {} },
+          statutsMesures: { fait: '', enCours: '', nonFait: '' },
+        })
+      );
 
       const recommandeeFaite = { id: 'A', statut: 'fait' };
       const recommandeePartielle = { id: 'B', statut: 'enCours' };
@@ -177,7 +183,7 @@ describe("L'indice cyber", () => {
       );
 
       const taux = indiceCyber.tauxDeLaCategorie('gouvernance');
-      expect(taux).to.eql(
+      expect(taux).toEqual(
         (nbRecommandeeFaite +
           nbRecommandeePartielle * coefficientStatutPartiel) /
           nbTotalRecommandees
@@ -185,24 +191,26 @@ describe("L'indice cyber", () => {
 
       // 0,5 car on a 1 mesure faite, 1 mesure partielle, 1 mesure non faite
       // … donc 1 point + 0,5 point + 0 point, divisé par 3 mesures au total : 1,5 / 3 = 0,5
-      expect(taux).to.be(0.5);
+      expect(taux).toBe(0.5);
     });
   });
 
   it("calcul l'indice cyber total", () => {
-    const referentiel = Referentiel.creeReferentiel({
-      indiceCyber: {
-        coefficientIndispensables,
-        coefficientRecommandees,
-        noteMax,
-      },
-      categoriesMesures: {
-        gouvernance: 'Gouvernance',
-        protection: 'Protection',
-      },
-      mesures: { A: {}, B: {}, C: {}, D: {}, E: {}, F: {} },
-      statutsMesures: { fait: '', enCours: '' },
-    });
+    const referentiel = creeReferentiel(
+      donneesReferentielDeTest({
+        indiceCyber: {
+          coefficientIndispensables,
+          coefficientRecommandees,
+          noteMax,
+        },
+        categoriesMesures: {
+          gouvernance: 'Gouvernance',
+          protection: 'Protection',
+        },
+        mesures: { A: {}, B: {}, C: {}, D: {}, E: {}, F: {} },
+        statutsMesures: { fait: '', enCours: '' },
+      })
+    );
 
     const indispensableGouvernanceFaite = { id: 'A', statut: 'fait' };
     const indispensableGouvernanceNonFaite = { id: 'B', statut: 'enCours' };
@@ -244,7 +252,7 @@ describe("L'indice cyber", () => {
     const nbMesuresTotal =
       nbTotalIndispensablesGouvernance + nbTotalIndispensablesProtection;
 
-    expect(indiceCyber.indiceCyber().total).to.eql(
+    expect(indiceCyber.indiceCyber().total).toEqual(
       noteMax *
         ((poidsMesuresGouvernance + poidsMesuresProtection) / nbMesuresTotal)
     );
